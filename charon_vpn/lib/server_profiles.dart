@@ -37,6 +37,46 @@ class ServerProfile {
         serverIp: json['serverIp'] as String,
         configJson: json['configJson'] as String,
       );
+
+  /// The Reality `serverName` (SNI) currently baked into [configJson]'s
+  /// vless outbound, or null if it doesn't have one (malformed/non-Reality
+  /// config). Used by the periodic dest-freshness check in `main.dart` to
+  /// detect when the server has rotated its camouflage domain.
+  String? get realityServerName {
+    try {
+      final config = jsonDecode(configJson) as Map<String, dynamic>;
+      for (final outbound in (config['outbounds'] as List? ?? const [])) {
+        final reality = (outbound as Map<String, dynamic>)['streamSettings']?['realitySettings'];
+        if (reality is Map<String, dynamic> && reality['serverName'] is String) {
+          return reality['serverName'] as String;
+        }
+      }
+    } catch (_) {
+      // Malformed config - treated the same as "no serverName found".
+    }
+    return null;
+  }
+
+  /// Copy of this profile with the Reality `serverName` replaced in-place
+  /// inside [configJson] - everything else (uuid, publicKey, server
+  /// address) stays untouched. Used when the server rotates its camouflage
+  /// domain so the next connect attempt uses a name the server still
+  /// accepts, without the user having to re-import a new config.
+  ServerProfile withRealityServerName(String newServerName) {
+    final config = jsonDecode(configJson) as Map<String, dynamic>;
+    for (final outbound in (config['outbounds'] as List? ?? const [])) {
+      final reality = (outbound as Map<String, dynamic>)['streamSettings']?['realitySettings'];
+      if (reality is Map<String, dynamic> && reality.containsKey('serverName')) {
+        reality['serverName'] = newServerName;
+      }
+    }
+    return ServerProfile(
+      id: id,
+      name: name,
+      serverIp: serverIp,
+      configJson: const JsonEncoder.withIndent('  ').convert(config),
+    );
+  }
 }
 
 /// Persists server profiles as one JSON file in the app's support directory.

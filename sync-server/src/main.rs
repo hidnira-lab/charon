@@ -79,6 +79,22 @@ impl Store {
     fn save_blob(&self, blob: &Value) -> std::io::Result<()> {
         std::fs::write(self.blob_path(), serde_json::to_string_pretty(blob).unwrap())
     }
+
+    fn reality_state_path(&self) -> PathBuf {
+        self.dir.join("reality_state.json")
+    }
+
+    /// Written by `charon-reality-rotate.sh` (not by this process) - see the
+    /// rotation script deployed alongside `xray`. The active domain isn't
+    /// sensitive (it's a public camouflage hostname, not a secret), so this
+    /// is exposed unauthenticated, same trust boundary as the rest of the
+    /// Reality tunnel itself.
+    fn load_active_reality(&self) -> Option<String> {
+        std::fs::read_to_string(self.reality_state_path())
+            .ok()
+            .and_then(|s| serde_json::from_str::<Value>(&s).ok())
+            .and_then(|v| v.get("active").and_then(Value::as_str).map(str::to_owned))
+    }
 }
 
 fn generate_token() -> String {
@@ -143,6 +159,10 @@ fn handle_request(frame: &[u8], store: &Mutex<Store>) -> Vec<u8> {
                 None => serde_json::to_vec(&json!({ "ok": true, "found": false })).unwrap(),
             }
         }
+        "activeReality" => match store.load_active_reality() {
+            Some(active) => serde_json::to_vec(&json!({ "ok": true, "active": active })).unwrap(),
+            None => error_response("no active reality serverName recorded yet"),
+        },
         other => error_response(&format!("unknown op: {other}")),
     }
 }

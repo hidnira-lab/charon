@@ -14,6 +14,7 @@ import 'design/design.dart';
 import 'profile_form_dialog.dart';
 import 'server_profiles.dart';
 import 'split_tunnel.dart';
+import 'sync_client.dart';
 import 'traffic_store.dart';
 import 'windows_startup.dart';
 import 'tabs/config_tab.dart';
@@ -103,6 +104,14 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
   final _scrollController = ScrollController();
   StreamSubscription<CharonEvent>? _eventSub;
   Timer? _sessionTicker;
+
+  /// Re-checks the server's active Reality camouflage domain every 12h
+  /// while connected (plus once immediately on connect) and silently
+  /// updates the active profile's cached `serverName` if it's changed -
+  /// see `_checkRealityFreshness`. Only running while `_connectedAt != null`
+  /// (started in `_markConnected`, cancelled in `_markDisconnected`).
+  static const _realityFreshnessInterval = Duration(hours: 12);
+  Timer? _realityFreshnessTimer;
 
   List<ServerProfile> _profiles = [];
   String? _activeProfileId;
@@ -279,6 +288,7 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
   void dispose() {
     _eventSub?.cancel();
     _sessionTicker?.cancel();
+    _realityFreshnessTimer?.cancel();
     _scrollController.dispose();
     if (Platform.isWindows) {
       windowManager.removeListener(this);
@@ -592,9 +602,44 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
   void _markConnected() {
     if (_connectedAt != null) return;
     setState(() => _connectedAt = DateTime.now());
+    _checkRealityFreshness();
+    _realityFreshnessTimer = Timer.periodic(_realityFreshnessInterval, (_) => _checkRealityFreshness());
+  }
+
+  /// Reactive dest rotation's counterpart for the "still connected the
+  /// whole time" case (Milestone: server-side scheduled rotation + client
+  /// auto-pull): `_handleReconnectFailed`'s failover only fires when a
+  /// connect attempt outright fails, but the user's devices rarely fully
+  /// disconnect, so a stale cached `serverName` could otherwise sit unused
+  /// for days. This asks `charon-sync`'s `activeReality` op (see
+  /// `sync_client.dart`) what the server's current camouflage domain is,
+  /// and if it's moved on from what's cached in the active profile, updates
+  /// the profile in place - no reconnect needed now, it just takes effect
+  /// next time this profile is used to connect. Relies entirely on the
+  /// server keeping recently-retired domains valid for a grace period (see
+  /// `charon-reality-rotate.sh`), so this never needs to race a live
+  /// rotation.
+  Future<void> _checkRealityFreshness() async {
+    final profile = _activeProfile;
+    if (profile == null || !_tunnelRunning) return;
+    final active = await SyncClient().activeRealityServerName();
+    if (active == null || active.isEmpty) return;
+    final current = profile.realityServerName;
+    if (current == null || current == active) return;
+    final index = _profiles.indexWhere((p) => p.id == profile.id);
+    if (index == -1) return;
+    final updated = profile.withRealityServerName(active);
+    setState(() => _profiles[index] = updated);
+    await _profileStore.save(_profiles, _activeProfileId);
+    _pushLog(
+      '[app] server reality dest berubah ("$current" -> "$active"), profile "${profile.name}" diupdate '
+      'buat connect berikutnya.',
+    );
   }
 
   void _markDisconnected() {
+    _realityFreshnessTimer?.cancel();
+    _realityFreshnessTimer = null;
     setState(() {
       _connectedAt = null;
       _elapsed = Duration.zero;

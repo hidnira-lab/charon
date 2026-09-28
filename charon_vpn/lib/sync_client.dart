@@ -145,6 +145,23 @@ class SyncClient {
     );
   }
 
+  /// Best-effort read of the server's currently active Reality camouflage
+  /// domain (see `sync-server`'s `activeReality` op and the rotation script
+  /// deployed on the VPS alongside `xray`). Not secret - no pairing/token
+  /// needed, unlike push/pull. Returns null on any failure (tunnel down,
+  /// server has no rotation state yet, etc.) instead of throwing - this
+  /// backs a silent background check, not a user-initiated action that
+  /// needs to surface errors.
+  Future<String?> activeRealityServerName() async {
+    try {
+      final resp = await _call({'op': 'activeReality'});
+      if (resp['ok'] != true) return null;
+      return resp['active'] as String?;
+    } catch (_) {
+      return null;
+    }
+  }
+
   void _requireOk(Map<String, dynamic> resp) {
     if (resp['ok'] != true) {
       throw SyncException(resp['error'] as String? ?? 'sync server returned an unknown error');
