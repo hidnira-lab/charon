@@ -619,6 +619,71 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
   /// server keeping recently-retired domains valid for a grace period (see
   /// `charon-reality-rotate.sh`), so this never needs to race a live
   /// rotation.
+  /// Runs right after xray+tunnel first come up (before declaring
+  /// "Connected"), to close the blind spot `_checkRealityFreshness` has: a
+  /// dead/blocked `serverName` doesn't crash xray or the tunnel (Reality
+  /// just silently drops every connection), so nothing here ever gets a
+  /// working tunnel to pull the fresh dest through, and the crash-triggered
+  /// auto-reconnect/failover in `_handleReconnectFailed` never fires either
+  /// - "Connected" would otherwise mean nothing but "processes are alive".
+  ///
+  /// Does one real round-trip through the tunnel (the same
+  /// `activeRealityServerName` call `_checkRealityFreshness` uses). If it
+  /// fails, restarts xray with each untried domain from
+  /// `realityCandidateServerNames` (the same pool the server rotates
+  /// through) until one actually carries traffic, adopting + persisting
+  /// whichever `serverName` worked. Returns false only once every candidate
+  /// (including whatever was originally cached) has failed.
+  Future<bool> _healReality() async {
+    final tried = <String>{};
+    while (true) {
+      final profile = _activeProfile;
+      if (profile == null) return false;
+      final currentName = profile.realityServerName;
+      if (currentName != null) tried.add(currentName);
+      final active = await SyncClient().activeRealityServerName();
+      if (active != null && active.isNotEmpty) {
+        if (profile.realityServerName != active) {
+          final index = _profiles.indexWhere((p) => p.id == profile.id);
+          if (index != -1) {
+            setState(() => _profiles[index] = profile.withRealityServerName(active));
+            await _profileStore.save(_profiles, _activeProfileId);
+            _pushLog('[app] serverName diupdate ke "$active".');
+          }
+        }
+        return true;
+      }
+      final next = realityCandidateServerNames.firstWhere((c) => !tried.contains(c), orElse: () => '');
+      if (next.isEmpty) return false;
+      _pushLog('[app] serverName "${currentName ?? "?"}" nggak respons, coba "$next"...');
+      final index = _profiles.indexWhere((p) => p.id == profile.id);
+      if (index == -1) return false;
+      setState(() => _profiles[index] = profile.withRealityServerName(next));
+      await _stopXray();
+      await _startXray();
+      if (!_xrayRunning) return false;
+      await Future.delayed(const Duration(seconds: 1));
+    }
+  }
+
+  /// Single choke point for the primary (non-failover) connect paths -
+  /// `_engage` on Windows, `_onAndroidChannelCall` on Android. Gates the
+  /// "Connected" UI state on `_healReality` actually confirming the tunnel
+  /// carries traffic, instead of just trusting that the processes started.
+  /// If every candidate fails, tears the attempt down cleanly rather than
+  /// leaving the user staring at a "Connected" state that doesn't work.
+  Future<void> _verifyAndDeclareConnected() async {
+    final healed = await _healReality();
+    if (healed) {
+      _markConnected();
+      return;
+    }
+    _pushLog('[app] semua serverName kandidat gagal - server mungkin down atau IP server diblokir. Disconnecting.');
+    await _stopTunnel();
+    await _stopXray();
+    _markDisconnected();
+  }
+
   Future<void> _checkRealityFreshness() async {
     final profile = _activeProfile;
     if (profile == null || !_tunnelRunning) return;
@@ -715,7 +780,7 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
           _xrayRunning = true;
           _tunnelRunning = true;
         });
-        _markConnected();
+        _verifyAndDeclareConnected();
         _pushLog('[app] reconnected');
       case CharonEvent_ReconnectFailed():
         _handleReconnectFailed();
@@ -771,7 +836,8 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
       await _startTunnelForFailover();
     }
     setState(() => _connecting = false);
-    if (_xrayRunning && _tunnelRunning) {
+    final healed = _xrayRunning && _tunnelRunning && await _healReality();
+    if (healed) {
       setState(() {
         _reconnecting = false;
         _blocked = false;
@@ -782,6 +848,9 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
       _failoverTried.clear();
       _failoverOriginalId = null;
     } else {
+      if (_xrayRunning && _tunnelRunning) {
+        _pushLog('[app] failover: profile "${candidate.name}" jalan tapi semua serverName kandidat gagal juga.');
+      }
       await _attemptFailover();
     }
   }
@@ -837,7 +906,7 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
         bypassCidrs: bypassCidrs,
       );
       setState(() => _tunnelRunning = true);
-      _markConnected();
+      await _verifyAndDeclareConnected();
       _pushLog('[app] tunnel started (fd=$fd)');
     } catch (e) {
       _pushLog('[app] failed to start tunnel: $e');
@@ -947,7 +1016,7 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
     if (_xrayRunning) {
       await _startTunnel();
     }
-    if (_xrayRunning && _tunnelRunning) _markConnected();
+    if (_xrayRunning && _tunnelRunning) await _verifyAndDeclareConnected();
     setState(() => _connecting = false);
   }
 
