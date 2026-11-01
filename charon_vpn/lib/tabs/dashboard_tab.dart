@@ -8,6 +8,8 @@ class DashboardTab extends StatelessWidget {
     super.key,
     required this.state,
     required this.blocked,
+    required this.serverWarning,
+    required this.serverWarningCritical,
     required this.hasProfile,
     required this.activeProfileName,
     required this.activeProfileIp,
@@ -20,6 +22,8 @@ class DashboardTab extends StatelessWidget {
 
   final ConnState state;
   final bool blocked;
+  final String? serverWarning;
+  final bool serverWarningCritical;
   final bool hasProfile;
   final String? activeProfileName;
   final String? activeProfileIp;
@@ -57,6 +61,13 @@ class DashboardTab extends StatelessWidget {
           // TUN adapter survives, never while merely idle/disconnected —
           // showing this banner in the idle case would be a false safety
           // claim (see CLAUDE.md "Milestone 8" notes).
+          if (serverWarning != null) ...[
+            HazardBanner(
+              tone: serverWarningCritical ? HazardTone.critical : HazardTone.caution,
+              child: Text(serverWarning!),
+            ),
+            const SizedBox(height: 24),
+          ],
           if (blocked) ...[
             HazardBanner(
               tone: HazardTone.critical,

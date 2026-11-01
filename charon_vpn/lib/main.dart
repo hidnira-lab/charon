@@ -12,6 +12,7 @@ import 'android_channel.dart';
 import 'app_settings.dart';
 import 'design/design.dart';
 import 'profile_form_dialog.dart';
+import 'server_diagnosis.dart';
 import 'server_profiles.dart';
 import 'split_tunnel.dart';
 import 'sync_client.dart';
@@ -153,6 +154,15 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
   double _downMbps = 0;
   double _upMbps = 0;
   int? _latencyMs;
+
+  // Server reachability diagnosis (IP block detection). The latency prober
+  // reports null every 5s while the tunnel is up but the server can't be
+  // reached; after `_latencyFailThreshold` in a row we probe TCP vs ICMP.
+  static const _latencyFailThreshold = 6;
+  int _latencyFailStreak = 0;
+  bool _diagnosing = false;
+  String? _serverWarning;
+  bool _serverWarningCritical = false;
   int _monthlyTxBytes = 0;
   int _monthlyRxBytes = 0;
   int? _lastSampleTx;
@@ -599,9 +609,45 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
     });
   }
 
+  /// Probes the active profile's server directly and updates the Dashboard
+  /// warning. Distinguishes "IP likely blocked" (TCP fails, ping answers)
+  /// from "unreachable" (both fail) so the cause is obvious in minutes
+  /// instead of after a long debugging session.
+  Future<void> _diagnoseServer() async {
+    final ip = _activeProfile?.serverIp;
+    if (ip == null || ip.isEmpty || _diagnosing) return;
+    _diagnosing = true;
+    try {
+      final reach = await diagnoseServer(ip);
+      if (!mounted) return;
+      switch (reach) {
+        case ServerReach.ok:
+          setState(() => _serverWarning = null);
+        case ServerReach.likelyIpBlocked:
+          setState(() {
+            _serverWarning = 'SERVER IP LIKELY BLOCKED — TCP 443 FAILS BUT PING ANSWERS. ASK YOUR PROVIDER FOR A NEW IP';
+            _serverWarningCritical = true;
+          });
+          _pushLog('[app] diagnosis: $ip ping hidup tapi TCP 443 gagal - IP server kemungkinan diblokir network filter.');
+        case ServerReach.unreachable:
+          setState(() {
+            _serverWarning = 'SERVER UNREACHABLE — TCP AND PING BOTH FAIL. CHECK YOUR NETWORK OR SERVER STATUS';
+            _serverWarningCritical = false;
+          });
+          _pushLog('[app] diagnosis: $ip nggak bisa dijangkau (TCP dan ping gagal) - server down atau jaringan lokal bermasalah.');
+      }
+    } finally {
+      _diagnosing = false;
+    }
+  }
+
   void _markConnected() {
     if (_connectedAt != null) return;
-    setState(() => _connectedAt = DateTime.now());
+    setState(() {
+      _connectedAt = DateTime.now();
+      _serverWarning = null;
+      _latencyFailStreak = 0;
+    });
     _checkRealityFreshness();
     _realityFreshnessTimer = Timer.periodic(_realityFreshnessInterval, (_) => _checkRealityFreshness());
   }
@@ -682,6 +728,7 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
     await _stopTunnel();
     await _stopXray();
     _markDisconnected();
+    await _diagnoseServer();
   }
 
   Future<void> _checkRealityFreshness() async {
@@ -788,6 +835,13 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
         _onTrafficSample(txBytes, rxBytes);
       case CharonEvent_LatencyMs(:final ms):
         setState(() => _latencyMs = ms);
+        if (ms == null) {
+          _latencyFailStreak++;
+          if (_latencyFailStreak == _latencyFailThreshold) _diagnoseServer();
+        } else {
+          _latencyFailStreak = 0;
+          if (_serverWarning != null) setState(() => _serverWarning = null);
+        }
     }
   }
 
@@ -1107,6 +1161,8 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
         return DashboardTab(
           state: _connState,
           blocked: _blocked,
+          serverWarning: _serverWarning,
+          serverWarningCritical: _serverWarningCritical,
           hasProfile: _activeProfile != null,
           activeProfileName: _activeProfile?.name,
           activeProfileIp: _activeProfile?.serverIp,
