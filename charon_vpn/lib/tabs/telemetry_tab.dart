@@ -33,7 +33,7 @@ class TelemetryTab extends StatelessWidget {
   final List<double> downHistory;
   final List<double> upHistory;
 
-  static const _quotaGb = 1200;
+  static const _quotaGb = 2000;
 
   String _formatGb(int bytes) => (bytes / 1e9).toStringAsFixed(2);
 

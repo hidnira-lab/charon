@@ -150,7 +150,7 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
   /// Live throughput, derived from consecutive `TrafficSample` events -
   /// purely in-memory, resets on disconnect. `_monthlyTxBytes`/`Rx` are the
   /// persisted running totals for the current calendar month (see
-  /// `TrafficStore`), compared against the server's 1200GB/month quota.
+  /// `TrafficStore`), compared against the server's 2000GB/month quota.
   double _downMbps = 0;
   double _upMbps = 0;
   int? _latencyMs;
