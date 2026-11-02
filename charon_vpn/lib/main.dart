@@ -684,6 +684,8 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
   /// through) until one actually carries traffic, adopting + persisting
   /// whichever `serverName` worked. Returns false only once every candidate
   /// (including whatever was originally cached) has failed.
+  static const _probeAttemptsPerName = 3;
+
   Future<bool> _healReality() async {
     final tried = <String>{};
     while (true) {
@@ -691,14 +693,26 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
       if (profile == null) return false;
       final currentName = profile.realityServerName;
       if (currentName != null) tried.add(currentName);
-      final active = await SyncClient().activeRealityServerName();
-      if (active != null && active.isNotEmpty) {
-        if (profile.realityServerName != active) {
+      // A single failed probe is usually a flaky path (transient network resets),
+      // not a dead serverName, so retry the same name a few times before
+      // blaming it and rotating to the next candidate.
+      String? active;
+      for (var attempt = 1; attempt <= _probeAttemptsPerName; attempt++) {
+        active = await SyncClient().activeRealityServerName();
+        if (active != null && active.isNotEmpty) break;
+        if (attempt < _probeAttemptsPerName) {
+          _pushLog('[app] probe ke server gagal (percobaan $attempt/$_probeAttemptsPerName), coba lagi...');
+          await Future.delayed(const Duration(seconds: 2));
+        }
+      }
+      final confirmed = active;
+      if (confirmed != null && confirmed.isNotEmpty) {
+        if (profile.realityServerName != confirmed) {
           final index = _profiles.indexWhere((p) => p.id == profile.id);
           if (index != -1) {
-            setState(() => _profiles[index] = profile.withRealityServerName(active));
+            setState(() => _profiles[index] = profile.withRealityServerName(confirmed));
             await _profileStore.save(_profiles, _activeProfileId);
-            _pushLog('[app] serverName diupdate ke "$active".');
+            _pushLog('[app] serverName diupdate ke "$confirmed".');
           }
         }
         return true;
@@ -728,7 +742,7 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
       _markConnected();
       return;
     }
-    _pushLog('[app] semua serverName kandidat gagal - server mungkin down atau IP server diblokir. Disconnecting.');
+    _pushLog('[app] semua serverName kandidat gagal (masing-masing dicoba ${_probeAttemptsPerName}x) - bisa jaringan lagi putus-nyambung, server down, atau IP diblokir. Disconnecting; cek diagnosis di bawah.');
     await _stopTunnel();
     await _stopXray();
     _markDisconnected();
