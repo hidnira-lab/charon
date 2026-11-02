@@ -421,7 +421,7 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
     return ServerProfile(
       id: 'default',
       name: 'Default',
-      serverIp: '203.0.113.1',
+      serverIp: '203.0.113.1', // placeholder (RFC 5737); edit in the Nodes tab
       configJson: configJson,
     );
   }
@@ -659,7 +659,7 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
   /// Reactive dest rotation's counterpart for the "still connected the
   /// whole time" case (Milestone: server-side scheduled rotation + client
   /// auto-pull): `_handleReconnectFailed`'s failover only fires when a
-  /// connect attempt outright fails, but the user's devices rarely fully
+  /// connect attempt outright fails, but typical usage rarely has every device fully
   /// disconnect, so a stale cached `serverName` could otherwise sit unused
   /// for days. This asks `charon-sync`'s `activeReality` op (see
   /// `sync_client.dart`) what the server's current camouflage domain is,

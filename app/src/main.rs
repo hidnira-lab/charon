@@ -9,7 +9,8 @@ use charon_core::{log_bridge, platform, AppEvent, Waker};
 
 const MAX_LOG_LINES: usize = 500;
 const LOCAL_SOCKS_PROXY: &str = "socks5://127.0.0.1:10808";
-const VPN_SERVER_IP: &str = "203.0.113.1";
+/// Placeholder (RFC 5737 documentation range). Set `CHARON_SERVER_IP` to your real server IP.
+const VPN_SERVER_IP_PLACEHOLDER: &str = "203.0.113.1";
 
 struct CharonApp {
     xray_path: PathBuf,
@@ -94,7 +95,12 @@ impl CharonApp {
         if self.tunnel.is_some() {
             return;
         }
-        match TunnelHandle::start(LOCAL_SOCKS_PROXY, VPN_SERVER_IP, &[], self.tx.clone()) {
+        match TunnelHandle::start(
+            LOCAL_SOCKS_PROXY,
+            &std::env::var("CHARON_SERVER_IP").unwrap_or_else(|_| VPN_SERVER_IP_PLACEHOLDER.to_string()),
+            &[],
+            self.tx.clone(),
+        ) {
             Ok(handle) => {
                 self.tunnel = Some(handle);
                 self.push_log("[app] tunnel started".to_string());

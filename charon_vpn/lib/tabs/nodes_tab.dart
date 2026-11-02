@@ -6,7 +6,7 @@ import '../server_profiles.dart';
 
 /// Unit-plate grid replacing the old `ProfilesPage`. Ping/load fields from
 /// the Figma Make reference are dropped — there's no mechanism to measure
-/// them yet (Milestone 6.2 is UI-only, per the user's placeholder-first call).
+/// them yet (Milestone 6.2 is UI-only, placeholder-first).
 class NodesTab extends StatelessWidget {
   const NodesTab({
     super.key,
