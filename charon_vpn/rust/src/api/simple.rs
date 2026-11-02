@@ -61,6 +61,44 @@ impl From<AppEvent> for CharonEvent {
     }
 }
 
+/// Appends every Rust panic (message, location, thread, backtrace) to the same
+/// `crash.log` the Dart side uses, then defers to the previous hook. Needed
+/// because a panic inside an FFI callback aborts the process before Dart can
+/// log anything. Windows path mirrors `getApplicationSupportDirectory()`;
+/// elsewhere (Android) the write just fails quietly and stderr/logcat still
+/// gets the default hook output.
+fn install_panic_log() {
+    static ONCE: std::sync::Once = std::sync::Once::new();
+    ONCE.call_once(|| {
+        let prev = std::panic::take_hook();
+        std::panic::set_hook(Box::new(move |info| {
+            if let Ok(appdata) = std::env::var("APPDATA") {
+                let path = std::path::Path::new(&appdata)
+                    .join("com.charonvpn")
+                    .join("Charon VPN")
+                    .join("crash.log");
+                let secs = std::time::SystemTime::now()
+                    .duration_since(std::time::UNIX_EPOCH)
+                    .map(|d| d.as_secs())
+                    .unwrap_or(0);
+                let thread = std::thread::current();
+                let entry = format!(
+                    "[rust-panic] unix={} thread={} {}\n{}\n",
+                    secs,
+                    thread.name().unwrap_or("<unnamed>"),
+                    info,
+                    std::backtrace::Backtrace::force_capture()
+                );
+                use std::io::Write;
+                if let Ok(mut f) = std::fs::OpenOptions::new().create(true).append(true).open(path) {
+                    let _ = f.write_all(entry.as_bytes());
+                }
+            }
+            prev(info);
+        }));
+    });
+}
+
 #[frb(opaque)]
 pub struct CharonBridge {
     rx: Mutex<Option<mpsc::Receiver<AppEvent>>>,
@@ -70,6 +108,7 @@ pub struct CharonBridge {
 impl CharonBridge {
     #[frb(sync)]
     pub fn new() -> CharonBridge {
+        install_panic_log();
         let (tx, rx) = mpsc::channel();
         let no_op_waker: charon_core::Waker = Arc::new(|| {});
         log_bridge::init(tx.clone(), no_op_waker.clone());

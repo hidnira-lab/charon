@@ -10,6 +10,7 @@ import 'package:window_manager/window_manager.dart';
 
 import 'android_channel.dart';
 import 'app_settings.dart';
+import 'crash_log.dart';
 import 'design/design.dart';
 import 'profile_form_dialog.dart';
 import 'server_diagnosis.dart';
@@ -45,6 +46,7 @@ Directory _windowsWorkspaceRoot() {
 
 Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
+  await CrashLog.init(args);
   await RustLib.init();
   // Loaded before `runApp` (not in `initState`) so the very first frame
   // already renders in the right theme instead of flashing dark then
@@ -66,6 +68,7 @@ Future<void> main(List<String> args) async {
         await windowManager.focus();
       }
     });
+    await CrashLog.startWatchdog();
   }
   runApp(const CharonApp());
 }
@@ -352,6 +355,7 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
     // is safe here since this line only runs once xray/tunnel are already
     // confirmed stopped (the guard above), so there's nothing left to clean
     // up first.
+    CrashLog.markCleanExit(); // tells the relaunch watchdog this was deliberate
     exit(0);
   }
 

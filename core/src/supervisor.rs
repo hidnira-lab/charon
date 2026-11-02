@@ -32,12 +32,19 @@ unsafe extern "C" fn traffic_callback(status: *const tun2proxy::TrafficStatus, _
         return;
     }
     let status = unsafe { *status };
-    if let Some(tx) = TRAFFIC_TX.get() {
-        let _ = tx.lock().unwrap().send(AppEvent::TrafficSample {
-            tx_bytes: status.tx,
-            rx_bytes: status.rx,
-        });
-    }
+    // A panic can't unwind out of an `extern "C"` fn - it aborts the whole
+    // process (seen as an APPCRASH, 0xc000001d, in rust_lib_charon_vpn.dll).
+    // Contain it here, and ride through a poisoned lock instead of panicking
+    // on it: a dropped traffic sample is harmless, a dead app is not.
+    let _ = std::panic::catch_unwind(|| {
+        if let Some(tx) = TRAFFIC_TX.get() {
+            let tx = tx.lock().unwrap_or_else(|poisoned| poisoned.into_inner());
+            let _ = tx.send(AppEvent::TrafficSample {
+                tx_bytes: status.tx,
+                rx_bytes: status.rx,
+            });
+        }
+    });
 }
 
 #[derive(Clone)]
