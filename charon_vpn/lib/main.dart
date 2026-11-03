@@ -33,9 +33,9 @@ const _localSocksProxy = 'socks5://127.0.0.1:10808';
 
 /// `charon_vpn.exe` lands at `build/windows/x64/runner/<Config>/` under the
 /// `charon_vpn` project directory, which itself lives directly under the
-/// charon-vpn workspace root - mirrors the same fixed-depth assumption as
-/// `app/src/main.rs`'s `workspace_root()` on the egui side. Windows only;
-/// Android resolves its own paths via platform channel + bundled asset.
+/// charon-vpn workspace root (fixed-depth assumption). Only used to find the
+/// optional `secrets/client-config.json` for first-run migration. Windows
+/// only; Android resolves its own paths via platform channel + bundled asset.
 Directory _windowsWorkspaceRoot() {
   var dir = File(Platform.resolvedExecutable).parent; // .../<Config>
   for (var i = 0; i < 6; i++) {
@@ -999,7 +999,9 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
         );
         xrayPath = '$nativeLibDir/libxray.so';
       } else {
-        xrayPath = '${_windowsWorkspaceRoot().path}/app/bin/xray.exe';
+        // Bundled next to the exe by windows/runner/CMakeLists.txt.
+        xrayPath =
+            '${File(Platform.resolvedExecutable).parent.path}/xray.exe';
       }
       final configPath = await _profileStore.materializeConfig(profile);
       await _bridge.startXray(xrayPath: xrayPath, configPath: configPath);

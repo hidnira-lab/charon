@@ -58,3 +58,12 @@ add_custom_command(TARGET ${BINARY_NAME} POST_BUILD
     "${CMAKE_BINARY_DIR}/plugins/rust_lib_charon_vpn/cargokit_build/x86_64-pc-windows-msvc/$<IF:$<CONFIG:Debug>,debug,release>/wintun.dll"
     "$<TARGET_FILE_DIR:${BINARY_NAME}>/wintun.dll"
 )
+
+# xray.exe is not committed (gitignored, ~35MB) - drop the official release
+# binary at windows/bin/xray.exe once and it gets bundled next to the exe on
+# every build, which is where main.dart looks for it.
+add_custom_command(TARGET ${BINARY_NAME} POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "${CMAKE_CURRENT_SOURCE_DIR}/../bin/xray.exe"
+    "$<TARGET_FILE_DIR:${BINARY_NAME}>/xray.exe"
+)
