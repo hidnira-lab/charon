@@ -508,5 +508,20 @@
   "androidAlwaysOnVpnDesc": "Jika Android menghentikan Charon, lalu lintas bisa langsung keluar. Untuk perlindungan penuh, aktifkan VPN Selalu Aktif dan Blokir koneksi tanpa VPN di pengaturan Android.",
   "androidOpenVpnSettings": "Buka pengaturan VPN",
   "splashLoadingService": "Memeriksa layanan Charon...",
-  "splashServiceReady": "Layanan siap"
+  "splashServiceReady": "Layanan siap",
+  "dialogVaultBackupTitle": "Cadangkan ke .charonvault",
+  "dialogVaultRestoreTitle": "Pulihkan dari .charonvault",
+  "dialogVaultPassphraseLabel": "Frasa sandi",
+  "dialogVaultPassphraseWarning": "Jika Anda kehilangan frasa sandi ini, tidak ada yang dapat memulihkan data Anda, termasuk Anda sendiri.",
+  "dialogVaultSavedCheckbox": "Saya telah menyimpan frasa sandi ini di tempat aman",
+  "dialogVaultStrengthShort": "Terlalu pendek",
+  "dialogVaultStrengthFair": "Cukup kuat",
+  "dialogVaultStrengthStrong": "Frasa sandi kuat",
+  "dialogVaultDeriving": "Menghitung kunci dengan Argon2id...",
+  "dialogVaultActionBackup": "Ekspor Brankas",
+  "dialogVaultActionRestore": "Dekripsi & Pulihkan",
+  "dialogQrSecretsWarning": "Kode QR ini membawa kredensial rahasia Anda (UUID dan kunci publik Reality). Siapa pun yang memindainya dapat menggunakan server Anda.",
+  "dialogQrActionShow": "Tampilkan kode QR",
+  "syncServerKeyLabel": "Kunci server",
+  "syncServerKeyHelper": "Ditampilkan sekali saat Anda memulai server sinkronisasi untuk pertama kali."
 }

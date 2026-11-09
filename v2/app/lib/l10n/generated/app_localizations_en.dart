@@ -1678,4 +1678,53 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get splashServiceReady => 'Service ready';
+
+  @override
+  String get dialogVaultBackupTitle => 'Back up to .charonvault';
+
+  @override
+  String get dialogVaultRestoreTitle => 'Restore from .charonvault';
+
+  @override
+  String get dialogVaultPassphraseLabel => 'Passphrase';
+
+  @override
+  String get dialogVaultPassphraseWarning =>
+      'If you lose this passphrase, nobody can recover your data, including you.';
+
+  @override
+  String get dialogVaultSavedCheckbox =>
+      'I have saved this passphrase in a safe place';
+
+  @override
+  String get dialogVaultStrengthShort => 'Too short';
+
+  @override
+  String get dialogVaultStrengthFair => 'Fair passphrase';
+
+  @override
+  String get dialogVaultStrengthStrong => 'Strong passphrase';
+
+  @override
+  String get dialogVaultDeriving => 'Deriving key with Argon2id...';
+
+  @override
+  String get dialogVaultActionBackup => 'Export Vault';
+
+  @override
+  String get dialogVaultActionRestore => 'Decrypt & Restore';
+
+  @override
+  String get dialogQrSecretsWarning =>
+      'This QR code carries your secret credentials (UUID and Reality public key). Anyone who scans it can use your server.';
+
+  @override
+  String get dialogQrActionShow => 'Show QR code';
+
+  @override
+  String get syncServerKeyLabel => 'Server key';
+
+  @override
+  String get syncServerKeyHelper =>
+      'Shown once when you start your sync server for the first time.';
 }

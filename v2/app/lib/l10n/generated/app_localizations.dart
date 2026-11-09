@@ -3040,6 +3040,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Service ready'**
   String get splashServiceReady;
+
+  /// Title for vault backup passphrase dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Back up to .charonvault'**
+  String get dialogVaultBackupTitle;
+
+  /// Title for vault restore passphrase dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from .charonvault'**
+  String get dialogVaultRestoreTitle;
+
+  /// Label for passphrase input field.
+  ///
+  /// In en, this message translates to:
+  /// **'Passphrase'**
+  String get dialogVaultPassphraseLabel;
+
+  /// Warning about non-recoverable passphrase.
+  ///
+  /// In en, this message translates to:
+  /// **'If you lose this passphrase, nobody can recover your data, including you.'**
+  String get dialogVaultPassphraseWarning;
+
+  /// Checkbox confirming passphrase was stored safely.
+  ///
+  /// In en, this message translates to:
+  /// **'I have saved this passphrase in a safe place'**
+  String get dialogVaultSavedCheckbox;
+
+  /// Passphrase strength hint 1 (muted).
+  ///
+  /// In en, this message translates to:
+  /// **'Too short'**
+  String get dialogVaultStrengthShort;
+
+  /// Passphrase strength hint 2 (amber).
+  ///
+  /// In en, this message translates to:
+  /// **'Fair passphrase'**
+  String get dialogVaultStrengthFair;
+
+  /// Passphrase strength hint 3 (blue).
+  ///
+  /// In en, this message translates to:
+  /// **'Strong passphrase'**
+  String get dialogVaultStrengthStrong;
+
+  /// Status text during Argon2id key derivation.
+  ///
+  /// In en, this message translates to:
+  /// **'Deriving key with Argon2id...'**
+  String get dialogVaultDeriving;
+
+  /// Button to confirm vault export.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Vault'**
+  String get dialogVaultActionBackup;
+
+  /// Button to confirm vault restore.
+  ///
+  /// In en, this message translates to:
+  /// **'Decrypt & Restore'**
+  String get dialogVaultActionRestore;
+
+  /// Warning before exporting server QR code.
+  ///
+  /// In en, this message translates to:
+  /// **'This QR code carries your secret credentials (UUID and Reality public key). Anyone who scans it can use your server.'**
+  String get dialogQrSecretsWarning;
+
+  /// Button to show QR code after secrets warning.
+  ///
+  /// In en, this message translates to:
+  /// **'Show QR code'**
+  String get dialogQrActionShow;
+
+  /// Label for sync server bootstrap key.
+  ///
+  /// In en, this message translates to:
+  /// **'Server key'**
+  String get syncServerKeyLabel;
+
+  /// Helper note for server key.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown once when you start your sync server for the first time.'**
+  String get syncServerKeyHelper;
 }
 
 class _AppLocalizationsDelegate

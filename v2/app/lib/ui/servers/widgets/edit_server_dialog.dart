@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/tokens.dart';
+import '../../dialogs/qr_export_dialog.dart';
 
 /// Dialog to edit server display name and quota configuration.
 /// Connection fields are strictly read-only as per Charon rules.
@@ -309,46 +310,66 @@ class _EditServerDialogState extends State<EditServerDialog> {
               ],
               const SizedBox(height: 24),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  OutlinedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFFEDEDED),
-                      side: const BorderSide(color: Color(0xFF737373)),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    ),
-                    child: Text(
-                      l10n.dialogCancel,
-                      style: const TextStyle(
+                  TextButton.icon(
+                    onPressed: () => QrExportDialog.show(context, widget.server),
+                    icon: const Icon(Icons.qr_code_2_rounded, size: 16),
+                    label: const Text(
+                      'Show as QR',
+                      style: TextStyle(
                         fontFamily: CharonTokens.fontMono,
+                        fontSize: 11,
                         fontWeight: FontWeight.w700,
-                        fontSize: 12,
                       ),
+                    ),
+                    style: TextButton.styleFrom(
+                      foregroundColor: const Color(0xFF60A1D9),
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  ElevatedButton(
-                    onPressed: _onSave,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFEDEDED),
-                      foregroundColor: const Color(0xFF121212),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(999),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      OutlinedButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: const Color(0xFFEDEDED),
+                          side: const BorderSide(color: Color(0xFF737373)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        ),
+                        child: Text(
+                          l10n.dialogCancel,
+                          style: const TextStyle(
+                            fontFamily: CharonTokens.fontMono,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12,
+                          ),
+                        ),
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    ),
-                    child: Text(
-                      l10n.dialogSave,
-                      style: const TextStyle(
-                        fontFamily: CharonTokens.fontMono,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 12,
+                      const SizedBox(width: 12),
+                      ElevatedButton(
+                        onPressed: _onSave,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFEDEDED),
+                          foregroundColor: const Color(0xFF121212),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        ),
+                        child: Text(
+                          l10n.dialogSave,
+                          style: const TextStyle(
+                            fontFamily: CharonTokens.fontMono,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),

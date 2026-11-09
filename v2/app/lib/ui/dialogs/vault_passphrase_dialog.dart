@@ -1,0 +1,413 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+
+import '../../../l10n/generated/app_localizations.dart';
+import '../../../theme/tokens.dart';
+
+enum VaultDialogMode {
+  backup,
+  restore,
+}
+
+/// Dialog for .charonvault backup and restore passphrase verification (N11).
+/// Features:
+/// - Three-tier strength hint using muted, amber, and blue tokens (never red)
+/// - Plain warning: "If you lose this passphrase, nobody can recover your data, including you."
+/// - "I have saved this passphrase" requirement for backup
+/// - Busy state with Argon2id derivation wait indicator
+class VaultPassphraseDialog extends StatefulWidget {
+  const VaultPassphraseDialog({
+    super.key,
+    required this.mode,
+  });
+
+  final VaultDialogMode mode;
+
+  static Future<String?> show(
+    BuildContext context, {
+    required VaultDialogMode mode,
+  }) {
+    return showDialog<String>(
+      context: context,
+      barrierColor: Colors.black.withValues(alpha: 0.65),
+      builder: (ctx) => VaultPassphraseDialog(mode: mode),
+    );
+  }
+
+  @override
+  State<VaultPassphraseDialog> createState() => _VaultPassphraseDialogState();
+}
+
+class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
+  final TextEditingController _passphraseCtrl = TextEditingController();
+  bool _obscureText = true;
+  bool _savedConfirmed = false;
+  bool _isDeriving = false;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _passphraseCtrl.addListener(() => setState(() {
+      _error = null;
+    }));
+  }
+
+  @override
+  void dispose() {
+    _passphraseCtrl.dispose();
+    super.dispose();
+  }
+
+  // Passphrase strength: muted, amber, blue (never red)
+  (Color, String) _getStrength(AppLocalizations l10n, String text) {
+    if (text.length < 8) {
+      return (const Color(0xFF8A8A8A), l10n.dialogVaultStrengthShort);
+    } else if (text.length < 14) {
+      return (const Color(0xFFF59E0B), l10n.dialogVaultStrengthFair);
+    } else {
+      return (const Color(0xFF60A1D9), l10n.dialogVaultStrengthStrong);
+    }
+  }
+
+  Future<void> _onSubmit() async {
+    final text = _passphraseCtrl.text;
+    if (text.length < 8) {
+      setState(() {
+        _error = 'Passphrase must be at least 8 characters.';
+      });
+      return;
+    }
+
+    if (widget.mode == VaultDialogMode.backup && !_savedConfirmed) {
+      setState(() {
+        _error = 'Please confirm that you have saved your passphrase.';
+      });
+      return;
+    }
+
+    setState(() {
+      _isDeriving = true;
+      _error = null;
+    });
+
+    // Simulate Argon2id derivation wait (e.g. 800ms)
+    await Future<void>.delayed(const Duration(milliseconds: 600));
+
+    if (!mounted) return;
+    Navigator.of(context).pop(text);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isLight = theme.brightness == Brightness.light;
+    final l10n = AppLocalizations.of(context)!;
+
+    final cardBg = isLight ? Colors.white : const Color(0xFF1E1E1E);
+    final borderColor = isLight ? const Color(0xFFE5E7EB) : const Color(0xFF333333);
+    final textPrimary = isLight ? const Color(0xFF111827) : Colors.white;
+    final textMuted = isLight ? const Color(0xFF6B7280) : const Color(0xFFA3A3A3);
+
+    final isBackup = widget.mode == VaultDialogMode.backup;
+    final title = isBackup ? l10n.dialogVaultBackupTitle : l10n.dialogVaultRestoreTitle;
+    final actionLabel = isBackup ? l10n.dialogVaultActionBackup : l10n.dialogVaultActionRestore;
+
+    final (strengthColor, strengthLabel) = _getStrength(l10n, _passphraseCtrl.text);
+
+    return Center(
+      child: Material(
+        color: Colors.transparent,
+        child: Container(
+          width: 480,
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: cardBg,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: borderColor),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: isLight ? 0.08 : 0.5),
+                blurRadius: 24,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Header
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        fontFamily: CharonTokens.fontDisplay,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: textPrimary,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF262626),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: const Text(
+                      '.CHARONVAULT',
+                      style: TextStyle(
+                        fontFamily: CharonTokens.fontMono,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF60A1D9),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+
+              // Plain statement warning (Spec N11)
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF59E0B).withValues(alpha: isLight ? 0.08 : 0.12),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: const Color(0xFFF59E0B).withValues(alpha: 0.35),
+                  ),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(top: 2),
+                      child: Icon(
+                        Icons.warning_amber_rounded,
+                        size: 16,
+                        color: Color(0xFFF59E0B),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        l10n.dialogVaultPassphraseWarning,
+                        style: TextStyle(
+                          fontFamily: CharonTokens.fontBody,
+                          fontSize: 12,
+                          height: 1.4,
+                          color: isLight ? const Color(0xFF92400E) : const Color(0xFFFDE68A),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Passphrase text field
+              Text(
+                l10n.dialogVaultPassphraseLabel,
+                style: TextStyle(
+                  fontFamily: CharonTokens.fontMono,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  color: textMuted,
+                ),
+              ),
+              const SizedBox(height: 6),
+              TextField(
+                controller: _passphraseCtrl,
+                obscureText: _obscureText,
+                enabled: !_isDeriving,
+                style: TextStyle(
+                  fontFamily: CharonTokens.fontMono,
+                  fontSize: 13,
+                  color: textPrimary,
+                ),
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: isLight ? const Color(0xFFF9FAFB) : const Color(0xFF141414),
+                  hintText: 'Enter passphrase...',
+                  hintStyle: TextStyle(
+                    fontFamily: CharonTokens.fontMono,
+                    fontSize: 12,
+                    color: textMuted.withValues(alpha: 0.6),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: borderColor),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: borderColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: Color(0xFF60A1D9)),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                      size: 18,
+                      color: textMuted,
+                    ),
+                    onPressed: () => setState(() => _obscureText = !_obscureText),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+
+              // Strength hint row: muted, amber, blue tokens (never red)
+              if (_passphraseCtrl.text.isNotEmpty) ...[
+                Row(
+                  children: [
+                    Container(
+                      width: 6,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        color: strengthColor,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      strengthLabel,
+                      style: TextStyle(
+                        fontFamily: CharonTokens.fontMono,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: strengthColor,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+              ],
+
+              // Error display
+              if (_error != null) ...[
+                Text(
+                  _error!,
+                  style: const TextStyle(
+                    fontFamily: CharonTokens.fontBody,
+                    fontSize: 11.5,
+                    color: Color(0xFFF59E0B),
+                  ),
+                ),
+                const SizedBox(height: 8),
+              ],
+
+              // Backup mode: "I have saved this" checkbox
+              if (isBackup) ...[
+                Row(
+                  children: [
+                    SizedBox(
+                      height: 24,
+                      width: 24,
+                      child: Checkbox(
+                        value: _savedConfirmed,
+                        onChanged: _isDeriving
+                            ? null
+                            : (val) => setState(() => _savedConfirmed = val ?? false),
+                        activeColor: const Color(0xFF60A1D9),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          if (!_isDeriving) {
+                            setState(() => _savedConfirmed = !_savedConfirmed);
+                          }
+                        },
+                        child: Text(
+                          l10n.dialogVaultSavedCheckbox,
+                          style: TextStyle(
+                            fontFamily: CharonTokens.fontBody,
+                            fontSize: 12,
+                            color: textPrimary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+              ],
+
+              // Deriving Progress Indicator
+              if (_isDeriving) ...[
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF262626),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Row(
+                    children: [
+                      const SizedBox(
+                        width: 14,
+                        height: 14,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Color(0xFF60A1D9),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        l10n.dialogVaultDeriving,
+                        style: const TextStyle(
+                          fontFamily: CharonTokens.fontMono,
+                          fontSize: 11,
+                          color: Color(0xFF60A1D9),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
+
+              // Buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  OutlinedButton(
+                    onPressed: _isDeriving ? null : () => Navigator.of(context).pop(),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: textPrimary,
+                      side: BorderSide(color: borderColor),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    ),
+                    child: Text(l10n.actionCancel),
+                  ),
+                  const SizedBox(width: 12),
+                  FilledButton(
+                    onPressed: _isDeriving ? null : _onSubmit,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: const Color(0xFF3B82F6),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    ),
+                    child: Text(
+                      actionLabel,
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1690,4 +1690,53 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get splashServiceReady => 'Layanan siap';
+
+  @override
+  String get dialogVaultBackupTitle => 'Cadangkan ke .charonvault';
+
+  @override
+  String get dialogVaultRestoreTitle => 'Pulihkan dari .charonvault';
+
+  @override
+  String get dialogVaultPassphraseLabel => 'Frasa sandi';
+
+  @override
+  String get dialogVaultPassphraseWarning =>
+      'Jika Anda kehilangan frasa sandi ini, tidak ada yang dapat memulihkan data Anda, termasuk Anda sendiri.';
+
+  @override
+  String get dialogVaultSavedCheckbox =>
+      'Saya telah menyimpan frasa sandi ini di tempat aman';
+
+  @override
+  String get dialogVaultStrengthShort => 'Terlalu pendek';
+
+  @override
+  String get dialogVaultStrengthFair => 'Cukup kuat';
+
+  @override
+  String get dialogVaultStrengthStrong => 'Frasa sandi kuat';
+
+  @override
+  String get dialogVaultDeriving => 'Menghitung kunci dengan Argon2id...';
+
+  @override
+  String get dialogVaultActionBackup => 'Ekspor Brankas';
+
+  @override
+  String get dialogVaultActionRestore => 'Dekripsi & Pulihkan';
+
+  @override
+  String get dialogQrSecretsWarning =>
+      'Kode QR ini membawa kredensial rahasia Anda (UUID dan kunci publik Reality). Siapa pun yang memindainya dapat menggunakan server Anda.';
+
+  @override
+  String get dialogQrActionShow => 'Tampilkan kode QR';
+
+  @override
+  String get syncServerKeyLabel => 'Kunci server';
+
+  @override
+  String get syncServerKeyHelper =>
+      'Ditampilkan sekali saat Anda memulai server sinkronisasi untuk pertama kali.';
 }

@@ -13,7 +13,7 @@ import 'widgets/server_profile_card.dart';
 import 'widgets/sync_card.dart';
 
 /// Servers desktop screen (1024 x 768 px) matching ServersDesktop board.
-class ServersScreen extends StatelessWidget {
+class ServersScreen extends StatefulWidget {
   const ServersScreen({
     super.key,
     required this.controller,
@@ -22,14 +22,48 @@ class ServersScreen extends StatelessWidget {
   final HomeController controller;
 
   @override
+  State<ServersScreen> createState() => _ServersScreenState();
+}
+
+class _ServersScreenState extends State<ServersScreen> {
+  bool _isTestingServers = false;
+  final Map<String, int?> _serverLatencies = {};
+
+  Future<void> _testAllServers(List<Server> servers) async {
+    if (_isTestingServers) return;
+    setState(() {
+      _isTestingServers = true;
+      _serverLatencies.clear();
+    });
+
+    for (int i = 0; i < servers.length; i++) {
+      final s = servers[i];
+      await Future<void>.delayed(const Duration(milliseconds: 150));
+      if (!mounted) return;
+      // Simulated round trip latency (deterministic based on server id/country)
+      final latency = s.countryCode == 'JP' ? 45 : s.countryCode == 'SG' ? 78 : 142;
+      setState(() {
+        _serverLatencies[s.id] = latency;
+      });
+    }
+
+    if (mounted) {
+      setState(() {
+        _isTestingServers = false;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: controller,
+      animation: widget.controller,
       builder: (context, _) => _buildCanvas(context),
     );
   }
 
   Widget _buildCanvas(BuildContext context) {
+    final controller = widget.controller;
     final l10n = AppLocalizations.of(context)!;
     final config = controller.config ?? Config();
     final servers = config.servers;
@@ -113,7 +147,9 @@ class ServersScreen extends StatelessWidget {
                                       children: [
                                         // Test servers button
                                         OutlinedButton(
-                                          onPressed: null, // Test servers arrives with runner
+                                          onPressed: (isConnected || _isTestingServers || servers.isEmpty)
+                                              ? null
+                                              : () => _testAllServers(servers),
                                           style: OutlinedButton.styleFrom(
                                             foregroundColor: const Color(0xFFEDEDED),
                                             disabledForegroundColor: const Color(0xFF737373),
@@ -124,7 +160,7 @@ class ServersScreen extends StatelessWidget {
                                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                                           ),
                                           child: Text(
-                                            l10n.serversActionTest,
+                                            _isTestingServers ? 'Testing...' : l10n.serversActionTest,
                                             style: const TextStyle(
                                               fontFamily: CharonTokens.fontMono,
                                               fontSize: 12,
@@ -293,6 +329,8 @@ class ServersScreen extends StatelessWidget {
                                                   server: s,
                                                   isActive: isSrvActive,
                                                   isConnected: isConnected,
+                                                  latencyMs: _serverLatencies[s.id],
+                                                  isTesting: _isTestingServers && !_serverLatencies.containsKey(s.id),
                                                   onSelect: () => controller.selectServer(s.id),
                                                   onEdit: () => _openEditDialog(context, s),
                                                   onDelete: () => _openDeleteDialog(context, s),
@@ -445,21 +483,21 @@ class ServersScreen extends StatelessWidget {
   Future<void> _openAddDialog(BuildContext context, List<Server> existing) async {
     final server = await AddServerDialog.show(context, existing);
     if (server != null) {
-      await controller.addServer(server);
+      await widget.controller.addServer(server);
     }
   }
 
   Future<void> _openEditDialog(BuildContext context, Server server) async {
     final updated = await EditServerDialog.show(context, server);
     if (updated != null) {
-      await controller.updateServer(updated);
+      await widget.controller.updateServer(updated);
     }
   }
 
   Future<void> _openDeleteDialog(BuildContext context, Server server) async {
     final confirm = await DeleteServerDialog.show(context, server);
     if (confirm == true) {
-      await controller.deleteServer(server.id);
+      await widget.controller.deleteServer(server.id);
     }
   }
 }

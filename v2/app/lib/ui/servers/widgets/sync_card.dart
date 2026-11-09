@@ -4,6 +4,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/tokens.dart';
 import '../../dialogs/sync_conflict_dialog.dart';
 import '../../dialogs/unpair_confirm_dialog.dart';
+import '../../dialogs/vault_passphrase_dialog.dart';
 
 /// Right-column Sync & Backup card (320px width) matching ServersDesktop board.
 class SyncCard extends StatelessWidget {
@@ -12,11 +13,15 @@ class SyncCard extends StatelessWidget {
     this.onPush,
     this.onPull,
     this.onUnpair,
+    this.onBackupFile,
+    this.onRestoreFile,
   });
 
   final VoidCallback? onPush;
   final VoidCallback? onPull;
   final VoidCallback? onUnpair;
+  final VoidCallback? onBackupFile;
+  final VoidCallback? onRestoreFile;
 
   @override
   Widget build(BuildContext context) {
@@ -280,10 +285,13 @@ class SyncCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: null,
+                        onPressed: onBackupFile ??
+                            () => VaultPassphraseDialog.show(
+                                  context,
+                                  mode: VaultDialogMode.backup,
+                                ),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: const Color(0xFFEDEDED),
-                          disabledForegroundColor: const Color(0xFF5C5C5C),
                           side: const BorderSide(color: Color(0xFF4A4A4A)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(999),
@@ -302,10 +310,13 @@ class SyncCard extends StatelessWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: null,
+                        onPressed: onRestoreFile ??
+                            () => VaultPassphraseDialog.show(
+                                  context,
+                                  mode: VaultDialogMode.restore,
+                                ),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: const Color(0xFFEDEDED),
-                          disabledForegroundColor: const Color(0xFF5C5C5C),
                           side: const BorderSide(color: Color(0xFF4A4A4A)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(999),

@@ -1575,6 +1575,52 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get splashServiceReady => '服务就绪';
+
+  @override
+  String get dialogVaultBackupTitle => '备份至 .charonvault';
+
+  @override
+  String get dialogVaultRestoreTitle => '从 .charonvault 恢复';
+
+  @override
+  String get dialogVaultPassphraseLabel => '密码短语';
+
+  @override
+  String get dialogVaultPassphraseWarning => '如果您丢失了此密码短语，任何人（包括您自己）都无法恢复您的数据。';
+
+  @override
+  String get dialogVaultSavedCheckbox => '我已将此密码短语保存在安全的地方';
+
+  @override
+  String get dialogVaultStrengthShort => '太短';
+
+  @override
+  String get dialogVaultStrengthFair => '强度适中';
+
+  @override
+  String get dialogVaultStrengthStrong => '高强度密码';
+
+  @override
+  String get dialogVaultDeriving => '正在使用 Argon2id 派生密钥...';
+
+  @override
+  String get dialogVaultActionBackup => '导出保险库';
+
+  @override
+  String get dialogVaultActionRestore => '解密并恢复';
+
+  @override
+  String get dialogQrSecretsWarning =>
+      '此二维码包含您的私密凭据（UUID 和 Reality 公钥）。扫描此二维码的任何人都可以使用您的服务器。';
+
+  @override
+  String get dialogQrActionShow => '显示二维码';
+
+  @override
+  String get syncServerKeyLabel => '服务器密钥';
+
+  @override
+  String get syncServerKeyHelper => '首次启动同步服务器时显示一次。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -3147,4 +3193,50 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get splashServiceReady => '服务就绪';
+
+  @override
+  String get dialogVaultBackupTitle => '备份至 .charonvault';
+
+  @override
+  String get dialogVaultRestoreTitle => '从 .charonvault 恢复';
+
+  @override
+  String get dialogVaultPassphraseLabel => '密码短语';
+
+  @override
+  String get dialogVaultPassphraseWarning => '如果您丢失了此密码短语，任何人（包括您自己）都无法恢复您的数据。';
+
+  @override
+  String get dialogVaultSavedCheckbox => '我已将此密码短语保存在安全的地方';
+
+  @override
+  String get dialogVaultStrengthShort => '太短';
+
+  @override
+  String get dialogVaultStrengthFair => '强度适中';
+
+  @override
+  String get dialogVaultStrengthStrong => '高强度密码';
+
+  @override
+  String get dialogVaultDeriving => '正在使用 Argon2id 派生密钥...';
+
+  @override
+  String get dialogVaultActionBackup => '导出保险库';
+
+  @override
+  String get dialogVaultActionRestore => '解密并恢复';
+
+  @override
+  String get dialogQrSecretsWarning =>
+      '此二维码包含您的私密凭据（UUID 和 Reality 公钥）。扫描此二维码的任何人都可以使用您的服务器。';
+
+  @override
+  String get dialogQrActionShow => '显示二维码';
+
+  @override
+  String get syncServerKeyLabel => '服务器密钥';
+
+  @override
+  String get syncServerKeyHelper => '首次启动同步服务器时显示一次。';
 }

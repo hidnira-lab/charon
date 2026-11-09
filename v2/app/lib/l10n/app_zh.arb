@@ -509,5 +509,20 @@
   "androidAlwaysOnVpnDesc": "如果 Android 终止 Charon，网络流量可能会直接出网。为获得完整保护，请在系统设置中启用“始终开启的 VPN”并“阻止未使用 VPN 的连接”。",
   "androidOpenVpnSettings": "打开 VPN 设置",
   "splashLoadingService": "正在检查 Charon 服务...",
-  "splashServiceReady": "服务就绪"
+  "splashServiceReady": "服务就绪",
+  "dialogVaultBackupTitle": "备份至 .charonvault",
+  "dialogVaultRestoreTitle": "从 .charonvault 恢复",
+  "dialogVaultPassphraseLabel": "密码短语",
+  "dialogVaultPassphraseWarning": "如果您丢失了此密码短语，任何人（包括您自己）都无法恢复您的数据。",
+  "dialogVaultSavedCheckbox": "我已将此密码短语保存在安全的地方",
+  "dialogVaultStrengthShort": "太短",
+  "dialogVaultStrengthFair": "强度适中",
+  "dialogVaultStrengthStrong": "高强度密码",
+  "dialogVaultDeriving": "正在使用 Argon2id 派生密钥...",
+  "dialogVaultActionBackup": "导出保险库",
+  "dialogVaultActionRestore": "解密并恢复",
+  "dialogQrSecretsWarning": "此二维码包含您的私密凭据（UUID 和 Reality 公钥）。扫描此二维码的任何人都可以使用您的服务器。",
+  "dialogQrActionShow": "显示二维码",
+  "syncServerKeyLabel": "服务器密钥",
+  "syncServerKeyHelper": "首次启动同步服务器时显示一次。"
 }
