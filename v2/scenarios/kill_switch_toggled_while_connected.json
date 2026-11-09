@@ -1,0 +1,32 @@
+{
+  "name": "kill switch toggled while connected",
+  "description": "Safety switches apply at once (spec). The session is Up with the kill switch off, so the gate is Disarmed. The user turns the kill switch on and the gate becomes Armed immediately, with no reconnect and no change of phase. Turning it off again lifts the gate at once. The same rule holds in any phase: the gate follows the setting.",
+
+  "config": {
+    "version": 1,
+    "servers": [
+      { "id": "SRV-01", "display_name": "Fixture server one", "protocol": "PROTOCOL_VLESS_REALITY", "address": "192.0.2.10", "port": 443, "uuid": "00000000-0000-0000-0000-000000000001", "flow": "xtls-rprx-vision", "reality": { "public_key": "FIXTURE_PUBLIC_KEY_NOT_A_REAL_KEY", "short_id": "0000", "server_name": "example.com", "fingerprint": "chrome" }, "transport": "tcp", "country_code": "US" }
+    ],
+    "chosen_server_id": "SRV-01",
+    "settings": { "kill_switch": false, "auto_reconnect": true, "allow_local_network": true }
+  },
+  "saved": { "last_session_connected": false, "active_server_id": "" },
+
+  "steps": [
+    { "at_ms": 0, "input": { "type": "Connect" },
+      "effects": [ { "type": "StartXray", "server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_STARTING", "gate": "GATE_DISARMED", "kill_switch_on": false } },
+    { "at_ms": 600, "input": { "type": "XrayStarted" },
+      "effects": [ { "type": "StartVerify", "server_id": "SRV-01" }, { "type": "SetTimer", "name": "verify_timeout", "after_ms": 15000 } ],
+      "expect": { "phase": "PHASE_VERIFYING" } },
+    { "at_ms": 2300, "input": { "type": "VerifyOk", "egress_address": "192.0.2.10", "latency_ms": 120 },
+      "effects": [ { "type": "CancelTimer", "name": "verify_timeout" }, { "type": "SaveLastSession", "connected": true, "active_server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_UP", "gate": "GATE_DISARMED" } },
+    { "at_ms": 60000, "input": { "type": "SettingsChanged", "kill_switch": true, "auto_reconnect": true, "allow_local_network": true },
+      "effects": [ { "type": "SetGate", "gate": "GATE_ARMED" } ],
+      "expect": { "phase": "PHASE_UP", "gate": "GATE_ARMED", "kill_switch_on": true } },
+    { "at_ms": 90000, "input": { "type": "SettingsChanged", "kill_switch": false, "auto_reconnect": true, "allow_local_network": true },
+      "effects": [ { "type": "SetGate", "gate": "GATE_DISARMED" } ],
+      "expect": { "phase": "PHASE_UP", "gate": "GATE_DISARMED", "kill_switch_on": false } }
+  ]
+}

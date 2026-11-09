@@ -2,7 +2,7 @@
 
 Shared scenario files. One format, one source of truth. The same file drives three things: the state machine tests in `core/`, the fake core, and the UI integration tests (see CLAUDE.md section 8).
 
-Status: format and the first scenario set drafted at M0. The list of effect types is provisional until the state machine is written in M1, and may change then. The scenarios are the spec for M1: write the machine until they pass.
+Status: 23 scenarios, all passing against the state machine (M1). The scenarios are the spec: change a scenario first, then the machine. The effect types listed below are now what the machine produces.
 
 ## Rules
 
@@ -46,7 +46,7 @@ System events, named as in the state machine document: `ServiceStarted`, `XraySt
 
 One input is added here: `XrayStopped`. The state machine document says "on Xray stopped" in the Stopping phase but does not list it as an event.
 
-## Effect types (provisional)
+## Effect types
 
 `SetGate` (gate), `StartXray` and `StopXray` (server id), `StartVerify` (server id), `SetTimer` (name and `after_ms`), `CancelTimer` (name), `SaveLastSession` (connected, active server id), `Notify` (notice kind and server id).
 
@@ -68,9 +68,12 @@ The documents do not settle these. Each scenario follows the choice below. If th
 6. **Notices.** `TRAFFIC_HELD` is sent when the gate becomes Held after an unexpected loss, `RECONNECTED` when a Retrying session is Up again, `MOVED_TO_BACKUP` when failover ends Up on another server.
 7. **Quota size.** `cap_gb` is decimal gigabytes (1 GB is 1,000,000,000 bytes), as providers count it. Amber from 80 percent, red at 100 percent.
 
-## Gaps in the documents that no scenario covers yet
+## Gaps in the documents, settled in M1
 
-* `Disconnect` is allowed in every phase except Idle and Stopping, but the transition table only defines it for Up, Retrying and Blocked.
-* `XrayExited` while Retrying or Switching is restarting Xray is not defined.
-* `SettingsChanged` has no transitions (for example the kill switch turned on while Up, which should apply at once).
-* The wake case where the network never comes back (see default 4).
+These were open in the documents. The owner decided each one, and each now has a scenario.
+
+8. `Disconnect` while Starting, Verifying or Switching behaves exactly like Cancel (`disconnect_while_verifying`).
+9. `XrayExited` while Retrying or Switching counts as one failed try, the same as a failed verification (`xray_exits_while_retrying`).
+10. `SettingsChanged` moves the gate at once, in any phase, to match the kill switch setting: Armed in Up, Starting, Verifying and Switching, Held in Retrying and Blocked, Disarmed in Idle or when the kill switch is off (`kill_switch_toggled_while_connected`). Auto reconnect is only read the next time something fails. The input carries `kill_switch`, `auto_reconnect` and `allow_local_network`.
+
+Still open: the wake case where the network never comes back (see default 4).
