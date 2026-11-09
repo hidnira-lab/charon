@@ -20,6 +20,12 @@ Charon is licensed under GPL 3.0 (see `LICENSE`). It includes or ships the follo
 * Source: https://github.com/protocolbuffers/protobuf-go (`google.golang.org/protobuf`, version v1.36.12)
 * Use: runtime library of the Go module in `v2/core/`. The generated file `v2/core/gen/charonv1/charon.pb.go` is produced from `v2/proto/` with `protoc` and `protoc-gen-go`. Both are build tools and are not shipped.
 
+## go-winio
+
+* Licence: MIT
+* Source: https://github.com/microsoft/go-winio (version v0.6.4)
+* Use: named pipe listener on Windows in `v2/core/cmd/fakecore/`. It will also serve the real service pipe in M2. It pulls in `golang.org/x/sys` (BSD 3 Clause).
+
 ## Fonts
 
 All three families are licensed under the SIL Open Font License 1.1. The licence texts are next to the font files in `charon_vpn/assets/fonts/`.
