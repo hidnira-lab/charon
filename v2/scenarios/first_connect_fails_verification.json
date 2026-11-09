@@ -15,15 +15,19 @@
   "steps": [
     { "at_ms": 0, "input": { "type": "Connect" },
       "effects": [ { "type": "SetGate", "gate": "GATE_ARMED" }, { "type": "StartXray", "server_id": "SRV-01" } ],
+      "ui": "verifying",
       "expect": { "phase": "PHASE_STARTING", "gate": "GATE_ARMED" } },
     { "at_ms": 600, "input": { "type": "XrayStarted" },
       "effects": [ { "type": "StartVerify", "server_id": "SRV-01" }, { "type": "SetTimer", "name": "verify_timeout", "after_ms": 15000 } ],
-      "expect": { "phase": "PHASE_VERIFYING", "gate": "GATE_ARMED" } },
+      "ui": "verifying",
+      "expect": { "phase": "PHASE_VERIFYING", "gate": "GATE_ARMED", "probe": "PROBE_UNSPECIFIED" } },
     { "at_ms": 3000, "input": { "type": "VerifyFailed", "reason": "FAILURE_REALITY_HANDSHAKE" },
       "effects": [ { "type": "CancelTimer", "name": "verify_timeout" }, { "type": "StopXray", "server_id": "SRV-01" } ],
+      "ui": "disconnecting",
       "expect": { "phase": "PHASE_STOPPING", "gate": "GATE_ARMED", "last_failure": "FAILURE_REALITY_HANDSHAKE" } },
     { "at_ms": 3200, "input": { "type": "XrayStopped" },
       "effects": [ { "type": "SetGate", "gate": "GATE_DISARMED" }, { "type": "SaveLastSession", "connected": false, "active_server_id": "" } ],
-      "expect": { "phase": "PHASE_IDLE", "gate": "GATE_DISARMED", "last_failure": "FAILURE_REALITY_HANDSHAKE" } }
+      "ui": "could_not_reach",
+      "expect": { "phase": "PHASE_IDLE", "gate": "GATE_DISARMED", "last_failure": "FAILURE_REALITY_HANDSHAKE", "last_end": "SESSION_END_COULD_NOT_REACH" } }
   ]
 }

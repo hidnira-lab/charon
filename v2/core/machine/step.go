@@ -217,6 +217,10 @@ func (r *run) connect(Event) {
 	r.s.EverUp = false
 	r.s.Attempt = 0
 	r.s.LastFailure = charonv1.FailureReason_FAILURE_UNSPECIFIED
+	r.s.LastEnd = charonv1.SessionEnd_SESSION_END_UNSPECIFIED
+	r.s.Ending = charonv1.SessionEnd_SESSION_END_UNSPECIFIED
+	r.s.Probe = charonv1.Probe_PROBE_UNSPECIFIED
+	r.s.Waking = false
 	r.setGate(charonv1.Gate_GATE_ARMED)
 	r.start(r.s.Active)
 	r.enter(phStarting)
@@ -228,6 +232,11 @@ func (r *run) beginStop(Event) {
 	r.cancelRetry()
 	r.cancelVerify()
 	r.s.WakeWait = false
+	r.s.Waking = false
+	r.s.Probe = charonv1.Probe_PROBE_UNSPECIFIED
+	if r.s.Ending == charonv1.SessionEnd_SESSION_END_UNSPECIFIED {
+		r.s.Ending = charonv1.SessionEnd_SESSION_END_MANUAL // a failed first connect set its own before calling this
+	}
 	r.stop()
 	r.enter(phStopping)
 }
@@ -338,6 +347,7 @@ func (r *run) lostWhileUp(e Event) {
 		r.setGate(charonv1.Gate_GATE_DISARMED)
 		r.save(false, "")
 		r.reset()
+		s.LastEnd = charonv1.SessionEnd_SESSION_END_TUNNEL_LOST
 		r.enter(phIdle)
 	}
 }
@@ -346,6 +356,7 @@ func (r *run) lostWhileUp(e Event) {
 func (r *run) stopped(Event) {
 	r.setGate(charonv1.Gate_GATE_DISARMED)
 	r.save(false, "")
+	r.s.LastEnd = r.s.Ending
 	r.reset()
 	r.enter(phIdle)
 }
@@ -359,6 +370,9 @@ func (r *run) reset() {
 	s.AutoSwitch = false
 	s.EverUp = false
 	s.WakeWait = false
+	s.Waking = false
+	s.Probe = charonv1.Probe_PROBE_UNSPECIFIED
+	s.Ending = charonv1.SessionEnd_SESSION_END_UNSPECIFIED
 	s.Attempt = 0
 	s.NextTryAtMs = 0
 	s.VerifyTimer = false
@@ -385,6 +399,8 @@ func (r *run) verifyOk(e Event) {
 	}
 	s.EverUp = true
 	s.AutoSwitch = false
+	s.Probe = charonv1.Probe_PROBE_UNSPECIFIED
+	s.Waking = false
 	s.Attempt = 0
 	s.NextTryAtMs = 0
 	s.EgressAddress = e.EgressAddress
@@ -406,9 +422,11 @@ func (r *run) failedCheck(e Event) {
 	s.LastFailure = reason
 	switch s.Phase {
 	case phStarting:
+		s.Ending = charonv1.SessionEnd_SESSION_END_COULD_NOT_REACH
 		r.beginStop(e) // first connect, never Up: stop, no retry loop (S4)
 	case phVerifying:
 		if !s.EverUp {
+			s.Ending = charonv1.SessionEnd_SESSION_END_COULD_NOT_REACH
 			r.beginStop(e) // "Could not reach", no retry loop (S4)
 			return
 		}
@@ -423,6 +441,8 @@ func (r *run) failedCheck(e Event) {
 // toRetrying enters Retrying on the active server, holds traffic when the kill
 // switch is on, and waits for the retry timer. attempt is the next try.
 func (r *run) toRetrying(attempt uint32, stopXray bool) {
+	r.s.Probe = charonv1.Probe_PROBE_UNSPECIFIED
+	r.s.Waking = false
 	r.cancelVerify()
 	if stopXray {
 		r.stop()
@@ -480,6 +500,10 @@ func (r *run) retryTimerFired(Event) {
 // the tunnel with a real round trip and never fails over by itself.
 func (r *run) probe(Event) {
 	r.s.WakeWait = false
+	r.s.Probe = charonv1.Probe_PROBE_NETWORK_CHANGE
+	if r.s.Waking {
+		r.s.Probe = charonv1.Probe_PROBE_WAKE
+	}
 	r.enter(phVerifying)
 	r.sendVerify()
 }
@@ -494,6 +518,7 @@ func (r *run) networkChanged(Event) {
 
 func (r *run) resumed(Event) {
 	r.s.WakeWait = true
+	r.s.Waking = true
 	r.emit(Effect{Type: SetTimer, Name: TimerNetworkWait, AfterMs: WakeWaitMs})
 }
 

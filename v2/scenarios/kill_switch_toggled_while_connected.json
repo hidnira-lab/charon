@@ -15,18 +15,23 @@
   "steps": [
     { "at_ms": 0, "input": { "type": "Connect" },
       "effects": [ { "type": "StartXray", "server_id": "SRV-01" } ],
+      "ui": "verifying",
       "expect": { "phase": "PHASE_STARTING", "gate": "GATE_DISARMED", "kill_switch_on": false } },
     { "at_ms": 600, "input": { "type": "XrayStarted" },
       "effects": [ { "type": "StartVerify", "server_id": "SRV-01" }, { "type": "SetTimer", "name": "verify_timeout", "after_ms": 15000 } ],
-      "expect": { "phase": "PHASE_VERIFYING" } },
+      "ui": "verifying",
+      "expect": { "phase": "PHASE_VERIFYING", "probe": "PROBE_UNSPECIFIED" } },
     { "at_ms": 2300, "input": { "type": "VerifyOk", "egress_address": "192.0.2.10", "latency_ms": 120 },
       "effects": [ { "type": "CancelTimer", "name": "verify_timeout" }, { "type": "SaveLastSession", "connected": true, "active_server_id": "SRV-01" } ],
-      "expect": { "phase": "PHASE_UP", "gate": "GATE_DISARMED" } },
+      "ui": "connected",
+      "expect": { "phase": "PHASE_UP", "gate": "GATE_DISARMED", "on_backup": false } },
     { "at_ms": 60000, "input": { "type": "SettingsChanged", "kill_switch": true, "auto_reconnect": true, "allow_local_network": true },
       "effects": [ { "type": "SetGate", "gate": "GATE_ARMED" } ],
-      "expect": { "phase": "PHASE_UP", "gate": "GATE_ARMED", "kill_switch_on": true } },
+      "ui": "connected",
+      "expect": { "phase": "PHASE_UP", "gate": "GATE_ARMED", "kill_switch_on": true, "on_backup": false } },
     { "at_ms": 90000, "input": { "type": "SettingsChanged", "kill_switch": false, "auto_reconnect": true, "allow_local_network": true },
       "effects": [ { "type": "SetGate", "gate": "GATE_DISARMED" } ],
-      "expect": { "phase": "PHASE_UP", "gate": "GATE_DISARMED", "kill_switch_on": false } }
+      "ui": "connected",
+      "expect": { "phase": "PHASE_UP", "gate": "GATE_DISARMED", "kill_switch_on": false, "on_backup": false } }
   ]
 }

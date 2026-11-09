@@ -15,21 +15,27 @@
   "steps": [
     { "at_ms": 0, "input": { "type": "Connect" },
       "effects": [ { "type": "SetGate", "gate": "GATE_ARMED" }, { "type": "StartXray", "server_id": "SRV-01" } ],
+      "ui": "verifying",
       "expect": { "phase": "PHASE_STARTING", "gate": "GATE_ARMED" } },
     { "at_ms": 600, "input": { "type": "XrayStarted" },
       "effects": [ { "type": "StartVerify", "server_id": "SRV-01" }, { "type": "SetTimer", "name": "verify_timeout", "after_ms": 15000 } ],
-      "expect": { "phase": "PHASE_VERIFYING" } },
+      "ui": "verifying",
+      "expect": { "phase": "PHASE_VERIFYING", "probe": "PROBE_UNSPECIFIED" } },
     { "at_ms": 2300, "input": { "type": "VerifyOk", "egress_address": "192.0.2.10", "latency_ms": 120 },
       "effects": [ { "type": "CancelTimer", "name": "verify_timeout" }, { "type": "SaveLastSession", "connected": true, "active_server_id": "SRV-01" } ],
-      "expect": { "phase": "PHASE_UP", "gate": "GATE_ARMED", "quota_level": "QUOTA_NORMAL" } },
+      "ui": "connected",
+      "expect": { "phase": "PHASE_UP", "gate": "GATE_ARMED", "quota_level": "QUOTA_NORMAL", "on_backup": false } },
     { "at_ms": 60000, "input": { "type": "QuotaUpdated", "server_id": "SRV-01", "counted_bytes": 79000000000 },
       "effects": [],
-      "expect": { "phase": "PHASE_UP", "gate": "GATE_ARMED", "quota_level": "QUOTA_NORMAL" } },
+      "ui": "connected",
+      "expect": { "phase": "PHASE_UP", "gate": "GATE_ARMED", "quota_level": "QUOTA_NORMAL", "on_backup": false } },
     { "at_ms": 120000, "input": { "type": "QuotaUpdated", "server_id": "SRV-01", "counted_bytes": 80000000000 },
       "effects": [ { "type": "Notify", "kind": "NOTICE_QUOTA_AMBER", "server_id": "SRV-01" } ],
-      "expect": { "phase": "PHASE_UP", "gate": "GATE_ARMED", "quota_level": "QUOTA_AMBER" } },
+      "ui": "connected",
+      "expect": { "phase": "PHASE_UP", "gate": "GATE_ARMED", "quota_level": "QUOTA_AMBER", "on_backup": false } },
     { "at_ms": 180000, "input": { "type": "QuotaUpdated", "server_id": "SRV-01", "counted_bytes": 100000000000 },
       "effects": [ { "type": "Notify", "kind": "NOTICE_QUOTA_CAP", "server_id": "SRV-01" } ],
-      "expect": { "phase": "PHASE_UP", "gate": "GATE_ARMED", "active_server_id": "SRV-01", "quota_level": "QUOTA_RED" } }
+      "ui": "connected",
+      "expect": { "phase": "PHASE_UP", "gate": "GATE_ARMED", "active_server_id": "SRV-01", "quota_level": "QUOTA_RED", "on_backup": false } }
   ]
 }

@@ -2,7 +2,7 @@
 
 Shared scenario files. One format, one source of truth. The same file drives three things: the state machine tests in `core/`, the fake core, and the UI integration tests (see CLAUDE.md section 8).
 
-Status: 23 scenarios, all passing against the state machine (M1). The scenarios are the spec: change a scenario first, then the machine. The effect types listed below are now what the machine produces.
+Status: 25 scenarios, all passing against the state machine (M1), and every step says what the app must show (the `ui` field below). The scenarios are the spec: change a scenario first, then the machine. The effect types listed below are now what the machine produces.
 
 ## Rules
 
@@ -55,6 +55,25 @@ Timer names used so far: `retry` (5 s between tries), `verify_timeout` (15 s), `
 ## Expect
 
 `expect` is a partial Status. It uses the field names and enum names of `Status` in `charon.proto`. Only the fields that are listed are checked, so a scenario says only what it cares about.
+
+## What the app shows (`ui`)
+
+Every step also carries `"ui"`, the state the Home screen must show after that step. The Go tests check that the field is present and valid, and the Dart tests check that the app's `projectState` gives the same answer, both from the step's `expect` and from the real snapshots the fake core sends.
+
+The names are the states of the Home board in the Design artifact (its state dropdown), plus `disconnecting` from the tray flyout:
+
+`no_server`, `disconnected`, `could_not_reach`, `tunnel_lost`, `verifying`, `waking_up`, `checking_network`, `connected`, `on_backup`, `reconnecting`, `reconnecting_held`, `switching`, `blocked`, `disconnecting`.
+
+`no_server` is the app's own (an empty server list), so no step can name it. The state comes from the phase plus one more field, and a step that names a `ui` must list that field in its `expect`, or the file does not load:
+
+| Phase | Also needs | Decides |
+|---|---|---|
+| `PHASE_UP` | `on_backup` | connected, or on_backup |
+| `PHASE_RETRYING` | `gate` | reconnecting (traffic goes direct), or reconnecting_held (traffic held) |
+| `PHASE_IDLE` | `last_end` | disconnected, could_not_reach, or tunnel_lost |
+| `PHASE_VERIFYING` | `probe` | verifying (a first connect), waking_up, or checking_network |
+
+`probe` and `last_end` are Status fields added after the Design artifact showed states that phase and gate alone could not tell apart. `probe` says why an Up session is being verified again, and `last_end` says how the last session ended. A failed first connect passes through Stopping on the way to Idle, so the app briefly shows `disconnecting` before `could_not_reach`.
 
 ## Defaults chosen at M0 (to confirm)
 

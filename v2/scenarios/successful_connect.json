@@ -44,6 +44,7 @@
         { "type": "SetGate", "gate": "GATE_ARMED" },
         { "type": "StartXray", "server_id": "SRV-01" }
       ],
+      "ui": "verifying",
       "expect": {
         "phase": "PHASE_STARTING",
         "gate": "GATE_ARMED",
@@ -59,9 +60,10 @@
         { "type": "StartVerify", "server_id": "SRV-01" },
         { "type": "SetTimer", "name": "verify_timeout", "after_ms": 15000 }
       ],
+      "ui": "verifying",
       "expect": {
         "phase": "PHASE_VERIFYING",
-        "gate": "GATE_ARMED"
+        "gate": "GATE_ARMED", "probe": "PROBE_UNSPECIFIED"
       }
     },
     {
@@ -71,6 +73,7 @@
         { "type": "CancelTimer", "name": "verify_timeout" },
         { "type": "SaveLastSession", "connected": true, "active_server_id": "SRV-01" }
       ],
+      "ui": "connected",
       "expect": {
         "phase": "PHASE_UP",
         "gate": "GATE_ARMED",

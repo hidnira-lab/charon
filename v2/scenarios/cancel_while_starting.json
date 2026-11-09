@@ -15,12 +15,15 @@
   "steps": [
     { "at_ms": 0, "input": { "type": "Connect" },
       "effects": [ { "type": "SetGate", "gate": "GATE_ARMED" }, { "type": "StartXray", "server_id": "SRV-01" } ],
+      "ui": "verifying",
       "expect": { "phase": "PHASE_STARTING", "gate": "GATE_ARMED" } },
     { "at_ms": 300, "input": { "type": "Cancel" },
       "effects": [ { "type": "StopXray", "server_id": "SRV-01" } ],
+      "ui": "disconnecting",
       "expect": { "phase": "PHASE_STOPPING", "gate": "GATE_ARMED" } },
     { "at_ms": 500, "input": { "type": "XrayStopped" },
       "effects": [ { "type": "SetGate", "gate": "GATE_DISARMED" }, { "type": "SaveLastSession", "connected": false, "active_server_id": "" } ],
-      "expect": { "phase": "PHASE_IDLE", "gate": "GATE_DISARMED" } }
+      "ui": "disconnected",
+      "expect": { "phase": "PHASE_IDLE", "gate": "GATE_DISARMED", "last_end": "SESSION_END_MANUAL" } }
   ]
 }

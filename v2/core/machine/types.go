@@ -122,16 +122,23 @@ type State struct {
 	PhaseSinceMs  int64
 	EgressAddress string
 	LatencyMs     uint32
+	// Probe says why an Up session is being verified again, and LastEnd how the
+	// last session ended. Both exist only so the app can show the right state,
+	// see the Status message in charon.proto.
+	Probe   charonv1.Probe
+	LastEnd charonv1.SessionEnd
 
 	KillSwitch    bool
 	AutoReconnect bool
 	Servers       []*charonv1.Server
 
-	EverUp      bool // the current session has been Up, so retries apply
-	AutoSwitch  bool // the current Switching came from automatic failover
-	WakeWait    bool // waiting for the network after a wake
-	VerifyTimer bool // a verify_timeout timer is pending
-	RetryTimer  bool // a retry timer is pending
+	EverUp      bool                // the current session has been Up, so retries apply
+	AutoSwitch  bool                // the current Switching came from automatic failover
+	WakeWait    bool                // waiting for the network after a wake
+	Waking      bool                // the next probe follows a wake, not a plain network change
+	Ending      charonv1.SessionEnd // how the Stopping now under way will be recorded
+	VerifyTimer bool                // a verify_timeout timer is pending
+	RetryTimer  bool                // a retry timer is pending
 
 	Saved Saved
 }
@@ -170,5 +177,7 @@ func (s State) Status(nowMs int64) *charonv1.Status {
 		KillSwitchOn:   s.KillSwitch,
 		EgressAddress:  s.EgressAddress,
 		LatencyMs:      s.LatencyMs,
+		Probe:          s.Probe,
+		LastEnd:        s.LastEnd,
 	}
 }

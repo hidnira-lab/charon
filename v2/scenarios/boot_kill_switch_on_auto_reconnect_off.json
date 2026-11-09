@@ -16,6 +16,7 @@
   "steps": [
     { "at_ms": 0, "input": { "type": "ServiceStarted" },
       "effects": [ { "type": "SetGate", "gate": "GATE_ARMED" }, { "type": "SetGate", "gate": "GATE_HELD" }, { "type": "Notify", "kind": "NOTICE_TRAFFIC_HELD", "server_id": "SRV-02" } ],
+      "ui": "blocked",
       "expect": { "phase": "PHASE_BLOCKED", "gate": "GATE_HELD", "active_server_id": "SRV-02", "chosen_server_id": "SRV-01", "on_backup": true } }
   ]
 }

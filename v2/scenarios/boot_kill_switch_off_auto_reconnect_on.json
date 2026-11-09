@@ -16,12 +16,15 @@
   "steps": [
     { "at_ms": 0, "input": { "type": "ServiceStarted" },
       "effects": [ { "type": "StartXray", "server_id": "SRV-02" } ],
+      "ui": "reconnecting",
       "expect": { "phase": "PHASE_RETRYING", "gate": "GATE_DISARMED", "attempt": 1, "active_server_id": "SRV-02", "on_backup": true } },
     { "at_ms": 600, "input": { "type": "XrayStarted" },
       "effects": [ { "type": "StartVerify", "server_id": "SRV-02" }, { "type": "SetTimer", "name": "verify_timeout", "after_ms": 15000 } ],
+      "ui": "reconnecting",
       "expect": { "phase": "PHASE_RETRYING", "gate": "GATE_DISARMED", "attempt": 1 } },
     { "at_ms": 2300, "input": { "type": "VerifyOk", "egress_address": "198.51.100.20", "latency_ms": 90 },
       "effects": [ { "type": "CancelTimer", "name": "verify_timeout" }, { "type": "Notify", "kind": "NOTICE_RECONNECTED", "server_id": "SRV-02" } ],
+      "ui": "on_backup",
       "expect": { "phase": "PHASE_UP", "gate": "GATE_DISARMED", "active_server_id": "SRV-02", "on_backup": true, "attempt": 0 } }
   ]
 }

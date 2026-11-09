@@ -30,6 +30,19 @@ type Step struct {
 	Input   machine.Event
 	Effects []machine.Effect
 	Expect  map[string]any
+	// UI is the state the app must show after this step, one of UINames. The
+	// Dart tests check the app's projection against it. Optional in the format.
+	UI string
+}
+
+// UINames are the states the app can show, in wire spelling. The thirteen
+// before disconnecting are the states of the Home board in the Design artifact
+// (its state dropdown), and disconnecting is the tray flyout state. no_server
+// is decided by the app alone (an empty server list), so no step can lead to it.
+var UINames = []string{
+	"no_server", "disconnected", "could_not_reach", "tunnel_lost", "verifying",
+	"waking_up", "checking_network", "connected", "on_backup", "reconnecting",
+	"reconnecting_held", "switching", "blocked", "disconnecting",
 }
 
 type fileJSON struct {
@@ -45,6 +58,7 @@ type fileJSON struct {
 		Input   json.RawMessage  `json:"input"`
 		Effects []machine.Effect `json:"effects"`
 		Expect  map[string]any   `json:"expect"`
+		UI      string           `json:"ui"`
 	} `json:"steps"`
 }
 
@@ -94,9 +108,45 @@ func Load(path string) (*Scenario, error) {
 		if err != nil {
 			return nil, fmt.Errorf("%s: step %d: %w", path, i, err)
 		}
-		sc.Steps = append(sc.Steps, Step{AtMs: st.AtMs, Input: ev, Effects: st.Effects, Expect: st.Expect})
+		if err := checkUI(st.UI, st.Expect); err != nil {
+			return nil, fmt.Errorf("%s: step %d: %w", path, i, err)
+		}
+		sc.Steps = append(sc.Steps, Step{AtMs: st.AtMs, Input: ev, Effects: st.Effects, Expect: st.Expect, UI: st.UI})
 	}
 	return sc, nil
+}
+
+// uiKey is the Status field that, together with the phase, decides the UI
+// state. A step that names a UI state must pin that field down too, or the
+// annotation could say one thing while the machine does another.
+var uiKey = map[string]string{
+	"PHASE_UP":        "on_backup", // connected or on backup
+	"PHASE_RETRYING":  "gate",      // reconnecting, or reconnecting held
+	"PHASE_IDLE":      "last_end",  // disconnected, could not reach, or tunnel lost
+	"PHASE_VERIFYING": "probe",     // verifying, waking up, or checking network
+}
+
+// checkUI keeps an annotation honest, see uiKey.
+func checkUI(ui string, expect map[string]any) error {
+	if ui == "" {
+		return nil
+	}
+	if !slices.Contains(UINames, ui) {
+		return fmt.Errorf("unknown ui state %q", ui)
+	}
+	if ui == "no_server" {
+		return fmt.Errorf("ui %q is decided by the app alone, no step can lead to it", ui)
+	}
+	phase, ok := expect["phase"]
+	if !ok {
+		return fmt.Errorf("ui %q needs expect.phase", ui)
+	}
+	if key, needed := uiKey[fmt.Sprint(phase)]; needed {
+		if _, ok := expect[key]; !ok {
+			return fmt.Errorf("ui %q in %v needs expect.%s, it tells the UI states of this phase apart", ui, phase, key)
+		}
+	}
+	return nil
 }
 
 func decodeInput(raw json.RawMessage) (machine.Event, error) {

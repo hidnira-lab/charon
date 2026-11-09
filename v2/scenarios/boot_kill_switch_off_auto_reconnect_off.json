@@ -16,6 +16,7 @@
   "steps": [
     { "at_ms": 0, "input": { "type": "ServiceStarted" },
       "effects": [],
-      "expect": { "phase": "PHASE_IDLE", "gate": "GATE_DISARMED" } }
+      "ui": "disconnected",
+      "expect": { "phase": "PHASE_IDLE", "gate": "GATE_DISARMED", "last_end": "SESSION_END_UNSPECIFIED" } }
   ]
 }
