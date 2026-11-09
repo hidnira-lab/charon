@@ -1249,4 +1249,190 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get privacySecurityDesc =>
       'Pelaporan kerentanan dan praktik keamanan terdokumentasi dalam SECURITY.md.';
+
+  @override
+  String get setupTag => 'PENYIAPAN AWAL';
+
+  @override
+  String get setupTitle => 'Menyeberang ke Internet Pribadi';
+
+  @override
+  String get setupSubtitle =>
+      'Ikuti sungai Styx untuk mengonfigurasi terowongan aman Anda.';
+
+  @override
+  String get setupFerryStop1 => 'Persiapan';
+
+  @override
+  String get setupFerryStop2 => 'Server';
+
+  @override
+  String get setupFerryStop3 => 'Keamanan';
+
+  @override
+  String get setupFerryStop4 => 'Verifikasi';
+
+  @override
+  String get setupStep1Title => 'Yang perlu disiapkan';
+
+  @override
+  String get setupStep1Subtitle =>
+      'Sebelum menyeberang, pastikan Anda telah menyiapkan data server Anda.';
+
+  @override
+  String get setupStep1ServiceActive =>
+      'Layanan Charon aktif. Izin admin Windows hanya diminta sekali saat instalasi.';
+
+  @override
+  String get setupStep1ReadFirst => 'BACA DULU · PERSYARATAN';
+
+  @override
+  String get setupStep1Req1 =>
+      'Server yang Anda kendalikan (VPS di lokasi netral)';
+
+  @override
+  String get setupStep1Req2 =>
+      'Inti Xray dengan protokol VLESS dan Reality terpasang';
+
+  @override
+  String get setupStep1Req3 =>
+      'Tautan VLESS (vless://...) atau konfigurasi JSON';
+
+  @override
+  String get setupStep1Req4 =>
+      'Opsional, frasa sandi sinkronisasi jika memulihkan dari perangkat lain';
+
+  @override
+  String get setupStep1GuideLink =>
+      'Butuh server? Baca panduan penyiapan server →';
+
+  @override
+  String get setupStep1Btn => 'Lanjut ke Server →';
+
+  @override
+  String get setupStep2Title => 'Tambahkan server Anda';
+
+  @override
+  String get setupStep2Subtitle =>
+      'Impor profil VLESS Reality atau pulihkan dari perangkat tertaut.';
+
+  @override
+  String get setupStep2TabAdd => 'Tempel Tautan atau JSON';
+
+  @override
+  String get setupStep2TabRestore => 'Pulihkan dari Perangkat';
+
+  @override
+  String get setupStep2InputLabel => 'TAUTAN VLESS REALITY ATAU JSON';
+
+  @override
+  String get setupStep2InputHint =>
+      'vless://uuid@host:port?security=reality...';
+
+  @override
+  String get setupStep2DemoBtn => 'Isi server demo (SRV-01)';
+
+  @override
+  String get setupStep2RestoreCodeLabel => 'KODE PENYANDINGAN (8 KARAKTER)';
+
+  @override
+  String get setupStep2RestoreCodeHint => 'K7QM 4XPD';
+
+  @override
+  String get setupStep2RestoreCodeDesc =>
+      'Desktop: ketik kode penyandingan 8 karakter yang ditampilkan di perangkat lain.';
+
+  @override
+  String get setupStep2RestoreFileBtn =>
+      'Pulihkan dari berkas cadangan .charonvault';
+
+  @override
+  String get setupStep2RestoreFallback =>
+      'Tidak ada perangkat lain? Masukkan alamat & kunci server sinkronisasi';
+
+  @override
+  String get setupStep2UnsupportedWarn =>
+      'Charon v1 secara eksklusif mendukung VLESS Reality. Tidak ada yang diimpor.';
+
+  @override
+  String get setupStep2BtnNext => 'Lanjut ke Keamanan →';
+
+  @override
+  String get setupStep2BtnBack => '← Kembali';
+
+  @override
+  String get setupStep3Title => 'Konfigurasi keamanan';
+
+  @override
+  String get setupStep3Subtitle =>
+      'Pengaturan bawaan yang melindungi privasi Anda jika koneksi terputus.';
+
+  @override
+  String get setupStep3KillSwitchTitle => 'Kill switch';
+
+  @override
+  String get setupStep3KillSwitchTag => 'PERLINDUNGAN KRITIS';
+
+  @override
+  String get setupStep3KillSwitchDesc =>
+      'Menahan lalu lintas setelah restart atau keluar mendadak, bukan saat pemutusan manual.';
+
+  @override
+  String get setupStep3AllowLocalTitle => 'Izinkan jaringan lokal';
+
+  @override
+  String get setupStep3AllowLocalDesc =>
+      'Menjaga printer, NAS, dan perangkat lokal tetap dapat diakses saat tersambung.';
+
+  @override
+  String get setupStep3StartupTitle => 'Jalankan saat booting';
+
+  @override
+  String get setupStep3StartupDesc =>
+      'Memulai layanan Charon dan terhubung otomatis saat komputer menyala.';
+
+  @override
+  String get setupStep3BtnNext => 'Lanjut ke Verifikasi →';
+
+  @override
+  String get setupStep4Title => 'Koneksi pertama & verifikasi';
+
+  @override
+  String get setupStep4Subtitle =>
+      'Menguji terowongan dengan 4 tahap pemeriksaan integritas Charon.';
+
+  @override
+  String get setupStep4Ready => 'Siap memverifikasi terowongan';
+
+  @override
+  String get setupStep4Probing => 'Menjalankan pemeriksaan verifikasi...';
+
+  @override
+  String get setupStep4Success =>
+      '4 dari 4 pemeriksaan lolos · Siap menyeberang';
+
+  @override
+  String get setupStep4Check1 => 'Round trip TLS Reality';
+
+  @override
+  String get setupStep4Check2 => 'Verifikasi alamat egress';
+
+  @override
+  String get setupStep4Check3 => 'Handshake terowongan duplex';
+
+  @override
+  String get setupStep4Check4 => 'DNS melalui terowongan';
+
+  @override
+  String get setupStep4FourChecksHelp => 'Arti keempat pemeriksaan';
+
+  @override
+  String get setupStep4FourChecksHelpBody =>
+      'Charon memverifikasi kamuflase SNI Reality, menguji kecocokan IP egress, memvalidasi lalu lintas TCP/UDP duplex, dan memastikan kueri DNS hanya melalui terowongan.';
+
+  @override
+  String get setupStep4RunTestBtn => 'Jalankan Pemeriksaan Verifikasi';
+
+  @override
+  String get setupStep4FinishBtn => 'Selesai & Buka Charon →';
 }

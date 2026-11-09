@@ -1239,4 +1239,188 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get privacySecurityDesc =>
       'Vulnerability disclosures and security practices are documented in SECURITY.md.';
+
+  @override
+  String get setupTag => 'FIRST RUN SETUP';
+
+  @override
+  String get setupTitle => 'Crossing to Private Internet';
+
+  @override
+  String get setupSubtitle =>
+      'Follow the river Styx to configure your secure tunnel.';
+
+  @override
+  String get setupFerryStop1 => 'Prepare';
+
+  @override
+  String get setupFerryStop2 => 'Server';
+
+  @override
+  String get setupFerryStop3 => 'Safety';
+
+  @override
+  String get setupFerryStop4 => 'Verify';
+
+  @override
+  String get setupStep1Title => 'What to prepare';
+
+  @override
+  String get setupStep1Subtitle =>
+      'Before crossing, make sure you have your server information ready.';
+
+  @override
+  String get setupStep1ServiceActive =>
+      'Charon service is active. Windows admin rights are granted once at install.';
+
+  @override
+  String get setupStep1ReadFirst => 'READ FIRST · REQUIREMENTS';
+
+  @override
+  String get setupStep1Req1 =>
+      'A server you control (VPS in a neutral location)';
+
+  @override
+  String get setupStep1Req2 =>
+      'Xray core with VLESS and Reality protocol installed';
+
+  @override
+  String get setupStep1Req3 => 'VLESS link (vless://...) or JSON configuration';
+
+  @override
+  String get setupStep1Req4 =>
+      'Optionally, a sync passphrase if restoring from another device';
+
+  @override
+  String get setupStep1GuideLink =>
+      'Need a server? Read the server setup guide →';
+
+  @override
+  String get setupStep1Btn => 'Continue to Server →';
+
+  @override
+  String get setupStep2Title => 'Add your server';
+
+  @override
+  String get setupStep2Subtitle =>
+      'Import a VLESS Reality profile or restore from a paired device.';
+
+  @override
+  String get setupStep2TabAdd => 'Paste Link or JSON';
+
+  @override
+  String get setupStep2TabRestore => 'Restore from Device';
+
+  @override
+  String get setupStep2InputLabel => 'VLESS REALITY LINK OR JSON';
+
+  @override
+  String get setupStep2InputHint =>
+      'vless://uuid@host:port?security=reality...';
+
+  @override
+  String get setupStep2DemoBtn => 'Fill demo server (SRV-01)';
+
+  @override
+  String get setupStep2RestoreCodeLabel => 'PAIRING CODE (8 CHARACTERS)';
+
+  @override
+  String get setupStep2RestoreCodeHint => 'K7QM 4XPD';
+
+  @override
+  String get setupStep2RestoreCodeDesc =>
+      'Desktop: type the 8-character pairing code shown on your other device.';
+
+  @override
+  String get setupStep2RestoreFileBtn =>
+      'Restore from .charonvault backup file';
+
+  @override
+  String get setupStep2RestoreFallback =>
+      'No other device? Enter sync server address & key';
+
+  @override
+  String get setupStep2UnsupportedWarn =>
+      'Charon v1 exclusively supports VLESS Reality. Nothing was imported.';
+
+  @override
+  String get setupStep2BtnNext => 'Continue to Safety →';
+
+  @override
+  String get setupStep2BtnBack => '← Back';
+
+  @override
+  String get setupStep3Title => 'Safety configuration';
+
+  @override
+  String get setupStep3Subtitle =>
+      'Defaults that protect your privacy if the connection drops.';
+
+  @override
+  String get setupStep3KillSwitchTitle => 'Kill switch';
+
+  @override
+  String get setupStep3KillSwitchTag => 'CRITICAL SAFEGUARD';
+
+  @override
+  String get setupStep3KillSwitchDesc =>
+      'Holds traffic after a restart or unexpected exit, not on your own disconnect.';
+
+  @override
+  String get setupStep3AllowLocalTitle => 'Allow local network';
+
+  @override
+  String get setupStep3AllowLocalDesc =>
+      'Keeps printers, NAS, and local devices accessible while connected.';
+
+  @override
+  String get setupStep3StartupTitle => 'Launch at startup';
+
+  @override
+  String get setupStep3StartupDesc =>
+      'Starts the Charon service and connects automatically when your computer boots.';
+
+  @override
+  String get setupStep3BtnNext => 'Continue to Verification →';
+
+  @override
+  String get setupStep4Title => 'First connect & verify';
+
+  @override
+  String get setupStep4Subtitle =>
+      'Testing the tunnel with Charon\'s 4-stage integrity checks.';
+
+  @override
+  String get setupStep4Ready => 'Ready to verify tunnel';
+
+  @override
+  String get setupStep4Probing => 'Running verification probes...';
+
+  @override
+  String get setupStep4Success => '4 of 4 checks passed · Ready to cross';
+
+  @override
+  String get setupStep4Check1 => 'Reality TLS round trip';
+
+  @override
+  String get setupStep4Check2 => 'Egress address verification';
+
+  @override
+  String get setupStep4Check3 => 'Duplex tunnel handshake';
+
+  @override
+  String get setupStep4Check4 => 'DNS through the tunnel';
+
+  @override
+  String get setupStep4FourChecksHelp => 'What the four checks mean';
+
+  @override
+  String get setupStep4FourChecksHelpBody =>
+      'Charon verifies the Reality camouflage SNI, tests egress IP match, validates duplex TCP/UDP tunneling, and guarantees DNS queries route exclusively inside the tunnel.';
+
+  @override
+  String get setupStep4RunTestBtn => 'Run Verification Probes';
+
+  @override
+  String get setupStep4FinishBtn => 'Finish & Launch Charon →';
 }

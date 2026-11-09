@@ -18,11 +18,13 @@ class HomeController extends ChangeNotifier {
     Status? initialStatus,
     Config? initialConfig,
     bool? hasServers,
+    bool isFirstRun = false,
     this._themeMode = ThemeMode.system,
     this._locale,
   })  : _status = initialStatus ?? Status(),
         _config = initialConfig,
-        _hasServers = hasServers ?? (initialConfig?.servers.isNotEmpty ?? true) {
+        _hasServers = hasServers ?? (initialConfig?.servers.isNotEmpty ?? true),
+        _isFirstRun = isFirstRun {
     _seedInitialLogs();
     _client = client;
     if (_client != null) {
@@ -36,6 +38,7 @@ class HomeController extends ChangeNotifier {
   Throughput? _throughput;
   Quota? _quota;
   bool _hasServers;
+  bool _isFirstRun;
   int _activeTabIndex = 0;
   StreamSubscription<Event>? _eventSub;
   bool _isDisposed = false;
@@ -87,7 +90,36 @@ class HomeController extends ChangeNotifier {
   Throughput? get throughput => _throughput;
   Quota? get quota => _quota;
   bool get hasServers => _hasServers;
+  bool get isFirstRun => _isFirstRun;
   int get activeTabIndex => _activeTabIndex;
+
+  void setIsFirstRun(bool value) {
+    _isFirstRun = value;
+    notifyListeners();
+  }
+
+  Future<void> completeFirstRun({
+    Server? server,
+    bool? killSwitch,
+    bool? allowLocalNetwork,
+    bool? launchAtStartup,
+  }) async {
+    if (server != null) {
+      await addServer(server);
+    }
+    if (killSwitch != null) {
+      await setKillSwitch(killSwitch);
+    }
+    if (allowLocalNetwork != null) {
+      await setAllowLocalNetwork(allowLocalNetwork);
+    }
+    if (launchAtStartup != null) {
+      setLaunchAtStartup(launchAtStartup);
+    }
+    _isFirstRun = false;
+    _activeTabIndex = 0;
+    notifyListeners();
+  }
 
   List<LogLine> get xrayLogs => List.unmodifiable(_xrayLogs);
   List<LogLine> get coreLogs => List.unmodifiable(_coreLogs);

@@ -11,6 +11,7 @@ import 'theme/theme.dart';
 import 'ui/home/home_screen.dart';
 import 'ui/servers/servers_screen.dart';
 import 'ui/settings/settings_screen.dart';
+import 'ui/setup/first_run_setup_screen.dart';
 import 'ui/split/split_screen.dart';
 import 'ui/telemetry/telemetry_screen.dart';
 
@@ -55,7 +56,9 @@ class CharonApp extends StatelessWidget {
       builder: (context, _) {
         final activeTab = controller.activeTabIndex;
         Widget screen;
-        if (activeTab == 1) {
+        if (controller.isFirstRun) {
+          screen = FirstRunSetupScreen(controller: controller);
+        } else if (activeTab == 1) {
           screen = ServersScreen(controller: controller);
         } else if (activeTab == 2) {
           screen = SplitScreen(controller: controller);

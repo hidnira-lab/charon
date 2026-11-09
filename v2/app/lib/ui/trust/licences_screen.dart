@@ -216,7 +216,7 @@ fonts may be shared and improved in partnership with others.''',
                   Expanded(
                     child: ListView.separated(
                       itemCount: licenceItems.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: CharonSpacing.s3),
+                      separatorBuilder: (context, index) => const SizedBox(height: CharonSpacing.s3),
                       itemBuilder: (context, index) {
                         final item = licenceItems[index];
                         final isExpanded = _expandedKeys.contains(item.key);
