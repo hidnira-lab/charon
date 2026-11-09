@@ -999,4 +999,119 @@ class AppLocalizationsId extends AppLocalizations {
   String telemetryLinesCount(int count) {
     return '$count baris';
   }
+
+  @override
+  String get updatesTitle => 'Pembaruan';
+
+  @override
+  String get updatesTag => 'PENGATURAN · TENTANG';
+
+  @override
+  String get updatesBackToSettings => '← Kembali ke Pengaturan';
+
+  @override
+  String get updatesOfflineBannerTitle =>
+      'GitHub sering kali lambat atau diblokir langsung dari sini.';
+
+  @override
+  String get updatesOfflineBannerActionFile => 'atau perbarui dari file';
+
+  @override
+  String get updatesOfflineBannerActionConnect => 'Coba hubungkan';
+
+  @override
+  String get updatesCoreCardTitle => 'XRAY CORE';
+
+  @override
+  String get updatesCoreCardSubtitle => 'Biner mesin tunnel';
+
+  @override
+  String get updatesCoreTrustNote =>
+      'Pembaruan core hadir di dalam rilis Charon yang terverifikasi, bukan langsung dari upstream.';
+
+  @override
+  String get updatesCoreStepDownload => 'Unduh';
+
+  @override
+  String get updatesCoreStepSignature => 'Periksa tanda tangan dan sha256';
+
+  @override
+  String get updatesCoreStepConfig => 'Uji konfigurasi Anda';
+
+  @override
+  String get updatesCoreStepSwap => 'Tukar dan verifikasi';
+
+  @override
+  String get updatesCoreReadyCostNote =>
+      'Tunnel akan terputus sekitar 2 detik, dan jika kill switch mati momen tersebut langsung tanpa proteksi.';
+
+  @override
+  String get updatesCoreApplyNowBtn => 'Terapkan sekarang';
+
+  @override
+  String get updatesCoreApplyWhenDisconnectBtn => 'Saat saya putuskan';
+
+  @override
+  String get updatesCoreQueuedBadge => 'MENUNGGU · BERLAKU SAAT PUTUS KONEKSI';
+
+  @override
+  String get updatesCoreCheckBtn => 'Periksa pembaruan';
+
+  @override
+  String get updatesCoreRollbackBtn => 'Kembalikan versi core';
+
+  @override
+  String get updatesAppCardTitle => 'APLIKASI CHARON';
+
+  @override
+  String get updatesAppCardSubtitle =>
+      'Antarmuka pengguna & layanan latar belakang';
+
+  @override
+  String get updatesAppWindowsAdminNotice =>
+      'Windows akan meminta izin administrator. Pembaruan layanan akan menjeda tunnel sesaat.';
+
+  @override
+  String get updatesAppRestartBtn => 'Mulai ulang untuk perbarui';
+
+  @override
+  String get updatesAppAndroidNotice =>
+      'Charon tidak memasang pembaruan sendiri di Android. Obtainium dapat melakukannya untuk Anda.';
+
+  @override
+  String get updatesAppOpenReleaseBtn => 'Buka halaman rilis';
+
+  @override
+  String get updatesAppWhatsNew => 'YANG BARU';
+
+  @override
+  String get updatesFileCardTitle => 'PERBARUI DARI FILE';
+
+  @override
+  String get updatesFileCardDesc =>
+      'Pilih file rilis core (.zip) terverifikasi untuk dikirim langsung ke layanan latar belakang. Berguna saat GitHub diblokir dan tunnel terputus.';
+
+  @override
+  String get updatesFileChooseBtn => 'Pilih file';
+
+  @override
+  String updatesFileUploading(int percent) {
+    return 'Mengirim file ke layanan... $percent%';
+  }
+
+  @override
+  String get updatesFileVerified => 'Terverifikasi dan siap';
+
+  @override
+  String get updatesFileInvalidSignature => 'Tanda tangan tidak valid';
+
+  @override
+  String get updatesFileOlderVersion =>
+      'Ini adalah versi lebih lama (penurunan versi ditolak)';
+
+  @override
+  String get updatesFileWrongPlatform => 'Arsitektur platform salah';
+
+  @override
+  String get updatesFileApplyBtn => 'Terapkan pembaruan file';
 }

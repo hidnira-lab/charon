@@ -1828,6 +1828,216 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} lines'**
   String telemetryLinesCount(int count);
+
+  /// Title of updates screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Updates'**
+  String get updatesTitle;
+
+  /// Category tag above title.
+  ///
+  /// In en, this message translates to:
+  /// **'SETTINGS · ABOUT'**
+  String get updatesTag;
+
+  /// Back button to settings screen.
+  ///
+  /// In en, this message translates to:
+  /// **'← Back to Settings'**
+  String get updatesBackToSettings;
+
+  /// Offline / direct connection warning banner.
+  ///
+  /// In en, this message translates to:
+  /// **'GitHub is often slow or blocked direct from here.'**
+  String get updatesOfflineBannerTitle;
+
+  /// Action link to manual file update.
+  ///
+  /// In en, this message translates to:
+  /// **'or update from a file'**
+  String get updatesOfflineBannerActionFile;
+
+  /// Action to connect VPN tunnel.
+  ///
+  /// In en, this message translates to:
+  /// **'Try connecting'**
+  String get updatesOfflineBannerActionConnect;
+
+  /// Core update card title.
+  ///
+  /// In en, this message translates to:
+  /// **'XRAY CORE'**
+  String get updatesCoreCardTitle;
+
+  /// Core update card subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tunnel engine binary'**
+  String get updatesCoreCardSubtitle;
+
+  /// Trust model note for core binary.
+  ///
+  /// In en, this message translates to:
+  /// **'Core updates arrive inside a signed Charon release, never straight from upstream.'**
+  String get updatesCoreTrustNote;
+
+  /// Step 1: download release package.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get updatesCoreStepDownload;
+
+  /// Step 2: manifest signature check.
+  ///
+  /// In en, this message translates to:
+  /// **'Check signature and sha256'**
+  String get updatesCoreStepSignature;
+
+  /// Step 3: test server configurations.
+  ///
+  /// In en, this message translates to:
+  /// **'Test your config'**
+  String get updatesCoreStepConfig;
+
+  /// Step 4: atomic binary swap and handshake test.
+  ///
+  /// In en, this message translates to:
+  /// **'Swap and verify'**
+  String get updatesCoreStepSwap;
+
+  /// Explanation of momentary tunnel pause when applying update.
+  ///
+  /// In en, this message translates to:
+  /// **'The tunnel drops for about 2 s, and with the kill switch off that moment goes direct.'**
+  String get updatesCoreReadyCostNote;
+
+  /// Button to immediately apply core update.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply now'**
+  String get updatesCoreApplyNowBtn;
+
+  /// Button to queue update on disconnect.
+  ///
+  /// In en, this message translates to:
+  /// **'When I disconnect'**
+  String get updatesCoreApplyWhenDisconnectBtn;
+
+  /// Badge when update is queued.
+  ///
+  /// In en, this message translates to:
+  /// **'QUEUED · APPLIES ON NEXT DISCONNECT'**
+  String get updatesCoreQueuedBadge;
+
+  /// Button to check for new updates.
+  ///
+  /// In en, this message translates to:
+  /// **'Check for updates'**
+  String get updatesCoreCheckBtn;
+
+  /// Button to rollback core update.
+  ///
+  /// In en, this message translates to:
+  /// **'Roll back core'**
+  String get updatesCoreRollbackBtn;
+
+  /// App update card title.
+  ///
+  /// In en, this message translates to:
+  /// **'CHARON APP'**
+  String get updatesAppCardTitle;
+
+  /// App update card subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'User interface & background service'**
+  String get updatesAppCardSubtitle;
+
+  /// Notice regarding Windows UAC prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows will ask for administrator permissions. Updating the service pauses the tunnel briefly.'**
+  String get updatesAppWindowsAdminNotice;
+
+  /// Button to restart and install update.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart to update'**
+  String get updatesAppRestartBtn;
+
+  /// Notice for Android users.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon does not install updates itself on Android. Obtainium can do it for you.'**
+  String get updatesAppAndroidNotice;
+
+  /// Button to open GitHub release page.
+  ///
+  /// In en, this message translates to:
+  /// **'Open release page'**
+  String get updatesAppOpenReleaseBtn;
+
+  /// Changelog header.
+  ///
+  /// In en, this message translates to:
+  /// **'WHAT\'S NEW'**
+  String get updatesAppWhatsNew;
+
+  /// Manual file update card title.
+  ///
+  /// In en, this message translates to:
+  /// **'UPDATE FROM A FILE'**
+  String get updatesFileCardTitle;
+
+  /// Manual file update description.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a signed core release file (.zip) to send directly to the background service. Useful when GitHub is blocked and the tunnel is broken.'**
+  String get updatesFileCardDesc;
+
+  /// Button to pick local zip file.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose file'**
+  String get updatesFileChooseBtn;
+
+  /// Progress label during file upload.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending file to service... {percent}%'**
+  String updatesFileUploading(int percent);
+
+  /// Status when file is verified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified and ready'**
+  String get updatesFileVerified;
+
+  /// Status when signature is invalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Signature not valid'**
+  String get updatesFileInvalidSignature;
+
+  /// Status when file version is older.
+  ///
+  /// In en, this message translates to:
+  /// **'This is an older version (downgrade refused)'**
+  String get updatesFileOlderVersion;
+
+  /// Status when file architecture mismatches.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong platform architecture'**
+  String get updatesFileWrongPlatform;
+
+  /// Button to apply verified file update.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply file update'**
+  String get updatesFileApplyBtn;
 }
 
 class _AppLocalizationsDelegate

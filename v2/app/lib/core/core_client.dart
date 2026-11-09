@@ -154,6 +154,12 @@ extension CoreCommands on CoreClient {
   Future<Response> unsubscribe(Subscription sub) => send(Command(unsubscribe: sub));
   Future<Response> exportDiagnostics() =>
       send(Command(exportDiagnostics: ExportDiagnostics()));
+  Future<Response> checkUpdate() => send(Command(checkUpdate: Empty()));
+  Future<Response> applyUpdate(UpdateKind kind, ApplyWhen when) =>
+      send(Command(applyUpdate: ApplyUpdate(kind: kind, when: when)));
+  Future<Response> rollbackCore() => send(Command(rollbackCore: Empty()));
+  Future<Response> updateFileChunk(UpdateFileChunk chunk) =>
+      send(Command(updateFileChunk: chunk));
 }
 
 /// True when [response] is an error with this code.

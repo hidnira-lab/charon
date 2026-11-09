@@ -938,6 +938,116 @@ class AppLocalizationsZh extends AppLocalizations {
   String telemetryLinesCount(int count) {
     return '$count 行';
   }
+
+  @override
+  String get updatesTitle => '更新';
+
+  @override
+  String get updatesTag => '设置 · 关于';
+
+  @override
+  String get updatesBackToSettings => '← 返回设置';
+
+  @override
+  String get updatesOfflineBannerTitle => '从此处直连 GitHub 通常很慢或被阻断。';
+
+  @override
+  String get updatesOfflineBannerActionFile => '或从文件更新';
+
+  @override
+  String get updatesOfflineBannerActionConnect => '尝试连接';
+
+  @override
+  String get updatesCoreCardTitle => 'XRAY 核心';
+
+  @override
+  String get updatesCoreCardSubtitle => '隧道引擎二进制组件';
+
+  @override
+  String get updatesCoreTrustNote => '核心更新包含在经签名的 Charon 发布版本中，绝不会直接从上游拉取。';
+
+  @override
+  String get updatesCoreStepDownload => '下载';
+
+  @override
+  String get updatesCoreStepSignature => '校验签名与 sha256';
+
+  @override
+  String get updatesCoreStepConfig => '测试您的配置';
+
+  @override
+  String get updatesCoreStepSwap => '替换与验证';
+
+  @override
+  String get updatesCoreReadyCostNote =>
+      '隧道将中断约 2 秒；若此时 Kill Switch 关闭，该瞬间流量将直连。';
+
+  @override
+  String get updatesCoreApplyNowBtn => '立即应用';
+
+  @override
+  String get updatesCoreApplyWhenDisconnectBtn => '断开连接时应用';
+
+  @override
+  String get updatesCoreQueuedBadge => '已排队 · 下次断开连接时生效';
+
+  @override
+  String get updatesCoreCheckBtn => '检查更新';
+
+  @override
+  String get updatesCoreRollbackBtn => '回滚核心版本';
+
+  @override
+  String get updatesAppCardTitle => 'CHARON 客户端';
+
+  @override
+  String get updatesAppCardSubtitle => '用户界面与后台服务';
+
+  @override
+  String get updatesAppWindowsAdminNotice => 'Windows 将请求管理员权限。更新服务时隧道将短暂暂停。';
+
+  @override
+  String get updatesAppRestartBtn => '重启并更新';
+
+  @override
+  String get updatesAppAndroidNotice =>
+      'Charon 在 Android 上不会自行安装更新。Obtainium 可为您代劳。';
+
+  @override
+  String get updatesAppOpenReleaseBtn => '打开发布页面';
+
+  @override
+  String get updatesAppWhatsNew => '更新内容';
+
+  @override
+  String get updatesFileCardTitle => '从本地文件更新';
+
+  @override
+  String get updatesFileCardDesc =>
+      '选择已签名的核心发布文件 (.zip) 并直接发送至后台服务。适用于 GitHub 受阻且隧道断开的情况。';
+
+  @override
+  String get updatesFileChooseBtn => '选择文件';
+
+  @override
+  String updatesFileUploading(int percent) {
+    return '正在向服务发送文件... $percent%';
+  }
+
+  @override
+  String get updatesFileVerified => '已通过验证并就绪';
+
+  @override
+  String get updatesFileInvalidSignature => '签名无效';
+
+  @override
+  String get updatesFileOlderVersion => '此版本较低（已拒绝降级）';
+
+  @override
+  String get updatesFileWrongPlatform => '平台架构不匹配';
+
+  @override
+  String get updatesFileApplyBtn => '应用文件更新';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -1873,4 +1983,114 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String telemetryLinesCount(int count) {
     return '$count 行';
   }
+
+  @override
+  String get updatesTitle => '更新';
+
+  @override
+  String get updatesTag => '设置 · 关于';
+
+  @override
+  String get updatesBackToSettings => '← 返回设置';
+
+  @override
+  String get updatesOfflineBannerTitle => '从此处直连 GitHub 通常很慢或被阻断。';
+
+  @override
+  String get updatesOfflineBannerActionFile => '或从文件更新';
+
+  @override
+  String get updatesOfflineBannerActionConnect => '尝试连接';
+
+  @override
+  String get updatesCoreCardTitle => 'XRAY 核心';
+
+  @override
+  String get updatesCoreCardSubtitle => '隧道引擎二进制组件';
+
+  @override
+  String get updatesCoreTrustNote => '核心更新包含在经签名的 Charon 发布版本中，绝不会直接从上游拉取。';
+
+  @override
+  String get updatesCoreStepDownload => '下载';
+
+  @override
+  String get updatesCoreStepSignature => '校验签名与 sha256';
+
+  @override
+  String get updatesCoreStepConfig => '测试您的配置';
+
+  @override
+  String get updatesCoreStepSwap => '替换与验证';
+
+  @override
+  String get updatesCoreReadyCostNote =>
+      '隧道将中断约 2 秒；若此时 Kill Switch 关闭，该瞬间流量将直连。';
+
+  @override
+  String get updatesCoreApplyNowBtn => '立即应用';
+
+  @override
+  String get updatesCoreApplyWhenDisconnectBtn => '断开连接时应用';
+
+  @override
+  String get updatesCoreQueuedBadge => '已排队 · 下次断开连接时生效';
+
+  @override
+  String get updatesCoreCheckBtn => '检查更新';
+
+  @override
+  String get updatesCoreRollbackBtn => '回滚核心版本';
+
+  @override
+  String get updatesAppCardTitle => 'CHARON 客户端';
+
+  @override
+  String get updatesAppCardSubtitle => '用户界面与后台服务';
+
+  @override
+  String get updatesAppWindowsAdminNotice => 'Windows 将请求管理员权限。更新服务时隧道将短暂暂停。';
+
+  @override
+  String get updatesAppRestartBtn => '重启并更新';
+
+  @override
+  String get updatesAppAndroidNotice =>
+      'Charon 在 Android 上不会自行安装更新。Obtainium 可为您代劳。';
+
+  @override
+  String get updatesAppOpenReleaseBtn => '打开发布页面';
+
+  @override
+  String get updatesAppWhatsNew => '更新内容';
+
+  @override
+  String get updatesFileCardTitle => '从本地文件更新';
+
+  @override
+  String get updatesFileCardDesc =>
+      '选择已签名的核心发布文件 (.zip) 并直接发送至后台服务。适用于 GitHub 受阻且隧道断开的情况。';
+
+  @override
+  String get updatesFileChooseBtn => '选择文件';
+
+  @override
+  String updatesFileUploading(int percent) {
+    return '正在向服务发送文件... $percent%';
+  }
+
+  @override
+  String get updatesFileVerified => '已通过验证并就绪';
+
+  @override
+  String get updatesFileInvalidSignature => '签名无效';
+
+  @override
+  String get updatesFileOlderVersion => '此版本较低（已拒绝降级）';
+
+  @override
+  String get updatesFileWrongPlatform => '平台架构不匹配';
+
+  @override
+  String get updatesFileApplyBtn => '应用文件更新';
 }

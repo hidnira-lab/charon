@@ -991,4 +991,118 @@ class AppLocalizationsEn extends AppLocalizations {
   String telemetryLinesCount(int count) {
     return '$count lines';
   }
+
+  @override
+  String get updatesTitle => 'Updates';
+
+  @override
+  String get updatesTag => 'SETTINGS · ABOUT';
+
+  @override
+  String get updatesBackToSettings => '← Back to Settings';
+
+  @override
+  String get updatesOfflineBannerTitle =>
+      'GitHub is often slow or blocked direct from here.';
+
+  @override
+  String get updatesOfflineBannerActionFile => 'or update from a file';
+
+  @override
+  String get updatesOfflineBannerActionConnect => 'Try connecting';
+
+  @override
+  String get updatesCoreCardTitle => 'XRAY CORE';
+
+  @override
+  String get updatesCoreCardSubtitle => 'Tunnel engine binary';
+
+  @override
+  String get updatesCoreTrustNote =>
+      'Core updates arrive inside a signed Charon release, never straight from upstream.';
+
+  @override
+  String get updatesCoreStepDownload => 'Download';
+
+  @override
+  String get updatesCoreStepSignature => 'Check signature and sha256';
+
+  @override
+  String get updatesCoreStepConfig => 'Test your config';
+
+  @override
+  String get updatesCoreStepSwap => 'Swap and verify';
+
+  @override
+  String get updatesCoreReadyCostNote =>
+      'The tunnel drops for about 2 s, and with the kill switch off that moment goes direct.';
+
+  @override
+  String get updatesCoreApplyNowBtn => 'Apply now';
+
+  @override
+  String get updatesCoreApplyWhenDisconnectBtn => 'When I disconnect';
+
+  @override
+  String get updatesCoreQueuedBadge => 'QUEUED · APPLIES ON NEXT DISCONNECT';
+
+  @override
+  String get updatesCoreCheckBtn => 'Check for updates';
+
+  @override
+  String get updatesCoreRollbackBtn => 'Roll back core';
+
+  @override
+  String get updatesAppCardTitle => 'CHARON APP';
+
+  @override
+  String get updatesAppCardSubtitle => 'User interface & background service';
+
+  @override
+  String get updatesAppWindowsAdminNotice =>
+      'Windows will ask for administrator permissions. Updating the service pauses the tunnel briefly.';
+
+  @override
+  String get updatesAppRestartBtn => 'Restart to update';
+
+  @override
+  String get updatesAppAndroidNotice =>
+      'Charon does not install updates itself on Android. Obtainium can do it for you.';
+
+  @override
+  String get updatesAppOpenReleaseBtn => 'Open release page';
+
+  @override
+  String get updatesAppWhatsNew => 'WHAT\'S NEW';
+
+  @override
+  String get updatesFileCardTitle => 'UPDATE FROM A FILE';
+
+  @override
+  String get updatesFileCardDesc =>
+      'Choose a signed core release file (.zip) to send directly to the background service. Useful when GitHub is blocked and the tunnel is broken.';
+
+  @override
+  String get updatesFileChooseBtn => 'Choose file';
+
+  @override
+  String updatesFileUploading(int percent) {
+    return 'Sending file to service... $percent%';
+  }
+
+  @override
+  String get updatesFileVerified => 'Verified and ready';
+
+  @override
+  String get updatesFileInvalidSignature => 'Signature not valid';
+
+  @override
+  String get updatesFileOlderVersion =>
+      'This is an older version (downgrade refused)';
+
+  @override
+  String get updatesFileWrongPlatform => 'Wrong platform architecture';
+
+  @override
+  String get updatesFileApplyBtn => 'Apply file update';
 }

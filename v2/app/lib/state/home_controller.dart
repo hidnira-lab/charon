@@ -47,6 +47,27 @@ class HomeController extends ChangeNotifier {
   int _xrayDroppedCount = 0;
   int _coreDroppedCount = 0;
 
+  // Updates state (05b Updates)
+  UpdateState _coreUpdateState = UpdateState(
+    kind: UpdateKind.UPDATE_KIND_CORE,
+    stage: UpdateStage.UPDATE_READY,
+    currentVersion: 'v1.8.7',
+    newVersion: 'v1.8.24',
+    sizeBytes: Int64(14889728),
+  );
+
+  UpdateState _appUpdateState = UpdateState(
+    kind: UpdateKind.UPDATE_KIND_APP,
+    stage: UpdateStage.UPDATE_AVAILABLE,
+    currentVersion: '0.1.0',
+    newVersion: '0.2.0',
+    sizeBytes: Int64(29826048),
+  );
+
+  bool _isFileUploading = false;
+  int _fileUploadProgress = 0;
+  String? _fileVerificationResult;
+
   // Settings & preferences state
   ThemeMode _themeMode = ThemeMode.system;
   Locale? _locale;
@@ -72,6 +93,86 @@ class HomeController extends ChangeNotifier {
   List<LogLine> get coreLogs => List.unmodifiable(_coreLogs);
   int get xrayDroppedCount => _xrayDroppedCount;
   int get coreDroppedCount => _coreDroppedCount;
+
+  UpdateState get coreUpdateState => _coreUpdateState;
+  UpdateState get appUpdateState => _appUpdateState;
+  bool get isFileUploading => _isFileUploading;
+  int get fileUploadProgress => _fileUploadProgress;
+  String? get fileVerificationResult => _fileVerificationResult;
+
+  void setCoreUpdateState(UpdateState state) {
+    _coreUpdateState = state;
+    notifyListeners();
+  }
+
+  void setAppUpdateState(UpdateState state) {
+    _appUpdateState = state;
+    notifyListeners();
+  }
+
+  Future<void> checkUpdates() async {
+    if (_client != null) {
+      try {
+        await _client!.checkUpdate();
+      } catch (_) {}
+    }
+    notifyListeners();
+  }
+
+  Future<void> applyCoreUpdate({required ApplyWhen when}) async {
+    if (when == ApplyWhen.APPLY_WHEN_DISCONNECTED) {
+      _coreUpdateState.stage = UpdateStage.UPDATE_QUEUED;
+    } else {
+      _coreUpdateState.stage = UpdateStage.UPDATE_APPLYING;
+    }
+    notifyListeners();
+
+    if (_client != null) {
+      try {
+        await _client!.applyUpdate(UpdateKind.UPDATE_KIND_CORE, when);
+      } catch (_) {}
+    }
+
+    if (when == ApplyWhen.APPLY_NOW) {
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+      _coreUpdateState.stage = UpdateStage.UPDATE_UPDATED;
+      _coreUpdateState.currentVersion = _coreUpdateState.newVersion;
+      notifyListeners();
+    }
+  }
+
+  Future<void> rollbackCore() async {
+    _coreUpdateState.stage = UpdateStage.UPDATE_ROLLED_BACK;
+    notifyListeners();
+    if (_client != null) {
+      try {
+        await _client!.rollbackCore();
+      } catch (_) {}
+    }
+  }
+
+  Future<void> simulateFileUpload({String outcome = 'verified'}) async {
+    _isFileUploading = true;
+    _fileUploadProgress = 0;
+    _fileVerificationResult = null;
+    notifyListeners();
+
+    for (var i = 25; i <= 100; i += 25) {
+      _fileUploadProgress = i;
+      notifyListeners();
+    }
+
+    _isFileUploading = false;
+    _fileVerificationResult = outcome;
+    notifyListeners();
+  }
+
+  void resetFileUpload() {
+    _isFileUploading = false;
+    _fileUploadProgress = 0;
+    _fileVerificationResult = null;
+    notifyListeners();
+  }
 
   ThemeMode get themeMode => _themeMode;
   Locale? get locale => _locale;
@@ -413,6 +514,13 @@ class HomeController extends ChangeNotifier {
       notifyListeners();
     } else if (event.hasLogs()) {
       addLogBatch(event.logs);
+    } else if (event.hasUpdateState()) {
+      if (event.updateState.kind == UpdateKind.UPDATE_KIND_CORE) {
+        _coreUpdateState = event.updateState;
+      } else {
+        _appUpdateState = event.updateState;
+      }
+      notifyListeners();
     }
   }
 

@@ -137,7 +137,7 @@ class SettingsScreen extends StatelessWidget {
                                       children: [
                                         GreetingCard(controller: controller),
                                         const SizedBox(height: 14),
-                                        const AboutCard(),
+                                        AboutCard(controller: controller),
                                       ],
                                     ),
                                   ],

@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../state/home_controller.dart';
 import '../../../theme/tokens.dart';
+import '../../updates/updates_screen.dart';
 
 class AboutCard extends StatelessWidget {
-  const AboutCard({super.key});
+  const AboutCard({
+    super.key,
+    this.controller,
+  });
+
+  final HomeController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +121,15 @@ class AboutCard extends StatelessWidget {
             child: Column(
               children: links.map((item) {
                 return InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    if (item.label == l10n.settingsAboutUpdates && controller != null) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => UpdatesScreen(controller: controller!),
+                        ),
+                      );
+                    }
+                  },
                   borderRadius: BorderRadius.circular(7),
                   child: Container(
                     height: 30,
