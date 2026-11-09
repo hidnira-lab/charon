@@ -1,0 +1,26 @@
+name: charon
+description: "Charon, a personal client for VLESS plus Reality servers you run yourself."
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.13.3
+
+dependencies:
+  dart_ipc: ^2.0.2
+  fixnum: ^1.1.1
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.3
+  protobuf: ^6.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  generate: true
