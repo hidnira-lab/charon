@@ -1,0 +1,80 @@
+{
+  "@@locale": "zh_Hans",
+  "@@x_note": "AI-generated translation, not yet reviewed by a native speaker (V15).",
+  "appTitle": "Charon",
+
+  "actionConnect": "连接",
+  "actionDisconnect": "断开连接",
+  "actionCancel": "取消",
+  "actionRetryNow": "立即重试",
+  "actionRelease": "释放流量",
+  "actionAddServer": "添加服务器",
+  "actionSwitchNow": "立即切换",
+
+  "stateConnectedTitle": "已连接",
+  "stateConnectedBadge": "已连接 · 已验证",
+  "stateConnectedLine2": "出口 {ip}，与服务器匹配",
+
+  "stateVerifyingTitle": "验证握手",
+  "stateVerifyingBadge": "正在验证",
+  "stateVerifyingLine2": "正在测试真实 Reality 往返：{duration}",
+
+  "stateDisconnectedTitle": "未连接",
+  "stateDisconnectedBadge": "未连接",
+  "stateDisconnectedLine2": "流量直接发出，不经过 Charon",
+
+  "stateBlockedTitle": "流量已拦截",
+  "stateBlockedBadge": "拦截 · 所有服务器均失败",
+  "stateBlockedLine2": "无服务器响应，断网保护已生效",
+
+  "stateNoServerTitle": "暂无服务器",
+  "stateNoServerBadge": "无服务器",
+  "stateNoServerLine2": "请添加自建服务器以连接",
+
+  "stateReconnectingTitle": "正在重新连接",
+  "stateReconnectingBadge": "重新连接 · 尝试 {attempt} / {maxAttempts}",
+  "stateReconnectingLine2": "{server} 无响应，{seconds} 秒 后重试",
+
+  "stateReconnectingHeldTitle": "正在重新连接",
+  "stateReconnectingHeldBadge": "拦截 · 尝试 {attempt} / {maxAttempts}",
+  "stateReconnectingHeldLine2": "尝试第 {attempt} 次（共 {maxAttempts} 次），{seconds} 秒 后重试，流量已拦截",
+
+  "stateSwitchingTitle": "正在切换至 {server}",
+  "stateSwitchingBadge": "正在切换 · 正在验证",
+  "stateSwitchingLine2": "{previousServer} 尝试 5 次失败，正在检查 {server}",
+
+  "stateOnBackupTitle": "已连接至备用节点",
+  "stateOnBackupBadge": "已连接 · 备用节点",
+  "stateOnBackupLine2": "出口 {ip}，与 {server} 匹配",
+
+  "stateCouldNotReachTitle": "无法连接 {server}",
+  "stateCouldNotReachBadge": "无法连接",
+
+  "stateTunnelLostTitle": "隧道中断",
+  "stateTunnelLostBadge": "隧道中断",
+  "stateTunnelLostLine2": "流量直接发出，自动重连已关闭",
+
+  "stateWakingUpTitle": "正在唤醒",
+  "stateWakingUpBadge": "正在唤醒",
+  "stateWakingUpLine2": "休眠唤醒后正在检查 {server}",
+
+  "stateCheckingNetworkTitle": "已连接",
+  "stateCheckingNetworkBadge": "已连接 · 正在检查",
+  "stateCheckingNetworkLine2": "网络已变更，正在检查连接",
+
+  "stateDisconnectingTitle": "正在断开",
+  "stateDisconnectingBadge": "正在断开",
+  "stateDisconnectingLine2": "正在关闭隧道并恢复直连流量",
+
+  "reasonNoAnswer": "TCP 连接超时",
+  "reasonHandshakeFailed": "Reality 握手失败",
+  "reasonEgressMismatch": "出口地址与服务器不匹配",
+  "reasonDnsNotTunnelled": "DNS 检查失败",
+  "reasonAdapterFailed": "网络适配器启动失败",
+  "reasonPortInUse": "本地端口已被占用",
+  "reasonConfigRejected": "内核更新后配置被拒绝",
+
+  "metricsLatency": "延迟",
+  "metricsSpeed": "吞吐量",
+  "metricsDuration": "时长"
+}

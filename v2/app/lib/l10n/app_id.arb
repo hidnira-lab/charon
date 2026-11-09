@@ -1,0 +1,79 @@
+{
+  "@@locale": "id",
+  "appTitle": "Charon",
+
+  "actionConnect": "Sambung",
+  "actionDisconnect": "Putus",
+  "actionCancel": "Batal",
+  "actionRetryNow": "Coba lagi",
+  "actionRelease": "Lepas",
+  "actionAddServer": "Tambah server",
+  "actionSwitchNow": "Ganti sekarang",
+
+  "stateConnectedTitle": "Terhubung",
+  "stateConnectedBadge": "TERHUBUNG · TERVERIFIKASI",
+  "stateConnectedLine2": "egress {ip}, cocok dengan server",
+
+  "stateVerifyingTitle": "Verifikasi handshake",
+  "stateVerifyingBadge": "VERIFIKASI",
+  "stateVerifyingLine2": "menguji round trip Reality nyata: {duration}",
+
+  "stateDisconnectedTitle": "Tidak terhubung",
+  "stateDisconnectedBadge": "TERPUTUS",
+  "stateDisconnectedLine2": "traffic langsung keluar, tidak lewat Charon",
+
+  "stateBlockedTitle": "Traffic ditahan",
+  "stateBlockedBadge": "TAHAN · SEMUA SERVER GAGAL",
+  "stateBlockedLine2": "tidak ada server merespons, kill switch aktif",
+
+  "stateNoServerTitle": "Belum ada server",
+  "stateNoServerBadge": "BELUM ADA SERVER",
+  "stateNoServerLine2": "tambah server yang kamu kelola untuk menyambung",
+
+  "stateReconnectingTitle": "Menyambung ulang",
+  "stateReconnectingBadge": "SAMBUNG ULANG · PERCOBAAN {attempt} / {maxAttempts}",
+  "stateReconnectingLine2": "{server} tidak merespons, coba lagi dalam {seconds} dtk",
+
+  "stateReconnectingHeldTitle": "Menyambung ulang",
+  "stateReconnectingHeldBadge": "TAHAN · PERCOBAAN {attempt} / {maxAttempts}",
+  "stateReconnectingHeldLine2": "percobaan {attempt} dari {maxAttempts}, berikutnya dalam {seconds} dtk, traffic ditahan",
+
+  "stateSwitchingTitle": "Pindah ke {server}",
+  "stateSwitchingBadge": "PINDAH · VERIFIKASI",
+  "stateSwitchingLine2": "{previousServer} gagal 5 kali, memeriksa {server}",
+
+  "stateOnBackupTitle": "Terhubung ke backup",
+  "stateOnBackupBadge": "TERHUBUNG · BACKUP",
+  "stateOnBackupLine2": "egress {ip}, cocok dengan {server}",
+
+  "stateCouldNotReachTitle": "Tidak dapat menjangkau {server}",
+  "stateCouldNotReachBadge": "TIDAK TERJANGKAU",
+
+  "stateTunnelLostTitle": "Tunnel terputus",
+  "stateTunnelLostBadge": "TUNNEL TERPUTUS",
+  "stateTunnelLostLine2": "traffic langsung keluar, sambung ulang otomatis mati",
+
+  "stateWakingUpTitle": "Bangun dari tidur",
+  "stateWakingUpBadge": "BANGUN",
+  "stateWakingUpLine2": "memeriksa {server} setelah perangkat bangun",
+
+  "stateCheckingNetworkTitle": "Terhubung",
+  "stateCheckingNetworkBadge": "TERHUBUNG · MEMERIKSA",
+  "stateCheckingNetworkLine2": "jaringan berubah, memeriksa koneksi",
+
+  "stateDisconnectingTitle": "Memutus koneksi",
+  "stateDisconnectingBadge": "MEMUTUS",
+  "stateDisconnectingLine2": "menghentikan tunnel dan melepas traffic",
+
+  "reasonNoAnswer": "koneksi tcp timed out",
+  "reasonHandshakeFailed": "handshake Reality gagal",
+  "reasonEgressMismatch": "egress tidak cocok dengan server",
+  "reasonDnsNotTunnelled": "pemeriksaan DNS gagal",
+  "reasonAdapterFailed": "adapter jaringan gagal dimulai",
+  "reasonPortInUse": "port lokal sedang digunakan",
+  "reasonConfigRejected": "konfigurasi ditolak setelah pembaruan core",
+
+  "metricsLatency": "Latensi",
+  "metricsSpeed": "Throughput",
+  "metricsDuration": "Durasi"
+}

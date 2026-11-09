@@ -1,0 +1,296 @@
+{
+  "@@locale": "en",
+  "appTitle": "Charon",
+  "@appTitle": {
+    "description": "The title of the application."
+  },
+
+  "actionConnect": "Connect",
+  "@actionConnect": {
+    "description": "Button label to initiate connection."
+  },
+  "actionDisconnect": "Disconnect",
+  "@actionDisconnect": {
+    "description": "Button label to disconnect active connection."
+  },
+  "actionCancel": "Cancel",
+  "@actionCancel": {
+    "description": "Button label to cancel an ongoing transition."
+  },
+  "actionRetryNow": "Retry now",
+  "@actionRetryNow": {
+    "description": "Button label to immediately retry connection."
+  },
+  "actionRelease": "Release",
+  "@actionRelease": {
+    "description": "Button label to release held traffic."
+  },
+  "actionAddServer": "Add a server",
+  "@actionAddServer": {
+    "description": "Button label when no server is configured."
+  },
+  "actionSwitchNow": "Switch now",
+  "@actionSwitchNow": {
+    "description": "Button label to skip retries and switch to backup server."
+  },
+
+  "stateConnectedTitle": "Connected",
+  "@stateConnectedTitle": {
+    "description": "Title when tunnel is connected."
+  },
+  "stateConnectedBadge": "CONNECTED · VERIFIED",
+  "@stateConnectedBadge": {
+    "description": "Badge when connection is verified."
+  },
+  "stateConnectedLine2": "egress {ip}, matches server",
+  "@stateConnectedLine2": {
+    "description": "Subtitle showing matched egress IP.",
+    "placeholders": {
+      "ip": { "type": "String" }
+    }
+  },
+
+  "stateVerifyingTitle": "Verifying handshake",
+  "@stateVerifyingTitle": {
+    "description": "Title while verifying Reality handshake."
+  },
+  "stateVerifyingBadge": "VERIFYING",
+  "@stateVerifyingBadge": {
+    "description": "Badge while verifying."
+  },
+  "stateVerifyingLine2": "testing a real Reality round trip: {duration}",
+  "@stateVerifyingLine2": {
+    "description": "Subtitle during verification.",
+    "placeholders": {
+      "duration": { "type": "String" }
+    }
+  },
+
+  "stateDisconnectedTitle": "Not connected",
+  "@stateDisconnectedTitle": {
+    "description": "Title when disconnected."
+  },
+  "stateDisconnectedBadge": "DISCONNECTED",
+  "@stateDisconnectedBadge": {
+    "description": "Badge when disconnected."
+  },
+  "stateDisconnectedLine2": "traffic goes direct, not through Charon",
+  "@stateDisconnectedLine2": {
+    "description": "Subtitle when disconnected."
+  },
+
+  "stateBlockedTitle": "Traffic held",
+  "@stateBlockedTitle": {
+    "description": "Title when traffic is blocked by kill switch."
+  },
+  "stateBlockedBadge": "HELD · ALL SERVERS FAILED",
+  "@stateBlockedBadge": {
+    "description": "Badge when all servers failed and traffic is held."
+  },
+  "stateBlockedLine2": "no server answered, kill switch holding",
+  "@stateBlockedLine2": {
+    "description": "Subtitle when kill switch is holding traffic."
+  },
+
+  "stateNoServerTitle": "No server yet",
+  "@stateNoServerTitle": {
+    "description": "Title when no server is configured."
+  },
+  "stateNoServerBadge": "NO SERVER",
+  "@stateNoServerBadge": {
+    "description": "Badge when no server exists."
+  },
+  "stateNoServerLine2": "add a server you control to connect",
+  "@stateNoServerLine2": {
+    "description": "Subtitle prompting user to add a server."
+  },
+
+  "stateReconnectingTitle": "Reconnecting",
+  "@stateReconnectingTitle": {
+    "description": "Title during auto reconnect."
+  },
+  "stateReconnectingBadge": "RECONNECTING · TRY {attempt} / {maxAttempts}",
+  "@stateReconnectingBadge": {
+    "description": "Badge during reconnect attempts.",
+    "placeholders": {
+      "attempt": { "type": "int" },
+      "maxAttempts": { "type": "int" }
+    }
+  },
+  "stateReconnectingLine2": "{server} not answering, next try in {seconds} s",
+  "@stateReconnectingLine2": {
+    "description": "Subtitle showing countdown to next retry.",
+    "placeholders": {
+      "server": { "type": "String" },
+      "seconds": { "type": "int" }
+    }
+  },
+
+  "stateReconnectingHeldTitle": "Reconnecting",
+  "@stateReconnectingHeldTitle": {
+    "description": "Title during auto reconnect with kill switch holding."
+  },
+  "stateReconnectingHeldBadge": "HELD · TRY {attempt} / {maxAttempts}",
+  "@stateReconnectingHeldBadge": {
+    "description": "Badge when holding traffic during reconnect.",
+    "placeholders": {
+      "attempt": { "type": "int" },
+      "maxAttempts": { "type": "int" }
+    }
+  },
+  "stateReconnectingHeldLine2": "try {attempt} of {maxAttempts}, next in {seconds} s, traffic held",
+  "@stateReconnectingHeldLine2": {
+    "description": "Subtitle showing countdown while traffic is held.",
+    "placeholders": {
+      "attempt": { "type": "int" },
+      "maxAttempts": { "type": "int" },
+      "seconds": { "type": "int" }
+    }
+  },
+
+  "stateSwitchingTitle": "Moving to {server}",
+  "@stateSwitchingTitle": {
+    "description": "Title when failing over to next server.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+  "stateSwitchingBadge": "SWITCHING · VERIFYING",
+  "@stateSwitchingBadge": {
+    "description": "Badge during failover verification."
+  },
+  "stateSwitchingLine2": "{previousServer} failed 5 tries, checking {server}",
+  "@stateSwitchingLine2": {
+    "description": "Subtitle during failover.",
+    "placeholders": {
+      "previousServer": { "type": "String" },
+      "server": { "type": "String" }
+    }
+  },
+
+  "stateOnBackupTitle": "Connected on backup",
+  "@stateOnBackupTitle": {
+    "description": "Title when connected on backup server."
+  },
+  "stateOnBackupBadge": "CONNECTED · BACKUP",
+  "@stateOnBackupBadge": {
+    "description": "Badge when connected on backup."
+  },
+  "stateOnBackupLine2": "egress {ip}, matches {server}",
+  "@stateOnBackupLine2": {
+    "description": "Subtitle when on backup server.",
+    "placeholders": {
+      "ip": { "type": "String" },
+      "server": { "type": "String" }
+    }
+  },
+
+  "stateCouldNotReachTitle": "Could not reach {server}",
+  "@stateCouldNotReachTitle": {
+    "description": "Title when first connect attempt fails.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+  "stateCouldNotReachBadge": "COULD NOT REACH",
+  "@stateCouldNotReachBadge": {
+    "description": "Badge when first connect fails."
+  },
+
+  "stateTunnelLostTitle": "Tunnel lost",
+  "@stateTunnelLostTitle": {
+    "description": "Title when tunnel drops and auto reconnect is off."
+  },
+  "stateTunnelLostBadge": "TUNNEL LOST",
+  "@stateTunnelLostBadge": {
+    "description": "Badge when tunnel is lost."
+  },
+  "stateTunnelLostLine2": "traffic goes direct, auto reconnect is off",
+  "@stateTunnelLostLine2": {
+    "description": "Subtitle when tunnel is lost."
+  },
+
+  "stateWakingUpTitle": "Waking up",
+  "@stateWakingUpTitle": {
+    "description": "Title when waking from sleep."
+  },
+  "stateWakingUpBadge": "WAKING UP",
+  "@stateWakingUpBadge": {
+    "description": "Badge during wake verification."
+  },
+  "stateWakingUpLine2": "checking {server} after sleep",
+  "@stateWakingUpLine2": {
+    "description": "Subtitle while waking up.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+
+  "stateCheckingNetworkTitle": "Connected",
+  "@stateCheckingNetworkTitle": {
+    "description": "Title during network change probe."
+  },
+  "stateCheckingNetworkBadge": "CONNECTED · CHECKING",
+  "@stateCheckingNetworkBadge": {
+    "description": "Badge when checking network."
+  },
+  "stateCheckingNetworkLine2": "network changed, checking connection",
+  "@stateCheckingNetworkLine2": {
+    "description": "Subtitle when network changes."
+  },
+
+  "stateDisconnectingTitle": "Disconnecting",
+  "@stateDisconnectingTitle": {
+    "description": "Title while disconnecting."
+  },
+  "stateDisconnectingBadge": "DISCONNECTING",
+  "@stateDisconnectingBadge": {
+    "description": "Badge while disconnecting."
+  },
+  "stateDisconnectingLine2": "stopping tunnel and releasing traffic",
+  "@stateDisconnectingLine2": {
+    "description": "Subtitle while disconnecting."
+  },
+
+  "reasonNoAnswer": "tcp connect timed out",
+  "@reasonNoAnswer": {
+    "description": "Failure reason when server did not answer."
+  },
+  "reasonHandshakeFailed": "Reality handshake failed",
+  "@reasonHandshakeFailed": {
+    "description": "Failure reason when Reality handshake fails."
+  },
+  "reasonEgressMismatch": "egress did not match the server",
+  "@reasonEgressMismatch": {
+    "description": "Failure reason when egress check fails."
+  },
+  "reasonDnsNotTunnelled": "DNS check failed",
+  "@reasonDnsNotTunnelled": {
+    "description": "Failure reason when DNS is not tunnelled."
+  },
+  "reasonAdapterFailed": "network adapter failed to start",
+  "@reasonAdapterFailed": {
+    "description": "Failure reason when wintun adapter fails."
+  },
+  "reasonPortInUse": "local port in use",
+  "@reasonPortInUse": {
+    "description": "Failure reason when local inbound port is occupied."
+  },
+  "reasonConfigRejected": "config rejected after a core update",
+  "@reasonConfigRejected": {
+    "description": "Failure reason when new core rejects config."
+  },
+
+  "metricsLatency": "Latency",
+  "@metricsLatency": {
+    "description": "Label for round trip latency metric."
+  },
+  "metricsSpeed": "Throughput",
+  "@metricsSpeed": {
+    "description": "Label for connection throughput metric."
+  },
+  "metricsDuration": "Duration",
+  "@metricsDuration": {
+    "description": "Label for connection duration metric."
+  }
+}

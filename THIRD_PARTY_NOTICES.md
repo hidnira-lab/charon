@@ -43,13 +43,14 @@ Used by `v2/app/`. Versions are pinned in `v2/app/pubspec.lock`.
 
 ## Fonts
 
-All three families are licensed under the SIL Open Font License 1.1. The licence texts are next to the font files in `charon_vpn/assets/fonts/`.
+All font families are licensed under the SIL Open Font License 1.1. Licence texts are next to the font files in `charon_vpn/assets/fonts/` (v1 app) and `v2/app/assets/fonts/` (v2 app).
 
-| Font | Copyright | Licence text |
-|---|---|---|
-| Inter | 2016 The Inter Project Authors (https://github.com/rsms/inter) | `OFL-Inter.txt` |
-| JetBrains Mono | 2020 The JetBrains Mono Project Authors (https://github.com/JetBrains/JetBrainsMono) | `OFL-JetBrainsMono.txt` |
-| Rajdhani | 2014 Indian Type Foundry | `OFL-Rajdhani.txt` |
+| Font | Copyright | Licence text | Used by |
+|---|---|---|---|
+| Inter | 2016 The Inter Project Authors (https://github.com/rsms/inter) | `OFL-Inter.txt` | v1 and v2 app |
+| Space Mono | 2016 Colophon Foundry (https://github.com/googlefonts/spacemono) | `OFL-SpaceMono.txt` | v2 app |
+| JetBrains Mono | 2020 The JetBrains Mono Project Authors (https://github.com/JetBrains/JetBrainsMono) | `OFL-JetBrainsMono.txt` | v1 app |
+| Rajdhani | 2014 Indian Type Foundry | `OFL-Rajdhani.txt` | v1 app |
 
 ## Other dependencies
 
