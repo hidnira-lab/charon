@@ -19,15 +19,15 @@
 
 <table>
 <tr>
+<th align="center" width="25%">0 Telemetry</th>
 <th align="center" width="25%">1 Protocol</th>
 <th align="center" width="25%">2 Platforms</th>
-<th align="center" width="25%">0 Telemetry</th>
 <th align="center" width="25%">3 Languages</th>
 </tr>
 <tr>
+<td align="center" valign="top">Nothing you did not start<br><sub>Except the update check</sub></td>
 <td align="center" valign="top">VLESS + Reality only<br><sub>Nothing else in v1</sub></td>
 <td align="center" valign="top">Windows and Android<br><sub>One shared Go core</sub></td>
-<td align="center" valign="top">Nothing you did not start<br><sub>Except the update check</sub></td>
 <td align="center" valign="top">EN, ID and 简体中文<br><sub>Light and dark themes</sub></td>
 </tr>
 </table>

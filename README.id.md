@@ -19,15 +19,15 @@
 
 <table>
 <tr>
+<th align="center" width="25%">0 Telemetri</th>
 <th align="center" width="25%">1 Protokol</th>
 <th align="center" width="25%">2 Platform</th>
-<th align="center" width="25%">0 Telemetri</th>
 <th align="center" width="25%">3 Bahasa</th>
 </tr>
 <tr>
+<td align="center" valign="top">Tidak ada yang tidak kamu mulai<br><sub>Kecuali cek update</sub></td>
 <td align="center" valign="top">Hanya VLESS + Reality<br><sub>Tidak ada yang lain di v1</sub></td>
 <td align="center" valign="top">Windows dan Android<br><sub>Satu core Go bersama</sub></td>
-<td align="center" valign="top">Tidak ada yang tidak kamu mulai<br><sub>Kecuali cek update</sub></td>
 <td align="center" valign="top">EN, ID, dan 简体中文<br><sub>Tema terang dan gelap</sub></td>
 </tr>
 </table>

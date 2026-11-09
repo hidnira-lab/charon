@@ -20,15 +20,15 @@
 
 <table>
 <tr>
+<th align="center" width="25%">0 遥测</th>
 <th align="center" width="25%">1 个协议</th>
 <th align="center" width="25%">2 个平台</th>
-<th align="center" width="25%">0 遥测</th>
 <th align="center" width="25%">3 种语言</th>
 </tr>
 <tr>
+<td align="center" valign="top">没有你没发起的请求<br><sub>更新检查除外</sub></td>
 <td align="center" valign="top">仅限 VLESS + Reality<br><sub>v1 不支持其他协议</sub></td>
 <td align="center" valign="top">Windows 和 Android<br><sub>共用一个 Go 内核</sub></td>
-<td align="center" valign="top">没有你没发起的请求<br><sub>更新检查除外</sub></td>
 <td align="center" valign="top">EN、ID 和简体中文<br><sub>浅色和深色主题</sub></td>
 </tr>
 </table>
