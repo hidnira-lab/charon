@@ -107,6 +107,31 @@ final samples = <String, Envelope>{
           killSwitchOn: true,
         ),
       )),
+  'event_status_waking': env(0,
+      event: Event(
+        statusChanged: Status(
+          phase: Phase.PHASE_VERIFYING,
+          gate: Gate.GATE_ARMED,
+          activeServerId: 'SRV-01',
+          chosenServerId: 'SRV-01',
+          maxAttempts: 5,
+          serviceNowMs: Int64(1700000000500),
+          killSwitchOn: true,
+          probe: Probe.PROBE_WAKE,
+        ),
+      )),
+  'event_status_could_not_reach': env(0,
+      event: Event(
+        statusChanged: Status(
+          phase: Phase.PHASE_IDLE,
+          gate: Gate.GATE_DISARMED,
+          chosenServerId: 'SRV-01',
+          maxAttempts: 5,
+          serviceNowMs: Int64(1700000003000),
+          lastFailure: FailureReason.FAILURE_DNS_NOT_TUNNELLED,
+          lastEnd: SessionEnd.SESSION_END_COULD_NOT_REACH,
+        ),
+      )),
   'event_notice': env(0,
       event: Event(
         notice: Notice(kind: NoticeKind.NOTICE_TRAFFIC_HELD, serverId: 'SRV-01', atMs: Int64(60000)),

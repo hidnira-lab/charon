@@ -266,6 +266,7 @@ const FailureReason$json = {
     {'1': 'FAILURE_XRAY_EXITED', '2': 7},
     {'1': 'FAILURE_ADAPTER_LOST', '2': 8},
     {'1': 'FAILURE_NETWORK_CHANGED', '2': 9},
+    {'1': 'FAILURE_DNS_NOT_TUNNELLED', '2': 10},
   ],
 };
 
@@ -276,7 +277,39 @@ final $typed_data.Uint8List failureReasonDescriptor = $convert.base64Decode(
     'RVNTX01JU01BVENIEAMSGwoXRkFJTFVSRV9DT05GSUdfUkVKRUNURUQQBBIaChZGQUlMVVJFX0'
     'FEQVBURVJfRkFJTEVEEAUSFwoTRkFJTFVSRV9QT1JUX0lOX1VTRRAGEhcKE0ZBSUxVUkVfWFJB'
     'WV9FWElURUQQBxIYChRGQUlMVVJFX0FEQVBURVJfTE9TVBAIEhsKF0ZBSUxVUkVfTkVUV09SS1'
-    '9DSEFOR0VEEAk=');
+    '9DSEFOR0VEEAkSHQoZRkFJTFVSRV9ETlNfTk9UX1RVTk5FTExFRBAK');
+
+@$core.Deprecated('Use probeDescriptor instead')
+const Probe$json = {
+  '1': 'Probe',
+  '2': [
+    {'1': 'PROBE_UNSPECIFIED', '2': 0},
+    {'1': 'PROBE_NETWORK_CHANGE', '2': 1},
+    {'1': 'PROBE_WAKE', '2': 2},
+  ],
+};
+
+/// Descriptor for `Probe`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List probeDescriptor = $convert.base64Decode(
+    'CgVQcm9iZRIVChFQUk9CRV9VTlNQRUNJRklFRBAAEhgKFFBST0JFX05FVFdPUktfQ0hBTkdFEA'
+    'ESDgoKUFJPQkVfV0FLRRAC');
+
+@$core.Deprecated('Use sessionEndDescriptor instead')
+const SessionEnd$json = {
+  '1': 'SessionEnd',
+  '2': [
+    {'1': 'SESSION_END_UNSPECIFIED', '2': 0},
+    {'1': 'SESSION_END_MANUAL', '2': 1},
+    {'1': 'SESSION_END_COULD_NOT_REACH', '2': 2},
+    {'1': 'SESSION_END_TUNNEL_LOST', '2': 3},
+  ],
+};
+
+/// Descriptor for `SessionEnd`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List sessionEndDescriptor = $convert.base64Decode(
+    'CgpTZXNzaW9uRW5kEhsKF1NFU1NJT05fRU5EX1VOU1BFQ0lGSUVEEAASFgoSU0VTU0lPTl9FTk'
+    'RfTUFOVUFMEAESHwobU0VTU0lPTl9FTkRfQ09VTERfTk9UX1JFQUNIEAISGwoXU0VTU0lPTl9F'
+    'TkRfVFVOTkVMX0xPU1QQAw==');
 
 @$core.Deprecated('Use errorCodeDescriptor instead')
 const ErrorCode$json = {
@@ -980,6 +1013,22 @@ const Status$json = {
     {'1': 'egress_address', '3': 14, '4': 1, '5': 9, '10': 'egressAddress'},
     {'1': 'latency_ms', '3': 15, '4': 1, '5': 13, '10': 'latencyMs'},
     {'1': 'config_version', '3': 16, '4': 1, '5': 4, '10': 'configVersion'},
+    {
+      '1': 'probe',
+      '3': 17,
+      '4': 1,
+      '5': 14,
+      '6': '.charon.v1.Probe',
+      '10': 'probe'
+    },
+    {
+      '1': 'last_end',
+      '3': 18,
+      '4': 1,
+      '5': 14,
+      '6': '.charon.v1.SessionEnd',
+      '10': 'lastEnd'
+    },
   ],
 };
 
@@ -996,7 +1045,9 @@ final $typed_data.Uint8List statusDescriptor = $convert.base64Decode(
     'RmFpbHVyZRIkCg5waGFzZV9zaW5jZV9tcxgMIAEoA1IMcGhhc2VTaW5jZU1zEiQKDmtpbGxfc3'
     'dpdGNoX29uGA0gASgIUgxraWxsU3dpdGNoT24SJQoOZWdyZXNzX2FkZHJlc3MYDiABKAlSDWVn'
     'cmVzc0FkZHJlc3MSHQoKbGF0ZW5jeV9tcxgPIAEoDVIJbGF0ZW5jeU1zEiUKDmNvbmZpZ192ZX'
-    'JzaW9uGBAgASgEUg1jb25maWdWZXJzaW9u');
+    'JzaW9uGBAgASgEUg1jb25maWdWZXJzaW9uEiYKBXByb2JlGBEgASgOMhAuY2hhcm9uLnYxLlBy'
+    'b2JlUgVwcm9iZRIwCghsYXN0X2VuZBgSIAEoDjIVLmNoYXJvbi52MS5TZXNzaW9uRW5kUgdsYX'
+    'N0RW5k');
 
 @$core.Deprecated('Use quotaDescriptor instead')
 const Quota$json = {

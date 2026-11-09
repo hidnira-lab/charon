@@ -789,21 +789,23 @@ const (
 	FailureReason_FAILURE_XRAY_EXITED       FailureReason = 7
 	FailureReason_FAILURE_ADAPTER_LOST      FailureReason = 8
 	FailureReason_FAILURE_NETWORK_CHANGED   FailureReason = 9
+	FailureReason_FAILURE_DNS_NOT_TUNNELLED FailureReason = 10
 )
 
 // Enum value maps for FailureReason.
 var (
 	FailureReason_name = map[int32]string{
-		0: "FAILURE_UNSPECIFIED",
-		1: "FAILURE_TCP_TIMEOUT",
-		2: "FAILURE_REALITY_HANDSHAKE",
-		3: "FAILURE_EGRESS_MISMATCH",
-		4: "FAILURE_CONFIG_REJECTED",
-		5: "FAILURE_ADAPTER_FAILED",
-		6: "FAILURE_PORT_IN_USE",
-		7: "FAILURE_XRAY_EXITED",
-		8: "FAILURE_ADAPTER_LOST",
-		9: "FAILURE_NETWORK_CHANGED",
+		0:  "FAILURE_UNSPECIFIED",
+		1:  "FAILURE_TCP_TIMEOUT",
+		2:  "FAILURE_REALITY_HANDSHAKE",
+		3:  "FAILURE_EGRESS_MISMATCH",
+		4:  "FAILURE_CONFIG_REJECTED",
+		5:  "FAILURE_ADAPTER_FAILED",
+		6:  "FAILURE_PORT_IN_USE",
+		7:  "FAILURE_XRAY_EXITED",
+		8:  "FAILURE_ADAPTER_LOST",
+		9:  "FAILURE_NETWORK_CHANGED",
+		10: "FAILURE_DNS_NOT_TUNNELLED",
 	}
 	FailureReason_value = map[string]int32{
 		"FAILURE_UNSPECIFIED":       0,
@@ -816,6 +818,7 @@ var (
 		"FAILURE_XRAY_EXITED":       7,
 		"FAILURE_ADAPTER_LOST":      8,
 		"FAILURE_NETWORK_CHANGED":   9,
+		"FAILURE_DNS_NOT_TUNNELLED": 10,
 	}
 )
 
@@ -844,6 +847,107 @@ func (x FailureReason) Number() protoreflect.EnumNumber {
 // Deprecated: Use FailureReason.Descriptor instead.
 func (FailureReason) EnumDescriptor() ([]byte, []int) {
 	return file_charon_v1_charon_proto_rawDescGZIP(), []int{14}
+}
+
+type Probe int32
+
+const (
+	Probe_PROBE_UNSPECIFIED    Probe = 0
+	Probe_PROBE_NETWORK_CHANGE Probe = 1
+	Probe_PROBE_WAKE           Probe = 2
+)
+
+// Enum value maps for Probe.
+var (
+	Probe_name = map[int32]string{
+		0: "PROBE_UNSPECIFIED",
+		1: "PROBE_NETWORK_CHANGE",
+		2: "PROBE_WAKE",
+	}
+	Probe_value = map[string]int32{
+		"PROBE_UNSPECIFIED":    0,
+		"PROBE_NETWORK_CHANGE": 1,
+		"PROBE_WAKE":           2,
+	}
+)
+
+func (x Probe) Enum() *Probe {
+	p := new(Probe)
+	*p = x
+	return p
+}
+
+func (x Probe) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Probe) Descriptor() protoreflect.EnumDescriptor {
+	return file_charon_v1_charon_proto_enumTypes[15].Descriptor()
+}
+
+func (Probe) Type() protoreflect.EnumType {
+	return &file_charon_v1_charon_proto_enumTypes[15]
+}
+
+func (x Probe) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Probe.Descriptor instead.
+func (Probe) EnumDescriptor() ([]byte, []int) {
+	return file_charon_v1_charon_proto_rawDescGZIP(), []int{15}
+}
+
+type SessionEnd int32
+
+const (
+	SessionEnd_SESSION_END_UNSPECIFIED     SessionEnd = 0
+	SessionEnd_SESSION_END_MANUAL          SessionEnd = 1
+	SessionEnd_SESSION_END_COULD_NOT_REACH SessionEnd = 2
+	SessionEnd_SESSION_END_TUNNEL_LOST     SessionEnd = 3
+)
+
+// Enum value maps for SessionEnd.
+var (
+	SessionEnd_name = map[int32]string{
+		0: "SESSION_END_UNSPECIFIED",
+		1: "SESSION_END_MANUAL",
+		2: "SESSION_END_COULD_NOT_REACH",
+		3: "SESSION_END_TUNNEL_LOST",
+	}
+	SessionEnd_value = map[string]int32{
+		"SESSION_END_UNSPECIFIED":     0,
+		"SESSION_END_MANUAL":          1,
+		"SESSION_END_COULD_NOT_REACH": 2,
+		"SESSION_END_TUNNEL_LOST":     3,
+	}
+)
+
+func (x SessionEnd) Enum() *SessionEnd {
+	p := new(SessionEnd)
+	*p = x
+	return p
+}
+
+func (x SessionEnd) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (SessionEnd) Descriptor() protoreflect.EnumDescriptor {
+	return file_charon_v1_charon_proto_enumTypes[16].Descriptor()
+}
+
+func (SessionEnd) Type() protoreflect.EnumType {
+	return &file_charon_v1_charon_proto_enumTypes[16]
+}
+
+func (x SessionEnd) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use SessionEnd.Descriptor instead.
+func (SessionEnd) EnumDescriptor() ([]byte, []int) {
+	return file_charon_v1_charon_proto_rawDescGZIP(), []int{16}
 }
 
 type ErrorCode int32
@@ -903,11 +1007,11 @@ func (x ErrorCode) String() string {
 }
 
 func (ErrorCode) Descriptor() protoreflect.EnumDescriptor {
-	return file_charon_v1_charon_proto_enumTypes[15].Descriptor()
+	return file_charon_v1_charon_proto_enumTypes[17].Descriptor()
 }
 
 func (ErrorCode) Type() protoreflect.EnumType {
-	return &file_charon_v1_charon_proto_enumTypes[15]
+	return &file_charon_v1_charon_proto_enumTypes[17]
 }
 
 func (x ErrorCode) Number() protoreflect.EnumNumber {
@@ -916,7 +1020,7 @@ func (x ErrorCode) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use ErrorCode.Descriptor instead.
 func (ErrorCode) EnumDescriptor() ([]byte, []int) {
-	return file_charon_v1_charon_proto_rawDescGZIP(), []int{15}
+	return file_charon_v1_charon_proto_rawDescGZIP(), []int{17}
 }
 
 type Envelope struct {
@@ -2281,8 +2385,18 @@ type Status struct {
 	EgressAddress  string                 `protobuf:"bytes,14,opt,name=egress_address,json=egressAddress,proto3" json:"egress_address,omitempty"`
 	LatencyMs      uint32                 `protobuf:"varint,15,opt,name=latency_ms,json=latencyMs,proto3" json:"latency_ms,omitempty"`
 	ConfigVersion  uint64                 `protobuf:"varint,16,opt,name=config_version,json=configVersion,proto3" json:"config_version,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	// Added after the Design artifact showed Home states that phase and gate alone
+	// cannot tell apart (additive, field numbers are not frozen yet).
+	// probe: why a session that was Up is being verified again. Set only while
+	// the phase is Verifying after Up, PROBE_UNSPECIFIED otherwise. It tells
+	// "waking up" and "checking network" from a first connect.
+	Probe Probe `protobuf:"varint,17,opt,name=probe,proto3,enum=charon.v1.Probe" json:"probe,omitempty"`
+	// last_end: how the most recent session ended. Set when the phase becomes
+	// Idle, cleared by the next Connect. It tells "could not reach" and "tunnel
+	// lost" from a plain disconnect.
+	LastEnd       SessionEnd `protobuf:"varint,18,opt,name=last_end,json=lastEnd,proto3,enum=charon.v1.SessionEnd" json:"last_end,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Status) Reset() {
@@ -2425,6 +2539,20 @@ func (x *Status) GetConfigVersion() uint64 {
 		return x.ConfigVersion
 	}
 	return 0
+}
+
+func (x *Status) GetProbe() Probe {
+	if x != nil {
+		return x.Probe
+	}
+	return Probe_PROBE_UNSPECIFIED
+}
+
+func (x *Status) GetLastEnd() SessionEnd {
+	if x != nil {
+		return x.LastEnd
+	}
+	return SessionEnd_SESSION_END_UNSPECIFIED
 }
 
 type Quota struct {
@@ -3553,7 +3681,7 @@ const file_charon_v1_charon_proto_rawDesc = "" +
 	"\fupdate_state\x18\x06 \x01(\v2\x16.charon.v1.UpdateStateH\x00R\vupdateState\x12>\n" +
 	"\rconfig_result\x18\a \x01(\v2\x17.charon.v1.ConfigResultH\x00R\fconfigResult\x12&\n" +
 	"\x04ping\x18\b \x01(\v2\x10.charon.v1.EmptyH\x00R\x04pingB\x06\n" +
-	"\x04kind\"\xfc\x04\n" +
+	"\x04kind\"\xd6\x05\n" +
 	"\x06Status\x12&\n" +
 	"\x05phase\x18\x01 \x01(\x0e2\x10.charon.v1.PhaseR\x05phase\x12#\n" +
 	"\x04gate\x18\x02 \x01(\x0e2\x0f.charon.v1.GateR\x04gate\x12(\n" +
@@ -3573,7 +3701,9 @@ const file_charon_v1_charon_proto_rawDesc = "" +
 	"\x0eegress_address\x18\x0e \x01(\tR\regressAddress\x12\x1d\n" +
 	"\n" +
 	"latency_ms\x18\x0f \x01(\rR\tlatencyMs\x12%\n" +
-	"\x0econfig_version\x18\x10 \x01(\x04R\rconfigVersion\"\xf8\x01\n" +
+	"\x0econfig_version\x18\x10 \x01(\x04R\rconfigVersion\x12&\n" +
+	"\x05probe\x18\x11 \x01(\x0e2\x10.charon.v1.ProbeR\x05probe\x120\n" +
+	"\blast_end\x18\x12 \x01(\x0e2\x15.charon.v1.SessionEndR\alastEnd\"\xf8\x01\n" +
 	"\x05Quota\x12\x1b\n" +
 	"\tserver_id\x18\x01 \x01(\tR\bserverId\x12\x1b\n" +
 	"\tbytes_out\x18\x02 \x01(\x04R\bbytesOut\x12\x19\n" +
@@ -3747,7 +3877,7 @@ const file_charon_v1_charon_proto_rawDesc = "" +
 	"\x13NOTICE_TRAFFIC_HELD\x10\x03\x12\x16\n" +
 	"\x12NOTICE_QUOTA_AMBER\x10\x04\x12\x14\n" +
 	"\x10NOTICE_QUOTA_CAP\x10\x05\x12\x16\n" +
-	"\x12NOTICE_TUNNEL_LOST\x10\x06*\x9f\x02\n" +
+	"\x12NOTICE_TUNNEL_LOST\x10\x06*\xbe\x02\n" +
 	"\rFailureReason\x12\x17\n" +
 	"\x13FAILURE_UNSPECIFIED\x10\x00\x12\x17\n" +
 	"\x13FAILURE_TCP_TIMEOUT\x10\x01\x12\x1d\n" +
@@ -3758,7 +3888,20 @@ const file_charon_v1_charon_proto_rawDesc = "" +
 	"\x13FAILURE_PORT_IN_USE\x10\x06\x12\x17\n" +
 	"\x13FAILURE_XRAY_EXITED\x10\a\x12\x18\n" +
 	"\x14FAILURE_ADAPTER_LOST\x10\b\x12\x1b\n" +
-	"\x17FAILURE_NETWORK_CHANGED\x10\t*\xae\x02\n" +
+	"\x17FAILURE_NETWORK_CHANGED\x10\t\x12\x1d\n" +
+	"\x19FAILURE_DNS_NOT_TUNNELLED\x10\n" +
+	"*H\n" +
+	"\x05Probe\x12\x15\n" +
+	"\x11PROBE_UNSPECIFIED\x10\x00\x12\x18\n" +
+	"\x14PROBE_NETWORK_CHANGE\x10\x01\x12\x0e\n" +
+	"\n" +
+	"PROBE_WAKE\x10\x02*\x7f\n" +
+	"\n" +
+	"SessionEnd\x12\x1b\n" +
+	"\x17SESSION_END_UNSPECIFIED\x10\x00\x12\x16\n" +
+	"\x12SESSION_END_MANUAL\x10\x01\x12\x1f\n" +
+	"\x1bSESSION_END_COULD_NOT_REACH\x10\x02\x12\x1b\n" +
+	"\x17SESSION_END_TUNNEL_LOST\x10\x03*\xae\x02\n" +
 	"\tErrorCode\x12\x15\n" +
 	"\x11ERROR_UNSPECIFIED\x10\x00\x12\x1a\n" +
 	"\x16ERROR_INVALID_ARGUMENT\x10\x01\x12\x18\n" +
@@ -3786,7 +3929,7 @@ func file_charon_v1_charon_proto_rawDescGZIP() []byte {
 	return file_charon_v1_charon_proto_rawDescData
 }
 
-var file_charon_v1_charon_proto_enumTypes = make([]protoimpl.EnumInfo, 16)
+var file_charon_v1_charon_proto_enumTypes = make([]protoimpl.EnumInfo, 18)
 var file_charon_v1_charon_proto_msgTypes = make([]protoimpl.MessageInfo, 29)
 var file_charon_v1_charon_proto_goTypes = []any{
 	(Phase)(0),                // 0: charon.v1.Phase
@@ -3804,110 +3947,114 @@ var file_charon_v1_charon_proto_goTypes = []any{
 	(UpdateStage)(0),          // 12: charon.v1.UpdateStage
 	(NoticeKind)(0),           // 13: charon.v1.NoticeKind
 	(FailureReason)(0),        // 14: charon.v1.FailureReason
-	(ErrorCode)(0),            // 15: charon.v1.ErrorCode
-	(*Envelope)(nil),          // 16: charon.v1.Envelope
-	(*Hello)(nil),             // 17: charon.v1.Hello
-	(*HelloAck)(nil),          // 18: charon.v1.HelloAck
-	(*Command)(nil),           // 19: charon.v1.Command
-	(*Empty)(nil),             // 20: charon.v1.Empty
-	(*ServerRef)(nil),         // 21: charon.v1.ServerRef
-	(*Subscription)(nil),      // 22: charon.v1.Subscription
-	(*ApplyUpdate)(nil),       // 23: charon.v1.ApplyUpdate
-	(*ExportDiagnostics)(nil), // 24: charon.v1.ExportDiagnostics
-	(*UpdateFileChunk)(nil),   // 25: charon.v1.UpdateFileChunk
-	(*Response)(nil),          // 26: charon.v1.Response
-	(*Error)(nil),             // 27: charon.v1.Error
-	(*FieldError)(nil),        // 28: charon.v1.FieldError
-	(*Event)(nil),             // 29: charon.v1.Event
-	(*Status)(nil),            // 30: charon.v1.Status
-	(*Quota)(nil),             // 31: charon.v1.Quota
-	(*Notice)(nil),            // 32: charon.v1.Notice
-	(*Throughput)(nil),        // 33: charon.v1.Throughput
-	(*LogLine)(nil),           // 34: charon.v1.LogLine
-	(*LogBatch)(nil),          // 35: charon.v1.LogBatch
-	(*ConfigResult)(nil),      // 36: charon.v1.ConfigResult
-	(*UpdateState)(nil),       // 37: charon.v1.UpdateState
-	(*Config)(nil),            // 38: charon.v1.Config
-	(*Server)(nil),            // 39: charon.v1.Server
-	(*Reality)(nil),           // 40: charon.v1.Reality
-	(*QuotaPlan)(nil),         // 41: charon.v1.QuotaPlan
-	(*Settings)(nil),          // 42: charon.v1.Settings
-	(*SplitTunnel)(nil),       // 43: charon.v1.SplitTunnel
-	(*Rule)(nil),              // 44: charon.v1.Rule
+	(Probe)(0),                // 15: charon.v1.Probe
+	(SessionEnd)(0),           // 16: charon.v1.SessionEnd
+	(ErrorCode)(0),            // 17: charon.v1.ErrorCode
+	(*Envelope)(nil),          // 18: charon.v1.Envelope
+	(*Hello)(nil),             // 19: charon.v1.Hello
+	(*HelloAck)(nil),          // 20: charon.v1.HelloAck
+	(*Command)(nil),           // 21: charon.v1.Command
+	(*Empty)(nil),             // 22: charon.v1.Empty
+	(*ServerRef)(nil),         // 23: charon.v1.ServerRef
+	(*Subscription)(nil),      // 24: charon.v1.Subscription
+	(*ApplyUpdate)(nil),       // 25: charon.v1.ApplyUpdate
+	(*ExportDiagnostics)(nil), // 26: charon.v1.ExportDiagnostics
+	(*UpdateFileChunk)(nil),   // 27: charon.v1.UpdateFileChunk
+	(*Response)(nil),          // 28: charon.v1.Response
+	(*Error)(nil),             // 29: charon.v1.Error
+	(*FieldError)(nil),        // 30: charon.v1.FieldError
+	(*Event)(nil),             // 31: charon.v1.Event
+	(*Status)(nil),            // 32: charon.v1.Status
+	(*Quota)(nil),             // 33: charon.v1.Quota
+	(*Notice)(nil),            // 34: charon.v1.Notice
+	(*Throughput)(nil),        // 35: charon.v1.Throughput
+	(*LogLine)(nil),           // 36: charon.v1.LogLine
+	(*LogBatch)(nil),          // 37: charon.v1.LogBatch
+	(*ConfigResult)(nil),      // 38: charon.v1.ConfigResult
+	(*UpdateState)(nil),       // 39: charon.v1.UpdateState
+	(*Config)(nil),            // 40: charon.v1.Config
+	(*Server)(nil),            // 41: charon.v1.Server
+	(*Reality)(nil),           // 42: charon.v1.Reality
+	(*QuotaPlan)(nil),         // 43: charon.v1.QuotaPlan
+	(*Settings)(nil),          // 44: charon.v1.Settings
+	(*SplitTunnel)(nil),       // 45: charon.v1.SplitTunnel
+	(*Rule)(nil),              // 46: charon.v1.Rule
 }
 var file_charon_v1_charon_proto_depIdxs = []int32{
-	17, // 0: charon.v1.Envelope.hello:type_name -> charon.v1.Hello
-	18, // 1: charon.v1.Envelope.hello_ack:type_name -> charon.v1.HelloAck
-	19, // 2: charon.v1.Envelope.command:type_name -> charon.v1.Command
-	26, // 3: charon.v1.Envelope.response:type_name -> charon.v1.Response
-	29, // 4: charon.v1.Envelope.event:type_name -> charon.v1.Event
-	30, // 5: charon.v1.HelloAck.status:type_name -> charon.v1.Status
-	27, // 6: charon.v1.HelloAck.error:type_name -> charon.v1.Error
-	20, // 7: charon.v1.Command.connect:type_name -> charon.v1.Empty
-	20, // 8: charon.v1.Command.disconnect:type_name -> charon.v1.Empty
-	20, // 9: charon.v1.Command.cancel:type_name -> charon.v1.Empty
-	20, // 10: charon.v1.Command.switch_now:type_name -> charon.v1.Empty
-	21, // 11: charon.v1.Command.move_to:type_name -> charon.v1.ServerRef
-	21, // 12: charon.v1.Command.try_server:type_name -> charon.v1.ServerRef
-	20, // 13: charon.v1.Command.release:type_name -> charon.v1.Empty
-	20, // 14: charon.v1.Command.retry_now:type_name -> charon.v1.Empty
-	38, // 15: charon.v1.Command.set_config:type_name -> charon.v1.Config
-	20, // 16: charon.v1.Command.get_config:type_name -> charon.v1.Empty
-	22, // 17: charon.v1.Command.subscribe:type_name -> charon.v1.Subscription
-	22, // 18: charon.v1.Command.unsubscribe:type_name -> charon.v1.Subscription
-	20, // 19: charon.v1.Command.check_update:type_name -> charon.v1.Empty
-	23, // 20: charon.v1.Command.apply_update:type_name -> charon.v1.ApplyUpdate
-	20, // 21: charon.v1.Command.rollback_core:type_name -> charon.v1.Empty
-	24, // 22: charon.v1.Command.export_diagnostics:type_name -> charon.v1.ExportDiagnostics
-	25, // 23: charon.v1.Command.update_file_chunk:type_name -> charon.v1.UpdateFileChunk
+	19, // 0: charon.v1.Envelope.hello:type_name -> charon.v1.Hello
+	20, // 1: charon.v1.Envelope.hello_ack:type_name -> charon.v1.HelloAck
+	21, // 2: charon.v1.Envelope.command:type_name -> charon.v1.Command
+	28, // 3: charon.v1.Envelope.response:type_name -> charon.v1.Response
+	31, // 4: charon.v1.Envelope.event:type_name -> charon.v1.Event
+	32, // 5: charon.v1.HelloAck.status:type_name -> charon.v1.Status
+	29, // 6: charon.v1.HelloAck.error:type_name -> charon.v1.Error
+	22, // 7: charon.v1.Command.connect:type_name -> charon.v1.Empty
+	22, // 8: charon.v1.Command.disconnect:type_name -> charon.v1.Empty
+	22, // 9: charon.v1.Command.cancel:type_name -> charon.v1.Empty
+	22, // 10: charon.v1.Command.switch_now:type_name -> charon.v1.Empty
+	23, // 11: charon.v1.Command.move_to:type_name -> charon.v1.ServerRef
+	23, // 12: charon.v1.Command.try_server:type_name -> charon.v1.ServerRef
+	22, // 13: charon.v1.Command.release:type_name -> charon.v1.Empty
+	22, // 14: charon.v1.Command.retry_now:type_name -> charon.v1.Empty
+	40, // 15: charon.v1.Command.set_config:type_name -> charon.v1.Config
+	22, // 16: charon.v1.Command.get_config:type_name -> charon.v1.Empty
+	24, // 17: charon.v1.Command.subscribe:type_name -> charon.v1.Subscription
+	24, // 18: charon.v1.Command.unsubscribe:type_name -> charon.v1.Subscription
+	22, // 19: charon.v1.Command.check_update:type_name -> charon.v1.Empty
+	25, // 20: charon.v1.Command.apply_update:type_name -> charon.v1.ApplyUpdate
+	22, // 21: charon.v1.Command.rollback_core:type_name -> charon.v1.Empty
+	26, // 22: charon.v1.Command.export_diagnostics:type_name -> charon.v1.ExportDiagnostics
+	27, // 23: charon.v1.Command.update_file_chunk:type_name -> charon.v1.UpdateFileChunk
 	7,  // 24: charon.v1.Subscription.topics:type_name -> charon.v1.Topic
 	8,  // 25: charon.v1.Subscription.log_source:type_name -> charon.v1.LogSource
 	9,  // 26: charon.v1.Subscription.min_level:type_name -> charon.v1.LogLevel
 	10, // 27: charon.v1.ApplyUpdate.kind:type_name -> charon.v1.UpdateKind
 	11, // 28: charon.v1.ApplyUpdate.when:type_name -> charon.v1.ApplyWhen
 	10, // 29: charon.v1.UpdateFileChunk.kind:type_name -> charon.v1.UpdateKind
-	20, // 30: charon.v1.Response.ack:type_name -> charon.v1.Empty
-	27, // 31: charon.v1.Response.error:type_name -> charon.v1.Error
-	38, // 32: charon.v1.Response.config:type_name -> charon.v1.Config
-	37, // 33: charon.v1.Response.update_state:type_name -> charon.v1.UpdateState
-	15, // 34: charon.v1.Error.code:type_name -> charon.v1.ErrorCode
-	28, // 35: charon.v1.Error.fields:type_name -> charon.v1.FieldError
-	30, // 36: charon.v1.Event.status_changed:type_name -> charon.v1.Status
-	31, // 37: charon.v1.Event.quota_changed:type_name -> charon.v1.Quota
-	32, // 38: charon.v1.Event.notice:type_name -> charon.v1.Notice
-	35, // 39: charon.v1.Event.logs:type_name -> charon.v1.LogBatch
-	33, // 40: charon.v1.Event.throughput:type_name -> charon.v1.Throughput
-	37, // 41: charon.v1.Event.update_state:type_name -> charon.v1.UpdateState
-	36, // 42: charon.v1.Event.config_result:type_name -> charon.v1.ConfigResult
-	20, // 43: charon.v1.Event.ping:type_name -> charon.v1.Empty
+	22, // 30: charon.v1.Response.ack:type_name -> charon.v1.Empty
+	29, // 31: charon.v1.Response.error:type_name -> charon.v1.Error
+	40, // 32: charon.v1.Response.config:type_name -> charon.v1.Config
+	39, // 33: charon.v1.Response.update_state:type_name -> charon.v1.UpdateState
+	17, // 34: charon.v1.Error.code:type_name -> charon.v1.ErrorCode
+	30, // 35: charon.v1.Error.fields:type_name -> charon.v1.FieldError
+	32, // 36: charon.v1.Event.status_changed:type_name -> charon.v1.Status
+	33, // 37: charon.v1.Event.quota_changed:type_name -> charon.v1.Quota
+	34, // 38: charon.v1.Event.notice:type_name -> charon.v1.Notice
+	37, // 39: charon.v1.Event.logs:type_name -> charon.v1.LogBatch
+	35, // 40: charon.v1.Event.throughput:type_name -> charon.v1.Throughput
+	39, // 41: charon.v1.Event.update_state:type_name -> charon.v1.UpdateState
+	38, // 42: charon.v1.Event.config_result:type_name -> charon.v1.ConfigResult
+	22, // 43: charon.v1.Event.ping:type_name -> charon.v1.Empty
 	0,  // 44: charon.v1.Status.phase:type_name -> charon.v1.Phase
 	1,  // 45: charon.v1.Status.gate:type_name -> charon.v1.Gate
 	2,  // 46: charon.v1.Status.quota_level:type_name -> charon.v1.QuotaLevel
 	14, // 47: charon.v1.Status.last_failure:type_name -> charon.v1.FailureReason
-	2,  // 48: charon.v1.Quota.level:type_name -> charon.v1.QuotaLevel
-	13, // 49: charon.v1.Notice.kind:type_name -> charon.v1.NoticeKind
-	9,  // 50: charon.v1.LogLine.level:type_name -> charon.v1.LogLevel
-	8,  // 51: charon.v1.LogBatch.source:type_name -> charon.v1.LogSource
-	34, // 52: charon.v1.LogBatch.lines:type_name -> charon.v1.LogLine
-	27, // 53: charon.v1.ConfigResult.error:type_name -> charon.v1.Error
-	10, // 54: charon.v1.UpdateState.kind:type_name -> charon.v1.UpdateKind
-	12, // 55: charon.v1.UpdateState.stage:type_name -> charon.v1.UpdateStage
-	39, // 56: charon.v1.Config.servers:type_name -> charon.v1.Server
-	42, // 57: charon.v1.Config.settings:type_name -> charon.v1.Settings
-	43, // 58: charon.v1.Config.split:type_name -> charon.v1.SplitTunnel
-	3,  // 59: charon.v1.Server.protocol:type_name -> charon.v1.Protocol
-	40, // 60: charon.v1.Server.reality:type_name -> charon.v1.Reality
-	41, // 61: charon.v1.Server.quota:type_name -> charon.v1.QuotaPlan
-	4,  // 62: charon.v1.QuotaPlan.counts:type_name -> charon.v1.CountsMode
-	5,  // 63: charon.v1.SplitTunnel.mode:type_name -> charon.v1.SplitMode
-	44, // 64: charon.v1.SplitTunnel.all_except_listed:type_name -> charon.v1.Rule
-	44, // 65: charon.v1.SplitTunnel.only_listed:type_name -> charon.v1.Rule
-	6,  // 66: charon.v1.Rule.kind:type_name -> charon.v1.RuleKind
-	67, // [67:67] is the sub-list for method output_type
-	67, // [67:67] is the sub-list for method input_type
-	67, // [67:67] is the sub-list for extension type_name
-	67, // [67:67] is the sub-list for extension extendee
-	0,  // [0:67] is the sub-list for field type_name
+	15, // 48: charon.v1.Status.probe:type_name -> charon.v1.Probe
+	16, // 49: charon.v1.Status.last_end:type_name -> charon.v1.SessionEnd
+	2,  // 50: charon.v1.Quota.level:type_name -> charon.v1.QuotaLevel
+	13, // 51: charon.v1.Notice.kind:type_name -> charon.v1.NoticeKind
+	9,  // 52: charon.v1.LogLine.level:type_name -> charon.v1.LogLevel
+	8,  // 53: charon.v1.LogBatch.source:type_name -> charon.v1.LogSource
+	36, // 54: charon.v1.LogBatch.lines:type_name -> charon.v1.LogLine
+	29, // 55: charon.v1.ConfigResult.error:type_name -> charon.v1.Error
+	10, // 56: charon.v1.UpdateState.kind:type_name -> charon.v1.UpdateKind
+	12, // 57: charon.v1.UpdateState.stage:type_name -> charon.v1.UpdateStage
+	41, // 58: charon.v1.Config.servers:type_name -> charon.v1.Server
+	44, // 59: charon.v1.Config.settings:type_name -> charon.v1.Settings
+	45, // 60: charon.v1.Config.split:type_name -> charon.v1.SplitTunnel
+	3,  // 61: charon.v1.Server.protocol:type_name -> charon.v1.Protocol
+	42, // 62: charon.v1.Server.reality:type_name -> charon.v1.Reality
+	43, // 63: charon.v1.Server.quota:type_name -> charon.v1.QuotaPlan
+	4,  // 64: charon.v1.QuotaPlan.counts:type_name -> charon.v1.CountsMode
+	5,  // 65: charon.v1.SplitTunnel.mode:type_name -> charon.v1.SplitMode
+	46, // 66: charon.v1.SplitTunnel.all_except_listed:type_name -> charon.v1.Rule
+	46, // 67: charon.v1.SplitTunnel.only_listed:type_name -> charon.v1.Rule
+	6,  // 68: charon.v1.Rule.kind:type_name -> charon.v1.RuleKind
+	69, // [69:69] is the sub-list for method output_type
+	69, // [69:69] is the sub-list for method input_type
+	69, // [69:69] is the sub-list for extension type_name
+	69, // [69:69] is the sub-list for extension extendee
+	0,  // [0:69] is the sub-list for field type_name
 }
 
 func init() { file_charon_v1_charon_proto_init() }
@@ -3963,7 +4110,7 @@ func file_charon_v1_charon_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_charon_v1_charon_proto_rawDesc), len(file_charon_v1_charon_proto_rawDesc)),
-			NumEnums:      16,
+			NumEnums:      18,
 			NumMessages:   29,
 			NumExtensions: 0,
 			NumServices:   0,

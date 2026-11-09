@@ -140,6 +140,16 @@ message Status {
   string egress_address = 14;
   uint32 latency_ms = 15;
   uint64 config_version = 16;
+  // Added after the Design artifact showed Home states that phase and gate alone
+  // cannot tell apart (additive, field numbers are not frozen yet).
+  // probe: why a session that was Up is being verified again. Set only while
+  // the phase is Verifying after Up, PROBE_UNSPECIFIED otherwise. It tells
+  // "waking up" and "checking network" from a first connect.
+  Probe probe = 17;
+  // last_end: how the most recent session ended. Set when the phase becomes
+  // Idle, cleared by the next Connect. It tells "could not reach" and "tunnel
+  // lost" from a plain disconnect.
+  SessionEnd last_end = 18;
 }
 
 message Quota {
@@ -364,6 +374,20 @@ enum FailureReason {
   FAILURE_XRAY_EXITED = 7;
   FAILURE_ADAPTER_LOST = 8;
   FAILURE_NETWORK_CHANGED = 9;
+  FAILURE_DNS_NOT_TUNNELLED = 10;
+}
+
+enum Probe {
+  PROBE_UNSPECIFIED = 0;
+  PROBE_NETWORK_CHANGE = 1;
+  PROBE_WAKE = 2;
+}
+
+enum SessionEnd {
+  SESSION_END_UNSPECIFIED = 0;
+  SESSION_END_MANUAL = 1;
+  SESSION_END_COULD_NOT_REACH = 2;
+  SESSION_END_TUNNEL_LOST = 3;
 }
 
 enum ErrorCode {

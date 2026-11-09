@@ -120,6 +120,28 @@ func goldenSamples() map[string]*charonv1.Envelope {
 				}},
 			}}
 		}),
+		// The two fields the Design artifact made necessary: why an Up session is
+		// being verified again, and how the last session ended.
+		"event_status_waking": env(0, func(e *charonv1.Envelope) {
+			e.Payload = &charonv1.Envelope_Event{Event: &charonv1.Event{
+				Kind: &charonv1.Event_StatusChanged{StatusChanged: &charonv1.Status{
+					Phase: charonv1.Phase_PHASE_VERIFYING, Gate: charonv1.Gate_GATE_ARMED,
+					ActiveServerId: "SRV-01", ChosenServerId: "SRV-01", MaxAttempts: 5,
+					ServiceNowMs: 1700000000500, KillSwitchOn: true,
+					Probe: charonv1.Probe_PROBE_WAKE,
+				}},
+			}}
+		}),
+		"event_status_could_not_reach": env(0, func(e *charonv1.Envelope) {
+			e.Payload = &charonv1.Envelope_Event{Event: &charonv1.Event{
+				Kind: &charonv1.Event_StatusChanged{StatusChanged: &charonv1.Status{
+					Phase: charonv1.Phase_PHASE_IDLE, Gate: charonv1.Gate_GATE_DISARMED,
+					ChosenServerId: "SRV-01", MaxAttempts: 5, ServiceNowMs: 1700000003000,
+					LastFailure: charonv1.FailureReason_FAILURE_DNS_NOT_TUNNELLED,
+					LastEnd:     charonv1.SessionEnd_SESSION_END_COULD_NOT_REACH,
+				}},
+			}}
+		}),
 		"event_notice": env(0, func(e *charonv1.Envelope) {
 			e.Payload = &charonv1.Envelope_Event{Event: &charonv1.Event{
 				Kind: &charonv1.Event_Notice{Notice: &charonv1.Notice{

@@ -1686,6 +1686,8 @@ class Status extends $pb.GeneratedMessage {
     $core.String? egressAddress,
     $core.int? latencyMs,
     $fixnum.Int64? configVersion,
+    Probe? probe,
+    SessionEnd? lastEnd,
   }) {
     final result = Status._();
     if (phase != null) result.phase = phase;
@@ -1704,6 +1706,8 @@ class Status extends $pb.GeneratedMessage {
     if (egressAddress != null) result.egressAddress = egressAddress;
     if (latencyMs != null) result.latencyMs = latencyMs;
     if (configVersion != null) result.configVersion = configVersion;
+    if (probe != null) result.probe = probe;
+    if (lastEnd != null) result.lastEnd = lastEnd;
     return result;
   }
 
@@ -1741,6 +1745,9 @@ class Status extends $pb.GeneratedMessage {
     ..a<$fixnum.Int64>(
         16, _omitFieldNames ? '' : 'configVersion', $pb.PbFieldType.OU6,
         defaultOrMaker: $fixnum.Int64.ZERO)
+    ..aE<Probe>(17, _omitFieldNames ? '' : 'probe', enumValues: Probe.values)
+    ..aE<SessionEnd>(18, _omitFieldNames ? '' : 'lastEnd',
+        enumValues: SessionEnd.values)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1906,6 +1913,32 @@ class Status extends $pb.GeneratedMessage {
   $core.bool hasConfigVersion() => $_has(15);
   @$pb.TagNumber(16)
   void clearConfigVersion() => $_clearField(16);
+
+  /// Added after the Design artifact showed Home states that phase and gate alone
+  /// cannot tell apart (additive, field numbers are not frozen yet).
+  /// probe: why a session that was Up is being verified again. Set only while
+  /// the phase is Verifying after Up, PROBE_UNSPECIFIED otherwise. It tells
+  /// "waking up" and "checking network" from a first connect.
+  @$pb.TagNumber(17)
+  Probe get probe => $_getN(16);
+  @$pb.TagNumber(17)
+  set probe(Probe value) => $_setField(17, value);
+  @$pb.TagNumber(17)
+  $core.bool hasProbe() => $_has(16);
+  @$pb.TagNumber(17)
+  void clearProbe() => $_clearField(17);
+
+  /// last_end: how the most recent session ended. Set when the phase becomes
+  /// Idle, cleared by the next Connect. It tells "could not reach" and "tunnel
+  /// lost" from a plain disconnect.
+  @$pb.TagNumber(18)
+  SessionEnd get lastEnd => $_getN(17);
+  @$pb.TagNumber(18)
+  set lastEnd(SessionEnd value) => $_setField(18, value);
+  @$pb.TagNumber(18)
+  $core.bool hasLastEnd() => $_has(17);
+  @$pb.TagNumber(18)
+  void clearLastEnd() => $_clearField(18);
 }
 
 class Quota extends $pb.GeneratedMessage {

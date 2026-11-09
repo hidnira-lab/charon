@@ -400,6 +400,8 @@ class FailureReason extends $pb.ProtobufEnum {
       FailureReason._(8, _omitEnumNames ? '' : 'FAILURE_ADAPTER_LOST');
   static const FailureReason FAILURE_NETWORK_CHANGED =
       FailureReason._(9, _omitEnumNames ? '' : 'FAILURE_NETWORK_CHANGED');
+  static const FailureReason FAILURE_DNS_NOT_TUNNELLED =
+      FailureReason._(10, _omitEnumNames ? '' : 'FAILURE_DNS_NOT_TUNNELLED');
 
   static const $core.List<FailureReason> values = <FailureReason>[
     FAILURE_UNSPECIFIED,
@@ -412,14 +414,62 @@ class FailureReason extends $pb.ProtobufEnum {
     FAILURE_XRAY_EXITED,
     FAILURE_ADAPTER_LOST,
     FAILURE_NETWORK_CHANGED,
+    FAILURE_DNS_NOT_TUNNELLED,
   ];
 
   static final $core.List<FailureReason?> _byValue =
-      $pb.ProtobufEnum.$_initByValueList(values, 9);
+      $pb.ProtobufEnum.$_initByValueList(values, 10);
   static FailureReason? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
   const FailureReason._(super.value, super.name);
+}
+
+class Probe extends $pb.ProtobufEnum {
+  static const Probe PROBE_UNSPECIFIED =
+      Probe._(0, _omitEnumNames ? '' : 'PROBE_UNSPECIFIED');
+  static const Probe PROBE_NETWORK_CHANGE =
+      Probe._(1, _omitEnumNames ? '' : 'PROBE_NETWORK_CHANGE');
+  static const Probe PROBE_WAKE =
+      Probe._(2, _omitEnumNames ? '' : 'PROBE_WAKE');
+
+  static const $core.List<Probe> values = <Probe>[
+    PROBE_UNSPECIFIED,
+    PROBE_NETWORK_CHANGE,
+    PROBE_WAKE,
+  ];
+
+  static final $core.List<Probe?> _byValue =
+      $pb.ProtobufEnum.$_initByValueList(values, 2);
+  static Probe? valueOf($core.int value) =>
+      value < 0 || value >= _byValue.length ? null : _byValue[value];
+
+  const Probe._(super.value, super.name);
+}
+
+class SessionEnd extends $pb.ProtobufEnum {
+  static const SessionEnd SESSION_END_UNSPECIFIED =
+      SessionEnd._(0, _omitEnumNames ? '' : 'SESSION_END_UNSPECIFIED');
+  static const SessionEnd SESSION_END_MANUAL =
+      SessionEnd._(1, _omitEnumNames ? '' : 'SESSION_END_MANUAL');
+  static const SessionEnd SESSION_END_COULD_NOT_REACH =
+      SessionEnd._(2, _omitEnumNames ? '' : 'SESSION_END_COULD_NOT_REACH');
+  static const SessionEnd SESSION_END_TUNNEL_LOST =
+      SessionEnd._(3, _omitEnumNames ? '' : 'SESSION_END_TUNNEL_LOST');
+
+  static const $core.List<SessionEnd> values = <SessionEnd>[
+    SESSION_END_UNSPECIFIED,
+    SESSION_END_MANUAL,
+    SESSION_END_COULD_NOT_REACH,
+    SESSION_END_TUNNEL_LOST,
+  ];
+
+  static final $core.List<SessionEnd?> _byValue =
+      $pb.ProtobufEnum.$_initByValueList(values, 3);
+  static SessionEnd? valueOf($core.int value) =>
+      value < 0 || value >= _byValue.length ? null : _byValue[value];
+
+  const SessionEnd._(super.value, super.name);
 }
 
 class ErrorCode extends $pb.ProtobufEnum {
