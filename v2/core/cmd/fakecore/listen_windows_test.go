@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net"
 	"os"
 	"testing"
 	"time"
@@ -15,19 +16,32 @@ import (
 // in memory connection. The pipe name is unique so it never clashes with a
 // running fake core.
 func TestHandshakeOverRealNamedPipe(t *testing.T) {
-	name := fmt.Sprintf(`\\.\pipe\charon-fake-test-%d`, os.Getpid())
+	dialFake(t, emptyHub())
+}
+
+// A scenario plays through a real named pipe, ending Up.
+func TestScenarioReplayOverRealNamedPipe(t *testing.T) {
+	h := newHub(loadScenario(t, "successful_connect.json"), fast, true)
+	c := dialFake(t, h)
+	phasesUntil(t, c, charonv1.Phase_PHASE_UP)
+}
+
+// dialFake serves h on a fresh pipe, connects, does the handshake and returns
+// the client end.
+func dialFake(t *testing.T, h *hub) net.Conn {
+	t.Helper()
+	name := fmt.Sprintf(`\\.\pipe\charon-fake-test-%d-%d`, os.Getpid(), time.Now().UnixNano())
 	ln, err := listen(name)
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer ln.Close()
+	t.Cleanup(func() { ln.Close() })
 	go func() {
 		conn, err := ln.Accept()
 		if err != nil {
 			return
 		}
-		defer conn.Close()
-		serve(conn)
+		serve(conn, h)
 	}()
 
 	timeout := 5 * time.Second
@@ -35,7 +49,7 @@ func TestHandshakeOverRealNamedPipe(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer c.Close()
+	t.Cleanup(func() { c.Close() })
 	_ = c.SetDeadline(time.Now().Add(5 * time.Second))
 
 	if err := ipc.WriteEnvelope(c, hello(5, 1, 1)); err != nil {
@@ -49,4 +63,5 @@ func TestHandshakeOverRealNamedPipe(t *testing.T) {
 	if ack == nil || ack.Error != nil || ack.Status.GetPhase() != charonv1.Phase_PHASE_IDLE {
 		t.Fatalf("unexpected reply %v", env)
 	}
+	return c
 }

@@ -9,17 +9,22 @@ import (
 
 	charonv1 "github.com/hidnira-lab/charon/core/gen/charonv1"
 	"github.com/hidnira-lab/charon/core/ipc"
+	"github.com/hidnira-lab/charon/core/scenario"
 )
 
+// emptyHub is a fake core with no servers and no timeline.
+func emptyHub() *hub {
+	return newHub(&scenario.Scenario{Config: &charonv1.Config{}}, 1, false)
+}
+
 // start runs serve on one end of an in-memory connection and returns the
-// client end. The server end is closed when serve returns, like main does.
-func start(t *testing.T) net.Conn {
+// client end. serve closes the server end itself when it returns.
+func start(t *testing.T) net.Conn { return startOn(t, emptyHub()) }
+
+func startOn(t *testing.T, h *hub) net.Conn {
 	t.Helper()
 	client, server := net.Pipe()
-	go func() {
-		serve(server)
-		server.Close()
-	}()
+	go serve(server, h)
 	t.Cleanup(func() { client.Close() })
 	_ = client.SetDeadline(time.Now().Add(5 * time.Second))
 	return client
@@ -94,16 +99,23 @@ func TestFirstMessageMustBeHello(t *testing.T) {
 	}
 }
 
-func TestCommandGetsUnsupportedWithSameRequestID(t *testing.T) {
+func command(id uint64, kind func(*charonv1.Command)) *charonv1.Envelope {
+	cmd := &charonv1.Command{}
+	kind(cmd)
+	return &charonv1.Envelope{ProtocolVersion: 1, RequestId: id, Payload: &charonv1.Envelope_Command{Command: cmd}}
+}
+
+func connectCmd(c *charonv1.Command) { c.Kind = &charonv1.Command_Connect{Connect: &charonv1.Empty{}} }
+
+// A command the fake core cannot honour gets UNSUPPORTED, with the same request id.
+func TestUnsupportedCommandGetsUnsupportedWithSameRequestID(t *testing.T) {
 	c := start(t)
 	_ = ipc.WriteEnvelope(c, hello(1, 1, 1))
 	if _, err := ipc.ReadEnvelope(c); err != nil {
 		t.Fatal(err)
 	}
-	cmd := &charonv1.Envelope{ProtocolVersion: 1, RequestId: 99, Payload: &charonv1.Envelope_Command{
-		Command: &charonv1.Command{Kind: &charonv1.Command_Connect{Connect: &charonv1.Empty{}}},
-	}}
-	if err := ipc.WriteEnvelope(c, cmd); err != nil {
+	checkUpdate := func(c *charonv1.Command) { c.Kind = &charonv1.Command_CheckUpdate{CheckUpdate: &charonv1.Empty{}} }
+	if err := ipc.WriteEnvelope(c, command(99, checkUpdate)); err != nil {
 		t.Fatal(err)
 	}
 	env, err := ipc.ReadEnvelope(c)
@@ -115,6 +127,25 @@ func TestCommandGetsUnsupportedWithSameRequestID(t *testing.T) {
 	}
 	if code := env.GetResponse().GetError().GetCode(); code != charonv1.ErrorCode_ERROR_UNSUPPORTED {
 		t.Fatalf("got %v, want UNSUPPORTED", code)
+	}
+}
+
+// Connect with no scenario waiting for it is a command in the wrong state.
+func TestCommandOutOfTurnIsNotAllowedInState(t *testing.T) {
+	c := start(t)
+	_ = ipc.WriteEnvelope(c, hello(1, 1, 1))
+	if _, err := ipc.ReadEnvelope(c); err != nil {
+		t.Fatal(err)
+	}
+	if err := ipc.WriteEnvelope(c, command(5, connectCmd)); err != nil {
+		t.Fatal(err)
+	}
+	env, err := ipc.ReadEnvelope(c)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if code := env.GetResponse().GetError().GetCode(); code != charonv1.ErrorCode_ERROR_NOT_ALLOWED_IN_STATE {
+		t.Fatalf("got %v, want NOT_ALLOWED_IN_STATE", code)
 	}
 }
 
