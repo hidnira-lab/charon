@@ -1324,6 +1324,324 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'About & Acknowledgments'**
   String get settingsAboutAcks;
+
+  /// Title of split tunnel screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Split tunnel'**
+  String get splitTitle;
+
+  /// Subtitle when in all except mode.
+  ///
+  /// In en, this message translates to:
+  /// **'choose what skips the tunnel'**
+  String get splitSubtitleAllExcept;
+
+  /// Subtitle when in only listed mode.
+  ///
+  /// In en, this message translates to:
+  /// **'choose what uses the tunnel'**
+  String get splitSubtitleOnlyListed;
+
+  /// Header showing rules count.
+  ///
+  /// In en, this message translates to:
+  /// **'SPLIT TUNNEL · {countLine}'**
+  String splitCountTitle(String countLine);
+
+  /// Notice when changes are pending reconnection.
+  ///
+  /// In en, this message translates to:
+  /// **'1 change saved. It applies on the next connect, the live tunnel still uses the previous rules.'**
+  String get splitPendingBanner;
+
+  /// Button to reconnect immediately.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnect now'**
+  String get splitReconnectNow;
+
+  /// Title of add rule composer.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a rule'**
+  String get splitAddRuleTitle;
+
+  /// Label for rule type picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Rule type'**
+  String get splitRuleType;
+
+  /// Domain type label.
+  ///
+  /// In en, this message translates to:
+  /// **'DOMAIN'**
+  String get splitTypeDomain;
+
+  /// IP/CIDR type label.
+  ///
+  /// In en, this message translates to:
+  /// **'IP / CIDR'**
+  String get splitTypeIpCidr;
+
+  /// App type label.
+  ///
+  /// In en, this message translates to:
+  /// **'APP'**
+  String get splitTypeApp;
+
+  /// Tooltip explaining app rules are android only.
+  ///
+  /// In en, this message translates to:
+  /// **'Android only'**
+  String get splitAppAndroidOnly;
+
+  /// Placeholder for domain input.
+  ///
+  /// In en, this message translates to:
+  /// **'example.net or *.example.net'**
+  String get splitDomainPlaceholder;
+
+  /// Placeholder for CIDR input.
+  ///
+  /// In en, this message translates to:
+  /// **'192.168.1.0/24 or 198.51.100.7'**
+  String get splitCidrPlaceholder;
+
+  /// Button to add rule.
+  ///
+  /// In en, this message translates to:
+  /// **'Add rule'**
+  String get splitAddRuleBtn;
+
+  /// Tag indicating rules skip tunnel.
+  ///
+  /// In en, this message translates to:
+  /// **'RULES GO DIRECT'**
+  String get splitTagGoDirect;
+
+  /// Tag indicating rules use tunnel.
+  ///
+  /// In en, this message translates to:
+  /// **'RULES USE THE TUNNEL'**
+  String get splitTagUseTunnel;
+
+  /// Explanation of direct rule effect.
+  ///
+  /// In en, this message translates to:
+  /// **'matching traffic skips the tunnel and leaves through your own network'**
+  String get splitConsequenceDirect;
+
+  /// Explanation of tunnel rule effect.
+  ///
+  /// In en, this message translates to:
+  /// **'matching traffic goes through {server}, the rest goes direct'**
+  String splitConsequenceTunnel(String server);
+
+  /// Warning when 1000 rules limit is reached.
+  ///
+  /// In en, this message translates to:
+  /// **'1000 rules is the limit. Delete one to add another.'**
+  String get splitLimitReached;
+
+  /// Conflict warning title.
+  ///
+  /// In en, this message translates to:
+  /// **'Already covered by {coverer}, rules can\'t overlap.'**
+  String splitConflictTitle(String coverer);
+
+  /// Conflict suggestion hint.
+  ///
+  /// In en, this message translates to:
+  /// **'edit or remove {coverer} first, or pick an address it doesn\'t cover'**
+  String splitConflictHint(String coverer);
+
+  /// Header for direct rules list.
+  ///
+  /// In en, this message translates to:
+  /// **'DIRECT LIST'**
+  String get splitDirectList;
+
+  /// Header for tunnel rules list.
+  ///
+  /// In en, this message translates to:
+  /// **'TUNNEL LIST'**
+  String get splitTunnelList;
+
+  /// Tally for direct rules.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} rules · go direct'**
+  String splitRulesGoDirectTally(int count);
+
+  /// Tally for tunnel rules.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} rules · use the tunnel'**
+  String splitRulesUseTunnelTally(int count);
+
+  /// Badge for rule awaiting reconnect.
+  ///
+  /// In en, this message translates to:
+  /// **'NEXT CONNECT'**
+  String get splitNextConnect;
+
+  /// Empty state title.
+  ///
+  /// In en, this message translates to:
+  /// **'No rules yet'**
+  String get splitNoRulesTitle;
+
+  /// Empty state description for all except mode.
+  ///
+  /// In en, this message translates to:
+  /// **'While connected, everything goes through the tunnel. Add a domain or an IP above to let it go direct.'**
+  String get splitEmptyDirect;
+
+  /// Empty state description for only listed mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing uses the tunnel yet, so while connected all traffic goes direct. Add a domain or an IP above to send it through {server}.'**
+  String splitEmptyTunnel(String server);
+
+  /// Technical note on domain resolution.
+  ///
+  /// In en, this message translates to:
+  /// **'domain rules are resolved to IPs once, on connect'**
+  String get splitNoteResolved;
+
+  /// Technical note on IP matching.
+  ///
+  /// In en, this message translates to:
+  /// **'rules match by IP, not SNI, so domains behind multi IP CDNs may not match fully'**
+  String get splitNoteIpMatch;
+
+  /// Technical note on list preservation.
+  ///
+  /// In en, this message translates to:
+  /// **'each mode keeps its own list, switching modes never deletes rules'**
+  String get splitNoteModeList;
+
+  /// Technical note on syncing rules.
+  ///
+  /// In en, this message translates to:
+  /// **'rules sync to your other devices with Push on the Servers page'**
+  String get splitNoteSync;
+
+  /// Mode section title.
+  ///
+  /// In en, this message translates to:
+  /// **'TUNNEL MODE'**
+  String get splitTunnelModeTitle;
+
+  /// All except mode title.
+  ///
+  /// In en, this message translates to:
+  /// **'Tunnel all except listed'**
+  String get splitModeAllExcept;
+
+  /// All except mode subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'the list goes direct'**
+  String get splitModeAllExceptDesc;
+
+  /// Only listed mode title.
+  ///
+  /// In en, this message translates to:
+  /// **'Tunnel only listed'**
+  String get splitModeOnlyListed;
+
+  /// Only listed mode subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'everything else goes direct'**
+  String get splitModeOnlyListedDesc;
+
+  /// Note that rule changes take effect on reconnect.
+  ///
+  /// In en, this message translates to:
+  /// **'rule changes apply on the next connect'**
+  String get splitNextConnectNote;
+
+  /// Route map title.
+  ///
+  /// In en, this message translates to:
+  /// **'WHERE TRAFFIC GOES'**
+  String get splitWhereTrafficGoes;
+
+  /// Badge for local unit.
+  ///
+  /// In en, this message translates to:
+  /// **'THIS UNIT'**
+  String get splitThisUnit;
+
+  /// Direct route title.
+  ///
+  /// In en, this message translates to:
+  /// **'Your network'**
+  String get splitYourNetwork;
+
+  /// Label for default route.
+  ///
+  /// In en, this message translates to:
+  /// **'the default'**
+  String get splitTheDefault;
+
+  /// Disconnected tunnel route state.
+  ///
+  /// In en, this message translates to:
+  /// **'off · rules wait'**
+  String get splitOffRulesWait;
+
+  /// Disconnected direct route state.
+  ///
+  /// In en, this message translates to:
+  /// **'until you connect'**
+  String get splitUntilConnect;
+
+  /// Windows note header.
+  ///
+  /// In en, this message translates to:
+  /// **'INFO · WINDOWS'**
+  String get splitInfoWindowsTitle;
+
+  /// App rules limitation title.
+  ///
+  /// In en, this message translates to:
+  /// **'App rules work on Android only'**
+  String get splitInfoAppAndroidOnly;
+
+  /// Windows limitation description.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows needs a kernel driver for per app routing. Use domain or IP rules here.'**
+  String get splitInfoWindowsDesc;
+
+  /// Helper label for single IP rule.
+  ///
+  /// In en, this message translates to:
+  /// **'single IP'**
+  String get splitHelperSingleIp;
+
+  /// Helper label for CIDR rule.
+  ///
+  /// In en, this message translates to:
+  /// **'CIDR · {count} addresses'**
+  String splitHelperCidr(int count);
+
+  /// Helper label for wildcard domain rule.
+  ///
+  /// In en, this message translates to:
+  /// **'domain · includes every subdomain'**
+  String get splitHelperDomainWildcard;
+
+  /// Helper label for exact domain rule.
+  ///
+  /// In en, this message translates to:
+  /// **'domain · exact name only'**
+  String get splitHelperDomainExact;
 }
 
 class _AppLocalizationsDelegate

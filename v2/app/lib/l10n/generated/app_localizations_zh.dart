@@ -660,6 +660,181 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsAboutAcks => '关于与致谢';
+
+  @override
+  String get splitTitle => '分流';
+
+  @override
+  String get splitSubtitleAllExcept => '选择不走隧道的流量';
+
+  @override
+  String get splitSubtitleOnlyListed => '选择走隧道的流量';
+
+  @override
+  String splitCountTitle(String countLine) {
+    return '分流 · $countLine';
+  }
+
+  @override
+  String get splitPendingBanner => '已保存 1 项更改。下次连接时生效，当前隧道仍使用旧规则。';
+
+  @override
+  String get splitReconnectNow => '立即重连';
+
+  @override
+  String get splitAddRuleTitle => '添加规则';
+
+  @override
+  String get splitRuleType => '规则类型';
+
+  @override
+  String get splitTypeDomain => '域名';
+
+  @override
+  String get splitTypeIpCidr => 'IP / CIDR';
+
+  @override
+  String get splitTypeApp => '应用';
+
+  @override
+  String get splitAppAndroidOnly => '仅限 Android';
+
+  @override
+  String get splitDomainPlaceholder => 'example.net 或 *.example.net';
+
+  @override
+  String get splitCidrPlaceholder => '192.168.1.0/24 或 198.51.100.7';
+
+  @override
+  String get splitAddRuleBtn => '添加规则';
+
+  @override
+  String get splitTagGoDirect => '规则直连';
+
+  @override
+  String get splitTagUseTunnel => '规则走隧道';
+
+  @override
+  String get splitConsequenceDirect => '匹配的流量绕过隧道，从你自己的网络出去';
+
+  @override
+  String splitConsequenceTunnel(String server) {
+    return '匹配的流量走 $server，其余直连';
+  }
+
+  @override
+  String get splitLimitReached => '最多 1000 条规则。删除一条才能再添加。';
+
+  @override
+  String splitConflictTitle(String coverer) {
+    return '已被 $coverer 覆盖，规则不能重叠。';
+  }
+
+  @override
+  String splitConflictHint(String coverer) {
+    return '请先编辑或删除 $coverer，或选择它不覆盖的地址';
+  }
+
+  @override
+  String get splitDirectList => '直连列表';
+
+  @override
+  String get splitTunnelList => '隧道列表';
+
+  @override
+  String splitRulesGoDirectTally(int count) {
+    return '$count 条规则 · 直连';
+  }
+
+  @override
+  String splitRulesUseTunnelTally(int count) {
+    return '$count 条规则 · 走隧道';
+  }
+
+  @override
+  String get splitNextConnect => '下次连接';
+
+  @override
+  String get splitNoRulesTitle => '尚无规则';
+
+  @override
+  String get splitEmptyDirect => '连接期间所有流量都走隧道。在上方添加域名或 IP 可让其直连。';
+
+  @override
+  String splitEmptyTunnel(String server) {
+    return '尚无流量走隧道，因此连接时所有流量均直连。在上方添加域名或 IP 可经由 $server 发送。';
+  }
+
+  @override
+  String get splitNoteResolved => '域名规则只在连接时解析一次 IP';
+
+  @override
+  String get splitNoteIpMatch => '规则按 IP 而非 SNI 匹配，多 IP CDN 后的域名可能无法完全匹配';
+
+  @override
+  String get splitNoteModeList => '每种模式各有自己的列表，切换模式不会删除规则';
+
+  @override
+  String get splitNoteSync => '在服务器页面点推送，规则会同步到你的其他设备';
+
+  @override
+  String get splitTunnelModeTitle => '隧道模式';
+
+  @override
+  String get splitModeAllExcept => '除列表外全部走隧道';
+
+  @override
+  String get splitModeAllExceptDesc => '列表直连';
+
+  @override
+  String get splitModeOnlyListed => '仅列表走隧道';
+
+  @override
+  String get splitModeOnlyListedDesc => '其余全部直连';
+
+  @override
+  String get splitNextConnectNote => '规则变更在下次连接时生效';
+
+  @override
+  String get splitWhereTrafficGoes => '流量去向';
+
+  @override
+  String get splitThisUnit => '本机';
+
+  @override
+  String get splitYourNetwork => '你的网络';
+
+  @override
+  String get splitTheDefault => '默认';
+
+  @override
+  String get splitOffRulesWait => '关闭 · 规则待用';
+
+  @override
+  String get splitUntilConnect => '直到你连接';
+
+  @override
+  String get splitInfoWindowsTitle => '提示 · WINDOWS';
+
+  @override
+  String get splitInfoAppAndroidOnly => '应用规则仅适用于 Android';
+
+  @override
+  String get splitInfoWindowsDesc => 'Windows 需要内核驱动才能按应用分流，这里请使用域名或 IP 规则。';
+
+  @override
+  String get splitHelperSingleIp => '单个 IP';
+
+  @override
+  String splitHelperCidr(int count) {
+    return 'CIDR · $count 个地址';
+  }
+
+  @override
+  String get splitHelperDomainWildcard => '域名 · 包含所有子域名';
+
+  @override
+  String get splitHelperDomainExact => '域名 · 仅精确匹配';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -1317,4 +1492,179 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get settingsAboutAcks => '关于与致谢';
+
+  @override
+  String get splitTitle => '分流';
+
+  @override
+  String get splitSubtitleAllExcept => '选择不走隧道的流量';
+
+  @override
+  String get splitSubtitleOnlyListed => '选择走隧道的流量';
+
+  @override
+  String splitCountTitle(String countLine) {
+    return '分流 · $countLine';
+  }
+
+  @override
+  String get splitPendingBanner => '已保存 1 项更改。下次连接时生效，当前隧道仍使用旧规则。';
+
+  @override
+  String get splitReconnectNow => '立即重连';
+
+  @override
+  String get splitAddRuleTitle => '添加规则';
+
+  @override
+  String get splitRuleType => '规则类型';
+
+  @override
+  String get splitTypeDomain => '域名';
+
+  @override
+  String get splitTypeIpCidr => 'IP / CIDR';
+
+  @override
+  String get splitTypeApp => '应用';
+
+  @override
+  String get splitAppAndroidOnly => '仅限 Android';
+
+  @override
+  String get splitDomainPlaceholder => 'example.net 或 *.example.net';
+
+  @override
+  String get splitCidrPlaceholder => '192.168.1.0/24 或 198.51.100.7';
+
+  @override
+  String get splitAddRuleBtn => '添加规则';
+
+  @override
+  String get splitTagGoDirect => '规则直连';
+
+  @override
+  String get splitTagUseTunnel => '规则走隧道';
+
+  @override
+  String get splitConsequenceDirect => '匹配的流量绕过隧道，从你自己的网络出去';
+
+  @override
+  String splitConsequenceTunnel(String server) {
+    return '匹配的流量走 $server，其余直连';
+  }
+
+  @override
+  String get splitLimitReached => '最多 1000 条规则。删除一条才能再添加。';
+
+  @override
+  String splitConflictTitle(String coverer) {
+    return '已被 $coverer 覆盖，规则不能重叠。';
+  }
+
+  @override
+  String splitConflictHint(String coverer) {
+    return '请先编辑或删除 $coverer，或选择它不覆盖的地址';
+  }
+
+  @override
+  String get splitDirectList => '直连列表';
+
+  @override
+  String get splitTunnelList => '隧道列表';
+
+  @override
+  String splitRulesGoDirectTally(int count) {
+    return '$count 条规则 · 直连';
+  }
+
+  @override
+  String splitRulesUseTunnelTally(int count) {
+    return '$count 条规则 · 走隧道';
+  }
+
+  @override
+  String get splitNextConnect => '下次连接';
+
+  @override
+  String get splitNoRulesTitle => '尚无规则';
+
+  @override
+  String get splitEmptyDirect => '连接期间所有流量都走隧道。在上方添加域名或 IP 可让其直连。';
+
+  @override
+  String splitEmptyTunnel(String server) {
+    return '尚无流量走隧道，因此连接时所有流量均直连。在上方添加域名或 IP 可经由 $server 发送。';
+  }
+
+  @override
+  String get splitNoteResolved => '域名规则只在连接时解析一次 IP';
+
+  @override
+  String get splitNoteIpMatch => '规则按 IP 而非 SNI 匹配，多 IP CDN 后的域名可能无法完全匹配';
+
+  @override
+  String get splitNoteModeList => '每种模式各有自己的列表，切换模式不会删除规则';
+
+  @override
+  String get splitNoteSync => '在服务器页面点推送，规则会同步到你的其他设备';
+
+  @override
+  String get splitTunnelModeTitle => '隧道模式';
+
+  @override
+  String get splitModeAllExcept => '除列表外全部走隧道';
+
+  @override
+  String get splitModeAllExceptDesc => '列表直连';
+
+  @override
+  String get splitModeOnlyListed => '仅列表走隧道';
+
+  @override
+  String get splitModeOnlyListedDesc => '其余全部直连';
+
+  @override
+  String get splitNextConnectNote => '规则变更在下次连接时生效';
+
+  @override
+  String get splitWhereTrafficGoes => '流量去向';
+
+  @override
+  String get splitThisUnit => '本机';
+
+  @override
+  String get splitYourNetwork => '你的网络';
+
+  @override
+  String get splitTheDefault => '默认';
+
+  @override
+  String get splitOffRulesWait => '关闭 · 规则待用';
+
+  @override
+  String get splitUntilConnect => '直到你连接';
+
+  @override
+  String get splitInfoWindowsTitle => '提示 · WINDOWS';
+
+  @override
+  String get splitInfoAppAndroidOnly => '应用规则仅适用于 Android';
+
+  @override
+  String get splitInfoWindowsDesc => 'Windows 需要内核驱动才能按应用分流，这里请使用域名或 IP 规则。';
+
+  @override
+  String get splitHelperSingleIp => '单个 IP';
+
+  @override
+  String splitHelperCidr(int count) {
+    return 'CIDR · $count 个地址';
+  }
+
+  @override
+  String get splitHelperDomainWildcard => '域名 · 包含所有子域名';
+
+  @override
+  String get splitHelperDomainExact => '域名 · 仅精确匹配';
 }

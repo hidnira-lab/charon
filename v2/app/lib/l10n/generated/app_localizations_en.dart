@@ -698,4 +698,188 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsAboutAcks => 'About & Acknowledgments';
+
+  @override
+  String get splitTitle => 'Split tunnel';
+
+  @override
+  String get splitSubtitleAllExcept => 'choose what skips the tunnel';
+
+  @override
+  String get splitSubtitleOnlyListed => 'choose what uses the tunnel';
+
+  @override
+  String splitCountTitle(String countLine) {
+    return 'SPLIT TUNNEL · $countLine';
+  }
+
+  @override
+  String get splitPendingBanner =>
+      '1 change saved. It applies on the next connect, the live tunnel still uses the previous rules.';
+
+  @override
+  String get splitReconnectNow => 'Reconnect now';
+
+  @override
+  String get splitAddRuleTitle => 'Add a rule';
+
+  @override
+  String get splitRuleType => 'Rule type';
+
+  @override
+  String get splitTypeDomain => 'DOMAIN';
+
+  @override
+  String get splitTypeIpCidr => 'IP / CIDR';
+
+  @override
+  String get splitTypeApp => 'APP';
+
+  @override
+  String get splitAppAndroidOnly => 'Android only';
+
+  @override
+  String get splitDomainPlaceholder => 'example.net or *.example.net';
+
+  @override
+  String get splitCidrPlaceholder => '192.168.1.0/24 or 198.51.100.7';
+
+  @override
+  String get splitAddRuleBtn => 'Add rule';
+
+  @override
+  String get splitTagGoDirect => 'RULES GO DIRECT';
+
+  @override
+  String get splitTagUseTunnel => 'RULES USE THE TUNNEL';
+
+  @override
+  String get splitConsequenceDirect =>
+      'matching traffic skips the tunnel and leaves through your own network';
+
+  @override
+  String splitConsequenceTunnel(String server) {
+    return 'matching traffic goes through $server, the rest goes direct';
+  }
+
+  @override
+  String get splitLimitReached =>
+      '1000 rules is the limit. Delete one to add another.';
+
+  @override
+  String splitConflictTitle(String coverer) {
+    return 'Already covered by $coverer, rules can\'t overlap.';
+  }
+
+  @override
+  String splitConflictHint(String coverer) {
+    return 'edit or remove $coverer first, or pick an address it doesn\'t cover';
+  }
+
+  @override
+  String get splitDirectList => 'DIRECT LIST';
+
+  @override
+  String get splitTunnelList => 'TUNNEL LIST';
+
+  @override
+  String splitRulesGoDirectTally(int count) {
+    return '$count rules · go direct';
+  }
+
+  @override
+  String splitRulesUseTunnelTally(int count) {
+    return '$count rules · use the tunnel';
+  }
+
+  @override
+  String get splitNextConnect => 'NEXT CONNECT';
+
+  @override
+  String get splitNoRulesTitle => 'No rules yet';
+
+  @override
+  String get splitEmptyDirect =>
+      'While connected, everything goes through the tunnel. Add a domain or an IP above to let it go direct.';
+
+  @override
+  String splitEmptyTunnel(String server) {
+    return 'Nothing uses the tunnel yet, so while connected all traffic goes direct. Add a domain or an IP above to send it through $server.';
+  }
+
+  @override
+  String get splitNoteResolved =>
+      'domain rules are resolved to IPs once, on connect';
+
+  @override
+  String get splitNoteIpMatch =>
+      'rules match by IP, not SNI, so domains behind multi IP CDNs may not match fully';
+
+  @override
+  String get splitNoteModeList =>
+      'each mode keeps its own list, switching modes never deletes rules';
+
+  @override
+  String get splitNoteSync =>
+      'rules sync to your other devices with Push on the Servers page';
+
+  @override
+  String get splitTunnelModeTitle => 'TUNNEL MODE';
+
+  @override
+  String get splitModeAllExcept => 'Tunnel all except listed';
+
+  @override
+  String get splitModeAllExceptDesc => 'the list goes direct';
+
+  @override
+  String get splitModeOnlyListed => 'Tunnel only listed';
+
+  @override
+  String get splitModeOnlyListedDesc => 'everything else goes direct';
+
+  @override
+  String get splitNextConnectNote => 'rule changes apply on the next connect';
+
+  @override
+  String get splitWhereTrafficGoes => 'WHERE TRAFFIC GOES';
+
+  @override
+  String get splitThisUnit => 'THIS UNIT';
+
+  @override
+  String get splitYourNetwork => 'Your network';
+
+  @override
+  String get splitTheDefault => 'the default';
+
+  @override
+  String get splitOffRulesWait => 'off · rules wait';
+
+  @override
+  String get splitUntilConnect => 'until you connect';
+
+  @override
+  String get splitInfoWindowsTitle => 'INFO · WINDOWS';
+
+  @override
+  String get splitInfoAppAndroidOnly => 'App rules work on Android only';
+
+  @override
+  String get splitInfoWindowsDesc =>
+      'Windows needs a kernel driver for per app routing. Use domain or IP rules here.';
+
+  @override
+  String get splitHelperSingleIp => 'single IP';
+
+  @override
+  String splitHelperCidr(int count) {
+    return 'CIDR · $count addresses';
+  }
+
+  @override
+  String get splitHelperDomainWildcard => 'domain · includes every subdomain';
+
+  @override
+  String get splitHelperDomainExact => 'domain · exact name only';
 }

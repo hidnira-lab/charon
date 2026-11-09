@@ -72,6 +72,100 @@ class HomeController extends ChangeNotifier {
   String get city => _city;
   String get countryCode => _countryCode;
 
+  bool _hasPendingSplitChanges = false;
+  final Set<String> _pendingSplitRules = {};
+
+  bool get hasPendingSplitChanges =>
+      _hasPendingSplitChanges && (_status.phase == Phase.PHASE_UP || _status.phase == Phase.PHASE_VERIFYING);
+
+  bool isRulePending(String value) =>
+      _hasPendingSplitChanges && _pendingSplitRules.contains(value);
+
+  SplitMode get splitMode {
+    if (_config?.hasSplit() == true && _config!.split.mode != SplitMode.SPLIT_UNSPECIFIED) {
+      return _config!.split.mode;
+    }
+    return SplitMode.SPLIT_ALL_EXCEPT_LISTED;
+  }
+
+  List<Rule> get activeSplitRules {
+    if (_config == null || !_config!.hasSplit()) return const [];
+    return splitMode == SplitMode.SPLIT_ONLY_LISTED
+        ? _config!.split.onlyListed
+        : _config!.split.allExceptListed;
+  }
+
+  Future<void> setSplitMode(SplitMode mode) async {
+    _config ??= Config();
+    _config!.ensureSplit().mode = mode;
+    _config!.version += Int64(1);
+    if (_status.phase == Phase.PHASE_UP || _status.phase == Phase.PHASE_VERIFYING) {
+      _hasPendingSplitChanges = true;
+    }
+    if (_client != null) {
+      try {
+        await _client!.setConfig(_config!);
+      } catch (_) {}
+    }
+    notifyListeners();
+  }
+
+  Future<bool> addSplitRule(Rule rule) async {
+    _config ??= Config();
+    final split = _config!.ensureSplit();
+    final list = splitMode == SplitMode.SPLIT_ONLY_LISTED
+        ? split.onlyListed
+        : split.allExceptListed;
+    if (list.length >= 1000) return false;
+
+    list.add(rule);
+    _config!.version += Int64(1);
+    if (_status.phase == Phase.PHASE_UP || _status.phase == Phase.PHASE_VERIFYING) {
+      _hasPendingSplitChanges = true;
+      _pendingSplitRules.add(rule.value);
+    }
+    if (_client != null) {
+      try {
+        await _client!.setConfig(_config!);
+      } catch (_) {}
+    }
+    notifyListeners();
+    return true;
+  }
+
+  Future<void> removeSplitRule(int index) async {
+    if (_config == null || !_config!.hasSplit()) return;
+    final split = _config!.split;
+    final list = splitMode == SplitMode.SPLIT_ONLY_LISTED
+        ? split.onlyListed
+        : split.allExceptListed;
+    if (index < 0 || index >= list.length) return;
+    final removed = list.removeAt(index);
+    _pendingSplitRules.remove(removed.value);
+    _config!.version += Int64(1);
+    if (_status.phase == Phase.PHASE_UP || _status.phase == Phase.PHASE_VERIFYING) {
+      _hasPendingSplitChanges = true;
+    }
+    if (_client != null) {
+      try {
+        await _client!.setConfig(_config!);
+      } catch (_) {}
+    }
+    notifyListeners();
+  }
+
+  Future<void> reconnectForPendingSplit() async {
+    _hasPendingSplitChanges = false;
+    _pendingSplitRules.clear();
+    notifyListeners();
+    if (_client != null) {
+      try {
+        await _client!.disconnect();
+        await _client!.connect();
+      } catch (_) {}
+    }
+  }
+
   bool get killSwitch => _config?.hasSettings() == true ? _config!.settings.killSwitch : false;
   bool get autoReconnect => _config?.hasSettings() == true ? _config!.settings.autoReconnect : true;
   bool get allowLocalNetwork => _config?.hasSettings() == true ? _config!.settings.allowLocalNetwork : true;
@@ -293,6 +387,10 @@ class HomeController extends ChangeNotifier {
     if (_isDisposed) return;
     if (event.hasStatusChanged()) {
       _status = event.statusChanged;
+      if (_status.phase == Phase.PHASE_IDLE) {
+        _hasPendingSplitChanges = false;
+        _pendingSplitRules.clear();
+      }
       notifyListeners();
     } else if (event.hasThroughput()) {
       _throughput = event.throughput;

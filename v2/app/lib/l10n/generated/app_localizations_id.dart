@@ -703,4 +703,190 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get settingsAboutAcks => 'Tentang & Terima kasih';
+
+  @override
+  String get splitTitle => 'Split tunnel';
+
+  @override
+  String get splitSubtitleAllExcept => 'pilih yang melewati tunnel';
+
+  @override
+  String get splitSubtitleOnlyListed => 'pilih yang lewat tunnel';
+
+  @override
+  String splitCountTitle(String countLine) {
+    return 'SPLIT TUNNEL · $countLine';
+  }
+
+  @override
+  String get splitPendingBanner =>
+      '1 perubahan tersimpan. Berlaku di koneksi berikutnya, tunnel yang berjalan masih memakai aturan lama.';
+
+  @override
+  String get splitReconnectNow => 'Sambung ulang sekarang';
+
+  @override
+  String get splitAddRuleTitle => 'Tambah aturan';
+
+  @override
+  String get splitRuleType => 'Jenis aturan';
+
+  @override
+  String get splitTypeDomain => 'DOMAIN';
+
+  @override
+  String get splitTypeIpCidr => 'IP / CIDR';
+
+  @override
+  String get splitTypeApp => 'APLIKASI';
+
+  @override
+  String get splitAppAndroidOnly => 'Khusus Android';
+
+  @override
+  String get splitDomainPlaceholder => 'example.net atau *.example.net';
+
+  @override
+  String get splitCidrPlaceholder => '192.168.1.0/24 atau 198.51.100.7';
+
+  @override
+  String get splitAddRuleBtn => 'Tambah aturan';
+
+  @override
+  String get splitTagGoDirect => 'ATURAN LEWAT LANGSUNG';
+
+  @override
+  String get splitTagUseTunnel => 'ATURAN LEWAT TUNNEL';
+
+  @override
+  String get splitConsequenceDirect =>
+      'trafik yang cocok melewati tunnel dan keluar lewat jaringanmu sendiri';
+
+  @override
+  String splitConsequenceTunnel(String server) {
+    return 'trafik yang cocok lewat $server, sisanya lewat langsung';
+  }
+
+  @override
+  String get splitLimitReached =>
+      'Batasnya 1000 aturan. Hapus satu untuk menambah yang lain.';
+
+  @override
+  String splitConflictTitle(String coverer) {
+    return 'Sudah tercakup oleh $coverer, aturan tidak boleh tumpang tindih.';
+  }
+
+  @override
+  String splitConflictHint(String coverer) {
+    return 'edit atau hapus $coverer dulu, atau pilih alamat yang tidak tercakup';
+  }
+
+  @override
+  String get splitDirectList => 'DAFTAR LANGSUNG';
+
+  @override
+  String get splitTunnelList => 'DAFTAR TUNNEL';
+
+  @override
+  String splitRulesGoDirectTally(int count) {
+    return '$count aturan · lewat langsung';
+  }
+
+  @override
+  String splitRulesUseTunnelTally(int count) {
+    return '$count aturan · lewat tunnel';
+  }
+
+  @override
+  String get splitNextConnect => 'KONEKSI BERIKUTNYA';
+
+  @override
+  String get splitNoRulesTitle => 'Belum ada aturan';
+
+  @override
+  String get splitEmptyDirect =>
+      'Selama terhubung, semuanya lewat tunnel. Tambahkan domain atau IP di atas supaya lewat langsung.';
+
+  @override
+  String splitEmptyTunnel(String server) {
+    return 'Belum ada yang lewat tunnel, jadi selama terhubung semua trafik lewat langsung. Tambahkan domain atau IP di atas untuk mengirimkannya lewat $server.';
+  }
+
+  @override
+  String get splitNoteResolved =>
+      'aturan domain diubah ke IP sekali, saat terhubung';
+
+  @override
+  String get splitNoteIpMatch =>
+      'aturan dicocokkan lewat IP, bukan SNI, jadi domain di balik CDN multi IP bisa tidak cocok sepenuhnya';
+
+  @override
+  String get splitNoteModeList =>
+      'tiap mode punya daftarnya sendiri, ganti mode tidak pernah menghapus aturan';
+
+  @override
+  String get splitNoteSync =>
+      'aturan disinkronkan ke perangkat lain lewat Kirim di halaman Server';
+
+  @override
+  String get splitTunnelModeTitle => 'MODE TUNNEL';
+
+  @override
+  String get splitModeAllExcept => 'Tunnel semua kecuali yang terdaftar';
+
+  @override
+  String get splitModeAllExceptDesc => 'daftar lewat langsung';
+
+  @override
+  String get splitModeOnlyListed => 'Tunnel hanya yang terdaftar';
+
+  @override
+  String get splitModeOnlyListedDesc => 'sisanya lewat langsung';
+
+  @override
+  String get splitNextConnectNote =>
+      'perubahan aturan berlaku di koneksi berikutnya';
+
+  @override
+  String get splitWhereTrafficGoes => 'ARAH TRAFIK';
+
+  @override
+  String get splitThisUnit => 'PERANGKAT INI';
+
+  @override
+  String get splitYourNetwork => 'Jaringanmu';
+
+  @override
+  String get splitTheDefault => 'bawaan';
+
+  @override
+  String get splitOffRulesWait => 'mati · aturan menunggu';
+
+  @override
+  String get splitUntilConnect => 'sampai kamu terhubung';
+
+  @override
+  String get splitInfoWindowsTitle => 'INFO · WINDOWS';
+
+  @override
+  String get splitInfoAppAndroidOnly =>
+      'Aturan aplikasi hanya jalan di Android';
+
+  @override
+  String get splitInfoWindowsDesc =>
+      'Windows butuh driver kernel untuk routing per aplikasi. Pakai aturan domain atau IP di sini.';
+
+  @override
+  String get splitHelperSingleIp => 'IP tunggal';
+
+  @override
+  String splitHelperCidr(int count) {
+    return 'CIDR · $count alamat';
+  }
+
+  @override
+  String get splitHelperDomainWildcard => 'domain · termasuk semua subdomain';
+
+  @override
+  String get splitHelperDomainExact => 'domain · nama persis saja';
 }
