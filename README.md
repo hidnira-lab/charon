@@ -1,1 +1,1 @@
-# charon-vpn
+# Charon
