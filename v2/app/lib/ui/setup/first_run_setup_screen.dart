@@ -926,7 +926,7 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
         Switch.adaptive(
           value: value,
           onChanged: onChanged,
-          activeColor: const Color(0xFF81D4FA),
+          activeThumbColor: const Color(0xFF81D4FA),
           activeTrackColor: const Color(0xFF2A4252),
           inactiveThumbColor: const Color(0xFF737373),
           inactiveTrackColor: const Color(0xFF262626),

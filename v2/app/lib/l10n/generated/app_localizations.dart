@@ -2806,6 +2806,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{days} days left'**
   String trayQuotaDaysLeft(int days);
+
+  /// Title for Windows service not running screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon service is not running'**
+  String get serviceNotRunningTitle;
+
+  /// Body for Windows service not running screen.
+  ///
+  /// In en, this message translates to:
+  /// **'The service keeps your tunnel and kill switch alive even when this window is closed. It is not running right now.'**
+  String get serviceNotRunningBody;
+
+  /// Button to start background service.
+  ///
+  /// In en, this message translates to:
+  /// **'Start service'**
+  String get serviceStartAction;
+
+  /// Indication that service is being started.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting service...'**
+  String get serviceStarting;
+
+  /// Option to repair via installer if start fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Repair with the installer'**
+  String get serviceRepairInstaller;
+
+  /// Open troubleshooting guide.
+  ///
+  /// In en, this message translates to:
+  /// **'Open guide'**
+  String get serviceOpenGuide;
+
+  /// Pipe reconnect backoff notice.
+  ///
+  /// In en, this message translates to:
+  /// **'Trying again in {seconds} s'**
+  String serviceTryingAgain(int seconds);
+
+  /// Notice for persistent WFP filters when service is down.
+  ///
+  /// In en, this message translates to:
+  /// **'If your internet is blocked, Charon\'s protection filters may still be active. The release tool removes them.'**
+  String get serviceReleaseToolNotice;
+
+  /// Action to launch standalone release tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Open release tool'**
+  String get serviceOpenReleaseTool;
+
+  /// Title when IPC handshake finds protocol version mismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon service needs an update'**
+  String get serviceNeedsUpdateTitle;
+
+  /// Body for service version mismatch screen.
+  ///
+  /// In en, this message translates to:
+  /// **'This window and the service speak different versions.'**
+  String get serviceNeedsUpdateBody;
+
+  /// Action to launch staged installer for service update.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get serviceUpdateAction;
+
+  /// Action to update service from offline file.
+  ///
+  /// In en, this message translates to:
+  /// **'Update from a file'**
+  String get serviceUpdateFromFile;
+
+  /// Note regarding brief tunnel interruption during service update.
+  ///
+  /// In en, this message translates to:
+  /// **'Updating the service briefly interrupts the tunnel.'**
+  String get serviceUpdateNote;
+
+  /// Android VPN permission explainer title.
+  ///
+  /// In en, this message translates to:
+  /// **'VPN connection'**
+  String get androidVpnPermissionTitle;
+
+  /// Android VPN permission explainer description.
+  ///
+  /// In en, this message translates to:
+  /// **'Android will ask to let Charon set up a VPN connection. This is how the tunnel works.'**
+  String get androidVpnPermissionDesc;
+
+  /// Android notification permission explainer title.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get androidNotificationPermissionTitle;
+
+  /// Android notification permission explainer description.
+  ///
+  /// In en, this message translates to:
+  /// **'So Charon can tell you when traffic is held.'**
+  String get androidNotificationPermissionDesc;
+
+  /// Amber notice when notifications are denied on Android 13+.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon cannot show the Traffic held notice.'**
+  String get androidNotificationDeniedNotice;
+
+  /// Amber notice when VPN permission is revoked.
+  ///
+  /// In en, this message translates to:
+  /// **'Android removed Charon\'s VPN permission. Traffic is going direct.'**
+  String get androidVpnRevokedNotice;
+
+  /// Action to request VPN permission again.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow again'**
+  String get androidActionAllowAgain;
+
+  /// Amber notice when another VPN takes over tunnel.
+  ///
+  /// In en, this message translates to:
+  /// **'Another VPN took over. Traffic is going direct.'**
+  String get androidAnotherVpnNotice;
+
+  /// Amber notice when Android OS killed background process.
+  ///
+  /// In en, this message translates to:
+  /// **'Android stopped Charon. Traffic may have gone direct meanwhile.'**
+  String get androidStoppedNotice;
+
+  /// Title for Always on VPN card.
+  ///
+  /// In en, this message translates to:
+  /// **'Always on VPN'**
+  String get androidAlwaysOnVpnTitle;
+
+  /// Explanation for Always on VPN.
+  ///
+  /// In en, this message translates to:
+  /// **'If Android stops Charon, traffic can go direct. For full protection turn on Always on VPN and Block connections without VPN in Android settings.'**
+  String get androidAlwaysOnVpnDesc;
+
+  /// Button to open Android VPN system settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open VPN settings'**
+  String get androidOpenVpnSettings;
+
+  /// Status text while verifying service on startup.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking Charon service...'**
+  String get splashLoadingService;
+
+  /// Status text when service connection is established.
+  ///
+  /// In en, this message translates to:
+  /// **'Service ready'**
+  String get splashServiceReady;
 }
 
 class _AppLocalizationsDelegate

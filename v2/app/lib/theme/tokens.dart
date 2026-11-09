@@ -64,4 +64,6 @@ abstract final class CharonCurves {
 abstract final class CharonTokens {
   static const String fontMono = 'SpaceMono';
   static const String fontSans = 'Inter';
+  static const String fontDisplay = 'Inter';
+  static const String fontBody = 'Inter';
 }

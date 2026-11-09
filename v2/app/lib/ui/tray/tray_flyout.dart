@@ -35,7 +35,6 @@ class TrayFlyout extends StatelessWidget {
       builder: (context, _) {
         final uiState = controller.uiState;
         final server = controller.activeServer;
-        final status = controller.status;
         final servers = controller.config?.servers ?? <Server>[];
 
         final bool isConnected =
@@ -731,7 +730,7 @@ class TrayFlyout extends StatelessWidget {
                   child: Switch.adaptive(
                     value: controller.killSwitch,
                     onChanged: controller.setKillSwitch,
-                    activeColor: const Color(0xFF81D4FA),
+                    activeThumbColor: const Color(0xFF81D4FA),
                     activeTrackColor: const Color(0xFF2A4252),
                     inactiveThumbColor: const Color(0xFF737373),
                     inactiveTrackColor: const Color(0xFF262626),
@@ -764,7 +763,7 @@ class TrayFlyout extends StatelessWidget {
                   child: Switch.adaptive(
                     value: controller.allowLocalNetwork,
                     onChanged: controller.setAllowLocalNetwork,
-                    activeColor: const Color(0xFF81D4FA),
+                    activeThumbColor: const Color(0xFF81D4FA),
                     activeTrackColor: const Color(0xFF2A4252),
                     inactiveThumbColor: const Color(0xFF737373),
                     inactiveTrackColor: const Color(0xFF262626),

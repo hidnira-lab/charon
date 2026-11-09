@@ -1548,4 +1548,101 @@ class AppLocalizationsId extends AppLocalizations {
   String trayQuotaDaysLeft(int days) {
     return 'Tersisa $days hari';
   }
+
+  @override
+  String get serviceNotRunningTitle => 'Layanan Charon tidak berjalan';
+
+  @override
+  String get serviceNotRunningBody =>
+      'Layanan menjaga terowongan dan tombol pemutus tetap aktif meskipun jendela ini ditutup. Layanan sedang tidak berjalan saat ini.';
+
+  @override
+  String get serviceStartAction => 'Mulai layanan';
+
+  @override
+  String get serviceStarting => 'Memulai layanan...';
+
+  @override
+  String get serviceRepairInstaller => 'Perbaiki dengan pemasang';
+
+  @override
+  String get serviceOpenGuide => 'Buka panduan';
+
+  @override
+  String serviceTryingAgain(int seconds) {
+    return 'Mencoba lagi dalam $seconds dtk';
+  }
+
+  @override
+  String get serviceReleaseToolNotice =>
+      'Jika internet Anda terblokir, filter perlindungan Charon mungkin masih aktif. Alat pelepas dapat membersihkannya.';
+
+  @override
+  String get serviceOpenReleaseTool => 'Buka alat pelepas';
+
+  @override
+  String get serviceNeedsUpdateTitle => 'Layanan Charon memerlukan pembaruan';
+
+  @override
+  String get serviceNeedsUpdateBody =>
+      'Jendela aplikasi ini dan layanan menggunakan versi protokol yang berbeda.';
+
+  @override
+  String get serviceUpdateAction => 'Perbarui';
+
+  @override
+  String get serviceUpdateFromFile => 'Perbarui dari berkas';
+
+  @override
+  String get serviceUpdateNote =>
+      'Memperbarui layanan akan memutus koneksi terowongan sebentar.';
+
+  @override
+  String get androidVpnPermissionTitle => 'Koneksi VPN';
+
+  @override
+  String get androidVpnPermissionDesc =>
+      'Android akan meminta izin agar Charon dapat menyiapkan koneksi VPN. Ini adalah cara terowongan bekerja.';
+
+  @override
+  String get androidNotificationPermissionTitle => 'Notifikasi';
+
+  @override
+  String get androidNotificationPermissionDesc =>
+      'Agar Charon dapat memberi tahu Anda saat lalu lintas ditahan.';
+
+  @override
+  String get androidNotificationDeniedNotice =>
+      'Charon tidak dapat menampilkan pemberitahuan Lalu lintas ditahan.';
+
+  @override
+  String get androidVpnRevokedNotice =>
+      'Android mencabut izin VPN Charon. Lalu lintas berjalan langsung.';
+
+  @override
+  String get androidActionAllowAgain => 'Izinkan lagi';
+
+  @override
+  String get androidAnotherVpnNotice =>
+      'VPN lain mengambil alih. Lalu lintas berjalan langsung.';
+
+  @override
+  String get androidStoppedNotice =>
+      'Android menghentikan Charon. Lalu lintas mungkin sempat berjalan langsung.';
+
+  @override
+  String get androidAlwaysOnVpnTitle => 'VPN Selalu Aktif';
+
+  @override
+  String get androidAlwaysOnVpnDesc =>
+      'Jika Android menghentikan Charon, lalu lintas bisa langsung keluar. Untuk perlindungan penuh, aktifkan VPN Selalu Aktif dan Blokir koneksi tanpa VPN di pengaturan Android.';
+
+  @override
+  String get androidOpenVpnSettings => 'Buka pengaturan VPN';
+
+  @override
+  String get splashLoadingService => 'Memeriksa layanan Charon...';
+
+  @override
+  String get splashServiceReady => 'Layanan siap';
 }

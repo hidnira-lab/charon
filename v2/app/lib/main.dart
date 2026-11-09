@@ -10,6 +10,8 @@ import 'state/home_controller.dart';
 import 'theme/theme.dart';
 import 'ui/home/home_screen.dart';
 import 'ui/servers/servers_screen.dart';
+import 'ui/service/service_needs_update_screen.dart';
+import 'ui/service/service_not_running_screen.dart';
 import 'ui/settings/settings_screen.dart';
 import 'ui/setup/first_run_setup_screen.dart';
 import 'ui/split/split_screen.dart';
@@ -58,6 +60,15 @@ class CharonApp extends StatelessWidget {
         Widget screen;
         if (controller.isFirstRun) {
           screen = FirstRunSetupScreen(controller: controller);
+        } else if (controller.serviceStatus == ServiceStatus.notRunning) {
+          screen = ServiceNotRunningScreen(controller: controller);
+        } else if (controller.serviceStatus == ServiceStatus.needsUpdate) {
+          screen = ServiceNeedsUpdateScreen(
+            controller: controller,
+            onUpdateFromFile: () {
+              controller.setTab(4);
+            },
+          );
         } else if (activeTab == 1) {
           screen = ServersScreen(controller: controller);
         } else if (activeTab == 2) {

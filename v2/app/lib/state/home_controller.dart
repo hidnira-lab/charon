@@ -9,6 +9,7 @@ import 'ui_state.dart';
 
 enum DnsMode { tunnelDefault, custom }
 enum ConnectionMode { tun, systemProxy }
+enum ServiceStatus { running, notRunning, needsUpdate }
 
 /// State controller for the Home screen, connecting to [CoreClient] events
 /// and projecting the active state with [projectState].
@@ -18,13 +19,12 @@ class HomeController extends ChangeNotifier {
     Status? initialStatus,
     Config? initialConfig,
     bool? hasServers,
-    bool isFirstRun = false,
+    this._isFirstRun = false,
     this._themeMode = ThemeMode.system,
     this._locale,
   })  : _status = initialStatus ?? Status(),
         _config = initialConfig,
-        _hasServers = hasServers ?? (initialConfig?.servers.isNotEmpty ?? true),
-        _isFirstRun = isFirstRun {
+        _hasServers = hasServers ?? (initialConfig?.servers.isNotEmpty ?? true) {
     _seedInitialLogs();
     _client = client;
     if (_client != null) {
@@ -79,6 +79,16 @@ class HomeController extends ChangeNotifier {
   ConnectionMode _connectionMode = ConnectionMode.tun;
   bool _launchAtStartup = false;
   bool _isServiceRestarting = false;
+  ServiceStatus _serviceStatus = ServiceStatus.running;
+  bool _isServiceStarting = false;
+  bool _serviceStartFailed = false;
+  int _pipeRetrySeconds = 3;
+
+  // Android specific states (N09 & N10)
+  bool _hasVpnPermission = true;
+  bool _hasNotificationPermission = true;
+  bool _anotherVpnTookOver = false;
+  bool _stoppedByAndroid = false;
   String _greetingName = 'Day';
   bool _detectCity = true;
   String _city = 'Nanjing';
@@ -213,6 +223,81 @@ class HomeController extends ChangeNotifier {
   ConnectionMode get connectionMode => _connectionMode;
   bool get launchAtStartup => _launchAtStartup;
   bool get isServiceRestarting => _isServiceRestarting;
+  ServiceStatus get serviceStatus => _serviceStatus;
+  bool get isServiceStarting => _isServiceStarting;
+  bool get serviceStartFailed => _serviceStartFailed;
+  int get pipeRetrySeconds => _pipeRetrySeconds;
+  bool get hasVpnPermission => _hasVpnPermission;
+  bool get hasNotificationPermission => _hasNotificationPermission;
+  bool get anotherVpnTookOver => _anotherVpnTookOver;
+  bool get stoppedByAndroid => _stoppedByAndroid;
+
+  void setServiceStatus(ServiceStatus status) {
+    _serviceStatus = status;
+    notifyListeners();
+  }
+
+  void setPipeRetrySeconds(int seconds) {
+    _pipeRetrySeconds = seconds;
+    notifyListeners();
+  }
+
+  void setHasVpnPermission(bool value) {
+    _hasVpnPermission = value;
+    notifyListeners();
+  }
+
+  void setHasNotificationPermission(bool value) {
+    _hasNotificationPermission = value;
+    notifyListeners();
+  }
+
+  void setAnotherVpnTookOver(bool value) {
+    _anotherVpnTookOver = value;
+    notifyListeners();
+  }
+
+  void setStoppedByAndroid(bool value) {
+    _stoppedByAndroid = value;
+    notifyListeners();
+  }
+
+  Future<void> startService() async {
+    _isServiceStarting = true;
+    _serviceStartFailed = false;
+    notifyListeners();
+    await Future<void>.delayed(const Duration(milliseconds: 600));
+    _isServiceStarting = false;
+    if (_serviceStartFailed) {
+      notifyListeners();
+    } else {
+      _serviceStatus = ServiceStatus.running;
+      notifyListeners();
+    }
+  }
+
+  void markServiceStartFailed() {
+    _isServiceStarting = false;
+    _serviceStartFailed = true;
+    notifyListeners();
+  }
+
+  Future<void> repairInstaller() async {
+    await Future<void>.delayed(const Duration(milliseconds: 300));
+    _serviceStartFailed = false;
+    _serviceStatus = ServiceStatus.running;
+    notifyListeners();
+  }
+
+  Future<void> openReleaseTool() async {
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+  }
+
+  Future<void> updateService() async {
+    await Future<void>.delayed(const Duration(milliseconds: 500));
+    _serviceStatus = ServiceStatus.running;
+    notifyListeners();
+  }
   String get greetingName => _greetingName;
   bool get detectCity => _detectCity;
   String get city => _city;

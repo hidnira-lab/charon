@@ -1536,4 +1536,101 @@ class AppLocalizationsEn extends AppLocalizations {
   String trayQuotaDaysLeft(int days) {
     return '$days days left';
   }
+
+  @override
+  String get serviceNotRunningTitle => 'Charon service is not running';
+
+  @override
+  String get serviceNotRunningBody =>
+      'The service keeps your tunnel and kill switch alive even when this window is closed. It is not running right now.';
+
+  @override
+  String get serviceStartAction => 'Start service';
+
+  @override
+  String get serviceStarting => 'Starting service...';
+
+  @override
+  String get serviceRepairInstaller => 'Repair with the installer';
+
+  @override
+  String get serviceOpenGuide => 'Open guide';
+
+  @override
+  String serviceTryingAgain(int seconds) {
+    return 'Trying again in $seconds s';
+  }
+
+  @override
+  String get serviceReleaseToolNotice =>
+      'If your internet is blocked, Charon\'s protection filters may still be active. The release tool removes them.';
+
+  @override
+  String get serviceOpenReleaseTool => 'Open release tool';
+
+  @override
+  String get serviceNeedsUpdateTitle => 'Charon service needs an update';
+
+  @override
+  String get serviceNeedsUpdateBody =>
+      'This window and the service speak different versions.';
+
+  @override
+  String get serviceUpdateAction => 'Update';
+
+  @override
+  String get serviceUpdateFromFile => 'Update from a file';
+
+  @override
+  String get serviceUpdateNote =>
+      'Updating the service briefly interrupts the tunnel.';
+
+  @override
+  String get androidVpnPermissionTitle => 'VPN connection';
+
+  @override
+  String get androidVpnPermissionDesc =>
+      'Android will ask to let Charon set up a VPN connection. This is how the tunnel works.';
+
+  @override
+  String get androidNotificationPermissionTitle => 'Notifications';
+
+  @override
+  String get androidNotificationPermissionDesc =>
+      'So Charon can tell you when traffic is held.';
+
+  @override
+  String get androidNotificationDeniedNotice =>
+      'Charon cannot show the Traffic held notice.';
+
+  @override
+  String get androidVpnRevokedNotice =>
+      'Android removed Charon\'s VPN permission. Traffic is going direct.';
+
+  @override
+  String get androidActionAllowAgain => 'Allow again';
+
+  @override
+  String get androidAnotherVpnNotice =>
+      'Another VPN took over. Traffic is going direct.';
+
+  @override
+  String get androidStoppedNotice =>
+      'Android stopped Charon. Traffic may have gone direct meanwhile.';
+
+  @override
+  String get androidAlwaysOnVpnTitle => 'Always on VPN';
+
+  @override
+  String get androidAlwaysOnVpnDesc =>
+      'If Android stops Charon, traffic can go direct. For full protection turn on Always on VPN and Block connections without VPN in Android settings.';
+
+  @override
+  String get androidOpenVpnSettings => 'Open VPN settings';
+
+  @override
+  String get splashLoadingService => 'Checking Charon service...';
+
+  @override
+  String get splashServiceReady => 'Service ready';
 }

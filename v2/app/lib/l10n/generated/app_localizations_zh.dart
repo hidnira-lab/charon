@@ -1446,6 +1446,95 @@ class AppLocalizationsZh extends AppLocalizations {
   String trayQuotaDaysLeft(int days) {
     return '剩余 $days 天';
   }
+
+  @override
+  String get serviceNotRunningTitle => 'Charon 服务未运行';
+
+  @override
+  String get serviceNotRunningBody => '后台服务会在关闭此窗口时保持隧道与断网开关活跃。当前该服务未在运行。';
+
+  @override
+  String get serviceStartAction => '启动服务';
+
+  @override
+  String get serviceStarting => '正在启动服务...';
+
+  @override
+  String get serviceRepairInstaller => '使用安装程序修复';
+
+  @override
+  String get serviceOpenGuide => '打开指南';
+
+  @override
+  String serviceTryingAgain(int seconds) {
+    return '$seconds 秒后重试';
+  }
+
+  @override
+  String get serviceReleaseToolNotice =>
+      '若您的互联网已被切断，Charon 的防火墙保护规则可能仍然生效。使用清理工具可安全移除它们。';
+
+  @override
+  String get serviceOpenReleaseTool => '打开清理工具';
+
+  @override
+  String get serviceNeedsUpdateTitle => 'Charon 服务需要更新';
+
+  @override
+  String get serviceNeedsUpdateBody => '此应用窗口与后台服务的协议版本不一致。';
+
+  @override
+  String get serviceUpdateAction => '更新';
+
+  @override
+  String get serviceUpdateFromFile => '从文件更新';
+
+  @override
+  String get serviceUpdateNote => '更新后台服务将短暂中断网络隧道。';
+
+  @override
+  String get androidVpnPermissionTitle => 'VPN 连接';
+
+  @override
+  String get androidVpnPermissionDesc =>
+      'Android 系统将请求允许 Charon 建立 VPN 连接。这是网络隧道运行的基础。';
+
+  @override
+  String get androidNotificationPermissionTitle => '通知权限';
+
+  @override
+  String get androidNotificationPermissionDesc => '以便在流量被阻断时及时向您发送提醒。';
+
+  @override
+  String get androidNotificationDeniedNotice => 'Charon 无法显示流量阻断通知。';
+
+  @override
+  String get androidVpnRevokedNotice => 'Android 移除了 Charon 的 VPN 权限。流量正直接出网。';
+
+  @override
+  String get androidActionAllowAgain => '重新授权';
+
+  @override
+  String get androidAnotherVpnNotice => '其他 VPN 已接管网络。流量正直接出网。';
+
+  @override
+  String get androidStoppedNotice => 'Android 终止了 Charon。在此期间流量可能已直接出网。';
+
+  @override
+  String get androidAlwaysOnVpnTitle => '始终开启的 VPN';
+
+  @override
+  String get androidAlwaysOnVpnDesc =>
+      '如果 Android 终止 Charon，网络流量可能会直接出网。为获得完整保护，请在系统设置中启用“始终开启的 VPN”并“阻止未使用 VPN 的连接”。';
+
+  @override
+  String get androidOpenVpnSettings => '打开 VPN 设置';
+
+  @override
+  String get splashLoadingService => '正在检查 Charon 服务...';
+
+  @override
+  String get splashServiceReady => '服务就绪';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -2889,4 +2978,93 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String trayQuotaDaysLeft(int days) {
     return '剩余 $days 天';
   }
+
+  @override
+  String get serviceNotRunningTitle => 'Charon 服务未运行';
+
+  @override
+  String get serviceNotRunningBody => '后台服务会在关闭此窗口时保持隧道与断网开关活跃。当前该服务未在运行。';
+
+  @override
+  String get serviceStartAction => '启动服务';
+
+  @override
+  String get serviceStarting => '正在启动服务...';
+
+  @override
+  String get serviceRepairInstaller => '使用安装程序修复';
+
+  @override
+  String get serviceOpenGuide => '打开指南';
+
+  @override
+  String serviceTryingAgain(int seconds) {
+    return '$seconds 秒后重试';
+  }
+
+  @override
+  String get serviceReleaseToolNotice =>
+      '若您的互联网已被切断，Charon 的防火墙保护规则可能仍然生效。使用清理工具可安全移除它们。';
+
+  @override
+  String get serviceOpenReleaseTool => '打开清理工具';
+
+  @override
+  String get serviceNeedsUpdateTitle => 'Charon 服务需要更新';
+
+  @override
+  String get serviceNeedsUpdateBody => '此应用窗口与后台服务的协议版本不一致。';
+
+  @override
+  String get serviceUpdateAction => '更新';
+
+  @override
+  String get serviceUpdateFromFile => '从文件更新';
+
+  @override
+  String get serviceUpdateNote => '更新后台服务将短暂中断网络隧道。';
+
+  @override
+  String get androidVpnPermissionTitle => 'VPN 连接';
+
+  @override
+  String get androidVpnPermissionDesc =>
+      'Android 系统将请求允许 Charon 建立 VPN 连接。这是网络隧道运行的基础。';
+
+  @override
+  String get androidNotificationPermissionTitle => '通知权限';
+
+  @override
+  String get androidNotificationPermissionDesc => '以便在流量被阻断时及时向您发送提醒。';
+
+  @override
+  String get androidNotificationDeniedNotice => 'Charon 无法显示流量阻断通知。';
+
+  @override
+  String get androidVpnRevokedNotice => 'Android 移除了 Charon 的 VPN 权限。流量正直接出网。';
+
+  @override
+  String get androidActionAllowAgain => '重新授权';
+
+  @override
+  String get androidAnotherVpnNotice => '其他 VPN 已接管网络。流量正直接出网。';
+
+  @override
+  String get androidStoppedNotice => 'Android 终止了 Charon。在此期间流量可能已直接出网。';
+
+  @override
+  String get androidAlwaysOnVpnTitle => '始终开启的 VPN';
+
+  @override
+  String get androidAlwaysOnVpnDesc =>
+      '如果 Android 终止 Charon，网络流量可能会直接出网。为获得完整保护，请在系统设置中启用“始终开启的 VPN”并“阻止未使用 VPN 的连接”。';
+
+  @override
+  String get androidOpenVpnSettings => '打开 VPN 设置';
+
+  @override
+  String get splashLoadingService => '正在检查 Charon 服务...';
+
+  @override
+  String get splashServiceReady => '服务就绪';
 }
