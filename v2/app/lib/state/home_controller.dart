@@ -744,18 +744,18 @@ class HomeController extends ChangeNotifier {
 
   Future<void> selectServer(String serverId) async {
     if (_config == null) return;
+    _config!.chosenServerId = serverId;
+    _config!.version += Int64(1);
     if (_status.phase != Phase.PHASE_IDLE) {
       if (_client != null) await _client!.moveTo(serverId);
     } else {
-      _config!.chosenServerId = serverId;
-      _config!.version += Int64(1);
       if (_client != null) {
         try {
           await _client!.setConfig(_config!);
         } catch (_) {}
       }
-      notifyListeners();
     }
+    notifyListeners();
   }
 
   @override

@@ -1419,6 +1419,33 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get dialogUnpairConfirm => '解除配对';
+
+  @override
+  String get trayOpenApp => '打开 Charon';
+
+  @override
+  String get trayServersLocked => '连接时锁定';
+
+  @override
+  String get trayServersUnlocked => '选择备用服务器';
+
+  @override
+  String traySwitchNow(String server) {
+    return '立即切换至 $server';
+  }
+
+  @override
+  String get trayStopReconnecting => '停止重试连接';
+
+  @override
+  String trayQuotaFormat(String used, String cap) {
+    return '$used GB / $cap GB';
+  }
+
+  @override
+  String trayQuotaDaysLeft(int days) {
+    return '剩余 $days 天';
+  }
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -2835,4 +2862,31 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get dialogUnpairConfirm => '解除配对';
+
+  @override
+  String get trayOpenApp => '打开 Charon';
+
+  @override
+  String get trayServersLocked => '连接时锁定';
+
+  @override
+  String get trayServersUnlocked => '选择备用服务器';
+
+  @override
+  String traySwitchNow(String server) {
+    return '立即切换至 $server';
+  }
+
+  @override
+  String get trayStopReconnecting => '停止重试连接';
+
+  @override
+  String trayQuotaFormat(String used, String cap) {
+    return '$used GB / $cap GB';
+  }
+
+  @override
+  String trayQuotaDaysLeft(int days) {
+    return '剩余 $days 天';
+  }
 }

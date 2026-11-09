@@ -1509,4 +1509,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dialogUnpairConfirm => 'Unpair device';
+
+  @override
+  String get trayOpenApp => 'Open Charon';
+
+  @override
+  String get trayServersLocked => 'Locked while connected';
+
+  @override
+  String get trayServersUnlocked => 'Select alternate server';
+
+  @override
+  String traySwitchNow(String server) {
+    return 'Switch to $server now';
+  }
+
+  @override
+  String get trayStopReconnecting => 'Stop reconnecting';
+
+  @override
+  String trayQuotaFormat(String used, String cap) {
+    return '$used GB of $cap GB';
+  }
+
+  @override
+  String trayQuotaDaysLeft(int days) {
+    return '$days days left';
+  }
 }

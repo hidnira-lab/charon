@@ -2764,6 +2764,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unpair device'**
   String get dialogUnpairConfirm;
+
+  /// Action to restore and open the main Charon window.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Charon'**
+  String get trayOpenApp;
+
+  /// Tooltip explaining server list is locked while tunnel is active.
+  ///
+  /// In en, this message translates to:
+  /// **'Locked while connected'**
+  String get trayServersLocked;
+
+  /// Label indicating server list is unlocked to switch.
+  ///
+  /// In en, this message translates to:
+  /// **'Select alternate server'**
+  String get trayServersUnlocked;
+
+  /// Action to skip remaining reconnect retries.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to {server} now'**
+  String traySwitchNow(String server);
+
+  /// Action to stop reconnecting retries.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop reconnecting'**
+  String get trayStopReconnecting;
+
+  /// Quota usage in tray footer.
+  ///
+  /// In en, this message translates to:
+  /// **'{used} GB of {cap} GB'**
+  String trayQuotaFormat(String used, String cap);
+
+  /// Days remaining until quota resets.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days left'**
+  String trayQuotaDaysLeft(int days);
 }
 
 class _AppLocalizationsDelegate

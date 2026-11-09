@@ -1521,4 +1521,31 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get dialogUnpairConfirm => 'Putuskan Tautan';
+
+  @override
+  String get trayOpenApp => 'Buka Charon';
+
+  @override
+  String get trayServersLocked => 'Terkunci saat tersambung';
+
+  @override
+  String get trayServersUnlocked => 'Pilih server alternatif';
+
+  @override
+  String traySwitchNow(String server) {
+    return 'Beralih ke $server sekarang';
+  }
+
+  @override
+  String get trayStopReconnecting => 'Hentikan penyambungan ulang';
+
+  @override
+  String trayQuotaFormat(String used, String cap) {
+    return '$used GB dari $cap GB';
+  }
+
+  @override
+  String trayQuotaDaysLeft(int days) {
+    return 'Tersisa $days hari';
+  }
 }

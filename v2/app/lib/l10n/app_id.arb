@@ -462,5 +462,12 @@
   "dialogUnpairTitle": "Putuskan tautan perangkat ini?",
   "dialogUnpairSubtitle": "Perangkat ini akan berhenti menyinkronkan dengan server sinkronisasi Anda.",
   "dialogUnpairNotice": "Salinan cadangan terenkripsi tetap tersimpan di server. Perangkat lain yang ditautkan tidak tercantum di sini dan tidak akan terpengaruh.",
-  "dialogUnpairConfirm": "Putuskan Tautan"
+  "dialogUnpairConfirm": "Putuskan Tautan",
+  "trayOpenApp": "Buka Charon",
+  "trayServersLocked": "Terkunci saat tersambung",
+  "trayServersUnlocked": "Pilih server alternatif",
+  "traySwitchNow": "Beralih ke {server} sekarang",
+  "trayStopReconnecting": "Hentikan penyambungan ulang",
+  "trayQuotaFormat": "{used} GB dari {cap} GB",
+  "trayQuotaDaysLeft": "Tersisa {days} hari"
 }

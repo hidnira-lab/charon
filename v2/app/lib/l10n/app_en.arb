@@ -1131,5 +1131,35 @@
   "dialogUnpairNotice": "The encrypted backup copy remains on the sync server. Other paired devices are not listed here and will not be affected.",
   "@dialogUnpairNotice": { "description": "Unpair explanatory notice." },
   "dialogUnpairConfirm": "Unpair device",
-  "@dialogUnpairConfirm": { "description": "Unpair confirmation button." }
+  "@dialogUnpairConfirm": { "description": "Unpair confirmation button." },
+  "trayOpenApp": "Open Charon",
+  "@trayOpenApp": { "description": "Action to restore and open the main Charon window." },
+  "trayServersLocked": "Locked while connected",
+  "@trayServersLocked": { "description": "Tooltip explaining server list is locked while tunnel is active." },
+  "trayServersUnlocked": "Select alternate server",
+  "@trayServersUnlocked": { "description": "Label indicating server list is unlocked to switch." },
+  "traySwitchNow": "Switch to {server} now",
+  "@traySwitchNow": {
+    "description": "Action to skip remaining reconnect retries.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+  "trayStopReconnecting": "Stop reconnecting",
+  "@trayStopReconnecting": { "description": "Action to stop reconnecting retries." },
+  "trayQuotaFormat": "{used} GB of {cap} GB",
+  "@trayQuotaFormat": {
+    "description": "Quota usage in tray footer.",
+    "placeholders": {
+      "used": { "type": "String" },
+      "cap": { "type": "String" }
+    }
+  },
+  "trayQuotaDaysLeft": "{days} days left",
+  "@trayQuotaDaysLeft": {
+    "description": "Days remaining until quota resets.",
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  }
 }

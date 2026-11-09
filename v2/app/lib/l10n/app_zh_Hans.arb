@@ -463,5 +463,12 @@
   "dialogUnpairTitle": "解除此设备配对？",
   "dialogUnpairSubtitle": "此设备将停止与同步服务器同步数据。",
   "dialogUnpairNotice": "加密备份副本将保留在同步服务器上。其他已配对设备不会在此列出，也不受影响。",
-  "dialogUnpairConfirm": "解除配对"
+  "dialogUnpairConfirm": "解除配对",
+  "trayOpenApp": "打开 Charon",
+  "trayServersLocked": "连接时锁定",
+  "trayServersUnlocked": "选择备用服务器",
+  "traySwitchNow": "立即切换至 {server}",
+  "trayStopReconnecting": "停止重试连接",
+  "trayQuotaFormat": "{used} GB / {cap} GB",
+  "trayQuotaDaysLeft": "剩余 {days} 天"
 }
