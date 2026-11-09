@@ -14,6 +14,12 @@ Charon is licensed under GPL 3.0 (see `LICENSE`). It includes or ships the follo
 * Source: https://github.com/ssrlive/tproxy-config (version 7.0.7, authors listed in its `Cargo.toml`)
 * Use: vendored in `vendor/tproxy-config-7.0.7/` with one local patch that starts its helper commands without opening a console window on Windows. The patch is marked in `src/lib.rs`.
 
+## Protocol Buffers for Go
+
+* Licence: BSD 3 Clause
+* Source: https://github.com/protocolbuffers/protobuf-go (`google.golang.org/protobuf`, version v1.36.12)
+* Use: runtime library of the Go module in `v2/core/`. The generated file `v2/core/gen/charonv1/charon.pb.go` is produced from `v2/proto/` with `protoc` and `protoc-gen-go`. Both are build tools and are not shipped.
+
 ## Fonts
 
 All three families are licensed under the SIL Open Font License 1.1. The licence texts are next to the font files in `charon_vpn/assets/fonts/`.
@@ -26,7 +32,7 @@ All three families are licensed under the SIL Open Font License 1.1. The licence
 
 ## Other dependencies
 
-Rust crates are listed in `Cargo.lock` and Dart packages in `charon_vpn/pubspec.lock`. Each keeps its own licence. The Lucide icon set (ISC licence) is used through the `lucide_icons_flutter` package.
+Rust crates are listed in `Cargo.lock`, Dart packages in `charon_vpn/pubspec.lock` and Go modules in `v2/core/go.sum`. Each keeps its own licence. The Lucide icon set (ISC licence) is used through the `lucide_icons_flutter` package.
 
 ## Not stored here
 
