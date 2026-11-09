@@ -1,4 +1,59 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
-// Placeholder. The real app shell arrives in M3 step 3.4.
-void main() => runApp(const MaterialApp(home: Scaffold(body: Center(child: Text('Charon')))));
+import 'core/core_client.dart';
+import 'core/transport.dart';
+import 'l10n/generated/app_localizations.dart';
+import 'state/home_controller.dart';
+import 'theme/theme.dart';
+import 'ui/home/home_screen.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  final controller = HomeController();
+  runApp(CharonApp(controller: controller));
+
+  if (Platform.isWindows) {
+    unawaited(_connectBackground(controller));
+  }
+}
+
+Future<void> _connectBackground(HomeController controller) async {
+  const pipe = String.fromEnvironment('CHARON_PIPE', defaultValue: r'\\.\pipe\charon-fake');
+  try {
+    final transport = await IpcTransport.connect(pipe);
+    final client = CoreClient(transport);
+    await client.hello(appVersion: '0.1.0');
+    controller.attachClient(client);
+  } catch (_) {
+    // Fakecore or service not reachable at launch
+  }
+}
+
+class CharonApp extends StatelessWidget {
+  const CharonApp({
+    super.key,
+    required this.controller,
+    this.locale,
+    this.themeData,
+  });
+
+  final HomeController controller;
+  final Locale? locale;
+  final ThemeData? themeData;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Charon',
+      debugShowCheckedModeBanner: false,
+      theme: themeData ?? CharonTheme.dark,
+      locale: locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: HomeScreen(controller: controller),
+    );
+  }
+}
