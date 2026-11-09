@@ -1423,4 +1423,90 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get setupStep4FinishBtn => 'Finish & Launch Charon →';
+
+  @override
+  String get dialogQuitTitle => 'Close Charon';
+
+  @override
+  String get dialogQuitSubtitle =>
+      'Your tunnel runs in Charon\'s service, so it can stay on without a window.';
+
+  @override
+  String get dialogQuitHideToTray => 'Hide to tray';
+
+  @override
+  String get dialogQuitHideToTrayDesc =>
+      'The window closes, the UI keeps running in background, and the tray icon stays active.';
+
+  @override
+  String get dialogQuitWindowOnly => 'Quit window only';
+
+  @override
+  String get dialogQuitWindowOnlyDesc =>
+      'The tunnel stays on. There is no tray icon until Charon is opened again.';
+
+  @override
+  String get dialogQuitDisconnect => 'Disconnect and quit';
+
+  @override
+  String get dialogQuitDisconnectDesc =>
+      'Closes the active tunnel and completely terminates the application.';
+
+  @override
+  String get dialogQuitTunnelStaysOn => 'TUNNEL STAYS ON';
+
+  @override
+  String get dialogQuitTunnelStops => 'TUNNEL STOPS';
+
+  @override
+  String get dialogReleaseTitle => 'Disconnect and release?';
+
+  @override
+  String get dialogReleaseSubtitle =>
+      'Traffic will go direct until you connect again.';
+
+  @override
+  String get dialogReleaseWarning =>
+      'The kill switch protection is released immediately. All system network traffic will bypass the tunnel and go through your ISP unencrypted.';
+
+  @override
+  String get dialogReleaseConfirm => 'Disconnect & Release';
+
+  @override
+  String get dialogConflictTitle => 'The server copy is newer';
+
+  @override
+  String get dialogConflictSubtitle =>
+      'Changes were made on another device since this device last synced.';
+
+  @override
+  String get dialogConflictPull => 'Pull first (replaces local)';
+
+  @override
+  String get dialogConflictPullDesc =>
+      'Downloads the newer remote configuration and replaces local profiles and rules.';
+
+  @override
+  String get dialogConflictOverwrite => 'Overwrite the server copy';
+
+  @override
+  String get dialogConflictOverwriteDesc =>
+      'Pushes local settings and overwrites the remote server vault.';
+
+  @override
+  String get dialogConflictCancel => 'Cancel';
+
+  @override
+  String get dialogUnpairTitle => 'Unpair this device?';
+
+  @override
+  String get dialogUnpairSubtitle =>
+      'This device will stop synchronizing with your sync server.';
+
+  @override
+  String get dialogUnpairNotice =>
+      'The encrypted backup copy remains on the sync server. Other paired devices are not listed here and will not be affected.';
+
+  @override
+  String get dialogUnpairConfirm => 'Unpair device';
 }

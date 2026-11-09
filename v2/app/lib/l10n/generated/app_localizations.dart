@@ -2614,6 +2614,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Finish & Launch Charon →'**
   String get setupStep4FinishBtn;
+
+  /// Quit while connected dialog title.
+  ///
+  /// In en, this message translates to:
+  /// **'Close Charon'**
+  String get dialogQuitTitle;
+
+  /// Quit dialog subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your tunnel runs in Charon\'s service, so it can stay on without a window.'**
+  String get dialogQuitSubtitle;
+
+  /// Choice 1 title: hide to tray.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide to tray'**
+  String get dialogQuitHideToTray;
+
+  /// Choice 1 description.
+  ///
+  /// In en, this message translates to:
+  /// **'The window closes, the UI keeps running in background, and the tray icon stays active.'**
+  String get dialogQuitHideToTrayDesc;
+
+  /// Choice 2 title: quit window only.
+  ///
+  /// In en, this message translates to:
+  /// **'Quit window only'**
+  String get dialogQuitWindowOnly;
+
+  /// Choice 2 description.
+  ///
+  /// In en, this message translates to:
+  /// **'The tunnel stays on. There is no tray icon until Charon is opened again.'**
+  String get dialogQuitWindowOnlyDesc;
+
+  /// Choice 3 title: disconnect and quit.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnect and quit'**
+  String get dialogQuitDisconnect;
+
+  /// Choice 3 description.
+  ///
+  /// In en, this message translates to:
+  /// **'Closes the active tunnel and completely terminates the application.'**
+  String get dialogQuitDisconnectDesc;
+
+  /// Badge indicating tunnel stays on.
+  ///
+  /// In en, this message translates to:
+  /// **'TUNNEL STAYS ON'**
+  String get dialogQuitTunnelStaysOn;
+
+  /// Badge indicating tunnel drops.
+  ///
+  /// In en, this message translates to:
+  /// **'TUNNEL STOPS'**
+  String get dialogQuitTunnelStops;
+
+  /// Release confirmation title.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnect and release?'**
+  String get dialogReleaseTitle;
+
+  /// Release confirmation subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Traffic will go direct until you connect again.'**
+  String get dialogReleaseSubtitle;
+
+  /// Release confirmation warning details.
+  ///
+  /// In en, this message translates to:
+  /// **'The kill switch protection is released immediately. All system network traffic will bypass the tunnel and go through your ISP unencrypted.'**
+  String get dialogReleaseWarning;
+
+  /// Release confirmation button.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnect & Release'**
+  String get dialogReleaseConfirm;
+
+  /// Conflict dialog title.
+  ///
+  /// In en, this message translates to:
+  /// **'The server copy is newer'**
+  String get dialogConflictTitle;
+
+  /// Conflict dialog subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes were made on another device since this device last synced.'**
+  String get dialogConflictSubtitle;
+
+  /// Choice to pull newer remote copy.
+  ///
+  /// In en, this message translates to:
+  /// **'Pull first (replaces local)'**
+  String get dialogConflictPull;
+
+  /// Pull description.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloads the newer remote configuration and replaces local profiles and rules.'**
+  String get dialogConflictPullDesc;
+
+  /// Choice to force overwrite remote copy.
+  ///
+  /// In en, this message translates to:
+  /// **'Overwrite the server copy'**
+  String get dialogConflictOverwrite;
+
+  /// Overwrite description.
+  ///
+  /// In en, this message translates to:
+  /// **'Pushes local settings and overwrites the remote server vault.'**
+  String get dialogConflictOverwriteDesc;
+
+  /// Conflict cancel button.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get dialogConflictCancel;
+
+  /// Unpair confirmation title.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpair this device?'**
+  String get dialogUnpairTitle;
+
+  /// Unpair subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This device will stop synchronizing with your sync server.'**
+  String get dialogUnpairSubtitle;
+
+  /// Unpair explanatory notice.
+  ///
+  /// In en, this message translates to:
+  /// **'The encrypted backup copy remains on the sync server. Other paired devices are not listed here and will not be affected.'**
+  String get dialogUnpairNotice;
+
+  /// Unpair confirmation button.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpair device'**
+  String get dialogUnpairConfirm;
 }
 
 class _AppLocalizationsDelegate

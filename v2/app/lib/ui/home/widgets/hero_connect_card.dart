@@ -4,6 +4,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
 import '../../../state/ui_state.dart';
 import '../../../theme/theme.dart';
+import '../../dialogs/release_confirm_dialog.dart';
 
 /// The Connect Control / Hero Card matching HomeDesktop board (332 x 364 px).
 class HeroConnectCard extends StatelessWidget {
@@ -56,6 +57,13 @@ class HeroConnectCard extends StatelessWidget {
     final egressIp = status.egressAddress.isNotEmpty
         ? status.egressAddress
         : (server?.address.isNotEmpty == true ? server!.address : '203.0.113.1');
+
+    Future<void> onReleaseWithConfirm() async {
+      final confirmed = await ReleaseConfirmDialog.show(context);
+      if (confirmed == true) {
+        await controller.release();
+      }
+    }
 
     final (String title, String badge, String line2, String cta, bool isPrimary, VoidCallback? onCta) =
         switch (uiState) {
@@ -113,7 +121,7 @@ class HeroConnectCard extends StatelessWidget {
           l10n.stateReconnectingHeldLine2(status.attempt, status.maxAttempts > 0 ? status.maxAttempts : 5, 3),
           l10n.actionRelease,
           false,
-          controller.release,
+          onReleaseWithConfirm,
         ),
       UiState.switching => (
           l10n.stateSwitchingTitle(serverName),
@@ -340,6 +348,24 @@ class HeroConnectCard extends StatelessWidget {
                           ),
                         ),
                       ),
+                      if (uiState == UiState.blocked) ...[
+                        const SizedBox(width: 8.0),
+                        OutlinedButton(
+                          onPressed: onReleaseWithConfirm,
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: colors.criticalText,
+                            side: BorderSide(color: colors.criticalFill.withValues(alpha: 0.5)),
+                            shape: const StadiumBorder(),
+                            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                          ),
+                          child: Text(
+                            l10n.actionRelease,
+                            style: CharonTypography.button.copyWith(
+                              color: colors.criticalText,
+                            ),
+                          ),
+                        ),
+                      ],
                       const SizedBox(width: 8.0),
                       Expanded(
                         child: Text(

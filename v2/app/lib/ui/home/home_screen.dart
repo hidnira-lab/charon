@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../state/home_controller.dart';
+import '../../state/ui_state.dart';
 import '../../theme/theme.dart';
+import '../dialogs/quit_while_connected_dialog.dart';
 import 'widgets/bottom_cards.dart';
 import 'widgets/hero_connect_card.dart';
 import 'widgets/rail_nav.dart';
@@ -40,7 +42,20 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   TitleBar(
                     onMinimize: onMinimize,
-                    onClose: onClose,
+                    onClose: onClose ?? () async {
+                      final uiState = controller.uiState;
+                      final isTunnelActive = uiState == UiState.connected ||
+                          uiState == UiState.onBackup ||
+                          uiState == UiState.verifying ||
+                          uiState == UiState.reconnecting ||
+                          uiState == UiState.reconnectingHeld;
+                      if (isTunnelActive) {
+                        final choice = await QuitWhileConnectedDialog.show(context);
+                        if (choice == QuitChoice.disconnectAndQuit) {
+                          await controller.disconnect();
+                        }
+                      }
+                    },
                   ),
                   Expanded(
                     child: Row(

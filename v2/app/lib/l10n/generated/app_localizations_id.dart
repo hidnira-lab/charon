@@ -1435,4 +1435,90 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get setupStep4FinishBtn => 'Selesai & Buka Charon →';
+
+  @override
+  String get dialogQuitTitle => 'Tutup Charon';
+
+  @override
+  String get dialogQuitSubtitle =>
+      'Terowongan Anda berjalan di layanan Charon, sehingga dapat tetap aktif tanpa jendela terbuka.';
+
+  @override
+  String get dialogQuitHideToTray => 'Sembunyikan ke baki sistem';
+
+  @override
+  String get dialogQuitHideToTrayDesc =>
+      'Jendela tertutup, antarmuka tetap berjalan di latar belakang, dan ikon baki tetap aktif.';
+
+  @override
+  String get dialogQuitWindowOnly => 'Tutup jendela saja';
+
+  @override
+  String get dialogQuitWindowOnlyDesc =>
+      'Terowongan tetap aktif. Tidak ada ikon baki sampai Charon dibuka kembali.';
+
+  @override
+  String get dialogQuitDisconnect => 'Putuskan dan keluar';
+
+  @override
+  String get dialogQuitDisconnectDesc =>
+      'Menutup terowongan yang aktif dan menghentikan aplikasi sepenuhnya.';
+
+  @override
+  String get dialogQuitTunnelStaysOn => 'TEROWONGAN TETAP AKTIF';
+
+  @override
+  String get dialogQuitTunnelStops => 'TEROWONGAN BERHENTI';
+
+  @override
+  String get dialogReleaseTitle => 'Putuskan dan lepaskan?';
+
+  @override
+  String get dialogReleaseSubtitle =>
+      'Lalu lintas akan langsung keluar jaringan hingga Anda tersambung kembali.';
+
+  @override
+  String get dialogReleaseWarning =>
+      'Perlindungan kill switch akan dilepas seketika. Seluruh lalu lintas jaringan perangkat tidak lagi terenkripsi dan melewati ISP secara langsung.';
+
+  @override
+  String get dialogReleaseConfirm => 'Putuskan & Lepaskan';
+
+  @override
+  String get dialogConflictTitle => 'Salinan server lebih baru';
+
+  @override
+  String get dialogConflictSubtitle =>
+      'Ada perubahan yang dibuat di perangkat lain sejak perangkat ini terakhir kali sinkron.';
+
+  @override
+  String get dialogConflictPull => 'Tarik lebih dulu (gantikan lokal)';
+
+  @override
+  String get dialogConflictPullDesc =>
+      'Mengunduh konfigurasi server yang lebih baru dan menggantikan profil serta aturan lokal.';
+
+  @override
+  String get dialogConflictOverwrite => 'Timpa salinan server';
+
+  @override
+  String get dialogConflictOverwriteDesc =>
+      'Mengunggah pengaturan lokal dan menimpa brankas server jarak jauh.';
+
+  @override
+  String get dialogConflictCancel => 'Batal';
+
+  @override
+  String get dialogUnpairTitle => 'Putuskan tautan perangkat ini?';
+
+  @override
+  String get dialogUnpairSubtitle =>
+      'Perangkat ini akan berhenti menyinkronkan dengan server sinkronisasi Anda.';
+
+  @override
+  String get dialogUnpairNotice =>
+      'Salinan cadangan terenkripsi tetap tersimpan di server. Perangkat lain yang ditautkan tidak tercantum di sini dan tidak akan terpengaruh.';
+
+  @override
+  String get dialogUnpairConfirm => 'Putuskan Tautan';
 }

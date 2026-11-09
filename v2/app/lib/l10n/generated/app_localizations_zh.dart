@@ -1343,6 +1343,82 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get setupStep4FinishBtn => '完成并启动 Charon →';
+
+  @override
+  String get dialogQuitTitle => '关闭 Charon';
+
+  @override
+  String get dialogQuitSubtitle => '您的隧道运行在 Charon 系统服务中，无需保持窗口开启。';
+
+  @override
+  String get dialogQuitHideToTray => '隐藏到托盘';
+
+  @override
+  String get dialogQuitHideToTrayDesc => '窗口关闭，UI 在后台继续运行，托盘图标保持常驻。';
+
+  @override
+  String get dialogQuitWindowOnly => '仅关闭窗口';
+
+  @override
+  String get dialogQuitWindowOnlyDesc => '隧道继续保持开启。在重新打开 Charon 前无托盘图标。';
+
+  @override
+  String get dialogQuitDisconnect => '断开连接并退出';
+
+  @override
+  String get dialogQuitDisconnectDesc => '断开当前隧道并完全退出应用程序。';
+
+  @override
+  String get dialogQuitTunnelStaysOn => '隧道保持开启';
+
+  @override
+  String get dialogQuitTunnelStops => '隧道断开';
+
+  @override
+  String get dialogReleaseTitle => '断开并放行？';
+
+  @override
+  String get dialogReleaseSubtitle => '在您重新连接前，所有流量将直连外网。';
+
+  @override
+  String get dialogReleaseWarning =>
+      'Kill switch 防护将立即解除。所有系统网络流量将不再经过隧道，直接通过 ISP 发送且不加密。';
+
+  @override
+  String get dialogReleaseConfirm => '断开并放行';
+
+  @override
+  String get dialogConflictTitle => '服务器副本更新';
+
+  @override
+  String get dialogConflictSubtitle => '自本机上次同步后，其他设备已提交了新的更改。';
+
+  @override
+  String get dialogConflictPull => '先拉取（覆盖本地）';
+
+  @override
+  String get dialogConflictPullDesc => '下载较新的远程配置并替换本地配置文件和分流规则。';
+
+  @override
+  String get dialogConflictOverwrite => '覆盖服务器副本';
+
+  @override
+  String get dialogConflictOverwriteDesc => '强制上传本地设置并覆盖远程服务器存储。';
+
+  @override
+  String get dialogConflictCancel => '取消';
+
+  @override
+  String get dialogUnpairTitle => '解除此设备配对？';
+
+  @override
+  String get dialogUnpairSubtitle => '此设备将停止与同步服务器同步数据。';
+
+  @override
+  String get dialogUnpairNotice => '加密备份副本将保留在同步服务器上。其他已配对设备不会在此列出，也不受影响。';
+
+  @override
+  String get dialogUnpairConfirm => '解除配对';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -2683,4 +2759,80 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get setupStep4FinishBtn => '完成并启动 Charon →';
+
+  @override
+  String get dialogQuitTitle => '关闭 Charon';
+
+  @override
+  String get dialogQuitSubtitle => '您的隧道运行在 Charon 系统服务中，无需保持窗口开启。';
+
+  @override
+  String get dialogQuitHideToTray => '隐藏到托盘';
+
+  @override
+  String get dialogQuitHideToTrayDesc => '窗口关闭，UI 在后台继续运行，托盘图标保持常驻。';
+
+  @override
+  String get dialogQuitWindowOnly => '仅关闭窗口';
+
+  @override
+  String get dialogQuitWindowOnlyDesc => '隧道继续保持开启。在重新打开 Charon 前无托盘图标。';
+
+  @override
+  String get dialogQuitDisconnect => '断开连接并退出';
+
+  @override
+  String get dialogQuitDisconnectDesc => '断开当前隧道并完全退出应用程序。';
+
+  @override
+  String get dialogQuitTunnelStaysOn => '隧道保持开启';
+
+  @override
+  String get dialogQuitTunnelStops => '隧道断开';
+
+  @override
+  String get dialogReleaseTitle => '断开并放行？';
+
+  @override
+  String get dialogReleaseSubtitle => '在您重新连接前，所有流量将直连外网。';
+
+  @override
+  String get dialogReleaseWarning =>
+      'Kill switch 防护将立即解除。所有系统网络流量将不再经过隧道，直接通过 ISP 发送且不加密。';
+
+  @override
+  String get dialogReleaseConfirm => '断开并放行';
+
+  @override
+  String get dialogConflictTitle => '服务器副本更新';
+
+  @override
+  String get dialogConflictSubtitle => '自本机上次同步后，其他设备已提交了新的更改。';
+
+  @override
+  String get dialogConflictPull => '先拉取（覆盖本地）';
+
+  @override
+  String get dialogConflictPullDesc => '下载较新的远程配置并替换本地配置文件和分流规则。';
+
+  @override
+  String get dialogConflictOverwrite => '覆盖服务器副本';
+
+  @override
+  String get dialogConflictOverwriteDesc => '强制上传本地设置并覆盖远程服务器存储。';
+
+  @override
+  String get dialogConflictCancel => '取消';
+
+  @override
+  String get dialogUnpairTitle => '解除此设备配对？';
+
+  @override
+  String get dialogUnpairSubtitle => '此设备将停止与同步服务器同步数据。';
+
+  @override
+  String get dialogUnpairNotice => '加密备份副本将保留在同步服务器上。其他已配对设备不会在此列出，也不受影响。';
+
+  @override
+  String get dialogUnpairConfirm => '解除配对';
 }

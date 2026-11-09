@@ -2,10 +2,21 @@ import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/tokens.dart';
+import '../../dialogs/sync_conflict_dialog.dart';
+import '../../dialogs/unpair_confirm_dialog.dart';
 
 /// Right-column Sync & Backup card (320px width) matching ServersDesktop board.
 class SyncCard extends StatelessWidget {
-  const SyncCard({super.key});
+  const SyncCard({
+    super.key,
+    this.onPush,
+    this.onPull,
+    this.onUnpair,
+  });
+
+  final VoidCallback? onPush;
+  final VoidCallback? onPull;
+  final VoidCallback? onUnpair;
 
   @override
   Widget build(BuildContext context) {
@@ -113,13 +124,39 @@ class SyncCard extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 2),
-                      Text(
-                        l10n.syncNotPaired,
-                        style: const TextStyle(
-                          fontFamily: CharonTokens.fontMono,
-                          fontSize: 11,
-                          color: Color(0xFF8A8A8A),
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              l10n.syncNotPaired,
+                              style: const TextStyle(
+                                fontFamily: CharonTokens.fontMono,
+                                fontSize: 11,
+                                color: Color(0xFF8A8A8A),
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          InkWell(
+                            onTap: onUnpair ?? () => UnpairConfirmDialog.show(context),
+                            borderRadius: BorderRadius.circular(4),
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                              child: Text(
+                                'UNPAIR',
+                                style: TextStyle(
+                                  fontFamily: CharonTokens.fontMono,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.05,
+                                  color: Color(0xFFE57373),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -133,10 +170,9 @@ class SyncCard extends StatelessWidget {
             children: [
               Expanded(
                 child: OutlinedButton(
-                  onPressed: null, // Paired flow arrives in M5
+                  onPressed: onPush ?? () => SyncConflictDialog.show(context),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: const Color(0xFFEDEDED),
-                    disabledForegroundColor: const Color(0xFF5C5C5C),
                     side: const BorderSide(color: Color(0xFF4A4A4A)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(999),
