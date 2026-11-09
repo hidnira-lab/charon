@@ -11,6 +11,8 @@ Status: M3 in progress. Step 3.1 is done: the project, the generated message cla
 * `lib/core/transport.dart`: `CoreTransport` with two implementations. `IpcTransport` is a Windows named pipe, or a Unix socket on macOS and Linux. `MemoryTransport` is for tests. The Android platform channel transport comes with M4.
 * `lib/core/core_client.dart`: `CoreClient`. Handshake, request and response matching by request id, an events stream, and a `closed` future. UI code uses only this class.
 
+* `lib/state/ui_state.dart`: `projectState`, the one pure function from a `Status` snapshot to the state the Home screen shows (14 states, taken from the Home board of the Design artifact). The scenario files say what every step must project to.
+
 ## Tests
 
 ```
@@ -20,7 +22,8 @@ flutter test
 
 * `test/frame_test.dart`, `test/core_client_test.dart`: unit tests with no pipe.
 * `test/golden_test.dart`: Dart and Go read each other's bytes. The fixtures are in `../proto/fixtures/v1/`, written by `go test ./ipc -run TestGolden -update` in `../core`.
-* `test/fakecore_integration_test.dart`: the client against the real Go fake core over a real named pipe. Windows only, and it needs Go on the PATH because it builds the fake core.
+* `test/ui_state_test.dart`: each projection rule, and every step of every scenario file against its `ui`.
+* `test/fakecore_integration_test.dart`: the client against the real Go fake core over a real named pipe. It plays every scenario and checks that what the app would show at each step equals the `ui` in the file. Windows only, and it needs Go on the PATH because it builds the fake core.
 
 ## Things learned about the pipe client (V7)
 

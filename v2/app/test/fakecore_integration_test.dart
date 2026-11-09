@@ -14,7 +14,10 @@ import 'dart:io';
 import 'package:charon/core/core_client.dart';
 import 'package:charon/core/transport.dart';
 import 'package:charon/gen/charon/v1/charon.pb.dart';
+import 'package:charon/state/ui_state.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'support/scenarios.dart';
 
 void main() {
   late Directory tmp;
@@ -102,6 +105,36 @@ void main() {
     await done.future.timeout(const Duration(seconds: 10));
 
     expect(notices, [NoticeKind.NOTICE_TRAFFIC_HELD, NoticeKind.NOTICE_RECONNECTED]);
+  });
+
+  // The whole chain for every scenario: the Go machine produces the snapshots,
+  // the pipe carries them, the Dart client decodes them, and projectState turns
+  // each into what the app shows. That must equal the "ui" written in the file.
+  group('every scenario, played by the real core, shows what its steps say', () {
+    for (final file in scenarioFiles()) {
+      final name = file.uri.pathSegments.last;
+      test(name, () async {
+        final steps = (jsonDecode(file.readAsStringSync()) as Map<String, dynamic>)['steps'] as List<dynamic>;
+        final (fake, pipe) = await startFake(name, auto: true);
+        addTearDown(fake.kill);
+
+        final client = CoreClient(await IpcTransport.connect(pipe));
+        addTearDown(client.close);
+
+        // The core sends one Status per step.
+        final shown = <String>[];
+        final done = Completer<void>();
+        client.events.listen((e) {
+          if (!e.hasStatusChanged()) return;
+          shown.add(projectState(e.statusChanged, hasServers: true).wireName);
+          if (shown.length == steps.length && !done.isCompleted) done.complete();
+        });
+        await client.hello(appVersion: 'test');
+        await done.future.timeout(const Duration(seconds: 10));
+
+        expect(shown, [for (final s in steps) (s as Map<String, dynamic>)['ui']]);
+      });
+    }
   });
 
   test('a late client starts from the current state, and sees a killed core at once', () async {
