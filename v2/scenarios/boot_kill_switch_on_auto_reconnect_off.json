@@ -1,0 +1,21 @@
+{
+  "name": "boot, kill switch on, auto reconnect off",
+  "description": "The service starts at boot and the last session ended connected on SRV-02. Kill switch on and auto reconnect off means Charon arms the gate and then holds it, and waits in Blocked for the user. Nothing connects by itself. The user can press Retry now or Release once the UI is up.",
+
+  "config": {
+    "version": 1,
+    "servers": [
+      { "id": "SRV-01", "display_name": "Fixture server one", "protocol": "PROTOCOL_VLESS_REALITY", "address": "192.0.2.10", "port": 443, "uuid": "00000000-0000-0000-0000-000000000001", "flow": "xtls-rprx-vision", "reality": { "public_key": "FIXTURE_PUBLIC_KEY_NOT_A_REAL_KEY", "short_id": "0000", "server_name": "example.com", "fingerprint": "chrome" }, "transport": "tcp", "country_code": "US" },
+      { "id": "SRV-02", "display_name": "Fixture server two", "protocol": "PROTOCOL_VLESS_REALITY", "address": "198.51.100.20", "port": 443, "uuid": "00000000-0000-0000-0000-000000000002", "flow": "xtls-rprx-vision", "reality": { "public_key": "FIXTURE_PUBLIC_KEY_NOT_A_REAL_KEY", "short_id": "0000", "server_name": "example.com", "fingerprint": "chrome" }, "transport": "tcp", "country_code": "ID" }
+    ],
+    "chosen_server_id": "SRV-01",
+    "settings": { "kill_switch": true, "auto_reconnect": false, "allow_local_network": true }
+  },
+  "saved": { "last_session_connected": true, "active_server_id": "SRV-02" },
+
+  "steps": [
+    { "at_ms": 0, "input": { "type": "ServiceStarted" },
+      "effects": [ { "type": "SetGate", "gate": "GATE_ARMED" }, { "type": "SetGate", "gate": "GATE_HELD" }, { "type": "Notify", "kind": "NOTICE_TRAFFIC_HELD", "server_id": "SRV-02" } ],
+      "expect": { "phase": "PHASE_BLOCKED", "gate": "GATE_HELD", "active_server_id": "SRV-02", "chosen_server_id": "SRV-01", "on_backup": true } }
+  ]
+}

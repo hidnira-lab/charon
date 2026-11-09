@@ -1,0 +1,35 @@
+{
+  "name": "quota reaches amber and red, no phase change",
+  "description": "The session is Up on a server with a 100 GB plan that counts outgoing traffic only. At 79 GB the level is still normal. At 80 GB it turns amber and the user gets a notice. At 100 GB it turns red and the user is told the cap is reached. In every case the phase stays Up and the gate stays Armed: at the cap Charon only offers to move, it never disconnects or moves by itself.",
+
+  "config": {
+    "version": 1,
+    "servers": [
+      { "id": "SRV-01", "display_name": "Fixture server one", "protocol": "PROTOCOL_VLESS_REALITY", "address": "192.0.2.10", "port": 443, "uuid": "00000000-0000-0000-0000-000000000001", "flow": "xtls-rprx-vision", "reality": { "public_key": "FIXTURE_PUBLIC_KEY_NOT_A_REAL_KEY", "short_id": "0000", "server_name": "example.com", "fingerprint": "chrome" }, "transport": "tcp", "country_code": "US", "quota": { "cap_gb": 100, "billing_day": 1, "counts": "COUNTS_OUT_ONLY" } }
+    ],
+    "chosen_server_id": "SRV-01",
+    "settings": { "kill_switch": true, "auto_reconnect": true, "allow_local_network": true }
+  },
+  "saved": { "last_session_connected": false, "active_server_id": "" },
+
+  "steps": [
+    { "at_ms": 0, "input": { "type": "Connect" },
+      "effects": [ { "type": "SetGate", "gate": "GATE_ARMED" }, { "type": "StartXray", "server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_STARTING", "gate": "GATE_ARMED" } },
+    { "at_ms": 600, "input": { "type": "XrayStarted" },
+      "effects": [ { "type": "StartVerify", "server_id": "SRV-01" }, { "type": "SetTimer", "name": "verify_timeout", "after_ms": 15000 } ],
+      "expect": { "phase": "PHASE_VERIFYING" } },
+    { "at_ms": 2300, "input": { "type": "VerifyOk", "egress_address": "192.0.2.10", "latency_ms": 120 },
+      "effects": [ { "type": "CancelTimer", "name": "verify_timeout" }, { "type": "SaveLastSession", "connected": true, "active_server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_UP", "gate": "GATE_ARMED", "quota_level": "QUOTA_NORMAL" } },
+    { "at_ms": 60000, "input": { "type": "QuotaUpdated", "server_id": "SRV-01", "counted_bytes": 79000000000 },
+      "effects": [],
+      "expect": { "phase": "PHASE_UP", "gate": "GATE_ARMED", "quota_level": "QUOTA_NORMAL" } },
+    { "at_ms": 120000, "input": { "type": "QuotaUpdated", "server_id": "SRV-01", "counted_bytes": 80000000000 },
+      "effects": [ { "type": "Notify", "kind": "NOTICE_QUOTA_AMBER", "server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_UP", "gate": "GATE_ARMED", "quota_level": "QUOTA_AMBER" } },
+    { "at_ms": 180000, "input": { "type": "QuotaUpdated", "server_id": "SRV-01", "counted_bytes": 100000000000 },
+      "effects": [ { "type": "Notify", "kind": "NOTICE_QUOTA_CAP", "server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_UP", "gate": "GATE_ARMED", "active_server_id": "SRV-01", "quota_level": "QUOTA_RED" } }
+  ]
+}

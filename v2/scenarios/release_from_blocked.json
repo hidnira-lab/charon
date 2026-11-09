@@ -1,0 +1,35 @@
+{
+  "name": "release from blocked",
+  "description": "Same start as retry now: auto reconnect off, kill switch on, Xray dies, Charon is Blocked with the gate Held. This time the user presses Release. Charon goes through Stopping to Idle, removes the filters, and traffic goes direct again. The session counts as manually ended, so the next start does not resume it.",
+
+  "config": {
+    "version": 1,
+    "servers": [
+      { "id": "SRV-01", "display_name": "Fixture server one", "protocol": "PROTOCOL_VLESS_REALITY", "address": "192.0.2.10", "port": 443, "uuid": "00000000-0000-0000-0000-000000000001", "flow": "xtls-rprx-vision", "reality": { "public_key": "FIXTURE_PUBLIC_KEY_NOT_A_REAL_KEY", "short_id": "0000", "server_name": "example.com", "fingerprint": "chrome" }, "transport": "tcp", "country_code": "US" }
+    ],
+    "chosen_server_id": "SRV-01",
+    "settings": { "kill_switch": true, "auto_reconnect": false, "allow_local_network": true }
+  },
+  "saved": { "last_session_connected": false, "active_server_id": "" },
+
+  "steps": [
+    { "at_ms": 0, "input": { "type": "Connect" },
+      "effects": [ { "type": "SetGate", "gate": "GATE_ARMED" }, { "type": "StartXray", "server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_STARTING", "gate": "GATE_ARMED" } },
+    { "at_ms": 600, "input": { "type": "XrayStarted" },
+      "effects": [ { "type": "StartVerify", "server_id": "SRV-01" }, { "type": "SetTimer", "name": "verify_timeout", "after_ms": 15000 } ],
+      "expect": { "phase": "PHASE_VERIFYING" } },
+    { "at_ms": 2300, "input": { "type": "VerifyOk", "egress_address": "192.0.2.10", "latency_ms": 120 },
+      "effects": [ { "type": "CancelTimer", "name": "verify_timeout" }, { "type": "SaveLastSession", "connected": true, "active_server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_UP", "gate": "GATE_ARMED" } },
+    { "at_ms": 60000, "input": { "type": "XrayExited" },
+      "effects": [ { "type": "SetGate", "gate": "GATE_HELD" }, { "type": "Notify", "kind": "NOTICE_TRAFFIC_HELD", "server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_BLOCKED", "gate": "GATE_HELD" } },
+    { "at_ms": 90000, "input": { "type": "Release" },
+      "effects": [ { "type": "StopXray", "server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_STOPPING", "gate": "GATE_HELD" } },
+    { "at_ms": 90100, "input": { "type": "XrayStopped" },
+      "effects": [ { "type": "SetGate", "gate": "GATE_DISARMED" }, { "type": "SaveLastSession", "connected": false, "active_server_id": "" } ],
+      "expect": { "phase": "PHASE_IDLE", "gate": "GATE_DISARMED" } }
+  ]
+}

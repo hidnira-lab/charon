@@ -1,0 +1,79 @@
+{
+  "name": "all servers fail into blocked",
+  "description": "A session is Up and then Xray dies. Auto reconnect tries the only saved server five times, five seconds apart, and every try fails. There is no next server, so Charon goes to Blocked and the gate stays Held (kill switch on). It does not retry again on its own, it waits for the user.",
+
+  "config": {
+    "version": 1,
+    "servers": [
+      { "id": "SRV-01", "display_name": "Fixture server one", "protocol": "PROTOCOL_VLESS_REALITY", "address": "192.0.2.10", "port": 443, "uuid": "00000000-0000-0000-0000-000000000001", "flow": "xtls-rprx-vision", "reality": { "public_key": "FIXTURE_PUBLIC_KEY_NOT_A_REAL_KEY", "short_id": "0000", "server_name": "example.com", "fingerprint": "chrome" }, "transport": "tcp", "country_code": "US" }
+    ],
+    "chosen_server_id": "SRV-01",
+    "settings": { "kill_switch": true, "auto_reconnect": true, "allow_local_network": true }
+  },
+  "saved": { "last_session_connected": false, "active_server_id": "" },
+
+  "steps": [
+    { "at_ms": 0, "input": { "type": "Connect" },
+      "effects": [ { "type": "SetGate", "gate": "GATE_ARMED" }, { "type": "StartXray", "server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_STARTING", "gate": "GATE_ARMED" } },
+    { "at_ms": 600, "input": { "type": "XrayStarted" },
+      "effects": [ { "type": "StartVerify", "server_id": "SRV-01" }, { "type": "SetTimer", "name": "verify_timeout", "after_ms": 15000 } ],
+      "expect": { "phase": "PHASE_VERIFYING" } },
+    { "at_ms": 2300, "input": { "type": "VerifyOk", "egress_address": "192.0.2.10", "latency_ms": 120 },
+      "effects": [ { "type": "CancelTimer", "name": "verify_timeout" }, { "type": "SaveLastSession", "connected": true, "active_server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_UP", "gate": "GATE_ARMED" } },
+    { "at_ms": 60000, "input": { "type": "XrayExited" },
+      "effects": [ { "type": "SetGate", "gate": "GATE_HELD" }, { "type": "SetTimer", "name": "retry", "after_ms": 5000 }, { "type": "Notify", "kind": "NOTICE_TRAFFIC_HELD", "server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_RETRYING", "gate": "GATE_HELD", "attempt": 1, "next_try_at_ms": 65000 } },
+
+    { "at_ms": 65000, "input": { "type": "TimerFired", "name": "retry" },
+      "effects": [ { "type": "StartXray", "server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_RETRYING", "attempt": 1 } },
+    { "at_ms": 65600, "input": { "type": "XrayStarted" },
+      "effects": [ { "type": "StartVerify", "server_id": "SRV-01" }, { "type": "SetTimer", "name": "verify_timeout", "after_ms": 15000 } ],
+      "expect": { "phase": "PHASE_RETRYING", "attempt": 1 } },
+    { "at_ms": 67600, "input": { "type": "VerifyFailed", "reason": "FAILURE_TCP_TIMEOUT" },
+      "effects": [ { "type": "CancelTimer", "name": "verify_timeout" }, { "type": "StopXray", "server_id": "SRV-01" }, { "type": "SetTimer", "name": "retry", "after_ms": 5000 } ],
+      "expect": { "phase": "PHASE_RETRYING", "gate": "GATE_HELD", "attempt": 2, "next_try_at_ms": 72600 } },
+
+    { "at_ms": 72600, "input": { "type": "TimerFired", "name": "retry" },
+      "effects": [ { "type": "StartXray", "server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_RETRYING", "attempt": 2 } },
+    { "at_ms": 73200, "input": { "type": "XrayStarted" },
+      "effects": [ { "type": "StartVerify", "server_id": "SRV-01" }, { "type": "SetTimer", "name": "verify_timeout", "after_ms": 15000 } ],
+      "expect": { "phase": "PHASE_RETRYING", "attempt": 2 } },
+    { "at_ms": 75200, "input": { "type": "VerifyFailed", "reason": "FAILURE_TCP_TIMEOUT" },
+      "effects": [ { "type": "CancelTimer", "name": "verify_timeout" }, { "type": "StopXray", "server_id": "SRV-01" }, { "type": "SetTimer", "name": "retry", "after_ms": 5000 } ],
+      "expect": { "phase": "PHASE_RETRYING", "gate": "GATE_HELD", "attempt": 3, "next_try_at_ms": 80200 } },
+
+    { "at_ms": 80200, "input": { "type": "TimerFired", "name": "retry" },
+      "effects": [ { "type": "StartXray", "server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_RETRYING", "attempt": 3 } },
+    { "at_ms": 80800, "input": { "type": "XrayStarted" },
+      "effects": [ { "type": "StartVerify", "server_id": "SRV-01" }, { "type": "SetTimer", "name": "verify_timeout", "after_ms": 15000 } ],
+      "expect": { "phase": "PHASE_RETRYING", "attempt": 3 } },
+    { "at_ms": 82800, "input": { "type": "VerifyFailed", "reason": "FAILURE_TCP_TIMEOUT" },
+      "effects": [ { "type": "CancelTimer", "name": "verify_timeout" }, { "type": "StopXray", "server_id": "SRV-01" }, { "type": "SetTimer", "name": "retry", "after_ms": 5000 } ],
+      "expect": { "phase": "PHASE_RETRYING", "gate": "GATE_HELD", "attempt": 4, "next_try_at_ms": 87800 } },
+
+    { "at_ms": 87800, "input": { "type": "TimerFired", "name": "retry" },
+      "effects": [ { "type": "StartXray", "server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_RETRYING", "attempt": 4 } },
+    { "at_ms": 88400, "input": { "type": "XrayStarted" },
+      "effects": [ { "type": "StartVerify", "server_id": "SRV-01" }, { "type": "SetTimer", "name": "verify_timeout", "after_ms": 15000 } ],
+      "expect": { "phase": "PHASE_RETRYING", "attempt": 4 } },
+    { "at_ms": 90400, "input": { "type": "VerifyFailed", "reason": "FAILURE_TCP_TIMEOUT" },
+      "effects": [ { "type": "CancelTimer", "name": "verify_timeout" }, { "type": "StopXray", "server_id": "SRV-01" }, { "type": "SetTimer", "name": "retry", "after_ms": 5000 } ],
+      "expect": { "phase": "PHASE_RETRYING", "gate": "GATE_HELD", "attempt": 5, "next_try_at_ms": 95400 } },
+
+    { "at_ms": 95400, "input": { "type": "TimerFired", "name": "retry" },
+      "effects": [ { "type": "StartXray", "server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_RETRYING", "attempt": 5 } },
+    { "at_ms": 96000, "input": { "type": "XrayStarted" },
+      "effects": [ { "type": "StartVerify", "server_id": "SRV-01" }, { "type": "SetTimer", "name": "verify_timeout", "after_ms": 15000 } ],
+      "expect": { "phase": "PHASE_RETRYING", "attempt": 5 } },
+    { "at_ms": 98000, "input": { "type": "VerifyFailed", "reason": "FAILURE_TCP_TIMEOUT" },
+      "effects": [ { "type": "CancelTimer", "name": "verify_timeout" }, { "type": "StopXray", "server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_BLOCKED", "gate": "GATE_HELD", "active_server_id": "SRV-01", "last_failure": "FAILURE_TCP_TIMEOUT" } }
+  ]
+}

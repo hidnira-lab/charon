@@ -1,0 +1,35 @@
+{
+  "name": "network change, probe passes",
+  "description": "The session is Up and the device changes network (for example Wi-Fi to a hotspot). Charon waits 2 seconds so a flapping link does not cause many probes, then runs a short verification. The tunnel still works, so Charon returns to Up. The gate stays Armed the whole time, and nothing is restarted or failed over.",
+
+  "config": {
+    "version": 1,
+    "servers": [
+      { "id": "SRV-01", "display_name": "Fixture server one", "protocol": "PROTOCOL_VLESS_REALITY", "address": "192.0.2.10", "port": 443, "uuid": "00000000-0000-0000-0000-000000000001", "flow": "xtls-rprx-vision", "reality": { "public_key": "FIXTURE_PUBLIC_KEY_NOT_A_REAL_KEY", "short_id": "0000", "server_name": "example.com", "fingerprint": "chrome" }, "transport": "tcp", "country_code": "US" }
+    ],
+    "chosen_server_id": "SRV-01",
+    "settings": { "kill_switch": true, "auto_reconnect": true, "allow_local_network": true }
+  },
+  "saved": { "last_session_connected": false, "active_server_id": "" },
+
+  "steps": [
+    { "at_ms": 0, "input": { "type": "Connect" },
+      "effects": [ { "type": "SetGate", "gate": "GATE_ARMED" }, { "type": "StartXray", "server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_STARTING", "gate": "GATE_ARMED" } },
+    { "at_ms": 600, "input": { "type": "XrayStarted" },
+      "effects": [ { "type": "StartVerify", "server_id": "SRV-01" }, { "type": "SetTimer", "name": "verify_timeout", "after_ms": 15000 } ],
+      "expect": { "phase": "PHASE_VERIFYING" } },
+    { "at_ms": 2300, "input": { "type": "VerifyOk", "egress_address": "192.0.2.10", "latency_ms": 120 },
+      "effects": [ { "type": "CancelTimer", "name": "verify_timeout" }, { "type": "SaveLastSession", "connected": true, "active_server_id": "SRV-01" } ],
+      "expect": { "phase": "PHASE_UP", "gate": "GATE_ARMED" } },
+    { "at_ms": 60000, "input": { "type": "NetworkChanged" },
+      "effects": [ { "type": "SetTimer", "name": "network_debounce", "after_ms": 2000 } ],
+      "expect": { "phase": "PHASE_UP", "gate": "GATE_ARMED" } },
+    { "at_ms": 62000, "input": { "type": "TimerFired", "name": "network_debounce" },
+      "effects": [ { "type": "StartVerify", "server_id": "SRV-01" }, { "type": "SetTimer", "name": "verify_timeout", "after_ms": 15000 } ],
+      "expect": { "phase": "PHASE_VERIFYING", "gate": "GATE_ARMED" } },
+    { "at_ms": 62800, "input": { "type": "VerifyOk", "egress_address": "192.0.2.10", "latency_ms": 140 },
+      "effects": [ { "type": "CancelTimer", "name": "verify_timeout" } ],
+      "expect": { "phase": "PHASE_UP", "gate": "GATE_ARMED", "active_server_id": "SRV-01", "on_backup": false, "latency_ms": 140 } }
+  ]
+}
