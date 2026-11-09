@@ -1,0 +1,381 @@
+// Charon IPC schema, protocol version 1.
+//
+// Single source of every message between the UI and charon core. Source of
+// truth for the design: docs/charon_ipc_contract.md, section 16.
+//
+// Rules (see CLAUDE.md section 9): only additive changes inside one major
+// version. Never reuse a field number or an enum value. Field numbers freeze
+// at the first public release.
+syntax = "proto3";
+
+package charon.v1;
+
+option go_package = "github.com/hidnira-lab/charon/core/gen/charonv1;charonv1";
+
+message Envelope {
+  uint32 protocol_version = 1;
+  uint64 request_id = 2; // 0 for events
+  oneof payload {
+    Hello hello = 10;
+    HelloAck hello_ack = 11;
+    Command command = 12;
+    Response response = 13;
+    Event event = 14;
+  }
+}
+
+message Hello {
+  uint32 min_protocol_version = 1;
+  uint32 max_protocol_version = 2;
+  string app_version = 3;
+  string client_kind = 4;
+}
+
+message HelloAck {
+  uint32 protocol_version = 1;
+  string service_version = 2;
+  string xray_version = 3;
+  uint64 config_version = 4;
+  Status status = 5;
+  Error error = 6;
+}
+
+message Command {
+  oneof kind {
+    Empty connect = 1;
+    Empty disconnect = 2;
+    Empty cancel = 3;
+    Empty switch_now = 4;
+    ServerRef move_to = 5;
+    ServerRef try_server = 6;
+    Empty release = 7;
+    Empty retry_now = 8;
+    Config set_config = 9;
+    Empty get_config = 10;
+    Subscription subscribe = 11;
+    Subscription unsubscribe = 12;
+    Empty check_update = 13;
+    ApplyUpdate apply_update = 14;
+    Empty rollback_core = 15;
+    ExportDiagnostics export_diagnostics = 16;
+    UpdateFileChunk update_file_chunk = 17;
+  }
+}
+
+message Empty {}
+
+message ServerRef {
+  string server_id = 1;
+}
+
+message Subscription {
+  repeated Topic topics = 1;
+  LogSource log_source = 2;
+  LogLevel min_level = 3;
+}
+
+message ApplyUpdate {
+  UpdateKind kind = 1;
+  ApplyWhen when = 2;
+}
+
+message ExportDiagnostics {}
+
+message UpdateFileChunk {
+  UpdateKind kind = 1;
+  uint64 offset = 2;
+  bytes data = 3;
+  bool last = 4;
+}
+
+message Response {
+  oneof kind {
+    Empty ack = 1;
+    Error error = 2;
+    Config config = 3;
+    UpdateState update_state = 4;
+    bytes diagnostics = 5;
+  }
+}
+
+message Error {
+  ErrorCode code = 1;
+  string message_key = 2;
+  string detail = 3;
+  repeated FieldError fields = 4;
+}
+
+message FieldError {
+  string path = 1;
+  string message_key = 2;
+}
+
+message Event {
+  oneof kind {
+    Status status_changed = 1;
+    Quota quota_changed = 2;
+    Notice notice = 3;
+    LogBatch logs = 4;
+    Throughput throughput = 5;
+    UpdateState update_state = 6;
+    ConfigResult config_result = 7;
+    Empty ping = 8;
+  }
+}
+
+message Status {
+  Phase phase = 1;
+  Gate gate = 2;
+  string active_server_id = 3;
+  string chosen_server_id = 4;
+  bool on_backup = 5;
+  uint32 attempt = 6;
+  uint32 max_attempts = 7;
+  int64 next_try_at_ms = 8;
+  int64 service_now_ms = 9;
+  QuotaLevel quota_level = 10;
+  FailureReason last_failure = 11;
+  int64 phase_since_ms = 12;
+  bool kill_switch_on = 13;
+  string egress_address = 14;
+  uint32 latency_ms = 15;
+  uint64 config_version = 16;
+}
+
+message Quota {
+  string server_id = 1;
+  uint64 bytes_out = 2;
+  uint64 bytes_in = 3;
+  uint64 counted_bytes = 4;
+  QuotaLevel level = 5;
+  int64 period_start_ms = 6;
+  int64 resets_at_ms = 7;
+}
+
+message Notice {
+  NoticeKind kind = 1;
+  string server_id = 2;
+  int64 at_ms = 3;
+}
+
+message Throughput {
+  uint64 down_bps = 1;
+  uint64 up_bps = 2;
+  int64 at_ms = 3;
+}
+
+message LogLine {
+  uint64 seq = 1;
+  int64 at_ms = 2;
+  LogLevel level = 3;
+  string text = 4;
+}
+
+message LogBatch {
+  LogSource source = 1;
+  repeated LogLine lines = 2;
+  uint32 dropped = 3;
+}
+
+message ConfigResult {
+  uint64 version = 1;
+  bool accepted = 2;
+  repeated string applies_now = 3;
+  repeated string applies_next_connect = 4;
+  Error error = 5;
+}
+
+message UpdateState {
+  UpdateKind kind = 1;
+  UpdateStage stage = 2;
+  string current_version = 3;
+  string new_version = 4;
+  uint64 size_bytes = 5;
+  uint32 progress_percent = 6;
+  string staged_installer = 7; // only for app updates, inside the protected staging folder
+  string failure_key = 8;
+}
+
+message Config {
+  uint64 version = 1;
+  repeated Server servers = 2; // order is the failover order
+  string chosen_server_id = 3;
+  Settings settings = 4;
+  SplitTunnel split = 5;
+}
+
+message Server {
+  string id = 1; // the stable SRV code, never changes
+  string display_name = 2;
+  Protocol protocol = 3;
+  string address = 4;
+  uint32 port = 5;
+  string uuid = 6;
+  string flow = 7;
+  Reality reality = 8;
+  string transport = 9;
+  string country_code = 10;
+  QuotaPlan quota = 11;
+}
+
+message Reality {
+  string public_key = 1;
+  string short_id = 2;
+  string server_name = 3;
+  string fingerprint = 4;
+}
+
+message QuotaPlan {
+  uint32 cap_gb = 1;
+  uint32 billing_day = 2;
+  CountsMode counts = 3;
+}
+
+message Settings {
+  bool kill_switch = 1;
+  bool auto_reconnect = 2;
+  bool allow_local_network = 3;
+}
+
+message SplitTunnel {
+  SplitMode mode = 1;
+  repeated Rule all_except_listed = 2;
+  repeated Rule only_listed = 3;
+}
+
+message Rule {
+  RuleKind kind = 1;
+  string value = 2;
+  bool include_subdomains = 3;
+}
+
+enum Phase {
+  PHASE_UNSPECIFIED = 0;
+  PHASE_IDLE = 1;
+  PHASE_STARTING = 2;
+  PHASE_VERIFYING = 3;
+  PHASE_UP = 4;
+  PHASE_RETRYING = 5;
+  PHASE_SWITCHING = 6;
+  PHASE_STOPPING = 7;
+  PHASE_BLOCKED = 8;
+}
+
+enum Gate {
+  GATE_UNSPECIFIED = 0;
+  GATE_DISARMED = 1;
+  GATE_ARMED = 2;
+  GATE_HELD = 3;
+}
+
+enum QuotaLevel {
+  QUOTA_UNSPECIFIED = 0;
+  QUOTA_NORMAL = 1;
+  QUOTA_AMBER = 2;
+  QUOTA_RED = 3;
+}
+
+enum Protocol {
+  PROTOCOL_UNSPECIFIED = 0;
+  PROTOCOL_VLESS_REALITY = 1;
+}
+
+enum CountsMode {
+  COUNTS_UNSPECIFIED = 0;
+  COUNTS_OUT_ONLY = 1;
+  COUNTS_IN_AND_OUT = 2;
+}
+
+enum SplitMode {
+  SPLIT_UNSPECIFIED = 0;
+  SPLIT_ALL_EXCEPT_LISTED = 1;
+  SPLIT_ONLY_LISTED = 2;
+}
+
+enum RuleKind {
+  RULE_UNSPECIFIED = 0;
+  RULE_DOMAIN = 1;
+  RULE_CIDR = 2;
+  RULE_APP = 3;
+}
+
+enum Topic {
+  TOPIC_UNSPECIFIED = 0;
+  TOPIC_THROUGHPUT = 1;
+  TOPIC_LOGS = 2;
+}
+
+enum LogSource {
+  LOG_SOURCE_UNSPECIFIED = 0;
+  LOG_SOURCE_XRAY_ACCESS = 1;
+  LOG_SOURCE_CHARON_CORE = 2;
+}
+
+enum LogLevel {
+  LOG_LEVEL_UNSPECIFIED = 0;
+  LOG_LEVEL_INFO = 1;
+  LOG_LEVEL_WARN = 2;
+  LOG_LEVEL_ERROR = 3;
+}
+
+enum UpdateKind {
+  UPDATE_KIND_UNSPECIFIED = 0;
+  UPDATE_KIND_CORE = 1;
+  UPDATE_KIND_APP = 2;
+}
+
+enum ApplyWhen {
+  APPLY_UNSPECIFIED = 0;
+  APPLY_NOW = 1;
+  APPLY_WHEN_DISCONNECTED = 2;
+}
+
+enum UpdateStage {
+  UPDATE_STAGE_UNSPECIFIED = 0;
+  UPDATE_UP_TO_DATE = 1;
+  UPDATE_AVAILABLE = 2;
+  UPDATE_DOWNLOADING = 3;
+  UPDATE_READY = 4;
+  UPDATE_QUEUED = 5;
+  UPDATE_APPLYING = 6;
+  UPDATE_UPDATED = 7;
+  UPDATE_ROLLED_BACK = 8;
+  UPDATE_CANNOT_CHECK = 9;
+}
+
+enum NoticeKind {
+  NOTICE_UNSPECIFIED = 0;
+  NOTICE_RECONNECTED = 1;
+  NOTICE_MOVED_TO_BACKUP = 2;
+  NOTICE_TRAFFIC_HELD = 3;
+  NOTICE_QUOTA_AMBER = 4;
+  NOTICE_QUOTA_CAP = 5;
+  NOTICE_TUNNEL_LOST = 6;
+}
+
+enum FailureReason {
+  FAILURE_UNSPECIFIED = 0;
+  FAILURE_TCP_TIMEOUT = 1;
+  FAILURE_REALITY_HANDSHAKE = 2;
+  FAILURE_EGRESS_MISMATCH = 3;
+  FAILURE_CONFIG_REJECTED = 4;
+  FAILURE_ADAPTER_FAILED = 5;
+  FAILURE_PORT_IN_USE = 6;
+  FAILURE_XRAY_EXITED = 7;
+  FAILURE_ADAPTER_LOST = 8;
+  FAILURE_NETWORK_CHANGED = 9;
+}
+
+enum ErrorCode {
+  ERROR_UNSPECIFIED = 0;
+  ERROR_INVALID_ARGUMENT = 1;
+  ERROR_UNKNOWN_SERVER = 2;
+  ERROR_NOT_ALLOWED_IN_STATE = 3;
+  ERROR_CONFIG_VERSION_MISMATCH = 4;
+  ERROR_CONFIG_REJECTED = 5;
+  ERROR_UNSUPPORTED = 6;
+  ERROR_BUSY = 7;
+  ERROR_UPDATE_SIGNATURE_INVALID = 8;
+  ERROR_UPDATE_FAILED = 9;
+  ERROR_INTERNAL = 10;
+}
