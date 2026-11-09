@@ -882,4 +882,113 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get splitHelperDomainExact => 'domain · exact name only';
+
+  @override
+  String get telemetryTitle => 'Telemetry & Logs';
+
+  @override
+  String get telemetryTag => 'SYSTEM LOGS';
+
+  @override
+  String get telemetryMemoryOnlyNote => 'Last 2000 lines, kept in memory only.';
+
+  @override
+  String get telemetryTabAccess => 'XRAY ACCESS';
+
+  @override
+  String get telemetryTabCore => 'CHARON CORE';
+
+  @override
+  String get telemetryPrivacyNote =>
+      'every line shows where a connection went. Read it before you share or paste it anywhere.';
+
+  @override
+  String telemetryNewLinesPill(int count) {
+    return '$count new lines';
+  }
+
+  @override
+  String telemetryLinesSkippedPill(int count) {
+    return '$count lines skipped';
+  }
+
+  @override
+  String get telemetryLevelAll => 'ALL';
+
+  @override
+  String get telemetryLevelInfo => 'INFO';
+
+  @override
+  String get telemetryLevelWarn => 'WARN';
+
+  @override
+  String get telemetryLevelError => 'ERROR';
+
+  @override
+  String get telemetryRawMode => 'RAW';
+
+  @override
+  String get telemetryCopyBtn => 'Copy';
+
+  @override
+  String telemetryCopiedToast(int count) {
+    return 'Copied $count lines to clipboard';
+  }
+
+  @override
+  String get telemetryShareBtn => 'Share';
+
+  @override
+  String get telemetryShareDialogTitle => 'Share visible lines?';
+
+  @override
+  String telemetryShareDialogDesc(int count) {
+    return 'Shares only the visible lines ($count lines) currently displayed in the viewer.';
+  }
+
+  @override
+  String get telemetryExportDiagnosticsBtn => 'Export diagnostics →';
+
+  @override
+  String get telemetryExportDialogTitle => 'Export diagnostics';
+
+  @override
+  String get telemetryExportDialogDesc =>
+      'Creates a diagnostic bundle of device state and core logs. Nothing is uploaded.';
+
+  @override
+  String get telemetryExportIncludeAccess =>
+      'Include access logs (may contain visited destinations)';
+
+  @override
+  String get telemetryExportSaveBtn => 'Save diagnostics';
+
+  @override
+  String get telemetryExportSavedToast =>
+      'Diagnostics exported to clipboard / file';
+
+  @override
+  String get telemetryHistoryCardTitle => 'SESSION HISTORY';
+
+  @override
+  String get telemetryHistoryLaterBadge => 'LATER';
+
+  @override
+  String get telemetryHistoryEmptyDesc =>
+      'Charon doesn\'t keep session history, so these stay empty.';
+
+  @override
+  String get telemetryHistoryUptime => 'UPTIME';
+
+  @override
+  String get telemetryHistoryPastSessions => 'PAST SESSIONS';
+
+  @override
+  String get telemetryHistoryNoHistoryNote =>
+      'Privacy first · No activity logging stored on this device.';
+
+  @override
+  String telemetryLinesCount(int count) {
+    return '$count lines';
+  }
 }

@@ -835,6 +835,109 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get splitHelperDomainExact => '域名 · 仅精确匹配';
+
+  @override
+  String get telemetryTitle => '遥测与日志';
+
+  @override
+  String get telemetryTag => '系统日志';
+
+  @override
+  String get telemetryMemoryOnlyNote => '仅在内存中保留最新 2000 行。';
+
+  @override
+  String get telemetryTabAccess => 'XRAY ACCESS';
+
+  @override
+  String get telemetryTabCore => 'CHARON CORE';
+
+  @override
+  String get telemetryPrivacyNote => '每行都会显示连接的目标地址。在分享或粘贴到任何地方前请仔细检查。';
+
+  @override
+  String telemetryNewLinesPill(int count) {
+    return '$count 条新行';
+  }
+
+  @override
+  String telemetryLinesSkippedPill(int count) {
+    return '已跳过 $count 行';
+  }
+
+  @override
+  String get telemetryLevelAll => '全部';
+
+  @override
+  String get telemetryLevelInfo => '信息';
+
+  @override
+  String get telemetryLevelWarn => '警告';
+
+  @override
+  String get telemetryLevelError => '错误';
+
+  @override
+  String get telemetryRawMode => 'RAW';
+
+  @override
+  String get telemetryCopyBtn => '复制';
+
+  @override
+  String telemetryCopiedToast(int count) {
+    return '已复制 $count 行到剪贴板';
+  }
+
+  @override
+  String get telemetryShareBtn => '分享';
+
+  @override
+  String get telemetryShareDialogTitle => '分享可见日志行？';
+
+  @override
+  String telemetryShareDialogDesc(int count) {
+    return '仅分享当前查看器中可见的行（$count 行）。';
+  }
+
+  @override
+  String get telemetryExportDiagnosticsBtn => '导出诊断日志 →';
+
+  @override
+  String get telemetryExportDialogTitle => '导出诊断日志';
+
+  @override
+  String get telemetryExportDialogDesc => '生成设备状态和核心日志诊断包。不会上传任何内容到远程服务器。';
+
+  @override
+  String get telemetryExportIncludeAccess => '包含访问日志（可能包含访问过的 IP 或域名）';
+
+  @override
+  String get telemetryExportSaveBtn => '保存诊断信息';
+
+  @override
+  String get telemetryExportSavedToast => '诊断日志已导出至剪贴板/文件';
+
+  @override
+  String get telemetryHistoryCardTitle => '会话历史';
+
+  @override
+  String get telemetryHistoryLaterBadge => '后续支持';
+
+  @override
+  String get telemetryHistoryEmptyDesc => 'Charon 不记录会话历史，因此此处始终为空。';
+
+  @override
+  String get telemetryHistoryUptime => '运行时间';
+
+  @override
+  String get telemetryHistoryPastSessions => '往期会话';
+
+  @override
+  String get telemetryHistoryNoHistoryNote => '隐私优先 · 本设备不保存任何活动记录。';
+
+  @override
+  String telemetryLinesCount(int count) {
+    return '$count 行';
+  }
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -1667,4 +1770,107 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get splitHelperDomainExact => '域名 · 仅精确匹配';
+
+  @override
+  String get telemetryTitle => '遥测与日志';
+
+  @override
+  String get telemetryTag => '系统日志';
+
+  @override
+  String get telemetryMemoryOnlyNote => '仅在内存中保留最新 2000 行。';
+
+  @override
+  String get telemetryTabAccess => 'XRAY ACCESS';
+
+  @override
+  String get telemetryTabCore => 'CHARON CORE';
+
+  @override
+  String get telemetryPrivacyNote => '每行都会显示连接的目标地址。在分享或粘贴到任何地方前请仔细检查。';
+
+  @override
+  String telemetryNewLinesPill(int count) {
+    return '$count 条新行';
+  }
+
+  @override
+  String telemetryLinesSkippedPill(int count) {
+    return '已跳过 $count 行';
+  }
+
+  @override
+  String get telemetryLevelAll => '全部';
+
+  @override
+  String get telemetryLevelInfo => '信息';
+
+  @override
+  String get telemetryLevelWarn => '警告';
+
+  @override
+  String get telemetryLevelError => '错误';
+
+  @override
+  String get telemetryRawMode => 'RAW';
+
+  @override
+  String get telemetryCopyBtn => '复制';
+
+  @override
+  String telemetryCopiedToast(int count) {
+    return '已复制 $count 行到剪贴板';
+  }
+
+  @override
+  String get telemetryShareBtn => '分享';
+
+  @override
+  String get telemetryShareDialogTitle => '分享可见日志行？';
+
+  @override
+  String telemetryShareDialogDesc(int count) {
+    return '仅分享当前查看器中可见的行（$count 行）。';
+  }
+
+  @override
+  String get telemetryExportDiagnosticsBtn => '导出诊断日志 →';
+
+  @override
+  String get telemetryExportDialogTitle => '导出诊断日志';
+
+  @override
+  String get telemetryExportDialogDesc => '生成设备状态和核心日志诊断包。不会上传任何内容到远程服务器。';
+
+  @override
+  String get telemetryExportIncludeAccess => '包含访问日志（可能包含访问过的 IP 或域名）';
+
+  @override
+  String get telemetryExportSaveBtn => '保存诊断信息';
+
+  @override
+  String get telemetryExportSavedToast => '诊断日志已导出至剪贴板/文件';
+
+  @override
+  String get telemetryHistoryCardTitle => '会话历史';
+
+  @override
+  String get telemetryHistoryLaterBadge => '后续支持';
+
+  @override
+  String get telemetryHistoryEmptyDesc => 'Charon 不记录会话历史，因此此处始终为空。';
+
+  @override
+  String get telemetryHistoryUptime => '运行时间';
+
+  @override
+  String get telemetryHistoryPastSessions => '往期会话';
+
+  @override
+  String get telemetryHistoryNoHistoryNote => '隐私优先 · 本设备不保存任何活动记录。';
+
+  @override
+  String telemetryLinesCount(int count) {
+    return '$count 行';
+  }
 }

@@ -889,4 +889,114 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get splitHelperDomainExact => 'domain · nama persis saja';
+
+  @override
+  String get telemetryTitle => 'Telemetri & Log';
+
+  @override
+  String get telemetryTag => 'LOG SISTEM';
+
+  @override
+  String get telemetryMemoryOnlyNote =>
+      '2000 baris terakhir, hanya disimpan di memori.';
+
+  @override
+  String get telemetryTabAccess => 'XRAY ACCESS';
+
+  @override
+  String get telemetryTabCore => 'CHARON CORE';
+
+  @override
+  String get telemetryPrivacyNote =>
+      'setiap baris menampilkan tujuan koneksi. Periksa sebelum Anda membagikan atau menempelkannya.';
+
+  @override
+  String telemetryNewLinesPill(int count) {
+    return '$count baris baru';
+  }
+
+  @override
+  String telemetryLinesSkippedPill(int count) {
+    return '$count baris dilewati';
+  }
+
+  @override
+  String get telemetryLevelAll => 'SEMUA';
+
+  @override
+  String get telemetryLevelInfo => 'INFO';
+
+  @override
+  String get telemetryLevelWarn => 'PERINGATAN';
+
+  @override
+  String get telemetryLevelError => 'KESALAHAN';
+
+  @override
+  String get telemetryRawMode => 'RAW';
+
+  @override
+  String get telemetryCopyBtn => 'Salin';
+
+  @override
+  String telemetryCopiedToast(int count) {
+    return '$count baris disalin ke papan klip';
+  }
+
+  @override
+  String get telemetryShareBtn => 'Bagikan';
+
+  @override
+  String get telemetryShareDialogTitle => 'Bagikan baris terlihat?';
+
+  @override
+  String telemetryShareDialogDesc(int count) {
+    return 'Hanya membagikan baris yang terlihat ($count baris) pada penampil saat ini.';
+  }
+
+  @override
+  String get telemetryExportDiagnosticsBtn => 'Ekspor diagnostik →';
+
+  @override
+  String get telemetryExportDialogTitle => 'Ekspor Diagnostik';
+
+  @override
+  String get telemetryExportDialogDesc =>
+      'Membuat paket diagnostik status perangkat dan log core. Tidak ada data yang diunggah.';
+
+  @override
+  String get telemetryExportIncludeAccess =>
+      'Sertakan log akses (mungkin berisi alamat tujuan yang dikunjungi)';
+
+  @override
+  String get telemetryExportSaveBtn => 'Simpan diagnostik';
+
+  @override
+  String get telemetryExportSavedToast =>
+      'Diagnostik diekspor ke papan klip / file';
+
+  @override
+  String get telemetryHistoryCardTitle => 'RIWAYAT SESI';
+
+  @override
+  String get telemetryHistoryLaterBadge => 'NANTI';
+
+  @override
+  String get telemetryHistoryEmptyDesc =>
+      'Charon tidak menyimpan riwayat sesi, sehingga ini tetap kosong.';
+
+  @override
+  String get telemetryHistoryUptime => 'WAKTU AKTIF';
+
+  @override
+  String get telemetryHistoryPastSessions => 'SESI SEBELUMNYA';
+
+  @override
+  String get telemetryHistoryNoHistoryNote =>
+      'Privasi utama · Tidak ada pencatatan aktivitas yang disimpan di perangkat ini.';
+
+  @override
+  String telemetryLinesCount(int count) {
+    return '$count baris';
+  }
 }

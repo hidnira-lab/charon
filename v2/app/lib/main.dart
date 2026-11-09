@@ -12,6 +12,7 @@ import 'ui/home/home_screen.dart';
 import 'ui/servers/servers_screen.dart';
 import 'ui/settings/settings_screen.dart';
 import 'ui/split/split_screen.dart';
+import 'ui/telemetry/telemetry_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,6 +59,8 @@ class CharonApp extends StatelessWidget {
           screen = ServersScreen(controller: controller);
         } else if (activeTab == 2) {
           screen = SplitScreen(controller: controller);
+        } else if (activeTab == 3) {
+          screen = TelemetryScreen(controller: controller);
         } else if (activeTab == 4) {
           screen = SettingsScreen(controller: controller);
         } else {

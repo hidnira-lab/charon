@@ -150,6 +150,10 @@ extension CoreCommands on CoreClient {
   Future<Response> retryNow() => send(Command(retryNow: Empty()));
   Future<Response> getConfig() => send(Command(getConfig: Empty()));
   Future<Response> setConfig(Config config) => send(Command(setConfig: config));
+  Future<Response> subscribe(Subscription sub) => send(Command(subscribe: sub));
+  Future<Response> unsubscribe(Subscription sub) => send(Command(unsubscribe: sub));
+  Future<Response> exportDiagnostics() =>
+      send(Command(exportDiagnostics: ExportDiagnostics()));
 }
 
 /// True when [response] is an error with this code.

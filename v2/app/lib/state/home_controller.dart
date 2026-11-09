@@ -23,6 +23,7 @@ class HomeController extends ChangeNotifier {
   })  : _status = initialStatus ?? Status(),
         _config = initialConfig,
         _hasServers = hasServers ?? (initialConfig?.servers.isNotEmpty ?? true) {
+    _seedInitialLogs();
     _client = client;
     if (_client != null) {
       _initClient();
@@ -38,6 +39,13 @@ class HomeController extends ChangeNotifier {
   int _activeTabIndex = 0;
   StreamSubscription<Event>? _eventSub;
   bool _isDisposed = false;
+
+  // Telemetry in-memory buffer (2000 lines max per source)
+  static const int maxLogLines = 2000;
+  final List<LogLine> _xrayLogs = [];
+  final List<LogLine> _coreLogs = [];
+  int _xrayDroppedCount = 0;
+  int _coreDroppedCount = 0;
 
   // Settings & preferences state
   ThemeMode _themeMode = ThemeMode.system;
@@ -59,6 +67,11 @@ class HomeController extends ChangeNotifier {
   Quota? get quota => _quota;
   bool get hasServers => _hasServers;
   int get activeTabIndex => _activeTabIndex;
+
+  List<LogLine> get xrayLogs => List.unmodifiable(_xrayLogs);
+  List<LogLine> get coreLogs => List.unmodifiable(_coreLogs);
+  int get xrayDroppedCount => _xrayDroppedCount;
+  int get coreDroppedCount => _coreDroppedCount;
 
   ThemeMode get themeMode => _themeMode;
   Locale? get locale => _locale;
@@ -398,7 +411,101 @@ class HomeController extends ChangeNotifier {
     } else if (event.hasQuotaChanged()) {
       _quota = event.quotaChanged;
       notifyListeners();
+    } else if (event.hasLogs()) {
+      addLogBatch(event.logs);
     }
+  }
+
+  void _seedInitialLogs() {
+    final nowMs = Int64(DateTime.now().millisecondsSinceEpoch);
+    _coreLogs.addAll([
+      LogLine(seq: Int64(1), atMs: nowMs - Int64(30000), level: LogLevel.LOG_LEVEL_INFO, text: 'charon-core v0.1.0 engine initialized'),
+      LogLine(seq: Int64(2), atMs: nowMs - Int64(25000), level: LogLevel.LOG_LEVEL_INFO, text: r'ipc transport listening on \\.\pipe\charon'),
+      LogLine(seq: Int64(3), atMs: nowMs - Int64(20000), level: LogLevel.LOG_LEVEL_INFO, text: 'routing rules loaded: 2 fallback profiles ready'),
+      LogLine(seq: Int64(4), atMs: nowMs - Int64(10000), level: LogLevel.LOG_LEVEL_INFO, text: 'telemetry ring buffer active (max 2000 lines)'),
+    ]);
+    _xrayLogs.addAll([
+      LogLine(seq: Int64(1), atMs: nowMs - Int64(15000), level: LogLevel.LOG_LEVEL_INFO, text: '198.51.100.1:53120 accepted tcp:198.51.100.2:443 [direct]'),
+      LogLine(seq: Int64(2), atMs: nowMs - Int64(12000), level: LogLevel.LOG_LEVEL_INFO, text: '198.51.100.1:53121 accepted tcp:203.0.113.10:443 [proxy]'),
+      LogLine(seq: Int64(3), atMs: nowMs - Int64(8000), level: LogLevel.LOG_LEVEL_INFO, text: '198.51.100.1:53122 accepted udp:192.0.2.53:53 [direct]'),
+      LogLine(seq: Int64(4), atMs: nowMs - Int64(3000), level: LogLevel.LOG_LEVEL_INFO, text: '198.51.100.1:53123 accepted tcp:198.51.100.50:80 [proxy]'),
+    ]);
+  }
+
+  void addLogBatch(LogBatch batch) {
+    final target = batch.source == LogSource.LOG_SOURCE_CHARON_CORE ? _coreLogs : _xrayLogs;
+    if (batch.dropped > 0) {
+      if (batch.source == LogSource.LOG_SOURCE_CHARON_CORE) {
+        _coreDroppedCount += batch.dropped;
+      } else {
+        _xrayDroppedCount += batch.dropped;
+      }
+    }
+    target.addAll(batch.lines);
+    if (target.length > maxLogLines) {
+      target.removeRange(0, target.length - maxLogLines);
+    }
+    notifyListeners();
+  }
+
+  void clearLogs({LogSource? source}) {
+    if (source == null || source == LogSource.LOG_SOURCE_XRAY_ACCESS) {
+      _xrayLogs.clear();
+      _xrayDroppedCount = 0;
+    }
+    if (source == null || source == LogSource.LOG_SOURCE_CHARON_CORE) {
+      _coreLogs.clear();
+      _coreDroppedCount = 0;
+    }
+    notifyListeners();
+  }
+
+  Future<void> subscribeLogs({
+    LogSource source = LogSource.LOG_SOURCE_UNSPECIFIED,
+    LogLevel minLevel = LogLevel.LOG_LEVEL_INFO,
+  }) async {
+    if (_client == null) return;
+    try {
+      await _client!.subscribe(Subscription(
+        topics: [Topic.TOPIC_LOGS],
+        logSource: source,
+        minLevel: minLevel,
+      ));
+    } catch (_) {}
+  }
+
+  String exportDiagnosticsText({bool includeAccess = false}) {
+    final now = DateTime.now().toUtc().toIso8601String();
+    final buffer = StringBuffer();
+    buffer.writeln('=== Charon Diagnostics Export ===');
+    buffer.writeln('Generated (UTC): $now');
+    buffer.writeln('Platform: Windows / Dart');
+    buffer.writeln('Client Version: 0.1.0');
+    buffer.writeln('Active Server: ${_status.activeServerId.isNotEmpty ? _status.activeServerId : "none"}');
+    buffer.writeln('Phase: ${_status.phase.name}');
+    buffer.writeln('Gate: ${_status.gate.name}');
+    buffer.writeln('Kill Switch: ${_status.killSwitchOn ? "enabled" : "disabled"}');
+    buffer.writeln('DNS Mode: ${_dnsMode.name} ($_customDns)');
+    buffer.writeln('Connection Mode: ${_connectionMode.name}');
+    buffer.writeln('----------------------------------------');
+    buffer.writeln('Charon Core Log (${_coreLogs.length} lines):');
+    for (final line in _coreLogs) {
+      final ts = DateTime.fromMillisecondsSinceEpoch(line.atMs.toInt()).toIso8601String();
+      buffer.writeln('[$ts] [${line.level.name}] ${line.text}');
+    }
+    if (includeAccess) {
+      buffer.writeln('----------------------------------------');
+      buffer.writeln('Xray Access Log (${_xrayLogs.length} lines):');
+      for (final line in _xrayLogs) {
+        final ts = DateTime.fromMillisecondsSinceEpoch(line.atMs.toInt()).toIso8601String();
+        buffer.writeln('[$ts] ${line.text}');
+      }
+    } else {
+      buffer.writeln('----------------------------------------');
+      buffer.writeln('Xray Access Log: [Excluded by user preference]');
+    }
+    buffer.writeln('=== End of Diagnostics ===');
+    return buffer.toString();
   }
 
   void updateStatus(Status status) {

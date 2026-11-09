@@ -1642,6 +1642,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'domain · exact name only'**
   String get splitHelperDomainExact;
+
+  /// Title of telemetry screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Telemetry & Logs'**
+  String get telemetryTitle;
+
+  /// Category tag above title.
+  ///
+  /// In en, this message translates to:
+  /// **'SYSTEM LOGS'**
+  String get telemetryTag;
+
+  /// Note regarding in-memory log buffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 2000 lines, kept in memory only.'**
+  String get telemetryMemoryOnlyNote;
+
+  /// Access log tab label.
+  ///
+  /// In en, this message translates to:
+  /// **'XRAY ACCESS'**
+  String get telemetryTabAccess;
+
+  /// Core log tab label.
+  ///
+  /// In en, this message translates to:
+  /// **'CHARON CORE'**
+  String get telemetryTabCore;
+
+  /// Privacy notice for access logs.
+  ///
+  /// In en, this message translates to:
+  /// **'every line shows where a connection went. Read it before you share or paste it anywhere.'**
+  String get telemetryPrivacyNote;
+
+  /// Floating pill indicating buffered new lines.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} new lines'**
+  String telemetryNewLinesPill(int count);
+
+  /// Pill indicating dropped log lines.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} lines skipped'**
+  String telemetryLinesSkippedPill(int count);
+
+  /// Filter all log levels.
+  ///
+  /// In en, this message translates to:
+  /// **'ALL'**
+  String get telemetryLevelAll;
+
+  /// Filter info log level.
+  ///
+  /// In en, this message translates to:
+  /// **'INFO'**
+  String get telemetryLevelInfo;
+
+  /// Filter warn log level.
+  ///
+  /// In en, this message translates to:
+  /// **'WARN'**
+  String get telemetryLevelWarn;
+
+  /// Filter error log level.
+  ///
+  /// In en, this message translates to:
+  /// **'ERROR'**
+  String get telemetryLevelError;
+
+  /// Raw log view toggle.
+  ///
+  /// In en, this message translates to:
+  /// **'RAW'**
+  String get telemetryRawMode;
+
+  /// Copy log lines button.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get telemetryCopyBtn;
+
+  /// Toast confirming lines copied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied {count} lines to clipboard'**
+  String telemetryCopiedToast(int count);
+
+  /// Share visible lines button.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get telemetryShareBtn;
+
+  /// Share dialog title.
+  ///
+  /// In en, this message translates to:
+  /// **'Share visible lines?'**
+  String get telemetryShareDialogTitle;
+
+  /// Share dialog description.
+  ///
+  /// In en, this message translates to:
+  /// **'Shares only the visible lines ({count} lines) currently displayed in the viewer.'**
+  String telemetryShareDialogDesc(int count);
+
+  /// Link to open export diagnostics dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Export diagnostics →'**
+  String get telemetryExportDiagnosticsBtn;
+
+  /// Diagnostics export dialog title.
+  ///
+  /// In en, this message translates to:
+  /// **'Export diagnostics'**
+  String get telemetryExportDialogTitle;
+
+  /// Diagnostics dialog notice.
+  ///
+  /// In en, this message translates to:
+  /// **'Creates a diagnostic bundle of device state and core logs. Nothing is uploaded.'**
+  String get telemetryExportDialogDesc;
+
+  /// Checkbox to include access logs in export.
+  ///
+  /// In en, this message translates to:
+  /// **'Include access logs (may contain visited destinations)'**
+  String get telemetryExportIncludeAccess;
+
+  /// Button to save diagnostics.
+  ///
+  /// In en, this message translates to:
+  /// **'Save diagnostics'**
+  String get telemetryExportSaveBtn;
+
+  /// Diagnostics export success notification.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnostics exported to clipboard / file'**
+  String get telemetryExportSavedToast;
+
+  /// Title of session history card.
+  ///
+  /// In en, this message translates to:
+  /// **'SESSION HISTORY'**
+  String get telemetryHistoryCardTitle;
+
+  /// Later badge on history card.
+  ///
+  /// In en, this message translates to:
+  /// **'LATER'**
+  String get telemetryHistoryLaterBadge;
+
+  /// Privacy note in history card.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon doesn\'t keep session history, so these stay empty.'**
+  String get telemetryHistoryEmptyDesc;
+
+  /// Uptime stat label.
+  ///
+  /// In en, this message translates to:
+  /// **'UPTIME'**
+  String get telemetryHistoryUptime;
+
+  /// Past sessions stat label.
+  ///
+  /// In en, this message translates to:
+  /// **'PAST SESSIONS'**
+  String get telemetryHistoryPastSessions;
+
+  /// Footer note in history card.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy first · No activity logging stored on this device.'**
+  String get telemetryHistoryNoHistoryNote;
+
+  /// Line count badge.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} lines'**
+  String telemetryLinesCount(int count);
 }
 
 class _AppLocalizationsDelegate
