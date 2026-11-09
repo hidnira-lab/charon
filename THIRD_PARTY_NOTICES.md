@@ -56,6 +56,8 @@ All font families are licensed under the SIL Open Font License 1.1. Licence text
 
 Rust crates are listed in `Cargo.lock`, Dart packages in `charon_vpn/pubspec.lock` and Go modules in `v2/core/go.sum`. Each keeps its own licence. The Lucide icon set (ISC licence) is used through the `lucide_icons_flutter` package.
 
-## Not stored here
+## Wintun
 
-`wintun.dll` is not part of this repository. Its redistribution terms are still to be checked before any Windows release that bundles it.
+* Licence: GPL 2.0 (kernel driver, prebuilt and Microsoft signed by WireGuard LLC) and MIT (userspace headers and integration code)
+* Source: https://www.wintun.net/ and https://git.zx2c4.com/wintun/ (version 0.14.1, copyright WireGuard LLC)
+* Use: `wintun.dll` is not stored in this repository. On Windows it is placed next to `xray.exe` in the protected program folder (`%ProgramFiles%\Charon`) by the installer as an unmodified signed binary from the official Wintun release.

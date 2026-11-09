@@ -2,17 +2,20 @@
 
 The Go module called charon core. Pure and platform free: state machine, config builder, quota logic, verification, signature checks, IPC types.
 
-Status: M0 and M1 done. The state machine passes all scenarios. The Windows service (M2) is next. See docs/charon_architecture_master.md and docs/charon_state_machine.md.
+Status: M0, M1, and M2 core packages done. The state machine and the driver pass all scenarios. See docs/charon_architecture_master.md and docs/charon_state_machine.md.
 
 ## Layout
 
 * `gen/charonv1/`: generated protobuf code. Never edit by hand, see `../proto/README.md`.
 * `machine/`: the connection state machine. `Step(state, event, nowMs)` returns the next state and a list of effects. It reads no clock, file, network or process, and it never changes the state it is given. The transition table is the `rules` variable in `step.go`: one row per event, the phases it applies to, an optional guard and an action. An input that matches no row is ignored.
+* `driver/`: the six DECIDED platform interfaces (`Gate`, `TunnelRunner`, `Stats`, `Store`, `Clock`, `Notifier`) plus `Verifier`, and the `Driver` that connects `machine.Step` to them.
+* `xrayconfig/`: validates `Config` and builds Xray JSON strictly from typed protobuf fields, pinned by golden JSON fixtures in `xrayconfig/testdata/`.
+* `quota/`: per server byte counters, local time zone billing day resets, and normal, amber, and red thresholds.
+* `logbuf/`: 2000 line in memory ring buffer per log source with automatic secret redaction at the source and non blocking subscriber delivery.
+* `diag/`: redacted diagnostics bundle builder (`ExportDiagnostics`) that excludes secrets, server addresses, and access logs by construction.
 * `scenario/`: loads the files in `../scenarios` and plays them against the machine. `TestAllScenarios` runs every file as a subtest.
 * `ipc/`: the wire rules shared by every transport: length prefixed frames (4 byte big endian length, 1 MiB cap) that each carry one `Envelope`. Includes a fuzz target.
 * `cmd/fakecore/`: the fake core. It speaks the real protocol (handshake with version negotiation, Status and Notice events, Ping every 5 seconds) and runs the real machine, so the UI can be built without the Windows service. With `-scenario` it plays a scenario file, see below.
-
-The interfaces that run the effects (Gate, TunnelRunner, Stats, Store, Clock, Notifier) are not written yet. They get their real signatures together with their first user, the driver that connects the machine to the world.
 
 ## Run the fake core
 
