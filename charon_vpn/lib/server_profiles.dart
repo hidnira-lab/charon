@@ -15,7 +15,7 @@ import 'package:path_provider/path_provider.dart';
 /// `charon-reality-rotate.sh` on the VPS) - kept in sync manually, since the
 /// client can't fetch this list before a working connection exists. Used by
 /// `_healReality` in `main.dart` to recover when the cached `serverName` has
-/// gone dead (e.g. actively blocked by the network filter) and the periodic freshness
+/// gone dead (e.g. actively blocked by a network filter) and the periodic freshness
 /// pull never got a chance to run because it needs a working tunnel first.
 const List<String> realityCandidateServerNames = [
   'www.adobe.com',

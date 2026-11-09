@@ -7,8 +7,8 @@ enum ServerReach {
   ok,
 
   /// TCP 443 fails but ICMP ping still answers. That is the signature of an
-  /// IP the network filter has blackholed at the TCP level (what happened to the previous server
-  /// IP on 2026-10-29): ping passes, every TCP port times out.
+  /// IP blackholed at the TCP level by a network filter (this happened to a
+  /// previous server IP): ping passes, every TCP port times out.
   likelyIpBlocked,
 
   /// Neither TCP nor ping works: the server is down or the local network is.

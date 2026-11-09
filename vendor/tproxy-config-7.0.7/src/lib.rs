@@ -44,7 +44,7 @@ pub(crate) const ETC_RESOLV_CONF_FILE: &str = "/etc/resolv.conf";
 pub(crate) fn run_command(command: &str, args: &[&str]) -> std::io::Result<Vec<u8>> {
     let full_cmd = format!("{} {}", command, args.join(" "));
     log::trace!("Running command: \"{full_cmd}\"...");
-    // Vendored patch (charon-vpn): route/netsh/ipconfig helpers this crate
+    // Vendored patch (Charon): route/netsh/ipconfig helpers this crate
     // shells out to would otherwise each flash a visible console window,
     // since this app has none of its own for the child to inherit.
     #[cfg(windows)]

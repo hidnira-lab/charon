@@ -246,7 +246,7 @@ class _Brand extends StatelessWidget {
               color: CharonColors.surface,
               border: Border.all(color: CharonColors.primaryBright),
             ),
-            child: Image.asset('assets/icon/icon_source.png', width: 28, height: 28),
+            child: const Icon(LucideIcons.cpu, size: 20, color: CharonColors.primaryBright),
           ),
           const SizedBox(width: 12),
           Column(
@@ -288,7 +288,7 @@ class _BrandCompact extends StatelessWidget {
             color: CharonColors.surface,
             border: Border.all(color: CharonColors.primaryBright),
           ),
-          child: Image.asset('assets/icon/icon_source.png', width: 22, height: 22),
+          child: const Icon(LucideIcons.cpu, size: 16, color: CharonColors.primaryBright),
         ),
         const SizedBox(width: 8),
         Text('CHARON', style: techLabel(fontSize: 16)),

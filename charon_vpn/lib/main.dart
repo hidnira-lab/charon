@@ -33,7 +33,7 @@ const _localSocksProxy = 'socks5://127.0.0.1:10808';
 
 /// `charon_vpn.exe` lands at `build/windows/x64/runner/<Config>/` under the
 /// `charon_vpn` project directory, which itself lives directly under the
-/// charon-vpn workspace root (fixed-depth assumption). Only used to find the
+/// Charon workspace root (fixed-depth assumption). Only used to find the
 /// optional `secrets/client-config.json` for first-run migration. Windows
 /// only; Android resolves its own paths via platform channel + bundled asset.
 Directory _windowsWorkspaceRoot() {
@@ -632,7 +632,7 @@ class _CharonHomePageState extends State<CharonHomePage> with WindowListener, Tr
             _serverWarning = 'SERVER IP LIKELY BLOCKED — TCP 443 FAILS BUT PING ANSWERS. ASK YOUR PROVIDER FOR A NEW IP';
             _serverWarningCritical = true;
           });
-          _pushLog('[app] diagnosis: $ip ping hidup tapi TCP 443 gagal - IP server kemungkinan diblokir network filter.');
+          _pushLog('[app] diagnosis: $ip ping hidup tapi TCP 443 gagal - IP server kemungkinan diblokir di level jaringan.');
         case ServerReach.unreachable:
           setState(() {
             _serverWarning = 'SERVER UNREACHABLE — TCP AND PING BOTH FAIL. CHECK YOUR NETWORK OR SERVER STATUS';
