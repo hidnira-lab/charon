@@ -1,11 +1,14 @@
 import 'dart:async';
 
 import 'package:fixnum/fixnum.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import '../core/core_client.dart';
 import '../gen/charon/v1/charon.pb.dart';
 import 'ui_state.dart';
+
+enum DnsMode { tunnelDefault, custom }
+enum ConnectionMode { tun, systemProxy }
 
 /// State controller for the Home screen, connecting to [CoreClient] events
 /// and projecting the active state with [projectState].
@@ -15,6 +18,8 @@ class HomeController extends ChangeNotifier {
     Status? initialStatus,
     Config? initialConfig,
     bool? hasServers,
+    this._themeMode = ThemeMode.system,
+    this._locale,
   })  : _status = initialStatus ?? Status(),
         _config = initialConfig,
         _hasServers = hasServers ?? (initialConfig?.servers.isNotEmpty ?? true) {
@@ -34,6 +39,19 @@ class HomeController extends ChangeNotifier {
   StreamSubscription<Event>? _eventSub;
   bool _isDisposed = false;
 
+  // Settings & preferences state
+  ThemeMode _themeMode = ThemeMode.system;
+  Locale? _locale;
+  DnsMode _dnsMode = DnsMode.tunnelDefault;
+  String _customDns = '198.51.100.53';
+  ConnectionMode _connectionMode = ConnectionMode.tun;
+  bool _launchAtStartup = false;
+  bool _isServiceRestarting = false;
+  String _greetingName = 'Day';
+  bool _detectCity = true;
+  String _city = 'Nanjing';
+  String _countryCode = 'CN';
+
   CoreClient? get client => _client;
   Status get status => _status;
   Config? get config => _config;
@@ -41,6 +59,183 @@ class HomeController extends ChangeNotifier {
   Quota? get quota => _quota;
   bool get hasServers => _hasServers;
   int get activeTabIndex => _activeTabIndex;
+
+  ThemeMode get themeMode => _themeMode;
+  Locale? get locale => _locale;
+  DnsMode get dnsMode => _dnsMode;
+  String get customDns => _customDns;
+  ConnectionMode get connectionMode => _connectionMode;
+  bool get launchAtStartup => _launchAtStartup;
+  bool get isServiceRestarting => _isServiceRestarting;
+  String get greetingName => _greetingName;
+  bool get detectCity => _detectCity;
+  String get city => _city;
+  String get countryCode => _countryCode;
+
+  bool get killSwitch => _config?.hasSettings() == true ? _config!.settings.killSwitch : false;
+  bool get autoReconnect => _config?.hasSettings() == true ? _config!.settings.autoReconnect : true;
+  bool get allowLocalNetwork => _config?.hasSettings() == true ? _config!.settings.allowLocalNetwork : true;
+
+  void setThemeMode(ThemeMode mode) {
+    if (_themeMode != mode) {
+      _themeMode = mode;
+      notifyListeners();
+    }
+  }
+
+  void setLocale(Locale? loc) {
+    if (_locale != loc) {
+      _locale = loc;
+      notifyListeners();
+    }
+  }
+
+  void setDnsMode(DnsMode mode) {
+    if (_dnsMode != mode) {
+      _dnsMode = mode;
+      notifyListeners();
+    }
+  }
+
+  void setCustomDns(String dns) {
+    if (_customDns != dns) {
+      _customDns = dns;
+      notifyListeners();
+    }
+  }
+
+  void setConnectionMode(ConnectionMode mode) {
+    if (_connectionMode != mode) {
+      _connectionMode = mode;
+      notifyListeners();
+    }
+  }
+
+  void setLaunchAtStartup(bool value) {
+    if (_launchAtStartup != value) {
+      _launchAtStartup = value;
+      notifyListeners();
+    }
+  }
+
+  void setGreetingName(String name) {
+    if (_greetingName != name) {
+      _greetingName = name;
+      notifyListeners();
+    }
+  }
+
+  void setDetectCity(bool value) {
+    if (_detectCity != value) {
+      _detectCity = value;
+      notifyListeners();
+    }
+  }
+
+  void setCity(String value) {
+    if (_city != value) {
+      _city = value;
+      notifyListeners();
+    }
+  }
+
+  void setCountryCode(String code) {
+    if (_countryCode != code) {
+      _countryCode = code;
+      notifyListeners();
+    }
+  }
+
+  Future<void> restartService() async {
+    if (_isServiceRestarting) return;
+    _isServiceRestarting = true;
+    notifyListeners();
+    await Future<void>.delayed(const Duration(milliseconds: 1500));
+    _isServiceRestarting = false;
+    notifyListeners();
+  }
+
+  Future<void> setKillSwitch(bool value) async {
+    _config ??= Config();
+    _config!.ensureSettings().killSwitch = value;
+    _config!.version += Int64(1);
+    if (_client != null) {
+      try {
+        await _client!.setConfig(_config!);
+      } catch (_) {}
+    }
+    notifyListeners();
+  }
+
+  Future<void> setAutoReconnect(bool value) async {
+    _config ??= Config();
+    _config!.ensureSettings().autoReconnect = value;
+    _config!.version += Int64(1);
+    if (_client != null) {
+      try {
+        await _client!.setConfig(_config!);
+      } catch (_) {}
+    }
+    notifyListeners();
+  }
+
+  Future<void> setAllowLocalNetwork(bool value) async {
+    _config ??= Config();
+    _config!.ensureSettings().allowLocalNetwork = value;
+    _config!.version += Int64(1);
+    if (_client != null) {
+      try {
+        await _client!.setConfig(_config!);
+      } catch (_) {}
+    }
+    notifyListeners();
+  }
+
+  Future<void> updateActiveQuotaPlan({
+    required int capGb,
+    required int billingDay,
+    required CountsMode counts,
+  }) async {
+    final srv = activeServer;
+    if (srv == null || _config == null) return;
+    srv.ensureQuota()
+      ..capGb = capGb
+      ..billingDay = billingDay
+      ..counts = counts;
+    _config!.version += Int64(1);
+    if (_client != null) {
+      try {
+        await _client!.setConfig(_config!);
+      } catch (_) {}
+    }
+    notifyListeners();
+  }
+
+  Future<void> eraseAllData() async {
+    if (_status.phase != Phase.PHASE_IDLE && _client != null) {
+      try {
+        await _client!.disconnect();
+      } catch (_) {}
+    }
+    _config = Config(
+      version: Int64(1),
+      settings: Settings(
+        killSwitch: false,
+        autoReconnect: true,
+        allowLocalNetwork: true,
+      ),
+    );
+    _hasServers = false;
+    _dnsMode = DnsMode.tunnelDefault;
+    _customDns = '198.51.100.53';
+    _connectionMode = ConnectionMode.tun;
+    if (_client != null) {
+      try {
+        await _client!.setConfig(_config!);
+      } catch (_) {}
+    }
+    notifyListeners();
+  }
 
   void setTab(int index) {
     if (_activeTabIndex != index) {

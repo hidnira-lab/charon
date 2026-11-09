@@ -364,4 +364,343 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get dialogServerAddress => 'Alamat';
+
+  @override
+  String get settingsTitle => 'Pengaturan';
+
+  @override
+  String get settingsSubtitle =>
+      'PENGATURAN · PENGAMAN, JARINGAN, APLIKASI, KUOTA';
+
+  @override
+  String get settingsSavedHint => 'tersimpan saat kamu mengubahnya';
+
+  @override
+  String get settingsFailsafeTitle => 'PENGAMAN';
+
+  @override
+  String settingsFailsafeArmed(int armed) {
+    return '$armed DARI 2 AKTIF';
+  }
+
+  @override
+  String get settingsKillSwitchTitle => 'Kill switch';
+
+  @override
+  String get settingsKillSwitchTag => 'PENGAMAN KRITIS';
+
+  @override
+  String get settingsKillSwitchDesc =>
+      'Menahan trafikmu kalau tunnel Charon berhenti tiba-tiba, termasuk setelah restart. Tidak menahan saat kamu sendiri yang memutus.';
+
+  @override
+  String get settingsKillSwitchArmed =>
+      'aktif · menahan trafik kalau tunnel berhenti';
+
+  @override
+  String get settingsKillSwitchDisarmed =>
+      'kalau tunnel berhenti sekarang, trafik lewat langsung';
+
+  @override
+  String get settingsAutoReconnectTitle => 'Sambung ulang otomatis';
+
+  @override
+  String get settingsAutoReconnectDesc =>
+      '5 kali coba, jeda 5 dtk, lalu profil berikutnya kalau ada.';
+
+  @override
+  String settingsAutoReconnectArmed(String nextServer) {
+    return 'aktif · 5 kali × 5 dtk, lalu $nextServer';
+  }
+
+  @override
+  String get settingsAutoReconnectDisarmed => 'kalau tunnel putus, tetap putus';
+
+  @override
+  String get settingsAllowLocalTitle => 'Izinkan jaringan lokal';
+
+  @override
+  String get settingsAllowLocalDesc =>
+      'PC-mu tetap bisa menjangkau printer, NAS, dan perangkat lain di jaringan rumah saat trafik ditahan atau lewat tunnel.';
+
+  @override
+  String get settingsAllowLocalArmed =>
+      'nyala · langsung berlaku, juga saat ditahan';
+
+  @override
+  String get settingsAllowLocalDisarmed => 'mati · hanya tunnel, di rumah juga';
+
+  @override
+  String get settingsFailsafeFoot =>
+      'setelah restart, kalau tadinya terhubung, Charon menyambung lagi sebelum kamu masuk';
+
+  @override
+  String get settingsHowItWorks => 'Cara kerjanya';
+
+  @override
+  String get settingsNetworkTitle => 'JARINGAN';
+
+  @override
+  String get settingsNetworkMeta => 'BERLAKU DI KONEKSI BERIKUTNYA';
+
+  @override
+  String get settingsDnsTitle => 'DNS';
+
+  @override
+  String get settingsDnsDesc =>
+      'Default bertanya ke resolver lewat tunnel. Kustom memakai satu alamat.';
+
+  @override
+  String get settingsDnsDefault => 'DEFAULT';
+
+  @override
+  String get settingsDnsCustom => 'KUSTOM';
+
+  @override
+  String get settingsDnsLineDefault =>
+      'lewat tunnel · ISP-mu tidak melihat lookup';
+
+  @override
+  String get settingsDnsLineCustom =>
+      'kustom · dipakai mulai koneksi berikutnya';
+
+  @override
+  String get settingsDnsLineBad =>
+      'belum tersimpan · Charon memakai default sampai ini dibetulkan';
+
+  @override
+  String get settingsDnsFieldLabel => 'Alamat DNS kustom';
+
+  @override
+  String get settingsDnsFieldError =>
+      'Ketik satu alamat IPv4 atau IPv6, misalnya 198.51.100.53.';
+
+  @override
+  String get settingsIpv6Title => 'IPv6';
+
+  @override
+  String get settingsIpv6Tag => 'DIBLOKIR';
+
+  @override
+  String get settingsIpv6Desc =>
+      'IPv6 diblokir selama terhubung karena tunnel tidak membawanya.';
+
+  @override
+  String get settingsIpv6Line =>
+      'tidak ada yang perlu diatur · untuk sekarang hanya IPv4';
+
+  @override
+  String get settingsConnModeTitle => 'Mode koneksi';
+
+  @override
+  String get settingsConnModeDesc =>
+      'TUN mencakup semua aplikasi. Proxy sistem adalah cadangan saat adaptor jaringan tidak bisa mulai.';
+
+  @override
+  String get settingsConnModeTun => 'TUN';
+
+  @override
+  String get settingsConnModeProxy => 'PROXY SISTEM';
+
+  @override
+  String get settingsConnModeLineTun => 'TUN · semua aplikasi lewat tunnel';
+
+  @override
+  String get settingsConnModeLineProxy =>
+      'proxy sistem · hanya aplikasi yang memakai proxy Windows · tanpa kill switch';
+
+  @override
+  String get settingsAppTitle => 'APLIKASI';
+
+  @override
+  String get settingsAppMeta => 'WINDOWS';
+
+  @override
+  String get settingsStartupTitle => 'Jalankan saat startup';
+
+  @override
+  String get settingsStartupDesc =>
+      'Membuka jendela Charon saat kamu masuk. Koneksimu tidak bergantung padanya.';
+
+  @override
+  String get settingsStartupLineOn => 'jendela terbuka setelah kamu masuk';
+
+  @override
+  String get settingsStartupLineOff =>
+      'tunnel kembali sendiri, jendelanya tidak';
+
+  @override
+  String get settingsStartupLineKs =>
+      'disarankan, supaya kamu melihat pemberitahuan kalau trafik ditahan';
+
+  @override
+  String get settingsServiceTitle => 'Service Charon';
+
+  @override
+  String get settingsServiceDesc =>
+      'Menjaga tunnel dan kill switch tetap jalan saat jendela ini ditutup. Menghentikannya butuh hak admin, panduannya menjelaskan caranya.';
+
+  @override
+  String get settingsServiceLineRunning =>
+      'berjalan · v0.1.0 · mulai bersama Windows';
+
+  @override
+  String get settingsServiceLineRestarting =>
+      'memulai ulang · tunnel berhenti sebentar';
+
+  @override
+  String get settingsServiceRestartBtn => 'Restart service';
+
+  @override
+  String get settingsThemeTitle => 'TEMA';
+
+  @override
+  String get settingsThemeSystem => 'SISTEM';
+
+  @override
+  String get settingsThemeDark => 'GELAP';
+
+  @override
+  String get settingsThemeLight => 'TERANG';
+
+  @override
+  String get settingsThemeLineSystem => 'mengikuti Windows · sedang gelap';
+
+  @override
+  String get settingsThemeLineDark => 'selalu gelap, apa pun tema Windows';
+
+  @override
+  String get settingsThemeLineLight => 'selalu terang, apa pun tema Windows';
+
+  @override
+  String get settingsLanguageTitle => 'BAHASA';
+
+  @override
+  String get settingsLanguageLineSystem => 'mengikuti Windows · sedang English';
+
+  @override
+  String get settingsLanguageLineManual => 'langsung berganti, tanpa restart';
+
+  @override
+  String get settingsLanguageNote =>
+      'Baris log tetap dalam bahasa Inggris supaya sama saat dilaporkan sebagai bug.';
+
+  @override
+  String get settingsEraseTitle => 'Hapus semua data di perangkat ini';
+
+  @override
+  String get settingsEraseDesc =>
+      'Menghapus server, aturan, pengaturan, dan penghitung dari PC ini. Salinan sync dan service tetap ada.';
+
+  @override
+  String get settingsEraseLine => 'bertanya dulu · tidak bisa dibatalkan';
+
+  @override
+  String get settingsEraseBtn => 'Hapus…';
+
+  @override
+  String get dialogEraseTitle => 'Hapus semua data di perangkat ini?';
+
+  @override
+  String get dialogEraseMessage =>
+      'Ini akan menghapus semua profil server, aturan split tunnel, dan preferensi lokal dari perangkat ini. Salinan remote sync dan service background tidak terpengaruh.';
+
+  @override
+  String get dialogEraseConfirm => 'Hapus semua data';
+
+  @override
+  String settingsQuotaTitle(String server) {
+    return 'KUOTA · $server';
+  }
+
+  @override
+  String get settingsQuotaMeta => 'TIAP SERVER PUNYA SENDIRI';
+
+  @override
+  String get settingsQuotaMonthlyCap => 'BATAS BULANAN';
+
+  @override
+  String get settingsQuotaBillingDay => 'TANGGAL TAGIHAN';
+
+  @override
+  String get settingsQuotaEachMonth => 'tiap bulan';
+
+  @override
+  String get settingsQuotaCounts => 'DIHITUNG';
+
+  @override
+  String get settingsQuotaOutOnly => 'KELUAR SAJA';
+
+  @override
+  String get settingsQuotaInAndOut => 'DUA ARAH';
+
+  @override
+  String get settingsQuotaPreview => 'PRATINJAU';
+
+  @override
+  String get settingsQuotaNoteOut =>
+      'salin keduanya dari paket VPS-mu · reset berikutnya 1 Des · kuning mulai 80%';
+
+  @override
+  String get settingsQuotaNoteBoth =>
+      'masuk + keluar menghitung setiap byte dua kali · reset 1 Des · kuning mulai 80%';
+
+  @override
+  String get settingsQuotaCountedDevice =>
+      'dihitung di perangkat ini, walau jendela ini ditutup';
+
+  @override
+  String get settingsGreetingTitle => 'SAPAAN BERANDA';
+
+  @override
+  String get settingsGreetingNameLabel => 'NAMA · OPSIONAL';
+
+  @override
+  String get settingsGreetingDetectCity => 'Deteksi kota dari perangkat ini';
+
+  @override
+  String get settingsGreetingCity => 'KOTA';
+
+  @override
+  String get settingsGreetingCountry => 'NEGARA';
+
+  @override
+  String get settingsGreetingAutoBadge => 'OTOMATIS';
+
+  @override
+  String get settingsGreetingOnHome => 'DI BERANDA';
+
+  @override
+  String get settingsGreetingNote =>
+      'lokasi OS, dicocokkan ke kota secara offline · Charon tidak mengirim apa pun';
+
+  @override
+  String get settingsAboutTitle => 'Tentang';
+
+  @override
+  String get settingsAboutBy => 'oleh the owner · xray v25.9.11';
+
+  @override
+  String get settingsAboutUpdates => 'Pembaruan';
+
+  @override
+  String get settingsAboutGuides => 'Bantuan dan panduan';
+
+  @override
+  String get settingsAboutPrivacy => 'Privasi dan jaringan';
+
+  @override
+  String get settingsAboutSecurity => 'Keamanan';
+
+  @override
+  String get settingsAboutDiagnostics => 'Ekspor diagnostik';
+
+  @override
+  String get settingsAboutSource => 'Kode Sumber';
+
+  @override
+  String get settingsAboutLicense => 'Lisensi';
+
+  @override
+  String get settingsAboutAcks => 'Tentang & Terima kasih';
 }

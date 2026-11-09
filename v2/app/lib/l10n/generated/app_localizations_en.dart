@@ -359,4 +359,343 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dialogServerAddress => 'Address';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get settingsSubtitle => 'SETTINGS · FAILSAFE, NETWORK, APP, QUOTA';
+
+  @override
+  String get settingsSavedHint => 'saved as you change them';
+
+  @override
+  String get settingsFailsafeTitle => 'FAILSAFE';
+
+  @override
+  String settingsFailsafeArmed(int armed) {
+    return '$armed OF 2 ARMED';
+  }
+
+  @override
+  String get settingsKillSwitchTitle => 'Kill switch';
+
+  @override
+  String get settingsKillSwitchTag => 'CRITICAL SAFEGUARD';
+
+  @override
+  String get settingsKillSwitchDesc =>
+      'Holds your traffic if Charon\'s tunnel stops unexpectedly, including after a restart. Does not hold it when you disconnect yourself.';
+
+  @override
+  String get settingsKillSwitchArmed =>
+      'armed · holds traffic if the tunnel stops';
+
+  @override
+  String get settingsKillSwitchDisarmed =>
+      'if the tunnel stops now, traffic goes direct';
+
+  @override
+  String get settingsAutoReconnectTitle => 'Auto reconnect';
+
+  @override
+  String get settingsAutoReconnectDesc =>
+      '5 retries, 5 s apart, then the next profile if there is one.';
+
+  @override
+  String settingsAutoReconnectArmed(String nextServer) {
+    return 'armed · 5 tries × 5 s, then $nextServer';
+  }
+
+  @override
+  String get settingsAutoReconnectDisarmed =>
+      'if the tunnel drops, it stays down';
+
+  @override
+  String get settingsAllowLocalTitle => 'Allow local network';
+
+  @override
+  String get settingsAllowLocalDesc =>
+      'Lets your PC reach printers, NAS and other devices on your home network while traffic is held or tunnelled.';
+
+  @override
+  String get settingsAllowLocalArmed => 'on · applies at once, even while held';
+
+  @override
+  String get settingsAllowLocalDisarmed =>
+      'off · only the tunnel, even at home';
+
+  @override
+  String get settingsFailsafeFoot =>
+      'after a restart, if you were connected, Charon reconnects before you sign in';
+
+  @override
+  String get settingsHowItWorks => 'How it works';
+
+  @override
+  String get settingsNetworkTitle => 'NETWORK';
+
+  @override
+  String get settingsNetworkMeta => 'APPLIES ON THE NEXT CONNECT';
+
+  @override
+  String get settingsDnsTitle => 'DNS';
+
+  @override
+  String get settingsDnsDesc =>
+      'Default asks a resolver through the tunnel. Custom takes one address.';
+
+  @override
+  String get settingsDnsDefault => 'DEFAULT';
+
+  @override
+  String get settingsDnsCustom => 'CUSTOM';
+
+  @override
+  String get settingsDnsLineDefault =>
+      'through the tunnel · your ISP sees no lookups';
+
+  @override
+  String get settingsDnsLineCustom => 'custom · used from the next connect';
+
+  @override
+  String get settingsDnsLineBad =>
+      'not saved · Charon keeps the default until this is fixed';
+
+  @override
+  String get settingsDnsFieldLabel => 'Custom DNS address';
+
+  @override
+  String get settingsDnsFieldError =>
+      'Type one IPv4 or IPv6 address, like 198.51.100.53.';
+
+  @override
+  String get settingsIpv6Title => 'IPv6';
+
+  @override
+  String get settingsIpv6Tag => 'BLOCKED';
+
+  @override
+  String get settingsIpv6Desc =>
+      'IPv6 is blocked while connected because the tunnel does not carry it.';
+
+  @override
+  String get settingsIpv6Line => 'nothing to set · IPv4 only for now';
+
+  @override
+  String get settingsConnModeTitle => 'Connection mode';
+
+  @override
+  String get settingsConnModeDesc =>
+      'TUN covers every app. System proxy is a fallback for when the network adapter cannot start.';
+
+  @override
+  String get settingsConnModeTun => 'TUN';
+
+  @override
+  String get settingsConnModeProxy => 'SYSTEM PROXY';
+
+  @override
+  String get settingsConnModeLineTun =>
+      'TUN · every app goes through the tunnel';
+
+  @override
+  String get settingsConnModeLineProxy =>
+      'system proxy · only apps that use the Windows proxy · no kill switch';
+
+  @override
+  String get settingsAppTitle => 'APP';
+
+  @override
+  String get settingsAppMeta => 'WINDOWS';
+
+  @override
+  String get settingsStartupTitle => 'Launch at startup';
+
+  @override
+  String get settingsStartupDesc =>
+      'Opens the Charon window when you sign in. Your connection does not depend on it.';
+
+  @override
+  String get settingsStartupLineOn => 'the window opens after you sign in';
+
+  @override
+  String get settingsStartupLineOff =>
+      'the tunnel comes back on its own, the window does not';
+
+  @override
+  String get settingsStartupLineKs =>
+      'recommended, so you see a notice if traffic is held';
+
+  @override
+  String get settingsServiceTitle => 'Charon service';
+
+  @override
+  String get settingsServiceDesc =>
+      'Keeps the tunnel and kill switch running when this window is closed. Stopping it needs admin rights, the guide shows how.';
+
+  @override
+  String get settingsServiceLineRunning =>
+      'running · v0.1.0 · started with Windows';
+
+  @override
+  String get settingsServiceLineRestarting =>
+      'restarting · the tunnel pauses for a moment';
+
+  @override
+  String get settingsServiceRestartBtn => 'Restart service';
+
+  @override
+  String get settingsThemeTitle => 'THEME';
+
+  @override
+  String get settingsThemeSystem => 'SYSTEM';
+
+  @override
+  String get settingsThemeDark => 'DARK';
+
+  @override
+  String get settingsThemeLight => 'LIGHT';
+
+  @override
+  String get settingsThemeLineSystem => 'follows Windows · dark right now';
+
+  @override
+  String get settingsThemeLineDark => 'always dark, whatever Windows uses';
+
+  @override
+  String get settingsThemeLineLight => 'always light, whatever Windows uses';
+
+  @override
+  String get settingsLanguageTitle => 'LANGUAGE';
+
+  @override
+  String get settingsLanguageLineSystem =>
+      'follows Windows · English right now';
+
+  @override
+  String get settingsLanguageLineManual => 'switches right away, no restart';
+
+  @override
+  String get settingsLanguageNote =>
+      'Log lines stay in English so they read the same in bug reports.';
+
+  @override
+  String get settingsEraseTitle => 'Erase all data on this device';
+
+  @override
+  String get settingsEraseDesc =>
+      'Removes servers, rules, settings and counters from this PC. The sync copy and the service stay.';
+
+  @override
+  String get settingsEraseLine => 'asks first · cannot be undone';
+
+  @override
+  String get settingsEraseBtn => 'Erase…';
+
+  @override
+  String get dialogEraseTitle => 'Erase all data on this device?';
+
+  @override
+  String get dialogEraseMessage =>
+      'This deletes all server profiles, split tunnel rules, and local preferences from this device. The remote sync vault and background service are unaffected.';
+
+  @override
+  String get dialogEraseConfirm => 'Erase all data';
+
+  @override
+  String settingsQuotaTitle(String server) {
+    return 'QUOTA · $server';
+  }
+
+  @override
+  String get settingsQuotaMeta => 'EACH SERVER HAS ITS OWN';
+
+  @override
+  String get settingsQuotaMonthlyCap => 'MONTHLY CAP';
+
+  @override
+  String get settingsQuotaBillingDay => 'BILLING DAY';
+
+  @override
+  String get settingsQuotaEachMonth => 'each month';
+
+  @override
+  String get settingsQuotaCounts => 'COUNTS';
+
+  @override
+  String get settingsQuotaOutOnly => 'OUT ONLY';
+
+  @override
+  String get settingsQuotaInAndOut => 'IN + OUT';
+
+  @override
+  String get settingsQuotaPreview => 'PREVIEW';
+
+  @override
+  String get settingsQuotaNoteOut =>
+      'copy both from your VPS plan · next reset 1 Dec · amber from 80%';
+
+  @override
+  String get settingsQuotaNoteBoth =>
+      'in + out counts every byte twice · resets 1 Dec · amber from 80%';
+
+  @override
+  String get settingsQuotaCountedDevice =>
+      'counted on this device, even when this window is closed';
+
+  @override
+  String get settingsGreetingTitle => 'HOME GREETING';
+
+  @override
+  String get settingsGreetingNameLabel => 'NAME · OPTIONAL';
+
+  @override
+  String get settingsGreetingDetectCity => 'Detect city from this device';
+
+  @override
+  String get settingsGreetingCity => 'CITY';
+
+  @override
+  String get settingsGreetingCountry => 'COUNTRY';
+
+  @override
+  String get settingsGreetingAutoBadge => 'AUTO';
+
+  @override
+  String get settingsGreetingOnHome => 'ON HOME';
+
+  @override
+  String get settingsGreetingNote =>
+      'OS location, matched to a city offline · Charon sends nothing';
+
+  @override
+  String get settingsAboutTitle => 'About';
+
+  @override
+  String get settingsAboutBy => 'by the owner · xray v25.9.11';
+
+  @override
+  String get settingsAboutUpdates => 'Updates';
+
+  @override
+  String get settingsAboutGuides => 'Help and guides';
+
+  @override
+  String get settingsAboutPrivacy => 'Privacy and network';
+
+  @override
+  String get settingsAboutSecurity => 'Security';
+
+  @override
+  String get settingsAboutDiagnostics => 'Export diagnostics';
+
+  @override
+  String get settingsAboutSource => 'Source Code';
+
+  @override
+  String get settingsAboutLicense => 'License';
+
+  @override
+  String get settingsAboutAcks => 'About & Acknowledgments';
 }

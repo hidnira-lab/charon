@@ -1,0 +1,278 @@
+import 'package:flutter/material.dart';
+
+import '../../../l10n/generated/app_localizations.dart';
+import '../../../state/home_controller.dart';
+import '../../../theme/tokens.dart';
+import 'charon_switch.dart';
+
+class FailsafeCard extends StatelessWidget {
+  const FailsafeCard({
+    super.key,
+    required this.controller,
+  });
+
+  final HomeController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    final ks = controller.killSwitch;
+    final ar = controller.autoReconnect;
+    final lan = controller.allowLocalNetwork;
+    final armedCount = (ks ? 1 : 0) + (ar ? 1 : 0);
+
+    // Compute next server for failover line
+    final servers = controller.config?.servers ?? [];
+    final activeId = controller.activeServer?.id ?? '';
+    final activeIdx = servers.indexWhere((s) => s.id == activeId);
+    final nextServerName = (activeIdx >= 0 && activeIdx + 1 < servers.length)
+        ? (servers[activeIdx + 1].displayName.isNotEmpty
+            ? servers[activeIdx + 1].displayName
+            : servers[activeIdx + 1].id)
+        : (servers.length > 1 ? servers.first.id : 'SRV-02');
+
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF1E1E1E).withValues(alpha: 0.55),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFF333333)),
+      ),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Section header
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '> ${l10n.settingsFailsafeTitle}',
+                style: const TextStyle(
+                  fontFamily: CharonTokens.fontMono,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.08,
+                  color: Color(0xFFA3A3A3),
+                ),
+              ),
+              Text(
+                l10n.settingsFailsafeArmed(armedCount),
+                style: TextStyle(
+                  fontFamily: CharonTokens.fontMono,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.08,
+                  color: armedCount > 0 ? const Color(0xFF60A1D9) : const Color(0xFF8A8A8A),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+
+          // Row 1: Kill switch
+          _SwitchRow(
+            icon: Icons.shield_outlined,
+            title: l10n.settingsKillSwitchTitle,
+            tag: l10n.settingsKillSwitchTag,
+            desc: l10n.settingsKillSwitchDesc,
+            line: ks ? l10n.settingsKillSwitchArmed : l10n.settingsKillSwitchDisarmed,
+            isOn: ks,
+            onChanged: (v) => controller.setKillSwitch(v),
+          ),
+          const Divider(color: Color(0xFF333333), height: 20),
+
+          // Row 2: Auto reconnect
+          _SwitchRow(
+            icon: Icons.replay_rounded,
+            title: l10n.settingsAutoReconnectTitle,
+            desc: l10n.settingsAutoReconnectDesc,
+            line: ar
+                ? l10n.settingsAutoReconnectArmed(nextServerName)
+                : l10n.settingsAutoReconnectDisarmed,
+            isOn: ar,
+            onChanged: (v) => controller.setAutoReconnect(v),
+          ),
+          const Divider(color: Color(0xFF333333), height: 20),
+
+          // Row 3: Allow local network
+          _SwitchRow(
+            icon: Icons.home_work_outlined,
+            title: l10n.settingsAllowLocalTitle,
+            desc: l10n.settingsAllowLocalDesc,
+            line: lan ? l10n.settingsAllowLocalArmed : l10n.settingsAllowLocalDisarmed,
+            isOn: lan,
+            onChanged: (v) => controller.setAllowLocalNetwork(v),
+          ),
+          const SizedBox(height: 12),
+
+          // Footer link
+          Container(
+            padding: const EdgeInsets.only(top: 10),
+            decoration: const BoxDecoration(
+              border: Border(top: BorderSide(color: Color(0xFF333333))),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 6,
+                  height: 6,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF8A8A8A),
+                    shape: BoxShape.rectangle,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    '> ${l10n.settingsFailsafeFoot}',
+                    style: const TextStyle(
+                      fontFamily: CharonTokens.fontMono,
+                      fontSize: 11,
+                      color: Color(0xFFA3A3A3),
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  '${l10n.settingsHowItWorks} ↗',
+                  style: const TextStyle(
+                    fontFamily: CharonTokens.fontMono,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF60A1D9),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SwitchRow extends StatelessWidget {
+  const _SwitchRow({
+    required this.icon,
+    required this.title,
+    this.tag,
+    required this.desc,
+    required this.line,
+    required this.isOn,
+    required this.onChanged,
+  });
+
+  final IconData icon;
+  final String title;
+  final String? tag;
+  final String desc;
+  final String line;
+  final bool isOn;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Leading Icon Box
+        Container(
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            color: const Color(0xFF262626),
+            borderRadius: BorderRadius.circular(9),
+          ),
+          child: Icon(
+            icon,
+            size: 18,
+            color: isOn ? const Color(0xFF60A1D9) : const Color(0xFFA3A3A3),
+          ),
+        ),
+        const SizedBox(width: 14),
+
+        // Content
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 8,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFFEDEDED),
+                    ),
+                  ),
+                  if (tag != null)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF262626),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text(
+                        tag!,
+                        style: const TextStyle(
+                          fontFamily: CharonTokens.fontMono,
+                          fontSize: 9,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.08,
+                          color: Color(0xFFA3A3A3),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 3),
+              Text(
+                desc,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Color(0xFFA3A3A3),
+                  height: 1.3,
+                ),
+              ),
+              const SizedBox(height: 5),
+              Row(
+                children: [
+                  Container(
+                    width: 6,
+                    height: 6,
+                    color: isOn ? const Color(0xFF60A1D9) : const Color(0xFF8A8A8A),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      '> $line',
+                      style: TextStyle(
+                        fontFamily: CharonTokens.fontMono,
+                        fontSize: 11,
+                        color: isOn ? const Color(0xFF60A1D9) : const Color(0xFF8A8A8A),
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 12),
+
+        // Toggle Switch
+        CharonSwitch(
+          value: isOn,
+          onChanged: onChanged,
+          semanticLabel: title,
+        ),
+      ],
+    );
+  }
+}

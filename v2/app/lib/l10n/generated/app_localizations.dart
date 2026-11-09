@@ -718,6 +718,612 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Address'**
   String get dialogServerAddress;
+
+  /// Title of settings screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
+  /// Subtitle of settings screen.
+  ///
+  /// In en, this message translates to:
+  /// **'SETTINGS · FAILSAFE, NETWORK, APP, QUOTA'**
+  String get settingsSubtitle;
+
+  /// Notice that changes are saved automatically.
+  ///
+  /// In en, this message translates to:
+  /// **'saved as you change them'**
+  String get settingsSavedHint;
+
+  /// Failsafe section header.
+  ///
+  /// In en, this message translates to:
+  /// **'FAILSAFE'**
+  String get settingsFailsafeTitle;
+
+  /// Counter of active safety features.
+  ///
+  /// In en, this message translates to:
+  /// **'{armed} OF 2 ARMED'**
+  String settingsFailsafeArmed(int armed);
+
+  /// Kill switch feature title.
+  ///
+  /// In en, this message translates to:
+  /// **'Kill switch'**
+  String get settingsKillSwitchTitle;
+
+  /// Badge for critical safeguard.
+  ///
+  /// In en, this message translates to:
+  /// **'CRITICAL SAFEGUARD'**
+  String get settingsKillSwitchTag;
+
+  /// Kill switch explanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Holds your traffic if Charon\'s tunnel stops unexpectedly, including after a restart. Does not hold it when you disconnect yourself.'**
+  String get settingsKillSwitchDesc;
+
+  /// Kill switch active status.
+  ///
+  /// In en, this message translates to:
+  /// **'armed · holds traffic if the tunnel stops'**
+  String get settingsKillSwitchArmed;
+
+  /// Kill switch inactive status.
+  ///
+  /// In en, this message translates to:
+  /// **'if the tunnel stops now, traffic goes direct'**
+  String get settingsKillSwitchDisarmed;
+
+  /// Auto reconnect feature title.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto reconnect'**
+  String get settingsAutoReconnectTitle;
+
+  /// Auto reconnect explanation.
+  ///
+  /// In en, this message translates to:
+  /// **'5 retries, 5 s apart, then the next profile if there is one.'**
+  String get settingsAutoReconnectDesc;
+
+  /// Auto reconnect active status.
+  ///
+  /// In en, this message translates to:
+  /// **'armed · 5 tries × 5 s, then {nextServer}'**
+  String settingsAutoReconnectArmed(String nextServer);
+
+  /// Auto reconnect inactive status.
+  ///
+  /// In en, this message translates to:
+  /// **'if the tunnel drops, it stays down'**
+  String get settingsAutoReconnectDisarmed;
+
+  /// Allow local network feature title.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow local network'**
+  String get settingsAllowLocalTitle;
+
+  /// Allow local network explanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Lets your PC reach printers, NAS and other devices on your home network while traffic is held or tunnelled.'**
+  String get settingsAllowLocalDesc;
+
+  /// Allow local network active status.
+  ///
+  /// In en, this message translates to:
+  /// **'on · applies at once, even while held'**
+  String get settingsAllowLocalArmed;
+
+  /// Allow local network inactive status.
+  ///
+  /// In en, this message translates to:
+  /// **'off · only the tunnel, even at home'**
+  String get settingsAllowLocalDisarmed;
+
+  /// Footer note for failsafe section.
+  ///
+  /// In en, this message translates to:
+  /// **'after a restart, if you were connected, Charon reconnects before you sign in'**
+  String get settingsFailsafeFoot;
+
+  /// Link label for how it works.
+  ///
+  /// In en, this message translates to:
+  /// **'How it works'**
+  String get settingsHowItWorks;
+
+  /// Network section header.
+  ///
+  /// In en, this message translates to:
+  /// **'NETWORK'**
+  String get settingsNetworkTitle;
+
+  /// Notice for network settings.
+  ///
+  /// In en, this message translates to:
+  /// **'APPLIES ON THE NEXT CONNECT'**
+  String get settingsNetworkMeta;
+
+  /// DNS setting title.
+  ///
+  /// In en, this message translates to:
+  /// **'DNS'**
+  String get settingsDnsTitle;
+
+  /// DNS setting description.
+  ///
+  /// In en, this message translates to:
+  /// **'Default asks a resolver through the tunnel. Custom takes one address.'**
+  String get settingsDnsDesc;
+
+  /// Default DNS option.
+  ///
+  /// In en, this message translates to:
+  /// **'DEFAULT'**
+  String get settingsDnsDefault;
+
+  /// Custom DNS option.
+  ///
+  /// In en, this message translates to:
+  /// **'CUSTOM'**
+  String get settingsDnsCustom;
+
+  /// Default DNS line note.
+  ///
+  /// In en, this message translates to:
+  /// **'through the tunnel · your ISP sees no lookups'**
+  String get settingsDnsLineDefault;
+
+  /// Custom DNS line note.
+  ///
+  /// In en, this message translates to:
+  /// **'custom · used from the next connect'**
+  String get settingsDnsLineCustom;
+
+  /// Invalid DNS line note.
+  ///
+  /// In en, this message translates to:
+  /// **'not saved · Charon keeps the default until this is fixed'**
+  String get settingsDnsLineBad;
+
+  /// Label for custom DNS input.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom DNS address'**
+  String get settingsDnsFieldLabel;
+
+  /// Error message for invalid DNS.
+  ///
+  /// In en, this message translates to:
+  /// **'Type one IPv4 or IPv6 address, like 198.51.100.53.'**
+  String get settingsDnsFieldError;
+
+  /// IPv6 setting title.
+  ///
+  /// In en, this message translates to:
+  /// **'IPv6'**
+  String get settingsIpv6Title;
+
+  /// Badge for blocked IPv6.
+  ///
+  /// In en, this message translates to:
+  /// **'BLOCKED'**
+  String get settingsIpv6Tag;
+
+  /// IPv6 description.
+  ///
+  /// In en, this message translates to:
+  /// **'IPv6 is blocked while connected because the tunnel does not carry it.'**
+  String get settingsIpv6Desc;
+
+  /// IPv6 note.
+  ///
+  /// In en, this message translates to:
+  /// **'nothing to set · IPv4 only for now'**
+  String get settingsIpv6Line;
+
+  /// Connection mode title.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection mode'**
+  String get settingsConnModeTitle;
+
+  /// Connection mode description.
+  ///
+  /// In en, this message translates to:
+  /// **'TUN covers every app. System proxy is a fallback for when the network adapter cannot start.'**
+  String get settingsConnModeDesc;
+
+  /// TUN mode option.
+  ///
+  /// In en, this message translates to:
+  /// **'TUN'**
+  String get settingsConnModeTun;
+
+  /// System proxy option.
+  ///
+  /// In en, this message translates to:
+  /// **'SYSTEM PROXY'**
+  String get settingsConnModeProxy;
+
+  /// TUN mode note.
+  ///
+  /// In en, this message translates to:
+  /// **'TUN · every app goes through the tunnel'**
+  String get settingsConnModeLineTun;
+
+  /// Proxy mode note.
+  ///
+  /// In en, this message translates to:
+  /// **'system proxy · only apps that use the Windows proxy · no kill switch'**
+  String get settingsConnModeLineProxy;
+
+  /// App section title.
+  ///
+  /// In en, this message translates to:
+  /// **'APP'**
+  String get settingsAppTitle;
+
+  /// App section meta.
+  ///
+  /// In en, this message translates to:
+  /// **'WINDOWS'**
+  String get settingsAppMeta;
+
+  /// Launch at startup title.
+  ///
+  /// In en, this message translates to:
+  /// **'Launch at startup'**
+  String get settingsStartupTitle;
+
+  /// Launch at startup description.
+  ///
+  /// In en, this message translates to:
+  /// **'Opens the Charon window when you sign in. Your connection does not depend on it.'**
+  String get settingsStartupDesc;
+
+  /// Startup on note.
+  ///
+  /// In en, this message translates to:
+  /// **'the window opens after you sign in'**
+  String get settingsStartupLineOn;
+
+  /// Startup off note.
+  ///
+  /// In en, this message translates to:
+  /// **'the tunnel comes back on its own, the window does not'**
+  String get settingsStartupLineOff;
+
+  /// Startup recommended note.
+  ///
+  /// In en, this message translates to:
+  /// **'recommended, so you see a notice if traffic is held'**
+  String get settingsStartupLineKs;
+
+  /// Charon service title.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon service'**
+  String get settingsServiceTitle;
+
+  /// Charon service description.
+  ///
+  /// In en, this message translates to:
+  /// **'Keeps the tunnel and kill switch running when this window is closed. Stopping it needs admin rights, the guide shows how.'**
+  String get settingsServiceDesc;
+
+  /// Service running note.
+  ///
+  /// In en, this message translates to:
+  /// **'running · v0.1.0 · started with Windows'**
+  String get settingsServiceLineRunning;
+
+  /// Service restarting note.
+  ///
+  /// In en, this message translates to:
+  /// **'restarting · the tunnel pauses for a moment'**
+  String get settingsServiceLineRestarting;
+
+  /// Button to restart background service.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart service'**
+  String get settingsServiceRestartBtn;
+
+  /// Theme selector title.
+  ///
+  /// In en, this message translates to:
+  /// **'THEME'**
+  String get settingsThemeTitle;
+
+  /// System theme option.
+  ///
+  /// In en, this message translates to:
+  /// **'SYSTEM'**
+  String get settingsThemeSystem;
+
+  /// Dark theme option.
+  ///
+  /// In en, this message translates to:
+  /// **'DARK'**
+  String get settingsThemeDark;
+
+  /// Light theme option.
+  ///
+  /// In en, this message translates to:
+  /// **'LIGHT'**
+  String get settingsThemeLight;
+
+  /// System theme note.
+  ///
+  /// In en, this message translates to:
+  /// **'follows Windows · dark right now'**
+  String get settingsThemeLineSystem;
+
+  /// Dark theme note.
+  ///
+  /// In en, this message translates to:
+  /// **'always dark, whatever Windows uses'**
+  String get settingsThemeLineDark;
+
+  /// Light theme note.
+  ///
+  /// In en, this message translates to:
+  /// **'always light, whatever Windows uses'**
+  String get settingsThemeLineLight;
+
+  /// Language selector title.
+  ///
+  /// In en, this message translates to:
+  /// **'LANGUAGE'**
+  String get settingsLanguageTitle;
+
+  /// System language note.
+  ///
+  /// In en, this message translates to:
+  /// **'follows Windows · English right now'**
+  String get settingsLanguageLineSystem;
+
+  /// Manual language note.
+  ///
+  /// In en, this message translates to:
+  /// **'switches right away, no restart'**
+  String get settingsLanguageLineManual;
+
+  /// Note regarding English logs.
+  ///
+  /// In en, this message translates to:
+  /// **'Log lines stay in English so they read the same in bug reports.'**
+  String get settingsLanguageNote;
+
+  /// Erase data title.
+  ///
+  /// In en, this message translates to:
+  /// **'Erase all data on this device'**
+  String get settingsEraseTitle;
+
+  /// Erase data description.
+  ///
+  /// In en, this message translates to:
+  /// **'Removes servers, rules, settings and counters from this PC. The sync copy and the service stay.'**
+  String get settingsEraseDesc;
+
+  /// Erase data note.
+  ///
+  /// In en, this message translates to:
+  /// **'asks first · cannot be undone'**
+  String get settingsEraseLine;
+
+  /// Button to trigger erase dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Erase…'**
+  String get settingsEraseBtn;
+
+  /// Erase modal confirmation title.
+  ///
+  /// In en, this message translates to:
+  /// **'Erase all data on this device?'**
+  String get dialogEraseTitle;
+
+  /// Erase modal warning message.
+  ///
+  /// In en, this message translates to:
+  /// **'This deletes all server profiles, split tunnel rules, and local preferences from this device. The remote sync vault and background service are unaffected.'**
+  String get dialogEraseMessage;
+
+  /// Erase modal confirm button.
+  ///
+  /// In en, this message translates to:
+  /// **'Erase all data'**
+  String get dialogEraseConfirm;
+
+  /// Quota card title with server name.
+  ///
+  /// In en, this message translates to:
+  /// **'QUOTA · {server}'**
+  String settingsQuotaTitle(String server);
+
+  /// Quota card meta.
+  ///
+  /// In en, this message translates to:
+  /// **'EACH SERVER HAS ITS OWN'**
+  String get settingsQuotaMeta;
+
+  /// Monthly cap label.
+  ///
+  /// In en, this message translates to:
+  /// **'MONTHLY CAP'**
+  String get settingsQuotaMonthlyCap;
+
+  /// Billing day label.
+  ///
+  /// In en, this message translates to:
+  /// **'BILLING DAY'**
+  String get settingsQuotaBillingDay;
+
+  /// Each month label.
+  ///
+  /// In en, this message translates to:
+  /// **'each month'**
+  String get settingsQuotaEachMonth;
+
+  /// Counts mode label.
+  ///
+  /// In en, this message translates to:
+  /// **'COUNTS'**
+  String get settingsQuotaCounts;
+
+  /// Out only option.
+  ///
+  /// In en, this message translates to:
+  /// **'OUT ONLY'**
+  String get settingsQuotaOutOnly;
+
+  /// In and out option.
+  ///
+  /// In en, this message translates to:
+  /// **'IN + OUT'**
+  String get settingsQuotaInAndOut;
+
+  /// Preview badge.
+  ///
+  /// In en, this message translates to:
+  /// **'PREVIEW'**
+  String get settingsQuotaPreview;
+
+  /// Quota note for outbound only.
+  ///
+  /// In en, this message translates to:
+  /// **'copy both from your VPS plan · next reset 1 Dec · amber from 80%'**
+  String get settingsQuotaNoteOut;
+
+  /// Quota note for both directions.
+  ///
+  /// In en, this message translates to:
+  /// **'in + out counts every byte twice · resets 1 Dec · amber from 80%'**
+  String get settingsQuotaNoteBoth;
+
+  /// Quota persistence note.
+  ///
+  /// In en, this message translates to:
+  /// **'counted on this device, even when this window is closed'**
+  String get settingsQuotaCountedDevice;
+
+  /// Greeting card title.
+  ///
+  /// In en, this message translates to:
+  /// **'HOME GREETING'**
+  String get settingsGreetingTitle;
+
+  /// Greeting name label.
+  ///
+  /// In en, this message translates to:
+  /// **'NAME · OPTIONAL'**
+  String get settingsGreetingNameLabel;
+
+  /// Detect city toggle label.
+  ///
+  /// In en, this message translates to:
+  /// **'Detect city from this device'**
+  String get settingsGreetingDetectCity;
+
+  /// City input label.
+  ///
+  /// In en, this message translates to:
+  /// **'CITY'**
+  String get settingsGreetingCity;
+
+  /// Country input label.
+  ///
+  /// In en, this message translates to:
+  /// **'COUNTRY'**
+  String get settingsGreetingCountry;
+
+  /// Auto location badge.
+  ///
+  /// In en, this message translates to:
+  /// **'AUTO'**
+  String get settingsGreetingAutoBadge;
+
+  /// Greeting preview title.
+  ///
+  /// In en, this message translates to:
+  /// **'ON HOME'**
+  String get settingsGreetingOnHome;
+
+  /// Location privacy note.
+  ///
+  /// In en, this message translates to:
+  /// **'OS location, matched to a city offline · Charon sends nothing'**
+  String get settingsGreetingNote;
+
+  /// About card title.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get settingsAboutTitle;
+
+  /// About author info.
+  ///
+  /// In en, this message translates to:
+  /// **'by the owner · xray v25.9.11'**
+  String get settingsAboutBy;
+
+  /// Updates row title.
+  ///
+  /// In en, this message translates to:
+  /// **'Updates'**
+  String get settingsAboutUpdates;
+
+  /// Guides row title.
+  ///
+  /// In en, this message translates to:
+  /// **'Help and guides'**
+  String get settingsAboutGuides;
+
+  /// Privacy row title.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy and network'**
+  String get settingsAboutPrivacy;
+
+  /// Security row title.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get settingsAboutSecurity;
+
+  /// Diagnostics row title.
+  ///
+  /// In en, this message translates to:
+  /// **'Export diagnostics'**
+  String get settingsAboutDiagnostics;
+
+  /// Source code row title.
+  ///
+  /// In en, this message translates to:
+  /// **'Source Code'**
+  String get settingsAboutSource;
+
+  /// License row title.
+  ///
+  /// In en, this message translates to:
+  /// **'License'**
+  String get settingsAboutLicense;
+
+  /// Acks row title.
+  ///
+  /// In en, this message translates to:
+  /// **'About & Acknowledgments'**
+  String get settingsAboutAcks;
 }
 
 class _AppLocalizationsDelegate

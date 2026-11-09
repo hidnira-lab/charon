@@ -10,6 +10,7 @@ import 'state/home_controller.dart';
 import 'theme/theme.dart';
 import 'ui/home/home_screen.dart';
 import 'ui/servers/servers_screen.dart';
+import 'ui/settings/settings_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,19 +48,38 @@ class CharonApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Charon',
-      debugShowCheckedModeBanner: false,
-      theme: themeData ?? CharonTheme.dark,
-      locale: locale,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: AnimatedBuilder(
-        animation: controller,
-        builder: (context, _) => controller.activeTabIndex == 1
-            ? ServersScreen(controller: controller)
-            : HomeScreen(controller: controller),
-      ),
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, _) {
+        final activeTab = controller.activeTabIndex;
+        Widget screen;
+        if (activeTab == 1) {
+          screen = ServersScreen(controller: controller);
+        } else if (activeTab == 4) {
+          screen = SettingsScreen(controller: controller);
+        } else {
+          screen = HomeScreen(controller: controller);
+        }
+
+        ThemeData activeTheme = themeData ?? CharonTheme.dark;
+        if (themeData == null) {
+          if (controller.themeMode == ThemeMode.light) {
+            activeTheme = CharonTheme.light;
+          } else if (controller.themeMode == ThemeMode.dark) {
+            activeTheme = CharonTheme.dark;
+          }
+        }
+
+        return MaterialApp(
+          title: 'Charon',
+          debugShowCheckedModeBanner: false,
+          theme: activeTheme,
+          locale: locale ?? controller.locale,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: screen,
+        );
+      },
     );
   }
 }
