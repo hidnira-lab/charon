@@ -437,6 +437,72 @@ abstract class AppLocalizations {
   /// **'config rejected after a core update'**
   String get reasonConfigRejected;
 
+  /// Body message when all servers fail and traffic is held.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon could not reach any of your servers. Nothing leaves this PC until you retry, pick a server, or release.'**
+  String get blockedBannerBody;
+
+  /// Action to open server switcher sheet from Blocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose another server'**
+  String get blockedActionChooseServer;
+
+  /// Plain explanation for TCP timeout.
+  ///
+  /// In en, this message translates to:
+  /// **'{server} did not answer. Check that the server is running.'**
+  String reasonTcpTimeoutDesc(String server);
+
+  /// Plain explanation for Reality handshake failure.
+  ///
+  /// In en, this message translates to:
+  /// **'The server answered, but the Reality handshake failed. The key or SNI may not match.'**
+  String get reasonRealityDesc;
+
+  /// Plain explanation for egress IP mismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Traffic came out somewhere other than {server}. Charon will not say connected.'**
+  String reasonEgressDesc(String server);
+
+  /// Plain explanation for Wintun/TUN adapter error.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon could not create its network adapter.'**
+  String get reasonAdapterDesc;
+
+  /// Plain explanation for local port conflict.
+  ///
+  /// In en, this message translates to:
+  /// **'Another program is using the port Charon needs.'**
+  String get reasonPortInUseDesc;
+
+  /// Plain explanation for DNS leak/failure.
+  ///
+  /// In en, this message translates to:
+  /// **'DNS is not going through the tunnel, so Charon will not say connected.'**
+  String get reasonDnsDesc;
+
+  /// Plain explanation for config rejected by Xray core.
+  ///
+  /// In en, this message translates to:
+  /// **'Xray rejected this configuration.'**
+  String get reasonConfigRejectedDesc;
+
+  /// Plain explanation for network change probe failure.
+  ///
+  /// In en, this message translates to:
+  /// **'Your network changed and {server} did not answer.'**
+  String reasonNetworkChangeDesc(String server);
+
+  /// Plain explanation when tunnel drops without kill switch.
+  ///
+  /// In en, this message translates to:
+  /// **'The tunnel stopped, and auto reconnect is off, so your traffic is going direct.'**
+  String get reasonTunnelLostDesc;
+
   /// Label for round trip latency metric.
   ///
   /// In en, this message translates to:

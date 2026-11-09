@@ -25,21 +25,23 @@ void main() {
     });
 
     test('refuses unsupported protocols with plain message', () {
+      const expectedMsg =
+          'Charon only speaks VLESS with Reality. This link is another kind.';
       final vmess = parseVlessLink('vmess://dummy-base64');
       expect(vmess.isSuccess, isFalse);
-      expect(vmess.error, 'vmess, trojan, ss and hysteria2 are not supported');
+      expect(vmess.error, expectedMsg);
 
       final trojan = parseVlessLink('trojan://pass@198.51.100.2:443');
       expect(trojan.isSuccess, isFalse);
-      expect(trojan.error, 'vmess, trojan, ss and hysteria2 are not supported');
+      expect(trojan.error, expectedMsg);
 
       final ss = parseVlessLink('ss://base64@198.51.100.3:443');
       expect(ss.isSuccess, isFalse);
-      expect(ss.error, 'vmess, trojan, ss and hysteria2 are not supported');
+      expect(ss.error, expectedMsg);
 
       final hy2 = parseVlessLink('hysteria2://pass@198.51.100.4:443');
       expect(hy2.isSuccess, isFalse);
-      expect(hy2.error, 'vmess, trojan, ss and hysteria2 are not supported');
+      expect(hy2.error, expectedMsg);
     });
 
     test('refuses missing pbk in VLESS Reality link', () {

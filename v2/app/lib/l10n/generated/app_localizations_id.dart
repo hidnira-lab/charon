@@ -206,6 +206,51 @@ class AppLocalizationsId extends AppLocalizations {
       'konfigurasi ditolak setelah pembaruan core';
 
   @override
+  String get blockedBannerBody =>
+      'Charon tidak dapat menjangkau server Anda. Tidak ada lalu lintas yang keluar dari perangkat ini sampai Anda mencoba lagi, memilih server, atau melepas.';
+
+  @override
+  String get blockedActionChooseServer => 'Pilih server lain';
+
+  @override
+  String reasonTcpTimeoutDesc(String server) {
+    return '$server tidak menjawab. Periksa apakah server sedang berjalan.';
+  }
+
+  @override
+  String get reasonRealityDesc =>
+      'Server menjawab, tetapi jabat tangan Reality gagal. Kunci publik atau SNI mungkin tidak cocok.';
+
+  @override
+  String reasonEgressDesc(String server) {
+    return 'Lalu lintas keluar di tempat selain $server. Charon tidak akan menyatakan tersambung.';
+  }
+
+  @override
+  String get reasonAdapterDesc =>
+      'Charon tidak dapat membuat adaptor jaringan.';
+
+  @override
+  String get reasonPortInUseDesc =>
+      'Program lain sedang menggunakan port yang dibutuhkan Charon.';
+
+  @override
+  String get reasonDnsDesc =>
+      'DNS tidak melewati terowongan, sehingga Charon tidak akan menyatakan tersambung.';
+
+  @override
+  String get reasonConfigRejectedDesc => 'Xray menolak konfigurasi ini.';
+
+  @override
+  String reasonNetworkChangeDesc(String server) {
+    return 'Jaringan Anda berubah dan $server tidak menjawab.';
+  }
+
+  @override
+  String get reasonTunnelLostDesc =>
+      'Terowongan terputus, dan sambung ulang otomatis mati, sehingga lalu lintas berjalan langsung.';
+
+  @override
   String get metricsLatency => 'Latensi';
 
   @override

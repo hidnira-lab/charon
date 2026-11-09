@@ -203,6 +203,51 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reasonConfigRejected => 'config rejected after a core update';
 
   @override
+  String get blockedBannerBody =>
+      'Charon could not reach any of your servers. Nothing leaves this PC until you retry, pick a server, or release.';
+
+  @override
+  String get blockedActionChooseServer => 'Choose another server';
+
+  @override
+  String reasonTcpTimeoutDesc(String server) {
+    return '$server did not answer. Check that the server is running.';
+  }
+
+  @override
+  String get reasonRealityDesc =>
+      'The server answered, but the Reality handshake failed. The key or SNI may not match.';
+
+  @override
+  String reasonEgressDesc(String server) {
+    return 'Traffic came out somewhere other than $server. Charon will not say connected.';
+  }
+
+  @override
+  String get reasonAdapterDesc =>
+      'Charon could not create its network adapter.';
+
+  @override
+  String get reasonPortInUseDesc =>
+      'Another program is using the port Charon needs.';
+
+  @override
+  String get reasonDnsDesc =>
+      'DNS is not going through the tunnel, so Charon will not say connected.';
+
+  @override
+  String get reasonConfigRejectedDesc => 'Xray rejected this configuration.';
+
+  @override
+  String reasonNetworkChangeDesc(String server) {
+    return 'Your network changed and $server did not answer.';
+  }
+
+  @override
+  String get reasonTunnelLostDesc =>
+      'The tunnel stopped, and auto reconnect is off, so your traffic is going direct.';
+
+  @override
   String get metricsLatency => 'Latency';
 
   @override

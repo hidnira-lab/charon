@@ -37,7 +37,7 @@ VlessParseResult parseVlessLink(String rawLink, {String? nextId}) {
         scheme == 'hysteria2' ||
         scheme == 'hy2') {
       return const VlessParseResult.failure(
-        'vmess, trojan, ss and hysteria2 are not supported',
+        'Charon only speaks VLESS with Reality. This link is another kind.',
       );
     }
     return VlessParseResult.failure('unsupported protocol: $scheme');

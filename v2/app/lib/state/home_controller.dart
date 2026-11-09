@@ -232,6 +232,16 @@ class HomeController extends ChangeNotifier {
   bool get anotherVpnTookOver => _anotherVpnTookOver;
   bool get stoppedByAndroid => _stoppedByAndroid;
 
+  void setQuota(Quota quota) {
+    _quota = quota;
+    notifyListeners();
+  }
+
+  void setStatus(Status status) {
+    _status = status;
+    notifyListeners();
+  }
+
   void setServiceStatus(ServiceStatus status) {
     _serviceStatus = status;
     notifyListeners();

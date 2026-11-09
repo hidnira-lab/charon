@@ -280,6 +280,43 @@
   "@reasonConfigRejected": {
     "description": "Failure reason when new core rejects config."
   },
+  "blockedBannerBody": "Charon could not reach any of your servers. Nothing leaves this PC until you retry, pick a server, or release.",
+  "@blockedBannerBody": { "description": "Body message when all servers fail and traffic is held." },
+  "blockedActionChooseServer": "Choose another server",
+  "@blockedActionChooseServer": { "description": "Action to open server switcher sheet from Blocked." },
+  "reasonTcpTimeoutDesc": "{server} did not answer. Check that the server is running.",
+  "@reasonTcpTimeoutDesc": {
+    "description": "Plain explanation for TCP timeout.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+  "reasonRealityDesc": "The server answered, but the Reality handshake failed. The key or SNI may not match.",
+  "@reasonRealityDesc": { "description": "Plain explanation for Reality handshake failure." },
+  "reasonEgressDesc": "Traffic came out somewhere other than {server}. Charon will not say connected.",
+  "@reasonEgressDesc": {
+    "description": "Plain explanation for egress IP mismatch.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+  "reasonAdapterDesc": "Charon could not create its network adapter.",
+  "@reasonAdapterDesc": { "description": "Plain explanation for Wintun/TUN adapter error." },
+  "reasonPortInUseDesc": "Another program is using the port Charon needs.",
+  "@reasonPortInUseDesc": { "description": "Plain explanation for local port conflict." },
+  "reasonDnsDesc": "DNS is not going through the tunnel, so Charon will not say connected.",
+  "@reasonDnsDesc": { "description": "Plain explanation for DNS leak/failure." },
+  "reasonConfigRejectedDesc": "Xray rejected this configuration.",
+  "@reasonConfigRejectedDesc": { "description": "Plain explanation for config rejected by Xray core." },
+  "reasonNetworkChangeDesc": "Your network changed and {server} did not answer.",
+  "@reasonNetworkChangeDesc": {
+    "description": "Plain explanation for network change probe failure.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+  "reasonTunnelLostDesc": "The tunnel stopped, and auto reconnect is off, so your traffic is going direct.",
+  "@reasonTunnelLostDesc": { "description": "Plain explanation when tunnel drops without kill switch." },
 
   "metricsLatency": "Latency",
   "@metricsLatency": {

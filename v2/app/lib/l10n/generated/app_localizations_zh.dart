@@ -200,6 +200,46 @@ class AppLocalizationsZh extends AppLocalizations {
   String get reasonConfigRejected => '内核更新后配置被拒绝';
 
   @override
+  String get blockedBannerBody =>
+      'Charon 无法连接至您的任何服务器。在您重试、选择服务器或断开之前，任何流量都不会离开此设备。';
+
+  @override
+  String get blockedActionChooseServer => '选择其他服务器';
+
+  @override
+  String reasonTcpTimeoutDesc(String server) {
+    return '$server 未响应。请检查服务器是否正常运行。';
+  }
+
+  @override
+  String get reasonRealityDesc => '服务器已响应，但 Reality 握手失败。公钥或 SNI 可能不匹配。';
+
+  @override
+  String reasonEgressDesc(String server) {
+    return '网络流量出网位置并非 $server。Charon 将不会判定为已连接。';
+  }
+
+  @override
+  String get reasonAdapterDesc => 'Charon 无法创建网络适配器。';
+
+  @override
+  String get reasonPortInUseDesc => '其他程序占用了 Charon 所需的网络端口。';
+
+  @override
+  String get reasonDnsDesc => 'DNS 查询未通过隧道发送，因此 Charon 不会判定为已连接。';
+
+  @override
+  String get reasonConfigRejectedDesc => 'Xray 核心拒绝了此配置。';
+
+  @override
+  String reasonNetworkChangeDesc(String server) {
+    return '您的网络发生变更，且 $server 未响应。';
+  }
+
+  @override
+  String get reasonTunnelLostDesc => '隧道已终止且自动重连已关闭，网络流量正直接出网。';
+
+  @override
   String get metricsLatency => '延迟';
 
   @override
@@ -1730,6 +1770,46 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get reasonConfigRejected => '内核更新后配置被拒绝';
+
+  @override
+  String get blockedBannerBody =>
+      'Charon 无法连接至您的任何服务器。在您重试、选择服务器或断开之前，任何流量都不会离开此设备。';
+
+  @override
+  String get blockedActionChooseServer => '选择其他服务器';
+
+  @override
+  String reasonTcpTimeoutDesc(String server) {
+    return '$server 未响应。请检查服务器是否正常运行。';
+  }
+
+  @override
+  String get reasonRealityDesc => '服务器已响应，但 Reality 握手失败。公钥或 SNI 可能不匹配。';
+
+  @override
+  String reasonEgressDesc(String server) {
+    return '网络流量出网位置并非 $server。Charon 将不会判定为已连接。';
+  }
+
+  @override
+  String get reasonAdapterDesc => 'Charon 无法创建网络适配器。';
+
+  @override
+  String get reasonPortInUseDesc => '其他程序占用了 Charon 所需的网络端口。';
+
+  @override
+  String get reasonDnsDesc => 'DNS 查询未通过隧道发送，因此 Charon 不会判定为已连接。';
+
+  @override
+  String get reasonConfigRejectedDesc => 'Xray 核心拒绝了此配置。';
+
+  @override
+  String reasonNetworkChangeDesc(String server) {
+    return '您的网络发生变更，且 $server 未响应。';
+  }
+
+  @override
+  String get reasonTunnelLostDesc => '隧道已终止且自动重连已关闭，网络流量正直接出网。';
 
   @override
   String get metricsLatency => '延迟';

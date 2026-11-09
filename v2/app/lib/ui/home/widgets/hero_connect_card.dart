@@ -5,6 +5,7 @@ import '../../../state/home_controller.dart';
 import '../../../state/ui_state.dart';
 import '../../../theme/theme.dart';
 import '../../dialogs/release_confirm_dialog.dart';
+import 'choose_server_sheet.dart';
 
 /// The Connect Control / Hero Card matching HomeDesktop board (332 x 364 px).
 class HeroConnectCard extends StatelessWidget {
