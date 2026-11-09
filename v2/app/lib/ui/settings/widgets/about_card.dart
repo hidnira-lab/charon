@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
 import '../../../theme/tokens.dart';
+import '../../telemetry/widgets/export_diagnostics_dialog.dart';
+import '../../trust/licences_screen.dart';
+import '../../trust/privacy_screen.dart';
 import '../../updates/updates_screen.dart';
 
 class AboutCard extends StatelessWidget {
@@ -122,12 +125,27 @@ class AboutCard extends StatelessWidget {
               children: links.map((item) {
                 return InkWell(
                   onTap: () {
-                    if (item.label == l10n.settingsAboutUpdates && controller != null) {
+                    if (controller == null) return;
+                    if (item.label == l10n.settingsAboutUpdates) {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => UpdatesScreen(controller: controller!),
                         ),
                       );
+                    } else if (item.label == l10n.settingsAboutLicense) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => LicencesScreen(controller: controller!),
+                        ),
+                      );
+                    } else if (item.label == l10n.settingsAboutPrivacy) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => PrivacyScreen(controller: controller!),
+                        ),
+                      );
+                    } else if (item.label == l10n.settingsAboutDiagnostics) {
+                      ExportDiagnosticsDialog.show(context, controller!);
                     }
                   },
                   borderRadius: BorderRadius.circular(7),

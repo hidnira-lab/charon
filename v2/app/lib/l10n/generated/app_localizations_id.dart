@@ -1114,4 +1114,139 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get updatesFileApplyBtn => 'Terapkan pembaruan file';
+
+  @override
+  String get licencesTitle => 'Lisensi Sumber Terbuka';
+
+  @override
+  String get licencesTag => 'KEPERCAYAAN · LEGAL';
+
+  @override
+  String get licencesSubtitle =>
+      'Charon dan dependensinya adalah perangkat lunak bebas dan sumber terbuka.';
+
+  @override
+  String get licencesCharonTitle => 'Klien & Layanan Charon';
+
+  @override
+  String get licencesCharonType => 'GNU General Public License v3.0 (GPL-3.0)';
+
+  @override
+  String get licencesXrayTitle => 'Mesin Xray Core';
+
+  @override
+  String get licencesXrayType => 'Mozilla Public License 2.0 (MPL-2.0)';
+
+  @override
+  String get licencesWintunTitle => 'Driver TUN Wintun';
+
+  @override
+  String get licencesWintunType => 'GPL-2.0 / Lisensi Driver Wintun';
+
+  @override
+  String get licencesGoModulesTitle => 'Modul Runtime Go';
+
+  @override
+  String get licencesGoModulesType => 'BSD 3-Clause / MIT';
+
+  @override
+  String get licencesDartPackagesTitle => 'Paket Dart & Flutter';
+
+  @override
+  String get licencesDartPackagesType => 'MIT / BSD 3-Clause';
+
+  @override
+  String get licencesFontsTitle => 'Tipografi & Font (Inter, Space Mono)';
+
+  @override
+  String get licencesFontsType => 'SIL Open Font License 1.1 (OFL-1.1)';
+
+  @override
+  String get licencesViewFullText => 'Lihat teks lengkap';
+
+  @override
+  String get licencesHideFullText => 'Sembunyikan teks';
+
+  @override
+  String get privacyTitle => 'Jaringan & Privasi';
+
+  @override
+  String get privacyTag => 'KEPERCAYAAN · PERILAKU';
+
+  @override
+  String get privacySubtitle =>
+      'Setiap koneksi yang dibuat aplikasi, dan data yang tersimpan di perangkat.';
+
+  @override
+  String get privacyDestinationsTitle => 'TUJUAN JARINGAN';
+
+  @override
+  String get privacyDestYourServers => 'SERVER ANDA';
+
+  @override
+  String get privacyDestYourServersDesc =>
+      'Koneksi tunnel langsung ke node VPS yang Anda konfigurasikan. Terenkripsi dengan VLESS Reality.';
+
+  @override
+  String get privacyDestSync => 'SERVER SINKRONISASI (HANYA SAAT TERSAMBUNG)';
+
+  @override
+  String get privacyDestSyncDesc =>
+      'Hanya saat sinkronisasi perangkat dipasangkan oleh Anda. Berisi cadangan profil terenkripsi AES-256-GCM dari sisi klien. Tidak pernah diakses jika sinkronisasi tidak aktif.';
+
+  @override
+  String get privacyDestGithub => 'GITHUB (HANYA PEMBARUAN)';
+
+  @override
+  String get privacyDestGithubDesc =>
+      'Memeriksa manifes rilis tertanda tangan saat mulai dan harian. Mengunduh rilis hanya saat Anda memicu pembaruan atau saat terhubung.';
+
+  @override
+  String get privacyDestNothingElse => 'TIDAK ADA LAINNYA';
+
+  @override
+  String get privacyDestNothingElseDesc =>
+      'Tanpa analitik, tanpa pelacakan telemetri, tanpa pelaporan crash, tanpa CDN atau server iklan pihak ketiga.';
+
+  @override
+  String get privacyPrinciplesTitle => 'FAKTA PRIVASI NYATA';
+
+  @override
+  String get privacyFact1Title => 'Nol Analitik & Telemetri';
+
+  @override
+  String get privacyFact1Desc =>
+      'Charon tidak memiliki pelacak pengguna atau SDK analitik. Tidak ada paket telemetri yang dikirim ke mana pun.';
+
+  @override
+  String get privacyFact2Title => 'Lokasi Tetap di Perangkat Anda';
+
+  @override
+  String get privacyFact2Desc =>
+      'Deteksi kota memeriksa sistem operasi lokal atau IP langsung tanpa menyimpan riwayat lokasi.';
+
+  @override
+  String get privacyFact3Title => 'Pembaruan Terjadwal';
+
+  @override
+  String get privacyFact3Desc =>
+      'Pengecekan pembaruan berjalan saat aplikasi dibuka dan setiap hari. Unduhan biner hanya berjalan saat dipicu atau saat terhubung.';
+
+  @override
+  String get privacyFact4Title => 'Tidak Ada Riwayat Aktivitas';
+
+  @override
+  String get privacyFact4Desc =>
+      'Tidak ada riwayat penjelajahan, catatan waktu, atau log sesi yang disimpan ke disk penyimpanan.';
+
+  @override
+  String get privacySecurityTitle => 'KEAMANAN & MODEL ANCAMAN';
+
+  @override
+  String get privacySecurityFingerprintLabel =>
+      'SIDIK JARI TANDA TANGAN PEMBARUAN';
+
+  @override
+  String get privacySecurityDesc =>
+      'Pelaporan kerentanan dan praktik keamanan terdokumentasi dalam SECURITY.md.';
 }

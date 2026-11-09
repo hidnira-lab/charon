@@ -1105,4 +1105,138 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updatesFileApplyBtn => 'Apply file update';
+
+  @override
+  String get licencesTitle => 'Open Source Licences';
+
+  @override
+  String get licencesTag => 'TRUST · LEGAL';
+
+  @override
+  String get licencesSubtitle =>
+      'Charon and its dependencies are free and open source software.';
+
+  @override
+  String get licencesCharonTitle => 'Charon Client & Service';
+
+  @override
+  String get licencesCharonType => 'GNU General Public License v3.0 (GPL-3.0)';
+
+  @override
+  String get licencesXrayTitle => 'Xray Core Engine';
+
+  @override
+  String get licencesXrayType => 'Mozilla Public License 2.0 (MPL-2.0)';
+
+  @override
+  String get licencesWintunTitle => 'Wintun TUN Driver';
+
+  @override
+  String get licencesWintunType => 'GPL-2.0 / Wintun Driver Licence';
+
+  @override
+  String get licencesGoModulesTitle => 'Go Runtime Modules';
+
+  @override
+  String get licencesGoModulesType => 'BSD 3-Clause / MIT';
+
+  @override
+  String get licencesDartPackagesTitle => 'Dart & Flutter Packages';
+
+  @override
+  String get licencesDartPackagesType => 'MIT / BSD 3-Clause';
+
+  @override
+  String get licencesFontsTitle => 'Typography & Fonts (Inter, Space Mono)';
+
+  @override
+  String get licencesFontsType => 'SIL Open Font License 1.1 (OFL-1.1)';
+
+  @override
+  String get licencesViewFullText => 'View full text';
+
+  @override
+  String get licencesHideFullText => 'Hide text';
+
+  @override
+  String get privacyTitle => 'Network & Privacy';
+
+  @override
+  String get privacyTag => 'TRUST · BEHAVIOUR';
+
+  @override
+  String get privacySubtitle =>
+      'Every connection the app makes, and what stays on your device.';
+
+  @override
+  String get privacyDestinationsTitle => 'NETWORK DESTINATIONS';
+
+  @override
+  String get privacyDestYourServers => 'YOUR SERVERS';
+
+  @override
+  String get privacyDestYourServersDesc =>
+      'Direct tunnel connection to your configured VPS nodes. Encrypted with VLESS Reality.';
+
+  @override
+  String get privacyDestSync => 'SYNC SERVER (ONLY WHEN PAIRED)';
+
+  @override
+  String get privacyDestSyncDesc =>
+      'Only when device sync is paired by you. Carries client-side AES-256-GCM encrypted profile backups only. Never accessed if sync is unused.';
+
+  @override
+  String get privacyDestGithub => 'GITHUB (UPDATES ONLY)';
+
+  @override
+  String get privacyDestGithubDesc =>
+      'Checks signed version manifests at launch and daily. Downloads core/app releases only when you initiate update or while connected.';
+
+  @override
+  String get privacyDestNothingElse => 'NOTHING ELSE';
+
+  @override
+  String get privacyDestNothingElseDesc =>
+      'No analytics, no telemetry tracking, no crash reporting, no third-party CDNs or ad servers.';
+
+  @override
+  String get privacyPrinciplesTitle => 'PLAIN PRIVACY FACTS';
+
+  @override
+  String get privacyFact1Title => 'Zero Analytics & Telemetry';
+
+  @override
+  String get privacyFact1Desc =>
+      'Charon has no user tracking or analytics SDKs. No telemetry packets are sent anywhere.';
+
+  @override
+  String get privacyFact2Title => 'Location Stays On Your Device';
+
+  @override
+  String get privacyFact2Desc =>
+      'City detection queries your local OS or direct IP without saving location history.';
+
+  @override
+  String get privacyFact3Title => 'Scheduled Updates';
+
+  @override
+  String get privacyFact3Desc =>
+      'Update checks run at launch and daily. Binary downloads only run when triggered or while connected.';
+
+  @override
+  String get privacyFact4Title => 'No Activity History';
+
+  @override
+  String get privacyFact4Desc =>
+      'No browsing history, timestamps, or session records are written to disk.';
+
+  @override
+  String get privacySecurityTitle => 'SECURITY & THREAT MODEL';
+
+  @override
+  String get privacySecurityFingerprintLabel => 'UPDATE SIGNING FINGERPRINT';
+
+  @override
+  String get privacySecurityDesc =>
+      'Vulnerability disclosures and security practices are documented in SECURITY.md.';
 }

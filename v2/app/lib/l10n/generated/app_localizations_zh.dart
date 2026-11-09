@@ -1048,6 +1048,133 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get updatesFileApplyBtn => '应用文件更新';
+
+  @override
+  String get licencesTitle => '开源许可证';
+
+  @override
+  String get licencesTag => '信任 · 法律';
+
+  @override
+  String get licencesSubtitle => 'Charon 及其依赖均为自由与开源软件。';
+
+  @override
+  String get licencesCharonTitle => 'Charon 客户端与服务';
+
+  @override
+  String get licencesCharonType => 'GNU General Public License v3.0 (GPL-3.0)';
+
+  @override
+  String get licencesXrayTitle => 'Xray Core 引擎';
+
+  @override
+  String get licencesXrayType => 'Mozilla Public License 2.0 (MPL-2.0)';
+
+  @override
+  String get licencesWintunTitle => 'Wintun TUN 驱动';
+
+  @override
+  String get licencesWintunType => 'GPL-2.0 / Wintun Driver Licence';
+
+  @override
+  String get licencesGoModulesTitle => 'Go 运行时模块';
+
+  @override
+  String get licencesGoModulesType => 'BSD 3-Clause / MIT';
+
+  @override
+  String get licencesDartPackagesTitle => 'Dart 与 Flutter 依赖包';
+
+  @override
+  String get licencesDartPackagesType => 'MIT / BSD 3-Clause';
+
+  @override
+  String get licencesFontsTitle => '字体排印 (Inter, Space Mono)';
+
+  @override
+  String get licencesFontsType => 'SIL Open Font License 1.1 (OFL-1.1)';
+
+  @override
+  String get licencesViewFullText => '查看完整条款';
+
+  @override
+  String get licencesHideFullText => '收起条款';
+
+  @override
+  String get privacyTitle => '网络行为与隐私';
+
+  @override
+  String get privacyTag => '信任 · 行为规范';
+
+  @override
+  String get privacySubtitle => '本应用发起的每一项网络连接，以及保留在本地的数据。';
+
+  @override
+  String get privacyDestinationsTitle => '网络连接目标';
+
+  @override
+  String get privacyDestYourServers => '您的服务器';
+
+  @override
+  String get privacyDestYourServersDesc =>
+      '直连至您配置的 VPS 节点。采用 VLESS Reality 加密传输。';
+
+  @override
+  String get privacyDestSync => '同步服务器（仅在配对时）';
+
+  @override
+  String get privacyDestSyncDesc =>
+      '仅在您主动配对设备同步时连接。仅传输在客户端经 AES-256-GCM 加密的配置备份。未启用同步时绝不访问。';
+
+  @override
+  String get privacyDestGithub => 'GITHUB（仅用于更新）';
+
+  @override
+  String get privacyDestGithubDesc =>
+      '在启动及每日定时检查已签名的版本清单。仅在您触发或已连接时下载核心/客户端安装包。';
+
+  @override
+  String get privacyDestNothingElse => '绝无其他目标';
+
+  @override
+  String get privacyDestNothingElseDesc =>
+      '无任何数据分析，无遥测追踪，无崩溃上报，不包含任何第三方 CDN 或广告服务器。';
+
+  @override
+  String get privacyPrinciplesTitle => '核心隐私事实';
+
+  @override
+  String get privacyFact1Title => '零分析与遥测';
+
+  @override
+  String get privacyFact1Desc => 'Charon 没有任何用户追踪或统计 SDK。绝不会向任何地方发送遥测数据包。';
+
+  @override
+  String get privacyFact2Title => '位置信息仅留存本地';
+
+  @override
+  String get privacyFact2Desc => '城市检测仅读取本地系统配置或直连 IP，不会保存任何位置历史。';
+
+  @override
+  String get privacyFact3Title => '定时更新机制';
+
+  @override
+  String get privacyFact3Desc => '仅在启动和每日定时检查更新。二进制组件下载仅在用户手动触发或安全连接时执行。';
+
+  @override
+  String get privacyFact4Title => '不保存任何活动历史';
+
+  @override
+  String get privacyFact4Desc => '磁盘上不会保存任何浏览记录、时间戳或会话日志。';
+
+  @override
+  String get privacySecurityTitle => '安全性与威胁模型';
+
+  @override
+  String get privacySecurityFingerprintLabel => '更新签名公钥指纹';
+
+  @override
+  String get privacySecurityDesc => '漏洞披露政策与安全保障措施详见 SECURITY.md。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -2093,4 +2220,131 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get updatesFileApplyBtn => '应用文件更新';
+
+  @override
+  String get licencesTitle => '开源许可证';
+
+  @override
+  String get licencesTag => '信任 · 法律';
+
+  @override
+  String get licencesSubtitle => 'Charon 及其依赖均为自由与开源软件。';
+
+  @override
+  String get licencesCharonTitle => 'Charon 客户端与服务';
+
+  @override
+  String get licencesCharonType => 'GNU General Public License v3.0 (GPL-3.0)';
+
+  @override
+  String get licencesXrayTitle => 'Xray Core 引擎';
+
+  @override
+  String get licencesXrayType => 'Mozilla Public License 2.0 (MPL-2.0)';
+
+  @override
+  String get licencesWintunTitle => 'Wintun TUN 驱动';
+
+  @override
+  String get licencesWintunType => 'GPL-2.0 / Wintun Driver Licence';
+
+  @override
+  String get licencesGoModulesTitle => 'Go 运行时模块';
+
+  @override
+  String get licencesGoModulesType => 'BSD 3-Clause / MIT';
+
+  @override
+  String get licencesDartPackagesTitle => 'Dart 与 Flutter 依赖包';
+
+  @override
+  String get licencesDartPackagesType => 'MIT / BSD 3-Clause';
+
+  @override
+  String get licencesFontsTitle => '字体排印 (Inter, Space Mono)';
+
+  @override
+  String get licencesFontsType => 'SIL Open Font License 1.1 (OFL-1.1)';
+
+  @override
+  String get licencesViewFullText => '查看完整条款';
+
+  @override
+  String get licencesHideFullText => '收起条款';
+
+  @override
+  String get privacyTitle => '网络行为与隐私';
+
+  @override
+  String get privacyTag => '信任 · 行为规范';
+
+  @override
+  String get privacySubtitle => '本应用发起的每一项网络连接，以及保留在本地的数据。';
+
+  @override
+  String get privacyDestinationsTitle => '网络连接目标';
+
+  @override
+  String get privacyDestYourServers => '您的服务器';
+
+  @override
+  String get privacyDestYourServersDesc =>
+      '直连至您配置的 VPS 节点。采用 VLESS Reality 加密传输。';
+
+  @override
+  String get privacyDestSync => '同步服务器（仅在配对时）';
+
+  @override
+  String get privacyDestSyncDesc =>
+      '仅在您主动配对设备同步时连接。仅传输在客户端经 AES-256-GCM 加密的配置备份。未启用同步时绝不访问。';
+
+  @override
+  String get privacyDestGithub => 'GITHUB（仅用于更新）';
+
+  @override
+  String get privacyDestGithubDesc =>
+      '在启动及每日定时检查已签名的版本清单。仅在您触发或已连接时下载核心/客户端安装包。';
+
+  @override
+  String get privacyDestNothingElse => '绝无其他目标';
+
+  @override
+  String get privacyDestNothingElseDesc =>
+      '无任何数据分析，无遥测追踪，无崩溃上报，不包含任何第三方 CDN 或广告服务器。';
+
+  @override
+  String get privacyPrinciplesTitle => '核心隐私事实';
+
+  @override
+  String get privacyFact1Title => '零分析与遥测';
+
+  @override
+  String get privacyFact1Desc => 'Charon 没有任何用户追踪或统计 SDK。绝不会向任何地方发送遥测数据包。';
+
+  @override
+  String get privacyFact2Title => '位置信息仅留存本地';
+
+  @override
+  String get privacyFact2Desc => '城市检测仅读取本地系统配置或直连 IP，不会保存任何位置历史。';
+
+  @override
+  String get privacyFact3Title => '定时更新机制';
+
+  @override
+  String get privacyFact3Desc => '仅在启动和每日定时检查更新。二进制组件下载仅在用户手动触发或安全连接时执行。';
+
+  @override
+  String get privacyFact4Title => '不保存任何活动历史';
+
+  @override
+  String get privacyFact4Desc => '磁盘上不会保存任何浏览记录、时间戳或会话日志。';
+
+  @override
+  String get privacySecurityTitle => '安全性与威胁模型';
+
+  @override
+  String get privacySecurityFingerprintLabel => '更新签名公钥指纹';
+
+  @override
+  String get privacySecurityDesc => '漏洞披露政策与安全保障措施详见 SECURITY.md。';
 }

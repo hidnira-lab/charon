@@ -2038,6 +2038,252 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Apply file update'**
   String get updatesFileApplyBtn;
+
+  /// Title of licences screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Source Licences'**
+  String get licencesTitle;
+
+  /// Category tag above title.
+  ///
+  /// In en, this message translates to:
+  /// **'TRUST · LEGAL'**
+  String get licencesTag;
+
+  /// Licences subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon and its dependencies are free and open source software.'**
+  String get licencesSubtitle;
+
+  /// Charon license heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon Client & Service'**
+  String get licencesCharonTitle;
+
+  /// Charon license type.
+  ///
+  /// In en, this message translates to:
+  /// **'GNU General Public License v3.0 (GPL-3.0)'**
+  String get licencesCharonType;
+
+  /// Xray license heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Xray Core Engine'**
+  String get licencesXrayTitle;
+
+  /// Xray license type.
+  ///
+  /// In en, this message translates to:
+  /// **'Mozilla Public License 2.0 (MPL-2.0)'**
+  String get licencesXrayType;
+
+  /// Wintun license heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Wintun TUN Driver'**
+  String get licencesWintunTitle;
+
+  /// Wintun license type.
+  ///
+  /// In en, this message translates to:
+  /// **'GPL-2.0 / Wintun Driver Licence'**
+  String get licencesWintunType;
+
+  /// Go modules heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Runtime Modules'**
+  String get licencesGoModulesTitle;
+
+  /// Go modules license type.
+  ///
+  /// In en, this message translates to:
+  /// **'BSD 3-Clause / MIT'**
+  String get licencesGoModulesType;
+
+  /// Dart packages heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Dart & Flutter Packages'**
+  String get licencesDartPackagesTitle;
+
+  /// Dart packages license type.
+  ///
+  /// In en, this message translates to:
+  /// **'MIT / BSD 3-Clause'**
+  String get licencesDartPackagesType;
+
+  /// Fonts heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Typography & Fonts (Inter, Space Mono)'**
+  String get licencesFontsTitle;
+
+  /// Fonts license type.
+  ///
+  /// In en, this message translates to:
+  /// **'SIL Open Font License 1.1 (OFL-1.1)'**
+  String get licencesFontsType;
+
+  /// Expand license text button.
+  ///
+  /// In en, this message translates to:
+  /// **'View full text'**
+  String get licencesViewFullText;
+
+  /// Collapse license text button.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide text'**
+  String get licencesHideFullText;
+
+  /// Title of privacy and network screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Network & Privacy'**
+  String get privacyTitle;
+
+  /// Category tag above title.
+  ///
+  /// In en, this message translates to:
+  /// **'TRUST · BEHAVIOUR'**
+  String get privacyTag;
+
+  /// Privacy screen subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Every connection the app makes, and what stays on your device.'**
+  String get privacySubtitle;
+
+  /// Destinations card header.
+  ///
+  /// In en, this message translates to:
+  /// **'NETWORK DESTINATIONS'**
+  String get privacyDestinationsTitle;
+
+  /// Destination label.
+  ///
+  /// In en, this message translates to:
+  /// **'YOUR SERVERS'**
+  String get privacyDestYourServers;
+
+  /// Destination description.
+  ///
+  /// In en, this message translates to:
+  /// **'Direct tunnel connection to your configured VPS nodes. Encrypted with VLESS Reality.'**
+  String get privacyDestYourServersDesc;
+
+  /// Destination label.
+  ///
+  /// In en, this message translates to:
+  /// **'SYNC SERVER (ONLY WHEN PAIRED)'**
+  String get privacyDestSync;
+
+  /// Destination description.
+  ///
+  /// In en, this message translates to:
+  /// **'Only when device sync is paired by you. Carries client-side AES-256-GCM encrypted profile backups only. Never accessed if sync is unused.'**
+  String get privacyDestSyncDesc;
+
+  /// Destination label.
+  ///
+  /// In en, this message translates to:
+  /// **'GITHUB (UPDATES ONLY)'**
+  String get privacyDestGithub;
+
+  /// Destination description.
+  ///
+  /// In en, this message translates to:
+  /// **'Checks signed version manifests at launch and daily. Downloads core/app releases only when you initiate update or while connected.'**
+  String get privacyDestGithubDesc;
+
+  /// Destination label.
+  ///
+  /// In en, this message translates to:
+  /// **'NOTHING ELSE'**
+  String get privacyDestNothingElse;
+
+  /// Destination description.
+  ///
+  /// In en, this message translates to:
+  /// **'No analytics, no telemetry tracking, no crash reporting, no third-party CDNs or ad servers.'**
+  String get privacyDestNothingElseDesc;
+
+  /// Privacy facts header.
+  ///
+  /// In en, this message translates to:
+  /// **'PLAIN PRIVACY FACTS'**
+  String get privacyPrinciplesTitle;
+
+  /// Fact 1 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Zero Analytics & Telemetry'**
+  String get privacyFact1Title;
+
+  /// Fact 1 description.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon has no user tracking or analytics SDKs. No telemetry packets are sent anywhere.'**
+  String get privacyFact1Desc;
+
+  /// Fact 2 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Location Stays On Your Device'**
+  String get privacyFact2Title;
+
+  /// Fact 2 description.
+  ///
+  /// In en, this message translates to:
+  /// **'City detection queries your local OS or direct IP without saving location history.'**
+  String get privacyFact2Desc;
+
+  /// Fact 3 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled Updates'**
+  String get privacyFact3Title;
+
+  /// Fact 3 description.
+  ///
+  /// In en, this message translates to:
+  /// **'Update checks run at launch and daily. Binary downloads only run when triggered or while connected.'**
+  String get privacyFact3Desc;
+
+  /// Fact 4 title.
+  ///
+  /// In en, this message translates to:
+  /// **'No Activity History'**
+  String get privacyFact4Title;
+
+  /// Fact 4 description.
+  ///
+  /// In en, this message translates to:
+  /// **'No browsing history, timestamps, or session records are written to disk.'**
+  String get privacyFact4Desc;
+
+  /// Security section title.
+  ///
+  /// In en, this message translates to:
+  /// **'SECURITY & THREAT MODEL'**
+  String get privacySecurityTitle;
+
+  /// Fingerprint label.
+  ///
+  /// In en, this message translates to:
+  /// **'UPDATE SIGNING FINGERPRINT'**
+  String get privacySecurityFingerprintLabel;
+
+  /// Security section description.
+  ///
+  /// In en, this message translates to:
+  /// **'Vulnerability disclosures and security practices are documented in SECURITY.md.'**
+  String get privacySecurityDesc;
 }
 
 class _AppLocalizationsDelegate
