@@ -9,6 +9,7 @@ import 'l10n/generated/app_localizations.dart';
 import 'state/home_controller.dart';
 import 'theme/theme.dart';
 import 'ui/home/home_screen.dart';
+import 'ui/servers/servers_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,7 +54,12 @@ class CharonApp extends StatelessWidget {
       locale: locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: HomeScreen(controller: controller),
+      home: AnimatedBuilder(
+        animation: controller,
+        builder: (context, _) => controller.activeTabIndex == 1
+            ? ServersScreen(controller: controller)
+            : HomeScreen(controller: controller),
+      ),
     );
   }
 }

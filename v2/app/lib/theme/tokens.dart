@@ -59,3 +59,9 @@ abstract final class CharonCurves {
   /// Exit curve: Cubic(0.4, 0.0, 1.0, 1.0) accelerates and is shorter.
   static const Cubic exit = Cubic(0.4, 0.0, 1.0, 1.0);
 }
+
+/// Common font family tokens.
+abstract final class CharonTokens {
+  static const String fontMono = 'SpaceMono';
+  static const String fontSans = 'Inter';
+}

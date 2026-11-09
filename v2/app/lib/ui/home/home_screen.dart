@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        RailNav(uiState: controller.uiState),
+                        RailNav(controller: controller, selectedIndex: 0),
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 20.0),

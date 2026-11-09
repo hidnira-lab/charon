@@ -213,4 +213,155 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get metricsDuration => 'Durasi';
+
+  @override
+  String get serversTitle => 'Server';
+
+  @override
+  String serversCountSubtitle(int count) {
+    return 'SERVER · $count PROFIL';
+  }
+
+  @override
+  String get serversFailoverSubtitle => 'PROFIL · URUTAN FAILOVER';
+
+  @override
+  String get serversFailoverHint => 'Charon mencoba server dengan urutan ini';
+
+  @override
+  String get serversActionTest => 'Tes server';
+
+  @override
+  String get serversActionImportLink => 'Impor link vless://';
+
+  @override
+  String get serversActionPasteConfig => 'Tempel config';
+
+  @override
+  String serversLockedBanner(String server) {
+    return 'Ganti dan hapus dikunci selama terhubung ke $server. Edit tetap bisa.';
+  }
+
+  @override
+  String get serversActionUse => 'Pakai';
+
+  @override
+  String get serversActionDisconnectFirst => 'Putuskan dulu';
+
+  @override
+  String get serversActionDisconnectLink => 'Putuskan →';
+
+  @override
+  String get serversActiveConnected => 'AKTIF · TERHUBUNG';
+
+  @override
+  String get serversActive => 'AKTIF';
+
+  @override
+  String get serversAddCardTitle => 'Tambahkan server milikmu';
+
+  @override
+  String get serversAddCardSubtitle =>
+      'tempel config JSON atau impor link vless://';
+
+  @override
+  String get serversLimitReached =>
+      'Batasnya 32 server. Hapus satu untuk menambah yang lain.';
+
+  @override
+  String get serversFailoverRule1 =>
+      'failover: kalau sambung ulang otomatis gagal 5 kali, Charon pindah ke profil berikutnya dan tetap di sana';
+
+  @override
+  String get serversFailoverRule2 =>
+      'latensi hanya diukur untuk server aktif, belum ada ping per profil';
+
+  @override
+  String get syncTitle => 'SYNC';
+
+  @override
+  String get syncE2EBadge => 'E2E · AES 256 GCM';
+
+  @override
+  String get syncThisUnit => 'PERANGKAT INI';
+
+  @override
+  String get syncNotPaired => 'belum dipasangkan';
+
+  @override
+  String syncPaired(String platform) {
+    return 'terpasang · $platform';
+  }
+
+  @override
+  String get syncActionPush => 'Kirim';
+
+  @override
+  String get syncActionPull => 'Tarik';
+
+  @override
+  String get syncActionShowPairingCode => 'Tampilkan kode pasangan';
+
+  @override
+  String get syncFileBackupTitle => 'CADANGAN FILE';
+
+  @override
+  String get syncFileBackupSubtitle => '.charonvault · passphrase yang sama';
+
+  @override
+  String get syncActionBackupFile => 'Cadangkan ke file';
+
+  @override
+  String get syncActionRestoreFile => 'Pulihkan dari file';
+
+  @override
+  String get syncWhatSyncsTitle => 'YANG DISINKRONKAN';
+
+  @override
+  String get syncWhatSyncsLine1 =>
+      'Server dan paket kuota, aturan split tunnel, tiga sakelar pengaman, tema, dan bahasa.';
+
+  @override
+  String get syncWhatSyncsLine2 =>
+      'tetap di perangkat ini: startup, lokasi, sapaan, nama perangkat, jendela, penghitung kuota';
+
+  @override
+  String get syncEncryptedHint =>
+      'dienkripsi di perangkat ini sebelum diunggah';
+
+  @override
+  String get syncNoOtherDevicesHint =>
+      'perangkat terpasang lain tidak ditampilkan';
+
+  @override
+  String dialogDeleteServerTitle(String server) {
+    return 'Hapus $server?';
+  }
+
+  @override
+  String get dialogDeleteServerMessage =>
+      'Ini akan menghapus profil server dari perangkat ini. Tindakan ini tidak bisa dibatalkan.';
+
+  @override
+  String get dialogCancel => 'Batal';
+
+  @override
+  String get dialogDelete => 'Hapus';
+
+  @override
+  String get dialogSave => 'Simpan';
+
+  @override
+  String get dialogAddServerTitle => 'Tambah server';
+
+  @override
+  String dialogEditServerTitle(String server) {
+    return 'Edit $server';
+  }
+
+  @override
+  String get dialogServerName => 'Nama';
+
+  @override
+  String get dialogServerAddress => 'Alamat';
 }

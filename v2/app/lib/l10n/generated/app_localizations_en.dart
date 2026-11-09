@@ -210,4 +210,153 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get metricsDuration => 'Duration';
+
+  @override
+  String get serversTitle => 'Servers';
+
+  @override
+  String serversCountSubtitle(int count) {
+    return 'SERVERS · $count PROFILES';
+  }
+
+  @override
+  String get serversFailoverSubtitle => 'PROFILES · FAILOVER ORDER';
+
+  @override
+  String get serversFailoverHint => 'Charon tries servers in this order';
+
+  @override
+  String get serversActionTest => 'Test servers';
+
+  @override
+  String get serversActionImportLink => 'Import vless:// link';
+
+  @override
+  String get serversActionPasteConfig => 'Paste config';
+
+  @override
+  String serversLockedBanner(String server) {
+    return 'Switching and deleting are locked while connected to $server, editing is fine.';
+  }
+
+  @override
+  String get serversActionUse => 'Use';
+
+  @override
+  String get serversActionDisconnectFirst => 'Disconnect first';
+
+  @override
+  String get serversActionDisconnectLink => 'Disconnect →';
+
+  @override
+  String get serversActiveConnected => 'ACTIVE · CONNECTED';
+
+  @override
+  String get serversActive => 'ACTIVE';
+
+  @override
+  String get serversAddCardTitle => 'Add a server you control';
+
+  @override
+  String get serversAddCardSubtitle =>
+      'paste a JSON config or import a vless:// link';
+
+  @override
+  String get serversLimitReached =>
+      '32 servers is the limit, delete one to add another.';
+
+  @override
+  String get serversFailoverRule1 =>
+      'failover: if auto reconnect fails 5 times, Charon moves to the next profile and stays there';
+
+  @override
+  String get serversFailoverRule2 =>
+      'latency is only measured for the active server, no ping per profile yet';
+
+  @override
+  String get syncTitle => 'SYNC';
+
+  @override
+  String get syncE2EBadge => 'E2E · AES 256 GCM';
+
+  @override
+  String get syncThisUnit => 'THIS UNIT';
+
+  @override
+  String get syncNotPaired => 'not paired yet';
+
+  @override
+  String syncPaired(String platform) {
+    return 'paired · $platform';
+  }
+
+  @override
+  String get syncActionPush => 'Push';
+
+  @override
+  String get syncActionPull => 'Pull';
+
+  @override
+  String get syncActionShowPairingCode => 'Show pairing code';
+
+  @override
+  String get syncFileBackupTitle => 'FILE BACKUP';
+
+  @override
+  String get syncFileBackupSubtitle => '.charonvault · same passphrase';
+
+  @override
+  String get syncActionBackupFile => 'Back up to file';
+
+  @override
+  String get syncActionRestoreFile => 'Restore from file';
+
+  @override
+  String get syncWhatSyncsTitle => 'WHAT SYNCS';
+
+  @override
+  String get syncWhatSyncsLine1 =>
+      'Servers and quota plans, split tunnel rules, the three safety switches, theme and language.';
+
+  @override
+  String get syncWhatSyncsLine2 =>
+      'stays on this device: startup, location, greeting, device name, window, quota counters';
+
+  @override
+  String get syncEncryptedHint => 'encrypted on this device before upload';
+
+  @override
+  String get syncNoOtherDevicesHint => 'other paired devices are not listed';
+
+  @override
+  String dialogDeleteServerTitle(String server) {
+    return 'Delete $server?';
+  }
+
+  @override
+  String get dialogDeleteServerMessage =>
+      'This removes the server profile from this device, it cannot be undone.';
+
+  @override
+  String get dialogCancel => 'Cancel';
+
+  @override
+  String get dialogDelete => 'Delete';
+
+  @override
+  String get dialogSave => 'Save';
+
+  @override
+  String get dialogAddServerTitle => 'Add a server';
+
+  @override
+  String dialogEditServerTitle(String server) {
+    return 'Edit $server';
+  }
+
+  @override
+  String get dialogServerName => 'Name';
+
+  @override
+  String get dialogServerAddress => 'Address';
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fixnum/fixnum.dart';
 import 'package:flutter/foundation.dart';
 
 import '../core/core_client.dart';
@@ -29,6 +30,7 @@ class HomeController extends ChangeNotifier {
   Throughput? _throughput;
   Quota? _quota;
   bool _hasServers;
+  int _activeTabIndex = 0;
   StreamSubscription<Event>? _eventSub;
   bool _isDisposed = false;
 
@@ -38,6 +40,14 @@ class HomeController extends ChangeNotifier {
   Throughput? get throughput => _throughput;
   Quota? get quota => _quota;
   bool get hasServers => _hasServers;
+  int get activeTabIndex => _activeTabIndex;
+
+  void setTab(int index) {
+    if (_activeTabIndex != index) {
+      _activeTabIndex = index;
+      notifyListeners();
+    }
+  }
 
   UiState get uiState => projectState(_status, hasServers: _hasServers);
 
@@ -136,6 +146,76 @@ class HomeController extends ChangeNotifier {
 
   Future<void> switchNow() async {
     if (_client != null) await _client!.switchNow();
+  }
+
+  Future<bool> addServer(Server server) async {
+    _config ??= Config();
+    if (_config!.servers.length >= 32) return false;
+    _config!.servers.add(server);
+    if (_config!.chosenServerId.isEmpty) {
+      _config!.chosenServerId = server.id;
+    }
+    _hasServers = true;
+    _config!.version += Int64(1);
+    if (_client != null) {
+      try {
+        await _client!.setConfig(_config!);
+      } catch (_) {}
+    }
+    notifyListeners();
+    return true;
+  }
+
+  Future<void> updateServer(Server updated) async {
+    if (_config == null) return;
+    final idx = _config!.servers.indexWhere((s) => s.id == updated.id);
+    if (idx < 0) return;
+    _config!.servers[idx] = updated;
+    _config!.version += Int64(1);
+    if (_client != null) {
+      try {
+        await _client!.setConfig(_config!);
+      } catch (_) {}
+    }
+    notifyListeners();
+  }
+
+  Future<bool> deleteServer(String serverId) async {
+    if (_config == null) return false;
+    // Cannot delete active server while connected
+    if (_status.phase != Phase.PHASE_IDLE &&
+        (_status.activeServerId == serverId || _status.chosenServerId == serverId)) {
+      return false;
+    }
+    _config!.servers.removeWhere((s) => s.id == serverId);
+    _hasServers = _config!.servers.isNotEmpty;
+    if (_config!.chosenServerId == serverId) {
+      _config!.chosenServerId = _config!.servers.isNotEmpty ? _config!.servers.first.id : '';
+    }
+    _config!.version += Int64(1);
+    if (_client != null) {
+      try {
+        await _client!.setConfig(_config!);
+      } catch (_) {}
+    }
+    notifyListeners();
+    return true;
+  }
+
+  Future<void> selectServer(String serverId) async {
+    if (_config == null) return;
+    if (_status.phase != Phase.PHASE_IDLE) {
+      if (_client != null) await _client!.moveTo(serverId);
+    } else {
+      _config!.chosenServerId = serverId;
+      _config!.version += Int64(1);
+      if (_client != null) {
+        try {
+          await _client!.setConfig(_config!);
+        } catch (_) {}
+      }
+      notifyListeners();
+    }
   }
 
   @override

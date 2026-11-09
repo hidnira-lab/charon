@@ -454,6 +454,270 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Duration'**
   String get metricsDuration;
+
+  /// Title of Servers screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Servers'**
+  String get serversTitle;
+
+  /// Subtitle showing number of profiles.
+  ///
+  /// In en, this message translates to:
+  /// **'SERVERS · {count} PROFILES'**
+  String serversCountSubtitle(int count);
+
+  /// Section header for failover order list.
+  ///
+  /// In en, this message translates to:
+  /// **'PROFILES · FAILOVER ORDER'**
+  String get serversFailoverSubtitle;
+
+  /// Hint on failover order.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon tries servers in this order'**
+  String get serversFailoverHint;
+
+  /// Action to test servers.
+  ///
+  /// In en, this message translates to:
+  /// **'Test servers'**
+  String get serversActionTest;
+
+  /// Action to import vless link.
+  ///
+  /// In en, this message translates to:
+  /// **'Import vless:// link'**
+  String get serversActionImportLink;
+
+  /// Action to paste server configuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste config'**
+  String get serversActionPasteConfig;
+
+  /// Notice banner when connected to a server.
+  ///
+  /// In en, this message translates to:
+  /// **'Switching and deleting are locked while connected to {server}, editing is fine.'**
+  String serversLockedBanner(String server);
+
+  /// Button to activate a server.
+  ///
+  /// In en, this message translates to:
+  /// **'Use'**
+  String get serversActionUse;
+
+  /// Tooltip when action requires disconnecting first.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnect first'**
+  String get serversActionDisconnectFirst;
+
+  /// Link to disconnect from banner.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnect →'**
+  String get serversActionDisconnectLink;
+
+  /// Badge for active connected server.
+  ///
+  /// In en, this message translates to:
+  /// **'ACTIVE · CONNECTED'**
+  String get serversActiveConnected;
+
+  /// Badge for active server.
+  ///
+  /// In en, this message translates to:
+  /// **'ACTIVE'**
+  String get serversActive;
+
+  /// Title of empty add card.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a server you control'**
+  String get serversAddCardTitle;
+
+  /// Subtitle of empty add card.
+  ///
+  /// In en, this message translates to:
+  /// **'paste a JSON config or import a vless:// link'**
+  String get serversAddCardSubtitle;
+
+  /// Notice when server limit of 32 is reached.
+  ///
+  /// In en, this message translates to:
+  /// **'32 servers is the limit, delete one to add another.'**
+  String get serversLimitReached;
+
+  /// First failover rule notice.
+  ///
+  /// In en, this message translates to:
+  /// **'failover: if auto reconnect fails 5 times, Charon moves to the next profile and stays there'**
+  String get serversFailoverRule1;
+
+  /// Second failover rule notice.
+  ///
+  /// In en, this message translates to:
+  /// **'latency is only measured for the active server, no ping per profile yet'**
+  String get serversFailoverRule2;
+
+  /// Sync section title.
+  ///
+  /// In en, this message translates to:
+  /// **'SYNC'**
+  String get syncTitle;
+
+  /// Badge for end to end encryption.
+  ///
+  /// In en, this message translates to:
+  /// **'E2E · AES 256 GCM'**
+  String get syncE2EBadge;
+
+  /// Badge for current device.
+  ///
+  /// In en, this message translates to:
+  /// **'THIS UNIT'**
+  String get syncThisUnit;
+
+  /// Status when device is not paired with sync.
+  ///
+  /// In en, this message translates to:
+  /// **'not paired yet'**
+  String get syncNotPaired;
+
+  /// Status when device is paired.
+  ///
+  /// In en, this message translates to:
+  /// **'paired · {platform}'**
+  String syncPaired(String platform);
+
+  /// Button to push vault to sync server.
+  ///
+  /// In en, this message translates to:
+  /// **'Push'**
+  String get syncActionPush;
+
+  /// Button to pull vault from sync server.
+  ///
+  /// In en, this message translates to:
+  /// **'Pull'**
+  String get syncActionPull;
+
+  /// Button to display pairing code.
+  ///
+  /// In en, this message translates to:
+  /// **'Show pairing code'**
+  String get syncActionShowPairingCode;
+
+  /// File backup section title.
+  ///
+  /// In en, this message translates to:
+  /// **'FILE BACKUP'**
+  String get syncFileBackupTitle;
+
+  /// File backup format notice.
+  ///
+  /// In en, this message translates to:
+  /// **'.charonvault · same passphrase'**
+  String get syncFileBackupSubtitle;
+
+  /// Button to export vault file.
+  ///
+  /// In en, this message translates to:
+  /// **'Back up to file'**
+  String get syncActionBackupFile;
+
+  /// Button to import vault file.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from file'**
+  String get syncActionRestoreFile;
+
+  /// Header for sync scope.
+  ///
+  /// In en, this message translates to:
+  /// **'WHAT SYNCS'**
+  String get syncWhatSyncsTitle;
+
+  /// List of synced items.
+  ///
+  /// In en, this message translates to:
+  /// **'Servers and quota plans, split tunnel rules, the three safety switches, theme and language.'**
+  String get syncWhatSyncsLine1;
+
+  /// List of unsynced items that stay on device.
+  ///
+  /// In en, this message translates to:
+  /// **'stays on this device: startup, location, greeting, device name, window, quota counters'**
+  String get syncWhatSyncsLine2;
+
+  /// Hint on encryption before upload.
+  ///
+  /// In en, this message translates to:
+  /// **'encrypted on this device before upload'**
+  String get syncEncryptedHint;
+
+  /// Hint on other paired devices.
+  ///
+  /// In en, this message translates to:
+  /// **'other paired devices are not listed'**
+  String get syncNoOtherDevicesHint;
+
+  /// Dialog title confirming server deletion.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {server}?'**
+  String dialogDeleteServerTitle(String server);
+
+  /// Warning message when deleting server.
+  ///
+  /// In en, this message translates to:
+  /// **'This removes the server profile from this device, it cannot be undone.'**
+  String get dialogDeleteServerMessage;
+
+  /// Generic cancel button.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get dialogCancel;
+
+  /// Generic delete button.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get dialogDelete;
+
+  /// Generic save button.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get dialogSave;
+
+  /// Title of add server dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a server'**
+  String get dialogAddServerTitle;
+
+  /// Title of edit server dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit {server}'**
+  String dialogEditServerTitle(String server);
+
+  /// Field label for server name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get dialogServerName;
+
+  /// Field label for server address.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get dialogServerAddress;
 }
 
 class _AppLocalizationsDelegate

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../state/home_controller.dart';
 import '../../../state/ui_state.dart';
 import '../../../theme/theme.dart';
 
@@ -7,24 +8,33 @@ import '../../../theme/theme.dart';
 class RailNav extends StatelessWidget {
   const RailNav({
     super.key,
-    required this.uiState,
+    this.controller,
+    UiState? uiState,
+    this.selectedIndex = 0,
+    this.onTabSelected,
     this.onTapHome,
     this.onTapServers,
     this.onTapSplit,
     this.onTapTelemetry,
     this.onTapSettings,
-  });
+  }) : _explicitUiState = uiState;
 
-  final UiState uiState;
+  final HomeController? controller;
+  final UiState? _explicitUiState;
+  final int selectedIndex;
+  final ValueChanged<int>? onTabSelected;
   final VoidCallback? onTapHome;
   final VoidCallback? onTapServers;
   final VoidCallback? onTapSplit;
   final VoidCallback? onTapTelemetry;
   final VoidCallback? onTapSettings;
 
+  UiState get uiState => _explicitUiState ?? controller?.uiState ?? UiState.disconnected;
+
   @override
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
+    final active = controller != null ? controller!.activeTabIndex : selectedIndex;
 
     return Container(
       width: 72.0,
@@ -62,36 +72,46 @@ class RailNav extends StatelessWidget {
           _RailItem(
             icon: Icons.home_rounded,
             tooltip: 'Home',
-            isActive: true,
-            onTap: onTapHome,
+            isActive: active == 0,
+            onTap: onTabSelected != null
+                ? () => onTabSelected!(0)
+                : (controller != null ? () => controller!.setTab(0) : onTapHome),
           ),
           const SizedBox(height: CharonSpacing.s2),
           _RailItem(
             icon: Icons.dns_rounded,
             tooltip: 'Servers',
-            isActive: false,
-            onTap: onTapServers,
+            isActive: active == 1,
+            onTap: onTabSelected != null
+                ? () => onTabSelected!(1)
+                : (controller != null ? () => controller!.setTab(1) : onTapServers),
           ),
           const SizedBox(height: CharonSpacing.s2),
           _RailItem(
             icon: Icons.alt_route_rounded,
             tooltip: 'Split tunnel',
-            isActive: false,
-            onTap: onTapSplit,
+            isActive: active == 2,
+            onTap: onTabSelected != null
+                ? () => onTabSelected!(2)
+                : (controller != null ? () => controller!.setTab(2) : onTapSplit),
           ),
           const SizedBox(height: CharonSpacing.s2),
           _RailItem(
             icon: Icons.query_stats_rounded,
             tooltip: 'Telemetry',
-            isActive: false,
-            onTap: onTapTelemetry,
+            isActive: active == 3,
+            onTap: onTabSelected != null
+                ? () => onTabSelected!(3)
+                : (controller != null ? () => controller!.setTab(3) : onTapTelemetry),
           ),
           const Spacer(),
           _RailItem(
             icon: Icons.settings_rounded,
             tooltip: 'Settings',
-            isActive: false,
-            onTap: onTapSettings,
+            isActive: active == 4,
+            onTap: onTabSelected != null
+                ? () => onTabSelected!(4)
+                : (controller != null ? () => controller!.setTab(4) : onTapSettings),
           ),
           const SizedBox(height: CharonSpacing.s3),
           // Status chip at bottom
