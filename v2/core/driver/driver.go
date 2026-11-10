@@ -36,6 +36,9 @@ type Driver struct {
 	// during a session. Server changes apply on the next connect, so the new
 	// choice is copied into the state when the phase returns to Idle.
 	chosenPending bool
+	// queue and draining serialize HandleEvent, see there.
+	queue    []machine.Event
+	draining bool
 }
 
 // New initializes a Driver from the given Config, Saved session, and dependencies.
@@ -74,30 +77,55 @@ func (d *Driver) Config() *charonv1.Config {
 
 // HandleEvent feeds one machine.Event into machine.Step, broadcasts the new
 // Status snapshot, and executes every resulting Effect in order.
+//
+// Events are handled strictly one after another. An event that arrives while
+// another one is being handled (from a timer, the verifier, the pipe, or from
+// inside an effect such as Xray reporting that it stopped) is queued and runs
+// after the current event's effects have all finished, so the effects of two
+// events can never interleave. In that case HandleEvent returns nil at once;
+// otherwise it returns the effects of ev.
 func (d *Driver) HandleEvent(ev machine.Event) []machine.Effect {
 	d.mu.Lock()
-	var fx []machine.Effect
-	now := int64(0)
-	if d.deps.Clock != nil {
-		now = d.deps.Clock.NowMs()
+	d.queue = append(d.queue, ev)
+	if d.draining {
+		d.mu.Unlock()
+		return nil
 	}
-	d.applyPendingChosenLocked() // Idle reached outside Step (ForceSessionEnd)
-	d.state, fx = machine.Step(d.state, ev, now)
-	d.applyPendingChosenLocked() // Idle reached by this step
-	cfg := d.cfg
-	activeSrv := d.findServerLocked(d.state.Active)
-	snap := d.state.Status(now)
-	snap.ConfigVersion = cfg.GetVersion()
+	d.draining = true
+
+	var own []machine.Effect
+	for first := true; len(d.queue) > 0; first = false {
+		next := d.queue[0]
+		d.queue = d.queue[1:]
+
+		var fx []machine.Effect
+		now := int64(0)
+		if d.deps.Clock != nil {
+			now = d.deps.Clock.NowMs()
+		}
+		d.applyPendingChosenLocked() // Idle reached outside Step (ForceSessionEnd)
+		d.state, fx = machine.Step(d.state, next, now)
+		d.applyPendingChosenLocked() // Idle reached by this step
+		cfg := d.cfg
+		activeSrv := d.findServerLocked(d.state.Active)
+		snap := d.state.Status(now)
+		snap.ConfigVersion = cfg.GetVersion()
+		d.mu.Unlock()
+
+		if d.deps.Notifier != nil {
+			d.deps.Notifier.NotifyStatus(snap)
+		}
+		for _, e := range fx {
+			d.runEffect(e, cfg, activeSrv, now)
+		}
+		if first {
+			own = fx
+		}
+		d.mu.Lock()
+	}
+	d.draining = false
 	d.mu.Unlock()
-
-	if d.deps.Notifier != nil {
-		d.deps.Notifier.NotifyStatus(snap)
-	}
-
-	for _, e := range fx {
-		d.runEffect(e, cfg, activeSrv, now)
-	}
-	return fx
+	return own
 }
 
 // HandleUserCommand validates whether an IPC command is allowed in the current
