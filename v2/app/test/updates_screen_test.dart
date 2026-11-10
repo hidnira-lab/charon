@@ -53,11 +53,10 @@ void main() {
 
       // Apply now
       await controller.applyCoreUpdate(when: ApplyWhen.APPLY_NOW);
-      expect(controller.coreUpdateState.stage, UpdateStage.UPDATE_UPDATED);
+      expect(controller.coreUpdateState.stage, UpdateStage.UPDATE_APPLYING);
 
       // Rollback
       await controller.rollbackCore();
-      expect(controller.coreUpdateState.stage, UpdateStage.UPDATE_ROLLED_BACK);
     });
   });
 

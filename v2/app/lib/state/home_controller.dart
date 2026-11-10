@@ -116,8 +116,8 @@ class HomeController extends ChangeNotifier {
   String _customDns = '198.51.100.53';
   ConnectionMode _connectionMode = ConnectionMode.tun;
   bool _launchAtStartup = false;
-  bool _isServiceRestarting = false;
   ServiceStatus _serviceStatus = ServiceStatus.running;
+  bool _isServiceRestarting = false;
   bool _isServiceStarting = false;
   bool _serviceStartFailed = false;
   int _pipeRetrySeconds = 3;
@@ -215,18 +215,9 @@ class HomeController extends ChangeNotifier {
         await _client!.applyUpdate(UpdateKind.UPDATE_KIND_CORE, when);
       } catch (_) {}
     }
-
-    if (when == ApplyWhen.APPLY_NOW) {
-      await Future<void>.delayed(const Duration(milliseconds: 300));
-      _coreUpdateState.stage = UpdateStage.UPDATE_UPDATED;
-      _coreUpdateState.currentVersion = _coreUpdateState.newVersion;
-      notifyListeners();
-    }
   }
 
   Future<void> rollbackCore() async {
-    _coreUpdateState.stage = UpdateStage.UPDATE_ROLLED_BACK;
-    notifyListeners();
     if (_client != null) {
       try {
         await _client!.rollbackCore();
@@ -311,8 +302,8 @@ class HomeController extends ChangeNotifier {
   String get customDns => _customDns;
   ConnectionMode get connectionMode => _connectionMode;
   bool get launchAtStartup => _launchAtStartup;
-  bool get isServiceRestarting => _isServiceRestarting;
   ServiceStatus get serviceStatus => _serviceStatus;
+  bool get isServiceRestarting => _isServiceRestarting;
   bool get isServiceStarting => _isServiceStarting;
   bool get serviceStartFailed => _serviceStartFailed;
   int get pipeRetrySeconds => _pipeRetrySeconds;
@@ -393,12 +384,17 @@ class HomeController extends ChangeNotifier {
     _isServiceStarting = true;
     _serviceStartFailed = false;
     notifyListeners();
-    await Future<void>.delayed(const Duration(milliseconds: 600));
-    _isServiceStarting = false;
-    if (_serviceStartFailed) {
-      notifyListeners();
-    } else {
-      _serviceStatus = ServiceStatus.running;
+    try {
+      if (Platform.isWindows) {
+        final res = await Process.run('sc.exe', ['start', 'charon']);
+        if (res.exitCode != 0) {
+          _serviceStartFailed = true;
+        }
+      }
+    } catch (_) {
+      _serviceStartFailed = true;
+    } finally {
+      _isServiceStarting = false;
       notifyListeners();
     }
   }
@@ -410,21 +406,45 @@ class HomeController extends ChangeNotifier {
   }
 
   Future<void> repairInstaller() async {
-    await Future<void>.delayed(const Duration(milliseconds: 300));
-    _serviceStartFailed = false;
-    _serviceStatus = ServiceStatus.running;
-    notifyListeners();
+    if (Platform.isWindows) {
+      try {
+        await Process.start('charon-installer.exe', []);
+      } catch (_) {}
+    }
   }
 
   Future<void> openReleaseTool() async {
-    await Future<void>.delayed(const Duration(milliseconds: 100));
+    if (Platform.isWindows) {
+      try {
+        await Process.start('charon-release.exe', []);
+      } catch (_) {}
+    }
   }
 
   Future<void> updateService() async {
-    await Future<void>.delayed(const Duration(milliseconds: 500));
-    _serviceStatus = ServiceStatus.running;
-    notifyListeners();
+    if (Platform.isWindows) {
+      try {
+        await Process.start('charon-installer.exe', ['/SILENT']);
+      } catch (_) {}
+    }
   }
+
+  Future<void> restartService() async {
+    if (_isServiceRestarting) return;
+    _isServiceRestarting = true;
+    notifyListeners();
+    try {
+      if (Platform.isWindows) {
+        await Process.run('sc.exe', ['stop', 'charon']);
+        await Process.run('sc.exe', ['start', 'charon']);
+      }
+    } catch (_) {
+    } finally {
+      _isServiceRestarting = false;
+      notifyListeners();
+    }
+  }
+
   String get greetingName => _greetingName;
   bool get detectCity => _detectCity;
   String get city => _city;
@@ -603,15 +623,6 @@ class HomeController extends ChangeNotifier {
       _countryCode = code;
       notifyListeners();
     }
-  }
-
-  Future<void> restartService() async {
-    if (_isServiceRestarting) return;
-    _isServiceRestarting = true;
-    notifyListeners();
-    await Future<void>.delayed(const Duration(milliseconds: 1500));
-    _isServiceRestarting = false;
-    notifyListeners();
   }
 
   Future<void> setKillSwitch(bool value) async {
