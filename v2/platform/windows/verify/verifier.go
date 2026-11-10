@@ -101,11 +101,10 @@ func (v *Verifier) Verify(ctx context.Context, server *charonv1.Server, _ *charo
 	}
 
 	// Step 3: Egress IP match against the server's expected IP(s).
-	observedIP, err := netip.ParseAddr(strings.TrimSpace(egressStr))
+	observedIP, err := parseEgress(egressStr)
 	if err != nil {
 		return "", 0, charonv1.FailureReason_FAILURE_EGRESS_MISMATCH
 	}
-	observedIP = observedIP.Unmap()
 	matched := false
 	for _, exp := range expectedIPs {
 		if exp == observedIP {
@@ -123,6 +122,19 @@ func (v *Verifier) Verify(ctx context.Context, server *charonv1.Server, _ *charo
 	}
 
 	return observedIP.String(), latencyMs, charonv1.FailureReason_FAILURE_UNSPECIFIED
+}
+
+// parseEgress reads the caller address from the egress endpoint's reply. It
+// accepts a bare address, or the key=value lines of a cdn-cgi/trace reply
+// (the default EgressURL), where the address is on the "ip=" line.
+func parseEgress(body string) (netip.Addr, error) {
+	for _, line := range strings.Split(body, "\n") {
+		line = strings.TrimPrefix(strings.TrimSpace(line), "ip=")
+		if ip, err := netip.ParseAddr(line); err == nil {
+			return ip.Unmap(), nil
+		}
+	}
+	return netip.Addr{}, fmt.Errorf("no address in egress reply")
 }
 
 func (v *Verifier) dialThroughTunnel(ctx context.Context, network, addr string) (net.Conn, error) {

@@ -201,3 +201,20 @@ func TestVerifier_AllFourChecks(t *testing.T) {
 		t.Fatalf("expected FAILURE_TCP_TIMEOUT, got %v", r)
 	}
 }
+
+func TestParseEgress(t *testing.T) {
+	trace := "fl=123f45\nh=1.1.1.1\nip=192.0.2.10\nts=1700000000.000\nvisit_scheme=https\n"
+	for name, body := range map[string]string{
+		"plain address":         "192.0.2.10\n",
+		"cdn-cgi trace":         trace,
+		"mapped IPv4 in a line": "ip=::ffff:192.0.2.10\n",
+	} {
+		got, err := parseEgress(body)
+		if err != nil || got != netip.MustParseAddr("192.0.2.10") {
+			t.Errorf("%s: got %v, %v", name, got, err)
+		}
+	}
+	if _, err := parseEgress("h=1.1.1.1\nts=1\n"); err == nil {
+		t.Error("a body without an address must be rejected")
+	}
+}
