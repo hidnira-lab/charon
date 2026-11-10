@@ -4,6 +4,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
 import '../../../theme/tokens.dart';
 import '../../telemetry/widgets/export_diagnostics_dialog.dart';
+import '../../trust/guide_links.dart';
 import '../../trust/licences_screen.dart';
 import '../../trust/privacy_screen.dart';
 import '../../updates/updates_screen.dart';
@@ -19,16 +20,37 @@ class AboutCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final activeLocale = controller?.locale ?? Localizations.maybeLocaleOf(context);
 
     final links = [
       _AboutItem(label: l10n.settingsAboutUpdates, value: '2 READY →', isExternal: false),
-      _AboutItem(label: l10n.settingsAboutGuides, value: 'GUIDES', isExternal: true),
+      _AboutItem(
+        label: l10n.settingsAboutGuides,
+        value: 'GUIDES',
+        isExternal: true,
+        url: CharonGuideLinks.urlFor(CharonGuideId.hub, locale: activeLocale),
+      ),
       _AboutItem(label: l10n.settingsAboutPrivacy, value: 'OPEN →', isExternal: false),
-      _AboutItem(label: l10n.settingsAboutSecurity, value: 'SECURITY.md', isExternal: true),
+      _AboutItem(
+        label: l10n.settingsAboutSecurity,
+        value: 'SECURITY.md',
+        isExternal: true,
+        url: CharonGuideLinks.securityUrl,
+      ),
       _AboutItem(label: l10n.settingsAboutDiagnostics, value: 'PREVIEW →', isExternal: false),
-      _AboutItem(label: l10n.settingsAboutSource, value: 'REPOSITORY', isExternal: true),
+      _AboutItem(
+        label: l10n.settingsAboutSource,
+        value: 'REPOSITORY',
+        isExternal: true,
+        url: CharonGuideLinks.repoUrl,
+      ),
       _AboutItem(label: l10n.settingsAboutLicense, value: 'LICENCES →', isExternal: false),
-      _AboutItem(label: l10n.settingsAboutAcks, value: 'WEBSITE', isExternal: true),
+      _AboutItem(
+        label: l10n.settingsAboutAcks,
+        value: 'WEBSITE',
+        isExternal: true,
+        url: CharonGuideLinks.thirdPartyNoticesUrl,
+      ),
     ];
 
     return Container(
@@ -206,9 +228,11 @@ class _AboutItem {
     required this.label,
     required this.value,
     required this.isExternal,
+    this.url,
   });
 
   final String label;
   final String value;
   final bool isExternal;
+  final String? url;
 }

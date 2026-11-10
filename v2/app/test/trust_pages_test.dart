@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:charon/gen/charon/v1/charon.pbenum.dart';
 import 'package:charon/l10n/generated/app_localizations.dart';
 import 'package:charon/main.dart';
 import 'package:charon/state/home_controller.dart';
 import 'package:charon/ui/telemetry/widgets/export_diagnostics_dialog.dart';
+import 'package:charon/ui/trust/guide_links.dart';
 import 'package:charon/ui/trust/licences_screen.dart';
 import 'package:charon/ui/trust/privacy_screen.dart';
 
@@ -174,6 +178,74 @@ void main() {
       expect(find.text('TUJUAN JARINGAN'), findsOneWidget);
       expect(find.text('FAKTA PRIVASI NYATA'), findsOneWidget);
       expect(find.text('Nol Analitik & Telemetri'), findsOneWidget);
+    });
+  });
+
+  group('Wave 1 Guides and Public Documentation Integrity (M7)', () {
+    test('CharonGuideLinks resolves language folders with English fallback and maps FailReason', () {
+      expect(CharonGuideLinks.languageFolder(const Locale('en')), 'en');
+      expect(CharonGuideLinks.languageFolder(const Locale('id')), 'id');
+      expect(CharonGuideLinks.languageFolder(const Locale('zh')), 'zh');
+      expect(CharonGuideLinks.languageFolder(const Locale('fr')), 'en');
+      expect(CharonGuideLinks.languageFolder(null), 'en');
+
+      expect(
+        CharonGuideLinks.relativePath(CharonGuideId.a7KillSwitchAndBoot, locale: const Locale('id')),
+        'guides/id/a7-kill-switch-and-boot.md',
+      );
+      expect(
+        CharonGuideLinks.guideForFailureReason(FailureReason.FAILURE_TCP_TIMEOUT),
+        CharonGuideId.a5CouldNotReach,
+      );
+      expect(
+        CharonGuideLinks.guideForFailureReason(FailureReason.FAILURE_REALITY_HANDSHAKE),
+        CharonGuideId.a4RealityKeysAndSni,
+      );
+      expect(
+        CharonGuideLinks.guideForFailureReason(FailureReason.FAILURE_CONFIG_REJECTED),
+        CharonGuideId.a3ServerSetup,
+      );
+      expect(
+        CharonGuideLinks.guideForFailureReason(FailureReason.FAILURE_ADAPTER_LOST),
+        CharonGuideId.a7KillSwitchAndBoot,
+      );
+      expect(
+        CharonGuideLinks.guideForFailureReason(FailureReason.FAILURE_DNS_NOT_TUNNELLED),
+        CharonGuideId.b10Troubleshooting,
+      );
+    });
+
+    test('all Wave 1 guides (en, id, zh) and root trust docs exist on disk and are clean', () {
+      // Test runs with CWD = v2/app; v2 root is one level up.
+      final v2Root = Directory('..');
+      final rootDocs = [
+        'LICENSE',
+        'SECURITY.md',
+        'PRIVACY.md',
+        'THREAT_MODEL.md',
+        'THIRD_PARTY_NOTICES.md',
+        'README.md',
+      ];
+      final forbidden = RegExp(r'BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY|/Users/[A-Za-z0-9_]+');
+
+      for (final name in rootDocs) {
+        final file = File('${v2Root.path}/$name');
+        expect(file.existsSync(), isTrue, reason: 'missing $name');
+        final content = file.readAsStringSync();
+        expect(content, isNotEmpty);
+        expect(forbidden.hasMatch(content), isFalse, reason: 'sensitive pattern in $name');
+      }
+
+      for (final lang in ['en', 'id', 'zh']) {
+        for (final guide in CharonGuideId.values) {
+          final rel = CharonGuideLinks.relativePath(guide, locale: Locale(lang));
+          final file = File('${v2Root.path}/$rel');
+          expect(file.existsSync(), isTrue, reason: 'missing $rel');
+          final content = file.readAsStringSync();
+          expect(content, isNotEmpty);
+          expect(forbidden.hasMatch(content), isFalse, reason: 'sensitive pattern in $rel');
+        }
+      }
     });
   });
 }
