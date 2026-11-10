@@ -21,6 +21,7 @@ import (
 	"github.com/hidnira-lab/charon/platform/windows/stats"
 	"github.com/hidnira-lab/charon/platform/windows/store"
 	"github.com/hidnira-lab/charon/platform/windows/supervisor"
+	"github.com/hidnira-lab/charon/platform/windows/updater"
 	"github.com/hidnira-lab/charon/platform/windows/verify"
 	"github.com/hidnira-lab/charon/platform/windows/wfp"
 	"golang.org/x/sys/windows/svc"
@@ -173,6 +174,20 @@ func NewRuntime(opts Options) (*Runtime, error) {
 	})
 	pipeSrv.SetDriver(drv)
 	rt.drv = drv
+
+	upAgent, err := updater.New(updater.Config{
+		DataDir:            opts.DataDir,
+		CurrentAppVersion:  opts.ServiceVersion,
+		CurrentCoreVersion: opts.XrayVersion,
+		ManifestBaseURL:    os.Getenv("CHARON_MANIFEST_BASE_URL"),
+		IsTunnelIdle: func() bool {
+			return drv.Status().GetPhase() == charonv1.Phase_PHASE_IDLE
+		},
+		OnUpdateState: pipeSrv.BroadcastUpdateState,
+	})
+	if err == nil {
+		pipeSrv.SetUpdater(upAgent)
+	}
 
 	return rt, nil
 }

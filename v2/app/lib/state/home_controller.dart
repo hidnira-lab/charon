@@ -230,6 +230,70 @@ class HomeController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Streams a manual update bundle or binary ([bytes]) to the service in
+  /// chunks via `UpdateFileChunk` and records verification status.
+  Future<bool> uploadUpdateFileBytes(
+    UpdateKind kind,
+    List<int> bytes, {
+    int chunkSize = 256 * 1024,
+  }) async {
+    if (_client == null || bytes.isEmpty) {
+      _fileVerificationResult = 'failed';
+      notifyListeners();
+      return false;
+    }
+
+    _isFileUploading = true;
+    _fileUploadProgress = 0;
+    _fileVerificationResult = null;
+    notifyListeners();
+
+    try {
+      var offset = 0;
+      Response? lastResp;
+      while (offset < bytes.length) {
+        final end = (offset + chunkSize < bytes.length)
+            ? offset + chunkSize
+            : bytes.length;
+        final isLast = end == bytes.length;
+        lastResp = await _client!.updateFileChunk(
+          UpdateFileChunk(
+            kind: kind,
+            offset: Int64(offset),
+            data: bytes.sublist(offset, end),
+            last: isLast,
+          ),
+        );
+        offset = end;
+        _fileUploadProgress = ((offset * 100) ~/ bytes.length).clamp(0, 100);
+        notifyListeners();
+        if (lastResp.hasError()) {
+          _isFileUploading = false;
+          _fileVerificationResult = 'failed';
+          notifyListeners();
+          return false;
+        }
+      }
+
+      if (lastResp != null && lastResp.hasUpdateState()) {
+        if (kind == UpdateKind.UPDATE_KIND_CORE) {
+          _coreUpdateState = lastResp.updateState;
+        } else {
+          _appUpdateState = lastResp.updateState;
+        }
+      }
+      _isFileUploading = false;
+      _fileVerificationResult = 'verified';
+      notifyListeners();
+      return true;
+    } catch (_) {
+      _isFileUploading = false;
+      _fileVerificationResult = 'failed';
+      notifyListeners();
+      return false;
+    }
+  }
+
   ThemeMode get themeMode => _themeMode;
   Locale? get locale => _locale;
   DnsMode get dnsMode => _dnsMode;

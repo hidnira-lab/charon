@@ -4,10 +4,12 @@
 package update
 
 import (
+	"bytes"
 	"crypto/ed25519"
 	"crypto/sha256"
 	"crypto/subtle"
 	"encoding/base64"
+	"encoding/binary"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
@@ -20,6 +22,10 @@ import (
 const (
 	// MaxManifestSize caps manifest.json at 256 KiB.
 	MaxManifestSize = 256 * 1024
+
+	// BundleMarker is the 8-byte prefix of a self-contained manual update bundle
+	// sent over UpdateFileChunk (manifest.json + manifest.json.sig + artifact bytes).
+	BundleMarker = "CHARONUP"
 
 	// DefaultPrimaryPublicKeyHex is the primary embedded Ed25519 release verification key.
 	DefaultPrimaryPublicKeyHex = "8986c43e929f02a4e2f30f9c278f3c6a38d0e3c782a6b6e440d335c36c05763a"
@@ -275,4 +281,48 @@ func isValidSHA256Hex(s string) bool {
 	}
 	_, err := hex.DecodeString(trimmed)
 	return err == nil
+}
+
+// PackBundle combines manifestBytes, sigBytes, and artifactBytes into a
+// single self-contained byte slice prefixed by BundleMarker ("CHARONUP") for
+// manual offline update uploads over UpdateFileChunk.
+func PackBundle(manifestBytes, sigBytes, artifactBytes []byte) []byte {
+	total := 8 + 4 + len(manifestBytes) + 4 + len(sigBytes) + len(artifactBytes)
+	out := make([]byte, 0, total)
+	out = append(out, BundleMarker...)
+	var lenBuf [4]byte
+	binary.BigEndian.PutUint32(lenBuf[:], uint32(len(manifestBytes)))
+	out = append(out, lenBuf[:]...)
+	out = append(out, manifestBytes...)
+	binary.BigEndian.PutUint32(lenBuf[:], uint32(len(sigBytes)))
+	out = append(out, lenBuf[:]...)
+	out = append(out, sigBytes...)
+	out = append(out, artifactBytes...)
+	return out
+}
+
+// UnpackBundle splits a BundleMarker-prefixed manual update stream into
+// manifestBytes, sigBytes, and artifactBytes.
+func UnpackBundle(raw []byte) (manifestBytes, sigBytes, artifactBytes []byte, err error) {
+	if len(raw) < 16 || !bytes.Equal(raw[:8], []byte(BundleMarker)) {
+		return nil, nil, nil, ErrMalformedManifest
+	}
+	pos := 8
+	mLen := int(binary.BigEndian.Uint32(raw[pos : pos+4]))
+	pos += 4
+	if mLen <= 0 || mLen > MaxManifestSize || pos+mLen+4 > len(raw) {
+		return nil, nil, nil, ErrMalformedManifest
+	}
+	manifestBytes = raw[pos : pos+mLen]
+	pos += mLen
+
+	sLen := int(binary.BigEndian.Uint32(raw[pos : pos+4]))
+	pos += 4
+	if sLen <= 0 || sLen > 4096 || pos+sLen > len(raw) {
+		return nil, nil, nil, ErrMalformedManifest
+	}
+	sigBytes = raw[pos : pos+sLen]
+	pos += sLen
+	artifactBytes = raw[pos:]
+	return manifestBytes, sigBytes, artifactBytes, nil
 }

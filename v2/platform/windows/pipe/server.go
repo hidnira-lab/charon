@@ -3,6 +3,7 @@
 package pipe
 
 import (
+	"context"
 	"errors"
 	"io"
 	"net"
@@ -16,6 +17,15 @@ import (
 	"github.com/hidnira-lab/charon/core/ipc"
 	"github.com/hidnira-lab/charon/core/logbuf"
 )
+
+// UpdateHandler is implemented by the Windows service update agent (I4).
+type UpdateHandler interface {
+	CheckUpdate(ctx context.Context) (*charonv1.UpdateState, *charonv1.Error)
+	HandleFileChunk(chunk *charonv1.UpdateFileChunk) (*charonv1.UpdateState, *charonv1.Error)
+	ApplyUpdate(req *charonv1.ApplyUpdate) (*charonv1.UpdateState, *charonv1.Error)
+	RollbackCore() (*charonv1.UpdateState, *charonv1.Error)
+	OnTunnelIdle()
+}
 
 const (
 	MinProtocolVersion = 1
@@ -35,6 +45,7 @@ type Config struct {
 	ServiceVersion string
 	XrayVersion    string
 	Driver         *driver.Driver
+	Updater        UpdateHandler
 	CoreLogs       *logbuf.Ring
 	AccessLogs     *logbuf.Ring
 	NowMs          func() int64
@@ -99,6 +110,13 @@ func NewServer(cfg Config) *Server {
 func (s *Server) SetDriver(drv *driver.Driver) {
 	s.cmdMu.Lock()
 	s.cfg.Driver = drv
+	s.cmdMu.Unlock()
+}
+
+// SetUpdater binds the UpdateHandler to the Server.
+func (s *Server) SetUpdater(u UpdateHandler) {
+	s.cmdMu.Lock()
+	s.cfg.Updater = u
 	s.cmdMu.Unlock()
 }
 
@@ -307,6 +325,46 @@ func (s *Server) executeCommand(c *clientSession, cmd *charonv1.Command) *charon
 			Kind: &charonv1.Response_Diagnostics{Diagnostics: raw},
 		}
 
+	case *charonv1.Command_CheckUpdate:
+		if s.cfg.Updater == nil {
+			return errResp(charonv1.ErrorCode_ERROR_UNSUPPORTED, "error.unsupported")
+		}
+		st, uErr := s.cfg.Updater.CheckUpdate(context.Background())
+		if uErr != nil {
+			return &charonv1.Response{Kind: &charonv1.Response_Error{Error: uErr}}
+		}
+		return &charonv1.Response{Kind: &charonv1.Response_UpdateState{UpdateState: st}}
+
+	case *charonv1.Command_UpdateFileChunk:
+		if s.cfg.Updater == nil {
+			return errResp(charonv1.ErrorCode_ERROR_UNSUPPORTED, "error.unsupported")
+		}
+		st, uErr := s.cfg.Updater.HandleFileChunk(k.UpdateFileChunk)
+		if uErr != nil {
+			return &charonv1.Response{Kind: &charonv1.Response_Error{Error: uErr}}
+		}
+		return &charonv1.Response{Kind: &charonv1.Response_UpdateState{UpdateState: st}}
+
+	case *charonv1.Command_ApplyUpdate:
+		if s.cfg.Updater == nil {
+			return errResp(charonv1.ErrorCode_ERROR_UNSUPPORTED, "error.unsupported")
+		}
+		st, uErr := s.cfg.Updater.ApplyUpdate(k.ApplyUpdate)
+		if uErr != nil {
+			return &charonv1.Response{Kind: &charonv1.Response_Error{Error: uErr}}
+		}
+		return &charonv1.Response{Kind: &charonv1.Response_UpdateState{UpdateState: st}}
+
+	case *charonv1.Command_RollbackCore:
+		if s.cfg.Updater == nil {
+			return errResp(charonv1.ErrorCode_ERROR_UNSUPPORTED, "error.unsupported")
+		}
+		st, uErr := s.cfg.Updater.RollbackCore()
+		if uErr != nil {
+			return &charonv1.Response{Kind: &charonv1.Response_Error{Error: uErr}}
+		}
+		return &charonv1.Response{Kind: &charonv1.Response_UpdateState{UpdateState: st}}
+
 	default:
 		if s.cfg.Driver == nil {
 			return errResp(charonv1.ErrorCode_ERROR_UNSUPPORTED, "error.unsupported")
@@ -322,6 +380,16 @@ func (s *Server) executeCommand(c *clientSession, cmd *charonv1.Command) *charon
 func (s *Server) NotifyStatus(status *charonv1.Status) {
 	s.broadcast(&charonv1.Event{
 		Kind: &charonv1.Event_StatusChanged{StatusChanged: status},
+	}, false)
+	if status.GetPhase() == charonv1.Phase_PHASE_IDLE && s.cfg.Updater != nil {
+		go s.cfg.Updater.OnTunnelIdle()
+	}
+}
+
+// BroadcastUpdateState sends an UpdateState event to all connected clients.
+func (s *Server) BroadcastUpdateState(st *charonv1.UpdateState) {
+	s.broadcast(&charonv1.Event{
+		Kind: &charonv1.Event_UpdateState{UpdateState: st},
 	}, false)
 }
 
