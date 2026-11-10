@@ -101,6 +101,11 @@ func (s *Supervisor) Start(server *charonv1.Server, userCfg *charonv1.Config) er
 	s.cmd = cmd
 	s.mu.Unlock()
 
+	if err := tieToService(cmd.Process.Pid); err != nil && s.cfg.CoreLogs != nil {
+		// Xray still runs, it just is not guaranteed to die with the service.
+		s.cfg.CoreLogs.Append(charonv1.LogLevel_LOG_LEVEL_WARN, "supervisor: could not tie Xray to the service: "+err.Error(), s.cfg.NowMs())
+	}
+
 	var logCollector strings.Builder
 	var logMu sync.Mutex
 
