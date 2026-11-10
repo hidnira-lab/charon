@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
@@ -14,7 +13,6 @@ enum VaultDialogMode {
 /// - Three-tier strength hint using muted, amber, and blue tokens (never red)
 /// - Plain warning: "If you lose this passphrase, nobody can recover your data, including you."
 /// - "I have saved this passphrase" requirement for backup
-/// - Busy state with Argon2id derivation wait indicator
 class VaultPassphraseDialog extends StatefulWidget {
   const VaultPassphraseDialog({
     super.key,
@@ -42,7 +40,6 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
   final TextEditingController _passphraseCtrl = TextEditingController();
   bool _obscureText = true;
   bool _savedConfirmed = false;
-  bool _isDeriving = false;
   String? _error;
 
   @override
@@ -70,7 +67,7 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
     }
   }
 
-  Future<void> _onSubmit() async {
+  void _onSubmit() {
     final text = _passphraseCtrl.text;
     if (text.length < 8) {
       setState(() {
@@ -86,15 +83,6 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
       return;
     }
 
-    setState(() {
-      _isDeriving = true;
-      _error = null;
-    });
-
-    // Simulate Argon2id derivation wait (e.g. 800ms)
-    await Future<void>.delayed(const Duration(milliseconds: 600));
-
-    if (!mounted) return;
     Navigator.of(context).pop(text);
   }
 
@@ -225,7 +213,6 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
               TextField(
                 controller: _passphraseCtrl,
                 obscureText: _obscureText,
-                enabled: !_isDeriving,
                 style: TextStyle(
                   fontFamily: CharonTokens.fontMono,
                   fontSize: 13,
@@ -314,20 +301,14 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
                       width: 24,
                       child: Checkbox(
                         value: _savedConfirmed,
-                        onChanged: _isDeriving
-                            ? null
-                            : (val) => setState(() => _savedConfirmed = val ?? false),
+                        onChanged: (val) => setState(() => _savedConfirmed = val ?? false),
                         activeColor: const Color(0xFF60A1D9),
                       ),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: GestureDetector(
-                        onTap: () {
-                          if (!_isDeriving) {
-                            setState(() => _savedConfirmed = !_savedConfirmed);
-                          }
-                        },
+                        onTap: () => setState(() => _savedConfirmed = !_savedConfirmed),
                         child: Text(
                           l10n.dialogVaultSavedCheckbox,
                           style: TextStyle(
@@ -343,45 +324,12 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
                 const SizedBox(height: 12),
               ],
 
-              // Deriving Progress Indicator
-              if (_isDeriving) ...[
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF262626),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                        width: 14,
-                        height: 14,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Color(0xFF60A1D9),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        l10n.dialogVaultDeriving,
-                        style: const TextStyle(
-                          fontFamily: CharonTokens.fontMono,
-                          fontSize: 11,
-                          color: Color(0xFF60A1D9),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-              ],
-
               // Buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   OutlinedButton(
-                    onPressed: _isDeriving ? null : () => Navigator.of(context).pop(),
+                    onPressed: () => Navigator.of(context).pop(),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: textPrimary,
                       side: BorderSide(color: borderColor),
@@ -391,7 +339,7 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
                   ),
                   const SizedBox(width: 12),
                   FilledButton(
-                    onPressed: _isDeriving ? null : _onSubmit,
+                    onPressed: _onSubmit,
                     style: FilledButton.styleFrom(
                       backgroundColor: const Color(0xFF3B82F6),
                       foregroundColor: Colors.white,

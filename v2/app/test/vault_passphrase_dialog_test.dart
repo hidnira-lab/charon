@@ -62,11 +62,6 @@ void main() {
 
       // Tap Export Vault
       await tester.tap(find.text('Export Vault'));
-      await tester.pump(); // starts deriving
-
-      expect(find.text('Deriving key with Argon2id...'), findsOneWidget);
-
-      await tester.pump(const Duration(milliseconds: 700));
       await tester.pumpAndSettle();
 
       expect(resultPassphrase, 'supersecurevaultpassphrase');
@@ -101,9 +96,6 @@ void main() {
       await tester.pump();
 
       await tester.tap(find.text('Decrypt & Restore'));
-      await tester.pump(); // starts deriving
-
-      await tester.pump(const Duration(milliseconds: 700));
       await tester.pumpAndSettle();
 
       expect(resultPassphrase, 'mypassword123');
