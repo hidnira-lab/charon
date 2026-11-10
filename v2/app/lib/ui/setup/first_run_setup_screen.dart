@@ -6,6 +6,7 @@ import '../../gen/charon/v1/charon.pb.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../state/home_controller.dart';
 import '../../theme/tokens.dart';
+import '../home/widgets/failure_copy.dart';
 import 'widgets/crossing_scene.dart';
 
 /// First Run Setup Wizard screen implementing Spec 07.
@@ -50,8 +51,8 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
   bool _launchAtStartup = false;
 
   // Step 3: Dial test & verification
-  bool _isProbing = false;
-  int _probeChecksPassed = 0; // 0 to 4
+  bool _hasStartedProbing = false;
+  bool _isConnecting = false;
   bool _showFourChecksHelp = false;
 
   @override
@@ -60,13 +61,19 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
     _currentStep = widget.initialStep.clamp(0, 3);
     _timeMode = widget.initialTimeMode;
     _serverInputController.addListener(_validateServerInput);
+    widget.controller.addListener(_onControllerChanged);
   }
 
   @override
   void dispose() {
+    widget.controller.removeListener(_onControllerChanged);
     _serverInputController.dispose();
     _restoreCodeController.dispose();
     super.dispose();
+  }
+
+  void _onControllerChanged() {
+    if (mounted) setState(() {});
   }
 
   void _validateServerInput() {
@@ -111,28 +118,41 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
     if (_currentStep > 0) {
       setState(() {
         _currentStep--;
+        if (_currentStep < 3) {
+          _hasStartedProbing = false;
+        }
       });
     }
   }
 
   Future<void> _runVerificationProbes() async {
-    if (_isProbing) return;
+    final server = _parsedServer;
+    if (server == null || _isConnecting) return;
+
     setState(() {
-      _isProbing = true;
-      _probeChecksPassed = 0;
+      _hasStartedProbing = true;
+      _isConnecting = true;
     });
 
-    for (var i = 1; i <= 4; i++) {
-      await Future<void>.delayed(const Duration(milliseconds: 320));
-      if (!mounted) return;
-      setState(() {
-        _probeChecksPassed = i;
-      });
+    try {
+      final exists = widget.controller.config?.servers.any((s) => s.id == server.id) ?? false;
+      if (!exists) {
+        await widget.controller.addServer(server);
+      } else {
+        await widget.controller.updateServer(server);
+      }
+      await widget.controller.setKillSwitch(_killSwitch);
+      await widget.controller.setAllowLocalNetwork(_allowLocalNetwork);
+      widget.controller.setLaunchAtStartup(_launchAtStartup);
+
+      await widget.controller.connect();
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isConnecting = false;
+        });
+      }
     }
-
-    setState(() {
-      _isProbing = false;
-    });
   }
 
   Future<void> _finishSetup() async {
@@ -923,7 +943,15 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
   // STEP 3: FIRST CONNECT DIAL TEST & VERIFY
   // --------------------------------------------------------------------------
   Widget _buildStep3Verify(BuildContext context, AppLocalizations l10n) {
-    final bool allPassed = _probeChecksPassed == 4;
+    final status = widget.controller.status;
+    final bool allPassed = status.phase == Phase.PHASE_UP;
+    final bool isProbing = _isConnecting ||
+        status.phase == Phase.PHASE_STARTING ||
+        status.phase == Phase.PHASE_VERIFYING;
+    final bool hasFailed = _hasStartedProbing &&
+        !allPassed &&
+        !isProbing &&
+        status.lastFailure != FailureReason.FAILURE_UNSPECIFIED;
 
     return Container(
       decoration: BoxDecoration(
@@ -964,16 +992,20 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
                 border: Border.all(
                   color: allPassed
                       ? const Color(0xFF81C784)
-                      : (_isProbing ? const Color(0xFF81D4FA) : const Color(0xFF4A4A4A)),
+                      : (hasFailed
+                          ? const Color(0xFFDC7C7D)
+                          : (isProbing ? const Color(0xFF81D4FA) : const Color(0xFF4A4A4A))),
                   width: 2.0,
                 ),
                 boxShadow: [
                   BoxShadow(
                     color: allPassed
                         ? const Color(0xFF81C784).withValues(alpha: 0.25)
-                        : (_isProbing
-                            ? const Color(0xFF81D4FA).withValues(alpha: 0.25)
-                            : Colors.transparent),
+                        : (hasFailed
+                            ? const Color(0xFFDC7C7D).withValues(alpha: 0.25)
+                            : (isProbing
+                                ? const Color(0xFF81D4FA).withValues(alpha: 0.25)
+                                : Colors.transparent)),
                     blurRadius: 18,
                     spreadRadius: 2,
                   ),
@@ -981,8 +1013,9 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
               ),
               child: Center(
                 child: _DialGhostMascot(
-                  isProbing: _isProbing,
+                  isProbing: isProbing,
                   allPassed: allPassed,
+                  hasFailed: hasFailed,
                 ),
               ),
             ),
@@ -996,20 +1029,26 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
               decoration: BoxDecoration(
                 color: allPassed
                     ? const Color(0xFF1B2E1E)
-                    : (_isProbing ? const Color(0xFF1C2C38) : const Color(0xFF262626)),
+                    : (hasFailed
+                        ? const Color(0xFF3A1C1C)
+                        : (isProbing ? const Color(0xFF1C2C38) : const Color(0xFF262626))),
                 borderRadius: BorderRadius.circular(999),
               ),
               child: Text(
                 allPassed
                     ? l10n.setupStep4Success
-                    : (_isProbing ? l10n.setupStep4Probing : l10n.setupStep4Ready),
+                    : (hasFailed
+                        ? failureShort(l10n, status.lastFailure)
+                        : (isProbing ? l10n.setupStep4Probing : l10n.setupStep4Ready)),
                 style: TextStyle(
                   fontFamily: CharonTokens.fontMono,
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
                   color: allPassed
                       ? const Color(0xFF81C784)
-                      : (_isProbing ? const Color(0xFF81D4FA) : const Color(0xFFA3A3A3)),
+                      : (hasFailed
+                          ? const Color(0xFFDC7C7D)
+                          : (isProbing ? const Color(0xFF81D4FA) : const Color(0xFFA3A3A3))),
                 ),
               ),
             ),
@@ -1028,30 +1067,60 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
               children: [
                 _buildCheckRow(
                   name: l10n.setupStep4Check1,
-                  passed: _probeChecksPassed >= 1,
-                  probing: _isProbing && _probeChecksPassed == 0,
+                  passed: allPassed,
+                  probing: isProbing,
+                  failed: hasFailed,
                 ),
                 const SizedBox(height: 8),
                 _buildCheckRow(
                   name: l10n.setupStep4Check2,
-                  passed: _probeChecksPassed >= 2,
-                  probing: _isProbing && _probeChecksPassed == 1,
+                  passed: allPassed,
+                  probing: isProbing,
+                  failed: hasFailed,
                 ),
                 const SizedBox(height: 8),
                 _buildCheckRow(
                   name: l10n.setupStep4Check3,
-                  passed: _probeChecksPassed >= 3,
-                  probing: _isProbing && _probeChecksPassed == 2,
+                  passed: allPassed,
+                  probing: isProbing,
+                  failed: hasFailed,
                 ),
                 const SizedBox(height: 8),
                 _buildCheckRow(
                   name: l10n.setupStep4Check4,
-                  passed: _probeChecksPassed >= 4,
-                  probing: _isProbing && _probeChecksPassed == 3,
+                  passed: allPassed,
+                  probing: isProbing,
+                  failed: hasFailed,
                 ),
               ],
             ),
           ),
+          if (hasFailed) ...[
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: const Color(0xFF2C1C1D),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: const Color(0xFFDC7C7D).withValues(alpha: 0.5)),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.error_outline_rounded, size: 16, color: Color(0xFFDC7C7D)),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      failureShort(l10n, status.lastFailure),
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: Color(0xFFFFCDD2),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
           const SizedBox(height: 10),
 
           // Four checks help link
@@ -1121,8 +1190,8 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
               ),
               if (!allPassed)
                 ElevatedButton.icon(
-                  onPressed: _isProbing ? null : _runVerificationProbes,
-                  icon: _isProbing
+                  onPressed: isProbing ? null : _runVerificationProbes,
+                  icon: isProbing
                       ? const SizedBox(
                           width: 14,
                           height: 14,
@@ -1180,6 +1249,7 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
     required String name,
     required bool passed,
     required bool probing,
+    bool failed = false,
   }) {
     return Row(
       children: [
@@ -1194,6 +1264,8 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
               color: Color(0xFF81D4FA),
             ),
           )
+        else if (failed)
+          const Icon(Icons.cancel_rounded, size: 16, color: Color(0xFFDC7C7D))
         else
           Container(
             width: 14,
@@ -1210,7 +1282,9 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
             style: TextStyle(
               fontSize: 12,
               fontWeight: passed ? FontWeight.w600 : FontWeight.w400,
-              color: passed ? const Color(0xFFEDEDED) : const Color(0xFF8A8A8A),
+              color: passed
+                  ? const Color(0xFFEDEDED)
+                  : (failed ? const Color(0xFFDC7C7D) : const Color(0xFF8A8A8A)),
             ),
           ),
         ),
@@ -1223,6 +1297,16 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
               fontWeight: FontWeight.w700,
               color: Color(0xFF81C784),
             ),
+          )
+        else if (failed)
+          const Text(
+            'FAILED',
+            style: TextStyle(
+              fontFamily: CharonTokens.fontMono,
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFFDC7C7D),
+            ),
           ),
       ],
     );
@@ -1234,16 +1318,20 @@ class _DialGhostMascot extends StatelessWidget {
   const _DialGhostMascot({
     required this.isProbing,
     required this.allPassed,
+    this.hasFailed = false,
   });
 
   final bool isProbing;
   final bool allPassed;
+  final bool hasFailed;
 
   @override
   Widget build(BuildContext context) {
     final Color ghostEyeColor = allPassed
         ? const Color(0xFF81C784)
-        : (isProbing ? const Color(0xFF81D4FA) : const Color(0xFFA3A3A3));
+        : (hasFailed
+            ? const Color(0xFFDC7C7D)
+            : (isProbing ? const Color(0xFF81D4FA) : const Color(0xFFA3A3A3)));
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

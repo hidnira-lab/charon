@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/l10n/generated/app_localizations.dart';
 import 'package:charon/state/home_controller.dart';
 import 'package:charon/theme/theme.dart';
@@ -270,13 +271,15 @@ void main() {
       final runTestBtn = find.text('Run Verification Probes');
       await tester.ensureVisible(runTestBtn);
       await tester.tap(runTestBtn);
-      await tester.pump(const Duration(milliseconds: 50)); // Starts probing
+      await tester.pump();
 
-      // Advance through the simulated probes
-      await tester.pump(const Duration(milliseconds: 350));
-      await tester.pump(const Duration(milliseconds: 350));
-      await tester.pump(const Duration(milliseconds: 350));
-      await tester.pump(const Duration(milliseconds: 350));
+      // Probing status
+      controller.updateStatus(Status(phase: Phase.PHASE_VERIFYING));
+      await tester.pump();
+      expect(find.text('Running verification probes...'), findsOneWidget);
+
+      // Core reaches UP
+      controller.updateStatus(Status(phase: Phase.PHASE_UP));
       await tester.pump(const Duration(milliseconds: 100));
 
       // All 4 checks should be passed
@@ -294,6 +297,48 @@ void main() {
       expect(controller.hasServers, isTrue);
       expect(controller.activeServer?.id, 'SRV-01');
       expect(controller.activeServer?.address, 'test.example.com');
+    });
+
+    testWidgets('Step 3: shows failure when core reports verification failure', (tester) async {
+      tester.view.physicalSize = const Size(1200, 1000);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
+      await tester.pumpWidget(
+        _buildTestApp(
+          controller: controller,
+          initialStep: 1,
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.enterText(find.byType(TextField).first, _testLink);
+      await tester.pump(const Duration(milliseconds: 100));
+      for (final label in ['Continue to Safety →', 'Continue to Verification →']) {
+        await tester.ensureVisible(find.text(label));
+        await tester.tap(find.text(label));
+        await tester.pump(const Duration(milliseconds: 400));
+      }
+
+      // Tap Run Verification Probes
+      final runTestBtn = find.text('Run Verification Probes');
+      await tester.ensureVisible(runTestBtn);
+      await tester.tap(runTestBtn);
+      await tester.pump(const Duration(milliseconds: 100));
+
+      // Core fails with handshake error
+      controller.updateStatus(Status(
+        phase: Phase.PHASE_IDLE,
+        lastFailure: FailureReason.FAILURE_REALITY_HANDSHAKE,
+      ));
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.text('Reality handshake failed'), findsWidgets);
+      expect(find.text('FAILED'), findsNWidgets(4));
+      // Can retry
+      expect(find.text('Run Verification Probes'), findsOneWidget);
     });
   });
 }

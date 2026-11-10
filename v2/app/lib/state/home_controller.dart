@@ -153,7 +153,10 @@ class HomeController extends ChangeNotifier {
     bool? launchAtStartup,
   }) async {
     if (server != null) {
-      await addServer(server);
+      final exists = _config?.servers.any((s) => s.id == server.id) ?? false;
+      if (!exists) {
+        await addServer(server);
+      }
     }
     if (killSwitch != null) {
       await setKillSwitch(killSwitch);
