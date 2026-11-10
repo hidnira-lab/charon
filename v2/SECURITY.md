@@ -36,6 +36,7 @@ We aim to acknowledge reports within 7 days and publish a fix before public disc
 * The core embeds two Ed25519 public keys (`current` and `next`) in `core/update/manifest.go` so key rotation works without stranding existing installs:
   * Current public key (hex): `5209e24488f6bd506e2397058cfb76ac8a6413bcf94d0802ce45f401a9e49fab`
   * Next public key (hex): `041fe0a250c38b22c4c4662ee4d104a8f3d2d9b5bd995b8e528def3a3bcca4b4` (held offline for the first rotation)
+  * The app shows the fingerprint of the current key under Privacy and network. It is the SHA-256 of the 32 key bytes: `eb8ccdaedf05f04707c7bb4be99aadafc0f93ca801b89abd32b48700b2c97034`
 * Downgrades are refused using a monotonically increasing `sequence` number in the signed manifest.
 * Manual updates from a `.charonup` bundle (`CHARONUP` header) are streamed in chunks over IPC and verified by the service against the same embedded Ed25519 keys, sequence floor, `minVersion`, and artifact SHA-256 digests.
 * Core updates are tested with `xray run -test` against every saved server configuration before swapping, and roll back automatically if the post-swap handshake fails.

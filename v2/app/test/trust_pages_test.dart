@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cryptography/cryptography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -99,7 +100,7 @@ void main() {
       expect(find.text('SECURITY & THREAT MODEL'), findsOneWidget);
       expect(find.text('UPDATE SIGNING FINGERPRINT'), findsOneWidget);
       expect(
-        find.textContaining('SHA256: 7f3b892a014c2b8109ef3a90bc7754d21e8460ab718399e8d423985110023a41'),
+        find.text(updateSigningFingerprint),
         findsOneWidget,
       );
     });
@@ -247,5 +248,14 @@ void main() {
         }
       }
     });
+  });
+
+  test('the fingerprint on the Privacy screen is the SHA-256 of the embedded primary release key', () async {
+    final manifestGo = File('../core/update/manifest.go').readAsStringSync();
+    final hex = RegExp('DefaultPrimaryPublicKeyHex = "([0-9a-f]{64})"').firstMatch(manifestGo)!.group(1)!;
+    final key = [for (var i = 0; i < hex.length; i += 2) int.parse(hex.substring(i, i + 2), radix: 16)];
+    final digest = await Sha256().hash(key);
+    final digestHex = digest.bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
+    expect(updateSigningFingerprint, 'SHA256: $digestHex');
   });
 }

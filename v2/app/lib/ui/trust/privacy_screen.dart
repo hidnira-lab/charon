@@ -5,6 +5,11 @@ import '../../state/home_controller.dart';
 import '../../theme/theme.dart';
 import '../home/widgets/rail_nav.dart';
 
+/// SHA-256 of the 32 byte primary Ed25519 release key embedded in
+/// `core/update/manifest.go`. A test recomputes it from that file, so the two
+/// cannot drift apart.
+const updateSigningFingerprint = 'SHA256: eb8ccdaedf05f04707c7bb4be99aadafc0f93ca801b89abd32b48700b2c97034';
+
 class PrivacyScreen extends StatelessWidget {
   const PrivacyScreen({
     super.key,
@@ -248,7 +253,7 @@ class PrivacyScreen extends StatelessWidget {
                                       ),
                                       const SizedBox(height: 4.0),
                                       SelectableText(
-                                        'SHA256: 7f3b892a014c2b8109ef3a90bc7754d21e8460ab718399e8d423985110023a41',
+                                        updateSigningFingerprint,
                                         style: CharonTypography.code.copyWith(
                                           color: colors.accent,
                                           fontSize: 11.0,
