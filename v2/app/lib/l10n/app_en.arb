@@ -288,6 +288,10 @@
   "@reasonConfigRejected": {
     "description": "Failure reason when new core rejects config."
   },
+  "reasonXrayExited": "the core stopped while starting",
+  "@reasonXrayExited": { "description": "Failure reason when Xray quit while a connection was being started. Not on the design boards." },
+  "reasonGateFailed": "protection could not be turned on",
+  "@reasonGateFailed": { "description": "Failure reason when the kill switch filters could not be installed. Not on the design boards." },
   "blockedBannerBody": "Charon could not reach any of your servers. Nothing leaves this PC until you retry, pick a server, or release.",
   "@blockedBannerBody": { "description": "Body message when all servers fail and traffic is held." },
   "blockedActionChooseServer": "Choose another server",

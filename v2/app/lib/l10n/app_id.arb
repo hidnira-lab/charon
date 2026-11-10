@@ -73,6 +73,8 @@
   "reasonAdapterFailed": "adapter jaringan gagal dimulai",
   "reasonPortInUse": "port lokal sedang digunakan",
   "reasonConfigRejected": "konfigurasi ditolak setelah pembaruan core",
+  "reasonXrayExited": "core berhenti saat memulai",
+  "reasonGateFailed": "perlindungan tidak bisa diaktifkan",
   "blockedBannerBody": "Charon tidak dapat menjangkau server Anda. Tidak ada lalu lintas yang keluar dari perangkat ini sampai Anda mencoba lagi, memilih server, atau melepas.",
   "blockedActionChooseServer": "Pilih server lain",
   "reasonTcpTimeoutDesc": "{server} tidak menjawab. Periksa apakah server sedang berjalan.",

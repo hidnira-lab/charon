@@ -110,4 +110,20 @@ void main() {
     expect(find.text('186.2'), findsNothing);
     expect(find.text('/ 2000 GB'), findsNothing);
   });
+
+  testWidgets('could not reach shows the reason the core gave', (tester) async {
+    Status failed(FailureReason r) => Status(
+          phase: Phase.PHASE_IDLE,
+          chosenServerId: 'SRV-01',
+          lastEnd: SessionEnd.SESSION_END_COULD_NOT_REACH,
+          lastFailure: r,
+        );
+    final controller = await pumpHome(tester, failed(FailureReason.FAILURE_REALITY_HANDSHAKE));
+    expect(find.textContaining('Reality handshake failed'), findsOneWidget);
+    expect(find.textContaining('tcp connect timed out'), findsNothing);
+
+    controller.setStatus(failed(FailureReason.FAILURE_GATE_FAILED));
+    await tester.pump();
+    expect(find.textContaining('protection could not be turned on'), findsOneWidget);
+  });
 }

@@ -205,6 +205,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get reasonConfigRejected => '内核更新后配置被拒绝';
 
   @override
+  String get reasonXrayExited => '内核在启动时停止';
+
+  @override
+  String get reasonGateFailed => '无法开启保护';
+
+  @override
   String get blockedBannerBody =>
       'Charon 无法连接至您的任何服务器。在您重试、选择服务器或断开之前，任何流量都不会离开此设备。';
 
@@ -1826,6 +1832,12 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get reasonConfigRejected => '内核更新后配置被拒绝';
+
+  @override
+  String get reasonXrayExited => '内核在启动时停止';
+
+  @override
+  String get reasonGateFailed => '无法开启保护';
 
   @override
   String get blockedBannerBody =>

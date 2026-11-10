@@ -6,6 +6,7 @@ import '../../../state/home_controller.dart';
 import '../../../state/ui_state.dart';
 import '../../../theme/theme.dart';
 import '../../dialogs/release_confirm_dialog.dart';
+import 'failure_copy.dart';
 import 'live_values.dart';
 
 /// The Connect Control / Hero Card matching HomeDesktop board (332 x 364 px).
@@ -156,7 +157,7 @@ class HeroConnectCard extends StatelessWidget {
       UiState.couldNotReach => (
           l10n.stateCouldNotReachTitle(serverName),
           l10n.stateCouldNotReachBadge,
-          l10n.reasonNoAnswer,
+          failureShort(l10n, status.lastFailure),
           l10n.actionRetryNow,
           false,
           controller.connect,

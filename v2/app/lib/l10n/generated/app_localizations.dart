@@ -443,6 +443,18 @@ abstract class AppLocalizations {
   /// **'config rejected after a core update'**
   String get reasonConfigRejected;
 
+  /// Failure reason when Xray quit while a connection was being started. Not on the design boards.
+  ///
+  /// In en, this message translates to:
+  /// **'the core stopped while starting'**
+  String get reasonXrayExited;
+
+  /// Failure reason when the kill switch filters could not be installed. Not on the design boards.
+  ///
+  /// In en, this message translates to:
+  /// **'protection could not be turned on'**
+  String get reasonGateFailed;
+
   /// Body message when all servers fail and traffic is held.
   ///
   /// In en, this message translates to:

@@ -74,6 +74,8 @@
   "reasonAdapterFailed": "网络适配器启动失败",
   "reasonPortInUse": "本地端口已被占用",
   "reasonConfigRejected": "内核更新后配置被拒绝",
+  "reasonXrayExited": "内核在启动时停止",
+  "reasonGateFailed": "无法开启保护",
   "blockedBannerBody": "Charon 无法连接至您的任何服务器。在您重试、选择服务器或断开之前，任何流量都不会离开此设备。",
   "blockedActionChooseServer": "选择其他服务器",
   "reasonTcpTimeoutDesc": "{server} 未响应。请检查服务器是否正常运行。",

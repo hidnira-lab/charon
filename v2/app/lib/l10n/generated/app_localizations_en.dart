@@ -208,6 +208,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reasonConfigRejected => 'config rejected after a core update';
 
   @override
+  String get reasonXrayExited => 'the core stopped while starting';
+
+  @override
+  String get reasonGateFailed => 'protection could not be turned on';
+
+  @override
   String get blockedBannerBody =>
       'Charon could not reach any of your servers. Nothing leaves this PC until you retry, pick a server, or release.';
 

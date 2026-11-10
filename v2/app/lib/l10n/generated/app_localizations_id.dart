@@ -211,6 +211,12 @@ class AppLocalizationsId extends AppLocalizations {
       'konfigurasi ditolak setelah pembaruan core';
 
   @override
+  String get reasonXrayExited => 'core berhenti saat memulai';
+
+  @override
+  String get reasonGateFailed => 'perlindungan tidak bisa diaktifkan';
+
+  @override
   String get blockedBannerBody =>
       'Charon tidak dapat menjangkau server Anda. Tidak ada lalu lintas yang keluar dari perangkat ini sampai Anda mencoba lagi, memilih server, atau melepas.';
 
