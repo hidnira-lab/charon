@@ -32,6 +32,10 @@ type Driver struct {
 	cfg          *charonv1.Config
 	deps         Deps
 	verifyCancel context.CancelFunc
+	// chosenPending is set when a Config with a different chosen server arrives
+	// during a session. Server changes apply on the next connect, so the new
+	// choice is copied into the state when the phase returns to Idle.
+	chosenPending bool
 }
 
 // New initializes a Driver from the given Config, Saved session, and dependencies.
@@ -72,12 +76,14 @@ func (d *Driver) Config() *charonv1.Config {
 // Status snapshot, and executes every resulting Effect in order.
 func (d *Driver) HandleEvent(ev machine.Event) []machine.Effect {
 	d.mu.Lock()
+	var fx []machine.Effect
 	now := int64(0)
 	if d.deps.Clock != nil {
 		now = d.deps.Clock.NowMs()
 	}
-	next, fx := machine.Step(d.state, ev, now)
-	d.state = next
+	d.applyPendingChosenLocked() // Idle reached outside Step (ForceSessionEnd)
+	d.state, fx = machine.Step(d.state, ev, now)
+	d.applyPendingChosenLocked() // Idle reached by this step
 	cfg := d.cfg
 	activeSrv := d.findServerLocked(d.state.Active)
 	snap := d.state.Status(now)
@@ -202,6 +208,9 @@ func (d *Driver) SetConfig(next *charonv1.Config) (*charonv1.ConfigResult, *char
 	d.state.Servers = d.cfg.GetServers()
 	if d.state.Phase == charonv1.Phase_PHASE_IDLE {
 		d.state.Chosen = d.cfg.GetChosenServerId()
+		d.chosenPending = false
+	} else if d.cfg.GetChosenServerId() != d.state.Chosen {
+		d.chosenPending = true
 	}
 	gateArmed := d.state.Gate == charonv1.Gate_GATE_ARMED
 	activeSrv := d.findServerLocked(d.state.Active)
@@ -325,6 +334,13 @@ func (d *Driver) runEffect(e machine.Effect, cfg *charonv1.Config, activeSrv *ch
 				AtMs:     nowMs,
 			})
 		}
+	}
+}
+
+func (d *Driver) applyPendingChosenLocked() {
+	if d.chosenPending && d.state.Phase == charonv1.Phase_PHASE_IDLE {
+		d.state.Chosen = d.cfg.GetChosenServerId()
+		d.chosenPending = false
 	}
 }
 

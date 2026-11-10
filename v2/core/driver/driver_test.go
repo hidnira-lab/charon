@@ -243,3 +243,71 @@ func TestDriver_SetConfigAndCommands(t *testing.T) {
 		t.Fatalf("expected GATE_DISARMED after turning kill switch off, got %v", drv.Status().GetGate())
 	}
 }
+
+// A chosen server changed while connected applies on the next connect.
+func TestDriver_ChosenServerChangedWhileConnectedAppliesOnNextConnect(t *testing.T) {
+	sc, err := scenario.Load("../../scenarios/five_failed_tries_then_failover.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(sc.Config.Servers) < 2 {
+		t.Fatal("scenario needs two servers")
+	}
+	for i, sv := range sc.Config.Servers {
+		sv.Protocol = charonv1.Protocol_PROTOCOL_VLESS_REALITY
+		sv.Port = 443
+		sv.Uuid = "00000000-0000-0000-0000-000000000001"
+		sv.Address = "192.0.2." + string(rune('1'+i))
+		sv.Reality = &charonv1.Reality{
+			PublicKey:  "FIXTURE_PUBKEY_" + string(rune('A'+i)),
+			ServerName: "example.com",
+			ShortId:    "0102",
+		}
+	}
+	sc.Config.Version = 1
+	first, second := sc.Config.Servers[0].GetId(), sc.Config.Servers[1].GetId()
+	sc.Config.ChosenServerId = first
+
+	env := &fakeEnv{cfg: sc.Config}
+	drv := New(sc.Config, machine.Saved{}, Deps{Gate: env, Tunnel: env, Store: env, Clock: env, Notifier: env})
+
+	connect := func() {
+		t.Helper()
+		if cmdErr := drv.HandleUserCommand(&charonv1.Command{
+			Kind: &charonv1.Command_Connect{Connect: &charonv1.Empty{}},
+		}); cmdErr != nil {
+			t.Fatalf("unexpected Connect error: %v", cmdErr)
+		}
+	}
+	connect()
+	drv.HandleEvent(machine.Event{Type: machine.XrayStarted})
+	drv.HandleEvent(machine.Event{Type: machine.VerifyOk, EgressAddress: "192.0.2.1", LatencyMs: 95})
+	if got := drv.Status(); got.GetPhase() != charonv1.Phase_PHASE_UP || got.GetActiveServerId() != first {
+		t.Fatalf("expected Up on %s, got %v on %s", first, got.GetPhase(), got.GetActiveServerId())
+	}
+
+	next := proto.Clone(sc.Config).(*charonv1.Config)
+	next.Version = 2
+	next.ChosenServerId = second
+	if _, cfgErr := drv.SetConfig(next); cfgErr != nil {
+		t.Fatalf("unexpected SetConfig error: %v", cfgErr)
+	}
+	if got := drv.Status().GetActiveServerId(); got != first {
+		t.Fatalf("the running session must stay on %s, got %s", first, got)
+	}
+
+	if cmdErr := drv.HandleUserCommand(&charonv1.Command{
+		Kind: &charonv1.Command_Disconnect{Disconnect: &charonv1.Empty{}},
+	}); cmdErr != nil {
+		t.Fatalf("unexpected Disconnect error: %v", cmdErr)
+	}
+	drv.HandleEvent(machine.Event{Type: machine.XrayStopped})
+	if got := drv.Status().GetPhase(); got != charonv1.Phase_PHASE_IDLE {
+		t.Fatalf("expected Idle after disconnect, got %v", got)
+	}
+
+	connect()
+	if got := drv.Status().GetActiveServerId(); got != second {
+		t.Fatalf("the next connect must use the newly chosen server %s, got %s", second, got)
+	}
+}
