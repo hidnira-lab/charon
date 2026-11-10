@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/generated/app_localizations.dart';
+import '../../sync/sync_client.dart';
 import '../../theme/tokens.dart';
 
-enum SyncConflictChoice {
-  pullFirst,
-  overwriteServer,
-  cancel,
-}
+export '../../sync/sync_client.dart' show SyncConflictChoice;
 
 /// N11 Sync conflict dialog shown when pushing local changes
 /// while the sync server has a newer revision.

@@ -462,7 +462,7 @@ class _ServersScreenState extends State<ServersScreen> {
                                   ),
                                   const SizedBox(width: 16),
                                   // Right column: SyncCard
-                                  const SyncCard(),
+                                  SyncCard(controller: controller),
                                 ],
                               ),
                             ),

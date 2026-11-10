@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../state/home_controller.dart';
+import '../../../sync/sync_client.dart';
 import '../../../theme/tokens.dart';
 import '../../dialogs/sync_conflict_dialog.dart';
 import '../../dialogs/unpair_confirm_dialog.dart';
@@ -10,6 +12,7 @@ import '../../dialogs/vault_passphrase_dialog.dart';
 class SyncCard extends StatelessWidget {
   const SyncCard({
     super.key,
+    this.controller,
     this.onPush,
     this.onPull,
     this.onUnpair,
@@ -17,6 +20,7 @@ class SyncCard extends StatelessWidget {
     this.onRestoreFile,
   });
 
+  final HomeController? controller;
   final VoidCallback? onPush;
   final VoidCallback? onPull;
   final VoidCallback? onUnpair;
@@ -26,6 +30,9 @@ class SyncCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final syncState = controller?.sync.state ?? SyncState.unpaired;
+    final isPaired = syncState != SyncState.unpaired;
+    final amberError = controller?.sync.errorMessage;
 
     return Container(
       width: 320,
@@ -134,7 +141,9 @@ class SyncCard extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              l10n.syncNotPaired,
+                              isPaired
+                                  ? 'rev ${controller!.sync.lastSeenRevision} · ${controller!.sync.serverUrl}'
+                                  : l10n.syncNotPaired,
                               style: const TextStyle(
                                 fontFamily: CharonTokens.fontMono,
                                 fontSize: 11,
@@ -145,7 +154,13 @@ class SyncCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 6),
                           InkWell(
-                            onTap: onUnpair ?? () => UnpairConfirmDialog.show(context),
+                            onTap: onUnpair ??
+                                () async {
+                                  final ok = await UnpairConfirmDialog.show(context);
+                                  if (ok == true && controller != null) {
+                                    await controller!.unpairSyncDevice();
+                                  }
+                                },
                             borderRadius: BorderRadius.circular(4),
                             child: const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
@@ -169,6 +184,17 @@ class SyncCard extends StatelessWidget {
               ],
             ),
           ),
+          if (amberError != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              '> $amberError',
+              style: const TextStyle(
+                fontFamily: CharonTokens.fontMono,
+                fontSize: 10.5,
+                color: Color(0xFFF59E0B),
+              ),
+            ),
+          ],
           const SizedBox(height: 12),
           // Push / Pull buttons
           Row(
@@ -197,7 +223,7 @@ class SyncCard extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: OutlinedButton(
-                  onPressed: null,
+                  onPressed: onPull ?? (isPaired ? () {} : null),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: const Color(0xFFEDEDED),
                     disabledForegroundColor: const Color(0xFF5C5C5C),

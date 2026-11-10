@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 
 import '../core/core_client.dart';
 import '../gen/charon/v1/charon.pb.dart';
+import '../sync/sync_client.dart';
 import 'ui_state.dart';
 
 enum DnsMode { tunnelDefault, custom }
@@ -22,10 +24,13 @@ class HomeController extends ChangeNotifier {
     this._isFirstRun = false,
     this._themeMode = ThemeMode.system,
     this._locale,
+    SyncController? syncController,
   })  : _status = initialStatus ?? Status(),
         _config = initialConfig,
-        _hasServers = hasServers ?? (initialConfig?.servers.isNotEmpty ?? true) {
+        _hasServers = hasServers ?? (initialConfig?.servers.isNotEmpty ?? true),
+        _sync = syncController ?? SyncController() {
     _seedInitialLogs();
+    _sync.addListener(_onSyncChanged);
     _client = client;
     if (_client != null) {
       _initClient();
@@ -33,6 +38,7 @@ class HomeController extends ChangeNotifier {
   }
 
   CoreClient? _client;
+  final SyncController _sync;
   Status _status;
   Config? _config;
   Throughput? _throughput;
@@ -42,6 +48,14 @@ class HomeController extends ChangeNotifier {
   int _activeTabIndex = 0;
   StreamSubscription<Event>? _eventSub;
   bool _isDisposed = false;
+
+  void _onSyncChanged() {
+    if (!_isDisposed) {
+      notifyListeners();
+    }
+  }
+
+  SyncController get sync => _sync;
 
   // Telemetry in-memory buffer (2000 lines max per source)
   static const int maxLogLines = 2000;
@@ -886,9 +900,128 @@ class HomeController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Applies a verified [SyncPayload] to local state and pushes the new
+  /// [Config] to the service with `version = localVersion + 1` (SY6, section 3).
+  Future<void> applySyncPayload(SyncPayload payload) async {
+    final prevVer = _config?.version ?? Int64.ZERO;
+    final baseVer = prevVer > _status.configVersion ? prevVer : _status.configVersion;
+
+    final nextCfg = payload.hasConfig() ? payload.config.deepCopy() : Config();
+    nextCfg.version = baseVer + Int64(1);
+    _config = nextCfg;
+    _hasServers = nextCfg.servers.isNotEmpty;
+
+    if (payload.hasUi()) {
+      _themeMode = syncThemeToThemeMode(payload.ui.theme);
+      _locale = syncLanguageToLocale(payload.ui.language);
+    }
+
+    if (_client != null) {
+      try {
+        await _client!.setConfig(_config!);
+      } catch (_) {}
+    }
+    notifyListeners();
+  }
+
+  Future<bool> enrollSyncServer({
+    required String serverUrl,
+    required String bootstrapSecret,
+    required String deviceName,
+    bool allowLoopbackHttpForTests = false,
+  }) {
+    return _sync.enrollFirstDevice(
+      serverUrl: serverUrl,
+      bootstrapSecret: bootstrapSecret,
+      deviceName: deviceName,
+      allowLoopbackHttpForTests: allowLoopbackHttpForTests,
+    );
+  }
+
+  Future<SyncPairingTicket?> issueSyncPairingCode() {
+    return _sync.issuePairingCode();
+  }
+
+  Future<bool> pairSyncWithCode({
+    required String serverUrl,
+    required String code,
+    required String deviceName,
+    bool allowLoopbackHttpForTests = false,
+  }) {
+    return _sync.pairWithCode(
+      serverUrl: serverUrl,
+      code: code,
+      deviceName: deviceName,
+      allowLoopbackHttpForTests: allowLoopbackHttpForTests,
+    );
+  }
+
+  Future<bool> pushSyncVault(String passphrase) {
+    return _sync.push(
+      passphrase: passphrase,
+      localConfig: _config,
+      themeMode: _themeMode,
+      locale: _locale,
+    );
+  }
+
+  Future<bool> pullSyncVault(String passphrase, {bool allowOlderRevision = false}) async {
+    final payload = await _sync.pull(
+      passphrase: passphrase,
+      allowOlderRevision: allowOlderRevision,
+    );
+    if (payload == null) return false;
+    await applySyncPayload(payload);
+    return true;
+  }
+
+  Future<bool> resolveSyncConflict(
+    SyncConflictChoice choice, {
+    String? passphrase,
+  }) async {
+    final payload = await _sync.resolveConflict(
+      choice: choice,
+      passphrase: passphrase,
+      localConfig: _config,
+      themeMode: _themeMode,
+      locale: _locale,
+    );
+    if (payload != null) {
+      await applySyncPayload(payload);
+      return true;
+    }
+    return _sync.state == SyncState.paired;
+  }
+
+  Future<void> unpairSyncDevice() {
+    return _sync.unpairThisDevice();
+  }
+
+  Future<bool> backupVaultToFile(File target, String passphrase) {
+    return _sync.exportToFile(
+      target: target,
+      passphrase: passphrase,
+      localConfig: _config,
+      themeMode: _themeMode,
+      locale: _locale,
+    );
+  }
+
+  Future<bool> restoreVaultFromFile(File source, String passphrase) async {
+    final payload = await _sync.importFromFile(
+      source: source,
+      passphrase: passphrase,
+    );
+    if (payload == null) return false;
+    await applySyncPayload(payload);
+    return true;
+  }
+
   @override
   void dispose() {
     _isDisposed = true;
+    _sync.removeListener(_onSyncChanged);
+    _sync.dispose();
     _eventSub?.cancel();
     super.dispose();
   }
