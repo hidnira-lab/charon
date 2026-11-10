@@ -1,3 +1,4 @@
+import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -172,7 +173,14 @@ void main() {
         ),
         initialConfig: Config(
           servers: [
-            Server(id: 'SRV-01', displayName: 'Tokyo VPS', address: '1.1.1.1', port: 443, countryCode: 'JP'),
+            Server(
+              id: 'SRV-01',
+              displayName: 'Tokyo VPS',
+              address: '1.1.1.1',
+              port: 443,
+              countryCode: 'JP',
+              quota: QuotaPlan(capGb: 2000),
+            ),
             Server(id: 'SRV-02', displayName: 'Frankfurt VPS', address: '2.2.2.2', port: 443, countryCode: 'DE'),
           ],
           settings: Settings(
@@ -185,6 +193,11 @@ void main() {
 
     testWidgets('renders connected tray flyout with speed row and locked servers', (tester) async {
       bool openWindowCalled = false;
+      controller.setQuota(Quota(
+        serverId: 'SRV-01',
+        countedBytes: Int64(820000000000),
+        resetsAtMs: Int64(DateTime.now().add(const Duration(days: 12)).millisecondsSinceEpoch),
+      ));
 
       await tester.pumpWidget(
         _buildTestFlyout(

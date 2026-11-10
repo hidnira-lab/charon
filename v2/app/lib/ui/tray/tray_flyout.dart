@@ -261,7 +261,7 @@ class TrayFlyout extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      server?.displayName ?? 'SRV-01',
+                      server?.displayName.isNotEmpty == true ? server!.displayName : '—',
                       style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
@@ -272,7 +272,7 @@ class TrayFlyout extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      server?.address ?? 'srv-01.example.com',
+                      server?.address.isNotEmpty == true ? server!.address : '—',
                       style: const TextStyle(
                         fontFamily: CharonTokens.fontMono,
                         fontSize: 10,
@@ -351,14 +351,26 @@ class TrayFlyout extends StatelessWidget {
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
-                    child: Text(
-                      l10n.traySwitchNow('SRV-02'),
-                      style: const TextStyle(
-                        fontFamily: CharonTokens.fontMono,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+                    child: Builder(
+                      builder: (context) {
+                        final servers = controller.config?.servers ?? <Server>[];
+                        final altServer = servers.firstWhere(
+                          (s) => s.id != server?.id,
+                          orElse: () => Server(),
+                        );
+                        final altName = altServer.displayName.isNotEmpty
+                            ? altServer.displayName
+                            : (altServer.id.isNotEmpty ? altServer.id : 'backup');
+                        return Text(
+                          l10n.traySwitchNow(altName),
+                          style: const TextStyle(
+                            fontFamily: CharonTokens.fontMono,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -465,11 +477,13 @@ class TrayFlyout extends StatelessWidget {
   // 3. SPEED ROW
   // --------------------------------------------------------------------------
   Widget _buildSpeedRow() {
-    final up = controller.throughput?.upBps.toInt() ?? 1258291;
-    final down = controller.throughput?.downBps.toInt() ?? 8808038;
-
-    final upStr = '${(up / (1024 * 1024)).toStringAsFixed(1)} MB/s';
-    final downStr = '${(down / (1024 * 1024)).toStringAsFixed(1)} MB/s';
+    final tp = controller.throughput;
+    final upStr = tp != null
+        ? '${(tp.upBps.toDouble() / (1024 * 1024)).toStringAsFixed(1)} MB/s'
+        : '—';
+    final downStr = tp != null
+        ? '${(tp.downBps.toDouble() / (1024 * 1024)).toStringAsFixed(1)} MB/s'
+        : '—';
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -783,20 +797,37 @@ class TrayFlyout extends StatelessWidget {
   Widget _buildQuotaFooter(BuildContext context, AppLocalizations l10n) {
     final capGb = (controller.activeServer?.hasQuota() == true && controller.activeServer!.quota.capGb > 0)
         ? controller.activeServer!.quota.capGb
-        : 2000;
-    // Mock 820 GB for visual check of amber threshold, or proportional to cap
-    final double usedGb = 820.0;
+        : 0;
+
+    if (capGb == 0 && controller.quota == null) {
+      return const SizedBox.shrink();
+    }
+
+    final double usedGb = controller.quota != null
+        ? (controller.quota!.countedBytes.toDouble() / 1e9)
+        : 0.0;
     final double ratio = capGb > 0 ? (usedGb / capGb).clamp(0.0, 1.0) : 0.0;
 
     // Spec: "The footer turns amber at 80% and red at the cap."
     final Color barColor;
-    if (ratio >= 1.0) {
+    if (ratio >= 1.0 || controller.quota?.level == QuotaLevel.QUOTA_RED) {
       barColor = const Color(0xFFE57373); // Red
-    } else if (ratio >= 0.80) {
+    } else if (ratio >= 0.80 || controller.quota?.level == QuotaLevel.QUOTA_AMBER) {
       barColor = const Color(0xFFFFB74D); // Amber
     } else {
       barColor = const Color(0xFF81D4FA); // Blue
     }
+
+    final resetsAtMs = controller.quota?.resetsAtMs.toInt() ?? 0;
+    final int? daysLeft = resetsAtMs > 0
+        ? (DateTime.fromMillisecondsSinceEpoch(resetsAtMs)
+                .difference(DateTime.now())
+                .inSeconds /
+            86400)
+            .ceil()
+        : null;
+
+    final capStr = capGb > 0 ? capGb.toString() : '—';
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -812,7 +843,7 @@ class TrayFlyout extends StatelessWidget {
             children: [
               Flexible(
                 child: Text(
-                  l10n.trayQuotaFormat(usedGb.toStringAsFixed(0), capGb.toString()),
+                  l10n.trayQuotaFormat(usedGb.toStringAsFixed(0), capStr),
                   style: TextStyle(
                     fontFamily: CharonTokens.fontMono,
                     fontSize: 10,
@@ -822,15 +853,17 @@ class TrayFlyout extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              const SizedBox(width: 6),
-              Text(
-                l10n.trayQuotaDaysLeft(12),
-                style: const TextStyle(
-                  fontFamily: CharonTokens.fontMono,
-                  fontSize: 10,
-                  color: Color(0xFF8A8A8A),
+              if (daysLeft != null) ...[
+                const SizedBox(width: 6),
+                Text(
+                  l10n.trayQuotaDaysLeft(daysLeft > 0 ? daysLeft : 0),
+                  style: const TextStyle(
+                    fontFamily: CharonTokens.fontMono,
+                    fontSize: 10,
+                    color: Color(0xFF8A8A8A),
+                  ),
                 ),
-              ),
+              ],
             ],
           ),
           const SizedBox(height: 6),
