@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
 import '../../../theme/tokens.dart';
@@ -22,8 +23,19 @@ class AboutCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final activeLocale = controller?.locale ?? Localizations.maybeLocaleOf(context);
 
+    final pendingUpdates = [
+      controller?.coreUpdateState,
+      controller?.appUpdateState,
+    ].where((s) =>
+        s != null &&
+        (s.stage == UpdateStage.UPDATE_AVAILABLE || s.stage == UpdateStage.UPDATE_READY)).length;
+
     final links = [
-      _AboutItem(label: l10n.settingsAboutUpdates, value: '2 READY →', isExternal: false),
+      _AboutItem(
+        label: l10n.settingsAboutUpdates,
+        value: pendingUpdates > 0 ? '$pendingUpdates READY →' : 'UP TO DATE →',
+        isExternal: false,
+      ),
       _AboutItem(
         label: l10n.settingsAboutGuides,
         value: 'GUIDES',
