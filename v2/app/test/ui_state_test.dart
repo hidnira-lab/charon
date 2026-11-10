@@ -74,6 +74,29 @@ void main() {
     test('a snapshot with no phase falls back to disconnected, it never throws', () {
       expect(project(Status()), UiState.disconnected);
     });
+
+    test('Android session-end anomalies project when Idle and clear otherwise', () {
+      expect(
+        projectAndroidAnomaly(status(Phase.PHASE_IDLE, lastEnd: SessionEnd.SESSION_END_VPN_REVOKED)),
+        AndroidSessionAnomaly.vpnRevoked,
+      );
+      expect(
+        projectAndroidAnomaly(status(Phase.PHASE_IDLE, lastEnd: SessionEnd.SESSION_END_ANOTHER_VPN)),
+        AndroidSessionAnomaly.anotherVpn,
+      );
+      expect(
+        projectAndroidAnomaly(status(Phase.PHASE_IDLE, lastEnd: SessionEnd.SESSION_END_ANDROID_STOPPED)),
+        AndroidSessionAnomaly.androidStopped,
+      );
+      expect(
+        projectAndroidAnomaly(status(Phase.PHASE_IDLE, lastEnd: SessionEnd.SESSION_END_MANUAL)),
+        AndroidSessionAnomaly.none,
+      );
+      expect(
+        projectAndroidAnomaly(status(Phase.PHASE_UP, lastEnd: SessionEnd.SESSION_END_VPN_REVOKED)),
+        AndroidSessionAnomaly.none,
+      );
+    });
   });
 
   test('every wire name round trips, and an unknown one throws', () {

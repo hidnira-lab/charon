@@ -159,7 +159,7 @@ class HomeStateBanner extends StatelessWidget {
       );
     }
 
-    // 4. Tunnel lost (Amber)
+    // 4. Tunnel lost & Android session anomalies (Amber)
     if (uiState == UiState.tunnelLost) {
       return _buildBanner(
         context,
@@ -177,6 +177,62 @@ class HomeStateBanner extends StatelessWidget {
             label: 'Turn on auto reconnect',
             isPrimary: false,
             onPressed: () => controller.setAutoReconnect(true),
+          ),
+        ],
+      );
+    }
+
+    if (!controller.hasVpnPermission) {
+      return _buildBanner(
+        context,
+        isLight: isLight,
+        color: const Color(0xFFF59E0B),
+        title: l10n.androidVpnPermissionTitle,
+        body: l10n.androidVpnRevokedNotice,
+        actions: [
+          _ActionButton(
+            label: l10n.androidActionAllowAgain,
+            isPrimary: true,
+            onPressed: controller.allowVpnAgain,
+          ),
+        ],
+      );
+    }
+
+    if (controller.anotherVpnTookOver) {
+      return _buildBanner(
+        context,
+        isLight: isLight,
+        color: const Color(0xFFF59E0B),
+        title: 'Another VPN took over',
+        body: l10n.androidAnotherVpnNotice,
+        actions: [
+          _ActionButton(
+            label: l10n.actionConnect,
+            isPrimary: true,
+            onPressed: controller.connect,
+          ),
+        ],
+      );
+    }
+
+    if (controller.stoppedByAndroid) {
+      return _buildBanner(
+        context,
+        isLight: isLight,
+        color: const Color(0xFFF59E0B),
+        title: l10n.androidAlwaysOnVpnTitle,
+        body: l10n.androidStoppedNotice,
+        actions: [
+          _ActionButton(
+            label: l10n.actionConnect,
+            isPrimary: true,
+            onPressed: controller.connect,
+          ),
+          _ActionButton(
+            label: l10n.androidOpenVpnSettings,
+            isPrimary: false,
+            onPressed: controller.openVpnSettings,
           ),
         ],
       );

@@ -86,3 +86,30 @@ UiState projectState(Status status, {required bool hasServers}) {
       return UiState.disconnected;
   }
 }
+
+/// Android-specific session-end anomalies (N09, HomeMobile.dc.html) projected
+/// when the session is idle after an Android OS intervention.
+enum AndroidSessionAnomaly {
+  none('none'),
+  vpnRevoked('vpn_revoked'),
+  anotherVpn('another_vpn'),
+  androidStopped('android_stopped');
+
+  const AndroidSessionAnomaly(this.wireName);
+
+  final String wireName;
+}
+
+/// Projects the Android session-end anomaly from [status]. Returns
+/// [AndroidSessionAnomaly.none] when the session is not idle or ended normally.
+AndroidSessionAnomaly projectAndroidAnomaly(Status status) {
+  if (status.phase != Phase.PHASE_IDLE) {
+    return AndroidSessionAnomaly.none;
+  }
+  return switch (status.lastEnd) {
+    SessionEnd.SESSION_END_VPN_REVOKED => AndroidSessionAnomaly.vpnRevoked,
+    SessionEnd.SESSION_END_ANOTHER_VPN => AndroidSessionAnomaly.anotherVpn,
+    SessionEnd.SESSION_END_ANDROID_STOPPED => AndroidSessionAnomaly.androidStopped,
+    _ => AndroidSessionAnomaly.none,
+  };
+}

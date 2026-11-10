@@ -24,6 +24,8 @@ void main() {
 
   if (Platform.isWindows) {
     unawaited(_connectBackground(controller));
+  } else if (Platform.isAndroid) {
+    unawaited(_connectAndroidBackground(controller));
   }
 }
 
@@ -34,6 +36,23 @@ Future<void> _connectBackground(HomeController controller) async {
     final client = CoreClient(transport);
     final ack = await client.hello(appVersion: '0.1.0');
     controller.attachClient(client, initialStatus: ack.status);
+  } on ProtocolMismatch {
+    controller.setServiceStatus(ServiceStatus.needsUpdate);
+  } catch (_) {
+    controller.setServiceStatus(ServiceStatus.notRunning);
+  }
+}
+
+Future<void> _connectAndroidBackground(HomeController controller) async {
+  try {
+    final transport = PlatformChannelTransport();
+    final client = CoreClient(transport);
+    final ack = await client.hello(appVersion: '0.1.0');
+    controller.attachClient(
+      client,
+      initialStatus: ack.status,
+      platformTransport: transport,
+    );
   } on ProtocolMismatch {
     controller.setServiceStatus(ServiceStatus.needsUpdate);
   } catch (_) {

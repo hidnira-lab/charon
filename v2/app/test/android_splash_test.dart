@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:charon/core/core_client.dart';
+import 'package:charon/core/transport.dart';
 import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/l10n/generated/app_localizations.dart';
 import 'package:charon/state/home_controller.dart';
 import 'package:charon/theme/theme.dart';
 import 'package:charon/ui/android/android_notification_projector.dart';
 import 'package:charon/ui/android/android_permission_sheet.dart';
+import 'package:charon/ui/home/widgets/home_state_banner.dart';
 import 'package:charon/ui/splash/splash_screen.dart';
 
 Widget _buildTestApp({required Widget child}) {
@@ -213,6 +217,164 @@ void main() {
       // Advance animation
       await tester.pump(const Duration(milliseconds: 700));
       expect(completed, isTrue);
+    });
+  });
+
+  group('PlatformChannelTransport & Android Session Anomalies (M4)', () {
+    test('PlatformChannelTransport round-trips framed envelopes and events', () async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      const methodChannel = MethodChannel('app.charon/core_test');
+      const eventChannel = EventChannel('app.charon/core_events_test');
+      bool vpnGranted = true;
+      bool vpnSettingsOpened = false;
+
+      binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        methodChannel,
+        (call) async {
+          switch (call.method) {
+            case 'prepareVpn':
+              return vpnGranted;
+            case 'openVpnSettings':
+              vpnSettingsOpened = true;
+              return true;
+            case 'send':
+              final bytes = call.arguments as Uint8List;
+              final req = Envelope.fromBuffer(bytes.sublist(4));
+              if (req.hasHello()) {
+                final reply = Envelope(
+                  protocolVersion: 1,
+                  requestId: req.requestId,
+                  helloAck: HelloAck(
+                    protocolVersion: 1,
+                    serviceVersion: '0.1.0-android',
+                    status: Status(phase: Phase.PHASE_IDLE),
+                  ),
+                );
+                return reply.writeToBuffer();
+              }
+              final reply = Envelope(
+                protocolVersion: 1,
+                requestId: req.requestId,
+                response: Response(),
+              );
+              return reply.writeToBuffer();
+            default:
+              return null;
+          }
+        },
+      );
+
+      MockStreamHandlerEventSink? activeEventSink;
+      binding.defaultBinaryMessenger.setMockStreamHandler(
+        eventChannel,
+        MockStreamHandler.inline(
+          onListen: (args, events) {
+            activeEventSink = events;
+          },
+          onCancel: (args) {
+            activeEventSink = null;
+          },
+        ),
+      );
+
+      addTearDown(() {
+        binding.defaultBinaryMessenger
+            .setMockMethodCallHandler(methodChannel, null);
+        binding.defaultBinaryMessenger
+            .setMockStreamHandler(eventChannel, null);
+      });
+
+      final transport = PlatformChannelTransport(
+        methodChannel: methodChannel,
+        eventChannel: eventChannel,
+      );
+      final client = CoreClient(transport);
+      final ack = await client.hello(appVersion: '0.1.0');
+      expect(ack.serviceVersion, equals('0.1.0-android'));
+
+      final controller = HomeController(
+        client: client,
+        platformTransport: transport,
+        initialStatus: ack.status,
+      );
+
+      expect(await controller.prepareVpn(), isTrue);
+      expect(await controller.openVpnSettings(), isTrue);
+      expect(vpnSettingsOpened, isTrue);
+
+      // Push an unframed status event with SESSION_END_ANDROID_STOPPED
+      final stoppedEnv = Envelope(
+        protocolVersion: 1,
+        event: Event(
+          statusChanged: Status(
+            phase: Phase.PHASE_IDLE,
+            lastEnd: SessionEnd.SESSION_END_ANDROID_STOPPED,
+          ),
+        ),
+      );
+      activeEventSink?.success(stoppedEnv.writeToBuffer());
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+
+      expect(controller.stoppedByAndroid, isTrue);
+
+      // Push SESSION_END_VPN_REVOKED
+      final revokedEnv = Envelope(
+        protocolVersion: 1,
+        event: Event(
+          statusChanged: Status(
+            phase: Phase.PHASE_IDLE,
+            lastEnd: SessionEnd.SESSION_END_VPN_REVOKED,
+          ),
+        ),
+      );
+      activeEventSink?.success(revokedEnv.writeToBuffer());
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+
+      expect(controller.hasVpnPermission, isFalse);
+      expect(controller.stoppedByAndroid, isFalse);
+
+      await client.close();
+      controller.dispose();
+    });
+
+    testWidgets('HomeStateBanner renders Android VPN revoked, takeover, and stopped banners', (tester) async {
+      final controller = HomeController(
+        initialStatus: Status(
+          phase: Phase.PHASE_IDLE,
+          lastEnd: SessionEnd.SESSION_END_VPN_REVOKED,
+        ),
+      );
+
+      await tester.pumpWidget(
+        _buildTestApp(
+          child: ListenableBuilder(
+            listenable: controller,
+            builder: (ctx, _) => HomeStateBanner(controller: controller),
+          ),
+        ),
+      );
+
+      expect(find.text("Android removed Charon's VPN permission. Traffic is going direct."), findsOneWidget);
+      expect(find.text('Allow again'), findsOneWidget);
+
+      controller.setStatus(Status(
+        phase: Phase.PHASE_IDLE,
+        lastEnd: SessionEnd.SESSION_END_ANOTHER_VPN,
+      ));
+      await tester.pump();
+
+      expect(find.text('Another VPN took over. Traffic is going direct.'), findsOneWidget);
+
+      controller.setStatus(Status(
+        phase: Phase.PHASE_IDLE,
+        lastEnd: SessionEnd.SESSION_END_ANDROID_STOPPED,
+      ));
+      await tester.pump();
+
+      expect(find.text('Android stopped Charon. Traffic may have gone direct meanwhile.'), findsOneWidget);
+      expect(find.text('Open VPN settings'), findsOneWidget);
+
+      controller.dispose();
     });
   });
 }

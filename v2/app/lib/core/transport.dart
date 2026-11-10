@@ -6,6 +6,7 @@ import 'dart:io' show Socket;
 import 'dart:typed_data';
 
 import 'package:dart_ipc/dart_ipc.dart' as ipc;
+import 'package:flutter/services.dart';
 
 /// The core went away, or a write was attempted after it did.
 class CoreClosedException implements Exception {
@@ -100,5 +101,115 @@ class MemoryTransport implements CoreTransport {
     // peer's is how the peer notices.
     await _in.close();
     await _peerIn.close();
+  }
+}
+
+/// Android transport backed by Flutter [MethodChannel] (`app.charon/core`) for
+/// request/response envelopes and [EventChannel] (`app.charon/core_events`) for
+/// asynchronous core events (CORE1).
+class PlatformChannelTransport implements CoreTransport {
+  PlatformChannelTransport({
+    MethodChannel? methodChannel,
+    EventChannel? eventChannel,
+  })  : _methodChannel = methodChannel ?? const MethodChannel(defaultMethodChannelName),
+        _eventChannel = eventChannel ?? const EventChannel(defaultEventChannelName) {
+    _eventSub = _eventChannel.receiveBroadcastStream().listen(
+      _onEventPayload,
+      onError: (Object error) {
+        if (!_closed && !_incoming.isClosed) {
+          _incoming.addError(CoreClosedException(error));
+        }
+      },
+    );
+  }
+
+  static const String defaultMethodChannelName = 'app.charon/core';
+  static const String defaultEventChannelName = 'app.charon/core_events';
+
+  final MethodChannel _methodChannel;
+  final EventChannel _eventChannel;
+  final StreamController<Uint8List> _incoming = StreamController<Uint8List>.broadcast();
+  StreamSubscription<dynamic>? _eventSub;
+  bool _closed = false;
+
+  @override
+  Stream<Uint8List> get incoming => _incoming.stream;
+
+  @override
+  void send(Uint8List bytes) {
+    if (_closed || _incoming.isClosed) throw CoreClosedException();
+    unawaited(_sendAsync(bytes));
+  }
+
+  Future<void> _sendAsync(Uint8List bytes) async {
+    try {
+      final resp = await _methodChannel.invokeMethod<Uint8List>('send', bytes);
+      if (_closed || _incoming.isClosed || resp == null || resp.isEmpty) {
+        return;
+      }
+      _incoming.add(_ensureFramed(resp));
+    } catch (e) {
+      if (!_closed && !_incoming.isClosed) {
+        _closed = true;
+        _incoming.addError(CoreClosedException(e));
+        await _incoming.close();
+      }
+    }
+  }
+
+  void _onEventPayload(dynamic payload) {
+    if (_closed || _incoming.isClosed || payload == null) return;
+    final Uint8List raw;
+    if (payload is Uint8List) {
+      raw = payload;
+    } else if (payload is List<int>) {
+      raw = Uint8List.fromList(payload);
+    } else {
+      return;
+    }
+    if (raw.isEmpty) return;
+    _incoming.add(_ensureFramed(raw));
+  }
+
+  /// Ensures [bytes] begins with a 4-byte big-endian length prefix so
+  /// `CoreClient`'s `FrameDecoder` can parse both framed responses and raw
+  /// event envelopes uniformly.
+  static Uint8List _ensureFramed(Uint8List bytes) {
+    if (bytes.length >= 4) {
+      final prefixLen =
+          ByteData.sublistView(bytes, 0, 4).getUint32(0, Endian.big);
+      if (prefixLen == bytes.length - 4) {
+        return bytes;
+      }
+    }
+    final out = Uint8List(4 + bytes.length);
+    ByteData.sublistView(out).setUint32(0, bytes.length, Endian.big);
+    out.setRange(4, out.length, bytes);
+    return out;
+  }
+
+  /// Requests Android `VpnService.prepare` permission from `MainActivity`.
+  Future<bool> prepareVpn() async {
+    if (_closed) return false;
+    final granted = await _methodChannel.invokeMethod<bool>('prepareVpn');
+    return granted ?? false;
+  }
+
+  /// Opens the Android system VPN settings screen (Always-on VPN / Block
+  /// connections without VPN).
+  Future<bool> openVpnSettings() async {
+    if (_closed) return false;
+    final opened = await _methodChannel.invokeMethod<bool>('openVpnSettings');
+    return opened ?? false;
+  }
+
+  @override
+  Future<void> close() async {
+    if (_closed) return;
+    _closed = true;
+    await _eventSub?.cancel();
+    if (!_incoming.isClosed) {
+      await _incoming.close();
+    }
   }
 }

@@ -302,6 +302,9 @@ const SessionEnd$json = {
     {'1': 'SESSION_END_MANUAL', '2': 1},
     {'1': 'SESSION_END_COULD_NOT_REACH', '2': 2},
     {'1': 'SESSION_END_TUNNEL_LOST', '2': 3},
+    {'1': 'SESSION_END_VPN_REVOKED', '2': 4},
+    {'1': 'SESSION_END_ANOTHER_VPN', '2': 5},
+    {'1': 'SESSION_END_ANDROID_STOPPED', '2': 6},
   ],
 };
 
@@ -309,7 +312,8 @@ const SessionEnd$json = {
 final $typed_data.Uint8List sessionEndDescriptor = $convert.base64Decode(
     'CgpTZXNzaW9uRW5kEhsKF1NFU1NJT05fRU5EX1VOU1BFQ0lGSUVEEAASFgoSU0VTU0lPTl9FTk'
     'RfTUFOVUFMEAESHwobU0VTU0lPTl9FTkRfQ09VTERfTk9UX1JFQUNIEAISGwoXU0VTU0lPTl9F'
-    'TkRfVFVOTkVMX0xPU1QQAw==');
+    'TkRfVFVOTkVMX0xPU1QQAxIbChdTRVNTSU9OX0VORF9WUE5fUkVWT0tFRBAEEhsKF1NFU1NJT0'
+    '5fRU5EX0FOT1RIRVJfVlBOEAUSHwobU0VTU0lPTl9FTkRfQU5EUk9JRF9TVE9QUEVEEAY=');
 
 @$core.Deprecated('Use errorCodeDescriptor instead')
 const ErrorCode$json = {

@@ -100,6 +100,26 @@ class AndroidNotificationProjector {
       );
     }
 
+    if (controller.stoppedByAndroid) {
+      return AndroidNotificationPayload(
+        title: 'Charon · Stopped by Android',
+        body: l10n.androidStoppedNotice,
+        accentColor: const Color(0xFFF59E0B), // amber
+        channelId: channelTunnel,
+        isOngoing: false,
+        actions: [
+          AndroidNotificationAction(
+            id: 'reconnect',
+            label: l10n.actionConnect,
+          ),
+          AndroidNotificationAction(
+            id: 'open_vpn_settings',
+            label: l10n.androidOpenVpnSettings,
+          ),
+        ],
+      );
+    }
+
     final uiState = controller.uiState;
     final server = controller.activeServer;
     final serverName = server?.displayName.isNotEmpty == true

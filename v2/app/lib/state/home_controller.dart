@@ -5,6 +5,7 @@ import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 
 import '../core/core_client.dart';
+import '../core/transport.dart';
 import '../gen/charon/v1/charon.pb.dart';
 import '../sync/sync_client.dart';
 import 'ui_state.dart';
@@ -18,6 +19,7 @@ enum ServiceStatus { running, notRunning, needsUpdate }
 class HomeController extends ChangeNotifier {
   HomeController({
     CoreClient? client,
+    PlatformChannelTransport? platformTransport,
     Status? initialStatus,
     Config? initialConfig,
     bool? hasServers,
@@ -29,6 +31,8 @@ class HomeController extends ChangeNotifier {
         _config = initialConfig,
         _hasServers = hasServers ?? (initialConfig?.servers.isNotEmpty ?? true),
         _sync = syncController ?? SyncController() {
+    _platformTransport = platformTransport;
+    _syncAndroidAnomaly(_status);
     _seedInitialLogs();
     _sync.addListener(_onSyncChanged);
     _client = client;
@@ -38,6 +42,7 @@ class HomeController extends ChangeNotifier {
   }
 
   CoreClient? _client;
+  PlatformChannelTransport? _platformTransport;
   final SyncController _sync;
   Status _status;
   Config? _config;
@@ -317,7 +322,32 @@ class HomeController extends ChangeNotifier {
 
   void setStatus(Status status) {
     _status = status;
+    _syncAndroidAnomaly(status);
     notifyListeners();
+  }
+
+  void _syncAndroidAnomaly(Status status) {
+    final anomaly = projectAndroidAnomaly(status);
+    switch (anomaly) {
+      case AndroidSessionAnomaly.vpnRevoked:
+        _hasVpnPermission = false;
+        _anotherVpnTookOver = false;
+        _stoppedByAndroid = false;
+      case AndroidSessionAnomaly.anotherVpn:
+        _hasVpnPermission = true;
+        _anotherVpnTookOver = true;
+        _stoppedByAndroid = false;
+      case AndroidSessionAnomaly.androidStopped:
+        _hasVpnPermission = true;
+        _anotherVpnTookOver = false;
+        _stoppedByAndroid = true;
+      case AndroidSessionAnomaly.none:
+        if (status.phase != Phase.PHASE_IDLE) {
+          _hasVpnPermission = true;
+          _anotherVpnTookOver = false;
+          _stoppedByAndroid = false;
+        }
+    }
   }
 
   void setServiceStatus(ServiceStatus status) {
@@ -665,6 +695,7 @@ class HomeController extends ChangeNotifier {
   }
 
   UiState get uiState => projectState(_status, hasServers: _hasServers);
+  AndroidSessionAnomaly get androidAnomaly => projectAndroidAnomaly(_status);
 
   Server? get activeServer {
     if (_config == null || _config!.servers.isEmpty) return null;
@@ -679,13 +710,21 @@ class HomeController extends ChangeNotifier {
     );
   }
 
-  void attachClient(CoreClient newClient, {Status? initialStatus}) {
+  void attachClient(
+    CoreClient newClient, {
+    Status? initialStatus,
+    PlatformChannelTransport? platformTransport,
+  }) {
     if (_isDisposed) return;
     _eventSub?.cancel();
     _client = newClient;
+    if (platformTransport != null) {
+      _platformTransport = platformTransport;
+    }
     _serviceStatus = ServiceStatus.running;
     if (initialStatus != null) {
       _status = initialStatus;
+      _syncAndroidAnomaly(initialStatus);
     }
     _initClient();
     notifyListeners();
@@ -739,6 +778,7 @@ class HomeController extends ChangeNotifier {
     if (_isDisposed) return;
     if (event.hasStatusChanged()) {
       _status = event.statusChanged;
+      _syncAndroidAnomaly(_status);
       if (_status.phase == Phase.PHASE_IDLE) {
         _hasPendingSplitChanges = false;
         _pendingSplitRules.clear();
@@ -856,6 +896,7 @@ class HomeController extends ChangeNotifier {
 
   void updateStatus(Status status) {
     _status = status;
+    _syncAndroidAnomaly(status);
     notifyListeners();
   }
 
@@ -870,7 +911,40 @@ class HomeController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> prepareVpn() async {
+    if (_platformTransport == null) {
+      _hasVpnPermission = true;
+      notifyListeners();
+      return true;
+    }
+    final granted = await _platformTransport!.prepareVpn();
+    _hasVpnPermission = granted;
+    notifyListeners();
+    return granted;
+  }
+
+  Future<bool> allowVpnAgain() async {
+    final granted = await prepareVpn();
+    if (granted) {
+      _anotherVpnTookOver = false;
+      _stoppedByAndroid = false;
+      await connect();
+    }
+    return granted;
+  }
+
+  Future<bool> openVpnSettings() async {
+    if (_platformTransport == null) return false;
+    return _platformTransport!.openVpnSettings();
+  }
+
   Future<void> connect() async {
+    if (_platformTransport != null) {
+      final granted = await prepareVpn();
+      if (!granted) return;
+    }
+    _anotherVpnTookOver = false;
+    _stoppedByAndroid = false;
     if (_client != null) await _client!.connect();
   }
 

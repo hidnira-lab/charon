@@ -456,16 +456,25 @@ class SessionEnd extends $pb.ProtobufEnum {
       SessionEnd._(2, _omitEnumNames ? '' : 'SESSION_END_COULD_NOT_REACH');
   static const SessionEnd SESSION_END_TUNNEL_LOST =
       SessionEnd._(3, _omitEnumNames ? '' : 'SESSION_END_TUNNEL_LOST');
+  static const SessionEnd SESSION_END_VPN_REVOKED =
+      SessionEnd._(4, _omitEnumNames ? '' : 'SESSION_END_VPN_REVOKED');
+  static const SessionEnd SESSION_END_ANOTHER_VPN =
+      SessionEnd._(5, _omitEnumNames ? '' : 'SESSION_END_ANOTHER_VPN');
+  static const SessionEnd SESSION_END_ANDROID_STOPPED =
+      SessionEnd._(6, _omitEnumNames ? '' : 'SESSION_END_ANDROID_STOPPED');
 
   static const $core.List<SessionEnd> values = <SessionEnd>[
     SESSION_END_UNSPECIFIED,
     SESSION_END_MANUAL,
     SESSION_END_COULD_NOT_REACH,
     SESSION_END_TUNNEL_LOST,
+    SESSION_END_VPN_REVOKED,
+    SESSION_END_ANOTHER_VPN,
+    SESSION_END_ANDROID_STOPPED,
   ];
 
   static final $core.List<SessionEnd?> _byValue =
-      $pb.ProtobufEnum.$_initByValueList(values, 3);
+      $pb.ProtobufEnum.$_initByValueList(values, 6);
   static SessionEnd? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
