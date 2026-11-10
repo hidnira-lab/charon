@@ -33,7 +33,7 @@ class AboutCard extends StatelessWidget {
     final links = [
       _AboutItem(
         label: l10n.settingsAboutUpdates,
-        value: pendingUpdates > 0 ? '$pendingUpdates READY →' : 'UP TO DATE →',
+        value: pendingUpdates > 0 ? '$pendingUpdates READY →' : 'CHECK →',
         isExternal: false,
       ),
       _AboutItem(

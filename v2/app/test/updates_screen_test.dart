@@ -1,3 +1,4 @@
+import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -20,10 +21,30 @@ Widget _buildTestUpdatesApp({required HomeController controller, Locale? locale}
   );
 }
 
+/// Updates as the core would report them. Test data only, the app starts unchecked.
+void _withPendingUpdates(HomeController c) {
+  c.setCoreUpdateState(UpdateState(
+    kind: UpdateKind.UPDATE_KIND_CORE,
+    stage: UpdateStage.UPDATE_READY,
+    currentVersion: 'v1.8.7',
+    newVersion: 'v1.8.24',
+    sizeBytes: Int64(14889728),
+  ));
+  c.setAppUpdateState(UpdateState(
+    kind: UpdateKind.UPDATE_KIND_APP,
+    stage: UpdateStage.UPDATE_AVAILABLE,
+    currentVersion: '0.1.0',
+    newVersion: '0.2.0',
+    sizeBytes: Int64(29826048),
+  ));
+}
+
 void main() {
   group('HomeController Updates Logic', () {
     test('transitions core update stage on apply now and queued', () async {
       final controller = HomeController();
+      expect(controller.coreUpdateState.stage, UpdateStage.UPDATE_STAGE_UNSPECIFIED);
+      _withPendingUpdates(controller);
       expect(controller.coreUpdateState.stage, UpdateStage.UPDATE_READY);
 
       // Queue on disconnect
@@ -73,6 +94,7 @@ void main() {
       final controller = HomeController(
         initialStatus: Status(phase: Phase.PHASE_UP),
       );
+      _withPendingUpdates(controller);
 
       await tester.pumpWidget(_buildTestUpdatesApp(controller: controller));
       await tester.pumpAndSettle();
@@ -120,6 +142,7 @@ void main() {
       addTearDown(() => tester.view.resetPhysicalSize());
 
       final controller = HomeController(initialStatus: Status(phase: Phase.PHASE_UP));
+      _withPendingUpdates(controller);
       await tester.pumpWidget(_buildTestUpdatesApp(controller: controller));
       await tester.pumpAndSettle();
 
@@ -140,6 +163,7 @@ void main() {
         locale: const Locale('id'),
         initialStatus: Status(phase: Phase.PHASE_IDLE),
       );
+      _withPendingUpdates(controller);
 
       await tester.pumpWidget(CharonApp(
         controller: controller,

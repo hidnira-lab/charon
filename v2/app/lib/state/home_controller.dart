@@ -99,18 +99,10 @@ class HomeController extends ChangeNotifier {
   // Updates state (05b Updates)
   UpdateState _coreUpdateState = UpdateState(
     kind: UpdateKind.UPDATE_KIND_CORE,
-    stage: UpdateStage.UPDATE_READY,
-    currentVersion: 'v1.8.7',
-    newVersion: 'v1.8.24',
-    sizeBytes: Int64(14889728),
   );
 
   UpdateState _appUpdateState = UpdateState(
     kind: UpdateKind.UPDATE_KIND_APP,
-    stage: UpdateStage.UPDATE_AVAILABLE,
-    currentVersion: '0.1.0',
-    newVersion: '0.2.0',
-    sizeBytes: Int64(29826048),
   );
 
   bool _isFileUploading = false;

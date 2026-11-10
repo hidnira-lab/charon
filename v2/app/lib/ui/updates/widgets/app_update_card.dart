@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fixnum/fixnum.dart';
 
 import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -72,7 +73,11 @@ class AppUpdateCard extends StatelessWidget {
                   border: Border.all(color: colors.accent.withValues(alpha: 0.4)),
                 ),
                 child: Text(
-                  'UPDATE READY',
+                  switch (updateState.stage) {
+                    UpdateStage.UPDATE_AVAILABLE || UpdateStage.UPDATE_READY => 'UPDATE READY',
+                    UpdateStage.UPDATE_UPDATED || UpdateStage.UPDATE_UP_TO_DATE => 'UP TO DATE',
+                    _ => 'NOT CHECKED',
+                  },
                   style: CharonTypography.code.copyWith(
                     color: colors.accent,
                     fontSize: 10.5,
@@ -94,7 +99,7 @@ class AppUpdateCard extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  updateState.currentVersion.isNotEmpty ? 'v${updateState.currentVersion}' : 'v0.1.0',
+                  updateState.currentVersion.isNotEmpty ? 'v${updateState.currentVersion}' : '—',
                   style: CharonTypography.code.copyWith(
                     color: colors.text2,
                     fontSize: 13.0,
@@ -110,7 +115,7 @@ class AppUpdateCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  updateState.newVersion.isNotEmpty ? 'v${updateState.newVersion}' : 'v0.2.0',
+                  updateState.newVersion.isNotEmpty ? 'v${updateState.newVersion}' : '—',
                   style: CharonTypography.code.copyWith(
                     color: colors.accent,
                     fontSize: 13.0,
@@ -118,13 +123,14 @@ class AppUpdateCard extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                Text(
-                  '~28.4 MB',
-                  style: CharonTypography.code.copyWith(
-                    color: colors.text3,
-                    fontSize: 11.5,
+                if (updateState.sizeBytes > Int64.ZERO)
+                  Text(
+                    '~${(updateState.sizeBytes.toInt() / 1048576).toStringAsFixed(1)} MB',
+                    style: CharonTypography.code.copyWith(
+                      color: colors.text3,
+                      fontSize: 11.5,
+                    ),
                   ),
-                ),
               ],
             ),
           ),
