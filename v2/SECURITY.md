@@ -33,9 +33,9 @@ We aim to acknowledge reports within 7 days and publish a fix before public disc
 
 * Every release carries a detached Ed25519 signature (`manifest.json.sig`) over `manifest.json`.
 * The signing private key is kept offline and is never stored in repository files or CI secrets. GitHub Actions produces an unsigned draft release, and the maintainer verifies hashes and signs the manifest locally before publishing.
-* The core embeds two Ed25519 public keys (`current` and `next`) in `core/update/keys.go` so key rotation works without stranding existing installs:
-  * Current public key (hex): `3b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29`
-  * Next public key (hex): `4z8f56bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29` (placeholder until first rotation)
+* The core embeds two Ed25519 public keys (`current` and `next`) in `core/update/manifest.go` so key rotation works without stranding existing installs:
+  * Current public key (hex): `5209e24488f6bd506e2397058cfb76ac8a6413bcf94d0802ce45f401a9e49fab`
+  * Next public key (hex): `041fe0a250c38b22c4c4662ee4d104a8f3d2d9b5bd995b8e528def3a3bcca4b4` (held offline for the first rotation)
 * Downgrades are refused using a monotonically increasing `sequence` number in the signed manifest.
 * Manual updates from a `.charonup` bundle (`CHARONUP` header) are streamed in chunks over IPC and verified by the service against the same embedded Ed25519 keys, sequence floor, `minVersion`, and artifact SHA-256 digests.
 * Core updates are tested with `xray run -test` against every saved server configuration before swapping, and roll back automatically if the post-swap handshake fails.

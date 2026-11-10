@@ -28,10 +28,10 @@ const (
 	BundleMarker = "CHARONUP"
 
 	// DefaultPrimaryPublicKeyHex is the primary embedded Ed25519 release verification key.
-	DefaultPrimaryPublicKeyHex = "8986c43e929f02a4e2f30f9c278f3c6a38d0e3c782a6b6e440d335c36c05763a"
+	DefaultPrimaryPublicKeyHex = "5209e24488f6bd506e2397058cfb76ac8a6413bcf94d0802ce45f401a9e49fab"
 
 	// DefaultNextPublicKeyHex is the prepared rotation Ed25519 public key (section 4).
-	DefaultNextPublicKeyHex = "c1b5f9e6935a4b887a0983c71667c47a27829e6530f05d9423a54408f1745873"
+	DefaultNextPublicKeyHex = "041fe0a250c38b22c4c4662ee4d104a8f3d2d9b5bd995b8e528def3a3bcca4b4"
 )
 
 var (
