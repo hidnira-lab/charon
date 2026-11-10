@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/tokens.dart';
-import '../../dialogs/qr_export_dialog.dart';
 
 /// Dialog to edit server display name and quota configuration.
 /// Connection fields are strictly read-only as per Charon rules.
@@ -310,23 +309,8 @@ class _EditServerDialogState extends State<EditServerDialog> {
               ],
               const SizedBox(height: 24),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton.icon(
-                    onPressed: () => QrExportDialog.show(context, widget.server),
-                    icon: const Icon(Icons.qr_code_2_rounded, size: 16),
-                    label: const Text(
-                      'Show as QR',
-                      style: TextStyle(
-                        fontFamily: CharonTokens.fontMono,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    style: TextButton.styleFrom(
-                      foregroundColor: const Color(0xFF60A1D9),
-                    ),
-                  ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [

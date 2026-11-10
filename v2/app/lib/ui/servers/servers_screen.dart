@@ -26,34 +26,6 @@ class ServersScreen extends StatefulWidget {
 }
 
 class _ServersScreenState extends State<ServersScreen> {
-  bool _isTestingServers = false;
-  final Map<String, int?> _serverLatencies = {};
-
-  Future<void> _testAllServers(List<Server> servers) async {
-    if (_isTestingServers) return;
-    setState(() {
-      _isTestingServers = true;
-      _serverLatencies.clear();
-    });
-
-    for (int i = 0; i < servers.length; i++) {
-      final s = servers[i];
-      await Future<void>.delayed(const Duration(milliseconds: 150));
-      if (!mounted) return;
-      // Simulated round trip latency (deterministic based on server id/country)
-      final latency = s.countryCode == 'JP' ? 45 : s.countryCode == 'SG' ? 78 : 142;
-      setState(() {
-        _serverLatencies[s.id] = latency;
-      });
-    }
-
-    if (mounted) {
-      setState(() {
-        _isTestingServers = false;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -145,30 +117,6 @@ class _ServersScreenState extends State<ServersScreen> {
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        // Test servers button
-                                        OutlinedButton(
-                                          onPressed: (isConnected || _isTestingServers || servers.isEmpty)
-                                              ? null
-                                              : () => _testAllServers(servers),
-                                          style: OutlinedButton.styleFrom(
-                                            foregroundColor: const Color(0xFFEDEDED),
-                                            disabledForegroundColor: const Color(0xFF737373),
-                                            side: const BorderSide(color: Color(0xFF737373), style: BorderStyle.solid),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(999),
-                                            ),
-                                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                                          ),
-                                          child: Text(
-                                            _isTestingServers ? 'Testing...' : l10n.serversActionTest,
-                                            style: const TextStyle(
-                                              fontFamily: CharonTokens.fontMono,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 10),
                                         // Import vless link
                                         OutlinedButton.icon(
                                           onPressed: atLimit
@@ -329,8 +277,6 @@ class _ServersScreenState extends State<ServersScreen> {
                                                   server: s,
                                                   isActive: isSrvActive,
                                                   isConnected: isConnected,
-                                                  latencyMs: _serverLatencies[s.id],
-                                                  isTesting: _isTestingServers && !_serverLatencies.containsKey(s.id),
                                                   onSelect: () => controller.selectServer(s.id),
                                                   onEdit: () => _openEditDialog(context, s),
                                                   onDelete: () => _openDeleteDialog(context, s),

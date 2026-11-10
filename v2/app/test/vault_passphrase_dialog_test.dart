@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/l10n/generated/app_localizations.dart';
-import 'package:charon/state/home_controller.dart';
 import 'package:charon/theme/theme.dart';
-import 'package:charon/ui/dialogs/qr_export_dialog.dart';
 import 'package:charon/ui/dialogs/vault_passphrase_dialog.dart';
-import 'package:charon/ui/servers/servers_screen.dart';
 import 'package:charon/ui/servers/widgets/sync_card.dart';
 
 Widget _buildTestApp({required Widget child}) {
@@ -130,89 +126,6 @@ void main() {
       expect(find.text('Restore from .charonvault'), findsOneWidget);
       await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
-    });
-  });
-
-  group('QrExportDialog (N22)', () {
-    testWidgets('displays warning first, reveals QR after confirm, supports copy', (tester) async {
-      final server = Server(
-        id: 'srv-jp',
-        displayName: 'Tokyo Equinix TY8',
-        address: 'ty8.charon.network',
-        port: 443,
-      );
-
-      await tester.pumpWidget(
-        _buildTestApp(
-          child: Builder(
-            builder: (context) => ElevatedButton(
-              onPressed: () => QrExportDialog.show(context, server),
-              child: const Text('Open QR'),
-            ),
-          ),
-        ),
-      );
-
-      await tester.tap(find.text('Open QR'));
-      await tester.pumpAndSettle();
-
-      expect(find.text('Export srv-jp'), findsOneWidget);
-      expect(find.textContaining('This QR code carries your secret credentials'), findsOneWidget);
-      expect(find.text('Show QR code'), findsOneWidget);
-
-      // Tap reveal
-      await tester.tap(find.text('Show QR code'));
-      await tester.pumpAndSettle();
-
-      // Now reveals QR code canvas and copy link button
-      expect(find.text('Copy'), findsOneWidget);
-      expect(find.text('Close'), findsOneWidget);
-
-      await tester.tap(find.text('Copy'));
-      await tester.pump();
-      expect(find.text('Copied'), findsOneWidget);
-
-      await tester.tap(find.text('Close'));
-      await tester.pumpAndSettle();
-    });
-  });
-
-  group('ServersScreen Server Latency Testing (N21)', () {
-    testWidgets('Test servers button updates latency chips without changing active server', (tester) async {
-      tester.view.physicalSize = const Size(1280, 800);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(() => tester.view.resetPhysicalSize());
-
-      final s1 = Server(id: 's1', displayName: 'Frankfurt Core', address: '1.1.1.1', port: 443);
-      final s2 = Server(id: 's2', displayName: 'Singapore Telin-3', address: '1.0.0.1', port: 443);
-      final controller = HomeController(
-        initialStatus: Status(phase: Phase.PHASE_IDLE, activeServerId: 's1'),
-        initialConfig: Config(servers: [s1, s2]),
-      );
-
-      await tester.pumpWidget(_buildTestApp(child: ServersScreen(controller: controller)));
-      await tester.pumpAndSettle();
-
-      expect(find.text('Test servers'), findsOneWidget);
-      expect(find.text('Frankfurt Core'), findsOneWidget);
-      expect(find.text('Singapore Telin-3'), findsOneWidget);
-
-      // Tap Test servers
-      await tester.tap(find.text('Test servers'));
-      await tester.pump(); // testing starts
-
-      expect(find.text('Testing...'), findsOneWidget);
-
-      // Advance clock past test duration
-      await tester.pump(const Duration(milliseconds: 700));
-      await tester.pumpAndSettle();
-
-      // Finished testing, button back to 'Test servers'
-      expect(find.text('Test servers'), findsOneWidget);
-      // Latency chips should now display ms
-      expect(find.textContaining('ms'), findsWidgets);
-      // Active server is still s1
-      expect(controller.status.activeServerId, 's1');
     });
   });
 }

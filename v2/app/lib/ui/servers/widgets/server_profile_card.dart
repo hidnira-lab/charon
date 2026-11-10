@@ -15,8 +15,6 @@ class ServerProfileCard extends StatelessWidget {
     required this.onSelect,
     required this.onEdit,
     required this.onDelete,
-    this.latencyMs,
-    this.isTesting = false,
   });
 
   final int order;
@@ -26,8 +24,6 @@ class ServerProfileCard extends StatelessWidget {
   final VoidCallback onSelect;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
-  final int? latencyMs;
-  final bool isTesting;
 
   @override
   Widget build(BuildContext context) {
@@ -149,62 +145,6 @@ class ServerProfileCard extends StatelessWidget {
                               ),
                             ),
                           ],
-                        ),
-                      ),
-                    if (isTesting)
-                      Container(
-                        height: 20,
-                        padding: const EdgeInsets.symmetric(horizontal: 6),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF262626),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SizedBox(
-                              width: 8,
-                              height: 8,
-                              child: CircularProgressIndicator(strokeWidth: 1.5, color: Color(0xFF60A1D9)),
-                            ),
-                            SizedBox(width: 4),
-                            Text(
-                              'TESTING',
-                              style: TextStyle(
-                                fontFamily: CharonTokens.fontMono,
-                                fontSize: 9,
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xFF60A1D9),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    else if (latencyMs != null)
-                      Container(
-                        height: 20,
-                        padding: const EdgeInsets.symmetric(horizontal: 6),
-                        decoration: BoxDecoration(
-                          color: latencyMs! < 0
-                              ? const Color(0xFF3B1E1E)
-                              : latencyMs! < 120
-                                  ? const Color(0xFF1E3A24)
-                                  : const Color(0xFF3A301E),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          latencyMs! < 0 ? 'timeout' : '$latencyMs ms',
-                          style: TextStyle(
-                            fontFamily: CharonTokens.fontMono,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            color: latencyMs! < 0
-                                ? const Color(0xFFEF4444)
-                                : latencyMs! < 120
-                                    ? const Color(0xFF81C784)
-                                    : const Color(0xFFFFB74D),
-                          ),
                         ),
                       ),
                   ],

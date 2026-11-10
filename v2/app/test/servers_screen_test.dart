@@ -214,7 +214,6 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Server'), findsOneWidget);
-      expect(find.text('Tes server'), findsOneWidget);
       expect(find.text('Impor link vless://'), findsOneWidget);
       expect(find.text('Tempel config'), findsOneWidget);
       expect(find.text('Pakai'), findsOneWidget);
