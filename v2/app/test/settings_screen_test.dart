@@ -164,7 +164,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(controller.greetingName, 'Alex');
-      expect(find.text('Good evening, Alex! · in Nanjing'), findsOneWidget);
+      expect(find.text('Good evening, Alex! · in Yogyakarta'), findsOneWidget);
     });
 
     testWidgets('erase all data triggers modal and cleans state', (tester) async {

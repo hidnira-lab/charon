@@ -110,7 +110,7 @@ class HomeController extends ChangeNotifier {
   bool _stoppedByAndroid = false;
   String _greetingName = 'Day';
   bool _detectCity = true;
-  String _city = 'Nanjing';
+  String _city = 'Yogyakarta';
   String _countryCode = 'CN';
 
   CoreClient? get client => _client;

@@ -116,7 +116,7 @@ class TimePlaceCard extends StatelessWidget {
                       const SizedBox(width: CharonSpacing.s2),
                       Expanded(
                         child: Text(
-                          "You're now in Nanjing",
+                          "You're now in Yogyakarta",
                           style: CharonTypography.body.copyWith(
                             fontWeight: FontWeight.w600,
                             color: colors.text,
