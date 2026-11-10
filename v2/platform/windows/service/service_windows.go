@@ -159,6 +159,11 @@ func NewRuntime(opts Options) (*Runtime, error) {
 		CoreLogs:       coreLogs,
 		AccessLogs:     accessLogs,
 		NowMs:          clock.NowMs,
+		// The pipe ACL is the first check. This is the second one: the
+		// service asks Windows who the connected client is.
+		VerifyConn: func(c net.Conn) error {
+			return pipe.VerifyConn(c, rt.ownerSID())
+		},
 	})
 	rt.pipeSrv = pipeSrv
 
@@ -202,19 +207,26 @@ func (r *Runtime) Driver() *driver.Driver {
 	return r.drv
 }
 
+// ownerSID returns the SID of the user allowed to use the pipe: the explicit
+// option, else the installer's owner.sid file, else (console runs that are not
+// LocalSystem) the user running the process.
+func (r *Runtime) ownerSID() string {
+	if sid := r.opts.InstallingUserSID; sid != "" {
+		return sid
+	}
+	if raw, err := os.ReadFile(filepath.Join(r.opts.DataDir, "owner.sid")); err == nil {
+		return strings.TrimSpace(string(raw))
+	}
+	if cur, err := pipe.CurrentProcessUserSID(); err == nil && cur != "S-1-5-18" {
+		return cur
+	}
+	return ""
+}
+
 // Run starts the named pipe server, boot matrix, stats loop, and network
 // watcher until ctx is cancelled.
 func (r *Runtime) Run(ctx context.Context) error {
-	sid := r.opts.InstallingUserSID
-	if sid == "" {
-		if raw, err := os.ReadFile(filepath.Join(r.opts.DataDir, "owner.sid")); err == nil {
-			sid = strings.TrimSpace(string(raw))
-		} else if curSID, sidErr := pipe.CurrentProcessUserSID(); sidErr == nil && curSID != "S-1-5-18" {
-			sid = curSID
-		}
-	}
-
-	ln, err := pipe.ListenNamedPipe(r.opts.PipeName, sid)
+	ln, err := pipe.ListenNamedPipe(r.opts.PipeName, r.ownerSID())
 	if err != nil {
 		return err
 	}

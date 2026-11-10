@@ -3,11 +3,11 @@
 package pipe
 
 import (
+	"errors"
 	"fmt"
 	"net"
 	"regexp"
 	"strings"
-	"unsafe"
 
 	"github.com/Microsoft/go-winio"
 	"golang.org/x/sys/windows"
@@ -49,16 +49,16 @@ func ListenNamedPipe(pipeName, installingUserSID string) (net.Listener, error) {
 	return winio.ListenPipe(pipeName, cfg)
 }
 
-var (
-	modadvapi32                    = windows.NewLazySystemDLL("advapi32.dll")
-	procImpersonateNamedPipeClient = modadvapi32.NewProc("ImpersonateNamedPipeClient")
-)
+const localSystemSID = "S-1-5-18"
 
 // CurrentProcessUserSID returns the string SID of the current process token.
 func CurrentProcessUserSID() (string, error) {
+	return processUserSID(windows.CurrentProcess())
+}
+
+func processUserSID(proc windows.Handle) (string, error) {
 	var tok windows.Token
-	err := windows.OpenProcessToken(windows.CurrentProcess(), windows.TOKEN_QUERY, &tok)
-	if err != nil {
+	if err := windows.OpenProcessToken(proc, windows.TOKEN_QUERY, &tok); err != nil {
 		return "", err
 	}
 	defer tok.Close()
@@ -70,46 +70,40 @@ func CurrentProcessUserSID() (string, error) {
 	return tu.User.Sid.String(), nil
 }
 
-// VerifyPipeClientSID impersonates the named pipe client on handle, queries its
-// user SID and group memberships, and verifies that it is LocalSystem, an
-// Administrator, or matches allowedUserSID.
+// VerifyConn checks the identity of the client on a connection accepted from
+// ListenNamedPipe. It is the Server's VerifyConn hook on Windows.
+func VerifyConn(conn net.Conn, allowedUserSID string) error {
+	h, ok := conn.(interface{ Fd() uintptr })
+	if !ok {
+		return errors.New("pipe: connection has no handle to verify")
+	}
+	return VerifyPipeClientSID(windows.Handle(h.Fd()), allowedUserSID)
+}
+
+// VerifyPipeClientSID asks Windows which process is on the other end of the
+// pipe and accepts it only when that process runs as LocalSystem or as
+// allowedUserSID (D9: one user per machine).
+//
+// It reads the client process token instead of impersonating the client,
+// because the UI's pipe client opens the pipe with the anonymous impersonation
+// level, which gives the server no token to inspect.
 func VerifyPipeClientSID(pipeHandle windows.Handle, allowedUserSID string) error {
-	r0, _, err := procImpersonateNamedPipeClient.Call(uintptr(pipeHandle))
-	if r0 == 0 {
-		return fmt.Errorf("ImpersonateNamedPipeClient: %w", err)
+	var pid uint32
+	if err := windows.GetNamedPipeClientProcessId(pipeHandle, &pid); err != nil {
+		return fmt.Errorf("GetNamedPipeClientProcessId: %w", err)
 	}
-	defer windows.RevertToSelf()
-
-	var tok windows.Token
-	if err := windows.OpenThreadToken(windows.CurrentThread(), windows.TOKEN_QUERY, true, &tok); err != nil {
-		return fmt.Errorf("OpenThreadToken: %w", err)
-	}
-	defer tok.Close()
-
-	tu, err := tok.GetTokenUser()
+	proc, err := windows.OpenProcess(windows.PROCESS_QUERY_LIMITED_INFORMATION, false, pid)
 	if err != nil {
-		return fmt.Errorf("GetTokenUser: %w", err)
+		return fmt.Errorf("OpenProcess(%d): %w", pid, err)
 	}
-	clientSID := tu.User.Sid.String()
-	// S-1-5-18 is LocalSystem.
-	if clientSID == "S-1-5-18" || (allowedUserSID != "" && strings.EqualFold(clientSID, allowedUserSID)) {
+	defer windows.CloseHandle(proc)
+
+	clientSID, err := processUserSID(proc)
+	if err != nil {
+		return fmt.Errorf("client token: %w", err)
+	}
+	if clientSID == localSystemSID || (allowedUserSID != "" && strings.EqualFold(clientSID, allowedUserSID)) {
 		return nil
 	}
-
-	// Also allow members of Builtin Administrators (S-1-5-32-544).
-	adminSID, err := windows.StringToSid("S-1-5-32-544")
-	if err == nil {
-		var isMember int32
-		checkProc := modadvapi32.NewProc("CheckTokenMembership")
-		rc, _, _ := checkProc.Call(
-			uintptr(tok),
-			uintptr(unsafe.Pointer(adminSID)),
-			uintptr(unsafe.Pointer(&isMember)),
-		)
-		if rc != 0 && isMember != 0 {
-			return nil
-		}
-	}
-
 	return fmt.Errorf("unauthorized pipe client SID %s", clientSID)
 }

@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
+	"net"
 	"strings"
 	"testing"
 	"time"
@@ -161,5 +162,46 @@ func TestServer_OversizedFrameMaxClientsAndCommands(t *testing.T) {
 	diagBytes := respEnv.GetResponse().GetDiagnostics()
 	if !strings.Contains(string(diagBytes), "service ready") {
 		t.Fatalf("expected diagnostics to contain core log line, got:\n%s", string(diagBytes))
+	}
+}
+
+func TestVerifyConn_ChecksClientIdentity(t *testing.T) {
+	mySID, err := CurrentProcessUserSID()
+	if err != nil {
+		t.Fatal(err)
+	}
+	pipeName := fmt.Sprintf(`\\.\pipe\charon-test-id-%d`, time.Now().UnixNano())
+	ln, err := ListenNamedPipe(pipeName, mySID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer ln.Close()
+
+	accepted := make(chan net.Conn, 1)
+	go func() {
+		c, err := ln.Accept()
+		if err == nil {
+			accepted <- c
+		}
+	}()
+	// The UI's pipe client connects with the anonymous impersonation level,
+	// exactly like winio.DialPipe, so the check must work for such a client.
+	timeout := 2 * time.Second
+	client, err := winio.DialPipe(pipeName, &timeout)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer client.Close()
+	srvConn := <-accepted
+	defer srvConn.Close()
+
+	if err := VerifyConn(srvConn, mySID); err != nil {
+		t.Fatalf("the installing user must be accepted: %v", err)
+	}
+	if mySID == "S-1-5-18" {
+		t.Skip("running as LocalSystem, a foreign SID cannot be rejected here")
+	}
+	if err := VerifyConn(srvConn, "S-1-5-21-1-2-3-1001"); err == nil {
+		t.Fatal("a client that is not the installing user must be rejected")
 	}
 }
