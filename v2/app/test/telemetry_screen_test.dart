@@ -181,6 +181,13 @@ void main() {
       addTearDown(() => tester.view.resetPhysicalSize());
 
       final controller = HomeController();
+      // Share needs something to share: the viewer starts empty until the core sends lines.
+      for (final source in [LogSource.LOG_SOURCE_CHARON_CORE, LogSource.LOG_SOURCE_XRAY_ACCESS]) {
+        controller.addLogBatch(LogBatch(
+          source: source,
+          lines: [LogLine(seq: Int64(1), atMs: Int64(1000), level: LogLevel.LOG_LEVEL_INFO, text: 'fixture line')],
+        ));
+      }
       await tester.pumpWidget(CharonApp(controller: controller));
       controller.setTab(3);
       await tester.pumpAndSettle();

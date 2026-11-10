@@ -33,7 +33,6 @@ class HomeController extends ChangeNotifier {
         _sync = syncController ?? SyncController() {
     _platformTransport = platformTransport;
     _syncAndroidAnomaly(_status);
-    _seedInitialLogs();
     _sync.addListener(_onSyncChanged);
     _client = client;
     if (_client != null) {
@@ -800,22 +799,6 @@ class HomeController extends ChangeNotifier {
       }
       notifyListeners();
     }
-  }
-
-  void _seedInitialLogs() {
-    final nowMs = Int64(DateTime.now().millisecondsSinceEpoch);
-    _coreLogs.addAll([
-      LogLine(seq: Int64(1), atMs: nowMs - Int64(30000), level: LogLevel.LOG_LEVEL_INFO, text: 'charon-core v0.1.0 engine initialized'),
-      LogLine(seq: Int64(2), atMs: nowMs - Int64(25000), level: LogLevel.LOG_LEVEL_INFO, text: r'ipc transport listening on \\.\pipe\charon'),
-      LogLine(seq: Int64(3), atMs: nowMs - Int64(20000), level: LogLevel.LOG_LEVEL_INFO, text: 'routing rules loaded: 2 fallback profiles ready'),
-      LogLine(seq: Int64(4), atMs: nowMs - Int64(10000), level: LogLevel.LOG_LEVEL_INFO, text: 'telemetry ring buffer active (max 2000 lines)'),
-    ]);
-    _xrayLogs.addAll([
-      LogLine(seq: Int64(1), atMs: nowMs - Int64(15000), level: LogLevel.LOG_LEVEL_INFO, text: '198.51.100.1:53120 accepted tcp:198.51.100.2:443 [direct]'),
-      LogLine(seq: Int64(2), atMs: nowMs - Int64(12000), level: LogLevel.LOG_LEVEL_INFO, text: '198.51.100.1:53121 accepted tcp:203.0.113.10:443 [proxy]'),
-      LogLine(seq: Int64(3), atMs: nowMs - Int64(8000), level: LogLevel.LOG_LEVEL_INFO, text: '198.51.100.1:53122 accepted udp:192.0.2.53:53 [direct]'),
-      LogLine(seq: Int64(4), atMs: nowMs - Int64(3000), level: LogLevel.LOG_LEVEL_INFO, text: '198.51.100.1:53123 accepted tcp:198.51.100.50:80 [proxy]'),
-    ]);
   }
 
   void addLogBatch(LogBatch batch) {
