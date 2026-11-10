@@ -193,11 +193,15 @@ class HomeController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void _logError(Object error) => debugPrint('HomeController: $error');
+
   Future<void> checkUpdates() async {
     if (_client != null) {
       try {
         await _client!.checkUpdate();
-      } catch (_) {}
+      } catch (e) {
+        _logError(e);
+      }
     }
     notifyListeners();
   }
@@ -213,7 +217,9 @@ class HomeController extends ChangeNotifier {
     if (_client != null) {
       try {
         await _client!.applyUpdate(UpdateKind.UPDATE_KIND_CORE, when);
-      } catch (_) {}
+      } catch (e) {
+        _logError(e);
+      }
     }
   }
 
@@ -221,7 +227,9 @@ class HomeController extends ChangeNotifier {
     if (_client != null) {
       try {
         await _client!.rollbackCore();
-      } catch (_) {}
+      } catch (e) {
+        _logError(e);
+      }
     }
   }
 
@@ -409,7 +417,9 @@ class HomeController extends ChangeNotifier {
     if (Platform.isWindows) {
       try {
         await Process.start('charon-installer.exe', []);
-      } catch (_) {}
+      } catch (e) {
+        _logError(e);
+      }
     }
   }
 
@@ -417,7 +427,9 @@ class HomeController extends ChangeNotifier {
     if (Platform.isWindows) {
       try {
         await Process.start('charon-release.exe', []);
-      } catch (_) {}
+      } catch (e) {
+        _logError(e);
+      }
     }
   }
 
@@ -425,7 +437,9 @@ class HomeController extends ChangeNotifier {
     if (Platform.isWindows) {
       try {
         await Process.start('charon-installer.exe', ['/SILENT']);
-      } catch (_) {}
+      } catch (e) {
+        _logError(e);
+      }
     }
   }
 
@@ -490,7 +504,9 @@ class HomeController extends ChangeNotifier {
     if (_client != null) {
       try {
         await _client!.setConfig(_config!);
-      } catch (_) {}
+      } catch (e) {
+        _logError(e);
+      }
     }
     notifyListeners();
   }
@@ -512,7 +528,9 @@ class HomeController extends ChangeNotifier {
     if (_client != null) {
       try {
         await _client!.setConfig(_config!);
-      } catch (_) {}
+      } catch (e) {
+        _logError(e);
+      }
     }
     notifyListeners();
     return true;
@@ -534,7 +552,9 @@ class HomeController extends ChangeNotifier {
     if (_client != null) {
       try {
         await _client!.setConfig(_config!);
-      } catch (_) {}
+      } catch (e) {
+        _logError(e);
+      }
     }
     notifyListeners();
   }
@@ -547,7 +567,9 @@ class HomeController extends ChangeNotifier {
       try {
         await _client!.disconnect();
         await _client!.connect();
-      } catch (_) {}
+      } catch (e) {
+        _logError(e);
+      }
     }
   }
 
@@ -632,7 +654,9 @@ class HomeController extends ChangeNotifier {
     if (_client != null) {
       try {
         await _client!.setConfig(_config!);
-      } catch (_) {}
+      } catch (e) {
+        _logError(e);
+      }
     }
     notifyListeners();
   }
@@ -644,7 +668,9 @@ class HomeController extends ChangeNotifier {
     if (_client != null) {
       try {
         await _client!.setConfig(_config!);
-      } catch (_) {}
+      } catch (e) {
+        _logError(e);
+      }
     }
     notifyListeners();
   }
@@ -656,7 +682,9 @@ class HomeController extends ChangeNotifier {
     if (_client != null) {
       try {
         await _client!.setConfig(_config!);
-      } catch (_) {}
+      } catch (e) {
+        _logError(e);
+      }
     }
     notifyListeners();
   }
@@ -676,7 +704,9 @@ class HomeController extends ChangeNotifier {
     if (_client != null) {
       try {
         await _client!.setConfig(_config!);
-      } catch (_) {}
+      } catch (e) {
+        _logError(e);
+      }
     }
     notifyListeners();
   }
@@ -685,7 +715,9 @@ class HomeController extends ChangeNotifier {
     if (_status.phase != Phase.PHASE_IDLE && _client != null) {
       try {
         await _client!.disconnect();
-      } catch (_) {}
+      } catch (e) {
+        _logError(e);
+      }
     }
     _config = Config(
       version: Int64(1),
@@ -702,7 +734,9 @@ class HomeController extends ChangeNotifier {
     if (_client != null) {
       try {
         await _client!.setConfig(_config!);
-      } catch (_) {}
+      } catch (e) {
+        _logError(e);
+      }
     }
     notifyListeners();
   }
@@ -755,7 +789,7 @@ class HomeController extends ChangeNotifier {
     final activeClient = _client!;
     _eventSub = activeClient.events.listen(
       _handleEvent,
-      onError: (_) {},
+      onError: _logError,
     );
     unawaited(activeClient.closed.then((_) {
       if (!_isDisposed && identical(_client, activeClient)) {
@@ -773,7 +807,9 @@ class HomeController extends ChangeNotifier {
       if (res.hasDiagnostics()) {
         return res.diagnostics;
       }
-    } catch (_) {}
+    } catch (e) {
+        _logError(e);
+      }
     return null;
   }
 
@@ -861,7 +897,9 @@ class HomeController extends ChangeNotifier {
         logSource: source,
         minLevel: minLevel,
       ));
-    } catch (_) {}
+    } catch (e) {
+        _logError(e);
+      }
   }
 
   String exportDiagnosticsText({bool includeAccess = false}) {
@@ -984,7 +1022,9 @@ class HomeController extends ChangeNotifier {
     if (_client != null) {
       try {
         await _client!.setConfig(_config!);
-      } catch (_) {}
+      } catch (e) {
+        _logError(e);
+      }
     }
     notifyListeners();
     return true;
@@ -999,7 +1039,9 @@ class HomeController extends ChangeNotifier {
     if (_client != null) {
       try {
         await _client!.setConfig(_config!);
-      } catch (_) {}
+      } catch (e) {
+        _logError(e);
+      }
     }
     notifyListeners();
   }
@@ -1020,7 +1062,9 @@ class HomeController extends ChangeNotifier {
     if (_client != null) {
       try {
         await _client!.setConfig(_config!);
-      } catch (_) {}
+      } catch (e) {
+        _logError(e);
+      }
     }
     notifyListeners();
     return true;
@@ -1036,7 +1080,9 @@ class HomeController extends ChangeNotifier {
       if (_client != null) {
         try {
           await _client!.setConfig(_config!);
-        } catch (_) {}
+        } catch (e) {
+        _logError(e);
+      }
       }
     }
     notifyListeners();
@@ -1061,7 +1107,9 @@ class HomeController extends ChangeNotifier {
     if (_client != null) {
       try {
         await _client!.setConfig(_config!);
-      } catch (_) {}
+      } catch (e) {
+        _logError(e);
+      }
     }
     notifyListeners();
   }
