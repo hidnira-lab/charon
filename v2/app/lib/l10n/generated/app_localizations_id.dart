@@ -125,6 +125,11 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String stateSwitchingLine2Chosen(String server) {
+    return 'memeriksa $server';
+  }
+
+  @override
   String get stateOnBackupTitle => 'Terhubung ke backup';
 
   @override

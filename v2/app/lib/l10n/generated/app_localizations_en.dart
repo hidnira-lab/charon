@@ -123,6 +123,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String stateSwitchingLine2Chosen(String server) {
+    return 'checking $server';
+  }
+
+  @override
   String get stateOnBackupTitle => 'Connected on backup';
 
   @override

@@ -293,6 +293,12 @@ abstract class AppLocalizations {
   /// **'{previousServer} failed 5 tries, checking {server}'**
   String stateSwitchingLine2(String previousServer, String server);
 
+  /// Subtitle while moving to a server the user picked (no server failed).
+  ///
+  /// In en, this message translates to:
+  /// **'checking {server}'**
+  String stateSwitchingLine2Chosen(String server);
+
   /// Title when connected on backup server.
   ///
   /// In en, this message translates to:

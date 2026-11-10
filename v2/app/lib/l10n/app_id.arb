@@ -41,6 +41,7 @@
   "stateSwitchingTitle": "Pindah ke {server}",
   "stateSwitchingBadge": "PINDAH · VERIFIKASI",
   "stateSwitchingLine2": "{previousServer} gagal 5 kali, memeriksa {server}",
+  "stateSwitchingLine2Chosen": "memeriksa {server}",
 
   "stateOnBackupTitle": "Terhubung ke backup",
   "stateOnBackupBadge": "TERHUBUNG · BACKUP",

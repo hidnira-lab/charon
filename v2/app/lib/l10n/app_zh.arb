@@ -42,6 +42,7 @@
   "stateSwitchingTitle": "正在切换至 {server}",
   "stateSwitchingBadge": "正在切换 · 正在验证",
   "stateSwitchingLine2": "{previousServer} 尝试 5 次失败，正在检查 {server}",
+  "stateSwitchingLine2Chosen": "正在检查 {server}",
 
   "stateOnBackupTitle": "已连接至备用节点",
   "stateOnBackupBadge": "已连接 · 备用节点",

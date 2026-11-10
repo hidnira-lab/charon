@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
 import '../../../state/ui_state.dart';
 import '../../../theme/theme.dart';
 import '../../dialogs/release_confirm_dialog.dart';
+import 'live_values.dart';
 
 /// The Connect Control / Hero Card matching HomeDesktop board (332 x 364 px).
 class HeroConnectCard extends StatelessWidget {
@@ -53,10 +55,22 @@ class HeroConnectCard extends StatelessWidget {
         ),
     };
 
-    final serverName = server?.displayName ?? (server?.id ?? 'SRV-01');
-    final egressIp = status.egressAddress.isNotEmpty
-        ? status.egressAddress
-        : (server?.address.isNotEmpty == true ? server!.address : '203.0.113.1');
+    final serverName = server == null ? '—' : (server.displayName.isNotEmpty ? server.displayName : server.id);
+    // Only what the core measured. No address is shown until a verification
+    // has reported one.
+    final egressIp = status.egressAddress.isNotEmpty ? status.egressAddress : '—';
+    final elapsed = formatClock(controller.phaseElapsed ?? Duration.zero);
+    final nextTryIn = controller.secondsToNextTry ?? 0;
+
+    // On an automatic failover the server before the active one in list order
+    // is the one that used up its five tries. A move the user asked for has no
+    // failed server to name.
+    final servers = controller.config?.servers ?? const <Server>[];
+    final activeIndex = servers.indexWhere((s) => s.id == status.activeServerId);
+    final failed = status.onBackup && activeIndex > 0 ? servers[activeIndex - 1] : null;
+    final switchingLine = failed == null
+        ? l10n.stateSwitchingLine2Chosen(serverName)
+        : l10n.stateSwitchingLine2(failed.displayName.isNotEmpty ? failed.displayName : failed.id, serverName);
 
     Future<void> onReleaseWithConfirm() async {
       final confirmed = await ReleaseConfirmDialog.show(context);
@@ -78,7 +92,7 @@ class HeroConnectCard extends StatelessWidget {
       UiState.verifying => (
           l10n.stateVerifyingTitle,
           l10n.stateVerifyingBadge,
-          l10n.stateVerifyingLine2('00:12'),
+          l10n.stateVerifyingLine2(elapsed),
           l10n.actionCancel,
           false,
           controller.cancel,
@@ -110,7 +124,7 @@ class HeroConnectCard extends StatelessWidget {
       UiState.reconnecting => (
           l10n.stateReconnectingTitle,
           l10n.stateReconnectingBadge(status.attempt, status.maxAttempts > 0 ? status.maxAttempts : 5),
-          l10n.stateReconnectingLine2(serverName, 3),
+          l10n.stateReconnectingLine2(serverName, nextTryIn),
           l10n.actionCancel,
           false,
           controller.cancel,
@@ -118,7 +132,7 @@ class HeroConnectCard extends StatelessWidget {
       UiState.reconnectingHeld => (
           l10n.stateReconnectingHeldTitle,
           l10n.stateReconnectingHeldBadge(status.attempt, status.maxAttempts > 0 ? status.maxAttempts : 5),
-          l10n.stateReconnectingHeldLine2(status.attempt, status.maxAttempts > 0 ? status.maxAttempts : 5, 3),
+          l10n.stateReconnectingHeldLine2(status.attempt, status.maxAttempts > 0 ? status.maxAttempts : 5, nextTryIn),
           l10n.actionRelease,
           false,
           onReleaseWithConfirm,
@@ -126,7 +140,7 @@ class HeroConnectCard extends StatelessWidget {
       UiState.switching => (
           l10n.stateSwitchingTitle(serverName),
           l10n.stateSwitchingBadge,
-          l10n.stateSwitchingLine2('SRV-01', serverName),
+          switchingLine,
           l10n.actionCancel,
           false,
           controller.cancel,

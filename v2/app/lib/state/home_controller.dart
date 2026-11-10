@@ -27,7 +27,9 @@ class HomeController extends ChangeNotifier {
     this._themeMode = ThemeMode.system,
     this._locale,
     SyncController? syncController,
-  })  : _status = initialStatus ?? Status(),
+    int Function()? clock,
+  })  : _clock = clock ?? (() => DateTime.now().millisecondsSinceEpoch),
+        _status = initialStatus ?? Status(),
         _config = initialConfig,
         _hasServers = hasServers ?? (initialConfig?.servers.isNotEmpty ?? true),
         _sync = syncController ?? SyncController() {
@@ -42,6 +44,32 @@ class HomeController extends ChangeNotifier {
 
   CoreClient? _client;
   PlatformChannelTransport? _platformTransport;
+
+  // Time. Every time shown on screen is derived from the core's Status
+  // (phase_since_ms, next_try_at_ms), which uses the service clock. The offset
+  // between that clock and this one is taken from each snapshot.
+  final int Function() _clock;
+  int _serviceClockOffsetMs = 0;
+
+  /// The service clock right now, in milliseconds.
+  int get serviceNowMs => _clock() + _serviceClockOffsetMs;
+
+  /// How long the current phase has lasted, or null when the core has not said
+  /// when it began.
+  Duration? get phaseElapsed {
+    final since = _status.phaseSinceMs.toInt();
+    if (since <= 0) return null;
+    return Duration(milliseconds: (serviceNowMs - since).clamp(0, 1 << 52).toInt());
+  }
+
+  /// Whole seconds until the next retry, or null when none is scheduled.
+  int? get secondsToNextTry {
+    final at = _status.nextTryAtMs.toInt();
+    if (at <= 0) return null;
+    final left = at - serviceNowMs;
+    return left <= 0 ? 0 : (left / 1000).ceil();
+  }
+
   final SyncController _sync;
   Status _status;
   Config? _config;
@@ -326,6 +354,9 @@ class HomeController extends ChangeNotifier {
   }
 
   void _syncAndroidAnomaly(Status status) {
+    if (status.serviceNowMs != 0) {
+      _serviceClockOffsetMs = status.serviceNowMs.toInt() - _clock();
+    }
     final anomaly = projectAndroidAnomaly(status);
     switch (anomaly) {
       case AndroidSessionAnomaly.vpnRevoked:

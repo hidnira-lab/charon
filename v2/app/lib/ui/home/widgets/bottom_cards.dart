@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../state/home_controller.dart';
 import '../../../state/ui_state.dart';
@@ -29,6 +30,25 @@ class BottomCards extends StatelessWidget {
     final armedLine = isHolding
         ? '$armedCount of 2 armed · kill switch holding'
         : '$armedCount of 2 armed';
+
+    // Quota of the active server: what the service counted against the cap the
+    // user set. Unknown values show as a dash, never as a sample number.
+    final quota = controller.quota;
+    final capGb = server?.quota.capGb ?? 0;
+    final usedGb = quota != null && quota.serverId == server?.id
+        ? quota.countedBytes.toDouble() / 1e9
+        : null;
+    final filledBlocks = capGb > 0 && usedGb != null
+        ? (usedGb / capGb * 20).floor().clamp(0, 20)
+        : 0;
+    final resetsAt = quota != null && quota.resetsAtMs > 0
+        ? DateFormat('d MMM', Localizations.localeOf(context).toLanguageTag())
+            .format(DateTime.fromMillisecondsSinceEpoch(quota.resetsAtMs.toInt()))
+        : null;
+    final quotaFootParts = [
+      if (resetsAt != null) 'resets $resetsAt',
+      if (capGb > 0) '1 block = ${capGb ~/ 20} GB' else 'no cap set',
+    ];
 
     return Row(
       children: [
@@ -183,7 +203,7 @@ class BottomCards extends StatelessWidget {
                   textBaseline: TextBaseline.alphabetic,
                   children: [
                     Text(
-                      '186.2',
+                      usedGb?.toStringAsFixed(1) ?? '—',
                       style: CharonTypography.dataXL.copyWith(
                         fontSize: 20.0,
                         color: colors.text,
@@ -191,7 +211,7 @@ class BottomCards extends StatelessWidget {
                     ),
                     const SizedBox(width: 4.0),
                     Text(
-                      '/ 2000 GB',
+                      capGb > 0 ? '/ $capGb GB' : '',
                       style: CharonTypography.caption.copyWith(
                         fontFamily: CharonFontFamilies.spaceMono,
                         color: colors.text2,
@@ -205,7 +225,7 @@ class BottomCards extends StatelessWidget {
                   height: 12.0,
                   child: Row(
                     children: List.generate(20, (index) {
-                      final isFilled = index < 2; // 186.2 GB of 2000 is ~2 blocks
+                      final isFilled = index < filledBlocks;
                       return Expanded(
                         child: Container(
                           margin: EdgeInsets.only(right: index < 19 ? 2.0 : 0.0),
@@ -219,7 +239,7 @@ class BottomCards extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '> resets 1 Dec · 1 block = 100 GB',
+                  '> ${quotaFootParts.join(' · ')}',
                   style: CharonTypography.caption.copyWith(
                     fontFamily: CharonFontFamilies.spaceMono,
                     color: colors.text3,

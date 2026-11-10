@@ -9,6 +9,7 @@ import 'widgets/hero_connect_card.dart';
 import 'widgets/rail_nav.dart';
 import 'widgets/readout_cards.dart';
 import 'widgets/time_place_card.dart';
+import 'widgets/live_values.dart';
 import 'widgets/title_bar.dart';
 
 /// The Home screen for desktop window 4:3 (1024 x 768 px).
@@ -29,7 +30,9 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListenableBuilder(
       listenable: controller,
-      builder: (context, _) {
+      // Elapsed times and countdowns on this screen are computed from the
+      // Status on every build, so one rebuild a second keeps them current.
+      builder: (context, _) => EverySecond(builder: (context) {
         final colors = CharonColors.of(context);
 
         return Scaffold(
@@ -101,7 +104,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         );
-      },
+      }),
     );
   }
 }

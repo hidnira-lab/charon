@@ -168,6 +168,14 @@
     }
   },
 
+  "stateSwitchingLine2Chosen": "checking {server}",
+  "@stateSwitchingLine2Chosen": {
+    "description": "Subtitle while moving to a server the user picked (no server failed).",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+
   "stateOnBackupTitle": "Connected on backup",
   "@stateOnBackupTitle": {
     "description": "Title when connected on backup server."

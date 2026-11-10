@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../state/home_controller.dart';
 import '../../../state/ui_state.dart';
 import '../../../theme/theme.dart';
+import 'live_values.dart';
 
 /// The 4 readout cards row matching HomeDesktop board (height 84 px).
 class ReadoutCards extends StatelessWidget {
@@ -28,15 +29,17 @@ class ReadoutCards extends StatelessWidget {
     // Down throughput in Mbps
     final downMbps = throughput != null
         ? (throughput.downBps.toDouble() / 1000000.0).toStringAsFixed(1)
-        : (isConnected ? '12.4' : '0.0');
+        : '—';
 
     // Up throughput in Mbps
     final upMbps = throughput != null
         ? (throughput.upBps.toDouble() / 1000000.0).toStringAsFixed(1)
-        : (isConnected ? '1.8' : '0.0');
+        : '—';
 
     // Session duration
-    final sessionText = isConnected ? '01:24:09' : '—';
+    // Session duration: time since the phase became Up, by the service clock.
+    final elapsed = controller.phaseElapsed;
+    final sessionText = isConnected && elapsed != null ? formatClock(elapsed) : '—';
 
     return SizedBox(
       height: 84.0,
@@ -57,7 +60,7 @@ class ReadoutCards extends StatelessWidget {
               title: 'DOWN',
               indicatorColor: colors.accent,
               value: downMbps,
-              unit: 'Mbps',
+              unit: throughput != null ? 'Mbps' : '',
               note: isConnected ? 'last 60 s' : 'direct',
             ),
           ),
@@ -67,7 +70,7 @@ class ReadoutCards extends StatelessWidget {
               title: 'UP',
               indicatorColor: colors.accent,
               value: upMbps,
-              unit: 'Mbps',
+              unit: throughput != null ? 'Mbps' : '',
               note: isConnected ? 'live' : 'direct',
             ),
           ),

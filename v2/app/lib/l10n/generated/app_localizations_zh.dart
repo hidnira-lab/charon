@@ -122,6 +122,11 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String stateSwitchingLine2Chosen(String server) {
+    return '正在检查 $server';
+  }
+
+  @override
   String get stateOnBackupTitle => '已连接至备用节点';
 
   @override
@@ -1737,6 +1742,11 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   @override
   String stateSwitchingLine2(String previousServer, String server) {
     return '$previousServer 尝试 5 次失败，正在检查 $server';
+  }
+
+  @override
+  String stateSwitchingLine2Chosen(String server) {
+    return '正在检查 $server';
   }
 
   @override
