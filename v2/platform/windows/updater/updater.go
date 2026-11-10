@@ -88,7 +88,7 @@ func New(cfg Config) (*Agent, error) {
 		cfg.CurrentAppVersion = "0.1.0"
 	}
 	if cfg.CurrentCoreVersion == "" {
-		cfg.CurrentCoreVersion = "26.3.27"
+		cfg.CurrentCoreVersion = "26.10.31"
 	}
 	if cfg.HTTPClient == nil {
 		cfg.HTTPClient = &http.Client{Timeout: 30 * time.Second}

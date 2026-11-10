@@ -2,10 +2,12 @@ package xrayconfig
 
 import (
 	"bytes"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 	"testing"
 
 	charonv1 "github.com/hidnira-lab/charon/core/gen/charonv1"
@@ -186,5 +188,42 @@ func TestGoldenXrayConfig(t *testing.T) {
 				t.Fatalf("golden xray config mismatch for %s:\ngot:\n%s\nwant:\n%s", name, got, want)
 			}
 		})
+	}
+}
+
+// The TUN options must have the types Xray reads (infra/conf TunConfig in the
+// pinned release): a list of prefixes to route, and an interface name. Xray
+// rejects the whole config when they are booleans.
+func TestTUNInboundRoutesEverythingAndKeepsXrayOut(t *testing.T) {
+	cfg := sampleConfig()
+	raw, err := Build(cfg.GetServers()[0], cfg, Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	var root struct {
+		Inbounds []struct {
+			Protocol string `json:"protocol"`
+			Settings struct {
+				Routes   []string `json:"autoSystemRoutingTable"`
+				Outbound string   `json:"autoOutboundsInterface"`
+				DNS      []string `json:"dns"`
+			} `json:"settings"`
+		} `json:"inbounds"`
+	}
+	if err := json.Unmarshal(raw, &root); err != nil {
+		t.Fatalf("TUN options have the wrong JSON types: %v", err)
+	}
+	tun := root.Inbounds[0]
+	if tun.Protocol != "tun" {
+		t.Fatalf("first inbound is %q, want tun", tun.Protocol)
+	}
+	if !slices.Equal(tun.Settings.Routes, []string{"0.0.0.0/0", "::/0"}) {
+		t.Errorf("routes = %v, want all IPv4 and all IPv6 through the TUN", tun.Settings.Routes)
+	}
+	if tun.Settings.Outbound != "auto" {
+		t.Errorf("autoOutboundsInterface = %q, want auto (loop protection)", tun.Settings.Outbound)
+	}
+	if len(tun.Settings.DNS) == 0 {
+		t.Error("the TUN needs DNS servers")
 	}
 }

@@ -87,7 +87,7 @@ func runManifest(args []string) {
 	seq := fs.Uint64("sequence", 1, "monotonic release sequence number")
 	commit := fs.String("commit", "unknown", "source git commit hash")
 	notesURL := fs.String("notes-url", "", "release notes URL")
-	coreVersion := fs.String("core-version", "26.3.27", "bundled xray-core version")
+	coreVersion := fs.String("core-version", "26.10.31", "bundled xray-core version")
 	coreFile := fs.String("core-file", "", "path to xray-core binary to hash")
 	coreSHA := fs.String("core-sha256", "", "explicit hex SHA-256 of xray-core (if -core-file is not provided)")
 	outPath := fs.String("out", "manifest.json", "output manifest JSON path")

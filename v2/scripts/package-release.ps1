@@ -2,7 +2,7 @@ param(
     [string]$Version = "0.1.0",
     [uint64]$Sequence = 1,
     [string]$MinVersion = "0.1.0",
-    [string]$CoreVersion = "26.3.27",
+    [string]$CoreVersion = "26.10.31",
     [string]$CoreFile = "",
     [string]$CoreSha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     [string]$OutDir = "dist",

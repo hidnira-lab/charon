@@ -146,10 +146,15 @@ func Build(server *charonv1.Server, cfg *charonv1.Config, opts Options) ([]byte,
 			"tag":      "tun-in",
 			"protocol": "tun",
 			"settings": map[string]any{
-				"name":                   tunName,
-				"mtu":                    DefaultTUNMTU,
-				"autoSystemRoutingTable": true,
-				"autoOutboundsInterface": true,
+				"name": tunName,
+				"mtu":  DefaultTUNMTU,
+				// Route everything into the TUN. IPv6 goes in as well so it
+				// cannot leave beside the tunnel; the routing rules below
+				// drop it when the server is reached over IPv4.
+				"autoSystemRoutingTable": []string{"0.0.0.0/0", "::/0"},
+				// Loop protection: Xray binds its own connections to the
+				// interface of the default route. Never left to the user.
+				"autoOutboundsInterface": "auto",
 				"dns":                    []string{dnsServer},
 			},
 			"sniffing": map[string]any{

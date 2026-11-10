@@ -78,7 +78,7 @@ void main() {
     final ack = await client.hello(appVersion: '0.1.0');
     expect(ack.protocolVersion, 1);
     expect(ack.serviceVersion, '0.1.0');
-    expect(ack.xrayVersion, '26.3.27');
+    expect(ack.xrayVersion, '26.10.31');
     expect(ack.status.phase, Phase.PHASE_IDLE);
 
     final controller = HomeController();
@@ -150,7 +150,7 @@ void main() {
     expect(diagJson.contains(secretPubKey), isFalse);
     expect(diagJson.contains('192.0.2.10'), isFalse);
     expect(diagJson.contains('srv-doc-1'), isTrue);
-    expect(diagJson.contains('26.3.27'), isTrue);
+    expect(diagJson.contains('26.10.31'), isTrue);
     expect(diagJson.contains('charon-service listening'), isTrue);
   });
 

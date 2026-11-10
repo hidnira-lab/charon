@@ -86,7 +86,7 @@ func NewServer(cfg Config) *Server {
 		cfg.ServiceVersion = "0.1.0"
 	}
 	if cfg.XrayVersion == "" {
-		cfg.XrayVersion = "26.3.27"
+		cfg.XrayVersion = "26.10.31"
 	}
 	if cfg.NowMs == nil {
 		cfg.NowMs = func() int64 { return time.Now().UnixMilli() }

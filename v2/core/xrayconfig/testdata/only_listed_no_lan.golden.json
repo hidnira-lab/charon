@@ -9,8 +9,11 @@
     {
       "protocol": "tun",
       "settings": {
-        "autoOutboundsInterface": true,
-        "autoSystemRoutingTable": true,
+        "autoOutboundsInterface": "auto",
+        "autoSystemRoutingTable": [
+          "0.0.0.0/0",
+          "::/0"
+        ],
         "dns": [
           "198.51.100.53"
         ],

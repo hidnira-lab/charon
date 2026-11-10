@@ -19,7 +19,7 @@ import (
 
 var (
 	serviceVersion = "0.1.0"
-	xrayVersion    = "26.3.27"
+	xrayVersion    = "26.10.31"
 )
 
 func main() {

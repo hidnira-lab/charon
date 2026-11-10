@@ -7,7 +7,7 @@ Charon is licensed under the GNU General Public License v3.0 (`LICENSE`). It shi
 ### Xray-core
 
 * **License**: Mozilla Public License 2.0 (MPL 2.0)
-* **Source**: https://github.com/XTLS/Xray-core
+* **Source**: https://github.com/XTLS/Xray-core (pinned release v26.10.31. Its TUN inbound writes the system routes and keeps the connections of Xray itself out of the tunnel)
 * **Usage**: Bundled as a separate executable (`xray.exe`) on Windows and embedded in `charon.aar` on Android. Unmodified MPL 2.0 files remain under MPL 2.0; the combined distribution of Charon is conveyed under GPL 3.0 as permitted by MPL 2.0 Section 3.3.
 
 ## 2. Windows Network Adapter Driver
