@@ -518,5 +518,30 @@ class ErrorCode extends $pb.ProtobufEnum {
   const ErrorCode._(super.value, super.name);
 }
 
+class SyncTheme extends $pb.ProtobufEnum {
+  static const SyncTheme SYNC_THEME_UNSPECIFIED =
+      SyncTheme._(0, _omitEnumNames ? '' : 'SYNC_THEME_UNSPECIFIED');
+  static const SyncTheme SYNC_THEME_SYSTEM =
+      SyncTheme._(1, _omitEnumNames ? '' : 'SYNC_THEME_SYSTEM');
+  static const SyncTheme SYNC_THEME_DARK =
+      SyncTheme._(2, _omitEnumNames ? '' : 'SYNC_THEME_DARK');
+  static const SyncTheme SYNC_THEME_LIGHT =
+      SyncTheme._(3, _omitEnumNames ? '' : 'SYNC_THEME_LIGHT');
+
+  static const $core.List<SyncTheme> values = <SyncTheme>[
+    SYNC_THEME_UNSPECIFIED,
+    SYNC_THEME_SYSTEM,
+    SYNC_THEME_DARK,
+    SYNC_THEME_LIGHT,
+  ];
+
+  static final $core.List<SyncTheme?> _byValue =
+      $pb.ProtobufEnum.$_initByValueList(values, 3);
+  static SyncTheme? valueOf($core.int value) =>
+      value < 0 || value >= _byValue.length ? null : _byValue[value];
+
+  const SyncTheme._(super.value, super.name);
+}
+
 const $core.bool _omitEnumNames =
     $core.bool.fromEnvironment('protobuf.omit_enum_names');

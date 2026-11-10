@@ -3336,6 +3336,201 @@ class Rule extends $pb.GeneratedMessage {
   void clearIncludeSubdomains() => $_clearField(3);
 }
 
+/// Encrypted sync vault plaintext payload (docs/charon_sync_design.md section 3).
+class SyncPayload extends $pb.GeneratedMessage {
+  factory SyncPayload({
+    $core.int? schemaVersion,
+    $fixnum.Int64? revision,
+    $fixnum.Int64? writtenAtMs,
+    $core.String? writerDeviceName,
+    Config? config,
+    UiSync? ui,
+  }) {
+    final result = SyncPayload._();
+    if (schemaVersion != null) result.schemaVersion = schemaVersion;
+    if (revision != null) result.revision = revision;
+    if (writtenAtMs != null) result.writtenAtMs = writtenAtMs;
+    if (writerDeviceName != null) result.writerDeviceName = writerDeviceName;
+    if (config != null) result.config = config;
+    if (ui != null) result.ui = ui;
+    return result;
+  }
+
+  SyncPayload._();
+
+  factory SyncPayload.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SyncPayload()..mergeFromBuffer(data, registry);
+  factory SyncPayload.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SyncPayload()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SyncPayload',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'charon.v1'),
+      createEmptyInstance: SyncPayload.$_createMessage)
+    ..aI(1, _omitFieldNames ? '' : 'schemaVersion',
+        fieldType: $pb.PbFieldType.OU3)
+    ..a<$fixnum.Int64>(
+        2, _omitFieldNames ? '' : 'revision', $pb.PbFieldType.OU6,
+        defaultOrMaker: $fixnum.Int64.ZERO)
+    ..aInt64(3, _omitFieldNames ? '' : 'writtenAtMs')
+    ..aOS(4, _omitFieldNames ? '' : 'writerDeviceName')
+    ..aOM<Config>(5, _omitFieldNames ? '' : 'config',
+        subBuilder: Config.$_createMessage)
+    ..aOM<UiSync>(6, _omitFieldNames ? '' : 'ui',
+        subBuilder: UiSync.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SyncPayload clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SyncPayload copyWith(void Function(SyncPayload) updates) =>
+      super.copyWith((message) => updates(message as SyncPayload))
+          as SyncPayload;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use SyncPayload() / SyncPayload.new instead')
+  static SyncPayload create() => SyncPayload._();
+  static $pb.GeneratedMessage $_createMessage() => SyncPayload._();
+  @$core.override
+  SyncPayload createEmptyInstance() => SyncPayload._();
+  @$core.pragma('dart2js:noInline')
+  static SyncPayload getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SyncPayload>(
+          SyncPayload.$_createMessage);
+  static SyncPayload? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get schemaVersion => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set schemaVersion($core.int value) => $_setUnsignedInt32(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasSchemaVersion() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSchemaVersion() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $fixnum.Int64 get revision => $_getI64(1);
+  @$pb.TagNumber(2)
+  set revision($fixnum.Int64 value) => $_setInt64(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasRevision() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearRevision() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $fixnum.Int64 get writtenAtMs => $_getI64(2);
+  @$pb.TagNumber(3)
+  set writtenAtMs($fixnum.Int64 value) => $_setInt64(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasWrittenAtMs() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearWrittenAtMs() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get writerDeviceName => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set writerDeviceName($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasWriterDeviceName() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearWriterDeviceName() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  Config get config => $_getN(4);
+  @$pb.TagNumber(5)
+  set config(Config value) => $_setField(5, value);
+  @$pb.TagNumber(5)
+  $core.bool hasConfig() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearConfig() => $_clearField(5);
+  @$pb.TagNumber(5)
+  Config ensureConfig() => $_ensure(4);
+
+  @$pb.TagNumber(6)
+  UiSync get ui => $_getN(5);
+  @$pb.TagNumber(6)
+  set ui(UiSync value) => $_setField(6, value);
+  @$pb.TagNumber(6)
+  $core.bool hasUi() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearUi() => $_clearField(6);
+  @$pb.TagNumber(6)
+  UiSync ensureUi() => $_ensure(5);
+}
+
+class UiSync extends $pb.GeneratedMessage {
+  factory UiSync({
+    SyncTheme? theme,
+    $core.String? language,
+  }) {
+    final result = UiSync._();
+    if (theme != null) result.theme = theme;
+    if (language != null) result.language = language;
+    return result;
+  }
+
+  UiSync._();
+
+  factory UiSync.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      UiSync()..mergeFromBuffer(data, registry);
+  factory UiSync.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      UiSync()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'UiSync',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'charon.v1'),
+      createEmptyInstance: UiSync.$_createMessage)
+    ..aE<SyncTheme>(1, _omitFieldNames ? '' : 'theme',
+        enumValues: SyncTheme.values)
+    ..aOS(2, _omitFieldNames ? '' : 'language')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UiSync clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  UiSync copyWith(void Function(UiSync) updates) =>
+      super.copyWith((message) => updates(message as UiSync)) as UiSync;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use UiSync() / UiSync.new instead')
+  static UiSync create() => UiSync._();
+  static $pb.GeneratedMessage $_createMessage() => UiSync._();
+  @$core.override
+  UiSync createEmptyInstance() => UiSync._();
+  @$core.pragma('dart2js:noInline')
+  static UiSync getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<UiSync>(UiSync.$_createMessage);
+  static UiSync? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  SyncTheme get theme => $_getN(0);
+  @$pb.TagNumber(1)
+  set theme(SyncTheme value) => $_setField(1, value);
+  @$pb.TagNumber(1)
+  $core.bool hasTheme() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTheme() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get language => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set language($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasLanguage() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearLanguage() => $_clearField(2);
+}
+
 const $core.bool _omitFieldNames =
     $core.bool.fromEnvironment('protobuf.omit_field_names');
 const $core.bool _omitMessageNames =

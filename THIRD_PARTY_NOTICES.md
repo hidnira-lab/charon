@@ -33,8 +33,10 @@ Used by `v2/app/`. Versions are pinned in `v2/app/pubspec.lock`.
 | Package | Licence | Use |
 |---|---|---|
 | dart_ipc 2.0.2 (https://github.com/monkeyWie/dart_ipc) | MIT | Talks to the Charon service over a Windows named pipe, or a Unix socket |
-| win32 6.4.0 | BSD 3 Clause | Windows API calls under dart_ipc |
-| ffi | BSD 3 Clause | Native memory helpers under dart_ipc |
+| win32 6.4.0 | BSD 3 Clause | Windows API calls under dart_ipc and Windows Credential Manager token storage |
+| ffi | BSD 3 Clause | Native memory helpers under dart_ipc and token storage |
+| cryptography 2.9.0 (https://github.com/dint-dev/cryptography) | Apache 2.0 | Argon2id key derivation and AES 256 GCM encryption for `.charonvault` sync vaults |
+| crypto 3.0.8 | BSD 3 Clause | Hash primitives under `cryptography` |
 | protobuf 6.1.0 | BSD 3 Clause | Runtime for the generated message classes in `v2/app/lib/gen/` |
 | fixnum 1.1.1 | BSD 3 Clause | 64 bit integers, which protobuf uses for uint64 fields |
 | intl | BSD 3 Clause | Message formatting for the three languages |

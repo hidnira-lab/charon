@@ -338,6 +338,22 @@ final $typed_data.Uint8List errorCodeDescriptor = $convert.base64Decode(
     'IgoeRVJST1JfVVBEQVRFX1NJR05BVFVSRV9JTlZBTElEEAgSFwoTRVJST1JfVVBEQVRFX0ZBSU'
     'xFRBAJEhIKDkVSUk9SX0lOVEVSTkFMEAo=');
 
+@$core.Deprecated('Use syncThemeDescriptor instead')
+const SyncTheme$json = {
+  '1': 'SyncTheme',
+  '2': [
+    {'1': 'SYNC_THEME_UNSPECIFIED', '2': 0},
+    {'1': 'SYNC_THEME_SYSTEM', '2': 1},
+    {'1': 'SYNC_THEME_DARK', '2': 2},
+    {'1': 'SYNC_THEME_LIGHT', '2': 3},
+  ],
+};
+
+/// Descriptor for `SyncTheme`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List syncThemeDescriptor = $convert.base64Decode(
+    'CglTeW5jVGhlbWUSGgoWU1lOQ19USEVNRV9VTlNQRUNJRklFRBAAEhUKEVNZTkNfVEhFTUVfU1'
+    'lTVEVNEAESEwoPU1lOQ19USEVNRV9EQVJLEAISFAoQU1lOQ19USEVNRV9MSUdIVBAD');
+
 @$core.Deprecated('Use envelopeDescriptor instead')
 const Envelope$json = {
   '1': 'Envelope',
@@ -1455,3 +1471,58 @@ final $typed_data.Uint8List ruleDescriptor = $convert.base64Decode(
     'CgRSdWxlEicKBGtpbmQYASABKA4yEy5jaGFyb24udjEuUnVsZUtpbmRSBGtpbmQSFAoFdmFsdW'
     'UYAiABKAlSBXZhbHVlEi0KEmluY2x1ZGVfc3ViZG9tYWlucxgDIAEoCFIRaW5jbHVkZVN1YmRv'
     'bWFpbnM=');
+
+@$core.Deprecated('Use syncPayloadDescriptor instead')
+const SyncPayload$json = {
+  '1': 'SyncPayload',
+  '2': [
+    {'1': 'schema_version', '3': 1, '4': 1, '5': 13, '10': 'schemaVersion'},
+    {'1': 'revision', '3': 2, '4': 1, '5': 4, '10': 'revision'},
+    {'1': 'written_at_ms', '3': 3, '4': 1, '5': 3, '10': 'writtenAtMs'},
+    {
+      '1': 'writer_device_name',
+      '3': 4,
+      '4': 1,
+      '5': 9,
+      '10': 'writerDeviceName'
+    },
+    {
+      '1': 'config',
+      '3': 5,
+      '4': 1,
+      '5': 11,
+      '6': '.charon.v1.Config',
+      '10': 'config'
+    },
+    {'1': 'ui', '3': 6, '4': 1, '5': 11, '6': '.charon.v1.UiSync', '10': 'ui'},
+  ],
+};
+
+/// Descriptor for `SyncPayload`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List syncPayloadDescriptor = $convert.base64Decode(
+    'CgtTeW5jUGF5bG9hZBIlCg5zY2hlbWFfdmVyc2lvbhgBIAEoDVINc2NoZW1hVmVyc2lvbhIaCg'
+    'hyZXZpc2lvbhgCIAEoBFIIcmV2aXNpb24SIgoNd3JpdHRlbl9hdF9tcxgDIAEoA1ILd3JpdHRl'
+    'bkF0TXMSLAoSd3JpdGVyX2RldmljZV9uYW1lGAQgASgJUhB3cml0ZXJEZXZpY2VOYW1lEikKBm'
+    'NvbmZpZxgFIAEoCzIRLmNoYXJvbi52MS5Db25maWdSBmNvbmZpZxIhCgJ1aRgGIAEoCzIRLmNo'
+    'YXJvbi52MS5VaVN5bmNSAnVp');
+
+@$core.Deprecated('Use uiSyncDescriptor instead')
+const UiSync$json = {
+  '1': 'UiSync',
+  '2': [
+    {
+      '1': 'theme',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.charon.v1.SyncTheme',
+      '10': 'theme'
+    },
+    {'1': 'language', '3': 2, '4': 1, '5': 9, '10': 'language'},
+  ],
+};
+
+/// Descriptor for `UiSync`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List uiSyncDescriptor = $convert.base64Decode(
+    'CgZVaVN5bmMSKgoFdGhlbWUYASABKA4yFC5jaGFyb24udjEuU3luY1RoZW1lUgV0aGVtZRIaCg'
+    'hsYW5ndWFnZRgCIAEoCVIIbGFuZ3VhZ2U=');

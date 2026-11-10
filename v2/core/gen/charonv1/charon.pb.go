@@ -1023,6 +1023,58 @@ func (ErrorCode) EnumDescriptor() ([]byte, []int) {
 	return file_charon_v1_charon_proto_rawDescGZIP(), []int{17}
 }
 
+type SyncTheme int32
+
+const (
+	SyncTheme_SYNC_THEME_UNSPECIFIED SyncTheme = 0
+	SyncTheme_SYNC_THEME_SYSTEM      SyncTheme = 1
+	SyncTheme_SYNC_THEME_DARK        SyncTheme = 2
+	SyncTheme_SYNC_THEME_LIGHT       SyncTheme = 3
+)
+
+// Enum value maps for SyncTheme.
+var (
+	SyncTheme_name = map[int32]string{
+		0: "SYNC_THEME_UNSPECIFIED",
+		1: "SYNC_THEME_SYSTEM",
+		2: "SYNC_THEME_DARK",
+		3: "SYNC_THEME_LIGHT",
+	}
+	SyncTheme_value = map[string]int32{
+		"SYNC_THEME_UNSPECIFIED": 0,
+		"SYNC_THEME_SYSTEM":      1,
+		"SYNC_THEME_DARK":        2,
+		"SYNC_THEME_LIGHT":       3,
+	}
+)
+
+func (x SyncTheme) Enum() *SyncTheme {
+	p := new(SyncTheme)
+	*p = x
+	return p
+}
+
+func (x SyncTheme) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (SyncTheme) Descriptor() protoreflect.EnumDescriptor {
+	return file_charon_v1_charon_proto_enumTypes[18].Descriptor()
+}
+
+func (SyncTheme) Type() protoreflect.EnumType {
+	return &file_charon_v1_charon_proto_enumTypes[18]
+}
+
+func (x SyncTheme) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use SyncTheme.Descriptor instead.
+func (SyncTheme) EnumDescriptor() ([]byte, []int) {
+	return file_charon_v1_charon_proto_rawDescGZIP(), []int{18}
+}
+
 type Envelope struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	ProtocolVersion uint32                 `protobuf:"varint,1,opt,name=protocol_version,json=protocolVersion,proto3" json:"protocol_version,omitempty"`
@@ -3579,6 +3631,143 @@ func (x *Rule) GetIncludeSubdomains() bool {
 	return false
 }
 
+// Encrypted sync vault plaintext payload (docs/charon_sync_design.md section 3).
+type SyncPayload struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	SchemaVersion    uint32                 `protobuf:"varint,1,opt,name=schema_version,json=schemaVersion,proto3" json:"schema_version,omitempty"`
+	Revision         uint64                 `protobuf:"varint,2,opt,name=revision,proto3" json:"revision,omitempty"`
+	WrittenAtMs      int64                  `protobuf:"varint,3,opt,name=written_at_ms,json=writtenAtMs,proto3" json:"written_at_ms,omitempty"`
+	WriterDeviceName string                 `protobuf:"bytes,4,opt,name=writer_device_name,json=writerDeviceName,proto3" json:"writer_device_name,omitempty"`
+	Config           *Config                `protobuf:"bytes,5,opt,name=config,proto3" json:"config,omitempty"`
+	Ui               *UiSync                `protobuf:"bytes,6,opt,name=ui,proto3" json:"ui,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *SyncPayload) Reset() {
+	*x = SyncPayload{}
+	mi := &file_charon_v1_charon_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SyncPayload) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SyncPayload) ProtoMessage() {}
+
+func (x *SyncPayload) ProtoReflect() protoreflect.Message {
+	mi := &file_charon_v1_charon_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SyncPayload.ProtoReflect.Descriptor instead.
+func (*SyncPayload) Descriptor() ([]byte, []int) {
+	return file_charon_v1_charon_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *SyncPayload) GetSchemaVersion() uint32 {
+	if x != nil {
+		return x.SchemaVersion
+	}
+	return 0
+}
+
+func (x *SyncPayload) GetRevision() uint64 {
+	if x != nil {
+		return x.Revision
+	}
+	return 0
+}
+
+func (x *SyncPayload) GetWrittenAtMs() int64 {
+	if x != nil {
+		return x.WrittenAtMs
+	}
+	return 0
+}
+
+func (x *SyncPayload) GetWriterDeviceName() string {
+	if x != nil {
+		return x.WriterDeviceName
+	}
+	return ""
+}
+
+func (x *SyncPayload) GetConfig() *Config {
+	if x != nil {
+		return x.Config
+	}
+	return nil
+}
+
+func (x *SyncPayload) GetUi() *UiSync {
+	if x != nil {
+		return x.Ui
+	}
+	return nil
+}
+
+type UiSync struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Theme         SyncTheme              `protobuf:"varint,1,opt,name=theme,proto3,enum=charon.v1.SyncTheme" json:"theme,omitempty"`
+	Language      string                 `protobuf:"bytes,2,opt,name=language,proto3" json:"language,omitempty"` // system, en, id or zh_Hans
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UiSync) Reset() {
+	*x = UiSync{}
+	mi := &file_charon_v1_charon_proto_msgTypes[30]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UiSync) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UiSync) ProtoMessage() {}
+
+func (x *UiSync) ProtoReflect() protoreflect.Message {
+	mi := &file_charon_v1_charon_proto_msgTypes[30]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UiSync.ProtoReflect.Descriptor instead.
+func (*UiSync) Descriptor() ([]byte, []int) {
+	return file_charon_v1_charon_proto_rawDescGZIP(), []int{30}
+}
+
+func (x *UiSync) GetTheme() SyncTheme {
+	if x != nil {
+		return x.Theme
+	}
+	return SyncTheme_SYNC_THEME_UNSPECIFIED
+}
+
+func (x *UiSync) GetLanguage() string {
+	if x != nil {
+		return x.Language
+	}
+	return ""
+}
+
 var File_charon_v1_charon_proto protoreflect.FileDescriptor
 
 const file_charon_v1_charon_proto_rawDesc = "" +
@@ -3794,7 +3983,17 @@ const file_charon_v1_charon_proto_rawDesc = "" +
 	"\x04Rule\x12'\n" +
 	"\x04kind\x18\x01 \x01(\x0e2\x13.charon.v1.RuleKindR\x04kind\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value\x12-\n" +
-	"\x12include_subdomains\x18\x03 \x01(\bR\x11includeSubdomains*\xb5\x01\n" +
+	"\x12include_subdomains\x18\x03 \x01(\bR\x11includeSubdomains\"\xf0\x01\n" +
+	"\vSyncPayload\x12%\n" +
+	"\x0eschema_version\x18\x01 \x01(\rR\rschemaVersion\x12\x1a\n" +
+	"\brevision\x18\x02 \x01(\x04R\brevision\x12\"\n" +
+	"\rwritten_at_ms\x18\x03 \x01(\x03R\vwrittenAtMs\x12,\n" +
+	"\x12writer_device_name\x18\x04 \x01(\tR\x10writerDeviceName\x12)\n" +
+	"\x06config\x18\x05 \x01(\v2\x11.charon.v1.ConfigR\x06config\x12!\n" +
+	"\x02ui\x18\x06 \x01(\v2\x11.charon.v1.UiSyncR\x02ui\"P\n" +
+	"\x06UiSync\x12*\n" +
+	"\x05theme\x18\x01 \x01(\x0e2\x14.charon.v1.SyncThemeR\x05theme\x12\x1a\n" +
+	"\blanguage\x18\x02 \x01(\tR\blanguage*\xb5\x01\n" +
 	"\x05Phase\x12\x15\n" +
 	"\x11PHASE_UNSPECIFIED\x10\x00\x12\x0e\n" +
 	"\n" +
@@ -3915,7 +4114,12 @@ const file_charon_v1_charon_proto_rawDesc = "" +
 	"\x1eERROR_UPDATE_SIGNATURE_INVALID\x10\b\x12\x17\n" +
 	"\x13ERROR_UPDATE_FAILED\x10\t\x12\x12\n" +
 	"\x0eERROR_INTERNAL\x10\n" +
-	"B:Z8github.com/hidnira-lab/charon/core/gen/charonv1;charonv1b\x06proto3"
+	"*i\n" +
+	"\tSyncTheme\x12\x1a\n" +
+	"\x16SYNC_THEME_UNSPECIFIED\x10\x00\x12\x15\n" +
+	"\x11SYNC_THEME_SYSTEM\x10\x01\x12\x13\n" +
+	"\x0fSYNC_THEME_DARK\x10\x02\x12\x14\n" +
+	"\x10SYNC_THEME_LIGHT\x10\x03B:Z8github.com/hidnira-lab/charon/core/gen/charonv1;charonv1b\x06proto3"
 
 var (
 	file_charon_v1_charon_proto_rawDescOnce sync.Once
@@ -3929,8 +4133,8 @@ func file_charon_v1_charon_proto_rawDescGZIP() []byte {
 	return file_charon_v1_charon_proto_rawDescData
 }
 
-var file_charon_v1_charon_proto_enumTypes = make([]protoimpl.EnumInfo, 18)
-var file_charon_v1_charon_proto_msgTypes = make([]protoimpl.MessageInfo, 29)
+var file_charon_v1_charon_proto_enumTypes = make([]protoimpl.EnumInfo, 19)
+var file_charon_v1_charon_proto_msgTypes = make([]protoimpl.MessageInfo, 31)
 var file_charon_v1_charon_proto_goTypes = []any{
 	(Phase)(0),                // 0: charon.v1.Phase
 	(Gate)(0),                 // 1: charon.v1.Gate
@@ -3950,81 +4154,84 @@ var file_charon_v1_charon_proto_goTypes = []any{
 	(Probe)(0),                // 15: charon.v1.Probe
 	(SessionEnd)(0),           // 16: charon.v1.SessionEnd
 	(ErrorCode)(0),            // 17: charon.v1.ErrorCode
-	(*Envelope)(nil),          // 18: charon.v1.Envelope
-	(*Hello)(nil),             // 19: charon.v1.Hello
-	(*HelloAck)(nil),          // 20: charon.v1.HelloAck
-	(*Command)(nil),           // 21: charon.v1.Command
-	(*Empty)(nil),             // 22: charon.v1.Empty
-	(*ServerRef)(nil),         // 23: charon.v1.ServerRef
-	(*Subscription)(nil),      // 24: charon.v1.Subscription
-	(*ApplyUpdate)(nil),       // 25: charon.v1.ApplyUpdate
-	(*ExportDiagnostics)(nil), // 26: charon.v1.ExportDiagnostics
-	(*UpdateFileChunk)(nil),   // 27: charon.v1.UpdateFileChunk
-	(*Response)(nil),          // 28: charon.v1.Response
-	(*Error)(nil),             // 29: charon.v1.Error
-	(*FieldError)(nil),        // 30: charon.v1.FieldError
-	(*Event)(nil),             // 31: charon.v1.Event
-	(*Status)(nil),            // 32: charon.v1.Status
-	(*Quota)(nil),             // 33: charon.v1.Quota
-	(*Notice)(nil),            // 34: charon.v1.Notice
-	(*Throughput)(nil),        // 35: charon.v1.Throughput
-	(*LogLine)(nil),           // 36: charon.v1.LogLine
-	(*LogBatch)(nil),          // 37: charon.v1.LogBatch
-	(*ConfigResult)(nil),      // 38: charon.v1.ConfigResult
-	(*UpdateState)(nil),       // 39: charon.v1.UpdateState
-	(*Config)(nil),            // 40: charon.v1.Config
-	(*Server)(nil),            // 41: charon.v1.Server
-	(*Reality)(nil),           // 42: charon.v1.Reality
-	(*QuotaPlan)(nil),         // 43: charon.v1.QuotaPlan
-	(*Settings)(nil),          // 44: charon.v1.Settings
-	(*SplitTunnel)(nil),       // 45: charon.v1.SplitTunnel
-	(*Rule)(nil),              // 46: charon.v1.Rule
+	(SyncTheme)(0),            // 18: charon.v1.SyncTheme
+	(*Envelope)(nil),          // 19: charon.v1.Envelope
+	(*Hello)(nil),             // 20: charon.v1.Hello
+	(*HelloAck)(nil),          // 21: charon.v1.HelloAck
+	(*Command)(nil),           // 22: charon.v1.Command
+	(*Empty)(nil),             // 23: charon.v1.Empty
+	(*ServerRef)(nil),         // 24: charon.v1.ServerRef
+	(*Subscription)(nil),      // 25: charon.v1.Subscription
+	(*ApplyUpdate)(nil),       // 26: charon.v1.ApplyUpdate
+	(*ExportDiagnostics)(nil), // 27: charon.v1.ExportDiagnostics
+	(*UpdateFileChunk)(nil),   // 28: charon.v1.UpdateFileChunk
+	(*Response)(nil),          // 29: charon.v1.Response
+	(*Error)(nil),             // 30: charon.v1.Error
+	(*FieldError)(nil),        // 31: charon.v1.FieldError
+	(*Event)(nil),             // 32: charon.v1.Event
+	(*Status)(nil),            // 33: charon.v1.Status
+	(*Quota)(nil),             // 34: charon.v1.Quota
+	(*Notice)(nil),            // 35: charon.v1.Notice
+	(*Throughput)(nil),        // 36: charon.v1.Throughput
+	(*LogLine)(nil),           // 37: charon.v1.LogLine
+	(*LogBatch)(nil),          // 38: charon.v1.LogBatch
+	(*ConfigResult)(nil),      // 39: charon.v1.ConfigResult
+	(*UpdateState)(nil),       // 40: charon.v1.UpdateState
+	(*Config)(nil),            // 41: charon.v1.Config
+	(*Server)(nil),            // 42: charon.v1.Server
+	(*Reality)(nil),           // 43: charon.v1.Reality
+	(*QuotaPlan)(nil),         // 44: charon.v1.QuotaPlan
+	(*Settings)(nil),          // 45: charon.v1.Settings
+	(*SplitTunnel)(nil),       // 46: charon.v1.SplitTunnel
+	(*Rule)(nil),              // 47: charon.v1.Rule
+	(*SyncPayload)(nil),       // 48: charon.v1.SyncPayload
+	(*UiSync)(nil),            // 49: charon.v1.UiSync
 }
 var file_charon_v1_charon_proto_depIdxs = []int32{
-	19, // 0: charon.v1.Envelope.hello:type_name -> charon.v1.Hello
-	20, // 1: charon.v1.Envelope.hello_ack:type_name -> charon.v1.HelloAck
-	21, // 2: charon.v1.Envelope.command:type_name -> charon.v1.Command
-	28, // 3: charon.v1.Envelope.response:type_name -> charon.v1.Response
-	31, // 4: charon.v1.Envelope.event:type_name -> charon.v1.Event
-	32, // 5: charon.v1.HelloAck.status:type_name -> charon.v1.Status
-	29, // 6: charon.v1.HelloAck.error:type_name -> charon.v1.Error
-	22, // 7: charon.v1.Command.connect:type_name -> charon.v1.Empty
-	22, // 8: charon.v1.Command.disconnect:type_name -> charon.v1.Empty
-	22, // 9: charon.v1.Command.cancel:type_name -> charon.v1.Empty
-	22, // 10: charon.v1.Command.switch_now:type_name -> charon.v1.Empty
-	23, // 11: charon.v1.Command.move_to:type_name -> charon.v1.ServerRef
-	23, // 12: charon.v1.Command.try_server:type_name -> charon.v1.ServerRef
-	22, // 13: charon.v1.Command.release:type_name -> charon.v1.Empty
-	22, // 14: charon.v1.Command.retry_now:type_name -> charon.v1.Empty
-	40, // 15: charon.v1.Command.set_config:type_name -> charon.v1.Config
-	22, // 16: charon.v1.Command.get_config:type_name -> charon.v1.Empty
-	24, // 17: charon.v1.Command.subscribe:type_name -> charon.v1.Subscription
-	24, // 18: charon.v1.Command.unsubscribe:type_name -> charon.v1.Subscription
-	22, // 19: charon.v1.Command.check_update:type_name -> charon.v1.Empty
-	25, // 20: charon.v1.Command.apply_update:type_name -> charon.v1.ApplyUpdate
-	22, // 21: charon.v1.Command.rollback_core:type_name -> charon.v1.Empty
-	26, // 22: charon.v1.Command.export_diagnostics:type_name -> charon.v1.ExportDiagnostics
-	27, // 23: charon.v1.Command.update_file_chunk:type_name -> charon.v1.UpdateFileChunk
+	20, // 0: charon.v1.Envelope.hello:type_name -> charon.v1.Hello
+	21, // 1: charon.v1.Envelope.hello_ack:type_name -> charon.v1.HelloAck
+	22, // 2: charon.v1.Envelope.command:type_name -> charon.v1.Command
+	29, // 3: charon.v1.Envelope.response:type_name -> charon.v1.Response
+	32, // 4: charon.v1.Envelope.event:type_name -> charon.v1.Event
+	33, // 5: charon.v1.HelloAck.status:type_name -> charon.v1.Status
+	30, // 6: charon.v1.HelloAck.error:type_name -> charon.v1.Error
+	23, // 7: charon.v1.Command.connect:type_name -> charon.v1.Empty
+	23, // 8: charon.v1.Command.disconnect:type_name -> charon.v1.Empty
+	23, // 9: charon.v1.Command.cancel:type_name -> charon.v1.Empty
+	23, // 10: charon.v1.Command.switch_now:type_name -> charon.v1.Empty
+	24, // 11: charon.v1.Command.move_to:type_name -> charon.v1.ServerRef
+	24, // 12: charon.v1.Command.try_server:type_name -> charon.v1.ServerRef
+	23, // 13: charon.v1.Command.release:type_name -> charon.v1.Empty
+	23, // 14: charon.v1.Command.retry_now:type_name -> charon.v1.Empty
+	41, // 15: charon.v1.Command.set_config:type_name -> charon.v1.Config
+	23, // 16: charon.v1.Command.get_config:type_name -> charon.v1.Empty
+	25, // 17: charon.v1.Command.subscribe:type_name -> charon.v1.Subscription
+	25, // 18: charon.v1.Command.unsubscribe:type_name -> charon.v1.Subscription
+	23, // 19: charon.v1.Command.check_update:type_name -> charon.v1.Empty
+	26, // 20: charon.v1.Command.apply_update:type_name -> charon.v1.ApplyUpdate
+	23, // 21: charon.v1.Command.rollback_core:type_name -> charon.v1.Empty
+	27, // 22: charon.v1.Command.export_diagnostics:type_name -> charon.v1.ExportDiagnostics
+	28, // 23: charon.v1.Command.update_file_chunk:type_name -> charon.v1.UpdateFileChunk
 	7,  // 24: charon.v1.Subscription.topics:type_name -> charon.v1.Topic
 	8,  // 25: charon.v1.Subscription.log_source:type_name -> charon.v1.LogSource
 	9,  // 26: charon.v1.Subscription.min_level:type_name -> charon.v1.LogLevel
 	10, // 27: charon.v1.ApplyUpdate.kind:type_name -> charon.v1.UpdateKind
 	11, // 28: charon.v1.ApplyUpdate.when:type_name -> charon.v1.ApplyWhen
 	10, // 29: charon.v1.UpdateFileChunk.kind:type_name -> charon.v1.UpdateKind
-	22, // 30: charon.v1.Response.ack:type_name -> charon.v1.Empty
-	29, // 31: charon.v1.Response.error:type_name -> charon.v1.Error
-	40, // 32: charon.v1.Response.config:type_name -> charon.v1.Config
-	39, // 33: charon.v1.Response.update_state:type_name -> charon.v1.UpdateState
+	23, // 30: charon.v1.Response.ack:type_name -> charon.v1.Empty
+	30, // 31: charon.v1.Response.error:type_name -> charon.v1.Error
+	41, // 32: charon.v1.Response.config:type_name -> charon.v1.Config
+	40, // 33: charon.v1.Response.update_state:type_name -> charon.v1.UpdateState
 	17, // 34: charon.v1.Error.code:type_name -> charon.v1.ErrorCode
-	30, // 35: charon.v1.Error.fields:type_name -> charon.v1.FieldError
-	32, // 36: charon.v1.Event.status_changed:type_name -> charon.v1.Status
-	33, // 37: charon.v1.Event.quota_changed:type_name -> charon.v1.Quota
-	34, // 38: charon.v1.Event.notice:type_name -> charon.v1.Notice
-	37, // 39: charon.v1.Event.logs:type_name -> charon.v1.LogBatch
-	35, // 40: charon.v1.Event.throughput:type_name -> charon.v1.Throughput
-	39, // 41: charon.v1.Event.update_state:type_name -> charon.v1.UpdateState
-	38, // 42: charon.v1.Event.config_result:type_name -> charon.v1.ConfigResult
-	22, // 43: charon.v1.Event.ping:type_name -> charon.v1.Empty
+	31, // 35: charon.v1.Error.fields:type_name -> charon.v1.FieldError
+	33, // 36: charon.v1.Event.status_changed:type_name -> charon.v1.Status
+	34, // 37: charon.v1.Event.quota_changed:type_name -> charon.v1.Quota
+	35, // 38: charon.v1.Event.notice:type_name -> charon.v1.Notice
+	38, // 39: charon.v1.Event.logs:type_name -> charon.v1.LogBatch
+	36, // 40: charon.v1.Event.throughput:type_name -> charon.v1.Throughput
+	40, // 41: charon.v1.Event.update_state:type_name -> charon.v1.UpdateState
+	39, // 42: charon.v1.Event.config_result:type_name -> charon.v1.ConfigResult
+	23, // 43: charon.v1.Event.ping:type_name -> charon.v1.Empty
 	0,  // 44: charon.v1.Status.phase:type_name -> charon.v1.Phase
 	1,  // 45: charon.v1.Status.gate:type_name -> charon.v1.Gate
 	2,  // 46: charon.v1.Status.quota_level:type_name -> charon.v1.QuotaLevel
@@ -4035,26 +4242,29 @@ var file_charon_v1_charon_proto_depIdxs = []int32{
 	13, // 51: charon.v1.Notice.kind:type_name -> charon.v1.NoticeKind
 	9,  // 52: charon.v1.LogLine.level:type_name -> charon.v1.LogLevel
 	8,  // 53: charon.v1.LogBatch.source:type_name -> charon.v1.LogSource
-	36, // 54: charon.v1.LogBatch.lines:type_name -> charon.v1.LogLine
-	29, // 55: charon.v1.ConfigResult.error:type_name -> charon.v1.Error
+	37, // 54: charon.v1.LogBatch.lines:type_name -> charon.v1.LogLine
+	30, // 55: charon.v1.ConfigResult.error:type_name -> charon.v1.Error
 	10, // 56: charon.v1.UpdateState.kind:type_name -> charon.v1.UpdateKind
 	12, // 57: charon.v1.UpdateState.stage:type_name -> charon.v1.UpdateStage
-	41, // 58: charon.v1.Config.servers:type_name -> charon.v1.Server
-	44, // 59: charon.v1.Config.settings:type_name -> charon.v1.Settings
-	45, // 60: charon.v1.Config.split:type_name -> charon.v1.SplitTunnel
+	42, // 58: charon.v1.Config.servers:type_name -> charon.v1.Server
+	45, // 59: charon.v1.Config.settings:type_name -> charon.v1.Settings
+	46, // 60: charon.v1.Config.split:type_name -> charon.v1.SplitTunnel
 	3,  // 61: charon.v1.Server.protocol:type_name -> charon.v1.Protocol
-	42, // 62: charon.v1.Server.reality:type_name -> charon.v1.Reality
-	43, // 63: charon.v1.Server.quota:type_name -> charon.v1.QuotaPlan
+	43, // 62: charon.v1.Server.reality:type_name -> charon.v1.Reality
+	44, // 63: charon.v1.Server.quota:type_name -> charon.v1.QuotaPlan
 	4,  // 64: charon.v1.QuotaPlan.counts:type_name -> charon.v1.CountsMode
 	5,  // 65: charon.v1.SplitTunnel.mode:type_name -> charon.v1.SplitMode
-	46, // 66: charon.v1.SplitTunnel.all_except_listed:type_name -> charon.v1.Rule
-	46, // 67: charon.v1.SplitTunnel.only_listed:type_name -> charon.v1.Rule
+	47, // 66: charon.v1.SplitTunnel.all_except_listed:type_name -> charon.v1.Rule
+	47, // 67: charon.v1.SplitTunnel.only_listed:type_name -> charon.v1.Rule
 	6,  // 68: charon.v1.Rule.kind:type_name -> charon.v1.RuleKind
-	69, // [69:69] is the sub-list for method output_type
-	69, // [69:69] is the sub-list for method input_type
-	69, // [69:69] is the sub-list for extension type_name
-	69, // [69:69] is the sub-list for extension extendee
-	0,  // [0:69] is the sub-list for field type_name
+	41, // 69: charon.v1.SyncPayload.config:type_name -> charon.v1.Config
+	49, // 70: charon.v1.SyncPayload.ui:type_name -> charon.v1.UiSync
+	18, // 71: charon.v1.UiSync.theme:type_name -> charon.v1.SyncTheme
+	72, // [72:72] is the sub-list for method output_type
+	72, // [72:72] is the sub-list for method input_type
+	72, // [72:72] is the sub-list for extension type_name
+	72, // [72:72] is the sub-list for extension extendee
+	0,  // [0:72] is the sub-list for field type_name
 }
 
 func init() { file_charon_v1_charon_proto_init() }
@@ -4110,8 +4320,8 @@ func file_charon_v1_charon_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_charon_v1_charon_proto_rawDesc), len(file_charon_v1_charon_proto_rawDesc)),
-			NumEnums:      18,
-			NumMessages:   29,
+			NumEnums:      19,
+			NumMessages:   31,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
