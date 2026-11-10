@@ -194,6 +194,8 @@ func (r *Runtime) Run(ctx context.Context) error {
 	if sid == "" {
 		if raw, err := os.ReadFile(filepath.Join(r.opts.DataDir, "owner.sid")); err == nil {
 			sid = strings.TrimSpace(string(raw))
+		} else if curSID, sidErr := pipe.CurrentProcessUserSID(); sidErr == nil && curSID != "S-1-5-18" {
+			sid = curSID
 		}
 	}
 
@@ -203,7 +205,9 @@ func (r *Runtime) Run(ctx context.Context) error {
 	}
 	defer ln.Close()
 
+	r.coreLogs.Append(charonv1.LogLevel_LOG_LEVEL_INFO, "charon-service listening on "+r.opts.PipeName, r.clock.NowMs())
 	r.Boot()
+	fmt.Fprintf(os.Stderr, "charon-service: listening on %s\n", r.opts.PipeName)
 
 	go func() { _ = r.pipeSrv.Serve(ln) }()
 	go r.statsLoop(ctx)

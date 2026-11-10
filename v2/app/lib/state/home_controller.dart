@@ -336,10 +336,17 @@ class HomeController extends ChangeNotifier {
         : _config!.split.allExceptListed;
   }
 
+  void _bumpConfigVersion() {
+    final base = _config!.version > _status.configVersion
+        ? _config!.version
+        : _status.configVersion;
+    _config!.version = base + Int64(1);
+  }
+
   Future<void> setSplitMode(SplitMode mode) async {
     _config ??= Config();
     _config!.ensureSplit().mode = mode;
-    _config!.version += Int64(1);
+    _bumpConfigVersion();
     if (_status.phase == Phase.PHASE_UP || _status.phase == Phase.PHASE_VERIFYING) {
       _hasPendingSplitChanges = true;
     }
@@ -360,7 +367,7 @@ class HomeController extends ChangeNotifier {
     if (list.length >= 1000) return false;
 
     list.add(rule);
-    _config!.version += Int64(1);
+    _bumpConfigVersion();
     if (_status.phase == Phase.PHASE_UP || _status.phase == Phase.PHASE_VERIFYING) {
       _hasPendingSplitChanges = true;
       _pendingSplitRules.add(rule.value);
@@ -383,7 +390,7 @@ class HomeController extends ChangeNotifier {
     if (index < 0 || index >= list.length) return;
     final removed = list.removeAt(index);
     _pendingSplitRules.remove(removed.value);
-    _config!.version += Int64(1);
+    _bumpConfigVersion();
     if (_status.phase == Phase.PHASE_UP || _status.phase == Phase.PHASE_VERIFYING) {
       _hasPendingSplitChanges = true;
     }
@@ -493,7 +500,7 @@ class HomeController extends ChangeNotifier {
   Future<void> setKillSwitch(bool value) async {
     _config ??= Config();
     _config!.ensureSettings().killSwitch = value;
-    _config!.version += Int64(1);
+    _bumpConfigVersion();
     if (_client != null) {
       try {
         await _client!.setConfig(_config!);
@@ -505,7 +512,7 @@ class HomeController extends ChangeNotifier {
   Future<void> setAutoReconnect(bool value) async {
     _config ??= Config();
     _config!.ensureSettings().autoReconnect = value;
-    _config!.version += Int64(1);
+    _bumpConfigVersion();
     if (_client != null) {
       try {
         await _client!.setConfig(_config!);
@@ -517,7 +524,7 @@ class HomeController extends ChangeNotifier {
   Future<void> setAllowLocalNetwork(bool value) async {
     _config ??= Config();
     _config!.ensureSettings().allowLocalNetwork = value;
-    _config!.version += Int64(1);
+    _bumpConfigVersion();
     if (_client != null) {
       try {
         await _client!.setConfig(_config!);
@@ -537,7 +544,7 @@ class HomeController extends ChangeNotifier {
       ..capGb = capGb
       ..billingDay = billingDay
       ..counts = counts;
-    _config!.version += Int64(1);
+    _bumpConfigVersion();
     if (_client != null) {
       try {
         await _client!.setConfig(_config!);
@@ -594,20 +601,43 @@ class HomeController extends ChangeNotifier {
     );
   }
 
-  void attachClient(CoreClient newClient) {
+  void attachClient(CoreClient newClient, {Status? initialStatus}) {
     if (_isDisposed) return;
     _eventSub?.cancel();
     _client = newClient;
+    _serviceStatus = ServiceStatus.running;
+    if (initialStatus != null) {
+      _status = initialStatus;
+    }
     _initClient();
+    notifyListeners();
   }
 
   void _initClient() {
     if (_client == null) return;
-    _eventSub = _client!.events.listen(
+    final activeClient = _client!;
+    _eventSub = activeClient.events.listen(
       _handleEvent,
       onError: (_) {},
     );
+    unawaited(activeClient.closed.then((_) {
+      if (!_isDisposed && identical(_client, activeClient)) {
+        _serviceStatus = ServiceStatus.notRunning;
+        notifyListeners();
+      }
+    }));
     unawaited(_refreshConfig());
+  }
+
+  Future<List<int>?> requestDiagnosticsBytes() async {
+    if (_client == null) return null;
+    try {
+      final res = await _client!.exportDiagnostics();
+      if (res.hasDiagnostics()) {
+        return res.diagnostics;
+      }
+    } catch (_) {}
+    return null;
   }
 
   Future<void> _refreshConfig() async {
@@ -615,9 +645,12 @@ class HomeController extends ChangeNotifier {
     try {
       final res = await _client!.getConfig();
       if (res.hasConfig()) {
-        _config = res.config;
-        _hasServers = res.config.servers.isNotEmpty;
-        notifyListeners();
+        final currentVer = _config?.version ?? Int64.ZERO;
+        if (_config == null || res.config.version > currentVer) {
+          _config = res.config;
+          _hasServers = res.config.servers.isNotEmpty;
+          notifyListeners();
+        }
       }
     } catch (_) {
       // Fakecore or initial connect may not have config yet
@@ -791,7 +824,7 @@ class HomeController extends ChangeNotifier {
       _config!.chosenServerId = server.id;
     }
     _hasServers = true;
-    _config!.version += Int64(1);
+    _bumpConfigVersion();
     if (_client != null) {
       try {
         await _client!.setConfig(_config!);
@@ -806,7 +839,7 @@ class HomeController extends ChangeNotifier {
     final idx = _config!.servers.indexWhere((s) => s.id == updated.id);
     if (idx < 0) return;
     _config!.servers[idx] = updated;
-    _config!.version += Int64(1);
+    _bumpConfigVersion();
     if (_client != null) {
       try {
         await _client!.setConfig(_config!);
@@ -827,7 +860,7 @@ class HomeController extends ChangeNotifier {
     if (_config!.chosenServerId == serverId) {
       _config!.chosenServerId = _config!.servers.isNotEmpty ? _config!.servers.first.id : '';
     }
-    _config!.version += Int64(1);
+    _bumpConfigVersion();
     if (_client != null) {
       try {
         await _client!.setConfig(_config!);

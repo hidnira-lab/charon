@@ -28,14 +28,16 @@ void main() {
 }
 
 Future<void> _connectBackground(HomeController controller) async {
-  const pipe = String.fromEnvironment('CHARON_PIPE', defaultValue: r'\\.\pipe\charon-fake');
+  const pipe = String.fromEnvironment('CHARON_PIPE', defaultValue: r'\\.\pipe\charon');
   try {
     final transport = await IpcTransport.connect(pipe);
     final client = CoreClient(transport);
-    await client.hello(appVersion: '0.1.0');
-    controller.attachClient(client);
+    final ack = await client.hello(appVersion: '0.1.0');
+    controller.attachClient(client, initialStatus: ack.status);
+  } on ProtocolMismatch {
+    controller.setServiceStatus(ServiceStatus.needsUpdate);
   } catch (_) {
-    // Fakecore or service not reachable at launch
+    controller.setServiceStatus(ServiceStatus.notRunning);
   }
 }
 
