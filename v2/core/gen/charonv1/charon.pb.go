@@ -905,6 +905,9 @@ const (
 	SessionEnd_SESSION_END_MANUAL          SessionEnd = 1
 	SessionEnd_SESSION_END_COULD_NOT_REACH SessionEnd = 2
 	SessionEnd_SESSION_END_TUNNEL_LOST     SessionEnd = 3
+	SessionEnd_SESSION_END_VPN_REVOKED     SessionEnd = 4
+	SessionEnd_SESSION_END_ANOTHER_VPN     SessionEnd = 5
+	SessionEnd_SESSION_END_ANDROID_STOPPED SessionEnd = 6
 )
 
 // Enum value maps for SessionEnd.
@@ -914,12 +917,18 @@ var (
 		1: "SESSION_END_MANUAL",
 		2: "SESSION_END_COULD_NOT_REACH",
 		3: "SESSION_END_TUNNEL_LOST",
+		4: "SESSION_END_VPN_REVOKED",
+		5: "SESSION_END_ANOTHER_VPN",
+		6: "SESSION_END_ANDROID_STOPPED",
 	}
 	SessionEnd_value = map[string]int32{
 		"SESSION_END_UNSPECIFIED":     0,
 		"SESSION_END_MANUAL":          1,
 		"SESSION_END_COULD_NOT_REACH": 2,
 		"SESSION_END_TUNNEL_LOST":     3,
+		"SESSION_END_VPN_REVOKED":     4,
+		"SESSION_END_ANOTHER_VPN":     5,
+		"SESSION_END_ANDROID_STOPPED": 6,
 	}
 )
 
@@ -4094,13 +4103,16 @@ const file_charon_v1_charon_proto_rawDesc = "" +
 	"\x11PROBE_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14PROBE_NETWORK_CHANGE\x10\x01\x12\x0e\n" +
 	"\n" +
-	"PROBE_WAKE\x10\x02*\x7f\n" +
+	"PROBE_WAKE\x10\x02*\xda\x01\n" +
 	"\n" +
 	"SessionEnd\x12\x1b\n" +
 	"\x17SESSION_END_UNSPECIFIED\x10\x00\x12\x16\n" +
 	"\x12SESSION_END_MANUAL\x10\x01\x12\x1f\n" +
 	"\x1bSESSION_END_COULD_NOT_REACH\x10\x02\x12\x1b\n" +
-	"\x17SESSION_END_TUNNEL_LOST\x10\x03*\xae\x02\n" +
+	"\x17SESSION_END_TUNNEL_LOST\x10\x03\x12\x1b\n" +
+	"\x17SESSION_END_VPN_REVOKED\x10\x04\x12\x1b\n" +
+	"\x17SESSION_END_ANOTHER_VPN\x10\x05\x12\x1f\n" +
+	"\x1bSESSION_END_ANDROID_STOPPED\x10\x06*\xae\x02\n" +
 	"\tErrorCode\x12\x15\n" +
 	"\x11ERROR_UNSPECIFIED\x10\x00\x12\x1a\n" +
 	"\x16ERROR_INVALID_ARGUMENT\x10\x01\x12\x18\n" +

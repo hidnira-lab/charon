@@ -90,11 +90,12 @@ func (vlessRealityBuilder) BuildOutbound(sv *charonv1.Server) (map[string]any, e
 
 // Options controls local runtime bindings that are not part of the user Config.
 type Options struct {
-	DNSServer  string // defaults to DefaultDNSResolver ("1.1.1.1")
-	TUNName    string // defaults to DefaultTUNName ("charon0")
-	SocksPort  uint16 // optional local loopback SOCKS5 port for tunnel verification
-	StatsPort  uint16 // optional local loopback API port for StatsService byte counters
-	OutboundBy map[charonv1.Protocol]OutboundBuilder
+	DNSServer     string // defaults to DefaultDNSResolver ("1.1.1.1")
+	TUNName       string // defaults to DefaultTUNName ("charon0")
+	SocksPort     uint16 // optional local loopback SOCKS5 port for tunnel verification
+	StatsPort     uint16 // optional local loopback API port for StatsService byte counters
+	AllowAppRules bool   // true on Android where VpnService handles per-application rules
+	OutboundBy    map[charonv1.Protocol]OutboundBuilder
 }
 
 var privateCIDRs = []string{
@@ -112,7 +113,7 @@ func Build(server *charonv1.Server, cfg *charonv1.Config, opts Options) ([]byte,
 	if cfg == nil {
 		return nil, fmt.Errorf("config is nil")
 	}
-	if errs := ValidateConfig(cfg, false); len(errs) > 0 {
+	if errs := ValidateConfig(cfg, opts.AllowAppRules); len(errs) > 0 {
 		return nil, fmt.Errorf("invalid config at %s: %s", errs[0].GetPath(), errs[0].GetMessageKey())
 	}
 

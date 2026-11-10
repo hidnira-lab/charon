@@ -487,3 +487,57 @@ func sameServerSlice(a, b []*charonv1.Server) bool {
 	}
 	return true
 }
+
+// ForceSessionEnd transitions the driver immediately to PHASE_IDLE with the
+// gate disarmed and LastEnd set to end, stopping Xray and clearing any saved
+// connected session. Used on Android when the OS revokes VPN permission,
+// another VPN takes over the slot, or the OS killed the background process.
+func (d *Driver) ForceSessionEnd(end charonv1.SessionEnd) {
+	d.cancelVerifyContext()
+
+	d.mu.Lock()
+	now := int64(0)
+	if d.deps.Clock != nil {
+		now = d.deps.Clock.NowMs()
+	}
+	wasRunning := d.state.Phase != charonv1.Phase_PHASE_IDLE && d.state.Phase != charonv1.Phase_PHASE_BLOCKED
+	if d.deps.Clock != nil {
+		d.deps.Clock.CancelTimer(machine.TimerRetry)
+		d.deps.Clock.CancelTimer(machine.TimerVerify)
+		d.deps.Clock.CancelTimer(machine.TimerDebounce)
+		d.deps.Clock.CancelTimer(machine.TimerNetworkWait)
+	}
+	d.state.Phase = charonv1.Phase_PHASE_IDLE
+	d.state.PhaseSinceMs = now
+	d.state.Gate = charonv1.Gate_GATE_DISARMED
+	d.state.Active = ""
+	d.state.OnBackup = false
+	d.state.AutoSwitch = false
+	d.state.EverUp = false
+	d.state.WakeWait = false
+	d.state.Waking = false
+	d.state.Probe = charonv1.Probe_PROBE_UNSPECIFIED
+	d.state.Ending = charonv1.SessionEnd_SESSION_END_UNSPECIFIED
+	d.state.LastEnd = end
+	d.state.Attempt = 0
+	d.state.NextTryAtMs = 0
+	d.state.VerifyTimer = false
+	d.state.RetryTimer = false
+	d.state.Saved = machine.Saved{Connected: false, ActiveServerID: ""}
+	snap := d.state.Status(now)
+	snap.ConfigVersion = d.cfg.GetVersion()
+	d.mu.Unlock()
+
+	if wasRunning && d.deps.Tunnel != nil {
+		_ = d.deps.Tunnel.Stop()
+	}
+	if d.deps.Gate != nil {
+		_ = d.deps.Gate.Disarm()
+	}
+	if d.deps.Store != nil {
+		_ = d.deps.Store.SaveSaved(machine.Saved{Connected: false, ActiveServerID: ""})
+	}
+	if d.deps.Notifier != nil {
+		d.deps.Notifier.NotifyStatus(snap)
+	}
+}
