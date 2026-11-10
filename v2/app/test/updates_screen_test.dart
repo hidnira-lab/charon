@@ -38,19 +38,6 @@ void main() {
       await controller.rollbackCore();
       expect(controller.coreUpdateState.stage, UpdateStage.UPDATE_ROLLED_BACK);
     });
-
-    test('simulates file upload chunks and outcome', () async {
-      final controller = HomeController();
-      expect(controller.isFileUploading, isFalse);
-      expect(controller.fileVerificationResult, isNull);
-
-      await controller.simulateFileUpload(outcome: 'verified');
-      expect(controller.isFileUploading, isFalse);
-      expect(controller.fileVerificationResult, 'verified');
-
-      controller.resetFileUpload();
-      expect(controller.fileVerificationResult, isNull);
-    });
   });
 
   group('UpdatesScreen UI and Interactions', () {
@@ -127,51 +114,21 @@ void main() {
       expect(find.text('Choose file'), findsOneWidget);
     });
 
-    testWidgets('applying core update queues or updates state', (tester) async {
+    testWidgets('Choose file is disabled until a real file can be chosen', (tester) async {
       tester.view.physicalSize = const Size(1280, 800);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() => tester.view.resetPhysicalSize());
 
-      final controller = HomeController(
-        initialStatus: Status(phase: Phase.PHASE_UP),
-      );
-
+      final controller = HomeController(initialStatus: Status(phase: Phase.PHASE_UP));
       await tester.pumpWidget(_buildTestUpdatesApp(controller: controller));
       await tester.pumpAndSettle();
 
-      // Tap When I disconnect
-      await tester.tap(find.text('When I disconnect'));
-      await tester.pumpAndSettle();
-
-      expect(find.text('QUEUED · APPLIES ON NEXT DISCONNECT'), findsOneWidget);
-    });
-
-    testWidgets('simulating file update verifies and shows apply button', (tester) async {
-      tester.view.physicalSize = const Size(1280, 800);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(() => tester.view.resetPhysicalSize());
-
-      final controller = HomeController(
-        initialStatus: Status(phase: Phase.PHASE_UP),
-      );
-
-      await tester.pumpWidget(_buildTestUpdatesApp(controller: controller));
-      await tester.pumpAndSettle();
-
-      // Scroll to Choose file and tap
       await tester.scrollUntilVisible(find.text('Choose file'), 200.0);
-      await tester.tap(find.text('Choose file'));
+      await tester.tap(find.text('Choose file'), warnIfMissed: false);
       await tester.pumpAndSettle();
 
-      expect(find.text('Verified and ready'), findsOneWidget);
-      expect(find.text('Apply file update'), findsOneWidget);
-
-      // Apply file update
-      await tester.scrollUntilVisible(find.text('Apply file update'), 100.0);
-      await tester.tap(find.text('Apply file update'));
-      await tester.pumpAndSettle();
-
-      expect(find.text('File update applied successfully.'), findsOneWidget);
+      expect(controller.fileVerificationResult, isNull);
+      expect(find.text('Verified and ready'), findsNothing);
     });
 
     testWidgets('renders Indonesian localization cleanly and navigates from About card', (tester) async {

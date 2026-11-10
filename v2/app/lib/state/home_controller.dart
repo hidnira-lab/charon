@@ -239,22 +239,6 @@ class HomeController extends ChangeNotifier {
     }
   }
 
-  Future<void> simulateFileUpload({String outcome = 'verified'}) async {
-    _isFileUploading = true;
-    _fileUploadProgress = 0;
-    _fileVerificationResult = null;
-    notifyListeners();
-
-    for (var i = 25; i <= 100; i += 25) {
-      _fileUploadProgress = i;
-      notifyListeners();
-    }
-
-    _isFileUploading = false;
-    _fileVerificationResult = outcome;
-    notifyListeners();
-  }
-
   void resetFileUpload() {
     _isFileUploading = false;
     _fileUploadProgress = 0;

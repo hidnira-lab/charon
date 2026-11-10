@@ -20,7 +20,9 @@ class FileUpdateCard extends StatelessWidget {
   final bool isUploading;
   final int progress;
   final String? verificationResult;
-  final VoidCallback onChooseFile;
+  /// Null until a file can really be chosen and sent to the service: the
+  /// button is then disabled instead of pretending.
+  final VoidCallback? onChooseFile;
   final VoidCallback onApplyFileUpdate;
   final VoidCallback onReset;
 

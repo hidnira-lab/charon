@@ -186,19 +186,11 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
                                   isUploading: widget.controller.isFileUploading,
                                   progress: widget.controller.fileUploadProgress,
                                   verificationResult: widget.controller.fileVerificationResult,
-                                  onChooseFile: () => widget.controller.simulateFileUpload(
-                                    outcome: 'verified',
-                                  ),
-                                  onApplyFileUpdate: () {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('File update applied successfully.'),
-                                        duration: Duration(seconds: 2),
-                                        behavior: SnackBarBehavior.floating,
-                                      ),
-                                    );
-                                    widget.controller.resetFileUpload();
-                                  },
+                                  // No file picker is wired yet, so the button stays
+                                  // disabled. The service side exists
+                                  // (HomeController.uploadUpdateFileBytes).
+                                  onChooseFile: null,
+                                  onApplyFileUpdate: widget.controller.resetFileUpload,
                                   onReset: widget.controller.resetFileUpload,
                                 ),
                               ),
