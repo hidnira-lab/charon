@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+import '../../core/vless_parser.dart';
 import '../../gen/charon/v1/charon.pb.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../state/home_controller.dart';
@@ -40,6 +41,8 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
   final _serverInputController = TextEditingController();
   final _restoreCodeController = TextEditingController();
   String? _unsupportedProtocolError;
+  String? _parseError;
+  Server? _parsedServer;
 
   // Step 2: Safety toggles
   bool _killSwitch = true;
@@ -50,9 +53,6 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
   bool _isProbing = false;
   int _probeChecksPassed = 0; // 0 to 4
   bool _showFourChecksHelp = false;
-
-  static const String demoVlessLink =
-      'vless://b831381d-6324-4d53-ad4f-8cda48b30811@srv-01.example.com:443?security=reality&sni=example.com&pbk=11a50d51a0b0feeb58d79ad812d603579f8d1043b440f6e64914a4060d105257&sid=6ba7b810&type=tcp&headerType=none#SRV-01';
 
   @override
   void initState() {
@@ -70,22 +70,33 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
   }
 
   void _validateServerInput() {
-    final text = _serverInputController.text.trim().toLowerCase();
-    if (text.startsWith('vmess://') ||
-        text.startsWith('trojan://') ||
-        text.startsWith('ss://') ||
-        text.startsWith('hysteria2://')) {
-      setState(() {
-        _unsupportedProtocolError =
-            'Charon v1 exclusively supports VLESS Reality. Nothing was imported.';
-      });
-    } else {
-      if (_unsupportedProtocolError != null) {
-        setState(() {
-          _unsupportedProtocolError = null;
-        });
+    final text = _serverInputController.text.trim();
+    final lower = text.toLowerCase();
+    final unsupported = lower.startsWith('vmess://') ||
+        lower.startsWith('trojan://') ||
+        lower.startsWith('ss://') ||
+        lower.startsWith('hysteria2://');
+
+    Server? server;
+    String? error;
+    if (text.isNotEmpty && !unsupported) {
+      final existing = widget.controller.config?.servers ?? const <Server>[];
+      final res = parseVlessLink(text, nextId: nextServerId(existing));
+      server = res.server;
+      error = res.error;
+      if (server != null && isDuplicateServer(existing, server)) {
+        server = null;
+        error = 'This server is already added.';
       }
     }
+
+    setState(() {
+      _unsupportedProtocolError = unsupported
+          ? 'Charon v1 exclusively supports VLESS Reality. Nothing was imported.'
+          : null;
+      _parsedServer = server;
+      _parseError = error;
+    });
   }
 
   void _nextStep() {
@@ -125,13 +136,8 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
   }
 
   Future<void> _finishSetup() async {
-    final server = Server(
-      id: 'SRV-01',
-      displayName: 'SRV-01',
-      address: 'srv-01.example.com',
-      port: 443,
-      countryCode: 'JP',
-    );
+    final server = _parsedServer;
+    if (server == null) return;
 
     await widget.controller.completeFirstRun(
       server: server,
@@ -542,31 +548,7 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
                 contentPadding: const EdgeInsets.all(12),
               ),
             ),
-            const SizedBox(height: 8),
-            // Quick Demo button
-            OutlinedButton.icon(
-              onPressed: () {
-                _serverInputController.text = demoVlessLink;
-              },
-              icon: const Icon(Icons.flash_on_rounded, size: 14),
-              label: Text(
-                l10n.setupStep2DemoBtn,
-                style: const TextStyle(
-                  fontFamily: CharonTokens.fontMono,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: const Color(0xFF81D4FA),
-                side: const BorderSide(color: Color(0xFF4A4A4A)),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              ),
-            ),
-            if (_unsupportedProtocolError != null) ...[
+            if (_unsupportedProtocolError != null || _parseError != null) ...[
               const SizedBox(height: 10),
               Container(
                 padding: const EdgeInsets.all(10),
@@ -581,7 +563,9 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        l10n.setupStep2UnsupportedWarn,
+                        _unsupportedProtocolError != null
+                            ? l10n.setupStep2UnsupportedWarn
+                            : _parseError!,
                         style: const TextStyle(
                           fontSize: 11,
                           color: Color(0xFFFFE0B2),
@@ -692,7 +676,7 @@ class _FirstRunSetupScreenState extends State<FirstRunSetupScreen> {
                 ),
               ),
               ElevatedButton(
-                onPressed: _nextStep,
+                onPressed: _serverTab == 0 && _parsedServer != null ? _nextStep : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF81D4FA),
                   foregroundColor: const Color(0xFF121212),

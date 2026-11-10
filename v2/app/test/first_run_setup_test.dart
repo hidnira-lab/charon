@@ -7,6 +7,10 @@ import 'package:charon/theme/theme.dart';
 import 'package:charon/ui/setup/first_run_setup_screen.dart';
 import 'package:charon/ui/setup/widgets/crossing_scene.dart';
 
+const _testUuid = '00000000-0000-4000-8000-000000000000';
+const _testLink =
+    'vless://$_testUuid@test.example.com:443?security=reality&sni=test.example.com&pbk=TESTPUBLICKEY&sid=ab12&type=tcp#SRV-TEST';
+
 Widget _buildTestApp({
   required HomeController controller,
   int initialStep = 0,
@@ -121,7 +125,7 @@ void main() {
       expect(find.text('Add your server'), findsOneWidget);
     });
 
-    testWidgets('Step 1: supports demo server fill, tabs, and protocol validation', (tester) async {
+    testWidgets('Step 1: parses the pasted link, supports tabs, and validates protocol', (tester) async {
       tester.view.physicalSize = const Size(1200, 1000);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() {
@@ -141,13 +145,23 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
       expect(find.textContaining('Charon v1 exclusively supports VLESS Reality'), findsOneWidget);
 
-      // Fill demo server
-      final demoBtn = find.text('Fill demo server (SRV-01)');
-      await tester.ensureVisible(demoBtn);
-      await tester.tap(demoBtn);
+      // Next stays disabled until the link parses
+      final nextBtn = find.text('Continue to Safety →');
+      await tester.ensureVisible(nextBtn);
+      expect(tester.widget<ElevatedButton>(find.widgetWithText(ElevatedButton, 'Continue to Safety →')).onPressed, isNull);
+
+      // A link missing its Reality key says what is wrong
+      await tester.enterText(inputFinder, 'vless://$_testUuid@test.example.com:443?security=reality');
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(find.textContaining('copy the link again'), findsOneWidget);
+      expect(tester.widget<ElevatedButton>(find.widgetWithText(ElevatedButton, 'Continue to Safety →')).onPressed, isNull);
+
+      // A valid link enables Next and shows no warning
+      await tester.enterText(inputFinder, _testLink);
       await tester.pump(const Duration(milliseconds: 100));
       expect(find.textContaining('Charon v1 exclusively supports VLESS Reality'), findsNothing);
-      expect(find.textContaining('srv-01.example.com'), findsOneWidget);
+      expect(find.textContaining('copy the link again'), findsNothing);
+      expect(find.textContaining('test.example.com'), findsOneWidget);
 
       // Switch tab to Restore
       final restoreTab = find.text('Restore from Device');
@@ -163,7 +177,6 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
 
       // Advance to Safety step
-      final nextBtn = find.text('Continue to Safety →');
       await tester.ensureVisible(nextBtn);
       await tester.tap(nextBtn);
       await tester.pump(const Duration(milliseconds: 400));
@@ -179,14 +192,17 @@ void main() {
         tester.view.resetDevicePixelRatio();
       });
 
-      await tester.pumpWidget(_buildTestApp(controller: controller, initialStep: 2));
+      await tester.pumpWidget(_buildTestApp(controller: controller, initialStep: 1));
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.enterText(find.byType(TextField).first, _testLink);
       await tester.pump(const Duration(milliseconds: 100));
 
-      expect(find.text('Safety configuration'), findsOneWidget);
-      expect(find.text('CRITICAL SAFEGUARD'), findsOneWidget);
-      expect(find.text('Kill switch'), findsOneWidget);
-      expect(find.text('Allow local network'), findsOneWidget);
-      expect(find.text('Launch at startup'), findsOneWidget);
+      // Forward to Step 2 then Step 3
+      final nextToSafety = find.text('Continue to Safety →');
+      await tester.ensureVisible(nextToSafety);
+      await tester.tap(nextToSafety);
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pump(const Duration(milliseconds: 800)); // old step finishes leaving
 
       // Back to Step 1
       final backBtn = find.text('← Back');
@@ -195,11 +211,14 @@ void main() {
       await tester.pump(const Duration(milliseconds: 400));
       expect(find.text('Add your server'), findsOneWidget);
 
-      // Forward to Step 2 then Step 3
-      final nextToSafety = find.text('Continue to Safety →');
       await tester.ensureVisible(nextToSafety);
       await tester.tap(nextToSafety);
       await tester.pump(const Duration(milliseconds: 400));
+      expect(find.text('Safety configuration'), findsOneWidget);
+      expect(find.text('CRITICAL SAFEGUARD'), findsOneWidget);
+      expect(find.text('Kill switch'), findsOneWidget);
+      expect(find.text('Allow local network'), findsOneWidget);
+      expect(find.text('Launch at startup'), findsOneWidget);
 
       final nextToVerify = find.text('Continue to Verification →');
       await tester.ensureVisible(nextToVerify);
@@ -222,11 +241,18 @@ void main() {
       await tester.pumpWidget(
         _buildTestApp(
           controller: controller,
-          initialStep: 3,
+          initialStep: 1,
           onFinished: () => finishedCalled = true,
         ),
       );
       await tester.pump(const Duration(milliseconds: 100));
+      await tester.enterText(find.byType(TextField).first, _testLink);
+      await tester.pump(const Duration(milliseconds: 100));
+      for (final label in ['Continue to Safety →', 'Continue to Verification →']) {
+        await tester.ensureVisible(find.text(label));
+        await tester.tap(find.text(label));
+        await tester.pump(const Duration(milliseconds: 400));
+      }
 
       expect(find.text('First connect & verify'), findsOneWidget);
       expect(find.text('Ready to verify tunnel'), findsOneWidget);
@@ -267,6 +293,7 @@ void main() {
       expect(controller.isFirstRun, isFalse);
       expect(controller.hasServers, isTrue);
       expect(controller.activeServer?.id, 'SRV-01');
+      expect(controller.activeServer?.address, 'test.example.com');
     });
   });
 }
