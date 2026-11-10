@@ -5,6 +5,7 @@ package wfp
 import (
 	"encoding/binary"
 	"fmt"
+	"runtime"
 	"unsafe"
 
 	"golang.org/x/sys/windows"
@@ -22,11 +23,11 @@ const (
 	fwpDataTypeUint32        = 3
 	fwpDataTypeByteArray16   = 11
 	fwpDataTypeByteBlob      = 12
-	fwpDataTypeV4AddrMask    = 14
-	fwpDataTypeV6AddrMask    = 15
+	fwpDataTypeV4AddrMask    = 0x100 // FWP_V4_ADDR_MASK
+	fwpDataTypeV6AddrMask    = 0x101 // FWP_V6_ADDR_MASK
 	fwpMatchEqual            = 0
 	fwpMatchFlagsAllSet      = 6
-	fwpConditionFlagLoopback = 0x00000004
+	fwpConditionFlagLoopback = 0x00000001 // FWP_CONDITION_FLAG_IS_LOOPBACK
 
 	fwpActionBlock  = 0x00001001
 	fwpActionPermit = 0x00001002
@@ -173,11 +174,13 @@ type fwpmFilter0 struct {
 	NumFilterConditions uint32
 	FilterCondition     *fwpmFilterCondition0
 	Action              fwpmAction0
-	RawContext          uint64
-	ProviderContextKey  windows.GUID
-	Reserved            *windows.GUID
-	FilterId            uint64
-	EffectiveWeight     fwpValue0
+	// RawContext and ProviderContextKey are one 16 byte union in FWPM_FILTER0.
+	// Charon uses neither, so the union is kept as two zero words.
+	RawContext      uint64
+	_               uint64
+	Reserved        *windows.GUID
+	FilterId        uint64
+	EffectiveWeight fwpValue0
 }
 
 func charonFilterGUID(index int) windows.GUID {
@@ -306,6 +309,14 @@ func addFilter(engine uintptr, idx int, sp FilterSpec) error {
 	var v4Mask fwpV4AddrAndMask
 	var v6Mask fwpV6AddrAndMask
 	var appBlob *fwpByteBlob
+
+	// The address masks are handed to WFP as uintptr values inside FWP_VALUE0,
+	// which hides them from the garbage collector. Pin them so they cannot
+	// move or be freed before FwpmFilterAdd0 returns.
+	var pin runtime.Pinner
+	defer pin.Unpin()
+	pin.Pin(&v4Mask)
+	pin.Pin(&v6Mask)
 
 	if sp.Loopback {
 		conds = append(conds, fwpmFilterCondition0{
