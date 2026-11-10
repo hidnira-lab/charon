@@ -22,6 +22,9 @@ type Deps struct {
 	Notifier      Notifier
 	QuotaTracker  *quota.Tracker
 	AllowAppRules bool
+	// Log receives one line for each platform error the driver cannot return
+	// to a caller (optional). The lines never contain destinations or secrets.
+	Log func(msg string)
 }
 
 // Driver owns the live machine.State and executes the effects returned by
@@ -257,7 +260,7 @@ func (d *Driver) SetConfig(next *charonv1.Config) (*charonv1.ConfigResult, *char
 	// If allow_local_network changed while the gate is Armed, re-arm the gate
 	// so the local network filter rule updates immediately.
 	if lanChanged && gateArmed && d.deps.Gate != nil {
-		_ = d.deps.Gate.Arm(next, activeSrv)
+		d.gateResult("arm", d.deps.Gate.Arm(next, activeSrv))
 	}
 
 	res := &charonv1.ConfigResult{
@@ -280,11 +283,16 @@ func (d *Driver) runEffect(e machine.Effect, cfg *charonv1.Config, activeSrv *ch
 		}
 		switch charonv1.Gate(charonv1.Gate_value[e.Gate]) {
 		case charonv1.Gate_GATE_ARMED:
-			_ = d.deps.Gate.Arm(cfg, activeSrv)
+			d.gateResult("arm", d.deps.Gate.Arm(cfg, activeSrv))
 		case charonv1.Gate_GATE_HELD:
-			_ = d.deps.Gate.Hold(cfg)
+			d.gateResult("hold", d.deps.Gate.Hold(cfg))
 		case charonv1.Gate_GATE_DISARMED:
-			_ = d.deps.Gate.Disarm()
+			// A failed removal is only logged. Ending the session would not
+			// remove the filters either, and the user still has Release and
+			// the standalone release tool.
+			if err := d.deps.Gate.Disarm(); err != nil {
+				d.log("gate: disarm failed: " + err.Error())
+			}
 		}
 
 	case machine.StartXray:
@@ -362,6 +370,22 @@ func (d *Driver) runEffect(e machine.Effect, cfg *charonv1.Config, activeSrv *ch
 				AtMs:     nowMs,
 			})
 		}
+	}
+}
+
+// gateResult handles the outcome of arming or holding the gate. On an error
+// the machine is told, and it ends the session (fail closed).
+func (d *Driver) gateResult(op string, err error) {
+	if err == nil {
+		return
+	}
+	d.log("gate: " + op + " failed: " + err.Error())
+	d.HandleEvent(machine.Event{Type: machine.GateFailed})
+}
+
+func (d *Driver) log(msg string) {
+	if d.deps.Log != nil {
+		d.deps.Log(msg)
 	}
 }
 

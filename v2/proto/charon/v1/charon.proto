@@ -375,6 +375,9 @@ enum FailureReason {
   FAILURE_ADAPTER_LOST = 8;
   FAILURE_NETWORK_CHANGED = 9;
   FAILURE_DNS_NOT_TUNNELLED = 10;
+  // The traffic gate (the WFP filters on Windows) could not be installed or
+  // changed, so the session was ended instead of claiming protection.
+  FAILURE_GATE_FAILED = 11;
 }
 
 enum Probe {

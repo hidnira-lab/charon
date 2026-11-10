@@ -52,6 +52,11 @@ const (
 	SystemResumed   EventType = "SystemResumed"
 	SettingsChanged EventType = "SettingsChanged"
 	QuotaUpdated    EventType = "QuotaUpdated"
+	// GateFailed is raised by the driver when the platform could not arm or
+	// hold the traffic gate. It is not in the state machine document, which is
+	// silent on this case. Decided on 10 November 2026: fail closed, the
+	// session ends instead of claiming a gate that is not there.
+	GateFailed EventType = "GateFailed"
 )
 
 // AllEventTypes lists every valid input, for loaders that validate names.
@@ -59,7 +64,7 @@ var AllEventTypes = []EventType{
 	Connect, Disconnect, Cancel, SwitchNow, MoveTo, TrySrv, Release, RetryNow,
 	ServiceStarted, XrayStarted, XrayExited, XrayStopped, TunAdapterLost,
 	VerifyOk, VerifyFailed, VerifyTimeout, TimerFired, NetworkChanged,
-	SystemResumed, SettingsChanged, QuotaUpdated,
+	SystemResumed, SettingsChanged, QuotaUpdated, GateFailed,
 }
 
 // Event is one input. Only the fields that belong to its type are read.

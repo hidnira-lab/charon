@@ -46,6 +46,8 @@ System events, named as in the state machine document: `ServiceStarted`, `XraySt
 
 One input is added here: `XrayStopped`. The state machine document says "on Xray stopped" in the Stopping phase but does not list it as an event.
 
+A second one is `GateFailed`: the platform could not arm or hold the traffic gate (see item 11 below).
+
 ## Effect types
 
 `SetGate` (gate), `StartXray` and `StopXray` (server id), `StartVerify` (server id), `SetTimer` (name and `after_ms`), `CancelTimer` (name), `SaveLastSession` (connected, active server id), `Notify` (notice kind and server id).
@@ -94,5 +96,6 @@ These were open in the documents. The owner decided each one, and each now has a
 8. `Disconnect` while Starting, Verifying or Switching behaves exactly like Cancel (`disconnect_while_verifying`).
 9. `XrayExited` while Retrying or Switching counts as one failed try, the same as a failed verification (`xray_exits_while_retrying`).
 10. `SettingsChanged` moves the gate at once, in any phase, to match the kill switch setting: Armed in Up, Starting, Verifying and Switching, Held in Retrying and Blocked, Disarmed in Idle or when the kill switch is off (`kill_switch_toggled_while_connected`). Auto reconnect is only read the next time something fails. The input carries `kill_switch`, `auto_reconnect` and `allow_local_network`.
+11. `GateFailed` ends the session (decided 10 November 2026, the documents say nothing about a gate that cannot be installed). Charon fails closed: it never shows a gate it does not have. The gate is recorded as Disarmed at once, Xray is stopped, and the last failure is `FAILURE_GATE_FAILED`. A first connect ends as "Could not reach" (`gate_fails_on_first_connect`). A session that has been Up ends as "Tunnel lost" with the `TUNNEL_LOST` notice, and nothing is retried (`gate_fails_to_hold_after_xray_crash`, `gate_fails_while_blocked`). Only a failure to arm or hold raises it. A failure to remove the filters is logged and changes nothing, because ending the session would not remove them either.
 
 Still open: the wake case where the network never comes back (see default 4).

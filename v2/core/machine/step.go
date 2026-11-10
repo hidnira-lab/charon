@@ -58,6 +58,7 @@ var rules = []rule{
 	{on: XrayExited, in: ph(phStarting, phVerifying, phRetrying, phSwitching), do: (*run).failedCheck},
 	{on: TunAdapterLost, in: ph(phStarting, phVerifying, phRetrying, phSwitching), do: (*run).failedCheck},
 	{on: XrayStopped, in: ph(phStopping), do: (*run).stopped},
+	{on: GateFailed, in: ph(phStarting, phVerifying, phSwitching, phUp, phRetrying, phBlocked), do: (*run).gateFailed},
 
 	// Verification.
 	{on: VerifyOk, in: ph(phVerifying, phRetrying, phSwitching), do: (*run).verifyOk},
@@ -350,6 +351,27 @@ func (r *run) lostWhileUp(e Event) {
 		s.LastEnd = charonv1.SessionEnd_SESSION_END_TUNNEL_LOST
 		r.enter(phIdle)
 	}
+}
+
+// gateFailed runs when the platform could not arm or hold the gate. Charon
+// never claims a gate it does not have, so the session ends: the state says
+// Disarmed at once (and the driver is asked to remove whatever is left), a
+// session that has been Up tells the user the tunnel is lost, and Xray is
+// stopped. A first connect ends as "Could not reach", like any failed start.
+func (r *run) gateFailed(e Event) {
+	s := &r.s
+	s.LastFailure = charonv1.FailureReason_FAILURE_GATE_FAILED
+	s.Ending = charonv1.SessionEnd_SESSION_END_COULD_NOT_REACH
+	if s.EverUp {
+		s.Ending = charonv1.SessionEnd_SESSION_END_TUNNEL_LOST
+		r.notify(charonv1.NoticeKind_NOTICE_TUNNEL_LOST)
+	}
+	r.setGate(charonv1.Gate_GATE_DISARMED)
+	if s.Phase == phBlocked { // Xray is not running in Blocked, nothing to wait for
+		r.stopped(e)
+		return
+	}
+	r.beginStop(e)
 }
 
 // stopped runs when Xray is gone after a Stopping. Filters come off here.

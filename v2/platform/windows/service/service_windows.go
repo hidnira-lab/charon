@@ -108,13 +108,15 @@ func NewRuntime(opts Options) (*Runtime, error) {
 
 	xrayPath := filepath.Join(opts.ProgramDir, "xray.exe")
 	gate := wfp.NewGate(opts.WFPEngine, xrayPath)
-	if err := gate.ReconcileOnBoot(saved.Connected); err != nil {
-		// Log and continue if WFP cannot be reached in non-elevated test runs.
-		_ = err
-	}
+	reconcileErr := gate.ReconcileOnBoot(saved.Connected)
 
 	clock := NewRealClock()
 	coreLogs := logbuf.New(charonv1.LogSource_LOG_SOURCE_CHARON_CORE)
+	if reconcileErr != nil {
+		// Not fatal: without administrator rights (console test runs) WFP
+		// cannot be opened. On a real install this line is the evidence.
+		coreLogs.Append(charonv1.LogLevel_LOG_LEVEL_ERROR, "gate: removing stale filters at start failed: "+reconcileErr.Error(), clock.NowMs())
+	}
 	accessLogs := logbuf.New(charonv1.LogSource_LOG_SOURCE_XRAY_ACCESS)
 	coreLogs.UpdateConfigSecrets(cfg)
 	accessLogs.UpdateConfigSecrets(cfg)
@@ -176,6 +178,9 @@ func NewRuntime(opts Options) (*Runtime, error) {
 		Clock:        clock,
 		Notifier:     pipeSrv,
 		QuotaTracker: qTracker,
+		Log: func(msg string) {
+			coreLogs.Append(charonv1.LogLevel_LOG_LEVEL_ERROR, msg, clock.NowMs())
+		},
 	})
 	pipeSrv.SetDriver(drv)
 	rt.drv = drv

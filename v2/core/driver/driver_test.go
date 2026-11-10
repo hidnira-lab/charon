@@ -1,6 +1,7 @@
 package driver
 
 import (
+	"errors"
 	"path/filepath"
 	"slices"
 	"strings"
@@ -309,5 +310,57 @@ func TestDriver_ChosenServerChangedWhileConnectedAppliesOnNextConnect(t *testing
 	connect()
 	if got := drv.Status().GetActiveServerId(); got != second {
 		t.Fatalf("the next connect must use the newly chosen server %s, got %s", second, got)
+	}
+}
+
+// failingGate refuses to arm, like WFP rejecting a filter.
+type failingGate struct{ *fakeEnv }
+
+func (g failingGate) Arm(c *charonv1.Config, s *charonv1.Server) error {
+	_ = g.fakeEnv.Arm(c, s)
+	return errors.New("simulated gate failure")
+}
+
+// A gate that cannot be armed ends the connect instead of claiming protection,
+// and the stop it causes runs after the effects of the connect, not between them.
+func TestDriver_GateFailureEndsTheConnect(t *testing.T) {
+	sc, err := scenario.Load("../../scenarios/gate_fails_on_first_connect.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	env := &fakeEnv{cfg: sc.Config}
+	var logged []string
+	drv := New(sc.Config, sc.Saved, Deps{
+		Gate: failingGate{env}, Tunnel: env, Store: env, Clock: env, Notifier: env,
+		Log: func(msg string) { logged = append(logged, msg) },
+	})
+
+	if cmdErr := drv.HandleUserCommand(&charonv1.Command{
+		Kind: &charonv1.Command_Connect{Connect: &charonv1.Empty{}},
+	}); cmdErr != nil {
+		t.Fatalf("unexpected Connect error: %v", cmdErr)
+	}
+
+	var got []string
+	for _, e := range env.resetEffects() {
+		got = append(got, string(e.Type)+e.Gate)
+	}
+	want := []string{"SetGateGATE_ARMED", "StartXray", "SetGateGATE_DISARMED", "StopXray"}
+	if !slices.Equal(got, want) {
+		t.Fatalf("effects ran as %v, want %v", got, want)
+	}
+	st := drv.Status()
+	if st.GetPhase() != charonv1.Phase_PHASE_STOPPING || st.GetGate() != charonv1.Gate_GATE_DISARMED ||
+		st.GetLastFailure() != charonv1.FailureReason_FAILURE_GATE_FAILED {
+		t.Fatalf("expected Stopping, Disarmed, gate failed, got %v %v %v", st.GetPhase(), st.GetGate(), st.GetLastFailure())
+	}
+	if len(logged) != 1 || !strings.Contains(logged[0], "simulated gate failure") {
+		t.Fatalf("the gate error must be logged once, got %q", logged)
+	}
+
+	drv.HandleEvent(machine.Event{Type: machine.XrayStopped})
+	if st := drv.Status(); st.GetPhase() != charonv1.Phase_PHASE_IDLE ||
+		st.GetLastEnd() != charonv1.SessionEnd_SESSION_END_COULD_NOT_REACH {
+		t.Fatalf("expected Idle with could not reach, got %v %v", st.GetPhase(), st.GetLastEnd())
 	}
 }

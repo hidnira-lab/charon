@@ -403,6 +403,11 @@ class FailureReason extends $pb.ProtobufEnum {
   static const FailureReason FAILURE_DNS_NOT_TUNNELLED =
       FailureReason._(10, _omitEnumNames ? '' : 'FAILURE_DNS_NOT_TUNNELLED');
 
+  /// The traffic gate (the WFP filters on Windows) could not be installed or
+  /// changed, so the session was ended instead of claiming protection.
+  static const FailureReason FAILURE_GATE_FAILED =
+      FailureReason._(11, _omitEnumNames ? '' : 'FAILURE_GATE_FAILED');
+
   static const $core.List<FailureReason> values = <FailureReason>[
     FAILURE_UNSPECIFIED,
     FAILURE_TCP_TIMEOUT,
@@ -415,10 +420,11 @@ class FailureReason extends $pb.ProtobufEnum {
     FAILURE_ADAPTER_LOST,
     FAILURE_NETWORK_CHANGED,
     FAILURE_DNS_NOT_TUNNELLED,
+    FAILURE_GATE_FAILED,
   ];
 
   static final $core.List<FailureReason?> _byValue =
-      $pb.ProtobufEnum.$_initByValueList(values, 10);
+      $pb.ProtobufEnum.$_initByValueList(values, 11);
   static FailureReason? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 

@@ -790,6 +790,9 @@ const (
 	FailureReason_FAILURE_ADAPTER_LOST      FailureReason = 8
 	FailureReason_FAILURE_NETWORK_CHANGED   FailureReason = 9
 	FailureReason_FAILURE_DNS_NOT_TUNNELLED FailureReason = 10
+	// The traffic gate (the WFP filters on Windows) could not be installed or
+	// changed, so the session was ended instead of claiming protection.
+	FailureReason_FAILURE_GATE_FAILED FailureReason = 11
 )
 
 // Enum value maps for FailureReason.
@@ -806,6 +809,7 @@ var (
 		8:  "FAILURE_ADAPTER_LOST",
 		9:  "FAILURE_NETWORK_CHANGED",
 		10: "FAILURE_DNS_NOT_TUNNELLED",
+		11: "FAILURE_GATE_FAILED",
 	}
 	FailureReason_value = map[string]int32{
 		"FAILURE_UNSPECIFIED":       0,
@@ -819,6 +823,7 @@ var (
 		"FAILURE_ADAPTER_LOST":      8,
 		"FAILURE_NETWORK_CHANGED":   9,
 		"FAILURE_DNS_NOT_TUNNELLED": 10,
+		"FAILURE_GATE_FAILED":       11,
 	}
 )
 
@@ -4085,7 +4090,7 @@ const file_charon_v1_charon_proto_rawDesc = "" +
 	"\x13NOTICE_TRAFFIC_HELD\x10\x03\x12\x16\n" +
 	"\x12NOTICE_QUOTA_AMBER\x10\x04\x12\x14\n" +
 	"\x10NOTICE_QUOTA_CAP\x10\x05\x12\x16\n" +
-	"\x12NOTICE_TUNNEL_LOST\x10\x06*\xbe\x02\n" +
+	"\x12NOTICE_TUNNEL_LOST\x10\x06*\xd7\x02\n" +
 	"\rFailureReason\x12\x17\n" +
 	"\x13FAILURE_UNSPECIFIED\x10\x00\x12\x17\n" +
 	"\x13FAILURE_TCP_TIMEOUT\x10\x01\x12\x1d\n" +
@@ -4098,7 +4103,8 @@ const file_charon_v1_charon_proto_rawDesc = "" +
 	"\x14FAILURE_ADAPTER_LOST\x10\b\x12\x1b\n" +
 	"\x17FAILURE_NETWORK_CHANGED\x10\t\x12\x1d\n" +
 	"\x19FAILURE_DNS_NOT_TUNNELLED\x10\n" +
-	"*H\n" +
+	"\x12\x17\n" +
+	"\x13FAILURE_GATE_FAILED\x10\v*H\n" +
 	"\x05Probe\x12\x15\n" +
 	"\x11PROBE_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14PROBE_NETWORK_CHANGE\x10\x01\x12\x0e\n" +

@@ -154,7 +154,14 @@ void main() {
     expect(diagJson.contains('charon-service listening'), isTrue);
   });
 
-  testWidgets('CharonApp renders Blocked boot-matrix state from real service, Releases gate to Idle, and detects service exit', (tester) async {
+  testWidgets('CharonApp shows a boot resume that could not install its gate as tunnel lost, and detects service exit', (tester) async {
+    // With administrator rights the service would install real persistent
+    // block filters on this machine. This test is about the case without them.
+    if (Process.runSync('net', ['session']).exitCode == 0) {
+      markTestSkipped('running elevated: the service would install real WFP filters');
+      return;
+    }
+
     tester.view.physicalSize = const Size(1024, 768);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
@@ -198,43 +205,28 @@ void main() {
         jsonEncode({'connected': true, 'active_server_id': 'srv-boot-1'}),
       );
 
-      // 2. Start real service again on the same DataDir: boot matrix transitions to PHASE_BLOCKED + GATE_HELD.
+      // 2. Start the real service again on the same DataDir: the boot matrix tries to resume Held.
       final (proc2, pipe2, _, _) = await startRealService(existingDataDir: dataDir);
       addTearDown(proc2.kill);
 
       final client = CoreClient(await IpcTransport.connect(pipe2));
       addTearDown(client.close);
       final ack = await client.hello(appVersion: '0.1.0');
-      expect(ack.status.phase, Phase.PHASE_BLOCKED);
-      expect(ack.status.gate, Gate.GATE_HELD);
+      // The service runs here without administrator rights, so the real WFP
+      // engine refuses to install the Held filters. Charon must not claim a
+      // gate it does not have: the resumed session ends, Idle and Disarmed,
+      // with the reason gate failed.
+      expect(ack.status.phase, Phase.PHASE_IDLE);
+      expect(ack.status.gate, Gate.GATE_DISARMED);
+      expect(ack.status.lastFailure, FailureReason.FAILURE_GATE_FAILED);
+      expect(ack.status.lastEnd, SessionEnd.SESSION_END_TUNNEL_LOST);
 
       final controller = HomeController();
       controller.attachClient(client, initialStatus: ack.status);
-      expect(controller.uiState, UiState.blocked);
+      expect(controller.uiState, UiState.tunnelLost);
 
       await tester.pumpWidget(CharonApp(controller: controller));
       await tester.pump();
-
-      // Blocked UI state is shown with Release action.
-      expect(find.text('Release'), findsWidgets);
-
-      // Release the kill switch gate via the controller -> real service transitions to PHASE_IDLE + GATE_DISARMED.
-      final idleReached = Completer<void>();
-      final sub = client.events.listen((e) {
-        if (e.hasStatusChanged() &&
-            e.statusChanged.phase == Phase.PHASE_IDLE &&
-            !idleReached.isCompleted) {
-          idleReached.complete();
-        }
-      });
-      addTearDown(sub.cancel);
-
-      await controller.release();
-      await idleReached.future.timeout(const Duration(seconds: 5));
-      await tester.pump();
-
-      expect(controller.uiState, UiState.disconnected);
-      expect(find.text('Not connected'), findsOneWidget);
 
       // 3. Kill the service process and verify HomeController transitions to ServiceStatus.notRunning.
       proc2.kill();
