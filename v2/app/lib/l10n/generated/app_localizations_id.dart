@@ -1858,6 +1858,237 @@ class AppLocalizationsId extends AppLocalizations {
       'Pelaporan kerentanan dan praktik keamanan terdokumentasi dalam SECURITY.md.';
 
   @override
+  String get trustLicCrumb => 'LISENSI';
+
+  @override
+  String get trustLicTitle => 'Lisensi';
+
+  @override
+  String trustLicMeta(String version) {
+    return 'Charon $version';
+  }
+
+  @override
+  String get trustLicIntro =>
+      'Charon adalah perangkat lunak bebas. Ini lisensi dari semua yang ikut dibawanya.';
+
+  @override
+  String get trustLicFullText => 'Teks lengkap ↗';
+
+  @override
+  String get trustLicNote =>
+      'daftar ini dibuat dari build · ketentuan pastinya dari tinjauan legal';
+
+  @override
+  String get trustLicSubApp => 'aplikasi ini';
+
+  @override
+  String get trustLicSubXray => 'mesin tunnel · dibundel dengan Charon';
+
+  @override
+  String get trustLicSubWintun => 'driver adaptor jaringan · hanya Windows';
+
+  @override
+  String get trustLicSubGo => 'paket di dalam service dan core';
+
+  @override
+  String get trustLicSubFlutter => 'paket di dalam jendela ini';
+
+  @override
+  String get trustLicSubFonts => 'Inter dan Space Mono';
+
+  @override
+  String get trustChipConfirm => 'PERLU DIKONFIRMASI';
+
+  @override
+  String get trustChipMixed => 'CAMPURAN';
+
+  @override
+  String get trustLicTextWintun =>
+      'Ketentuannya dikonfirmasi lewat tinjauan legal sebelum rilis pertama.';
+
+  @override
+  String get trustLicTextGo =>
+      'Satu baris per modul, dibuat dari build: nama, versi, lisensi.';
+
+  @override
+  String get trustLicTextFlutter =>
+      'Satu baris per paket, dibuat dari build: nama, versi, lisensi.';
+
+  @override
+  String get trustLinkSource => 'Kode sumber ↗';
+
+  @override
+  String get trustLinkBundled => 'Sumber terbundel ↗';
+
+  @override
+  String get trustLinkProject => 'Halaman proyek ↗';
+
+  @override
+  String get trustLinkModules => 'Daftar modul ↗';
+
+  @override
+  String get trustLinkPackages => 'Daftar paket ↗';
+
+  @override
+  String get trustLinkFonts => 'Halaman font ↗';
+
+  @override
+  String get trustNetCrumb => 'PRIVASI DAN JARINGAN';
+
+  @override
+  String get trustNetTitle => 'Privasi dan jaringan';
+
+  @override
+  String get trustNetMeta => 'tanpa analitik · tanpa laporan crash';
+
+  @override
+  String get trustNetIntro =>
+      'Charon hanya berbicara dengan tiga jenis tempat, tidak lebih.';
+
+  @override
+  String get trustConnLabel => 'Koneksi';
+
+  @override
+  String get trustConnServersTag => 'SERVERMU';
+
+  @override
+  String get trustConnServersWhat =>
+      'Tunnel itu sendiri, dan pengecekan singkat sebelum Charon bilang terhubung.';
+
+  @override
+  String get trustConnServersWhen => 'setiap kali kamu terhubung';
+
+  @override
+  String get trustConnSyncTag => 'SERVER SYNC';
+
+  @override
+  String get trustConnSyncWhat =>
+      'Kirim dan tarik terenkripsi. Hanya saat perangkat ini terpasang.';
+
+  @override
+  String get trustConnSyncWhen => 'hanya saat kamu kirim atau tarik';
+
+  @override
+  String get trustConnGithubTag => 'GITHUB';
+
+  @override
+  String get trustConnGithubWhat =>
+      'Cek pembaruan, dan unduhan rilis Charon yang ditandatangani.';
+
+  @override
+  String get trustConnGithubWhen =>
+      'saat mulai, lalu sekali sehari · unduhan hanya saat terhubung';
+
+  @override
+  String get trustFactAnalytics => 'Tanpa analitik';
+
+  @override
+  String get trustFactCrash => 'Tanpa laporan crash';
+
+  @override
+  String get trustFactLocation => 'Lokasi tetap di sini';
+
+  @override
+  String get trustFactAccount => 'Tanpa akun';
+
+  @override
+  String get trustLinkThreat => 'Model ancaman';
+
+  @override
+  String get trustNetNote =>
+      'Charon adalah proyek belajar pribadi · halaman ini ditinjau bersama catatan legal';
+
+  @override
+  String get trustDiagCrumb => 'EKSPOR DIAGNOSTIK';
+
+  @override
+  String get trustDiagTitle => 'Ekspor diagnostik';
+
+  @override
+  String get trustDiagMeta => 'disalin, tidak pernah diunggah';
+
+  @override
+  String get trustDiagIntro =>
+      'Teks untuk dilampirkan ke laporan bug. Pilih isinya dan baca dulu sebelum menyalin.';
+
+  @override
+  String get trustDiagWhatGoesIn => 'Isi laporan';
+
+  @override
+  String get trustDiagPreviewLabel => 'Pratinjau';
+
+  @override
+  String get trustDiagPreview => 'PRATINJAU';
+
+  @override
+  String trustDiagSize(String kb) {
+    return 'sekitar $kb KB';
+  }
+
+  @override
+  String get trustDiagItemVersions => 'Versi aplikasi dan core';
+
+  @override
+  String get trustDiagItemOsWindows => 'Versi Windows';
+
+  @override
+  String get trustDiagItemOsAndroid => 'Versi Android';
+
+  @override
+  String get trustDiagDescOs => 'hanya versi dan build';
+
+  @override
+  String get trustDiagItemEvents => 'Perubahan status';
+
+  @override
+  String get trustDiagDescEvents => '500 terakhir · waktu dan status';
+
+  @override
+  String get trustDiagItemLog => 'Baris log core';
+
+  @override
+  String get trustDiagDescLog => 'tujuan dihapus';
+
+  @override
+  String get trustDiagItemServers => 'Ringkasan server';
+
+  @override
+  String get trustDiagDescServers => 'rahasia diganti kode SRV';
+
+  @override
+  String get trustDiagItemSettings => 'Pengaturan';
+
+  @override
+  String get trustDiagDescSettings => 'sakelar dan aturan, tanpa nama';
+
+  @override
+  String get trustDiagItemAccess => 'Log akses';
+
+  @override
+  String get trustDiagDescAccess =>
+      'mati secara default · berisi situs yang kamu buka';
+
+  @override
+  String get trustDiagNote =>
+      'Tidak ada yang diunggah. Charon menyalin teks ini ke papan klip dan kamu yang menentukan ke mana teks itu dikirim.';
+
+  @override
+  String get trustDiagCopyBtn => 'Salin ke papan klip';
+
+  @override
+  String get trustDiagCopied => 'Diagnostik disalin ke papan klip';
+
+  @override
+  String get trustDiagNone => 'tidak ada yang dipilih';
+
+  @override
+  String get updSigningKeyLabel => 'KUNCI TANDA TANGAN';
+
+  @override
+  String get trustCrumbPrefix => 'PENGATURAN · TENTANG';
+
+  @override
   String get setupTag => 'PENYIAPAN AWAL';
 
   @override

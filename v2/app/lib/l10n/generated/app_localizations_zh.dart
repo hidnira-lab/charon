@@ -1757,6 +1757,223 @@ class AppLocalizationsZh extends AppLocalizations {
   String get privacySecurityDesc => '漏洞披露政策与安全保障措施详见 SECURITY.md。';
 
   @override
+  String get trustLicCrumb => '许可证';
+
+  @override
+  String get trustLicTitle => '许可证';
+
+  @override
+  String trustLicMeta(String version) {
+    return 'Charon $version';
+  }
+
+  @override
+  String get trustLicIntro => 'Charon 是自由软件。这里是它附带的所有组件的许可证。';
+
+  @override
+  String get trustLicFullText => '完整文本 ↗';
+
+  @override
+  String get trustLicNote => '列表由构建生成 · 具体条款以法律审查为准';
+
+  @override
+  String get trustLicSubApp => '本应用';
+
+  @override
+  String get trustLicSubXray => '隧道引擎 · 随 Charon 一起提供';
+
+  @override
+  String get trustLicSubWintun => '网卡驱动 · 仅 Windows';
+
+  @override
+  String get trustLicSubGo => '服务和核心里的软件包';
+
+  @override
+  String get trustLicSubFlutter => '这个窗口里的软件包';
+
+  @override
+  String get trustLicSubFonts => 'Inter 和 Space Mono';
+
+  @override
+  String get trustChipConfirm => '待确认';
+
+  @override
+  String get trustChipMixed => '多种';
+
+  @override
+  String get trustLicTextWintun => '条款会在首次发布前的法律审查中确认。';
+
+  @override
+  String get trustLicTextGo => '每个模块一条，由构建生成：名称、版本、许可证。';
+
+  @override
+  String get trustLicTextFlutter => '每个软件包一条，由构建生成：名称、版本、许可证。';
+
+  @override
+  String get trustLinkSource => '源代码 ↗';
+
+  @override
+  String get trustLinkBundled => '附带的源代码 ↗';
+
+  @override
+  String get trustLinkProject => '项目页面 ↗';
+
+  @override
+  String get trustLinkModules => '模块列表 ↗';
+
+  @override
+  String get trustLinkPackages => '软件包列表 ↗';
+
+  @override
+  String get trustLinkFonts => '字体页面 ↗';
+
+  @override
+  String get trustNetCrumb => '隐私与网络';
+
+  @override
+  String get trustNetTitle => '隐私与网络';
+
+  @override
+  String get trustNetMeta => '无统计分析 · 无崩溃报告';
+
+  @override
+  String get trustNetIntro => 'Charon 只和三类地方通信，别无其他。';
+
+  @override
+  String get trustConnLabel => '连接';
+
+  @override
+  String get trustConnServersTag => '你的服务器';
+
+  @override
+  String get trustConnServersWhat => '隧道本身，以及 Charon 显示已连接之前的简短检查。';
+
+  @override
+  String get trustConnServersWhen => '每次连接时';
+
+  @override
+  String get trustConnSyncTag => '同步服务器';
+
+  @override
+  String get trustConnSyncWhat => '加密的推送和拉取。仅在本机已配对时。';
+
+  @override
+  String get trustConnSyncWhen => '仅在你推送或拉取时';
+
+  @override
+  String get trustConnGithubTag => 'GITHUB';
+
+  @override
+  String get trustConnGithubWhat => '检查更新，以及下载已签名的 Charon 版本。';
+
+  @override
+  String get trustConnGithubWhen => '启动时一次，之后每天一次 · 仅在连接时下载';
+
+  @override
+  String get trustFactAnalytics => '无统计分析';
+
+  @override
+  String get trustFactCrash => '无崩溃报告';
+
+  @override
+  String get trustFactLocation => '位置只留在本机';
+
+  @override
+  String get trustFactAccount => '无需账号';
+
+  @override
+  String get trustLinkThreat => '威胁模型';
+
+  @override
+  String get trustNetNote => 'Charon 是一个个人学习项目 · 本页会与法律说明一起审阅';
+
+  @override
+  String get trustDiagCrumb => '导出诊断信息';
+
+  @override
+  String get trustDiagTitle => '导出诊断信息';
+
+  @override
+  String get trustDiagMeta => '只复制，从不上传';
+
+  @override
+  String get trustDiagIntro => '用于附在问题报告里的文字。选好要包含的内容，复制前先看一遍。';
+
+  @override
+  String get trustDiagWhatGoesIn => '包含的内容';
+
+  @override
+  String get trustDiagPreviewLabel => '预览';
+
+  @override
+  String get trustDiagPreview => '预览';
+
+  @override
+  String trustDiagSize(String kb) {
+    return '约 $kb KB';
+  }
+
+  @override
+  String get trustDiagItemVersions => '应用和核心版本';
+
+  @override
+  String get trustDiagItemOsWindows => 'Windows 版本';
+
+  @override
+  String get trustDiagItemOsAndroid => 'Android 版本';
+
+  @override
+  String get trustDiagDescOs => '仅版本和构建号';
+
+  @override
+  String get trustDiagItemEvents => '状态变化';
+
+  @override
+  String get trustDiagDescEvents => '最近 500 条 · 时间和状态';
+
+  @override
+  String get trustDiagItemLog => '核心日志';
+
+  @override
+  String get trustDiagDescLog => '已去掉目标地址';
+
+  @override
+  String get trustDiagItemServers => '服务器摘要';
+
+  @override
+  String get trustDiagDescServers => '密钥已替换为 SRV 代号';
+
+  @override
+  String get trustDiagItemSettings => '设置';
+
+  @override
+  String get trustDiagDescSettings => '开关和规则，不含名称';
+
+  @override
+  String get trustDiagItemAccess => '访问日志';
+
+  @override
+  String get trustDiagDescAccess => '默认关闭 · 会列出你打开过的网站';
+
+  @override
+  String get trustDiagNote => '不会上传任何内容。Charon 只把这段文字复制到剪贴板，发到哪里由你决定。';
+
+  @override
+  String get trustDiagCopyBtn => '复制到剪贴板';
+
+  @override
+  String get trustDiagCopied => '诊断信息已复制到剪贴板';
+
+  @override
+  String get trustDiagNone => '未选择任何内容';
+
+  @override
+  String get updSigningKeyLabel => '签名密钥';
+
+  @override
+  String get trustCrumbPrefix => '设置 · 关于';
+
+  @override
   String get setupTag => '首次运行设置';
 
   @override
@@ -4592,6 +4809,223 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get privacySecurityDesc => '漏洞披露政策与安全保障措施详见 SECURITY.md。';
+
+  @override
+  String get trustLicCrumb => '许可证';
+
+  @override
+  String get trustLicTitle => '许可证';
+
+  @override
+  String trustLicMeta(String version) {
+    return 'Charon $version';
+  }
+
+  @override
+  String get trustLicIntro => 'Charon 是自由软件。这里是它附带的所有组件的许可证。';
+
+  @override
+  String get trustLicFullText => '完整文本 ↗';
+
+  @override
+  String get trustLicNote => '列表由构建生成 · 具体条款以法律审查为准';
+
+  @override
+  String get trustLicSubApp => '本应用';
+
+  @override
+  String get trustLicSubXray => '隧道引擎 · 随 Charon 一起提供';
+
+  @override
+  String get trustLicSubWintun => '网卡驱动 · 仅 Windows';
+
+  @override
+  String get trustLicSubGo => '服务和核心里的软件包';
+
+  @override
+  String get trustLicSubFlutter => '这个窗口里的软件包';
+
+  @override
+  String get trustLicSubFonts => 'Inter 和 Space Mono';
+
+  @override
+  String get trustChipConfirm => '待确认';
+
+  @override
+  String get trustChipMixed => '多种';
+
+  @override
+  String get trustLicTextWintun => '条款会在首次发布前的法律审查中确认。';
+
+  @override
+  String get trustLicTextGo => '每个模块一条，由构建生成：名称、版本、许可证。';
+
+  @override
+  String get trustLicTextFlutter => '每个软件包一条，由构建生成：名称、版本、许可证。';
+
+  @override
+  String get trustLinkSource => '源代码 ↗';
+
+  @override
+  String get trustLinkBundled => '附带的源代码 ↗';
+
+  @override
+  String get trustLinkProject => '项目页面 ↗';
+
+  @override
+  String get trustLinkModules => '模块列表 ↗';
+
+  @override
+  String get trustLinkPackages => '软件包列表 ↗';
+
+  @override
+  String get trustLinkFonts => '字体页面 ↗';
+
+  @override
+  String get trustNetCrumb => '隐私与网络';
+
+  @override
+  String get trustNetTitle => '隐私与网络';
+
+  @override
+  String get trustNetMeta => '无统计分析 · 无崩溃报告';
+
+  @override
+  String get trustNetIntro => 'Charon 只和三类地方通信，别无其他。';
+
+  @override
+  String get trustConnLabel => '连接';
+
+  @override
+  String get trustConnServersTag => '你的服务器';
+
+  @override
+  String get trustConnServersWhat => '隧道本身，以及 Charon 显示已连接之前的简短检查。';
+
+  @override
+  String get trustConnServersWhen => '每次连接时';
+
+  @override
+  String get trustConnSyncTag => '同步服务器';
+
+  @override
+  String get trustConnSyncWhat => '加密的推送和拉取。仅在本机已配对时。';
+
+  @override
+  String get trustConnSyncWhen => '仅在你推送或拉取时';
+
+  @override
+  String get trustConnGithubTag => 'GITHUB';
+
+  @override
+  String get trustConnGithubWhat => '检查更新，以及下载已签名的 Charon 版本。';
+
+  @override
+  String get trustConnGithubWhen => '启动时一次，之后每天一次 · 仅在连接时下载';
+
+  @override
+  String get trustFactAnalytics => '无统计分析';
+
+  @override
+  String get trustFactCrash => '无崩溃报告';
+
+  @override
+  String get trustFactLocation => '位置只留在本机';
+
+  @override
+  String get trustFactAccount => '无需账号';
+
+  @override
+  String get trustLinkThreat => '威胁模型';
+
+  @override
+  String get trustNetNote => 'Charon 是一个个人学习项目 · 本页会与法律说明一起审阅';
+
+  @override
+  String get trustDiagCrumb => '导出诊断信息';
+
+  @override
+  String get trustDiagTitle => '导出诊断信息';
+
+  @override
+  String get trustDiagMeta => '只复制，从不上传';
+
+  @override
+  String get trustDiagIntro => '用于附在问题报告里的文字。选好要包含的内容，复制前先看一遍。';
+
+  @override
+  String get trustDiagWhatGoesIn => '包含的内容';
+
+  @override
+  String get trustDiagPreviewLabel => '预览';
+
+  @override
+  String get trustDiagPreview => '预览';
+
+  @override
+  String trustDiagSize(String kb) {
+    return '约 $kb KB';
+  }
+
+  @override
+  String get trustDiagItemVersions => '应用和核心版本';
+
+  @override
+  String get trustDiagItemOsWindows => 'Windows 版本';
+
+  @override
+  String get trustDiagItemOsAndroid => 'Android 版本';
+
+  @override
+  String get trustDiagDescOs => '仅版本和构建号';
+
+  @override
+  String get trustDiagItemEvents => '状态变化';
+
+  @override
+  String get trustDiagDescEvents => '最近 500 条 · 时间和状态';
+
+  @override
+  String get trustDiagItemLog => '核心日志';
+
+  @override
+  String get trustDiagDescLog => '已去掉目标地址';
+
+  @override
+  String get trustDiagItemServers => '服务器摘要';
+
+  @override
+  String get trustDiagDescServers => '密钥已替换为 SRV 代号';
+
+  @override
+  String get trustDiagItemSettings => '设置';
+
+  @override
+  String get trustDiagDescSettings => '开关和规则，不含名称';
+
+  @override
+  String get trustDiagItemAccess => '访问日志';
+
+  @override
+  String get trustDiagDescAccess => '默认关闭 · 会列出你打开过的网站';
+
+  @override
+  String get trustDiagNote => '不会上传任何内容。Charon 只把这段文字复制到剪贴板，发到哪里由你决定。';
+
+  @override
+  String get trustDiagCopyBtn => '复制到剪贴板';
+
+  @override
+  String get trustDiagCopied => '诊断信息已复制到剪贴板';
+
+  @override
+  String get trustDiagNone => '未选择任何内容';
+
+  @override
+  String get updSigningKeyLabel => '签名密钥';
+
+  @override
+  String get trustCrumbPrefix => '设置 · 关于';
 
   @override
   String get setupTag => '首次运行设置';

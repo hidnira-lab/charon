@@ -3317,6 +3317,432 @@ abstract class AppLocalizations {
   /// **'Vulnerability disclosures and security practices are documented in SECURITY.md.'**
   String get privacySecurityDesc;
 
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'LICENCES'**
+  String get trustLicCrumb;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Licences'**
+  String get trustLicTitle;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon {version}'**
+  String trustLicMeta(String version);
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon is free software. These are the licences of everything it ships with.'**
+  String get trustLicIntro;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Full text ↗'**
+  String get trustLicFullText;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'the list is generated from the build · the exact terms come from the legal review'**
+  String get trustLicNote;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'this app'**
+  String get trustLicSubApp;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'the tunnel engine · bundled with Charon'**
+  String get trustLicSubXray;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'the network adapter driver · Windows only'**
+  String get trustLicSubWintun;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'packages inside the service and the core'**
+  String get trustLicSubGo;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'packages inside this window'**
+  String get trustLicSubFlutter;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Inter and Space Mono'**
+  String get trustLicSubFonts;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'TO CONFIRM'**
+  String get trustChipConfirm;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'MIXED'**
+  String get trustChipMixed;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms are confirmed in the legal review before the first release.'**
+  String get trustLicTextWintun;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'One entry per module, generated from the build: name, version, licence.'**
+  String get trustLicTextGo;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'One entry per package, generated from the build: name, version, licence.'**
+  String get trustLicTextFlutter;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Source code ↗'**
+  String get trustLinkSource;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Bundled source ↗'**
+  String get trustLinkBundled;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Project page ↗'**
+  String get trustLinkProject;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Module list ↗'**
+  String get trustLinkModules;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Package list ↗'**
+  String get trustLinkPackages;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Font pages ↗'**
+  String get trustLinkFonts;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'PRIVACY AND NETWORK'**
+  String get trustNetCrumb;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy and network'**
+  String get trustNetTitle;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'no analytics · no crash reports'**
+  String get trustNetMeta;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon talks to three kinds of places, and nothing else.'**
+  String get trustNetIntro;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Connections'**
+  String get trustConnLabel;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'YOUR SERVERS'**
+  String get trustConnServersTag;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'The tunnel itself, and the short checks before Charon says connected.'**
+  String get trustConnServersWhat;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'whenever you connect'**
+  String get trustConnServersWhen;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'SYNC SERVER'**
+  String get trustConnSyncTag;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypted push and pull. Only when this device is paired.'**
+  String get trustConnSyncWhat;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'only when you push or pull'**
+  String get trustConnSyncWhen;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'GITHUB'**
+  String get trustConnGithubTag;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Update checks, and downloads of signed Charon releases.'**
+  String get trustConnGithubWhat;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'at start, then once a day · downloads only while connected'**
+  String get trustConnGithubWhen;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'No analytics'**
+  String get trustFactAnalytics;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'No crash reports'**
+  String get trustFactCrash;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Location stays here'**
+  String get trustFactLocation;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'No account needed'**
+  String get trustFactAccount;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Threat model'**
+  String get trustLinkThreat;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon is a personal learning project · this page is reviewed with the legal notes'**
+  String get trustNetNote;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'EXPORT DIAGNOSTICS'**
+  String get trustDiagCrumb;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Export diagnostics'**
+  String get trustDiagTitle;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'copied, never uploaded'**
+  String get trustDiagMeta;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'A text to attach to a bug report. Pick what goes in and read it before you copy.'**
+  String get trustDiagIntro;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'What goes in'**
+  String get trustDiagWhatGoesIn;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get trustDiagPreviewLabel;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'PREVIEW'**
+  String get trustDiagPreview;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'about {kb} KB'**
+  String trustDiagSize(String kb);
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'App and core versions'**
+  String get trustDiagItemVersions;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows version'**
+  String get trustDiagItemOsWindows;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Android version'**
+  String get trustDiagItemOsAndroid;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'version and build only'**
+  String get trustDiagDescOs;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'State changes'**
+  String get trustDiagItemEvents;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'the last 500 · time and state'**
+  String get trustDiagDescEvents;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Core log lines'**
+  String get trustDiagItemLog;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'destinations removed'**
+  String get trustDiagDescLog;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Server summaries'**
+  String get trustDiagItemServers;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'secrets replaced by SRV codes'**
+  String get trustDiagDescServers;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get trustDiagItemSettings;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'switches and rules, no names'**
+  String get trustDiagDescSettings;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Access log'**
+  String get trustDiagItemAccess;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'off by default · it lists the sites you opened'**
+  String get trustDiagDescAccess;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing is uploaded. Charon copies this text to your clipboard and you decide where it goes.'**
+  String get trustDiagNote;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy to clipboard'**
+  String get trustDiagCopyBtn;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnostics copied to the clipboard'**
+  String get trustDiagCopied;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'nothing selected'**
+  String get trustDiagNone;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'SIGNING KEY'**
+  String get updSigningKeyLabel;
+
+  /// Breadcrumb before the name of a Trust page.
+  ///
+  /// In en, this message translates to:
+  /// **'SETTINGS · ABOUT'**
+  String get trustCrumbPrefix;
+
   /// Tag at top of setup screen.
   ///
   /// In en, this message translates to:

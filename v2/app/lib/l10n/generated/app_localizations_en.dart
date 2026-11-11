@@ -1843,6 +1843,237 @@ class AppLocalizationsEn extends AppLocalizations {
       'Vulnerability disclosures and security practices are documented in SECURITY.md.';
 
   @override
+  String get trustLicCrumb => 'LICENCES';
+
+  @override
+  String get trustLicTitle => 'Licences';
+
+  @override
+  String trustLicMeta(String version) {
+    return 'Charon $version';
+  }
+
+  @override
+  String get trustLicIntro =>
+      'Charon is free software. These are the licences of everything it ships with.';
+
+  @override
+  String get trustLicFullText => 'Full text ↗';
+
+  @override
+  String get trustLicNote =>
+      'the list is generated from the build · the exact terms come from the legal review';
+
+  @override
+  String get trustLicSubApp => 'this app';
+
+  @override
+  String get trustLicSubXray => 'the tunnel engine · bundled with Charon';
+
+  @override
+  String get trustLicSubWintun => 'the network adapter driver · Windows only';
+
+  @override
+  String get trustLicSubGo => 'packages inside the service and the core';
+
+  @override
+  String get trustLicSubFlutter => 'packages inside this window';
+
+  @override
+  String get trustLicSubFonts => 'Inter and Space Mono';
+
+  @override
+  String get trustChipConfirm => 'TO CONFIRM';
+
+  @override
+  String get trustChipMixed => 'MIXED';
+
+  @override
+  String get trustLicTextWintun =>
+      'Terms are confirmed in the legal review before the first release.';
+
+  @override
+  String get trustLicTextGo =>
+      'One entry per module, generated from the build: name, version, licence.';
+
+  @override
+  String get trustLicTextFlutter =>
+      'One entry per package, generated from the build: name, version, licence.';
+
+  @override
+  String get trustLinkSource => 'Source code ↗';
+
+  @override
+  String get trustLinkBundled => 'Bundled source ↗';
+
+  @override
+  String get trustLinkProject => 'Project page ↗';
+
+  @override
+  String get trustLinkModules => 'Module list ↗';
+
+  @override
+  String get trustLinkPackages => 'Package list ↗';
+
+  @override
+  String get trustLinkFonts => 'Font pages ↗';
+
+  @override
+  String get trustNetCrumb => 'PRIVACY AND NETWORK';
+
+  @override
+  String get trustNetTitle => 'Privacy and network';
+
+  @override
+  String get trustNetMeta => 'no analytics · no crash reports';
+
+  @override
+  String get trustNetIntro =>
+      'Charon talks to three kinds of places, and nothing else.';
+
+  @override
+  String get trustConnLabel => 'Connections';
+
+  @override
+  String get trustConnServersTag => 'YOUR SERVERS';
+
+  @override
+  String get trustConnServersWhat =>
+      'The tunnel itself, and the short checks before Charon says connected.';
+
+  @override
+  String get trustConnServersWhen => 'whenever you connect';
+
+  @override
+  String get trustConnSyncTag => 'SYNC SERVER';
+
+  @override
+  String get trustConnSyncWhat =>
+      'Encrypted push and pull. Only when this device is paired.';
+
+  @override
+  String get trustConnSyncWhen => 'only when you push or pull';
+
+  @override
+  String get trustConnGithubTag => 'GITHUB';
+
+  @override
+  String get trustConnGithubWhat =>
+      'Update checks, and downloads of signed Charon releases.';
+
+  @override
+  String get trustConnGithubWhen =>
+      'at start, then once a day · downloads only while connected';
+
+  @override
+  String get trustFactAnalytics => 'No analytics';
+
+  @override
+  String get trustFactCrash => 'No crash reports';
+
+  @override
+  String get trustFactLocation => 'Location stays here';
+
+  @override
+  String get trustFactAccount => 'No account needed';
+
+  @override
+  String get trustLinkThreat => 'Threat model';
+
+  @override
+  String get trustNetNote =>
+      'Charon is a personal learning project · this page is reviewed with the legal notes';
+
+  @override
+  String get trustDiagCrumb => 'EXPORT DIAGNOSTICS';
+
+  @override
+  String get trustDiagTitle => 'Export diagnostics';
+
+  @override
+  String get trustDiagMeta => 'copied, never uploaded';
+
+  @override
+  String get trustDiagIntro =>
+      'A text to attach to a bug report. Pick what goes in and read it before you copy.';
+
+  @override
+  String get trustDiagWhatGoesIn => 'What goes in';
+
+  @override
+  String get trustDiagPreviewLabel => 'Preview';
+
+  @override
+  String get trustDiagPreview => 'PREVIEW';
+
+  @override
+  String trustDiagSize(String kb) {
+    return 'about $kb KB';
+  }
+
+  @override
+  String get trustDiagItemVersions => 'App and core versions';
+
+  @override
+  String get trustDiagItemOsWindows => 'Windows version';
+
+  @override
+  String get trustDiagItemOsAndroid => 'Android version';
+
+  @override
+  String get trustDiagDescOs => 'version and build only';
+
+  @override
+  String get trustDiagItemEvents => 'State changes';
+
+  @override
+  String get trustDiagDescEvents => 'the last 500 · time and state';
+
+  @override
+  String get trustDiagItemLog => 'Core log lines';
+
+  @override
+  String get trustDiagDescLog => 'destinations removed';
+
+  @override
+  String get trustDiagItemServers => 'Server summaries';
+
+  @override
+  String get trustDiagDescServers => 'secrets replaced by SRV codes';
+
+  @override
+  String get trustDiagItemSettings => 'Settings';
+
+  @override
+  String get trustDiagDescSettings => 'switches and rules, no names';
+
+  @override
+  String get trustDiagItemAccess => 'Access log';
+
+  @override
+  String get trustDiagDescAccess =>
+      'off by default · it lists the sites you opened';
+
+  @override
+  String get trustDiagNote =>
+      'Nothing is uploaded. Charon copies this text to your clipboard and you decide where it goes.';
+
+  @override
+  String get trustDiagCopyBtn => 'Copy to clipboard';
+
+  @override
+  String get trustDiagCopied => 'Diagnostics copied to the clipboard';
+
+  @override
+  String get trustDiagNone => 'nothing selected';
+
+  @override
+  String get updSigningKeyLabel => 'SIGNING KEY';
+
+  @override
+  String get trustCrumbPrefix => 'SETTINGS · ABOUT';
+
+  @override
   String get setupTag => 'FIRST RUN SETUP';
 
   @override
