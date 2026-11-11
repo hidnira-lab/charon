@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/theme.dart';
+import '../../common/dashed_box.dart';
+import '../../common/glass_card.dart';
 
-/// Simplified Desktop History card according to Design Spec v0.5 section 04:
-/// "Desktop History card is now simple: a LATER chip, the mascot with one line
-/// ('Charon doesn't keep session history, so these stay empty.'), and UPTIME
-/// and PAST SESSIONS rows shown as dots."
+/// History card of the Telemetry board: a dashed "not tracked yet" card with a
+/// LATER chip, the sleeping mascot and two rows of dots. Charon keeps no
+/// session history, so these stay empty on purpose.
 class HistoryCard extends StatelessWidget {
   const HistoryCard({super.key});
 
@@ -15,221 +16,113 @@ class HistoryCard extends StatelessWidget {
     final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(16.0),
-        border: Border.all(color: colors.divider, width: 1.0),
-      ),
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Header: Title + LATER chip
-          Row(
+    Widget dots(String label) => Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                l10n.telemetryHistoryCardTitle,
-                style: CharonTypography.label.copyWith(
-                  color: colors.text2,
-                  letterSpacing: 1.2,
-                  fontSize: 11.0,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
-                decoration: BoxDecoration(
-                  color: colors.surface2,
-                  borderRadius: BorderRadius.circular(4.0),
-                  border: Border.all(color: colors.controlBorder, width: 1.0),
-                ),
-                child: Text(
-                  l10n.telemetryHistoryLaterBadge,
-                  style: CharonTypography.code.copyWith(
-                    color: colors.accent,
-                    fontSize: 10.0,
-                    fontWeight: FontWeight.w600,
-                  ),
+              Text(label, style: monoStyle(colors.text3, 10, bold: true, em: 0.08)),
+              Semantics(
+                label: l10n.telemetryNoData,
+                child: ExcludeSemantics(
+                  child: Text('· · ·', style: monoStyle(colors.text3.withValues(alpha: 0.6), 12, em: 0.2)),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: CharonSpacing.s4),
+        );
 
-          // Center Mascot and Quote
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
-            decoration: BoxDecoration(
-              color: colors.surface2.withValues(alpha: 0.5),
-              borderRadius: BorderRadius.circular(12.0),
-              border: Border.all(color: colors.divider.withValues(alpha: 0.6)),
-            ),
-            child: Column(
+    return Semantics(
+      container: true,
+      child: DashedBox(
+        color: colors.controlBorder.withValues(alpha: 0.6),
+        fill: colors.bg.withValues(alpha: 0.4),
+        padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const _SleepingMascotWidget(),
-                const SizedBox(height: CharonSpacing.s3),
-                Text(
-                  l10n.telemetryHistoryEmptyDesc,
-                  style: CharonTypography.body.copyWith(
-                    color: colors.text2,
-                    fontStyle: FontStyle.italic,
+                Text('> ${l10n.telemetryHistoryCardTitle}', style: monoStyle(colors.text2, 10, bold: true, em: 0.08)),
+                Container(
+                  height: 20,
+                  padding: const EdgeInsets.symmetric(horizontal: 7),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(color: colors.surface2, borderRadius: BorderRadius.circular(6)),
+                  child: Text(
+                    l10n.telemetryHistoryLaterBadge,
+                    style: monoStyle(colors.text3, 9, bold: true, em: 0.08),
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ],
             ),
-          ),
-          const SizedBox(height: CharonSpacing.s4),
-
-          // Stat Rows: UPTIME & PAST SESSIONS as dots
-          _StatDotRow(
-            label: l10n.telemetryHistoryUptime,
-            dots: '···',
-            colors: colors,
-          ),
-          const SizedBox(height: CharonSpacing.s2),
-          _StatDotRow(
-            label: l10n.telemetryHistoryPastSessions,
-            dots: '···',
-            colors: colors,
-          ),
-
-          const SizedBox(height: CharonSpacing.s4),
-          // Privacy note
-          Text(
-            l10n.telemetryHistoryNoHistoryNote,
-            style: CharonTypography.caption.copyWith(
-              color: colors.text3,
-              fontSize: 10.5,
+            Expanded(
+              child: Row(
+              children: [
+                const _SleepingMascot(),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.telemetryHistoryTitle,
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: colors.text),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        l10n.telemetryHistoryEmptyDesc,
+                        style: TextStyle(fontSize: 12, height: 1.4, color: colors.text2),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+            ),
+            const SizedBox(height: 12),
+            Container(
+              decoration: BoxDecoration(border: Border(top: BorderSide(color: colors.divider))),
+              child: Column(
+                children: [
+                  dots(l10n.telemetryHistoryUptime),
+                  dots(l10n.telemetryHistoryPastSessions),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class _StatDotRow extends StatelessWidget {
-  const _StatDotRow({
-    required this.label,
-    required this.dots,
-    required this.colors,
-  });
-
-  final String label;
-  final String dots;
-  final CharonColors colors;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-      decoration: BoxDecoration(
-        color: colors.surface2,
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: CharonTypography.label.copyWith(
-              color: colors.text3,
-              fontSize: 11.0,
-            ),
-          ),
-          Text(
-            dots,
-            style: CharonTypography.code.copyWith(
-              color: colors.text3,
-              letterSpacing: 2.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _SleepingMascotWidget extends StatelessWidget {
-  const _SleepingMascotWidget();
+/// Stand in for the sleeping ghost of the board (pixel art is still to do).
+class _SleepingMascot extends StatelessWidget {
+  const _SleepingMascot();
 
   @override
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
-
+    Widget eye() => Container(width: 7, height: 2, color: colors.accentText);
     return Container(
-      width: 52.0,
-      height: 52.0,
+      width: 48,
+      height: 48,
       decoration: BoxDecoration(
         color: colors.surface,
         shape: BoxShape.circle,
         border: Border.all(color: colors.controlBorder, width: 1.5),
-        boxShadow: [
-          BoxShadow(
-            color: colors.accent.withValues(alpha: 0.12),
-            blurRadius: 12.0,
-          )
-        ],
       ),
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Ghost shape representation
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Sleeping eyes (- -)
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 7.0,
-                    height: 2.0,
-                    decoration: BoxDecoration(
-                      color: colors.accent,
-                      borderRadius: BorderRadius.circular(1.0),
-                    ),
-                  ),
-                  const SizedBox(width: 6.0),
-                  Container(
-                    width: 7.0,
-                    height: 2.0,
-                    decoration: BoxDecoration(
-                      color: colors.accent,
-                      borderRadius: BorderRadius.circular(1.0),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 5.0),
-              // Soft sleeping pixel mouth
-              Container(
-                width: 4.0,
-                height: 1.5,
-                decoration: BoxDecoration(
-                  color: colors.text3,
-                  borderRadius: BorderRadius.circular(1.0),
-                ),
-              ),
-            ],
-          ),
-          // Drifting 'z' indicator
+          Row(mainAxisSize: MainAxisSize.min, children: [eye(), const SizedBox(width: 6), eye()]),
           Positioned(
-            right: 8.0,
-            top: 7.0,
-            child: Text(
-              'z',
-              style: CharonTypography.code.copyWith(
-                color: colors.accent.withValues(alpha: 0.7),
-                fontSize: 9.0,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+            right: 8,
+            top: 6,
+            child: Text('z', style: monoStyle(colors.accentText.withValues(alpha: 0.7), 9, bold: true)),
           ),
         ],
       ),

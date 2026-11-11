@@ -4,12 +4,17 @@ import 'package:flutter/services.dart';
 import '../../gen/charon/v1/charon.pb.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../state/home_controller.dart';
+import '../../state/telemetry_view.dart';
 import '../../theme/theme.dart';
+import '../common/glass_card.dart';
 import '../home/widgets/rail_nav.dart';
 import 'widgets/export_diagnostics_dialog.dart';
 import 'widgets/history_card.dart';
 import 'widgets/log_terminal_card.dart';
+import 'widgets/session_card.dart';
 import 'widgets/share_dialog.dart';
+import 'widgets/throughput_card.dart';
+import 'widgets/traffic_card.dart';
 
 class TelemetryScreen extends StatefulWidget {
   const TelemetryScreen({
@@ -61,17 +66,11 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
   }
 
   void _handleShare(List<LogLine> visibleLogs) {
-    final count = visibleLogs.length;
-    final text = visibleLogs.map((l) => l.text).join('\n');
     ShareDialog.show(
       context,
-      visibleLinesText: text,
-      lineCount: count,
+      visibleLinesText: visibleLogs.map((l) => l.text).join('\n'),
+      lineCount: visibleLogs.length,
     );
-  }
-
-  void _handleExportDiagnostics() {
-    ExportDiagnosticsDialog.show(context, widget.controller);
   }
 
   @override
@@ -81,18 +80,25 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
       builder: (context, _) {
         final colors = CharonColors.of(context);
         final l10n = AppLocalizations.of(context)!;
-        final visibleLogs = _computeVisibleLogs(widget.controller);
+        final controller = widget.controller;
+        final view = TelemetryView(
+          l10n,
+          controller,
+          localeTag: Localizations.localeOf(context).toLanguageTag(),
+        );
+        final visibleLogs = _computeVisibleLogs(controller);
         final droppedCount = _activeSource == LogSource.LOG_SOURCE_CHARON_CORE
-            ? widget.controller.coreDroppedCount
-            : widget.controller.xrayDroppedCount;
+            ? controller.coreDroppedCount
+            : controller.xrayDroppedCount;
+        final server = controller.activeServer;
 
         return Scaffold(
           body: Row(
             children: [
               RailNav(
-                controller: widget.controller,
+                controller: controller,
                 selectedIndex: 3,
-                onTabSelected: widget.controller.setTab,
+                onTabSelected: controller.setTab,
               ),
               Expanded(
                 child: Padding(
@@ -100,7 +106,6 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // Header Row
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -109,94 +114,74 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '> ${l10n.telemetryTag}',
-                                style: CharonTypography.label.copyWith(
-                                  color: colors.text3,
-                                  letterSpacing: 1.2,
-                                  fontSize: 10.5,
-                                ),
+                                '> ${view.headTitle}',
+                                style: monoStyle(colors.text3, 10, bold: true, em: 0.08),
                               ),
-                              const SizedBox(height: CharonSpacing.s1),
+                              const SizedBox(height: 2),
                               Text(
                                 l10n.telemetryTitle,
-                                style: CharonTypography.h1.copyWith(fontSize: 22.0),
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: -0.33,
+                                  color: colors.text,
+                                ),
                               ),
                             ],
                           ),
-                          // Action buttons: Copy & Share
-                          Row(
-                            children: [
-                              OutlinedButton.icon(
-                                onPressed: visibleLogs.isEmpty ? null : () => _handleCopy(visibleLogs),
-                                icon: const Icon(Icons.copy_rounded, size: 14.0),
-                                label: Text(l10n.telemetryCopyBtn),
-                                style: OutlinedButton.styleFrom(
-                                  foregroundColor: colors.text,
-                                  side: BorderSide(color: colors.controlBorder),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 14.0,
-                                    vertical: 8.0,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: CharonSpacing.s2),
-                              ElevatedButton.icon(
-                                onPressed: visibleLogs.isEmpty ? null : () => _handleShare(visibleLogs),
-                                icon: const Icon(Icons.share_rounded, size: 14.0),
-                                label: Text(l10n.telemetryShareBtn),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: colors.surface2,
-                                  foregroundColor: colors.text,
-                                  elevation: 0,
-                                  side: BorderSide(color: colors.controlBorder),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 14.0,
-                                    vertical: 8.0,
-                                  ),
-                                ),
-                              ),
-                            ],
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 4),
+                            child: Text(l10n.telemetrySubtitle, style: monoStyle(colors.text3, 11)),
                           ),
                         ],
                       ),
-                      const SizedBox(height: CharonSpacing.s4),
-
-                      // Body Row: Log Terminal (flex: 8) & Desktop History Card (320px)
+                      const SizedBox(height: 14),
                       Expanded(
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Expanded(
-                              flex: 8,
-                              child: LogTerminalCard(
-                                visibleLogs: visibleLogs,
-                                droppedCount: droppedCount,
-                                activeSource: _activeSource,
-                                filterLevel: _filterLevel,
-                                rawMode: _rawMode,
-                                onSourceChanged: (src) {
-                                  setState(() => _activeSource = src);
-                                },
-                                onFilterChanged: (lvl) {
-                                  setState(() => _filterLevel = lvl);
-                                },
-                                onRawModeChanged: (raw) {
-                                  setState(() => _rawMode = raw);
-                                },
-                                onExportDiagnostics: _handleExportDiagnostics,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  ThroughputCard(view: view),
+                                  const SizedBox(height: 14),
+                                  Expanded(
+                                    child: LogTerminalCard(
+                                      visibleLogs: visibleLogs,
+                                      droppedCount: droppedCount,
+                                      activeSource: _activeSource,
+                                      filterLevel: _filterLevel,
+                                      rawMode: _rawMode,
+                                      note: view.noteFor(_activeSource),
+                                      onSourceChanged: (src) => setState(() => _activeSource = src),
+                                      onFilterChanged: (lvl) => setState(() => _filterLevel = lvl),
+                                      onRawModeChanged: (raw) => setState(() => _rawMode = raw),
+                                      onCopy: () => _handleCopy(visibleLogs),
+                                      onShare: () => _handleShare(visibleLogs),
+                                      onExportDiagnostics: () =>
+                                          ExportDiagnosticsDialog.show(context, controller),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            const SizedBox(width: CharonSpacing.s4),
-                            const SizedBox(
-                              width: 320.0,
-                              child: SingleChildScrollView(
-                                child: HistoryCard(),
+                            const SizedBox(width: 16),
+                            SizedBox(
+                              width: 286,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  SessionCard(
+                                    view: view,
+                                    serverCode: server?.id ?? '—',
+                                    countryCode: server?.countryCode ?? '',
+                                  ),
+                                  const SizedBox(height: 14),
+                                  TrafficCard(quota: view.quota),
+                                  const SizedBox(height: 14),
+                                  const Expanded(child: HistoryCard()),
+                                ],
                               ),
                             ),
                           ],

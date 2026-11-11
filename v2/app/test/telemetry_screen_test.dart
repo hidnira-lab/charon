@@ -11,6 +11,10 @@ import 'package:charon/ui/telemetry/telemetry_screen.dart';
 import 'package:charon/ui/telemetry/widgets/export_diagnostics_dialog.dart';
 import 'package:charon/ui/telemetry/widgets/history_card.dart';
 import 'package:charon/ui/telemetry/widgets/log_terminal_card.dart';
+import 'package:charon/ui/telemetry/widgets/session_card.dart';
+import 'package:charon/ui/telemetry/widgets/throughput_card.dart';
+import 'package:charon/ui/telemetry/widgets/traffic_card.dart';
+import 'package:charon/theme/theme.dart';
 import 'package:charon/ui/telemetry/widgets/share_dialog.dart';
 
 void main() {
@@ -89,27 +93,33 @@ void main() {
       expect(find.byType(LogTerminalCard), findsOneWidget);
       expect(find.byType(HistoryCard), findsOneWidget);
 
-      // Header labels
-      expect(find.text('> SYSTEM LOGS'), findsOneWidget);
-      expect(find.text('Telemetry & Logs'), findsOneWidget);
+      // Header: tag, title, subtitle (the session is not live yet)
+      expect(find.text('> TELEMETRY · NO SESSION'), findsOneWidget);
+      expect(find.text('measured on this device, nothing leaves it'), findsOneWidget);
+
+      // The cards of the board
+      expect(find.byType(ThroughputCard), findsOneWidget);
+      expect(find.byType(SessionCard), findsOneWidget);
+      expect(find.byType(TrafficCard), findsOneWidget);
+      expect(find.text('Throughput'), findsOneWidget);
+      expect(find.text('No samples yet'), findsOneWidget);
+
+      // Log card: tabs, RAW, Copy and Share live in its toolbar
+      expect(find.text('> LOG'), findsOneWidget);
+      expect(find.text('XRAY · ACCESS'), findsOneWidget);
+      expect(find.text('CHARON CORE'), findsOneWidget);
+      expect(find.text('RAW'), findsOneWidget);
       expect(find.text('Copy'), findsOneWidget);
       expect(find.text('Share'), findsOneWidget);
+      expect(find.text('> no access lines, xray is not running'), findsOneWidget);
 
-      // Tabs & Memory note
-      expect(find.text('XRAY ACCESS'), findsOneWidget);
-      expect(find.text('CHARON CORE'), findsOneWidget);
-      expect(find.text('Last 2000 lines, kept in memory only.'), findsOneWidget);
+      // The level chips are not on the board, so they are hidden
+      expect(find.text('ALL'), findsNothing);
 
-      // Access tab shows privacy notice
-      expect(find.byIcon(Icons.lock_outline_rounded), findsOneWidget);
-      expect(
-        find.text('every line shows where a connection went. Read it before you share or paste it anywhere.'),
-        findsOneWidget,
-      );
-
-      // History Card checks
-      expect(find.text('SESSION HISTORY'), findsOneWidget);
+      // History card
+      expect(find.text('> HISTORY'), findsOneWidget);
       expect(find.text('LATER'), findsOneWidget);
+      expect(find.text('Not tracked yet'), findsOneWidget);
       expect(find.text("Charon doesn't keep session history, so these stay empty."), findsOneWidget);
       expect(find.text('UPTIME'), findsOneWidget);
       expect(find.text('PAST SESSIONS'), findsOneWidget);
@@ -129,14 +139,13 @@ void main() {
       await tester.tap(find.text('CHARON CORE'));
       await tester.pumpAndSettle();
 
-      // Privacy banner should be gone
-      expect(find.byIcon(Icons.lock_outline_rounded), findsNothing);
+      expect(find.text('> last 2000 lines, in memory only · no destinations in here'), findsOneWidget);
 
       // Export diagnostics quiet link should appear
       expect(find.text('Export diagnostics →'), findsOneWidget);
     });
 
-    testWidgets('filtering by level and raw mode operates correctly', (tester) async {
+    testWidgets('core lines show a level and RAW shows them as the core wrote them', (tester) async {
       tester.view.physicalSize = const Size(1280, 800);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() => tester.view.resetPhysicalSize());
@@ -155,28 +164,91 @@ void main() {
       await tester.pumpWidget(CharonApp(controller: controller));
       controller.setTab(3);
       await tester.pumpAndSettle();
-
-      // Switch to core tab
       await tester.tap(find.text('CHARON CORE'));
       await tester.pumpAndSettle();
 
       expect(find.text('info msg 1'), findsOneWidget);
       expect(find.text('warn msg 1'), findsOneWidget);
       expect(find.text('error msg 1'), findsOneWidget);
+      expect(find.text('WARN'), findsOneWidget); // the level column, not a chip
+      expect(find.text('ERROR'), findsOneWidget);
 
-      // Tap WARN filter
-      await tester.tap(find.text('WARN').first);
-      await tester.pumpAndSettle();
-
-      expect(find.text('warn msg 1'), findsOneWidget);
-      expect(find.text('info msg 1'), findsNothing);
-      expect(find.text('error msg 1'), findsNothing);
-
-      // Toggle RAW mode
       await tester.tap(find.text('RAW'));
       await tester.pumpAndSettle();
+      expect(find.textContaining('[WARN] warn msg 1'), findsOneWidget);
+    });
 
-      expect(find.textContaining('#2 [2000] warn msg 1'), findsOneWidget);
+    testWidgets('Xray lines are split into protocol, source and destination', (tester) async {
+      tester.view.physicalSize = const Size(1280, 800);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+
+      final controller = HomeController();
+      controller.addLogBatch(LogBatch(
+        source: LogSource.LOG_SOURCE_XRAY_ACCESS,
+        dropped: 120,
+        lines: [
+          LogLine(
+            seq: Int64(1),
+            atMs: Int64(1000),
+            level: LogLevel.LOG_LEVEL_INFO,
+            text: 'from udp:127.0.0.1:61479 accepted udp:192.0.2.53:53',
+          ),
+        ],
+      ));
+      await tester.pumpWidget(CharonApp(controller: controller));
+      controller.setTab(3);
+      await tester.pumpAndSettle();
+
+      expect(find.text('UDP'), findsOneWidget);
+      expect(find.text('127.0.0.1:61479'), findsOneWidget);
+      expect(find.text('192.0.2.53:53'), findsOneWidget);
+      expect(find.text('accepted'), findsOneWidget);
+      expect(find.text('120 lines skipped'), findsOneWidget);
+    });
+
+    testWidgets('a live session draws the chart and the table lists the samples', (tester) async {
+      tester.view.physicalSize = const Size(1280, 800);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+
+      final controller = HomeController(
+        initialStatus: Status(phase: Phase.PHASE_UP, activeServerId: 'SRV-01', latencyMs: 48),
+        initialConfig: Config(chosenServerId: 'SRV-01', servers: [Server(id: 'SRV-01', countryCode: 'SG')]),
+      );
+      for (var i = 0; i < 42; i++) {
+        controller.updateThroughput(Throughput(downBps: Int64(7000000 + i * 100000), upBps: Int64(1200000)));
+      }
+      await tester.pumpWidget(CharonApp(controller: controller));
+      controller.setTab(3);
+      await tester.pumpAndSettle();
+
+      expect(find.text('> TELEMETRY · 0:42 OF 5:00'), findsOneWidget);
+      expect(find.text('LIVE · SRV-01'), findsOneWidget);
+      expect(find.text('no samples before connect'), findsOneWidget);
+      expect(find.text('PEAK DOWN · 0:42'), findsOneWidget);
+      expect(find.text('48 ms', findRichText: true), findsOneWidget); // latency on the Session card
+
+      await tester.tap(find.text('TABLE'));
+      await tester.pumpAndSettle();
+      expect(find.text('NOW'), findsOneWidget);
+      expect(find.text('0:01 AGO'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('light theme uses the light tokens', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+
+      final controller = HomeController();
+      await tester.pumpWidget(CharonApp(controller: controller, themeData: CharonTheme.light));
+      controller.setTab(3);
+      await tester.pumpAndSettle();
+
+      final ink = tester.widget<Text>(find.text('No samples yet')).style!.color;
+      expect(ink, CharonColors.light.text);
+      expect(tester.takeException(), isNull);
     });
 
     testWidgets('Share dialog opens and confirms sharing visible lines', (tester) async {
@@ -258,14 +330,16 @@ void main() {
       controller.setTab(3);
       await tester.pumpAndSettle();
 
-      expect(find.text('> LOG SISTEM'), findsOneWidget);
-      expect(find.text('Telemetri & Log'), findsOneWidget);
+      expect(find.text('> TELEMETRI · TANPA SESI'), findsOneWidget);
       expect(find.text('Salin'), findsOneWidget);
       expect(find.text('Bagikan'), findsOneWidget);
-      expect(find.text('2000 baris terakhir, hanya disimpan di memori.'), findsOneWidget);
-      expect(find.text('RIWAYAT SESI'), findsOneWidget);
+      expect(find.text('MENTAH'), findsOneWidget);
+      expect(find.text('XRAY · AKSES'), findsOneWidget);
+      expect(find.text('> tidak ada baris akses, xray tidak berjalan'), findsOneWidget);
+      expect(find.text('> RIWAYAT'), findsOneWidget);
       expect(find.text('NANTI'), findsOneWidget);
-      expect(find.text('Charon tidak menyimpan riwayat sesi, sehingga ini tetap kosong.'), findsOneWidget);
+      expect(find.text('Charon tidak menyimpan riwayat sesi, jadi ini tetap kosong.'), findsOneWidget);
+      expect(tester.takeException(), isNull);
     });
   });
 }
