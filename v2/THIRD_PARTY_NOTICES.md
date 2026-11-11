@@ -36,6 +36,7 @@ Charon is licensed under the GNU General Public License v3.0 (`LICENSE`). It shi
 * **`intl` (0.20.2)**: BSD 3-Clause License
 * **`path` (1.9.1)**: BSD 3-Clause License
 * **`protobuf` (6.0.0)**: BSD 3-Clause License
+* **`url_launcher` (6.3.3)**: BSD 3-Clause License (Copyright 2013 The Flutter Authors). Opens https links in the browser. Its platform packages `url_launcher_windows` (3.1.6), `url_launcher_android` (6.3.33) and `url_launcher_platform_interface` (2.3.2) have the same licence.
 * **`win32` (6.0.0)**: BSD 3-Clause License
 
 ## 5. Fonts
