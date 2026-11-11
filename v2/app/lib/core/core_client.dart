@@ -14,8 +14,11 @@ import 'transport.dart';
 /// The core and the UI share no protocol version, so the UI must show the
 /// "Charon service needs an update" screen instead of the normal one.
 class ProtocolMismatch implements Exception {
-  ProtocolMismatch(this.error);
+  ProtocolMismatch(this.error, {this.serviceProtocol = 0});
   final Error error;
+
+  /// The newest protocol version the service speaks, 0 when it did not say.
+  final int serviceProtocol;
   @override
   String toString() => 'ProtocolMismatch: ${error.messageKey}';
 }
@@ -64,7 +67,7 @@ class CoreClient {
           ),
         ));
     final ack = reply.helloAck;
-    if (ack.hasError()) throw ProtocolMismatch(ack.error);
+    if (ack.hasError()) throw ProtocolMismatch(ack.error, serviceProtocol: ack.protocolVersion);
     _protocol = ack.protocolVersion;
     return ack;
   }
