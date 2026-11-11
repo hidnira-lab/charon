@@ -109,3 +109,48 @@ class SleepZ extends StatelessWidget {
     );
   }
 }
+
+// The 22 x 27 ghost of the living logo (the Splash board's G27), eyes included.
+const _g27 = [
+  '..........WW..........',
+  '..........WW..........',
+  '..........WW..........',
+  '..........WW..........',
+  '..........WW..........',
+  '..........WW..........',
+  '.........WWWW.........',
+  '.........WWWW.........',
+  '........WWWWWW........',
+  '........WWWWWW........',
+  '.......WWWWWWWW.......',
+  '......WWWWWWWWWW......',
+  '.....WWWEEWWEEWWW.....',
+  '....WWWWEEWWEEWWWW....',
+  '..WWWWWWEEWWEEWWWWWW..',
+  'WWWWWWWWWWWWWWWWWWWWWW',
+  '...WWWWWWWWWWWWWWWW...',
+  '.....GWGWGWGWGWGW.....',
+  '.......GGGGGGGG.......',
+  '........GGGGGG........',
+  '........GGGGGG........',
+  '.........GGGG.........',
+  '.........GGGG.........',
+  '.........GGGG.........',
+  '..........GG..........',
+  '..........GG..........',
+  '..........GG..........',
+];
+
+/// The living logo as three layers, so the eyes can glance and blink on their own:
+/// the body without eyes, the open eyes, and the eyelid (the eye row only).
+({List<String> body, List<String> eyes, List<String> lid}) logoRows() {
+  String keep(String r, String c) => r.split('').map((x) => x == c ? x : '.').join();
+  return (
+    body: [for (final r in _g27) r.replaceAll('E', 'W')],
+    eyes: [for (final r in _g27) keep(r, 'E')],
+    lid: [for (final (y, r) in _g27.indexed) y == 14 ? keep(r, 'E') : '.' * r.length],
+  );
+}
+
+/// The colours of the living logo: body, belly and eyes.
+const logoColors = {'W': Color(0xFFFFFFFF), 'G': Color(0xFFE1E1E1), 'E': Color(0xFF1E1E1E)};

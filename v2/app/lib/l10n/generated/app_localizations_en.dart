@@ -2744,12 +2744,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get androidOpenVpnSettings => 'Open VPN settings';
 
   @override
-  String get splashLoadingService => 'Checking Charon service...';
-
-  @override
-  String get splashServiceReady => 'Service ready';
-
-  @override
   String get dialogVaultBackupTitle => 'Back up to .charonvault';
 
   @override
@@ -4125,4 +4119,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get svcMascot => 'Charon';
+
+  @override
+  String get splStarting => 'starting charon-core';
+
+  @override
+  String get splSlowNote =>
+      'The first launch after an update can take a few seconds while Windows sets up the network adapter.';
+
+  @override
+  String get splQuit => 'Quit';
+
+  @override
+  String get splCheckService => 'charon service';
+
+  @override
+  String get splCheckServiceOk => 'answered on its pipe';
+
+  @override
+  String get splCheckServiceWait => 'waiting for its pipe';
+
+  @override
+  String get splCheckSettings => 'settings';
+
+  @override
+  String get splCheckSettingsFirst => 'first launch, nothing yet';
+
+  @override
+  String splCheckSettingsServers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count servers',
+      one: '1 server',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get splCheckSettingsWait => 'waiting for the service';
+
+  @override
+  String get splSkip => 'Skip the splash';
 }

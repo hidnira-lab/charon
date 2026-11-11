@@ -2582,12 +2582,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get androidOpenVpnSettings => '打开 VPN 设置';
 
   @override
-  String get splashLoadingService => '正在检查 Charon 服务...';
-
-  @override
-  String get splashServiceReady => '服务就绪';
-
-  @override
   String get dialogVaultBackupTitle => '备份至 .charonvault';
 
   @override
@@ -3893,6 +3887,41 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get svcMascot => 'Charon';
+
+  @override
+  String get splStarting => '正在启动 charon-core';
+
+  @override
+  String get splSlowNote => '更新后首次启动可能需要几秒钟，Windows 正在设置网卡。';
+
+  @override
+  String get splQuit => '退出';
+
+  @override
+  String get splCheckService => 'charon 服务';
+
+  @override
+  String get splCheckServiceOk => '已通过管道响应';
+
+  @override
+  String get splCheckServiceWait => '等待其管道';
+
+  @override
+  String get splCheckSettings => '设置';
+
+  @override
+  String get splCheckSettingsFirst => '首次启动，暂无';
+
+  @override
+  String splCheckSettingsServers(int count) {
+    return '$count 台服务器';
+  }
+
+  @override
+  String get splCheckSettingsWait => '等待服务';
+
+  @override
+  String get splSkip => '跳过启动画面';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -6472,12 +6501,6 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get androidOpenVpnSettings => '打开 VPN 设置';
 
   @override
-  String get splashLoadingService => '正在检查 Charon 服务...';
-
-  @override
-  String get splashServiceReady => '服务就绪';
-
-  @override
   String get dialogVaultBackupTitle => '备份至 .charonvault';
 
   @override
@@ -7783,4 +7806,39 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get svcMascot => 'Charon';
+
+  @override
+  String get splStarting => '正在启动 charon-core';
+
+  @override
+  String get splSlowNote => '更新后首次启动可能需要几秒钟，Windows 正在设置网卡。';
+
+  @override
+  String get splQuit => '退出';
+
+  @override
+  String get splCheckService => 'charon 服务';
+
+  @override
+  String get splCheckServiceOk => '已通过管道响应';
+
+  @override
+  String get splCheckServiceWait => '等待其管道';
+
+  @override
+  String get splCheckSettings => '设置';
+
+  @override
+  String get splCheckSettingsFirst => '首次启动，暂无';
+
+  @override
+  String splCheckSettingsServers(int count) {
+    return '$count 台服务器';
+  }
+
+  @override
+  String get splCheckSettingsWait => '等待服务';
+
+  @override
+  String get splSkip => '跳过启动画面';
 }

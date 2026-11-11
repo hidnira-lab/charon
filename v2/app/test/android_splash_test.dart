@@ -11,7 +11,6 @@ import 'package:charon/theme/theme.dart';
 import 'package:charon/ui/android/android_notification_projector.dart';
 import 'package:charon/ui/android/android_permission_sheet.dart';
 import 'package:charon/ui/home/widgets/home_state_banner.dart';
-import 'package:charon/ui/splash/splash_screen.dart';
 
 Widget _buildTestApp({required Widget child}) {
   return MaterialApp(
@@ -193,30 +192,6 @@ void main() {
 
       await tester.tap(find.text('Open VPN settings'));
       expect(settingsTapped, isTrue);
-    });
-  });
-
-  group('Desktop Splash Screen & Living Logo (09)', () {
-    testWidgets('SplashScreen animates ghost, reveals letters, and completes', (tester) async {
-      bool completed = false;
-
-      await tester.pumpWidget(
-        _buildTestApp(
-          child: SplashScreen(
-            minDuration: const Duration(milliseconds: 600),
-            onComplete: () {
-              completed = true;
-            },
-          ),
-        ),
-      );
-
-      expect(find.byType(SplashScreen), findsOneWidget);
-      expect(find.text('Checking Charon service...'), findsOneWidget);
-
-      // Advance animation
-      await tester.pump(const Duration(milliseconds: 700));
-      expect(completed, isTrue);
     });
   });
 

@@ -13,6 +13,7 @@ import 'theme/theme.dart';
 import 'ui/home/home_screen.dart';
 import 'ui/servers/servers_screen.dart';
 import 'ui/service/service_screen.dart';
+import 'ui/splash/splash_screen.dart';
 import 'ui/settings/settings_screen.dart';
 import 'ui/setup/first_run_setup_screen.dart';
 import 'ui/split/split_screen.dart';
@@ -22,7 +23,8 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   unawaited(GeoIp.load()); // only needed once the user adds a server
   final controller = HomeController();
-  runApp(CharonApp(controller: controller));
+  // The splash is the Windows window's. Android has its system splash.
+  runApp(CharonApp(controller: controller, showSplash: Platform.isWindows));
 
   // The supervisor opens the pipe now, and again every few seconds while the
   // service is away, so the window comes back by itself when the service does.
@@ -62,17 +64,31 @@ Future<void> _connectAndroid(HomeController controller) async {
   );
 }
 
-class CharonApp extends StatelessWidget {
+class CharonApp extends StatefulWidget {
   const CharonApp({
     super.key,
     required this.controller,
     this.locale,
     this.themeData,
+    this.showSplash = false,
   });
 
   final HomeController controller;
   final Locale? locale;
   final ThemeData? themeData;
+
+  /// Draws the splash over the first screen until the service has been tried.
+  final bool showSplash;
+
+  @override
+  State<CharonApp> createState() => _CharonAppState();
+}
+
+class _CharonAppState extends State<CharonApp> {
+  var _splashDone = false;
+  final _splashKey = GlobalKey();
+
+  HomeController get controller => widget.controller;
 
   @override
   Widget build(BuildContext context) {
@@ -97,8 +113,8 @@ class CharonApp extends StatelessWidget {
           screen = HomeScreen(controller: controller);
         }
 
-        ThemeData activeTheme = themeData ?? CharonTheme.dark;
-        if (themeData == null) {
+        ThemeData activeTheme = widget.themeData ?? CharonTheme.dark;
+        if (widget.themeData == null) {
           if (controller.themeMode == ThemeMode.light) {
             activeTheme = CharonTheme.light;
           } else if (controller.themeMode == ThemeMode.dark) {
@@ -110,10 +126,27 @@ class CharonApp extends StatelessWidget {
           title: 'Charon',
           debugShowCheckedModeBanner: false,
           theme: activeTheme,
-          locale: locale ?? controller.locale,
+          locale: widget.locale ?? controller.locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: screen,
+          // The splash goes inside the home, not around the app: it needs the Overlay of the
+          // Navigator (the window buttons have tooltips). Keyed, so it keeps its clock when the
+          // screen under it changes.
+          home: widget.showSplash && !_splashDone
+              ? Stack(
+                  children: [
+                    screen,
+                    Positioned.fill(
+                      child: SplashScreen(
+                        key: _splashKey,
+                        controller: controller,
+                        onDone: () => setState(() => _splashDone = true),
+                        onQuit: () => exit(0),
+                      ),
+                    ),
+                  ],
+                )
+              : screen,
         );
       },
     );

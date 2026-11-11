@@ -2751,12 +2751,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get androidOpenVpnSettings => 'Buka pengaturan VPN';
 
   @override
-  String get splashLoadingService => 'Memeriksa layanan Charon...';
-
-  @override
-  String get splashServiceReady => 'Layanan siap';
-
-  @override
   String get dialogVaultBackupTitle => 'Cadangkan ke .charonvault';
 
   @override
@@ -4123,4 +4117,40 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get svcMascot => 'Charon';
+
+  @override
+  String get splStarting => 'memulai charon-core';
+
+  @override
+  String get splSlowNote =>
+      'Peluncuran pertama setelah pembaruan bisa makan beberapa detik selagi Windows menyiapkan adaptor jaringan.';
+
+  @override
+  String get splQuit => 'Keluar';
+
+  @override
+  String get splCheckService => 'service charon';
+
+  @override
+  String get splCheckServiceOk => 'menjawab lewat pipe-nya';
+
+  @override
+  String get splCheckServiceWait => 'menunggu pipe-nya';
+
+  @override
+  String get splCheckSettings => 'pengaturan';
+
+  @override
+  String get splCheckSettingsFirst => 'peluncuran pertama, belum ada';
+
+  @override
+  String splCheckSettingsServers(int count) {
+    return '$count server';
+  }
+
+  @override
+  String get splCheckSettingsWait => 'menunggu service';
+
+  @override
+  String get splSkip => 'Lewati splash';
 }

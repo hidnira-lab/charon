@@ -4901,18 +4901,6 @@ abstract class AppLocalizations {
   /// **'Open VPN settings'**
   String get androidOpenVpnSettings;
 
-  /// Status text while verifying service on startup.
-  ///
-  /// In en, this message translates to:
-  /// **'Checking Charon service...'**
-  String get splashLoadingService;
-
-  /// Status text when service connection is established.
-  ///
-  /// In en, this message translates to:
-  /// **'Service ready'**
-  String get splashServiceReady;
-
   /// Title for vault backup passphrase dialog.
   ///
   /// In en, this message translates to:
@@ -7203,6 +7191,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Charon'**
   String get svcMascot;
+
+  /// Splash screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'starting charon-core'**
+  String get splStarting;
+
+  /// Splash screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'The first launch after an update can take a few seconds while Windows sets up the network adapter.'**
+  String get splSlowNote;
+
+  /// Splash screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Quit'**
+  String get splQuit;
+
+  /// Splash screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'charon service'**
+  String get splCheckService;
+
+  /// Splash screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'answered on its pipe'**
+  String get splCheckServiceOk;
+
+  /// Splash screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'waiting for its pipe'**
+  String get splCheckServiceWait;
+
+  /// Splash screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'settings'**
+  String get splCheckSettings;
+
+  /// Splash screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'first launch, nothing yet'**
+  String get splCheckSettingsFirst;
+
+  /// Splash screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 server} other{{count} servers}}'**
+  String splCheckSettingsServers(int count);
+
+  /// Splash screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'waiting for the service'**
+  String get splCheckSettingsWait;
+
+  /// Splash screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip the splash'**
+  String get splSkip;
 }
 
 class _AppLocalizationsDelegate

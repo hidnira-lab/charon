@@ -820,8 +820,6 @@
   "androidAlwaysOnVpnTitle": "始终开启的 VPN",
   "androidAlwaysOnVpnDesc": "如果 Android 终止 Charon，网络流量可能会直接出网。为获得完整保护，请在系统设置中启用“始终开启的 VPN”并“阻止未使用 VPN 的连接”。",
   "androidOpenVpnSettings": "打开 VPN 设置",
-  "splashLoadingService": "正在检查 Charon 服务...",
-  "splashServiceReady": "服务就绪",
   "dialogVaultBackupTitle": "备份至 .charonvault",
   "dialogVaultRestoreTitle": "从 .charonvault 恢复",
   "dialogVaultPassphraseLabel": "密码短语",
@@ -1207,5 +1205,16 @@
   "svcReleaseBody": "Charon 的保护过滤器可能仍然有效。放行工具可以移除它们。",
   "svcReleaseSub": "独立工具 · 需要管理员权限",
   "svcMascotAsleep": "Charon 正在睡觉",
-  "svcMascot": "Charon"
+  "svcMascot": "Charon",
+  "splStarting": "正在启动 charon-core",
+  "splSlowNote": "更新后首次启动可能需要几秒钟，Windows 正在设置网卡。",
+  "splQuit": "退出",
+  "splCheckService": "charon 服务",
+  "splCheckServiceOk": "已通过管道响应",
+  "splCheckServiceWait": "等待其管道",
+  "splCheckSettings": "设置",
+  "splCheckSettingsFirst": "首次启动，暂无",
+  "splCheckSettingsServers": "{count} 台服务器",
+  "splCheckSettingsWait": "等待服务",
+  "splSkip": "跳过启动画面"
 }

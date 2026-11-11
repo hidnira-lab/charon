@@ -819,8 +819,6 @@
   "androidAlwaysOnVpnTitle": "VPN Selalu Aktif",
   "androidAlwaysOnVpnDesc": "Jika Android menghentikan Charon, lalu lintas bisa langsung keluar. Untuk perlindungan penuh, aktifkan VPN Selalu Aktif dan Blokir koneksi tanpa VPN di pengaturan Android.",
   "androidOpenVpnSettings": "Buka pengaturan VPN",
-  "splashLoadingService": "Memeriksa layanan Charon...",
-  "splashServiceReady": "Layanan siap",
   "dialogVaultBackupTitle": "Cadangkan ke .charonvault",
   "dialogVaultRestoreTitle": "Pulihkan dari .charonvault",
   "dialogVaultPassphraseLabel": "Frasa sandi",
@@ -1206,5 +1204,16 @@
   "svcReleaseBody": "Filter perlindungan Charon mungkin masih aktif. Alat pelepas akan menghapusnya.",
   "svcReleaseSub": "alat terpisah · minta hak admin",
   "svcMascotAsleep": "Charon, sedang tidur",
-  "svcMascot": "Charon"
+  "svcMascot": "Charon",
+  "splStarting": "memulai charon-core",
+  "splSlowNote": "Peluncuran pertama setelah pembaruan bisa makan beberapa detik selagi Windows menyiapkan adaptor jaringan.",
+  "splQuit": "Keluar",
+  "splCheckService": "service charon",
+  "splCheckServiceOk": "menjawab lewat pipe-nya",
+  "splCheckServiceWait": "menunggu pipe-nya",
+  "splCheckSettings": "pengaturan",
+  "splCheckSettingsFirst": "peluncuran pertama, belum ada",
+  "splCheckSettingsServers": "{count} server",
+  "splCheckSettingsWait": "menunggu service",
+  "splSkip": "Lewati splash"
 }
