@@ -877,6 +877,39 @@ class SyncController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// What the sync server holds (revision 0 means no vault yet), for the pairing
+  /// dialog. Null when it could not be read, with the reason set.
+  Future<SyncVaultMeta?> readVaultMeta() async {
+    final token = await _requireToken();
+    if (token == null || _serverClient == null) return null;
+    try {
+      return await _serverClient!.getVaultMeta(token: token);
+    } on SyncServerException catch (e) {
+      _setError(e.reason);
+      return null;
+    }
+  }
+
+  /// Opens the server's vault with [passphrase] to see that it is the right one,
+  /// and changes nothing. Unlike [pull] it keeps the revision this device has
+  /// seen: nothing was applied, so a later Push must still meet the conflict
+  /// check instead of overwriting the server copy.
+  Future<bool> verifyPassphrase(String passphrase) async {
+    final token = await _requireToken();
+    if (token == null || _serverClient == null) return false;
+    try {
+      final downloaded = await _serverClient!.getVault(token: token);
+      await VaultCodec.open(downloaded.blob, passphrase, useIsolate: useIsolateForCrypto);
+      return true;
+    } on VaultException catch (ve) {
+      _setError(_mapVaultError(ve.code));
+      return false;
+    } on SyncServerException catch (se) {
+      _setError(se.reason);
+      return false;
+    }
+  }
+
   /// Exports a `.charonvault` backup file to [target] (section 7).
   Future<bool> exportToFile({
     required File target,

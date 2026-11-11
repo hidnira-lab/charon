@@ -1171,6 +1171,10 @@ class HomeController extends ChangeNotifier {
     );
   }
 
+  Future<SyncVaultMeta?> readSyncVaultMeta() => _sync.readVaultMeta();
+
+  Future<bool> verifySyncPassphrase(String passphrase) => _sync.verifyPassphrase(passphrase);
+
   Future<bool> pushSyncVault(String passphrase) {
     return _sync.push(
       passphrase: passphrase,

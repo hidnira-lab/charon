@@ -166,6 +166,11 @@ void main() {
           expect(devA.sync.state, SyncState.paired);
           expect(devA.sync.lastSeenRevision, 0);
 
+          // Nothing is stored yet: the pairing dialog reads revision 0 as "new vault".
+          final emptyMeta = await devA.readSyncVaultMeta();
+          expect(emptyMeta, isNotNull);
+          expect(emptyMeta!.revision, 0);
+
           // Device A pushes revision 1.
           final pushed1 = await devA.pushSyncVault(passphrase);
           expect(pushed1, isTrue);
@@ -201,6 +206,24 @@ void main() {
           );
           expect(pairedB, isTrue);
           expect(devB.sync.state, SyncState.paired);
+
+          // The pairing dialog checks the passphrase without applying anything.
+          final meta = await devB.readSyncVaultMeta();
+          expect(meta!.revision, 1);
+          expect(meta.writerDeviceName, 'Desktop-A');
+
+          expect(await devB.verifySyncPassphrase('wrong-passphrase-123'), isFalse);
+          expect(devB.sync.errorReason, SyncErrorReason.wrongPassphrase);
+          devB.sync.clearError();
+          expect(await devB.verifySyncPassphrase(passphrase), isTrue);
+          // It changed nothing: no data came in, and the revision this device has
+          // seen is still 0, so a Push now must meet the conflict check and not
+          // overwrite the server copy with an empty device.
+          expect(devB.hasServers, isFalse);
+          expect(devB.sync.lastSeenRevision, 0);
+          expect(await devB.pushSyncVault(passphrase), isFalse);
+          expect(devB.sync.state, SyncState.conflict);
+          expect(devB.sync.conflictInfo!.currentRevision, 1);
 
           // Pulling with wrong passphrase fails AEAD check and changes nothing.
           final badPull = await devB.pullSyncVault('wrong-passphrase-123');
