@@ -3743,6 +3743,300 @@ abstract class AppLocalizations {
   /// **'SETTINGS · ABOUT'**
   String get trustCrumbPrefix;
 
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get dlgClose;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'SERVERS · DELETE'**
+  String get dlgDeleteKicker;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {name}?'**
+  String dlgDeleteTitle(String name);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'It leaves this device only. Your VPS keeps running and nothing changes on it.'**
+  String get dlgDeleteIntro;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'#{order} failover'**
+  String dlgDeleteOrder(String order);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'failover becomes {code} only, nothing to fall back to'**
+  String dlgDeleteNoteLast(String code);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'the other profiles keep their failover order'**
+  String get dlgDeleteNoteOthers;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'its quota count on this device is erased'**
+  String get dlgDeleteNoteQuota;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'the synced copy stays until your next Push'**
+  String get dlgDeleteNoteSync;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {code}'**
+  String dlgDeleteBtn(String code);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'SYNC · UNPAIR'**
+  String get dlgUnpairKicker;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpair this device?'**
+  String get dlgUnpairHeading;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'This device stops syncing. The encrypted copy stays on the sync server, and your other devices keep working.'**
+  String get dlgUnpairIntro;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'servers, rules and settings on this device stay as they are'**
+  String get dlgUnpairNote1;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon cannot list your other paired devices yet'**
+  String get dlgUnpairNote2;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'pair again any time with a code from another device'**
+  String get dlgUnpairNote3;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpair'**
+  String get dlgUnpairBtn;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'SETTINGS · ERASE'**
+  String get dlgEraseKicker;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Erase all data on this PC?'**
+  String get dlgEraseHeading;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon disconnects, turns off the kill switch, then removes everything it keeps on this PC.'**
+  String get dlgEraseIntro;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'REMOVED'**
+  String get dlgEraseRemovedTag;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'servers, rules, settings'**
+  String get dlgEraseRemovedWhat;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'quota counters, device token'**
+  String get dlgEraseRemovedSub;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'STAYS'**
+  String get dlgEraseStaysTag;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'the sync copy'**
+  String get dlgEraseStaysWhat;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'and the Charon service'**
+  String get dlgEraseStaysSub;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'this cannot be undone'**
+  String get dlgEraseNote1;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'pair again or restore from a file to bring your servers back'**
+  String get dlgEraseNote2;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'to remove the service, uninstall Charon'**
+  String get dlgEraseNote3;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Erase everything'**
+  String get dlgEraseBtn;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'QUIT'**
+  String get dlgQuitKicker;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Close Charon?'**
+  String get dlgQuitHeading;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'the window closes · the tray icon stays'**
+  String get dlgQuitHideDesc;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'no tray icon until you open Charon again'**
+  String get dlgQuitWindowDesc;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'your apps go back to your normal connection'**
+  String get dlgQuitDisconnectDesc;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'TUNNEL ON'**
+  String get dlgQuitTagOn;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'TUNNEL OFF'**
+  String get dlgQuitTagOff;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'kill switch stays out of it, quitting is your choice'**
+  String get dlgQuitNote1;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon reopens onto the running tunnel, no reconnect'**
+  String get dlgQuitNote2;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'when you are disconnected, X quits right away'**
+  String get dlgQuitNote3;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'SYNC · PUSH'**
+  String get dlgConflictKicker;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'The server copy is newer'**
+  String get dlgConflictHeading;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Another device pushed after this one last synced. Pushing now would replace that newer copy.'**
+  String get dlgConflictIntro;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Pull first'**
+  String get dlgConflictPullTitle;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'replaces what is on this device, then you can push again'**
+  String get dlgConflictPullDesc;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'SAFE'**
+  String get dlgConflictPullTag;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Overwrite the server copy'**
+  String get dlgConflictOverwriteTitle;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'every paired device gets this device\'s copy'**
+  String get dlgConflictOverwriteDesc;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'REPLACES'**
+  String get dlgConflictOverwriteTag;
+
   /// Tag at top of setup screen.
   ///
   /// In en, this message translates to:

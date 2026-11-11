@@ -1974,6 +1974,161 @@ class AppLocalizationsZh extends AppLocalizations {
   String get trustCrumbPrefix => '设置 · 关于';
 
   @override
+  String get dlgClose => '关闭';
+
+  @override
+  String get dlgDeleteKicker => '服务器 · 删除';
+
+  @override
+  String dlgDeleteTitle(String name) {
+    return '删除 $name？';
+  }
+
+  @override
+  String get dlgDeleteIntro => '只从本机移除。你的 VPS 继续运行，上面不会有任何变化。';
+
+  @override
+  String dlgDeleteOrder(String order) {
+    return '故障转移 #$order';
+  }
+
+  @override
+  String dlgDeleteNoteLast(String code) {
+    return '故障转移只剩 $code，没有可切换的备用';
+  }
+
+  @override
+  String get dlgDeleteNoteOthers => '其他配置保持原有的故障转移顺序';
+
+  @override
+  String get dlgDeleteNoteQuota => '本机上它的流量统计会被清除';
+
+  @override
+  String get dlgDeleteNoteSync => '同步副本会保留到你下次推送';
+
+  @override
+  String dlgDeleteBtn(String code) {
+    return '删除 $code';
+  }
+
+  @override
+  String get dlgUnpairKicker => '同步 · 取消配对';
+
+  @override
+  String get dlgUnpairHeading => '取消此设备的配对？';
+
+  @override
+  String get dlgUnpairIntro => '此设备将停止同步。加密副本仍保留在同步服务器上，你的其他设备照常工作。';
+
+  @override
+  String get dlgUnpairNote1 => '此设备上的服务器、规则和设置保持不变';
+
+  @override
+  String get dlgUnpairNote2 => 'Charon 暂时无法列出你其他已配对的设备';
+
+  @override
+  String get dlgUnpairNote3 => '随时可用另一台设备的配对码重新配对';
+
+  @override
+  String get dlgUnpairBtn => '取消配对';
+
+  @override
+  String get dlgEraseKicker => '设置 · 清除';
+
+  @override
+  String get dlgEraseHeading => '清除这台电脑上的所有数据？';
+
+  @override
+  String get dlgEraseIntro => 'Charon 会先断开连接、关闭断网保护，然后删除它在这台电脑上保存的所有内容。';
+
+  @override
+  String get dlgEraseRemovedTag => '将删除';
+
+  @override
+  String get dlgEraseRemovedWhat => '服务器、规则、设置';
+
+  @override
+  String get dlgEraseRemovedSub => '流量计数、设备令牌';
+
+  @override
+  String get dlgEraseStaysTag => '保留';
+
+  @override
+  String get dlgEraseStaysWhat => '同步副本';
+
+  @override
+  String get dlgEraseStaysSub => '以及 Charon 服务';
+
+  @override
+  String get dlgEraseNote1 => '此操作无法撤销';
+
+  @override
+  String get dlgEraseNote2 => '重新配对或从文件恢复，即可找回你的服务器';
+
+  @override
+  String get dlgEraseNote3 => '要移除服务，请卸载 Charon';
+
+  @override
+  String get dlgEraseBtn => '全部清除';
+
+  @override
+  String get dlgQuitKicker => '退出';
+
+  @override
+  String get dlgQuitHeading => '关闭 Charon？';
+
+  @override
+  String get dlgQuitHideDesc => '窗口关闭 · 托盘图标保留';
+
+  @override
+  String get dlgQuitWindowDesc => '重新打开 Charon 之前没有托盘图标';
+
+  @override
+  String get dlgQuitDisconnectDesc => '你的应用回到普通网络连接';
+
+  @override
+  String get dlgQuitTagOn => '隧道开启';
+
+  @override
+  String get dlgQuitTagOff => '隧道关闭';
+
+  @override
+  String get dlgQuitNote1 => '断网保护不会介入，退出由你决定';
+
+  @override
+  String get dlgQuitNote2 => 'Charon 重新打开时直接接上运行中的隧道，无需重连';
+
+  @override
+  String get dlgQuitNote3 => '未连接时，点 X 会直接退出';
+
+  @override
+  String get dlgConflictKicker => '同步 · 推送';
+
+  @override
+  String get dlgConflictHeading => '服务器上的副本更新';
+
+  @override
+  String get dlgConflictIntro => '另一台设备在本机上次同步之后推送过。现在推送会覆盖那份更新的副本。';
+
+  @override
+  String get dlgConflictPullTitle => '先拉取';
+
+  @override
+  String get dlgConflictPullDesc => '会替换本机内容，之后可以再次推送';
+
+  @override
+  String get dlgConflictPullTag => '安全';
+
+  @override
+  String get dlgConflictOverwriteTitle => '覆盖服务器上的副本';
+
+  @override
+  String get dlgConflictOverwriteDesc => '所有已配对设备都会得到本机的副本';
+
+  @override
+  String get dlgConflictOverwriteTag => '会覆盖';
+
+  @override
   String get setupTag => '首次运行设置';
 
   @override
@@ -5026,6 +5181,161 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get trustCrumbPrefix => '设置 · 关于';
+
+  @override
+  String get dlgClose => '关闭';
+
+  @override
+  String get dlgDeleteKicker => '服务器 · 删除';
+
+  @override
+  String dlgDeleteTitle(String name) {
+    return '删除 $name？';
+  }
+
+  @override
+  String get dlgDeleteIntro => '只从本机移除。你的 VPS 继续运行，上面不会有任何变化。';
+
+  @override
+  String dlgDeleteOrder(String order) {
+    return '故障转移 #$order';
+  }
+
+  @override
+  String dlgDeleteNoteLast(String code) {
+    return '故障转移只剩 $code，没有可切换的备用';
+  }
+
+  @override
+  String get dlgDeleteNoteOthers => '其他配置保持原有的故障转移顺序';
+
+  @override
+  String get dlgDeleteNoteQuota => '本机上它的流量统计会被清除';
+
+  @override
+  String get dlgDeleteNoteSync => '同步副本会保留到你下次推送';
+
+  @override
+  String dlgDeleteBtn(String code) {
+    return '删除 $code';
+  }
+
+  @override
+  String get dlgUnpairKicker => '同步 · 取消配对';
+
+  @override
+  String get dlgUnpairHeading => '取消此设备的配对？';
+
+  @override
+  String get dlgUnpairIntro => '此设备将停止同步。加密副本仍保留在同步服务器上，你的其他设备照常工作。';
+
+  @override
+  String get dlgUnpairNote1 => '此设备上的服务器、规则和设置保持不变';
+
+  @override
+  String get dlgUnpairNote2 => 'Charon 暂时无法列出你其他已配对的设备';
+
+  @override
+  String get dlgUnpairNote3 => '随时可用另一台设备的配对码重新配对';
+
+  @override
+  String get dlgUnpairBtn => '取消配对';
+
+  @override
+  String get dlgEraseKicker => '设置 · 清除';
+
+  @override
+  String get dlgEraseHeading => '清除这台电脑上的所有数据？';
+
+  @override
+  String get dlgEraseIntro => 'Charon 会先断开连接、关闭断网保护，然后删除它在这台电脑上保存的所有内容。';
+
+  @override
+  String get dlgEraseRemovedTag => '将删除';
+
+  @override
+  String get dlgEraseRemovedWhat => '服务器、规则、设置';
+
+  @override
+  String get dlgEraseRemovedSub => '流量计数、设备令牌';
+
+  @override
+  String get dlgEraseStaysTag => '保留';
+
+  @override
+  String get dlgEraseStaysWhat => '同步副本';
+
+  @override
+  String get dlgEraseStaysSub => '以及 Charon 服务';
+
+  @override
+  String get dlgEraseNote1 => '此操作无法撤销';
+
+  @override
+  String get dlgEraseNote2 => '重新配对或从文件恢复，即可找回你的服务器';
+
+  @override
+  String get dlgEraseNote3 => '要移除服务，请卸载 Charon';
+
+  @override
+  String get dlgEraseBtn => '全部清除';
+
+  @override
+  String get dlgQuitKicker => '退出';
+
+  @override
+  String get dlgQuitHeading => '关闭 Charon？';
+
+  @override
+  String get dlgQuitHideDesc => '窗口关闭 · 托盘图标保留';
+
+  @override
+  String get dlgQuitWindowDesc => '重新打开 Charon 之前没有托盘图标';
+
+  @override
+  String get dlgQuitDisconnectDesc => '你的应用回到普通网络连接';
+
+  @override
+  String get dlgQuitTagOn => '隧道开启';
+
+  @override
+  String get dlgQuitTagOff => '隧道关闭';
+
+  @override
+  String get dlgQuitNote1 => '断网保护不会介入，退出由你决定';
+
+  @override
+  String get dlgQuitNote2 => 'Charon 重新打开时直接接上运行中的隧道，无需重连';
+
+  @override
+  String get dlgQuitNote3 => '未连接时，点 X 会直接退出';
+
+  @override
+  String get dlgConflictKicker => '同步 · 推送';
+
+  @override
+  String get dlgConflictHeading => '服务器上的副本更新';
+
+  @override
+  String get dlgConflictIntro => '另一台设备在本机上次同步之后推送过。现在推送会覆盖那份更新的副本。';
+
+  @override
+  String get dlgConflictPullTitle => '先拉取';
+
+  @override
+  String get dlgConflictPullDesc => '会替换本机内容，之后可以再次推送';
+
+  @override
+  String get dlgConflictPullTag => '安全';
+
+  @override
+  String get dlgConflictOverwriteTitle => '覆盖服务器上的副本';
+
+  @override
+  String get dlgConflictOverwriteDesc => '所有已配对设备都会得到本机的副本';
+
+  @override
+  String get dlgConflictOverwriteTag => '会覆盖';
 
   @override
   String get setupTag => '首次运行设置';

@@ -2074,6 +2074,175 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trustCrumbPrefix => 'SETTINGS · ABOUT';
 
   @override
+  String get dlgClose => 'Close';
+
+  @override
+  String get dlgDeleteKicker => 'SERVERS · DELETE';
+
+  @override
+  String dlgDeleteTitle(String name) {
+    return 'Delete $name?';
+  }
+
+  @override
+  String get dlgDeleteIntro =>
+      'It leaves this device only. Your VPS keeps running and nothing changes on it.';
+
+  @override
+  String dlgDeleteOrder(String order) {
+    return '#$order failover';
+  }
+
+  @override
+  String dlgDeleteNoteLast(String code) {
+    return 'failover becomes $code only, nothing to fall back to';
+  }
+
+  @override
+  String get dlgDeleteNoteOthers =>
+      'the other profiles keep their failover order';
+
+  @override
+  String get dlgDeleteNoteQuota => 'its quota count on this device is erased';
+
+  @override
+  String get dlgDeleteNoteSync => 'the synced copy stays until your next Push';
+
+  @override
+  String dlgDeleteBtn(String code) {
+    return 'Delete $code';
+  }
+
+  @override
+  String get dlgUnpairKicker => 'SYNC · UNPAIR';
+
+  @override
+  String get dlgUnpairHeading => 'Unpair this device?';
+
+  @override
+  String get dlgUnpairIntro =>
+      'This device stops syncing. The encrypted copy stays on the sync server, and your other devices keep working.';
+
+  @override
+  String get dlgUnpairNote1 =>
+      'servers, rules and settings on this device stay as they are';
+
+  @override
+  String get dlgUnpairNote2 =>
+      'Charon cannot list your other paired devices yet';
+
+  @override
+  String get dlgUnpairNote3 =>
+      'pair again any time with a code from another device';
+
+  @override
+  String get dlgUnpairBtn => 'Unpair';
+
+  @override
+  String get dlgEraseKicker => 'SETTINGS · ERASE';
+
+  @override
+  String get dlgEraseHeading => 'Erase all data on this PC?';
+
+  @override
+  String get dlgEraseIntro =>
+      'Charon disconnects, turns off the kill switch, then removes everything it keeps on this PC.';
+
+  @override
+  String get dlgEraseRemovedTag => 'REMOVED';
+
+  @override
+  String get dlgEraseRemovedWhat => 'servers, rules, settings';
+
+  @override
+  String get dlgEraseRemovedSub => 'quota counters, device token';
+
+  @override
+  String get dlgEraseStaysTag => 'STAYS';
+
+  @override
+  String get dlgEraseStaysWhat => 'the sync copy';
+
+  @override
+  String get dlgEraseStaysSub => 'and the Charon service';
+
+  @override
+  String get dlgEraseNote1 => 'this cannot be undone';
+
+  @override
+  String get dlgEraseNote2 =>
+      'pair again or restore from a file to bring your servers back';
+
+  @override
+  String get dlgEraseNote3 => 'to remove the service, uninstall Charon';
+
+  @override
+  String get dlgEraseBtn => 'Erase everything';
+
+  @override
+  String get dlgQuitKicker => 'QUIT';
+
+  @override
+  String get dlgQuitHeading => 'Close Charon?';
+
+  @override
+  String get dlgQuitHideDesc => 'the window closes · the tray icon stays';
+
+  @override
+  String get dlgQuitWindowDesc => 'no tray icon until you open Charon again';
+
+  @override
+  String get dlgQuitDisconnectDesc =>
+      'your apps go back to your normal connection';
+
+  @override
+  String get dlgQuitTagOn => 'TUNNEL ON';
+
+  @override
+  String get dlgQuitTagOff => 'TUNNEL OFF';
+
+  @override
+  String get dlgQuitNote1 =>
+      'kill switch stays out of it, quitting is your choice';
+
+  @override
+  String get dlgQuitNote2 =>
+      'Charon reopens onto the running tunnel, no reconnect';
+
+  @override
+  String get dlgQuitNote3 => 'when you are disconnected, X quits right away';
+
+  @override
+  String get dlgConflictKicker => 'SYNC · PUSH';
+
+  @override
+  String get dlgConflictHeading => 'The server copy is newer';
+
+  @override
+  String get dlgConflictIntro =>
+      'Another device pushed after this one last synced. Pushing now would replace that newer copy.';
+
+  @override
+  String get dlgConflictPullTitle => 'Pull first';
+
+  @override
+  String get dlgConflictPullDesc =>
+      'replaces what is on this device, then you can push again';
+
+  @override
+  String get dlgConflictPullTag => 'SAFE';
+
+  @override
+  String get dlgConflictOverwriteTitle => 'Overwrite the server copy';
+
+  @override
+  String get dlgConflictOverwriteDesc =>
+      'every paired device gets this device\'s copy';
+
+  @override
+  String get dlgConflictOverwriteTag => 'REPLACES';
+
+  @override
   String get setupTag => 'FIRST RUN SETUP';
 
   @override

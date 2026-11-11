@@ -2089,6 +2089,176 @@ class AppLocalizationsId extends AppLocalizations {
   String get trustCrumbPrefix => 'PENGATURAN · TENTANG';
 
   @override
+  String get dlgClose => 'Tutup';
+
+  @override
+  String get dlgDeleteKicker => 'SERVER · HAPUS';
+
+  @override
+  String dlgDeleteTitle(String name) {
+    return 'Hapus $name?';
+  }
+
+  @override
+  String get dlgDeleteIntro =>
+      'Hanya dihapus dari perangkat ini. VPS-mu tetap berjalan dan tidak ada yang berubah di sana.';
+
+  @override
+  String dlgDeleteOrder(String order) {
+    return '#$order failover';
+  }
+
+  @override
+  String dlgDeleteNoteLast(String code) {
+    return 'failover jadi $code saja, tidak ada cadangan';
+  }
+
+  @override
+  String get dlgDeleteNoteOthers => 'profil lain tetap di urutan failover-nya';
+
+  @override
+  String get dlgDeleteNoteQuota => 'hitungan kuotanya di perangkat ini dihapus';
+
+  @override
+  String get dlgDeleteNoteSync =>
+      'salinan tersinkron tetap ada sampai Kirim berikutnya';
+
+  @override
+  String dlgDeleteBtn(String code) {
+    return 'Hapus $code';
+  }
+
+  @override
+  String get dlgUnpairKicker => 'SYNC · LEPAS PASANGAN';
+
+  @override
+  String get dlgUnpairHeading => 'Lepas pasangan perangkat ini?';
+
+  @override
+  String get dlgUnpairIntro =>
+      'Perangkat ini berhenti sinkron. Salinan terenkripsi tetap ada di server sync, dan perangkat lainmu tetap jalan.';
+
+  @override
+  String get dlgUnpairNote1 =>
+      'server, aturan, dan pengaturan di perangkat ini tetap seperti semula';
+
+  @override
+  String get dlgUnpairNote2 =>
+      'Charon belum bisa menampilkan daftar perangkat lain yang terpasang';
+
+  @override
+  String get dlgUnpairNote3 =>
+      'pasangkan lagi kapan saja dengan kode dari perangkat lain';
+
+  @override
+  String get dlgUnpairBtn => 'Lepas pasangan';
+
+  @override
+  String get dlgEraseKicker => 'PENGATURAN · HAPUS';
+
+  @override
+  String get dlgEraseHeading => 'Hapus semua data di PC ini?';
+
+  @override
+  String get dlgEraseIntro =>
+      'Charon memutus koneksi, mematikan kill switch, lalu menghapus semua yang disimpannya di PC ini.';
+
+  @override
+  String get dlgEraseRemovedTag => 'DIHAPUS';
+
+  @override
+  String get dlgEraseRemovedWhat => 'server, aturan, pengaturan';
+
+  @override
+  String get dlgEraseRemovedSub => 'penghitung kuota, token perangkat';
+
+  @override
+  String get dlgEraseStaysTag => 'TETAP ADA';
+
+  @override
+  String get dlgEraseStaysWhat => 'salinan sync';
+
+  @override
+  String get dlgEraseStaysSub => 'dan service Charon';
+
+  @override
+  String get dlgEraseNote1 => 'ini tidak bisa dibatalkan';
+
+  @override
+  String get dlgEraseNote2 =>
+      'pasangkan lagi atau pulihkan dari file untuk mengembalikan servermu';
+
+  @override
+  String get dlgEraseNote3 =>
+      'untuk menghapus service, copot pemasangan Charon';
+
+  @override
+  String get dlgEraseBtn => 'Hapus semuanya';
+
+  @override
+  String get dlgQuitKicker => 'KELUAR';
+
+  @override
+  String get dlgQuitHeading => 'Tutup Charon?';
+
+  @override
+  String get dlgQuitHideDesc => 'jendela menutup · ikon tray tetap ada';
+
+  @override
+  String get dlgQuitWindowDesc =>
+      'tanpa ikon tray sampai kamu membuka Charon lagi';
+
+  @override
+  String get dlgQuitDisconnectDesc => 'aplikasimu kembali ke koneksi biasa';
+
+  @override
+  String get dlgQuitTagOn => 'TUNNEL NYALA';
+
+  @override
+  String get dlgQuitTagOff => 'TUNNEL MATI';
+
+  @override
+  String get dlgQuitNote1 =>
+      'kill switch tidak ikut campur, keluar adalah pilihanmu';
+
+  @override
+  String get dlgQuitNote2 =>
+      'Charon dibuka lagi di tunnel yang masih jalan, tanpa sambung ulang';
+
+  @override
+  String get dlgQuitNote3 => 'saat kamu terputus, X langsung keluar';
+
+  @override
+  String get dlgConflictKicker => 'SYNC · KIRIM';
+
+  @override
+  String get dlgConflictHeading => 'Salinan di server lebih baru';
+
+  @override
+  String get dlgConflictIntro =>
+      'Perangkat lain mengirim setelah perangkat ini terakhir sinkron. Mengirim sekarang akan menimpa salinan yang lebih baru itu.';
+
+  @override
+  String get dlgConflictPullTitle => 'Tarik dulu';
+
+  @override
+  String get dlgConflictPullDesc =>
+      'menggantikan isi perangkat ini, lalu kamu bisa kirim lagi';
+
+  @override
+  String get dlgConflictPullTag => 'AMAN';
+
+  @override
+  String get dlgConflictOverwriteTitle => 'Timpa salinan di server';
+
+  @override
+  String get dlgConflictOverwriteDesc =>
+      'semua perangkat terpasang mendapat salinan perangkat ini';
+
+  @override
+  String get dlgConflictOverwriteTag => 'MENIMPA';
+
+  @override
   String get setupTag => 'PENYIAPAN AWAL';
 
   @override
