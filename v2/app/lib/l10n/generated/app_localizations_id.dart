@@ -3786,4 +3786,11 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get dlgAddReadConfigNamed => 'DIBACA DARI CONFIG';
+
+  @override
+  String get trustLicSubGeo =>
+      'data negara untuk alamat server · bekerja offline';
+
+  @override
+  String get trustLinkGeo => 'Sumber data ↗';
 }

@@ -18,6 +18,11 @@ const _mplText = 'Mozilla Public License Version 2.0\n\n'
     '1.1. "Contributor" means each individual or legal entity that creates, '
     'contributes to the creation of, or owns Covered Software.';
 
+/// The attribution DB-IP asks for. Legal text, so it is not translated.
+const _geoText = 'This product includes the IP to Country Lite database by DB-IP, '
+    'available from https://db-ip.com.\n\n'
+    'Licence: Creative Commons Attribution 4.0 International (CC BY 4.0).';
+
 const _oflText = 'SIL OPEN FONT LICENSE Version 1.1\n\n'
     'The fonts can be bundled, embedded and redistributed with any software.';
 
@@ -63,6 +68,7 @@ class _LicencesScreenState extends State<LicencesScreen> {
       _Lic('Go modules', l10n.trustChipMixed, l10n.trustLicSubGo, l10n.trustLicTextGo, l10n.trustLinkModules),
       _Lic('Flutter packages', l10n.trustChipMixed, l10n.trustLicSubFlutter, l10n.trustLicTextFlutter,
           l10n.trustLinkPackages),
+      _Lic('DB-IP', 'CC BY 4.0', l10n.trustLicSubGeo, _geoText, l10n.trustLinkGeo),
       _Lic('Fonts', 'OFL 1.1', l10n.trustLicSubFonts, _oflText, l10n.trustLinkFonts),
     ];
 

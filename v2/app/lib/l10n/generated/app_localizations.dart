@@ -6621,6 +6621,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'READ FROM THE CONFIG'**
   String get dlgAddReadConfigNamed;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'country data for server addresses · works offline'**
+  String get trustLicSubGeo;
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'Data source ↗'**
+  String get trustLinkGeo;
 }
 
 class _AppLocalizationsDelegate

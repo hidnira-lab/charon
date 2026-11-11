@@ -1110,5 +1110,7 @@
   "homeCountryRU": "俄罗斯",
   "homeCountryAU": "澳大利亚",
   "dlgAddReadLinkNamed": "从链接读取",
-  "dlgAddReadConfigNamed": "从配置读取"
+  "dlgAddReadConfigNamed": "从配置读取",
+  "trustLicSubGeo": "服务器地址的国家数据 · 离线可用",
+  "trustLinkGeo": "数据来源 ↗"
 }

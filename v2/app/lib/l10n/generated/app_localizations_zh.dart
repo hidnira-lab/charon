@@ -3576,6 +3576,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get dlgAddReadConfigNamed => '从配置读取';
+
+  @override
+  String get trustLicSubGeo => '服务器地址的国家数据 · 离线可用';
+
+  @override
+  String get trustLinkGeo => '数据来源 ↗';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -7149,4 +7155,10 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get dlgAddReadConfigNamed => '从配置读取';
+
+  @override
+  String get trustLicSubGeo => '服务器地址的国家数据 · 离线可用';
+
+  @override
+  String get trustLinkGeo => '数据来源 ↗';
 }

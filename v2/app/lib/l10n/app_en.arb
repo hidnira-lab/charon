@@ -2606,5 +2606,9 @@
   "dlgAddReadLinkNamed": "READ FROM THE LINK",
   "@dlgAddReadLinkNamed": { "description": "Dialog text." },
   "dlgAddReadConfigNamed": "READ FROM THE CONFIG",
-  "@dlgAddReadConfigNamed": { "description": "Dialog text." }
+  "@dlgAddReadConfigNamed": { "description": "Dialog text." },
+  "trustLicSubGeo": "country data for server addresses · works offline",
+  "@trustLicSubGeo": { "description": "Trust screens text." },
+  "trustLinkGeo": "Data source ↗",
+  "@trustLinkGeo": { "description": "Trust screens text." }
 }

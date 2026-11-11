@@ -1109,5 +1109,7 @@
   "homeCountryRU": "Rusia",
   "homeCountryAU": "Australia",
   "dlgAddReadLinkNamed": "DIBACA DARI LINK",
-  "dlgAddReadConfigNamed": "DIBACA DARI CONFIG"
+  "dlgAddReadConfigNamed": "DIBACA DARI CONFIG",
+  "trustLicSubGeo": "data negara untuk alamat server · bekerja offline",
+  "trustLinkGeo": "Sumber data ↗"
 }

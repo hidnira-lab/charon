@@ -73,6 +73,25 @@ void main() {
       expect(find.textContaining('Mozilla Public License Version 2.0'), findsNothing);
     });
 
+    testWidgets('DB-IP is listed with its CC BY chip and the attribution it asks for', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+
+      await tester.pumpWidget(_buildTestTrustApp(home: LicencesScreen(controller: HomeController())));
+      await tester.pumpAndSettle();
+      expect(find.text('CC BY 4.0'), findsOneWidget);
+      expect(find.text('country data for server addresses · works offline'), findsOneWidget);
+      await tester.ensureVisible(find.text('DB-IP'));
+      await tester.tap(find.text('DB-IP'));
+      await tester.pumpAndSettle();
+      expect(
+        find.textContaining('This product includes the IP to Country Lite database by DB-IP'),
+        findsOneWidget,
+      );
+      expect(find.text('Data source ↗'), findsOneWidget);
+    });
+
     testWidgets('wintun says its terms are still to be confirmed, not a licence it may not have', (tester) async {
       tester.view.physicalSize = const Size(1024, 768);
       tester.view.devicePixelRatio = 1.0;

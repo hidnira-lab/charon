@@ -3776,4 +3776,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dlgAddReadConfigNamed => 'READ FROM THE CONFIG';
+
+  @override
+  String get trustLicSubGeo =>
+      'country data for server addresses · works offline';
+
+  @override
+  String get trustLinkGeo => 'Data source ↗';
 }
