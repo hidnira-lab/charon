@@ -200,15 +200,35 @@ class HomeController extends ChangeNotifier {
 
   void _logError(Object error) => debugPrint('HomeController: $error');
 
+  bool _isCheckingUpdates = false;
+
+  /// True while a "Check now" is waiting for the service to answer.
+  bool get isCheckingUpdates => _isCheckingUpdates;
+
   Future<void> checkUpdates() async {
-    if (_client != null) {
-      try {
-        await _client!.checkUpdate();
-      } catch (e) {
-        _logError(e);
-      }
-    }
+    if (_isCheckingUpdates) return;
+    _isCheckingUpdates = true;
     notifyListeners();
+    try {
+      if (_client != null) await _client!.checkUpdate();
+    } catch (e) {
+      _logError(e);
+    } finally {
+      _isCheckingUpdates = false;
+      notifyListeners();
+    }
+  }
+
+  /// Installs the staged Charon app update (the service asks Windows for admin
+  /// rights). A file update that was verified ends up here too.
+  Future<void> applyAppUpdate() async {
+    try {
+      if (_client != null) {
+        await _client!.applyUpdate(UpdateKind.UPDATE_KIND_APP, ApplyWhen.APPLY_NOW);
+      }
+    } catch (e) {
+      _logError(e);
+    }
   }
 
   Future<void> applyCoreUpdate({required ApplyWhen when}) async {
