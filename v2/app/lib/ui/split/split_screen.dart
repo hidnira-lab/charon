@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 import '../../gen/charon/v1/charon.pb.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../state/home_controller.dart';
+import '../../state/split_view.dart';
+import '../../theme/theme.dart';
 import '../home/widgets/rail_nav.dart';
 import 'widgets/composer_card.dart';
 import 'widgets/pending_banner.dart';
 import 'widgets/route_map_card.dart';
 import 'widgets/rules_list_card.dart';
+import 'widgets/split_card.dart';
 import 'widgets/windows_info_card.dart';
 
-class SplitScreen extends StatelessWidget {
+class SplitScreen extends StatefulWidget {
   const SplitScreen({
     super.key,
     required this.controller,
@@ -19,30 +22,46 @@ class SplitScreen extends StatelessWidget {
   final HomeController controller;
 
   @override
+  State<SplitScreen> createState() => _SplitScreenState();
+}
+
+class _SplitScreenState extends State<SplitScreen> {
+  /// The rule that covers what is typed in the composer (the list marks it).
+  final ValueNotifier<String?> _conflict = ValueNotifier(null);
+
+  @override
+  void dispose() {
+    _conflict.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final controller = widget.controller;
     return ListenableBuilder(
       listenable: controller,
       builder: (context, _) {
         final l10n = AppLocalizations.of(context)!;
+        final colors = CharonColors.of(context);
         final splitMode = controller.splitMode;
         final isOnlyListed = splitMode == SplitMode.SPLIT_ONLY_LISTED;
         final rules = controller.activeSplitRules;
         final isConnected = controller.status.phase == Phase.PHASE_UP ||
             controller.status.phase == Phase.PHASE_VERIFYING;
 
-        final activeServerName = controller.activeServer?.displayName.isNotEmpty == true
-            ? controller.activeServer!.displayName
-            : (controller.activeServer?.id.isNotEmpty == true
-                ? controller.activeServer!.id
-                : 'SRV-01');
+        final server = controller.activeServer;
+        final activeServerName = server?.displayName.isNotEmpty == true
+            ? server!.displayName
+            : (server?.id.isNotEmpty == true ? server!.id : 'SRV-01');
 
-        final countLine = rules.length >= 1000
-            ? '1000 RULES'
-            : (rules.isEmpty ? 'NO RULES' : '${rules.length} RULES');
-
-        final subtitle = isOnlyListed
-            ? l10n.splitSubtitleOnlyListed
-            : l10n.splitSubtitleAllExcept;
+        final view = SplitView.of(
+          l10n,
+          connected: isConnected,
+          onlyListed: isOnlyListed,
+          rules: [for (final r in rules) r.value],
+        );
+        final subtitle =
+            isOnlyListed ? l10n.splitSubtitleOnlyListed : l10n.splitSubtitleAllExcept;
 
         return Scaffold(
           body: Row(
@@ -58,7 +77,6 @@ class SplitScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // Header row
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -67,56 +85,36 @@ class SplitScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '> ${l10n.splitCountTitle(countLine)}',
-                                style: const TextStyle(
-                                  fontFamily: 'SpaceMono',
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: 0.08,
-                                  color: Color(0xFF8A8A8A),
-                                ),
+                                '> ${l10n.splitCountTitle(view.countLine)}',
+                                style: splitMono(colors.text3, 10, bold: true, em: 0.08),
                               ),
                               const SizedBox(height: 2),
                               Text(
                                 l10n.splitTitle,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.w600,
-                                  letterSpacing: -0.015,
-                                  color: Color(0xFFEDEDED),
+                                  letterSpacing: -0.33,
+                                  color: colors.text,
                                 ),
                               ),
                             ],
                           ),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 4),
-                            child: Text(
-                              subtitle,
-                              style: const TextStyle(
-                                fontFamily: 'SpaceMono',
-                                fontSize: 11,
-                                color: Color(0xFF8A8A8A),
-                              ),
-                            ),
+                            child: Text(subtitle, style: splitMono(colors.text3, 11)),
                           ),
                         ],
                       ),
                       const SizedBox(height: 14),
-
-                      // Pending banner if any
                       if (controller.hasPendingSplitChanges) ...[
-                        PendingBanner(
-                          onReconnect: controller.reconnectForPendingSplit,
-                        ),
+                        PendingBanner(onReconnect: controller.reconnectForPendingSplit),
                         const SizedBox(height: 14),
                       ],
-
-                      // Main two-column content
                       Expanded(
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            // Left column: Composer + Rules list
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -126,23 +124,27 @@ class SplitScreen extends StatelessWidget {
                                     activeServerName: activeServerName,
                                     existingRules: rules,
                                     onAddRule: controller.addSplitRule,
+                                    onConflict: (v) => _conflict.value = v,
                                   ),
                                   const SizedBox(height: 12),
                                   Expanded(
-                                    child: RulesListCard(
-                                      isOnlyListed: isOnlyListed,
-                                      activeServerName: activeServerName,
-                                      rules: rules,
-                                      isRulePending: controller.isRulePending,
-                                      onRemoveRule: controller.removeSplitRule,
+                                    child: ValueListenableBuilder<String?>(
+                                      valueListenable: _conflict,
+                                      builder: (_, coverer, _) => RulesListCard(
+                                        isOnlyListed: isOnlyListed,
+                                        activeServerName: activeServerName,
+                                        rules: rules,
+                                        tally: view.tally,
+                                        isRulePending: controller.isRulePending,
+                                        onRemoveRule: controller.removeSplitRule,
+                                        conflictWith: coverer,
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                             const SizedBox(width: 16),
-
-                            // Right column: Route map + Windows info
                             SizedBox(
                               width: 316,
                               child: Column(
@@ -153,7 +155,8 @@ class SplitScreen extends StatelessWidget {
                                       splitMode: splitMode,
                                       isConnected: isConnected,
                                       activeServerName: activeServerName,
-                                      rules: rules,
+                                      countryCode: server?.countryCode ?? '',
+                                      view: view,
                                       onSelectMode: controller.setSplitMode,
                                     ),
                                   ),

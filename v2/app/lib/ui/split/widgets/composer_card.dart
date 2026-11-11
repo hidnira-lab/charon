@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../theme/theme.dart';
 import '../rule_validator.dart';
+import 'split_card.dart';
 
 class ComposerCard extends StatefulWidget {
   const ComposerCard({
@@ -11,12 +13,16 @@ class ComposerCard extends StatefulWidget {
     required this.activeServerName,
     required this.existingRules,
     required this.onAddRule,
+    this.onConflict,
   });
 
   final bool isOnlyListed;
   final String activeServerName;
   final List<Rule> existingRules;
   final Future<bool> Function(Rule rule) onAddRule;
+
+  /// Tells the rules list which rule covers what is typed, so it can mark it.
+  final ValueChanged<String?>? onConflict;
 
   @override
   State<ComposerCard> createState() => _ComposerCardState();
@@ -33,14 +39,26 @@ class _ComposerCardState extends State<ComposerCard> {
     super.dispose();
   }
 
-  void _onTextChanged(String value) {
-    setState(() {
-      _conflictCoverer = RuleValidator.findConflict(
-        value,
+  @override
+  void didUpdateWidget(ComposerCard old) {
+    super.didUpdateWidget(old);
+    // The list changed (mode switch, rule added or removed): judge the text again.
+    final next = _findConflict();
+    if (next != _conflictCoverer) {
+      _conflictCoverer = next;
+      WidgetsBinding.instance.addPostFrameCallback((_) => widget.onConflict?.call(next));
+    }
+  }
+
+  String? _findConflict() => RuleValidator.findConflict(
+        _textController.text,
         _selectedKind,
         widget.existingRules,
       );
-    });
+
+  void _recheck() {
+    setState(() => _conflictCoverer = _findConflict());
+    widget.onConflict?.call(_conflictCoverer);
   }
 
   Future<void> _submit() async {
@@ -59,15 +77,19 @@ class _ComposerCardState extends State<ComposerCard> {
     final success = await widget.onAddRule(rule);
     if (success && mounted) {
       _textController.clear();
-      setState(() {
-        _conflictCoverer = null;
-      });
+      _recheck();
     }
+  }
+
+  void _pickKind(RuleKind kind) {
+    _selectedKind = kind;
+    _recheck();
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colors = CharonColors.of(context);
     final isAtLimit = widget.existingRules.length >= 1000;
     final hasConflict = _conflictCoverer != null;
     final isValid = RuleValidator.isValidInput(_textController.text, _selectedKind);
@@ -76,85 +98,62 @@ class _ComposerCardState extends State<ComposerCard> {
     final consequence = widget.isOnlyListed
         ? l10n.splitConsequenceTunnel(widget.activeServerName)
         : l10n.splitConsequenceDirect;
+    final modeTag = widget.isOnlyListed ? l10n.splitTagUseTunnel : l10n.splitTagGoDirect;
 
-    final modeTag = widget.isOnlyListed
-        ? l10n.splitTagUseTunnel
-        : l10n.splitTagGoDirect;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0x8C1E1E1E),
-        border: Border.all(color: const Color(0x33FFFFFF)),
-        borderRadius: BorderRadius.circular(16),
-      ),
+    return SplitCard(
       padding: const EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Segmented buttons & mode tag row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                padding: const EdgeInsets.all(3),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF262626),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildSegment(
-                      label: l10n.splitTypeDomain,
-                      icon: Icons.language,
-                      isSelected: _selectedKind == RuleKind.RULE_DOMAIN,
-                      onTap: () {
-                        setState(() {
-                          _selectedKind = RuleKind.RULE_DOMAIN;
-                          _onTextChanged(_textController.text);
-                        });
-                      },
-                    ),
-                    const SizedBox(width: 2),
-                    _buildSegment(
-                      label: l10n.splitTypeIpCidr,
-                      icon: Icons.tag,
-                      isSelected: _selectedKind == RuleKind.RULE_CIDR,
-                      onTap: () {
-                        setState(() {
-                          _selectedKind = RuleKind.RULE_CIDR;
-                          _onTextChanged(_textController.text);
-                        });
-                      },
-                    ),
-                    const SizedBox(width: 2),
-                    Tooltip(
-                      message: l10n.splitAppAndroidOnly,
-                      child: Container(
-                        height: 30,
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(7),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.lock, size: 14, color: Color(0xFF5C5C5C)),
-                            const SizedBox(width: 6),
-                            Text(
-                              l10n.splitTypeApp,
-                              style: const TextStyle(
-                                fontFamily: 'SpaceMono',
-                                fontSize: 11,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 0.06,
-                                color: Color(0xFF5C5C5C),
+              Semantics(
+                label: l10n.splitRuleType,
+                child: Container(
+                  padding: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    color: colors.surface2,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _segment(
+                        colors,
+                        label: l10n.splitTypeDomain,
+                        icon: Icons.language,
+                        isSelected: _selectedKind == RuleKind.RULE_DOMAIN,
+                        onTap: () => _pickKind(RuleKind.RULE_DOMAIN),
+                      ),
+                      const SizedBox(width: 2),
+                      _segment(
+                        colors,
+                        label: l10n.splitTypeIpCidr,
+                        icon: Icons.tag,
+                        isSelected: _selectedKind == RuleKind.RULE_CIDR,
+                        onTap: () => _pickKind(RuleKind.RULE_CIDR),
+                      ),
+                      const SizedBox(width: 2),
+                      Tooltip(
+                        message: l10n.splitAppAndroidOnly,
+                        child: Container(
+                          height: 30,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Row(
+                            children: [
+                              Icon(Icons.lock, size: 14, color: colors.text3.withValues(alpha: 0.6)),
+                              const SizedBox(width: 6),
+                              Text(
+                                l10n.splitTypeApp,
+                                style: splitMono(colors.text3.withValues(alpha: 0.6), 11, bold: true, em: 0.06),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               Flexible(
@@ -164,19 +163,13 @@ class _ComposerCardState extends State<ComposerCard> {
                     Icon(
                       widget.isOnlyListed ? Icons.alt_route : Icons.wifi,
                       size: 14,
-                      color: const Color(0xFF8A8A8A),
+                      color: colors.text3,
                     ),
                     const SizedBox(width: 6),
                     Flexible(
                       child: Text(
                         modeTag,
-                        style: const TextStyle(
-                          fontFamily: 'SpaceMono',
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.08,
-                          color: Color(0xFF8A8A8A),
-                        ),
+                        style: splitMono(colors.text3, 10, bold: true, em: 0.08),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -186,54 +179,40 @@ class _ComposerCardState extends State<ComposerCard> {
             ],
           ),
           const SizedBox(height: 10),
-
-          // Input field and Add button row
           Row(
             children: [
               Expanded(
                 child: Container(
                   height: 44,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF121212),
+                    color: colors.bg,
                     border: Border.all(
-                      color: hasConflict ? const Color(0xFFE3B579) : const Color(0xFF737373),
+                      color: hasConflict ? colors.transitionFill : colors.controlBorder,
                     ),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: Row(
                     children: [
-                      const Text(
-                        '>',
-                        style: TextStyle(
-                          fontFamily: 'SpaceMono',
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF60A1D9),
-                        ),
-                      ),
+                      Text('>', style: splitMono(colors.accentText, 14, bold: true)),
                       const SizedBox(width: 8),
                       Expanded(
-                        child: TextField(
-                          controller: _textController,
-                          onChanged: _onTextChanged,
-                          onSubmitted: (_) => _submit(),
-                          style: const TextStyle(
-                            fontFamily: 'SpaceMono',
-                            fontSize: 13,
-                            color: Color(0xFFEDEDED),
-                          ),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            isDense: true,
-                            contentPadding: EdgeInsets.zero,
-                            hintText: _selectedKind == RuleKind.RULE_DOMAIN
-                                ? l10n.splitDomainPlaceholder
-                                : l10n.splitCidrPlaceholder,
-                            hintStyle: const TextStyle(
-                              fontFamily: 'SpaceMono',
-                              fontSize: 13,
-                              color: Color(0xFF5C5C5C),
+                        child: Semantics(
+                          label: l10n.splitDomainLabel,
+                          textField: true,
+                          child: TextField(
+                            controller: _textController,
+                            onChanged: (_) => _recheck(),
+                            onSubmitted: (_) => _submit(),
+                            style: splitMono(colors.text, 13),
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              hintText: _selectedKind == RuleKind.RULE_DOMAIN
+                                  ? l10n.splitDomainPlaceholder
+                                  : l10n.splitCidrPlaceholder,
+                              hintStyle: splitMono(colors.text3, 13),
                             ),
                           ),
                         ),
@@ -244,7 +223,8 @@ class _ComposerCardState extends State<ComposerCard> {
               ),
               const SizedBox(width: 8),
               Opacity(
-                opacity: canAdd ? 1.0 : 0.4,
+                // The board dims the button only for a conflict or the limit.
+                opacity: hasConflict || isAtLimit ? 0.4 : 1.0,
                 child: InkWell(
                   onTap: canAdd ? _submit : null,
                   borderRadius: BorderRadius.circular(999),
@@ -252,30 +232,19 @@ class _ComposerCardState extends State<ComposerCard> {
                     height: 44,
                     padding: const EdgeInsets.only(left: 16, right: 5),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFEDEDED),
+                      color: colors.text,
                       borderRadius: BorderRadius.circular(999),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          l10n.splitAddRuleBtn,
-                          style: const TextStyle(
-                            fontFamily: 'SpaceMono',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFF121212),
-                          ),
-                        ),
+                        Text(l10n.splitAddRuleBtn, style: splitMono(colors.bg, 12, bold: true)),
                         const SizedBox(width: 12),
                         Container(
                           width: 34,
                           height: 34,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFF60A1D9),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(Icons.add, size: 18, color: Color(0xFF121212)),
+                          decoration: BoxDecoration(color: colors.accent, shape: BoxShape.circle),
+                          child: Icon(Icons.add, size: 18, color: colors.onAccent),
                         ),
                       ],
                     ),
@@ -285,24 +254,15 @@ class _ComposerCardState extends State<ComposerCard> {
             ],
           ),
           const SizedBox(height: 8),
-
-          // Consequence or error line
           if (isAtLimit)
             Row(
               children: [
-                Container(
-                  width: 6,
-                  height: 6,
-                  color: const Color(0xFFE3B579),
-                ),
+                Container(width: 6, height: 6, color: colors.transitionFill),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     l10n.splitLimitReached,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Color(0xFFE3B579),
-                    ),
+                    style: TextStyle(fontSize: 12, color: colors.transitionText),
                   ),
                 ),
               ],
@@ -313,19 +273,12 @@ class _ComposerCardState extends State<ComposerCard> {
               children: [
                 Row(
                   children: [
-                    Container(
-                      width: 8,
-                      height: 8,
-                      color: const Color(0xFFE3B579),
-                    ),
+                    Container(width: 8, height: 8, color: colors.transitionFill),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         l10n.splitConflictTitle(_conflictCoverer!),
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Color(0xFFEDEDED),
-                        ),
+                        style: TextStyle(fontSize: 12, color: colors.text),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -334,11 +287,7 @@ class _ComposerCardState extends State<ComposerCard> {
                 const SizedBox(height: 3),
                 Text(
                   '> ${l10n.splitConflictHint(_conflictCoverer!)}',
-                  style: const TextStyle(
-                    fontFamily: 'SpaceMono',
-                    fontSize: 11,
-                    color: Color(0xFF8A8A8A),
-                  ),
+                  style: splitMono(colors.text3, 11),
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
@@ -346,11 +295,7 @@ class _ComposerCardState extends State<ComposerCard> {
           else
             Text(
               '> $consequence',
-              style: const TextStyle(
-                fontFamily: 'SpaceMono',
-                fontSize: 11,
-                color: Color(0xFF8A8A8A),
-              ),
+              style: splitMono(colors.text3, 11),
               overflow: TextOverflow.ellipsis,
             ),
         ],
@@ -358,41 +303,30 @@ class _ComposerCardState extends State<ComposerCard> {
     );
   }
 
-  Widget _buildSegment({
+  Widget _segment(
+    CharonColors colors, {
     required String label,
     required IconData icon,
     required bool isSelected,
     required VoidCallback onTap,
   }) {
+    final ink = isSelected ? colors.bg : colors.text2;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(7),
       child: Container(
         height: 30,
-        padding: const EdgeInsets.symmetric(horizontal: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFFEDEDED) : Colors.transparent,
+          color: isSelected ? colors.text : Colors.transparent,
           borderRadius: BorderRadius.circular(7),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              size: 14,
-              color: isSelected ? const Color(0xFF121212) : const Color(0xFFA3A3A3),
-            ),
+            Icon(icon, size: 14, color: ink),
             const SizedBox(width: 6),
-            Text(
-              label,
-              style: TextStyle(
-                fontFamily: 'SpaceMono',
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.06,
-                color: isSelected ? const Color(0xFF121212) : const Color(0xFFA3A3A3),
-              ),
-            ),
+            Text(label, style: splitMono(ink, 11, bold: true, em: 0.06)),
           ],
         ),
       ),

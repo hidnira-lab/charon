@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../state/split_view.dart';
+import '../../../theme/theme.dart';
+import 'split_card.dart';
 
 class RouteMapCard extends StatelessWidget {
   const RouteMapCard({
@@ -9,335 +12,191 @@ class RouteMapCard extends StatelessWidget {
     required this.splitMode,
     required this.isConnected,
     required this.activeServerName,
-    required this.rules,
+    required this.countryCode,
+    required this.view,
     required this.onSelectMode,
   });
 
   final SplitMode splitMode;
   final bool isConnected;
   final String activeServerName;
-  final List<Rule> rules;
+  final String countryCode;
+  final SplitView view;
   final ValueChanged<SplitMode> onSelectMode;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colors = CharonColors.of(context);
     final isOnly = splitMode == SplitMode.SPLIT_ONLY_LISTED;
-    final hasRules = rules.isNotEmpty;
+    final label = splitMono(colors.text2, 10, bold: true, em: 0.08);
 
-    // Determine left (Tunnel) and right (Direct) content
-    String tunNote;
-    String dirNote;
-    List<String> tunList;
-    List<String> dirList;
+    return Semantics(
+      label: l10n.splitRouteMapLabel,
+      container: true,
+      child: SplitCard(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text('> ${l10n.splitTunnelModeTitle}', style: label),
+            const SizedBox(height: 10),
+            _modeOption(
+              colors,
+              title: l10n.splitModeAllExcept,
+              desc: l10n.splitModeAllExceptDesc,
+              isSelected: !isOnly,
+              onTap: () => onSelectMode(SplitMode.SPLIT_ALL_EXCEPT_LISTED),
+            ),
+            const SizedBox(height: 6),
+            _modeOption(
+              colors,
+              title: l10n.splitModeOnlyListed,
+              desc: l10n.splitModeOnlyListedDesc,
+              isSelected: isOnly,
+              onTap: () => onSelectMode(SplitMode.SPLIT_ONLY_LISTED),
+            ),
+            const SizedBox(height: 8),
+            Text('> ${l10n.splitNextConnectNote}', style: splitMono(colors.text3, 10)),
+            const SizedBox(height: 10),
+            Divider(color: colors.divider, height: 1),
+            const SizedBox(height: 10),
+            Text('> ${l10n.splitWhereTrafficGoes}', style: label),
+            const SizedBox(height: 10),
+            Container(
+              height: 40,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                color: colors.bg,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.laptop_mac, size: 20, color: colors.text),
+                  const SizedBox(width: 10),
+                  Text(
+                    l10n.splitLaptop,
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: colors.text),
+                  ),
+                  const Spacer(),
+                  Text(l10n.splitThisUnit, style: splitMono(colors.text3, 10, bold: true, em: 0.08)),
+                ],
+              ),
+            ),
+            _Fork(chip: view.countLine, tunnelLive: isConnected),
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: Opacity(
+                      opacity: isConnected ? 1 : 0.7,
+                      child: _destination(
+                        colors,
+                        border: isConnected ? colors.accent : colors.controlBorder.withValues(alpha: 0.6),
+                        head: Row(
+                          children: [
+                            if (countryCode.isNotEmpty) ...[
+                              Container(
+                                width: 24,
+                                height: 16,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: colors.surface2,
+                                  border: Border.all(color: colors.controlBorder),
+                                ),
+                                child: Text(
+                                  countryCode.toUpperCase(),
+                                  style: splitMono(colors.text, 8, bold: true),
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                            ],
+                            Text(
+                              l10n.splitTunnelTag,
+                              style: splitMono(
+                                isConnected ? colors.accentText : colors.text3,
+                                10,
+                                bold: true,
+                                em: 0.08,
+                              ),
+                            ),
+                          ],
+                        ),
+                        title: activeServerName,
+                        note: view.tunNote,
+                        entries: view.tunList,
+                        dash: isConnected ? colors.accent.withValues(alpha: 0.4) : colors.divider,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _destination(
+                      colors,
+                      border: colors.divider,
+                      head: Row(
+                        children: [
+                          Icon(Icons.wifi, size: 14, color: colors.text2),
+                          const SizedBox(width: 6),
+                          Text(l10n.splitDirectTag, style: splitMono(colors.text2, 10, bold: true, em: 0.08)),
+                        ],
+                      ),
+                      title: l10n.splitYourNetwork,
+                      note: view.dirNote,
+                      entries: view.dirList,
+                      dash: colors.divider,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-    if (!isConnected) {
-      tunNote = l10n.splitOffRulesWait;
-      dirNote = l10n.splitUntilConnect;
-      tunList = ['nothing yet'];
-      dirList = ['× everything'];
-    } else if (isOnly) {
-      tunNote = hasRules ? '${rules.length} rules' : 'no rules yet';
-      dirNote = l10n.splitTheDefault;
-      tunList = hasRules ? rules.map((r) => '→ ${r.value}').toList() : ['nothing yet'];
-      dirList = ['× everything else'];
-    } else {
-      tunNote = l10n.splitTheDefault;
-      dirNote = hasRules ? '${rules.length} rules' : 'no rules yet';
-      tunList = ['→ everything else'];
-      dirList = hasRules ? rules.map((r) => '× ${r.value}').toList() : ['nothing yet'];
-    }
-
-    final ruleChip = rules.length >= 1000
-        ? '1000 RULES'
-        : (rules.isEmpty ? 'NO RULES' : '${rules.length} RULES');
-
+  Widget _destination(
+    CharonColors colors, {
+    required Color border,
+    required Widget head,
+    required String title,
+    required String note,
+    required List<SplitEntry> entries,
+    required Color dash,
+  }) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0x8C1E1E1E),
-        border: Border.all(color: const Color(0x33FFFFFF)),
-        borderRadius: BorderRadius.circular(16),
+        color: colors.bg,
+        border: Border.all(color: border),
+        borderRadius: BorderRadius.circular(12),
       ),
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(10),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Section title
-          Text(
-            '> ${l10n.splitTunnelModeTitle}',
-            style: const TextStyle(
-              fontFamily: 'SpaceMono',
-              fontSize: 10,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.08,
-              color: Color(0xFFA3A3A3),
-            ),
-          ),
-          const SizedBox(height: 10),
-
-          // Radiogroup
-          _buildModeOption(
-            title: l10n.splitModeAllExcept,
-            desc: l10n.splitModeAllExceptDesc,
-            isSelected: !isOnly,
-            onTap: () => onSelectMode(SplitMode.SPLIT_ALL_EXCEPT_LISTED),
-          ),
+          head,
           const SizedBox(height: 6),
-          _buildModeOption(
-            title: l10n.splitModeOnlyListed,
-            desc: l10n.splitModeOnlyListedDesc,
-            isSelected: isOnly,
-            onTap: () => onSelectMode(SplitMode.SPLIT_ONLY_LISTED),
-          ),
-          const SizedBox(height: 8),
-
-          // Reconnect note
           Text(
-            '> ${l10n.splitNextConnectNote}',
-            style: const TextStyle(
-              fontFamily: 'SpaceMono',
-              fontSize: 10,
-              color: Color(0xFF8A8A8A),
-            ),
+            title,
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: colors.text),
+            overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 10),
-          const Divider(color: Color(0xFF333333), height: 1),
-          const SizedBox(height: 10),
-
-          // Where traffic goes title
-          Text(
-            '> ${l10n.splitWhereTrafficGoes}',
-            style: const TextStyle(
-              fontFamily: 'SpaceMono',
-              fontSize: 10,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.08,
-              color: Color(0xFFA3A3A3),
-            ),
-          ),
-          const SizedBox(height: 10),
-
-          // Laptop box
-          Container(
-            height: 40,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(
-              color: const Color(0xFF121212),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.laptop_mac, size: 20, color: Color(0xFFEDEDED)),
-                const SizedBox(width: 10),
-                const Text(
-                  'Laptop',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFFEDEDED),
-                  ),
-                ),
-                const Spacer(),
-                Text(
-                  l10n.splitThisUnit,
-                  style: const TextStyle(
-                    fontFamily: 'SpaceMono',
-                    fontSize: 10,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.08,
-                    color: Color(0xFF8A8A8A),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Visual fork connector with rule chip
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: Column(
-              children: [
-                Container(width: 2, height: 10, color: const Color(0xFF737373)),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF1E1E1E),
-                    border: Border.all(color: const Color(0xFF737373)),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Text(
-                    ruleChip,
-                    style: const TextStyle(
-                      fontFamily: 'SpaceMono',
-                      fontSize: 10,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.06,
-                      color: Color(0xFFEDEDED),
-                    ),
-                  ),
-                ),
-                Container(width: 2, height: 10, color: const Color(0xFF737373)),
-              ],
-            ),
-          ),
-
-          // Destinations row (Tunnel vs Direct)
+          Text(note, style: splitMono(colors.text2, 10).copyWith(height: 1.4)),
+          const SizedBox(height: 6),
+          Divider(color: dash, height: 1),
+          const SizedBox(height: 4),
           Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+            child: ListView(
+              padding: EdgeInsets.zero,
               children: [
-                // Tunnel box (Left)
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF121212),
-                      border: Border.all(
-                        color: isConnected ? const Color(0xFF60A1D9) : const Color(0xFF4A4A4A),
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              width: 16,
-                              height: 12,
-                              color: const Color(0xFFEF3340),
-                            ),
-                            const SizedBox(width: 6),
-                            Text(
-                              'TUNNEL',
-                              style: TextStyle(
-                                fontFamily: 'SpaceMono',
-                                fontSize: 10,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 0.08,
-                                color: isConnected
-                                    ? const Color(0xFF60A1D9)
-                                    : const Color(0xFF8A8A8A),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          activeServerName,
-                          style: const TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFFEDEDED),
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          tunNote,
-                          style: const TextStyle(
-                            fontFamily: 'SpaceMono',
-                            fontSize: 10,
-                            color: Color(0xFFA3A3A3),
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        const Divider(color: Color(0xFF333333), height: 1),
-                        const SizedBox(height: 4),
-                        Expanded(
-                          child: ListView(
-                            padding: EdgeInsets.zero,
-                            children: tunList
-                                .map((item) => Text(
-                                      item,
-                                      style: TextStyle(
-                                        fontFamily: 'SpaceMono',
-                                        fontSize: 11,
-                                        color: item == 'nothing yet'
-                                            ? const Color(0xFF737373)
-                                            : const Color(0xFFEDEDED),
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                      ],
-                    ),
+                for (final e in entries)
+                  Text(
+                    e.text,
+                    style: splitMono(e.dim ? colors.controlBorder : colors.text, 11).copyWith(height: 1.4),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                const SizedBox(width: 8),
-
-                // Direct box (Right)
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF121212),
-                      border: Border.all(color: const Color(0xFF333333)),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.wifi, size: 14, color: Color(0xFFA3A3A3)),
-                            const SizedBox(width: 6),
-                            const Text(
-                              'DIRECT',
-                              style: TextStyle(
-                                fontFamily: 'SpaceMono',
-                                fontSize: 10,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 0.08,
-                                color: Color(0xFFA3A3A3),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          l10n.splitYourNetwork,
-                          style: const TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFFEDEDED),
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          dirNote,
-                          style: const TextStyle(
-                            fontFamily: 'SpaceMono',
-                            fontSize: 10,
-                            color: Color(0xFFA3A3A3),
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        const Divider(color: Color(0xFF333333), height: 1),
-                        const SizedBox(height: 4),
-                        Expanded(
-                          child: ListView(
-                            padding: EdgeInsets.zero,
-                            children: dirList
-                                .map((item) => Text(
-                                      item,
-                                      style: TextStyle(
-                                        fontFamily: 'SpaceMono',
-                                        fontSize: 11,
-                                        color: item == 'nothing yet'
-                                            ? const Color(0xFF737373)
-                                            : const Color(0xFFEDEDED),
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
@@ -346,7 +205,8 @@ class RouteMapCard extends StatelessWidget {
     );
   }
 
-  Widget _buildModeOption({
+  Widget _modeOption(
+    CharonColors colors, {
     required String title,
     required String desc,
     required bool isSelected,
@@ -358,9 +218,9 @@ class RouteMapCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF121212) : Colors.transparent,
+          color: isSelected ? colors.bg : Colors.transparent,
           border: Border.all(
-            color: isSelected ? const Color(0xFFEDEDED) : const Color(0xFF333333),
+            color: isSelected ? colors.text : colors.divider,
             width: isSelected ? 2 : 1,
           ),
           borderRadius: BorderRadius.circular(12),
@@ -372,19 +232,13 @@ class RouteMapCard extends StatelessWidget {
               height: 16,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: isSelected ? const Color(0xFFEDEDED) : const Color(0xFF737373),
+                  color: isSelected ? colors.text : colors.controlBorder,
                   width: 2,
                 ),
                 borderRadius: BorderRadius.circular(4),
               ),
               alignment: Alignment.center,
-              child: isSelected
-                  ? Container(
-                      width: 6,
-                      height: 6,
-                      color: const Color(0xFF60A1D9),
-                    )
-                  : null,
+              child: isSelected ? Container(width: 6, height: 6, color: colors.accent) : null,
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -396,19 +250,11 @@ class RouteMapCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: isSelected ? const Color(0xFFEDEDED) : const Color(0xFFA3A3A3),
+                      color: isSelected ? colors.text : colors.text2,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Text(
-                    desc,
-                    style: const TextStyle(
-                      fontFamily: 'SpaceMono',
-                      fontSize: 10,
-                      color: Color(0xFF8A8A8A),
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  Text(desc, style: splitMono(colors.text3, 10), overflow: TextOverflow.ellipsis),
                 ],
               ),
             ),
@@ -417,4 +263,74 @@ class RouteMapCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// The fork under the Laptop box: a line down to the rule chip, then a split
+/// into the tunnel branch (blue while connected) and the direct branch.
+class _Fork extends StatelessWidget {
+  const _Fork({required this.chip, required this.tunnelLive});
+
+  final String chip;
+  final bool tunnelLive;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
+    return SizedBox(
+      height: 46,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: CustomPaint(
+              painter: _ForkPainter(
+                grey: colors.controlBorder,
+                tunnel: tunnelLive ? colors.accent : colors.controlBorder.withValues(alpha: 0.6),
+              ),
+            ),
+          ),
+          Align(
+            alignment: const Alignment(0, -0.45),
+            child: Container(
+              height: 22,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: colors.surface,
+                border: Border.all(color: colors.controlBorder),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(chip, style: splitMono(colors.text, 10, bold: true, em: 0.06)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ForkPainter extends CustomPainter {
+  const _ForkPainter({required this.grey, required this.tunnel});
+
+  final Color grey;
+  final Color tunnel;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // The two boxes below sit in a row with an 8 px gap, so their centres are:
+    final left = (size.width - 8) / 4;
+    final right = size.width - left;
+    final mid = size.width / 2;
+    final p = Paint()..strokeWidth = 2;
+    void line(Offset a, Offset b, Color c) => canvas.drawLine(a, b, p..color = c);
+
+    line(Offset(mid, 0), Offset(mid, 8), grey); // laptop to chip
+    line(Offset(mid, 30), Offset(mid, 38), grey); // chip to the fork
+    line(Offset(left, 38), Offset(mid, 38), tunnel);
+    line(Offset(mid, 38), Offset(right, 38), grey);
+    line(Offset(left, 38), Offset(left, size.height), tunnel);
+    line(Offset(right, 38), Offset(right, size.height), grey);
+  }
+
+  @override
+  bool shouldRepaint(_ForkPainter old) => old.grey != grey || old.tunnel != tunnel;
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../theme/theme.dart';
+import 'split_card.dart';
 
 class WindowsInfoCard extends StatelessWidget {
   const WindowsInfoCard({super.key});
@@ -8,9 +10,10 @@ class WindowsInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colors = CharonColors.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF303030),
+        color: colors.idleSoft,
         borderRadius: BorderRadius.circular(16),
       ),
       clipBehavior: Clip.antiAlias,
@@ -21,9 +24,7 @@ class WindowsInfoCard extends StatelessWidget {
             top: 0,
             bottom: 0,
             width: 12,
-            child: Container(
-              color: const Color(0xFF424242),
-            ),
+            child: ColoredBox(color: colors.idleFill.withValues(alpha: 0.5)),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(26, 14, 14, 14),
@@ -33,31 +34,17 @@ class WindowsInfoCard extends StatelessWidget {
               children: [
                 Text(
                   '> ${l10n.splitInfoWindowsTitle}',
-                  style: const TextStyle(
-                    fontFamily: 'SpaceMono',
-                    fontSize: 10,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.08,
-                    color: Color(0xFFA3A3A3),
-                  ),
+                  style: splitMono(colors.idleText, 10, bold: true, em: 0.08),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   l10n.splitInfoAppAndroidOnly,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFFEDEDED),
-                  ),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: colors.text),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   l10n.splitInfoWindowsDesc,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    height: 1.35,
-                    color: Color(0xFFEDEDED),
-                  ),
+                  style: TextStyle(fontSize: 12, height: 1.35, color: colors.text),
                 ),
               ],
             ),

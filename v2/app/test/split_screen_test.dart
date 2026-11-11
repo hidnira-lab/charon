@@ -6,6 +6,7 @@ import 'support/fonts.dart';
 import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/main.dart';
 import 'package:charon/state/home_controller.dart';
+import 'package:charon/theme/theme.dart';
 import 'package:charon/ui/split/rule_validator.dart';
 import 'package:charon/ui/split/split_screen.dart';
 import 'package:charon/ui/split/widgets/composer_card.dart';
@@ -315,6 +316,103 @@ void main() {
 
       expect(controller.hasPendingSplitChanges, isFalse);
       expect(find.byType(PendingBanner), findsNothing);
+    });
+
+    HomeController controllerWith({
+      List<Rule> rules = const [],
+      Phase phase = Phase.PHASE_IDLE,
+    }) =>
+        HomeController(
+          initialStatus: Status(phase: phase),
+          initialConfig: Config(
+            chosenServerId: 'SRV-01',
+            servers: [Server(id: 'SRV-01', displayName: 'Main SG', countryCode: 'SG')],
+            split: SplitTunnel(
+              mode: SplitMode.SPLIT_ALL_EXCEPT_LISTED,
+              allExceptListed: rules,
+            ),
+          ),
+        );
+
+    testWidgets('empty list reads like the board', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+
+      final controller = controllerWith();
+      await tester.pumpWidget(CharonApp(controller: controller));
+      controller.setTab(2);
+      await tester.pumpAndSettle();
+
+      expect(find.text('> SPLIT TUNNEL · NO RULES'), findsOneWidget);
+      expect(find.text('NO RULES'), findsOneWidget); // the chip on the route map
+      expect(find.text('0 rules'), findsOneWidget); // no "· go direct" when empty
+      expect(find.text('No rules yet'), findsOneWidget);
+      expect(find.text('SG'), findsOneWidget); // server country on the tunnel box
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('the rule that covers the typed text is marked in the list', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+
+      final controller = controllerWith(rules: [
+        Rule(kind: RuleKind.RULE_DOMAIN, value: '*.example.com', includeSubdomains: true),
+        Rule(kind: RuleKind.RULE_CIDR, value: '192.168.1.0/24'),
+      ]);
+      await tester.pumpWidget(CharonApp(controller: controller));
+      controller.setTab(2);
+      await tester.pumpAndSettle();
+
+      RulesListCard list() => tester.widget<RulesListCard>(find.byType(RulesListCard));
+      expect(list().conflictWith, isNull);
+
+      await tester.enterText(find.byType(TextField), 'sub.example.com');
+      await tester.pumpAndSettle();
+      expect(list().conflictWith, '*.example.com');
+
+      // Switching mode gives another list, so the old conflict must go.
+      await tester.tap(find.text('Tunnel only listed'));
+      await tester.pumpAndSettle();
+      expect(list().conflictWith, isNull);
+      expect(find.textContaining("Already covered by"), findsNothing);
+    });
+
+    testWidgets('light theme uses the light tokens, not the dark ones', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+
+      final controller = controllerWith(rules: [
+        Rule(kind: RuleKind.RULE_DOMAIN, value: '*.example.com', includeSubdomains: true),
+      ]);
+      await tester.pumpWidget(CharonApp(controller: controller, themeData: CharonTheme.light));
+      controller.setTab(2);
+      await tester.pumpAndSettle();
+
+      final ink = tester.widget<Text>(find.text('*.example.com')).style!.color;
+      expect(ink, CharonColors.light.text);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('renders Simplified Chinese with the board words', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+
+      final controller = controllerWith(rules: [
+        Rule(kind: RuleKind.RULE_DOMAIN, value: '*.example.com', includeSubdomains: true),
+      ]);
+      await tester.pumpWidget(CharonApp(controller: controller, locale: const Locale('zh')));
+      controller.setTab(2);
+      await tester.pumpAndSettle();
+
+      expect(find.text('> 分流 · 1 条规则'), findsOneWidget);
+      expect(find.text('笔记本'), findsOneWidget);
+      expect(find.text('直连'), findsOneWidget);
+      expect(find.byTooltip('删除 *.example.com'), findsOneWidget);
+      expect(tester.takeException(), isNull);
     });
 
     testWidgets('renders Indonesian localization without overflow', (tester) async {
