@@ -9,6 +9,7 @@ import '../../../state/server_form.dart';
 import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
 import '../../dialogs/dialog_shell.dart';
+import 'server_import_parts.dart';
 
 /// What the Add server dialog hands back.
 sealed class AddServerOutcome {
@@ -133,7 +134,6 @@ class _AddServerDialogState extends State<AddServerDialog> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final colors = CharonColors.of(context);
     final s = _read.server;
     final named = s != null && s.displayName != s.address;
     final (jsonStatus, jsonWarn) = _jsonStatus(l10n);
@@ -168,7 +168,7 @@ class _AddServerDialogState extends State<AddServerDialog> {
             onChanged: (_) => _recompute(),
           )
         else
-          _JsonEditor(
+          ServerJsonEditor(
             controller: _config,
             label: l10n.dlgAddJsonLabel,
             semanticLabel: l10n.dlgAddJsonField,
@@ -179,57 +179,21 @@ class _AddServerDialogState extends State<AddServerDialog> {
             onChanged: (_) => _recompute(),
             onPaste: _paste,
           ),
-        if (_read.hasError) _ErrorLines(_errorLines(l10n)),
-        if (s != null && !_read.isDuplicate) ...[
-          DialogPanel(children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    '> ${named ? (_json ? l10n.dlgAddReadConfigNamed : l10n.dlgAddReadLinkNamed) : (_json ? l10n.dlgAddReadConfig : l10n.dlgAddReadLink)}',
-                    style: monoStyle(colors.text2, 10, bold: true, em: 0.08),
-                  ),
-                ),
-                Builder(builder: (_) {
-                  final (ok, total) = _read.fieldsOk;
-                  return Text(l10n.dlgAddFieldsOk(ok, total), style: monoStyle(colors.accentText, 10));
-                }),
-              ],
-            ),
-            Row(
-              children: [
-                DialogFlag(s.countryCode),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: DialogField(
-                    controller: _name,
-                    semanticLabel: l10n.dlgFieldNameAria,
-                    prompt: false,
-                    prefix: l10n.dlgFieldName,
-                    suffix: l10n.dlgFieldNameEmpty,
-                    hint: s.countryCode.isEmpty ? s.address : countryName(l10n, s.countryCode),
-                    height: 38,
-                    onChanged: (_) => _nameTouched = true,
-                  ),
-                ),
-              ],
-            ),
-            DialogFacts(
-              [
-                (l10n.dlgFieldAddress, '${s.address}:${s.port}'),
-                (l10n.dlgFieldSni, s.reality.serverName),
-                (l10n.dlgFieldFlow, s.flow == 'xtls-rprx-vision' ? 'vision' : s.flow),
-                (l10n.dlgFieldPbkSid, s.reality.shortId.isEmpty ? '✓' : '✓ · ${s.reality.shortId}'),
-              ],
-              flex: const [14, 10, 10, 10],
-            ),
-            DialogNotes([
-              s.countryCode.isEmpty
-                  ? l10n.dlgAddBecomesNoCountry(s.id, widget.existingServers.length + 1)
-                  : l10n.dlgAddBecomesGuessed(s.id, widget.existingServers.length + 1),
-            ]),
-          ]),
-        ],
+        if (_read.hasError) ImportErrorLines(_errorLines(l10n)),
+        if (s != null && !_read.isDuplicate)
+          ServerPreview(
+            server: s,
+            name: _name,
+            readLabel: named
+                ? (_json ? l10n.dlgAddReadConfigNamed : l10n.dlgAddReadLinkNamed)
+                : (_json ? l10n.dlgAddReadConfig : l10n.dlgAddReadLink),
+            fieldsOk: l10n.dlgAddFieldsOk(_read.fieldsOk.$1, _read.fieldsOk.$2),
+            nameHint: s.countryCode.isEmpty ? s.address : countryName(l10n, s.countryCode),
+            becomes: s.countryCode.isEmpty
+                ? l10n.dlgAddBecomesNoCountry(s.id, widget.existingServers.length + 1)
+                : l10n.dlgAddBecomesGuessed(s.id, widget.existingServers.length + 1),
+            onNameChanged: (_) => _nameTouched = true,
+          ),
         if (_read.isDuplicate)
           _DuplicateBanner(
             title: l10n.dlgAddDupTitle(_read.duplicateOf!.id, _read.duplicateOf!.displayName),
@@ -306,141 +270,6 @@ class _Tabs extends StatelessWidget {
             tab(true, Icons.content_paste, pasteLabel),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _JsonEditor extends StatelessWidget {
-  const _JsonEditor({
-    required this.controller,
-    required this.label,
-    required this.semanticLabel,
-    required this.status,
-    required this.statusWarn,
-    required this.pasteLabel,
-    required this.warn,
-    required this.onChanged,
-    required this.onPaste,
-  });
-
-  final TextEditingController controller;
-  final String label;
-  final String semanticLabel;
-  final String status;
-  final bool statusWarn;
-  final String pasteLabel;
-  final bool warn;
-  final ValueChanged<String> onChanged;
-  final VoidCallback onPaste;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = CharonColors.of(context);
-    return Container(
-      height: 168,
-      decoration: BoxDecoration(
-        color: colors.bg,
-        border: Border.all(color: warn ? colors.transitionFill : colors.controlBorder),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          Container(
-            height: 32,
-            padding: const EdgeInsets.fromLTRB(12, 0, 6, 0),
-            decoration: BoxDecoration(border: Border(bottom: BorderSide(color: colors.surface2))),
-            child: Row(
-              children: [
-                Text(label, style: monoStyle(colors.text2, 10, bold: true, em: 0.08)),
-                const SizedBox(width: 10),
-                Flexible(
-                  child: Text(
-                    status,
-                    overflow: TextOverflow.ellipsis,
-                    style: monoStyle(statusWarn ? colors.transitionText : colors.accentText, 10),
-                  ),
-                ),
-                const Spacer(),
-                InkWell(
-                  onTap: onPaste,
-                  borderRadius: BorderRadius.circular(999),
-                  child: Container(
-                    height: 24,
-                    padding: const EdgeInsets.fromLTRB(8, 0, 10, 0),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: colors.controlBorder),
-                      borderRadius: BorderRadius.circular(999),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.content_paste, size: 14, color: colors.text2),
-                        const SizedBox(width: 6),
-                        Text(pasteLabel, style: monoStyle(colors.text2, 10, bold: true)),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Semantics(
-              label: semanticLabel,
-              textField: true,
-              multiline: true,
-              child: TextField(
-                controller: controller,
-                autofocus: true,
-                maxLines: null,
-                expands: true,
-                textAlignVertical: TextAlignVertical.top,
-                onChanged: onChanged,
-                style: monoStyle(colors.text, 11).copyWith(height: 12 / 11 * 1.2),
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  isDense: true,
-                  contentPadding: EdgeInsets.all(10),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ErrorLines extends StatelessWidget {
-  const _ErrorLines(this.lines);
-
-  final (String, String?) lines;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = CharonColors.of(context);
-    return Semantics(
-      liveRegion: true,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Container(width: 8, height: 8, color: colors.transitionFill),
-              ),
-              const SizedBox(width: 8),
-              Expanded(child: Text(lines.$1, style: TextStyle(fontSize: 12, height: 16 / 12, color: colors.text))),
-            ],
-          ),
-          if (lines.$2 != null) ...[
-            const SizedBox(height: 3),
-            Text('> ${lines.$2}', style: monoStyle(colors.text3, 11).copyWith(height: 16 / 11)),
-          ],
-        ],
       ),
     );
   }
