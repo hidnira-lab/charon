@@ -1,12 +1,20 @@
 import '../gen/charon/v1/charon.pb.dart';
 
+/// Why an import failed, for the two lines the Add server dialog shows. The
+/// dialog words these in the app language, [VlessParseResult.error] stays the
+/// plain English text for logs and tests.
+enum ImportIssue { unsupportedScheme, missingKey, other }
+
 /// Result of parsing a VLESS link or config.
 class VlessParseResult {
-  const VlessParseResult.success(this.server) : error = null;
-  const VlessParseResult.failure(this.error) : server = null;
+  const VlessParseResult.success(this.server)
+      : error = null,
+        issue = null;
+  const VlessParseResult.failure(this.error, {this.issue = ImportIssue.other}) : server = null;
 
   final Server? server;
   final String? error;
+  final ImportIssue? issue;
 
   bool get isSuccess => server != null;
 }
@@ -38,6 +46,7 @@ VlessParseResult parseVlessLink(String rawLink, {String? nextId}) {
         scheme == 'hy2') {
       return const VlessParseResult.failure(
         'Charon only speaks VLESS with Reality. This link is another kind.',
+        issue: ImportIssue.unsupportedScheme,
       );
     }
     return VlessParseResult.failure('unsupported protocol: $scheme');
@@ -70,6 +79,7 @@ VlessParseResult parseVlessLink(String rawLink, {String? nextId}) {
   if (pbk.isEmpty) {
     return const VlessParseResult.failure(
       'expected …&pbk=<key>&sid=<id> · copy the link again from your panel',
+      issue: ImportIssue.missingKey,
     );
   }
 
