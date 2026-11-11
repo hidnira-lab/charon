@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'support/fonts.dart';
 import 'package:fixnum/fixnum.dart';
 
 import 'package:charon/gen/charon/v1/charon.pb.dart';
@@ -12,6 +14,8 @@ import 'package:charon/ui/telemetry/widgets/log_terminal_card.dart';
 import 'package:charon/ui/telemetry/widgets/share_dialog.dart';
 
 void main() {
+  setUpAll(loadAppFonts);
+
   group('HomeController Telemetry Ring Buffer & Diagnostics', () {
     test('caps log lines at 2000 per source and tracks dropped lines', () {
       final controller = HomeController();

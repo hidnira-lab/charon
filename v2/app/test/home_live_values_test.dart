@@ -6,9 +6,13 @@ import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/fonts.dart';
+
 // The Home screen shows what the core reported, or a dash. It never shows the
 // sample numbers of the design boards.
 void main() {
+  setUpAll(loadAppFonts);
+
   const localNow = 1000000; // this device's clock
   const serviceNow = 5000000; // the service's clock, deliberately different
 
@@ -67,7 +71,8 @@ void main() {
       tester,
       Status(phase: Phase.PHASE_VERIFYING, activeServerId: 'SRV-01', phaseSinceMs: Int64(serviceNow - 7000)),
     );
-    expect(find.textContaining('00:07'), findsOneWidget);
+    // The hero line and the session card both show it.
+    expect(find.textContaining('00:07'), findsNWidgets(2));
     expect(find.textContaining('00:12'), findsNothing);
   });
 
@@ -91,7 +96,8 @@ void main() {
       tester,
       Status(phase: Phase.PHASE_SWITCHING, activeServerId: 'SRV-02', chosenServerId: 'SRV-01', onBackup: true),
     );
-    expect(find.textContaining('First failed 5 tries'), findsOneWidget);
+    // Sentences name a server by its SRV code, as the board does.
+    expect(find.textContaining('SRV-01 failed 5 tries · checking SRV-02'), findsOneWidget);
   });
 
   testWidgets('quota card shows counted bytes against the cap of the active server', (tester) async {
@@ -101,14 +107,14 @@ void main() {
       quota: Quota(serverId: 'SRV-01', countedBytes: Int64(125500000000)),
     );
     expect(find.text('125.5'), findsOneWidget);
-    expect(find.text('/ 500 GB'), findsOneWidget);
+    expect(find.text('of 500 GB'), findsOneWidget);
     expect(find.text('186.2'), findsNothing);
   });
 
   testWidgets('quota card without a cap or a count shows a dash', (tester) async {
     await pumpHome(tester, Status(phase: Phase.PHASE_UP, activeServerId: 'SRV-02'));
     expect(find.text('186.2'), findsNothing);
-    expect(find.text('/ 2000 GB'), findsNothing);
+    expect(find.text('of 2000 GB'), findsNothing);
   });
 
   testWidgets('could not reach shows the reason the core gave', (tester) async {
@@ -119,11 +125,15 @@ void main() {
           lastFailure: r,
         );
     final controller = await pumpHome(tester, failed(FailureReason.FAILURE_REALITY_HANDSHAKE));
-    expect(find.textContaining('Reality handshake failed'), findsOneWidget);
+    // The hero line and the latency card say it short.
+    expect(find.text('> Reality handshake failed'), findsOneWidget);
+    expect(find.text('Reality handshake failed'), findsOneWidget);
     expect(find.textContaining('tcp connect timed out'), findsNothing);
 
     controller.setStatus(failed(FailureReason.FAILURE_GATE_FAILED));
     await tester.pump();
-    expect(find.textContaining('protection could not be turned on'), findsOneWidget);
+    expect(find.text('> protection could not be turned on'), findsOneWidget);
+    // The latency card and the banner (the board has no longer text for this one).
+    expect(find.text('protection could not be turned on'), findsNWidgets(2));
   });
 }

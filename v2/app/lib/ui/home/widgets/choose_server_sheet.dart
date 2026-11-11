@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
-import '../../../theme/tokens.dart';
+import '../../../theme/theme.dart';
 
-/// Choose Another Server Sheet (N04, P0).
-/// Opened from Blocked state on Home when all servers failed.
-/// Displays available server list with failed server marked; tapping one
-/// starts switching to it immediately.
+/// The "Pick a server to try" dialog of the HomeDesktop board. Opened from the
+/// held banners: the server that failed is listed but cannot be picked, any
+/// other one starts fresh and stays the user's choice.
 class ChooseServerSheet extends StatelessWidget {
   const ChooseServerSheet({
     super.key,
@@ -18,257 +17,193 @@ class ChooseServerSheet extends StatelessWidget {
   final HomeController controller;
 
   static Future<Server?> show(BuildContext context, HomeController controller) {
-    return showModalBottomSheet<Server>(
+    return showDialog<Server>(
       context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
+      barrierColor: Colors.black.withValues(alpha: 0.55),
       builder: (ctx) => ChooseServerSheet(controller: controller),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
     final l10n = AppLocalizations.of(context)!;
-
-    final cardBg = isLight ? Colors.white : const Color(0xFF1E1E1E);
-    final borderColor = isLight ? const Color(0xFFE5E7EB) : const Color(0xFF333333);
-    final textPrimary = isLight ? const Color(0xFF111827) : Colors.white;
-    final textMuted = isLight ? const Color(0xFF6B7280) : const Color(0xFFA3A3A3);
+    final colors = CharonColors.of(context);
+    final mono = CharonTypography.caption.copyWith(
+      fontFamily: CharonFontFamilies.spaceMono,
+      fontSize: 10.0,
+      height: 14 / 10,
+    );
 
     final servers = controller.config?.servers ?? <Server>[];
-    final failedServerId = controller.activeServer?.id ?? (servers.isNotEmpty ? servers.first.id : '');
+    final failed = controller.activeServer ?? (servers.isNotEmpty ? servers.first : null);
+    final tries = controller.status.maxAttempts > 0 ? controller.status.maxAttempts : 5;
 
-    return SafeArea(
-      child: Container(
-        constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.75,
-        ),
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
-        decoration: BoxDecoration(
-          color: cardBg,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-          border: Border.all(color: borderColor, width: 1),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Handle bar
-            Center(
-              child: Container(
-                width: 36,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: textMuted.withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(2),
-                ),
+    return Center(
+      child: Material(
+        color: Colors.transparent,
+        child: Container(
+          width: 472,
+          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height - 48),
+          padding: const EdgeInsets.fromLTRB(24, 22, 24, 20),
+          decoration: BoxDecoration(
+            color: colors.surface,
+            borderRadius: BorderRadius.circular(28),
+            border: Border.all(color: colors.divider),
+            boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 60, offset: Offset(0, 24))],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('> ${l10n.homeSheetKicker}', style: mono.copyWith(fontWeight: FontWeight.w700, color: colors.text3)),
+              const SizedBox(height: 12),
+              Text(l10n.homeSheetTitle, style: CharonTypography.h2.copyWith(color: colors.text)),
+              const SizedBox(height: 12),
+              Text(
+                l10n.homeSheetBody(failed?.id ?? '—', tries),
+                style: CharonTypography.body.copyWith(fontSize: 13, height: 19 / 13, color: colors.text2),
               ),
-            ),
-            const SizedBox(height: 16),
-
-            // Header Row: Title & Subtitle
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  l10n.blockedActionChooseServer,
-                  style: TextStyle(
-                    fontFamily: CharonTokens.fontDisplay,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: textPrimary,
-                  ),
-                ),
-                Text(
-                  '${servers.length} SERVERS',
-                  style: TextStyle(
-                    fontFamily: CharonTokens.fontMono,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.5,
-                    color: textMuted,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 6),
-            Text(
-              'Select a server to switch to. Traffic remains held until connected.',
-              style: TextStyle(
-                fontFamily: CharonTokens.fontBody,
-                fontSize: 12.5,
-                color: textMuted,
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Server List
-            if (servers.isEmpty) ...[
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 24),
-                child: Center(
-                  child: Text(
-                    'No servers available.',
-                    style: TextStyle(color: textMuted),
-                  ),
-                ),
-              ),
-            ] else ...[
+              const SizedBox(height: 8),
               Flexible(
-                child: ListView.separated(
+                child: ListView(
                   shrinkWrap: true,
-                  itemCount: servers.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 8),
-                  itemBuilder: (context, index) {
-                    final s = servers[index];
-                    final isFailed = s.id == failedServerId;
-
-                    return Material(
-                      color: isFailed
-                          ? const Color(0xFFEF4444).withValues(alpha: isLight ? 0.06 : 0.12)
-                          : isLight
-                              ? const Color(0xFFF9FAFB)
-                              : const Color(0xFF262626),
-                      borderRadius: BorderRadius.circular(10),
-                      child: InkWell(
-                        onTap: () async {
-                          await controller.selectServer(s.id);
-                          await controller.connect();
-                          if (context.mounted) {
-                            Navigator.of(context).pop(s);
-                          }
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  children: [
+                    for (var i = 0; i < servers.length; i++)
+                      _ServerRow(
+                        server: servers[i],
+                        position: i + 1,
+                        isFailed: servers[i].id == failed?.id,
+                        onPick: () async {
+                          await controller.selectServer(servers[i].id);
+                          if (context.mounted) Navigator.of(context).pop(servers[i]);
                         },
-                        borderRadius: BorderRadius.circular(10),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: isFailed
-                                  ? const Color(0xFFEF4444).withValues(alpha: 0.35)
-                                  : borderColor,
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              // Country code pill
-                              Container(
-                                width: 28,
-                                height: 20,
-                                decoration: BoxDecoration(
-                                  color: isLight ? Colors.white : const Color(0xFF1E1E1E),
-                                  borderRadius: BorderRadius.circular(4),
-                                  border: Border.all(color: borderColor),
-                                ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  s.countryCode.isNotEmpty ? s.countryCode : '??',
-                                  style: TextStyle(
-                                    fontFamily: CharonTokens.fontMono,
-                                    fontSize: 9.5,
-                                    fontWeight: FontWeight.w700,
-                                    color: textPrimary,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-
-                              // Server details
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          s.id,
-                                          style: const TextStyle(
-                                            fontFamily: CharonTokens.fontMono,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w700,
-                                            color: Color(0xFF60A1D9),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Expanded(
-                                          child: Text(
-                                            s.displayName.isNotEmpty ? s.displayName : s.address,
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w600,
-                                              color: textPrimary,
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 2),
-                                    Text(
-                                      s.address,
-                                      style: TextStyle(
-                                        fontFamily: CharonTokens.fontMono,
-                                        fontSize: 11,
-                                        color: textMuted,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              // Status Chip: "FAILED" or "CONNECT"
-                              if (isFailed) ...[
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFEF4444).withValues(alpha: 0.2),
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: const Text(
-                                    'FAILED',
-                                    style: TextStyle(
-                                      fontFamily: CharonTokens.fontMono,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w700,
-                                      color: Color(0xFFEF4444),
-                                    ),
-                                  ),
-                                ),
-                              ] else ...[
-                                const Icon(
-                                  Icons.chevron_right_rounded,
-                                  size: 20,
-                                  color: Color(0xFF60A1D9),
-                                ),
-                              ],
-                            ],
-                          ),
-                        ),
                       ),
-                    );
-                  },
+                  ],
                 ),
               ),
+              const SizedBox(height: 6),
+              Align(
+                alignment: Alignment.centerRight,
+                child: OutlinedButton(
+                  autofocus: true,
+                  onPressed: () => Navigator.of(context).pop(),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: colors.text,
+                    side: BorderSide(color: colors.controlBorder),
+                    shape: const StadiumBorder(),
+                    minimumSize: const Size(0, 40),
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                  ),
+                  child: Text(l10n.actionCancel, style: CharonTypography.button.copyWith(color: colors.text)),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text('> ${l10n.homeSheetFoot}', style: mono.copyWith(color: colors.text3)),
             ],
-            const SizedBox(height: 16),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
-            // Cancel button
-            OutlinedButton(
-              onPressed: () => Navigator.of(context).pop(),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: textPrimary,
-                side: BorderSide(color: borderColor),
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+class _ServerRow extends StatelessWidget {
+  const _ServerRow({
+    required this.server,
+    required this.position,
+    required this.isFailed,
+    required this.onPick,
+  });
+
+  final Server server;
+  final int position;
+  final bool isFailed;
+  final VoidCallback onPick;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final colors = CharonColors.of(context);
+    final cc = server.countryCode.toUpperCase();
+    final name = [server.id, if (server.displayName.isNotEmpty) server.displayName].join(' · ');
+    final meta = isFailed
+        ? l10n.homeSheetMetaFailed(cc, server.address)
+        : l10n.homeSheetMetaOrder(cc, server.address, position);
+    final (Color tagBg, Color tagInk) =
+        isFailed ? (colors.transitionSoft, colors.transitionText) : (colors.connectedSoft, colors.connectedText);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Opacity(
+        opacity: isFailed ? 0.6 : 1,
+        child: Material(
+          color: isFailed ? colors.bg : colors.surface2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+            side: BorderSide(color: isFailed ? colors.divider : colors.controlBorder),
+          ),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(14),
+            onTap: isFailed ? null : onPick,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              child: Row(
+                children: [
+                  Container(
+                    width: 36,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: colors.surface2,
+                      border: Border.all(color: colors.controlBorder),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(cc, style: CharonTypography.label.copyWith(fontSize: 9, color: colors.text)),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          name,
+                          style: CharonTypography.body.copyWith(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: colors.text,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          meta,
+                          style: CharonTypography.caption.copyWith(
+                            fontFamily: CharonFontFamilies.spaceMono,
+                            fontSize: 11,
+                            color: colors.text3,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Container(
+                    height: 22,
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(color: tagBg, borderRadius: BorderRadius.circular(6)),
+                    alignment: Alignment.center,
+                    child: Text(
+                      isFailed ? l10n.homeSheetTagFailed : l10n.homeSheetTagTry,
+                      style: CharonTypography.label.copyWith(fontSize: 10, color: tagInk),
+                    ),
+                  ),
+                ],
               ),
-              child: Text(l10n.actionCancel),
             ),
-          ],
+          ),
         ),
       ),
     );

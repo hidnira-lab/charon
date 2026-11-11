@@ -5,7 +5,11 @@ import 'package:charon/ui/servers/servers_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/fonts.dart';
+
 void main() {
+  setUpAll(loadAppFonts);
+
   group('ServersScreen UI and interactions', () {
     testWidgets('renders server profiles and sync card', (tester) async {
       tester.view.physicalSize = const Size(1024, 768);

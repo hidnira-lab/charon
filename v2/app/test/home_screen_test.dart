@@ -10,7 +10,11 @@ import 'package:charon/state/ui_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/fonts.dart';
+
 void main() {
+  setUpAll(loadAppFonts);
+
   group('HomeScreen UI states and interactions', () {
     testWidgets('renders disconnected state and dispatches connect', (tester) async {
       tester.view.physicalSize = const Size(1024, 768);
@@ -108,11 +112,11 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Traffic held'), findsOneWidget);
-      expect(find.text('Retry now'), findsOneWidget);
+      expect(find.text('Retry now'), findsNWidgets(2)); // hero button and banner
       expect(find.text('HELD'), findsOneWidget); // Status chip
       expect(find.text('HOLDING'), findsOneWidget); // Failsafe card
 
-      await tester.tap(find.text('Retry now'));
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Retry now'));
       await tester.pump();
       expect(retryCalled, isTrue);
     });
@@ -145,11 +149,11 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Reconnecting'), findsOneWidget);
-      expect(find.text('Release'), findsOneWidget);
+      expect(find.text('Release'), findsNWidgets(2)); // hero button and banner
       expect(find.text('HELD'), findsOneWidget); // Status chip
       expect(find.text('HOLDING'), findsOneWidget); // Failsafe card
 
-      await tester.tap(find.text('Release'));
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Release'));
       await tester.pump();
       expect(releaseCalled, isTrue);
     });
@@ -198,8 +202,9 @@ void main() {
       await tester.pumpWidget(CharonApp(controller: controller));
       await tester.pumpAndSettle();
 
-      expect(find.text('No server yet'), findsOneWidget);
+      expect(find.text('No server yet'), findsNWidgets(2)); // hero title and node card
       expect(find.text('Add a server'), findsOneWidget);
+      expect(find.text('Add one →'), findsOneWidget);
       expect(controller.uiState, UiState.noServer);
     });
 

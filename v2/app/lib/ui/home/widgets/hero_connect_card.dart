@@ -56,7 +56,9 @@ class HeroConnectCard extends StatelessWidget {
         ),
     };
 
-    final serverName = server == null ? '—' : (server.displayName.isNotEmpty ? server.displayName : server.id);
+    // Sentences name a server by its SRV code, as the board does. The display
+    // name only appears next to the code in the server row.
+    final serverName = server?.id ?? '—';
     // Only what the core measured. No address is shown until a verification
     // has reported one.
     final egressIp = status.egressAddress.isNotEmpty ? status.egressAddress : '—';
@@ -71,7 +73,7 @@ class HeroConnectCard extends StatelessWidget {
     final failed = status.onBackup && activeIndex > 0 ? servers[activeIndex - 1] : null;
     final switchingLine = failed == null
         ? l10n.stateSwitchingLine2Chosen(serverName)
-        : l10n.stateSwitchingLine2(failed.displayName.isNotEmpty ? failed.displayName : failed.id, serverName);
+        : l10n.stateSwitchingLine2(failed.id, serverName);
 
     Future<void> onReleaseWithConfirm() async {
       final confirmed = await ReleaseConfirmDialog.show(context);
@@ -120,7 +122,7 @@ class HeroConnectCard extends StatelessWidget {
           l10n.stateNoServerLine2,
           l10n.actionAddServer,
           true,
-          null,
+          () => controller.setTab(1),
         ),
       UiState.reconnecting => (
           l10n.stateReconnectingTitle,
@@ -158,7 +160,7 @@ class HeroConnectCard extends StatelessWidget {
           l10n.stateCouldNotReachTitle(serverName),
           l10n.stateCouldNotReachBadge,
           failureShort(l10n, status.lastFailure),
-          l10n.actionRetryNow,
+          l10n.actionRetry,
           false,
           controller.connect,
         ),
@@ -297,20 +299,19 @@ class HeroConnectCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4.0),
-                  if (controller.hasServers) ...[
+                  if (controller.hasServers)
                     Row(
                       children: [
                         Container(
-                          width: 20.0,
-                          height: 14.0,
+                          width: 24.0,
+                          height: 16.0,
                           decoration: BoxDecoration(
                             color: colors.surface2,
-                            borderRadius: BorderRadius.circular(2.0),
                             border: Border.all(color: colors.controlBorder, width: 1.0),
                           ),
                           child: Center(
                             child: Text(
-                              server?.countryCode.isNotEmpty == true ? server!.countryCode : 'US',
+                              (server?.countryCode ?? '').toUpperCase(),
                               style: CharonTypography.label.copyWith(fontSize: 8.0),
                             ),
                           ),
@@ -318,7 +319,7 @@ class HeroConnectCard extends StatelessWidget {
                         const SizedBox(width: 8.0),
                         Expanded(
                           child: Text(
-                            server != null ? '${server.id} · ${server.displayName}' : 'SRV-01 · Home VPS',
+                            [server?.id ?? '—', if (server?.displayName.isNotEmpty == true) server!.displayName].join(' · '),
                             style: CharonTypography.body.copyWith(
                               fontWeight: FontWeight.w600,
                               color: colors.text,
@@ -329,8 +330,18 @@ class HeroConnectCard extends StatelessWidget {
                           ),
                         ),
                       ],
+                    )
+                  else
+                    Text(
+                      l10n.homeHeroNoServerHint,
+                      style: CharonTypography.caption.copyWith(
+                        fontFamily: CharonFontFamilies.spaceMono,
+                        color: colors.text2,
+                        fontSize: 11.0,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ],
                   const SizedBox(height: 4.0),
                   Text(
                     '> $line2',
@@ -363,28 +374,10 @@ class HeroConnectCard extends StatelessWidget {
                           ),
                         ),
                       ),
-                      if (uiState == UiState.blocked) ...[
-                        const SizedBox(width: 8.0),
-                        OutlinedButton(
-                          onPressed: onReleaseWithConfirm,
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: colors.criticalText,
-                            side: BorderSide(color: colors.criticalFill.withValues(alpha: 0.5)),
-                            shape: const StadiumBorder(),
-                            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-                          ),
-                          child: Text(
-                            l10n.actionRelease,
-                            style: CharonTypography.button.copyWith(
-                              color: colors.criticalText,
-                            ),
-                          ),
-                        ),
-                      ],
                       const SizedBox(width: 8.0),
                       Expanded(
                         child: Text(
-                          'or tap the ghost',
+                          uiState == UiState.noServer ? l10n.homeTapOpensServers : l10n.homeTapGhost,
                           style: CharonTypography.caption.copyWith(
                             fontFamily: CharonFontFamilies.spaceMono,
                             color: colors.text3,

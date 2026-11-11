@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/fonts.dart';
+
 import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/main.dart';
 import 'package:charon/state/home_controller.dart';
@@ -13,6 +15,8 @@ import 'package:charon/ui/split/widgets/rules_list_card.dart';
 import 'package:charon/ui/split/widgets/windows_info_card.dart';
 
 void main() {
+  setUpAll(loadAppFonts);
+
   group('RuleValidator unit tests', () {
     test('validates domain and CIDR inputs', () {
       expect(RuleValidator.isValidInput('example.com', RuleKind.RULE_DOMAIN), isTrue);

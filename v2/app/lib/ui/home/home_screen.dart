@@ -5,6 +5,7 @@ import '../../state/ui_state.dart';
 import '../../theme/theme.dart';
 import '../dialogs/quit_while_connected_dialog.dart';
 import 'widgets/bottom_cards.dart';
+import 'widgets/home_state_banner.dart';
 import 'widgets/hero_connect_card.dart';
 import 'widgets/rail_nav.dart';
 import 'widgets/readout_cards.dart';
@@ -71,6 +72,8 @@ class HomeScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
+                                // Context banner: held, critical, amber or info.
+                                HomeStateBanner(controller: controller),
                                 // Upper row: Time & Place + Connect Control Hero
                                 SizedBox(
                                   height: 364.0,

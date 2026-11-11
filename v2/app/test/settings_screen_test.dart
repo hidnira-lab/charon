@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/fonts.dart';
+
 import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/main.dart';
 import 'package:charon/state/home_controller.dart';
@@ -8,6 +10,8 @@ import 'package:charon/ui/settings/settings_screen.dart';
 import 'package:charon/ui/settings/widgets/charon_switch.dart';
 
 void main() {
+  setUpAll(loadAppFonts);
+
   group('SettingsScreen UI and interactions', () {
     testWidgets('renders all settings sections and cards in 1024x768', (tester) async {
       tester.view.physicalSize = const Size(1024, 768);

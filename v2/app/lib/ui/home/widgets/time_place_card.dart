@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
-import '../../../state/ui_state.dart';
+import '../../../state/home_view.dart';
 import '../../../theme/theme.dart';
 
 /// Time & Place Card matching HomeDesktop board (558 x 364 px).
@@ -16,38 +17,26 @@ class TimePlaceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
-    final uiState = controller.uiState;
-    final server = controller.activeServer;
+    final l10n = AppLocalizations.of(context)!;
+    final view = HomeView(
+      l10n,
+      controller,
+      localeTag: Localizations.localeOf(context).toLanguageTag(),
+    );
+    final crossingText = view.crossing();
 
-    final crossingText = switch (uiState) {
-      UiState.connected => 'your traffic crosses to ${server?.countryCode.isNotEmpty == true ? server!.countryCode : "Singapore"}',
-      UiState.verifying => 'getting ready to cross to ${server?.countryCode.isNotEmpty == true ? server!.countryCode : "Singapore"}',
-      UiState.onBackup => 'your traffic crosses to Japan',
-      UiState.blocked => 'traffic is held here until you choose',
-      UiState.reconnectingHeld => 'the ferry is waiting · traffic is held here',
-      UiState.reconnecting => 'the ferry is waiting · traffic goes direct for now',
-      UiState.switching => 'changing ferries · heading for ${server?.countryCode.isNotEmpty == true ? server!.countryCode : "Japan"}',
-      UiState.couldNotReach => 'the ferry never left · traffic stays here',
-      UiState.noServer => 'nothing to cross to yet · add a server first',
-      _ => 'your traffic stays on this side',
-    };
-
+    // Time of day as on the board: morning 5 to 10, day 10 to 15, dusk 15 to 18.
     final now = DateTime.now();
     final hour = now.hour;
     final timeStr = '${hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
-    final timeTag = hour >= 6 && hour < 12
-        ? 'MORNING'
-        : hour >= 12 && hour < 17
-            ? 'DAY'
-            : hour >= 17 && hour < 21
-                ? 'DUSK'
-                : 'NIGHT';
-
-    final greeting = hour >= 5 && hour < 12
-        ? 'Good morning'
-        : hour >= 12 && hour < 18
-            ? 'Good afternoon'
-            : 'Good evening';
+    final name = controller.greetingName;
+    final (String sceneTag, String greeting) = hour >= 5 && hour < 10
+        ? (l10n.homeSceneMorning, l10n.homeGreetMorning(name))
+        : hour >= 10 && hour < 15
+            ? (l10n.homeSceneDay, l10n.homeGreetAfternoon(name))
+            : hour >= 15 && hour < 18
+                ? (l10n.homeSceneDusk, l10n.homeGreetEvening(name))
+                : (l10n.homeSceneNight, l10n.homeGreetNight(name));
 
     return Container(
       width: 558.0,
@@ -92,7 +81,7 @@ class TimePlaceCard extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    '$timeTag · LOCAL $timeStr',
+                    l10n.homeLocalTime(sceneTag, timeStr),
                     style: CharonTypography.label.copyWith(
                       color: colors.text3,
                       fontSize: 10.0,
@@ -116,7 +105,7 @@ class TimePlaceCard extends StatelessWidget {
                       const SizedBox(width: CharonSpacing.s2),
                       Expanded(
                         child: Text(
-                          "You're now in Yogyakarta",
+                          l10n.homeLocation(controller.city),
                           style: CharonTypography.body.copyWith(
                             fontWeight: FontWeight.w600,
                             color: colors.text,
@@ -136,7 +125,7 @@ class TimePlaceCard extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text(
-                            'CN',
+                            controller.countryCode.toUpperCase(),
                             style: CharonTypography.label.copyWith(fontSize: 8.0),
                           ),
                         ),
@@ -151,7 +140,7 @@ class TimePlaceCard extends StatelessWidget {
                       color: colors.text3,
                       fontSize: 11.0,
                     ),
-                    maxLines: 1,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],

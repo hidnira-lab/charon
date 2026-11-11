@@ -2,6 +2,8 @@ import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/fonts.dart';
+
 import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/l10n/generated/app_localizations.dart';
 import 'package:charon/main.dart';
@@ -40,6 +42,8 @@ void _withPendingUpdates(HomeController c) {
 }
 
 void main() {
+  setUpAll(loadAppFonts);
+
   group('HomeController Updates Logic', () {
     test('transitions core update stage on apply now and queued', () async {
       final controller = HomeController();

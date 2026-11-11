@@ -19,7 +19,11 @@ import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/fonts.dart';
+
 void main() {
+  setUpAll(loadAppFonts);
+
   late Directory tmp;
   late String serviceExe;
 
