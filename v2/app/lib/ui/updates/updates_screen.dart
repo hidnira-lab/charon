@@ -1,14 +1,18 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../gen/charon/v1/charon.pb.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../state/home_controller.dart';
+import '../../state/updates_view.dart';
 import '../../theme/theme.dart';
+import '../common/glass_card.dart';
 import '../home/widgets/rail_nav.dart';
-import 'widgets/app_update_card.dart';
-import 'widgets/core_update_card.dart';
 import 'widgets/file_update_card.dart';
 import 'widgets/offline_banner.dart';
+import 'widgets/update_card.dart';
 
 class UpdatesScreen extends StatefulWidget {
   const UpdatesScreen({
@@ -26,20 +30,11 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
   final ScrollController _scrollController = ScrollController();
   final GlobalKey _fileCardKey = GlobalKey();
 
-  void _scrollToBottomFileCard() {
+  void _scrollToFileCard() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_fileCardKey.currentContext != null) {
-        Scrollable.ensureVisible(
-          _fileCardKey.currentContext!,
-          duration: const Duration(milliseconds: 350),
-          curve: Curves.easeOut,
-        );
-      } else if (_scrollController.hasClients) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 350),
-          curve: Curves.easeOut,
-        );
+      final ctx = _fileCardKey.currentContext;
+      if (ctx != null) {
+        Scrollable.ensureVisible(ctx, duration: const Duration(milliseconds: 350), curve: Curves.easeOut);
       }
     });
   }
@@ -49,6 +44,45 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
       Navigator.of(context).pop();
     } else {
       widget.controller.setTab(4); // Back to Settings tab
+    }
+  }
+
+  void _copyCoreLog() {
+    Clipboard.setData(ClipboardData(text: widget.controller.coreLogs.map((l) => l.text).join('\n')));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(AppLocalizations.of(context)!.updLogCopied),
+        duration: const Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  /// Turns a button of the board into a call. The ones with no command or no
+  /// package behind them are disabled in [UpdateButton], so they never arrive.
+  void _act(UpdateAction action) {
+    final c = widget.controller;
+    switch (action) {
+      case UpdateAction.applyNow:
+        c.applyCoreUpdate(when: ApplyWhen.APPLY_NOW);
+      case UpdateAction.applyWhenDisconnected:
+        c.applyCoreUpdate(when: ApplyWhen.APPLY_WHEN_DISCONNECTED);
+      case UpdateAction.rollback:
+        c.rollbackCore();
+      case UpdateAction.check:
+        c.checkUpdates();
+      case UpdateAction.copyLog:
+        _copyCoreLog();
+      case UpdateAction.editServers:
+        c.setTab(1);
+      case UpdateAction.installApp:
+        c.applyAppUpdate();
+      case UpdateAction.download ||
+            UpdateAction.releaseNotes ||
+            UpdateAction.allReleases ||
+            UpdateAction.cancel ||
+            UpdateAction.chooseFile:
+        break;
     }
   }
 
@@ -65,8 +99,8 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
       builder: (context, _) {
         final colors = CharonColors.of(context);
         final l10n = AppLocalizations.of(context)!;
-        final isConnected = widget.controller.status.phase == Phase.PHASE_UP ||
-            widget.controller.status.phase == Phase.PHASE_VERIFYING;
+        final view = UpdatesView(l10n, widget.controller, isWindows: Platform.isWindows);
+        final checkedLine = view.checkedLine;
 
         return Scaffold(
           body: Row(
@@ -82,7 +116,6 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // Header Row
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -92,109 +125,76 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
                             children: [
                               InkWell(
                                 onTap: _handleBack,
-                                borderRadius: BorderRadius.circular(4.0),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 2.0),
-                                  child: Text(
-                                    l10n.updatesBackToSettings,
-                                    style: CharonTypography.caption.copyWith(
-                                      color: colors.accent,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 11.5,
-                                    ),
-                                  ),
+                                child: Text(
+                                  '> ${l10n.updatesTag}',
+                                  style: monoStyle(colors.text3, 10, bold: true, em: 0.08),
                                 ),
                               ),
-                              const SizedBox(height: CharonSpacing.s1),
-                              Text(
-                                '> ${l10n.updatesTag}',
-                                style: CharonTypography.label.copyWith(
-                                  color: colors.text3,
-                                  letterSpacing: 1.2,
-                                  fontSize: 10.5,
-                                ),
-                              ),
-                              const SizedBox(height: CharonSpacing.s1),
+                              const SizedBox(height: 2),
                               Text(
                                 l10n.updatesTitle,
-                                style: CharonTypography.h1.copyWith(fontSize: 22.0),
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: -0.33,
+                                  color: colors.text,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              if (checkedLine != null) ...[
+                                Text(checkedLine, style: monoStyle(colors.text3, 11)),
+                                const SizedBox(width: 12),
+                              ],
+                              Opacity(
+                                opacity: widget.controller.isCheckingUpdates ? 0.4 : 1,
+                                child: InkWell(
+                                  onTap: widget.controller.isCheckingUpdates ? null : () => _act(UpdateAction.check),
+                                  borderRadius: BorderRadius.circular(999),
+                                  child: Container(
+                                    height: 32,
+                                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: colors.controlBorder),
+                                      borderRadius: BorderRadius.circular(999),
+                                    ),
+                                    child: Text(l10n.updCheckNow, style: monoStyle(colors.text, 12, bold: true)),
+                                  ),
+                                ),
                               ),
                             ],
                           ),
                         ],
                       ),
-                      const SizedBox(height: CharonSpacing.s4),
-
-                      // Content Area
+                      const SizedBox(height: 14),
                       Expanded(
                         child: SingleChildScrollView(
                           controller: _scrollController,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              // Amber banner if disconnected
-                              if (!isConnected) ...[
-                                OfflineBanner(
-                                  onConnect: widget.controller.connect,
-                                  onScrollToFileUpdate: _scrollToBottomFileCard,
-                                ),
-                                const SizedBox(height: CharonSpacing.s4),
+                              if (!view.online) ...[
+                                OfflineBanner(onScrollToFileUpdate: _scrollToFileCard),
+                                const SizedBox(height: 14),
                               ],
-
-                              // 1. Xray Core Update Card
-                              CoreUpdateCard(
-                                updateState: widget.controller.coreUpdateState,
-                                onApplyNow: () => widget.controller.applyCoreUpdate(
-                                  when: ApplyWhen.APPLY_NOW,
+                              IntrinsicHeight(
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Expanded(child: UpdateCard(view: view.core, onAction: _act)),
+                                    const SizedBox(width: 16),
+                                    Expanded(child: UpdateCard(view: view.app, onAction: _act)),
+                                  ],
                                 ),
-                                onApplyWhenDisconnect: () => widget.controller.applyCoreUpdate(
-                                  when: ApplyWhen.APPLY_WHEN_DISCONNECTED,
-                                ),
-                                onCheckUpdates: widget.controller.checkUpdates,
-                                onRollback: widget.controller.rollbackCore,
                               ),
-                              const SizedBox(height: CharonSpacing.s4),
-
-                              // 2. Charon App Update Card
-                              AppUpdateCard(
-                                updateState: widget.controller.appUpdateState,
-                                onRestartUpdate: () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Restarting Charon and applying update...'),
-                                      duration: Duration(seconds: 2),
-                                      behavior: SnackBarBehavior.floating,
-                                    ),
-                                  );
-                                },
-                                onOpenReleasePage: () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Opening GitHub release page...'),
-                                      duration: Duration(seconds: 2),
-                                      behavior: SnackBarBehavior.floating,
-                                    ),
-                                  );
-                                },
-                              ),
-                              const SizedBox(height: CharonSpacing.s4),
-
-                              // 3. Update from a file Card
-                              Container(
+                              const SizedBox(height: 14),
+                              KeyedSubtree(
                                 key: _fileCardKey,
-                                child: FileUpdateCard(
-                                  isUploading: widget.controller.isFileUploading,
-                                  progress: widget.controller.fileUploadProgress,
-                                  verificationResult: widget.controller.fileVerificationResult,
-                                  // No file picker is wired yet, so the button stays
-                                  // disabled. The service side exists
-                                  // (HomeController.uploadUpdateFileBytes).
-                                  onChooseFile: null,
-                                  onApplyFileUpdate: widget.controller.resetFileUpload,
-                                  onReset: widget.controller.resetFileUpload,
-                                ),
+                                child: FileUpdateCard(view: view.file, onAction: _act),
                               ),
-                              const SizedBox(height: CharonSpacing.s5),
                             ],
                           ),
                         ),

@@ -8,14 +8,15 @@ import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/l10n/generated/app_localizations.dart';
 import 'package:charon/main.dart';
 import 'package:charon/state/home_controller.dart';
+import 'package:charon/theme/theme.dart';
 import 'package:charon/ui/updates/updates_screen.dart';
-import 'package:charon/ui/updates/widgets/app_update_card.dart';
-import 'package:charon/ui/updates/widgets/core_update_card.dart';
 import 'package:charon/ui/updates/widgets/file_update_card.dart';
 import 'package:charon/ui/updates/widgets/offline_banner.dart';
+import 'package:charon/ui/updates/widgets/update_card.dart';
 
-Widget _buildTestUpdatesApp({required HomeController controller, Locale? locale}) {
+Widget _buildTestUpdatesApp({required HomeController controller, Locale? locale, ThemeData? theme}) {
   return MaterialApp(
+    theme: theme,
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
     locale: locale,
@@ -51,96 +52,95 @@ void main() {
       _withPendingUpdates(controller);
       expect(controller.coreUpdateState.stage, UpdateStage.UPDATE_READY);
 
-      // Queue on disconnect
       await controller.applyCoreUpdate(when: ApplyWhen.APPLY_WHEN_DISCONNECTED);
       expect(controller.coreUpdateState.stage, UpdateStage.UPDATE_QUEUED);
 
-      // Apply now
       await controller.applyCoreUpdate(when: ApplyWhen.APPLY_NOW);
       expect(controller.coreUpdateState.stage, UpdateStage.UPDATE_APPLYING);
 
-      // Rollback
       await controller.rollbackCore();
+    });
+
+    test('a check always ends with the flag back at false, also without a core', () async {
+      final controller = HomeController();
+      var notified = 0;
+      controller.addListener(() => notified++);
+      expect(controller.isCheckingUpdates, isFalse);
+      await controller.checkUpdates();
+      expect(controller.isCheckingUpdates, isFalse);
+      expect(notified, greaterThanOrEqualTo(2)); // went to true, then back to false
     });
   });
 
   group('UpdatesScreen UI and Interactions', () {
-    testWidgets('renders offline banner when disconnected and hides when connected', (tester) async {
-      tester.view.physicalSize = const Size(1280, 800);
+    testWidgets('renders the offline notice when not connected and hides it when connected', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() => tester.view.resetPhysicalSize());
 
-      final controller = HomeController(
-        initialStatus: Status(phase: Phase.PHASE_IDLE),
-      );
+      final controller = HomeController(initialStatus: Status(phase: Phase.PHASE_IDLE));
 
       await tester.pumpWidget(_buildTestUpdatesApp(controller: controller));
       await tester.pumpAndSettle();
 
       expect(find.byType(OfflineBanner), findsOneWidget);
-      expect(find.text('GitHub is often slow or blocked direct from here.'), findsOneWidget);
+      expect(find.text('NOT CONNECTED · DIRECT DOWNLOAD'), findsOneWidget);
+      expect(find.text('GitHub is often slow or blocked from here without the tunnel.'), findsOneWidget);
       expect(find.text('or update from a file'), findsOneWidget);
-      expect(find.text('Try connecting'), findsOneWidget);
 
-      // Connect -> banner disappears
       controller.updateStatus(Status(phase: Phase.PHASE_UP));
       await tester.pumpAndSettle();
-
       expect(find.byType(OfflineBanner), findsNothing);
     });
 
-    testWidgets('renders core, app, and file update cards with exact spec details', (tester) async {
-      tester.view.physicalSize = const Size(1280, 800);
+    testWidgets('renders the core, app and file cards like the board', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() => tester.view.resetPhysicalSize());
 
-      final controller = HomeController(
-        initialStatus: Status(phase: Phase.PHASE_UP),
-      );
+      final controller = HomeController(initialStatus: Status(phase: Phase.PHASE_UP, activeServerId: 'SRV-01'));
       _withPendingUpdates(controller);
 
       await tester.pumpWidget(_buildTestUpdatesApp(controller: controller));
       await tester.pumpAndSettle();
 
-      expect(find.byType(CoreUpdateCard), findsOneWidget);
-      expect(find.byType(AppUpdateCard), findsOneWidget);
+      expect(find.byType(UpdateCard), findsNWidgets(2));
       expect(find.byType(FileUpdateCard), findsOneWidget);
 
-      // Core card checks
-      expect(find.text('XRAY CORE'), findsOneWidget);
+      // Header
+      expect(find.text('> SETTINGS · ABOUT · UPDATES'), findsOneWidget);
+      expect(find.text('Updates'), findsOneWidget);
+      expect(find.text('Check now'), findsOneWidget);
+
+      // Core card
+      expect(find.text('> XRAY-CORE · THE ENGINE'), findsOneWidget);
       expect(find.text('READY'), findsOneWidget);
       expect(find.text('v1.8.7'), findsOneWidget);
       expect(find.text('v1.8.24'), findsOneWidget);
-      expect(find.text('~14.2 MB'), findsOneWidget);
-
-      // Four verified steps
-      expect(find.textContaining('Download · '), findsOneWidget);
-      expect(find.textContaining('Check signature and sha256 · '), findsOneWidget);
-      expect(find.textContaining('Test your config · '), findsOneWidget);
-      expect(find.textContaining('Swap and verify · '), findsOneWidget);
-
-      // Trust line
-      expect(
-        find.text('Core updates arrive inside a signed Charon release, never straight from upstream.'),
-        findsOneWidget,
-      );
-
-      // Ready buttons
+      expect(find.text('Download'), findsNWidgets(2)); // the first step, and the app card button
+      expect(find.text('Check signature and sha256'), findsOneWidget);
+      expect(find.text('Test your config'), findsOneWidget);
+      expect(find.text('Swap and verify'), findsOneWidget);
+      expect(find.text('Core updates arrive inside a signed Charon release, never straight from upstream.'), findsOneWidget);
       expect(find.text('Apply now'), findsOneWidget);
       expect(find.text('When I disconnect'), findsOneWidget);
 
-      // App card checks
-      expect(find.text('CHARON APP'), findsOneWidget);
-      expect(find.text('WHAT\'S NEW'), findsOneWidget);
-      expect(find.text('Restart to update'), findsOneWidget);
+      // App card
+      expect(find.text('> CHARON · THIS APP'), findsOneWidget);
+      expect(find.text('UPDATE'), findsOneWidget);
+      expect(find.text('> installer · 29.8 MB · signed'), findsOneWidget);
 
-      // File update card checks
-      expect(find.text('UPDATE FROM A FILE'), findsOneWidget);
+      // File card
+      expect(find.text('> UPDATE FROM A FILE'), findsOneWidget);
       expect(find.text('Choose file'), findsOneWidget);
+
+      // The fake texts of the old screen are gone
+      expect(find.text('Restart to update'), findsNothing);
+      expect(find.text("WHAT'S NEW"), findsNothing);
     });
 
-    testWidgets('Choose file is disabled until a real file can be chosen', (tester) async {
-      tester.view.physicalSize = const Size(1280, 800);
+    testWidgets('buttons that have no command behind them do nothing', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() => tester.view.resetPhysicalSize());
 
@@ -149,12 +149,62 @@ void main() {
       await tester.pumpWidget(_buildTestUpdatesApp(controller: controller));
       await tester.pumpAndSettle();
 
-      await tester.scrollUntilVisible(find.text('Choose file'), 200.0);
       await tester.tap(find.text('Choose file'), warnIfMissed: false);
       await tester.pumpAndSettle();
-
       expect(controller.fileVerificationResult, isNull);
-      expect(find.text('Verified and ready'), findsNothing);
+      expect(find.text('VERIFIED'), findsNothing);
+    });
+
+    testWidgets('Apply now sends the apply command and moves the card to APPLYING', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+
+      final controller = HomeController(initialStatus: Status(phase: Phase.PHASE_UP));
+      _withPendingUpdates(controller);
+      await tester.pumpWidget(_buildTestUpdatesApp(controller: controller));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Apply now'));
+      await tester.pumpAndSettle();
+      expect(controller.coreUpdateState.stage, UpdateStage.UPDATE_APPLYING);
+      expect(find.text('APPLYING'), findsOneWidget);
+    });
+
+    testWidgets('a failed core check shows its state with the amber chip', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+
+      final controller = HomeController(initialStatus: Status(phase: Phase.PHASE_UP));
+      controller.setCoreUpdateState(UpdateState(
+        kind: UpdateKind.UPDATE_KIND_CORE,
+        stage: UpdateStage.UPDATE_CANNOT_CHECK,
+        currentVersion: '25.9.11',
+        newVersion: '25.10.15',
+        failureKey: 'error.update.signature_invalid',
+      ));
+      await tester.pumpWidget(_buildTestUpdatesApp(controller: controller));
+      await tester.pumpAndSettle();
+
+      expect(find.text('SIGNATURE INVALID'), findsOneWidget);
+      expect(find.text('signature not valid, file deleted'), findsOneWidget);
+      expect(find.text('Try again'), findsOneWidget);
+      expect(find.text('Copy log'), findsOneWidget);
+    });
+
+    testWidgets('light theme uses the light tokens', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+
+      final controller = HomeController(initialStatus: Status(phase: Phase.PHASE_UP));
+      _withPendingUpdates(controller);
+      await tester.pumpWidget(_buildTestUpdatesApp(controller: controller, theme: CharonTheme.light));
+      await tester.pumpAndSettle();
+
+      expect(tester.widget<Text>(find.text('v1.8.7')).style!.color, CharonColors.light.text);
+      expect(tester.takeException(), isNull);
     });
 
     testWidgets('renders Indonesian localization cleanly and navigates from About card', (tester) async {
@@ -168,25 +218,21 @@ void main() {
       );
       _withPendingUpdates(controller);
 
-      await tester.pumpWidget(CharonApp(
-        controller: controller,
-        locale: const Locale('id'),
-      ));
+      await tester.pumpWidget(CharonApp(controller: controller, locale: const Locale('id')));
       controller.setTab(4); // Settings tab
       await tester.pumpAndSettle();
 
-      // Tap 2 READY → in About card to navigate to Updates
       await tester.tap(find.text('2 READY →'));
       await tester.pumpAndSettle();
 
       expect(find.byType(UpdatesScreen), findsOneWidget);
       expect(find.text('Pembaruan'), findsOneWidget);
-      expect(find.text('> PENGATURAN · TENTANG'), findsOneWidget);
-      expect(find.text('← Kembali ke Pengaturan'), findsOneWidget);
-      expect(find.text('GitHub sering kali lambat atau diblokir langsung dari sini.'), findsOneWidget);
+      expect(find.text('> PENGATURAN · TENTANG · PEMBARUAN'), findsOneWidget);
+      expect(find.text('TIDAK TERHUBUNG · UNDUH LANGSUNG'), findsOneWidget);
       expect(find.text('Terapkan sekarang'), findsOneWidget);
-      expect(find.text('Saat saya putuskan'), findsOneWidget);
-      expect(find.text('PERBARUI DARI FILE'), findsOneWidget);
+      expect(find.text('Saat aku memutuskan'), findsOneWidget);
+      expect(find.text('> PERBARUI DARI FILE'), findsOneWidget);
+      expect(tester.takeException(), isNull);
     });
   });
 }

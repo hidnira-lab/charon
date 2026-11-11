@@ -2,17 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/theme.dart';
+import '../../common/glass_card.dart';
 
-/// Amber warning banner when disconnected or connection is direct:
-/// "GitHub is often slow or blocked direct from here. [or update from a file] [Try connecting]"
+/// Amber notice while not connected: GitHub is often slow or blocked from here
+/// without the tunnel, with a link down to "Update from a file".
 class OfflineBanner extends StatelessWidget {
-  const OfflineBanner({
-    super.key,
-    required this.onConnect,
-    required this.onScrollToFileUpdate,
-  });
+  const OfflineBanner({super.key, required this.onScrollToFileUpdate});
 
-  final VoidCallback onConnect;
   final VoidCallback onScrollToFileUpdate;
 
   @override
@@ -21,72 +17,81 @@ class OfflineBanner extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: colors.transitionSoft,
-        borderRadius: BorderRadius.circular(10.0),
-        border: Border.all(color: colors.transitionText.withValues(alpha: 0.5)),
+        borderRadius: BorderRadius.circular(16),
       ),
-      child: Row(
-        children: [
-          Icon(
-            Icons.cloud_off_rounded,
-            size: 18.0,
-            color: colors.transitionText,
-          ),
-          const SizedBox(width: CharonSpacing.s3),
-          Expanded(
-            child: Text(
-              l10n.updatesOfflineBannerTitle,
-              style: CharonTypography.body.copyWith(
-                color: colors.transitionText,
-                fontSize: 12.5,
-                fontWeight: FontWeight.w500,
-              ),
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // The amber checker stripe of the board.
+            SizedBox(
+              width: 12,
+              child: CustomPaint(painter: _CheckerPainter(colors.transitionFill, colors.transitionSoft)),
             ),
-          ),
-          const SizedBox(width: CharonSpacing.s3),
-          // Action: or update from a file
-          InkWell(
-            onTap: onScrollToFileUpdate,
-            borderRadius: BorderRadius.circular(4.0),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-              child: Text(
-                l10n.updatesOfflineBannerActionFile,
-                style: CharonTypography.caption.copyWith(
-                  color: colors.transitionText,
-                  fontWeight: FontWeight.w700,
-                  decoration: TextDecoration.underline,
-                  decorationColor: colors.transitionText,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            l10n.updOfflineTag,
+                            style: monoStyle(colors.transitionText, 10, bold: true, em: 0.08),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            l10n.updOfflineText,
+                            style: TextStyle(fontSize: 12, height: 1.35, color: colors.text),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    InkWell(
+                      onTap: onScrollToFileUpdate,
+                      child: Text(
+                        l10n.updatesOfflineBannerActionFile,
+                        style: monoStyle(colors.text, 11, bold: true).copyWith(
+                          decoration: TextDecoration.underline,
+                          decorationColor: colors.text,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ),
-          const SizedBox(width: CharonSpacing.s2),
-          // Button: Try connecting
-          ElevatedButton(
-            onPressed: onConnect,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: colors.transitionText,
-              foregroundColor: colors.bg,
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6.0),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-              minimumSize: const Size(0, 30.0),
-            ),
-            child: Text(
-              l10n.updatesOfflineBannerActionConnect,
-              style: CharonTypography.caption.copyWith(
-                color: colors.bg,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
+}
+
+class _CheckerPainter extends CustomPainter {
+  const _CheckerPainter(this.fill, this.bg);
+
+  final Color fill;
+  final Color bg;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.drawRect(Offset.zero & size, Paint()..color = bg);
+    final p = Paint()..color = fill;
+    const s = 4.0;
+    for (var y = 0.0, r = 0; y < size.height; y += s, r++) {
+      for (var x = 0.0, c = 0; x < size.width; x += s, c++) {
+        if ((r + c).isEven) canvas.drawRect(Rect.fromLTWH(x, y, s, s), p);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_CheckerPainter old) => old.fill != fill || old.bg != bg;
 }
