@@ -164,7 +164,7 @@ class CharonDialog extends StatelessWidget {
                       ),
                       for (final a in actions) ...[
                         const SizedBox(width: 10),
-                        _Button(a),
+                        PillButton(a),
                       ],
                     ],
                   ),
@@ -178,10 +178,13 @@ class CharonDialog extends StatelessWidget {
   }
 }
 
-class _Button extends StatelessWidget {
-  const _Button(this.a);
+/// The round buttons of the boards: a filled primary, an outlined secondary.
+/// [external] adds the small arrow of a link that leaves the app.
+class PillButton extends StatelessWidget {
+  const PillButton(this.a, {super.key, this.external = false});
 
   final DialogAction a;
+  final bool external;
 
   @override
   Widget build(BuildContext context) {
@@ -207,6 +210,10 @@ class _Button extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(a.label, style: monoStyle(ink, 12, bold: true)),
+              if (external) ...[
+                const SizedBox(width: 8),
+                Text('↗', style: monoStyle(colors.text3, 12)),
+              ],
               if (a.icon != null) ...[
                 const SizedBox(width: 12),
                 Container(

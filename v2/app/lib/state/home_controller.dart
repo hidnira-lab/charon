@@ -8,15 +8,17 @@ import '../core/core_client.dart';
 import '../core/transport.dart';
 import '../gen/charon/v1/charon.pb.dart';
 import '../sync/sync_client.dart';
+import 'service_supervisor.dart';
 import 'throughput_history.dart';
 import 'ui_state.dart';
+
+export 'service_supervisor.dart' show InstallMode, Recovery, ServiceStatus;
 
 /// One change of the tunnel phase, as the service clock saw it.
 typedef StateChange = ({int atMs, Phase from, Phase to});
 
 enum DnsMode { tunnelDefault, custom }
 enum ConnectionMode { tun, systemProxy }
-enum ServiceStatus { running, notRunning, needsUpdate }
 
 /// State controller for the Home screen, connecting to [CoreClient] events
 /// and projecting the active state with [projectState].
@@ -31,16 +33,19 @@ class HomeController extends ChangeNotifier {
     this._themeMode = ThemeMode.system,
     this._locale,
     SyncController? syncController,
+    ServiceSupervisor? serviceSupervisor,
     int Function()? clock,
   })  : _clock = clock ?? (() => DateTime.now().millisecondsSinceEpoch),
         _status = initialStatus ?? Status(),
         _config = initialConfig,
         _hasServers = hasServers ?? (initialConfig?.servers.isNotEmpty ?? true),
-        _sync = syncController ?? SyncController() {
+        _sync = syncController ?? SyncController(),
+        service = serviceSupervisor ?? ServiceSupervisor() {
     _platformTransport = platformTransport;
     _lastPhase = _status.phase;
     _syncAndroidAnomaly(_status);
     _sync.addListener(_onSyncChanged);
+    service.addListener(_onSyncChanged);
     _client = client;
     if (_client != null) {
       _initClient();
@@ -76,6 +81,9 @@ class HomeController extends ChangeNotifier {
   }
 
   final SyncController _sync;
+
+  /// The Charon service: whether it answers, and starting, repairing and updating it.
+  final ServiceSupervisor service;
   Status _status;
   Config? _config;
   Throughput? _throughput;
@@ -125,11 +133,6 @@ class HomeController extends ChangeNotifier {
   String _customDns = '198.51.100.53';
   ConnectionMode _connectionMode = ConnectionMode.tun;
   bool _launchAtStartup = false;
-  ServiceStatus _serviceStatus = ServiceStatus.running;
-  bool _isServiceRestarting = false;
-  bool _isServiceStarting = false;
-  bool _serviceStartFailed = false;
-  int _pipeRetrySeconds = 3;
 
   // Android specific states (N09 & N10)
   bool _hasVpnPermission = true;
@@ -339,11 +342,8 @@ class HomeController extends ChangeNotifier {
   String get customDns => _customDns;
   ConnectionMode get connectionMode => _connectionMode;
   bool get launchAtStartup => _launchAtStartup;
-  ServiceStatus get serviceStatus => _serviceStatus;
-  bool get isServiceRestarting => _isServiceRestarting;
-  bool get isServiceStarting => _isServiceStarting;
-  bool get serviceStartFailed => _serviceStartFailed;
-  int get pipeRetrySeconds => _pipeRetrySeconds;
+  ServiceStatus get serviceStatus => service.status;
+  bool get isServiceRestarting => service.isRestarting;
   bool get hasVpnPermission => _hasVpnPermission;
   bool get hasNotificationPermission => _hasNotificationPermission;
   bool get anotherVpnTookOver => _anotherVpnTookOver;
@@ -410,15 +410,7 @@ class HomeController extends ChangeNotifier {
     }
   }
 
-  void setServiceStatus(ServiceStatus status) {
-    _serviceStatus = status;
-    notifyListeners();
-  }
-
-  void setPipeRetrySeconds(int seconds) {
-    _pipeRetrySeconds = seconds;
-    notifyListeners();
-  }
+  void setServiceStatus(ServiceStatus status) => service.setStatus(status);
 
   void setHasVpnPermission(bool value) {
     _hasVpnPermission = value;
@@ -440,76 +432,7 @@ class HomeController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> startService() async {
-    _isServiceStarting = true;
-    _serviceStartFailed = false;
-    notifyListeners();
-    try {
-      if (Platform.isWindows) {
-        final res = await Process.run('sc.exe', ['start', 'charon']);
-        if (res.exitCode != 0) {
-          _serviceStartFailed = true;
-        }
-      }
-    } catch (_) {
-      _serviceStartFailed = true;
-    } finally {
-      _isServiceStarting = false;
-      notifyListeners();
-    }
-  }
-
-  void markServiceStartFailed() {
-    _isServiceStarting = false;
-    _serviceStartFailed = true;
-    notifyListeners();
-  }
-
-  Future<void> repairInstaller() async {
-    if (Platform.isWindows) {
-      try {
-        await Process.start('charon-installer.exe', []);
-      } catch (e) {
-        _logError(e);
-      }
-    }
-  }
-
-  Future<void> openReleaseTool() async {
-    if (Platform.isWindows) {
-      try {
-        await Process.start('charon-release.exe', []);
-      } catch (e) {
-        _logError(e);
-      }
-    }
-  }
-
-  Future<void> updateService() async {
-    if (Platform.isWindows) {
-      try {
-        await Process.start('charon-installer.exe', ['/SILENT']);
-      } catch (e) {
-        _logError(e);
-      }
-    }
-  }
-
-  Future<void> restartService() async {
-    if (_isServiceRestarting) return;
-    _isServiceRestarting = true;
-    notifyListeners();
-    try {
-      if (Platform.isWindows) {
-        await Process.run('sc.exe', ['stop', 'charon']);
-        await Process.run('sc.exe', ['start', 'charon']);
-      }
-    } catch (_) {
-    } finally {
-      _isServiceRestarting = false;
-      notifyListeners();
-    }
-  }
+  Future<void> restartService() => service.restart();
 
   String get greetingName => _greetingName;
   bool get detectCity => _detectCity;
@@ -827,7 +750,7 @@ class HomeController extends ChangeNotifier {
     if (platformTransport != null) {
       _platformTransport = platformTransport;
     }
-    _serviceStatus = ServiceStatus.running;
+    service.setStatus(ServiceStatus.running);
     if (initialStatus != null) {
       _status = initialStatus;
       _syncAndroidAnomaly(initialStatus);
@@ -845,8 +768,7 @@ class HomeController extends ChangeNotifier {
     );
     unawaited(activeClient.closed.then((_) {
       if (!_isDisposed && identical(_client, activeClient)) {
-        _serviceStatus = ServiceStatus.notRunning;
-        notifyListeners();
+        service.setStatus(ServiceStatus.notRunning);
       }
     }));
     unawaited(_refreshConfig());
@@ -1241,6 +1163,8 @@ class HomeController extends ChangeNotifier {
     _isDisposed = true;
     _sync.removeListener(_onSyncChanged);
     _sync.dispose();
+    service.removeListener(_onSyncChanged);
+    service.dispose();
     _eventSub?.cancel();
     super.dispose();
   }

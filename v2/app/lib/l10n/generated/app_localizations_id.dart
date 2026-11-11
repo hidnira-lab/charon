@@ -2686,22 +2686,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get serviceStartAction => 'Jalankan service';
 
   @override
-  String get serviceStarting => 'Memulai layanan...';
-
-  @override
   String get serviceRepairInstaller => 'Perbaiki lewat installer';
 
   @override
   String get serviceOpenGuide => 'Buka panduan';
-
-  @override
-  String serviceTryingAgain(int seconds) {
-    return 'Mencoba lagi dalam $seconds dtk';
-  }
-
-  @override
-  String get serviceReleaseToolNotice =>
-      'Jika internet Anda terblokir, filter perlindungan Charon mungkin masih aktif. Alat pelepas dapat membersihkannya.';
 
   @override
   String get serviceOpenReleaseTool => 'Buka alat pelepas';
@@ -2718,10 +2706,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get serviceUpdateFromFile => 'Perbarui dari file';
-
-  @override
-  String get serviceUpdateNote =>
-      'Memperbarui layanan akan memutus koneksi terowongan sebentar.';
 
   @override
   String get androidVpnPermissionTitle => 'Koneksi VPN';
@@ -4101,9 +4085,6 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get svcUpdatingBodyNone =>
       'Tunnel berhenti sebentar, lalu Charon terhubung lagi.';
-
-  @override
-  String get svcInstallLineFile => 'dari charon-setup.exe · tanda tangan dicek';
 
   @override
   String get svcInstallLineAdmin => 'setelah Windows minta hak admin';

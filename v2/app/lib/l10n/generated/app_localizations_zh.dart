@@ -2523,22 +2523,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get serviceStartAction => '启动服务';
 
   @override
-  String get serviceStarting => '正在启动服务...';
-
-  @override
   String get serviceRepairInstaller => '用安装程序修复';
 
   @override
   String get serviceOpenGuide => '打开指南';
-
-  @override
-  String serviceTryingAgain(int seconds) {
-    return '$seconds 秒后重试';
-  }
-
-  @override
-  String get serviceReleaseToolNotice =>
-      '若您的互联网已被切断，Charon 的防火墙保护规则可能仍然生效。使用清理工具可安全移除它们。';
 
   @override
   String get serviceOpenReleaseTool => '打开放行工具';
@@ -2554,9 +2542,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get serviceUpdateFromFile => '从文件更新';
-
-  @override
-  String get serviceUpdateNote => '更新后台服务将短暂中断网络隧道。';
 
   @override
   String get androidVpnPermissionTitle => 'VPN 连接';
@@ -3873,9 +3858,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get svcUpdatingBodyNone => '隧道会暂停片刻，然后 Charon 重新连接。';
-
-  @override
-  String get svcInstallLineFile => '来自 charon-setup.exe · 签名已校验';
 
   @override
   String get svcInstallLineAdmin => '在 Windows 请求管理员权限之后';
@@ -6431,22 +6413,10 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get serviceStartAction => '启动服务';
 
   @override
-  String get serviceStarting => '正在启动服务...';
-
-  @override
   String get serviceRepairInstaller => '用安装程序修复';
 
   @override
   String get serviceOpenGuide => '打开指南';
-
-  @override
-  String serviceTryingAgain(int seconds) {
-    return '$seconds 秒后重试';
-  }
-
-  @override
-  String get serviceReleaseToolNotice =>
-      '若您的互联网已被切断，Charon 的防火墙保护规则可能仍然生效。使用清理工具可安全移除它们。';
 
   @override
   String get serviceOpenReleaseTool => '打开放行工具';
@@ -6462,9 +6432,6 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get serviceUpdateFromFile => '从文件更新';
-
-  @override
-  String get serviceUpdateNote => '更新后台服务将短暂中断网络隧道。';
 
   @override
   String get androidVpnPermissionTitle => 'VPN 连接';
@@ -7781,9 +7748,6 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get svcUpdatingBodyNone => '隧道会暂停片刻，然后 Charon 重新连接。';
-
-  @override
-  String get svcInstallLineFile => '来自 charon-setup.exe · 签名已校验';
 
   @override
   String get svcInstallLineAdmin => '在 Windows 请求管理员权限之后';

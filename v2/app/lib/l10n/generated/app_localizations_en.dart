@@ -2679,22 +2679,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get serviceStartAction => 'Start service';
 
   @override
-  String get serviceStarting => 'Starting service...';
-
-  @override
   String get serviceRepairInstaller => 'Repair with the installer';
 
   @override
   String get serviceOpenGuide => 'Open guide';
-
-  @override
-  String serviceTryingAgain(int seconds) {
-    return 'Trying again in $seconds s';
-  }
-
-  @override
-  String get serviceReleaseToolNotice =>
-      'If your internet is blocked, Charon\'s protection filters may still be active. The release tool removes them.';
 
   @override
   String get serviceOpenReleaseTool => 'Open release tool';
@@ -2711,10 +2699,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get serviceUpdateFromFile => 'Update from a file';
-
-  @override
-  String get serviceUpdateNote =>
-      'Updating the service briefly interrupts the tunnel.';
 
   @override
   String get androidVpnPermissionTitle => 'VPN connection';
@@ -4103,9 +4087,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get svcUpdatingBodyNone =>
       'The tunnel pauses for a moment, then Charon reconnects.';
-
-  @override
-  String get svcInstallLineFile => 'from charon-setup.exe · signature checked';
 
   @override
   String get svcInstallLineAdmin => 'after Windows asks for admin rights';

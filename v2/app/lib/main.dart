@@ -8,11 +8,11 @@ import 'core/geoip.dart';
 import 'core/transport.dart';
 import 'l10n/generated/app_localizations.dart';
 import 'state/home_controller.dart';
+import 'state/service_view.dart';
 import 'theme/theme.dart';
 import 'ui/home/home_screen.dart';
 import 'ui/servers/servers_screen.dart';
-import 'ui/service/service_needs_update_screen.dart';
-import 'ui/service/service_not_running_screen.dart';
+import 'ui/service/service_screen.dart';
 import 'ui/settings/settings_screen.dart';
 import 'ui/setup/first_run_setup_screen.dart';
 import 'ui/split/split_screen.dart';
@@ -24,42 +24,42 @@ void main() {
   final controller = HomeController();
   runApp(CharonApp(controller: controller));
 
+  // The supervisor opens the pipe now, and again every few seconds while the
+  // service is away, so the window comes back by itself when the service does.
   if (Platform.isWindows) {
-    unawaited(_connectBackground(controller));
+    controller.service.setConnector(() => _connectWindows(controller));
+    unawaited(controller.service.reconnect());
   } else if (Platform.isAndroid) {
-    unawaited(_connectAndroidBackground(controller));
+    controller.service.setConnector(() => _connectAndroid(controller));
+    unawaited(controller.service.reconnect());
   }
 }
 
-Future<void> _connectBackground(HomeController controller) async {
+/// Opens the service pipe and hands its client to the controller. Throws
+/// [ProtocolMismatch] when no version is shared, anything else when the pipe
+/// cannot be opened.
+Future<void> _connectWindows(HomeController controller) async {
   const pipe = String.fromEnvironment('CHARON_PIPE', defaultValue: r'\\.\pipe\charon');
+  final transport = await IpcTransport.connect(pipe);
+  final client = CoreClient(transport);
   try {
-    final transport = await IpcTransport.connect(pipe);
-    final client = CoreClient(transport);
     final ack = await client.hello(appVersion: '0.1.0');
     controller.attachClient(client, initialStatus: ack.status);
-  } on ProtocolMismatch {
-    controller.setServiceStatus(ServiceStatus.needsUpdate);
   } catch (_) {
-    controller.setServiceStatus(ServiceStatus.notRunning);
+    unawaited(transport.close());
+    rethrow;
   }
 }
 
-Future<void> _connectAndroidBackground(HomeController controller) async {
-  try {
-    final transport = PlatformChannelTransport();
-    final client = CoreClient(transport);
-    final ack = await client.hello(appVersion: '0.1.0');
-    controller.attachClient(
-      client,
-      initialStatus: ack.status,
-      platformTransport: transport,
-    );
-  } on ProtocolMismatch {
-    controller.setServiceStatus(ServiceStatus.needsUpdate);
-  } catch (_) {
-    controller.setServiceStatus(ServiceStatus.notRunning);
-  }
+Future<void> _connectAndroid(HomeController controller) async {
+  final transport = PlatformChannelTransport();
+  final client = CoreClient(transport);
+  final ack = await client.hello(appVersion: '0.1.0');
+  controller.attachClient(
+    client,
+    initialStatus: ack.status,
+    platformTransport: transport,
+  );
 }
 
 class CharonApp extends StatelessWidget {
@@ -83,15 +83,8 @@ class CharonApp extends StatelessWidget {
         Widget screen;
         if (controller.isFirstRun) {
           screen = FirstRunSetupScreen(controller: controller);
-        } else if (controller.serviceStatus == ServiceStatus.notRunning) {
-          screen = ServiceNotRunningScreen(controller: controller);
-        } else if (controller.serviceStatus == ServiceStatus.needsUpdate) {
-          screen = ServiceNeedsUpdateScreen(
-            controller: controller,
-            onUpdateFromFile: () {
-              controller.setTab(4);
-            },
-          );
+        } else if (controller.service.view != null) {
+          screen = ServiceScreen(controller: controller);
         } else if (activeTab == 1) {
           screen = ServersScreen(controller: controller);
         } else if (activeTab == 2) {

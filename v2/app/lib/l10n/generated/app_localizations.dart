@@ -4787,12 +4787,6 @@ abstract class AppLocalizations {
   /// **'Start service'**
   String get serviceStartAction;
 
-  /// Indication that service is being started.
-  ///
-  /// In en, this message translates to:
-  /// **'Starting service...'**
-  String get serviceStarting;
-
   /// Option to repair via installer if start fails.
   ///
   /// In en, this message translates to:
@@ -4804,18 +4798,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open guide'**
   String get serviceOpenGuide;
-
-  /// Pipe reconnect backoff notice.
-  ///
-  /// In en, this message translates to:
-  /// **'Trying again in {seconds} s'**
-  String serviceTryingAgain(int seconds);
-
-  /// Notice for persistent WFP filters when service is down.
-  ///
-  /// In en, this message translates to:
-  /// **'If your internet is blocked, Charon\'s protection filters may still be active. The release tool removes them.'**
-  String get serviceReleaseToolNotice;
 
   /// Action to launch standalone release tool.
   ///
@@ -4846,12 +4828,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Update from a file'**
   String get serviceUpdateFromFile;
-
-  /// Note regarding brief tunnel interruption during service update.
-  ///
-  /// In en, this message translates to:
-  /// **'Updating the service briefly interrupts the tunnel.'**
-  String get serviceUpdateNote;
 
   /// Android VPN permission explainer title.
   ///
@@ -7161,12 +7137,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The tunnel pauses for a moment, then Charon reconnects.'**
   String get svcUpdatingBodyNone;
-
-  /// Service screen text.
-  ///
-  /// In en, this message translates to:
-  /// **'from charon-setup.exe · signature checked'**
-  String get svcInstallLineFile;
 
   /// Service screen text.
   ///
