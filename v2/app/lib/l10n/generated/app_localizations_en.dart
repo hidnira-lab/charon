@@ -3522,4 +3522,252 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get syncTextTooLarge => 'Vault exceeds the 1 MiB maximum size.';
+
+  @override
+  String get dlgAddKicker => 'SERVERS · ADD';
+
+  @override
+  String get dlgAddTitle => 'Add a server';
+
+  @override
+  String get dlgAddHint => 'added last · nothing changes until you Use it';
+
+  @override
+  String get dlgAddSaveBtn => 'Save server';
+
+  @override
+  String get dlgAddTabsLabel => 'How to add';
+
+  @override
+  String get dlgAddTabLink => 'Import vless:// link';
+
+  @override
+  String get dlgAddTabPaste => 'Paste config';
+
+  @override
+  String get dlgAddLinkLabel => 'VLESS LINK';
+
+  @override
+  String get dlgAddLinkField => 'vless link';
+
+  @override
+  String get dlgAddJsonLabel => 'XRAY CONFIG · JSON';
+
+  @override
+  String get dlgAddJsonField => 'xray config JSON';
+
+  @override
+  String get dlgAddPasteBtn => 'Paste from clipboard';
+
+  @override
+  String get dlgAddJsonOk => 'valid · 1 outbound';
+
+  @override
+  String get dlgAddJsonNoKey => 'missing publicKey';
+
+  @override
+  String dlgAddJsonProtocol(String protocol) {
+    return 'protocol is $protocol, not vless';
+  }
+
+  @override
+  String get dlgAddJsonBad => 'not a valid config yet';
+
+  @override
+  String get dlgAddErrScheme =>
+      'Charon only speaks VLESS with Reality. This link is another kind.';
+
+  @override
+  String get dlgAddErrSchemeHelp =>
+      'nothing was imported · vmess, trojan, ss and hysteria2 are not supported';
+
+  @override
+  String get dlgAddErrKeyLink => 'Missing pbk, the Reality public key.';
+
+  @override
+  String get dlgAddErrKeyLinkHelp =>
+      'expected …&pbk=<key>&sid=<id> · copy the link again from your panel';
+
+  @override
+  String get dlgAddErrKeyJson => 'The publicKey is empty.';
+
+  @override
+  String get dlgAddErrKeyJsonHelp =>
+      'copy it from the server config, the private key stays on the server';
+
+  @override
+  String get dlgAddReadLink => 'READ FROM THE LINK · NO NAME IN IT';
+
+  @override
+  String get dlgAddReadConfig => 'READ FROM THE CONFIG · NO NAME IN IT';
+
+  @override
+  String dlgAddFieldsOk(int ok, int total) {
+    return '$ok of $total fields ok';
+  }
+
+  @override
+  String dlgAddBecomesGuessed(String code, int order) {
+    return 'becomes $code · #$order in failover order · country guessed offline from the IP';
+  }
+
+  @override
+  String dlgAddBecomesNoCountry(String code, int order) {
+    return 'becomes $code · #$order in failover order · country not known, set it in Edit';
+  }
+
+  @override
+  String dlgAddDupTitle(String code, String name) {
+    return 'This is already $code · $name';
+  }
+
+  @override
+  String get dlgAddDupSub =>
+      'same address, same public key · nothing new to add';
+
+  @override
+  String dlgAddDupEdit(String code) {
+    return 'Edit $code →';
+  }
+
+  @override
+  String get dlgFieldName => 'NAME';
+
+  @override
+  String get dlgFieldNameAria => 'Server name';
+
+  @override
+  String get dlgFieldNameEmpty => 'empty = country name';
+
+  @override
+  String get dlgFieldAddress => 'ADDRESS';
+
+  @override
+  String get dlgFieldSni => 'SNI';
+
+  @override
+  String get dlgFieldFlow => 'FLOW';
+
+  @override
+  String get dlgFieldPbkSid => 'PBK · SID';
+
+  @override
+  String get dlgFieldPublicKey => 'PUBLIC KEY';
+
+  @override
+  String get dlgFieldShortId => 'SHORT ID';
+
+  @override
+  String get dlgFieldUuid => 'UUID';
+
+  @override
+  String dlgEditKicker(String code) {
+    return 'SERVERS · EDIT $code';
+  }
+
+  @override
+  String dlgEditTitle(String name) {
+    return 'Edit $name';
+  }
+
+  @override
+  String get dlgEditHint => 'SRV codes never change, names can';
+
+  @override
+  String get dlgEditSaveBtn => 'Save changes';
+
+  @override
+  String get dlgEditCountry => 'COUNTRY';
+
+  @override
+  String get dlgEditCountryNone => 'not set';
+
+  @override
+  String get dlgEditNameNote =>
+      'empty name = country name · the country is only a guess from the address, change it if wrong';
+
+  @override
+  String get dlgEditConnTitle => 'CONNECTION · VLESS + REALITY';
+
+  @override
+  String get dlgEditConnNote =>
+      'read only on purpose · one wrong character breaks Reality, so swap the whole link';
+
+  @override
+  String dlgEditHidden(String prefix) {
+    return '$prefix… hidden';
+  }
+
+  @override
+  String get dlgEditQuotaTitle => 'MONTHLY QUOTA';
+
+  @override
+  String get dlgEditQuotaSwitch => 'Track monthly quota';
+
+  @override
+  String get dlgEditQuotaOn =>
+      'Home shows how much of the plan is left this cycle';
+
+  @override
+  String get dlgEditQuotaOff => 'off · Home only shows traffic, no limit';
+
+  @override
+  String get dlgEditQuotaCap => 'PLAN CAP';
+
+  @override
+  String get dlgEditQuotaCapUnit => 'GB per cycle';
+
+  @override
+  String get dlgEditQuotaDay => 'RESETS ON';
+
+  @override
+  String get dlgEditQuotaDayPre => 'day';
+
+  @override
+  String get dlgEditQuotaDaySuf => 'of each month · billing day';
+
+  @override
+  String get dlgEditQuotaNote =>
+      'from your VPS plan · counted on this device only, other devices are not added';
+
+  @override
+  String dlgEditActiveNote(String code) {
+    return '$code is carrying your traffic right now. Changes apply on the next connect.';
+  }
+
+  @override
+  String get homeCountryHK => 'Hong Kong';
+
+  @override
+  String get homeCountryTW => 'Taiwan';
+
+  @override
+  String get homeCountryMY => 'Malaysia';
+
+  @override
+  String get homeCountryIN => 'India';
+
+  @override
+  String get homeCountryUS => 'United States';
+
+  @override
+  String get homeCountryCA => 'Canada';
+
+  @override
+  String get homeCountryDE => 'Germany';
+
+  @override
+  String get homeCountryNL => 'Netherlands';
+
+  @override
+  String get homeCountryGB => 'United Kingdom';
+
+  @override
+  String get homeCountryFR => 'France';
+
+  @override
+  String get homeCountryRU => 'Russia';
+
+  @override
+  String get homeCountryAU => 'Australia';
 }

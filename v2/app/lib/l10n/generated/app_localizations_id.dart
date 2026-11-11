@@ -3531,4 +3531,253 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get syncTextTooLarge => 'Vault melebihi ukuran maksimum 1 MiB.';
+
+  @override
+  String get dlgAddKicker => 'SERVER · TAMBAH';
+
+  @override
+  String get dlgAddTitle => 'Tambah server';
+
+  @override
+  String get dlgAddHint =>
+      'ditambahkan terakhir · tidak ada yang berubah sampai kamu Pakai';
+
+  @override
+  String get dlgAddSaveBtn => 'Simpan server';
+
+  @override
+  String get dlgAddTabsLabel => 'Cara menambahkan';
+
+  @override
+  String get dlgAddTabLink => 'Impor link vless://';
+
+  @override
+  String get dlgAddTabPaste => 'Tempel config';
+
+  @override
+  String get dlgAddLinkLabel => 'LINK VLESS';
+
+  @override
+  String get dlgAddLinkField => 'link vless';
+
+  @override
+  String get dlgAddJsonLabel => 'CONFIG XRAY · JSON';
+
+  @override
+  String get dlgAddJsonField => 'config JSON xray';
+
+  @override
+  String get dlgAddPasteBtn => 'Tempel dari clipboard';
+
+  @override
+  String get dlgAddJsonOk => 'valid · 1 outbound';
+
+  @override
+  String get dlgAddJsonNoKey => 'publicKey tidak ada';
+
+  @override
+  String dlgAddJsonProtocol(String protocol) {
+    return 'protokolnya $protocol, bukan vless';
+  }
+
+  @override
+  String get dlgAddJsonBad => 'belum jadi config yang valid';
+
+  @override
+  String get dlgAddErrScheme =>
+      'Charon hanya bicara VLESS dengan Reality. Link ini jenis lain.';
+
+  @override
+  String get dlgAddErrSchemeHelp =>
+      'tidak ada yang diimpor · vmess, trojan, ss, dan hysteria2 tidak didukung';
+
+  @override
+  String get dlgAddErrKeyLink => 'pbk tidak ada, yaitu kunci publik Reality.';
+
+  @override
+  String get dlgAddErrKeyLinkHelp =>
+      'seharusnya …&pbk=<key>&sid=<id> · salin lagi link dari panelmu';
+
+  @override
+  String get dlgAddErrKeyJson => 'publicKey kosong.';
+
+  @override
+  String get dlgAddErrKeyJsonHelp =>
+      'salin dari config server, kunci privat tetap di server';
+
+  @override
+  String get dlgAddReadLink => 'DIBACA DARI LINK · TANPA NAMA';
+
+  @override
+  String get dlgAddReadConfig => 'DIBACA DARI CONFIG · TANPA NAMA';
+
+  @override
+  String dlgAddFieldsOk(int ok, int total) {
+    return '$ok dari $total kolom oke';
+  }
+
+  @override
+  String dlgAddBecomesGuessed(String code, int order) {
+    return 'jadi $code · #$order di urutan failover · negara ditebak offline dari IP';
+  }
+
+  @override
+  String dlgAddBecomesNoCountry(String code, int order) {
+    return 'jadi $code · #$order di urutan failover · negara belum diketahui, atur di Edit';
+  }
+
+  @override
+  String dlgAddDupTitle(String code, String name) {
+    return 'Ini sudah $code · $name';
+  }
+
+  @override
+  String get dlgAddDupSub =>
+      'alamat sama, kunci publik sama · tidak ada yang baru';
+
+  @override
+  String dlgAddDupEdit(String code) {
+    return 'Edit $code →';
+  }
+
+  @override
+  String get dlgFieldName => 'NAMA';
+
+  @override
+  String get dlgFieldNameAria => 'Nama server';
+
+  @override
+  String get dlgFieldNameEmpty => 'kosong = nama negara';
+
+  @override
+  String get dlgFieldAddress => 'ALAMAT';
+
+  @override
+  String get dlgFieldSni => 'SNI';
+
+  @override
+  String get dlgFieldFlow => 'FLOW';
+
+  @override
+  String get dlgFieldPbkSid => 'PBK · SID';
+
+  @override
+  String get dlgFieldPublicKey => 'KUNCI PUBLIK';
+
+  @override
+  String get dlgFieldShortId => 'SHORT ID';
+
+  @override
+  String get dlgFieldUuid => 'UUID';
+
+  @override
+  String dlgEditKicker(String code) {
+    return 'SERVER · EDIT $code';
+  }
+
+  @override
+  String dlgEditTitle(String name) {
+    return 'Edit $name';
+  }
+
+  @override
+  String get dlgEditHint => 'kode SRV tidak pernah berubah, nama bisa';
+
+  @override
+  String get dlgEditSaveBtn => 'Simpan perubahan';
+
+  @override
+  String get dlgEditCountry => 'NEGARA';
+
+  @override
+  String get dlgEditCountryNone => 'belum diatur';
+
+  @override
+  String get dlgEditNameNote =>
+      'nama kosong = nama negara · negara hanya tebakan dari alamat, ubah kalau salah';
+
+  @override
+  String get dlgEditConnTitle => 'KONEKSI · VLESS + REALITY';
+
+  @override
+  String get dlgEditConnNote =>
+      'sengaja hanya baca · satu karakter salah merusak Reality, jadi ganti seluruh link';
+
+  @override
+  String dlgEditHidden(String prefix) {
+    return '$prefix… disembunyikan';
+  }
+
+  @override
+  String get dlgEditQuotaTitle => 'KUOTA BULANAN';
+
+  @override
+  String get dlgEditQuotaSwitch => 'Lacak kuota bulanan';
+
+  @override
+  String get dlgEditQuotaOn => 'Beranda menampilkan sisa paket siklus ini';
+
+  @override
+  String get dlgEditQuotaOff =>
+      'mati · Beranda hanya menampilkan trafik, tanpa batas';
+
+  @override
+  String get dlgEditQuotaCap => 'BATAS PAKET';
+
+  @override
+  String get dlgEditQuotaCapUnit => 'GB per siklus';
+
+  @override
+  String get dlgEditQuotaDay => 'RESET PADA';
+
+  @override
+  String get dlgEditQuotaDayPre => 'tanggal';
+
+  @override
+  String get dlgEditQuotaDaySuf => 'tiap bulan · tanggal tagihan';
+
+  @override
+  String get dlgEditQuotaNote =>
+      'dari paket VPS-mu · dihitung di perangkat ini saja, perangkat lain tidak dijumlahkan';
+
+  @override
+  String dlgEditActiveNote(String code) {
+    return '$code sedang membawa trafikmu sekarang. Perubahan berlaku di koneksi berikutnya.';
+  }
+
+  @override
+  String get homeCountryHK => 'Hong Kong';
+
+  @override
+  String get homeCountryTW => 'Taiwan';
+
+  @override
+  String get homeCountryMY => 'Malaysia';
+
+  @override
+  String get homeCountryIN => 'India';
+
+  @override
+  String get homeCountryUS => 'Amerika Serikat';
+
+  @override
+  String get homeCountryCA => 'Kanada';
+
+  @override
+  String get homeCountryDE => 'Jerman';
+
+  @override
+  String get homeCountryNL => 'Belanda';
+
+  @override
+  String get homeCountryGB => 'Inggris Raya';
+
+  @override
+  String get homeCountryFR => 'Prancis';
+
+  @override
+  String get homeCountryRU => 'Rusia';
+
+  @override
+  String get homeCountryAU => 'Australia';
 }

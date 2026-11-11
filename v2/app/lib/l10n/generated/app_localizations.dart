@@ -6171,6 +6171,444 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Vault exceeds the 1 MiB maximum size.'**
   String get syncTextTooLarge;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'SERVERS · ADD'**
+  String get dlgAddKicker;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a server'**
+  String get dlgAddTitle;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'added last · nothing changes until you Use it'**
+  String get dlgAddHint;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Save server'**
+  String get dlgAddSaveBtn;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'How to add'**
+  String get dlgAddTabsLabel;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Import vless:// link'**
+  String get dlgAddTabLink;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste config'**
+  String get dlgAddTabPaste;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'VLESS LINK'**
+  String get dlgAddLinkLabel;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'vless link'**
+  String get dlgAddLinkField;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'XRAY CONFIG · JSON'**
+  String get dlgAddJsonLabel;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'xray config JSON'**
+  String get dlgAddJsonField;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste from clipboard'**
+  String get dlgAddPasteBtn;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'valid · 1 outbound'**
+  String get dlgAddJsonOk;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'missing publicKey'**
+  String get dlgAddJsonNoKey;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'protocol is {protocol}, not vless'**
+  String dlgAddJsonProtocol(String protocol);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'not a valid config yet'**
+  String get dlgAddJsonBad;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon only speaks VLESS with Reality. This link is another kind.'**
+  String get dlgAddErrScheme;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'nothing was imported · vmess, trojan, ss and hysteria2 are not supported'**
+  String get dlgAddErrSchemeHelp;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing pbk, the Reality public key.'**
+  String get dlgAddErrKeyLink;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'expected …&pbk=<key>&sid=<id> · copy the link again from your panel'**
+  String get dlgAddErrKeyLinkHelp;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'The publicKey is empty.'**
+  String get dlgAddErrKeyJson;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'copy it from the server config, the private key stays on the server'**
+  String get dlgAddErrKeyJsonHelp;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'READ FROM THE LINK · NO NAME IN IT'**
+  String get dlgAddReadLink;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'READ FROM THE CONFIG · NO NAME IN IT'**
+  String get dlgAddReadConfig;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'{ok} of {total} fields ok'**
+  String dlgAddFieldsOk(int ok, int total);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'becomes {code} · #{order} in failover order · country guessed offline from the IP'**
+  String dlgAddBecomesGuessed(String code, int order);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'becomes {code} · #{order} in failover order · country not known, set it in Edit'**
+  String dlgAddBecomesNoCountry(String code, int order);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'This is already {code} · {name}'**
+  String dlgAddDupTitle(String code, String name);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'same address, same public key · nothing new to add'**
+  String get dlgAddDupSub;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit {code} →'**
+  String dlgAddDupEdit(String code);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'NAME'**
+  String get dlgFieldName;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Server name'**
+  String get dlgFieldNameAria;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'empty = country name'**
+  String get dlgFieldNameEmpty;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'ADDRESS'**
+  String get dlgFieldAddress;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'SNI'**
+  String get dlgFieldSni;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'FLOW'**
+  String get dlgFieldFlow;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'PBK · SID'**
+  String get dlgFieldPbkSid;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'PUBLIC KEY'**
+  String get dlgFieldPublicKey;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'SHORT ID'**
+  String get dlgFieldShortId;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'UUID'**
+  String get dlgFieldUuid;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'SERVERS · EDIT {code}'**
+  String dlgEditKicker(String code);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit {name}'**
+  String dlgEditTitle(String name);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'SRV codes never change, names can'**
+  String get dlgEditHint;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get dlgEditSaveBtn;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'COUNTRY'**
+  String get dlgEditCountry;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'not set'**
+  String get dlgEditCountryNone;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'empty name = country name · the country is only a guess from the address, change it if wrong'**
+  String get dlgEditNameNote;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'CONNECTION · VLESS + REALITY'**
+  String get dlgEditConnTitle;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'read only on purpose · one wrong character breaks Reality, so swap the whole link'**
+  String get dlgEditConnNote;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'{prefix}… hidden'**
+  String dlgEditHidden(String prefix);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'MONTHLY QUOTA'**
+  String get dlgEditQuotaTitle;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Track monthly quota'**
+  String get dlgEditQuotaSwitch;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Home shows how much of the plan is left this cycle'**
+  String get dlgEditQuotaOn;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'off · Home only shows traffic, no limit'**
+  String get dlgEditQuotaOff;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'PLAN CAP'**
+  String get dlgEditQuotaCap;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'GB per cycle'**
+  String get dlgEditQuotaCapUnit;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'RESETS ON'**
+  String get dlgEditQuotaDay;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'day'**
+  String get dlgEditQuotaDayPre;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'of each month · billing day'**
+  String get dlgEditQuotaDaySuf;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'from your VPS plan · counted on this device only, other devices are not added'**
+  String get dlgEditQuotaNote;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'{code} is carrying your traffic right now. Changes apply on the next connect.'**
+  String dlgEditActiveNote(String code);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Hong Kong'**
+  String get homeCountryHK;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Taiwan'**
+  String get homeCountryTW;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Malaysia'**
+  String get homeCountryMY;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'India'**
+  String get homeCountryIN;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'United States'**
+  String get homeCountryUS;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Canada'**
+  String get homeCountryCA;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Germany'**
+  String get homeCountryDE;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Netherlands'**
+  String get homeCountryNL;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'United Kingdom'**
+  String get homeCountryGB;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'France'**
+  String get homeCountryFR;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Russia'**
+  String get homeCountryRU;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Australia'**
+  String get homeCountryAU;
 }
 
 class _AppLocalizationsDelegate

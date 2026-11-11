@@ -3330,6 +3330,246 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get syncTextTooLarge => '保险库超过了 1 MiB 的上限。';
+
+  @override
+  String get dlgAddKicker => '服务器 · 添加';
+
+  @override
+  String get dlgAddTitle => '添加服务器';
+
+  @override
+  String get dlgAddHint => '最后添加 · 点使用之前不会有变化';
+
+  @override
+  String get dlgAddSaveBtn => '保存服务器';
+
+  @override
+  String get dlgAddTabsLabel => '如何添加';
+
+  @override
+  String get dlgAddTabLink => '导入 vless:// 链接';
+
+  @override
+  String get dlgAddTabPaste => '粘贴配置';
+
+  @override
+  String get dlgAddLinkLabel => 'VLESS 链接';
+
+  @override
+  String get dlgAddLinkField => 'vless 链接';
+
+  @override
+  String get dlgAddJsonLabel => 'XRAY 配置 · JSON';
+
+  @override
+  String get dlgAddJsonField => 'xray JSON 配置';
+
+  @override
+  String get dlgAddPasteBtn => '从剪贴板粘贴';
+
+  @override
+  String get dlgAddJsonOk => '有效 · 1 个出站';
+
+  @override
+  String get dlgAddJsonNoKey => '缺少 publicKey';
+
+  @override
+  String dlgAddJsonProtocol(String protocol) {
+    return '协议是 $protocol，不是 vless';
+  }
+
+  @override
+  String get dlgAddJsonBad => '还不是有效的配置';
+
+  @override
+  String get dlgAddErrScheme => 'Charon 只支持 VLESS + Reality。这个链接是其他类型。';
+
+  @override
+  String get dlgAddErrSchemeHelp =>
+      '没有导入任何内容 · 不支持 vmess、trojan、ss 和 hysteria2';
+
+  @override
+  String get dlgAddErrKeyLink => '缺少 pbk，即 Reality 公钥。';
+
+  @override
+  String get dlgAddErrKeyLinkHelp => '应为 …&pbk=<key>&sid=<id> · 请从面板重新复制链接';
+
+  @override
+  String get dlgAddErrKeyJson => 'publicKey 为空。';
+
+  @override
+  String get dlgAddErrKeyJsonHelp => '从服务器配置中复制，私钥只留在服务器上';
+
+  @override
+  String get dlgAddReadLink => '从链接读取 · 不含名称';
+
+  @override
+  String get dlgAddReadConfig => '从配置读取 · 不含名称';
+
+  @override
+  String dlgAddFieldsOk(int ok, int total) {
+    return '$ok/$total 项正常';
+  }
+
+  @override
+  String dlgAddBecomesGuessed(String code, int order) {
+    return '成为 $code · 故障转移顺序第 $order · 根据 IP 离线推测国家';
+  }
+
+  @override
+  String dlgAddBecomesNoCountry(String code, int order) {
+    return '成为 $code · 故障转移顺序第 $order · 国家未知，可在编辑中设置';
+  }
+
+  @override
+  String dlgAddDupTitle(String code, String name) {
+    return '这已经是 $code · $name';
+  }
+
+  @override
+  String get dlgAddDupSub => '地址和公钥都相同 · 无需新增';
+
+  @override
+  String dlgAddDupEdit(String code) {
+    return '编辑 $code →';
+  }
+
+  @override
+  String get dlgFieldName => '名称';
+
+  @override
+  String get dlgFieldNameAria => '服务器名称';
+
+  @override
+  String get dlgFieldNameEmpty => '留空 = 国家名';
+
+  @override
+  String get dlgFieldAddress => '地址';
+
+  @override
+  String get dlgFieldSni => 'SNI';
+
+  @override
+  String get dlgFieldFlow => 'FLOW';
+
+  @override
+  String get dlgFieldPbkSid => 'PBK · SID';
+
+  @override
+  String get dlgFieldPublicKey => '公钥';
+
+  @override
+  String get dlgFieldShortId => '短 ID';
+
+  @override
+  String get dlgFieldUuid => 'UUID';
+
+  @override
+  String dlgEditKicker(String code) {
+    return '服务器 · 编辑 $code';
+  }
+
+  @override
+  String dlgEditTitle(String name) {
+    return '编辑 $name';
+  }
+
+  @override
+  String get dlgEditHint => 'SRV 代号不会变，名称可以改';
+
+  @override
+  String get dlgEditSaveBtn => '保存更改';
+
+  @override
+  String get dlgEditCountry => '国家';
+
+  @override
+  String get dlgEditCountryNone => '未设置';
+
+  @override
+  String get dlgEditNameNote => '名称留空 = 国家名 · 国家只是根据地址的推测，不对可以修改';
+
+  @override
+  String get dlgEditConnTitle => '连接 · VLESS + REALITY';
+
+  @override
+  String get dlgEditConnNote => '故意设为只读 · 错一个字符 Reality 就会失效，所以请替换整条链接';
+
+  @override
+  String dlgEditHidden(String prefix) {
+    return '$prefix… 已隐藏';
+  }
+
+  @override
+  String get dlgEditQuotaTitle => '每月流量';
+
+  @override
+  String get dlgEditQuotaSwitch => '统计每月流量';
+
+  @override
+  String get dlgEditQuotaOn => '首页显示本周期套餐还剩多少';
+
+  @override
+  String get dlgEditQuotaOff => '关闭 · 首页只显示流量，没有上限';
+
+  @override
+  String get dlgEditQuotaCap => '套餐上限';
+
+  @override
+  String get dlgEditQuotaCapUnit => 'GB / 周期';
+
+  @override
+  String get dlgEditQuotaDay => '重置日';
+
+  @override
+  String get dlgEditQuotaDayPre => '日';
+
+  @override
+  String get dlgEditQuotaDaySuf => '每月 · 账单日';
+
+  @override
+  String get dlgEditQuotaNote => '来自你的 VPS 套餐 · 仅在本机统计，不累加其他设备';
+
+  @override
+  String dlgEditActiveNote(String code) {
+    return '$code 正在传送你的流量。更改将在下次连接时生效。';
+  }
+
+  @override
+  String get homeCountryHK => '香港';
+
+  @override
+  String get homeCountryTW => '台湾';
+
+  @override
+  String get homeCountryMY => '马来西亚';
+
+  @override
+  String get homeCountryIN => '印度';
+
+  @override
+  String get homeCountryUS => '美国';
+
+  @override
+  String get homeCountryCA => '加拿大';
+
+  @override
+  String get homeCountryDE => '德国';
+
+  @override
+  String get homeCountryNL => '荷兰';
+
+  @override
+  String get homeCountryGB => '英国';
+
+  @override
+  String get homeCountryFR => '法国';
+
+  @override
+  String get homeCountryRU => '俄罗斯';
+
+  @override
+  String get homeCountryAU => '澳大利亚';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -6657,4 +6897,244 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get syncTextTooLarge => '保险库超过了 1 MiB 的上限。';
+
+  @override
+  String get dlgAddKicker => '服务器 · 添加';
+
+  @override
+  String get dlgAddTitle => '添加服务器';
+
+  @override
+  String get dlgAddHint => '最后添加 · 点使用之前不会有变化';
+
+  @override
+  String get dlgAddSaveBtn => '保存服务器';
+
+  @override
+  String get dlgAddTabsLabel => '如何添加';
+
+  @override
+  String get dlgAddTabLink => '导入 vless:// 链接';
+
+  @override
+  String get dlgAddTabPaste => '粘贴配置';
+
+  @override
+  String get dlgAddLinkLabel => 'VLESS 链接';
+
+  @override
+  String get dlgAddLinkField => 'vless 链接';
+
+  @override
+  String get dlgAddJsonLabel => 'XRAY 配置 · JSON';
+
+  @override
+  String get dlgAddJsonField => 'xray JSON 配置';
+
+  @override
+  String get dlgAddPasteBtn => '从剪贴板粘贴';
+
+  @override
+  String get dlgAddJsonOk => '有效 · 1 个出站';
+
+  @override
+  String get dlgAddJsonNoKey => '缺少 publicKey';
+
+  @override
+  String dlgAddJsonProtocol(String protocol) {
+    return '协议是 $protocol，不是 vless';
+  }
+
+  @override
+  String get dlgAddJsonBad => '还不是有效的配置';
+
+  @override
+  String get dlgAddErrScheme => 'Charon 只支持 VLESS + Reality。这个链接是其他类型。';
+
+  @override
+  String get dlgAddErrSchemeHelp =>
+      '没有导入任何内容 · 不支持 vmess、trojan、ss 和 hysteria2';
+
+  @override
+  String get dlgAddErrKeyLink => '缺少 pbk，即 Reality 公钥。';
+
+  @override
+  String get dlgAddErrKeyLinkHelp => '应为 …&pbk=<key>&sid=<id> · 请从面板重新复制链接';
+
+  @override
+  String get dlgAddErrKeyJson => 'publicKey 为空。';
+
+  @override
+  String get dlgAddErrKeyJsonHelp => '从服务器配置中复制，私钥只留在服务器上';
+
+  @override
+  String get dlgAddReadLink => '从链接读取 · 不含名称';
+
+  @override
+  String get dlgAddReadConfig => '从配置读取 · 不含名称';
+
+  @override
+  String dlgAddFieldsOk(int ok, int total) {
+    return '$ok/$total 项正常';
+  }
+
+  @override
+  String dlgAddBecomesGuessed(String code, int order) {
+    return '成为 $code · 故障转移顺序第 $order · 根据 IP 离线推测国家';
+  }
+
+  @override
+  String dlgAddBecomesNoCountry(String code, int order) {
+    return '成为 $code · 故障转移顺序第 $order · 国家未知，可在编辑中设置';
+  }
+
+  @override
+  String dlgAddDupTitle(String code, String name) {
+    return '这已经是 $code · $name';
+  }
+
+  @override
+  String get dlgAddDupSub => '地址和公钥都相同 · 无需新增';
+
+  @override
+  String dlgAddDupEdit(String code) {
+    return '编辑 $code →';
+  }
+
+  @override
+  String get dlgFieldName => '名称';
+
+  @override
+  String get dlgFieldNameAria => '服务器名称';
+
+  @override
+  String get dlgFieldNameEmpty => '留空 = 国家名';
+
+  @override
+  String get dlgFieldAddress => '地址';
+
+  @override
+  String get dlgFieldSni => 'SNI';
+
+  @override
+  String get dlgFieldFlow => 'FLOW';
+
+  @override
+  String get dlgFieldPbkSid => 'PBK · SID';
+
+  @override
+  String get dlgFieldPublicKey => '公钥';
+
+  @override
+  String get dlgFieldShortId => '短 ID';
+
+  @override
+  String get dlgFieldUuid => 'UUID';
+
+  @override
+  String dlgEditKicker(String code) {
+    return '服务器 · 编辑 $code';
+  }
+
+  @override
+  String dlgEditTitle(String name) {
+    return '编辑 $name';
+  }
+
+  @override
+  String get dlgEditHint => 'SRV 代号不会变，名称可以改';
+
+  @override
+  String get dlgEditSaveBtn => '保存更改';
+
+  @override
+  String get dlgEditCountry => '国家';
+
+  @override
+  String get dlgEditCountryNone => '未设置';
+
+  @override
+  String get dlgEditNameNote => '名称留空 = 国家名 · 国家只是根据地址的推测，不对可以修改';
+
+  @override
+  String get dlgEditConnTitle => '连接 · VLESS + REALITY';
+
+  @override
+  String get dlgEditConnNote => '故意设为只读 · 错一个字符 Reality 就会失效，所以请替换整条链接';
+
+  @override
+  String dlgEditHidden(String prefix) {
+    return '$prefix… 已隐藏';
+  }
+
+  @override
+  String get dlgEditQuotaTitle => '每月流量';
+
+  @override
+  String get dlgEditQuotaSwitch => '统计每月流量';
+
+  @override
+  String get dlgEditQuotaOn => '首页显示本周期套餐还剩多少';
+
+  @override
+  String get dlgEditQuotaOff => '关闭 · 首页只显示流量，没有上限';
+
+  @override
+  String get dlgEditQuotaCap => '套餐上限';
+
+  @override
+  String get dlgEditQuotaCapUnit => 'GB / 周期';
+
+  @override
+  String get dlgEditQuotaDay => '重置日';
+
+  @override
+  String get dlgEditQuotaDayPre => '日';
+
+  @override
+  String get dlgEditQuotaDaySuf => '每月 · 账单日';
+
+  @override
+  String get dlgEditQuotaNote => '来自你的 VPS 套餐 · 仅在本机统计，不累加其他设备';
+
+  @override
+  String dlgEditActiveNote(String code) {
+    return '$code 正在传送你的流量。更改将在下次连接时生效。';
+  }
+
+  @override
+  String get homeCountryHK => '香港';
+
+  @override
+  String get homeCountryTW => '台湾';
+
+  @override
+  String get homeCountryMY => '马来西亚';
+
+  @override
+  String get homeCountryIN => '印度';
+
+  @override
+  String get homeCountryUS => '美国';
+
+  @override
+  String get homeCountryCA => '加拿大';
+
+  @override
+  String get homeCountryDE => '德国';
+
+  @override
+  String get homeCountryNL => '荷兰';
+
+  @override
+  String get homeCountryGB => '英国';
+
+  @override
+  String get homeCountryFR => '法国';
+
+  @override
+  String get homeCountryRU => '俄罗斯';
+
+  @override
+  String get homeCountryAU => '澳大利亚';
 }
