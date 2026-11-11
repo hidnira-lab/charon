@@ -2517,7 +2517,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get serviceNotRunningTitle => 'Charon 服务未运行';
 
   @override
-  String get serviceNotRunningBody => '后台服务会在关闭此窗口时保持隧道与断网开关活跃。当前该服务未在运行。';
+  String get serviceNotRunningBody => '即使关闭这个窗口，服务也会让隧道和断网保护继续工作。它现在没有运行。';
 
   @override
   String get serviceStartAction => '启动服务';
@@ -2526,7 +2526,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get serviceStarting => '正在启动服务...';
 
   @override
-  String get serviceRepairInstaller => '使用安装程序修复';
+  String get serviceRepairInstaller => '用安装程序修复';
 
   @override
   String get serviceOpenGuide => '打开指南';
@@ -2541,13 +2541,13 @@ class AppLocalizationsZh extends AppLocalizations {
       '若您的互联网已被切断，Charon 的防火墙保护规则可能仍然生效。使用清理工具可安全移除它们。';
 
   @override
-  String get serviceOpenReleaseTool => '打开清理工具';
+  String get serviceOpenReleaseTool => '打开放行工具';
 
   @override
   String get serviceNeedsUpdateTitle => 'Charon 服务需要更新';
 
   @override
-  String get serviceNeedsUpdateBody => '此应用窗口与后台服务的协议版本不一致。';
+  String get serviceNeedsUpdateBody => '这个窗口和服务使用的版本不同。';
 
   @override
   String get serviceUpdateAction => '更新';
@@ -3800,6 +3800,117 @@ class AppLocalizationsZh extends AppLocalizations {
   String dlgCodeBusy(String host) {
     return '正在从 $host 获取配对码';
   }
+
+  @override
+  String get svcBadgeStopped => '服务已停止';
+
+  @override
+  String get svcBadgeStarting => '启动中';
+
+  @override
+  String get svcBadgeFailed => '无法启动';
+
+  @override
+  String get svcBadgeMismatch => '版本不一致';
+
+  @override
+  String get svcBadgeRepairing => '修复中';
+
+  @override
+  String get svcBadgeUpdating => '更新中';
+
+  @override
+  String get svcBadgeRunning => '服务运行中';
+
+  @override
+  String get svcStartingTitle => '正在启动服务';
+
+  @override
+  String get svcStartingBody => 'Windows 正在启动 Charon 的服务，需要几秒钟。';
+
+  @override
+  String get svcStartingLine => '等待服务响应';
+
+  @override
+  String get svcFailedTitle => '服务没有启动';
+
+  @override
+  String get svcFailedBody =>
+      'Windows 没有启动 Charon 的服务。用安装程序修复即可恢复，你的服务器和设置都会保留。';
+
+  @override
+  String get svcFailedNote => '安装程序会请求一次管理员权限';
+
+  @override
+  String get svcRetryLine => '正在重试 · 每 5 秒';
+
+  @override
+  String svcMismatchLine(String window, String service) {
+    return '窗口使用协议 $window · 服务使用 $service';
+  }
+
+  @override
+  String svcMismatchLineWindow(String window) {
+    return '窗口使用协议 $window';
+  }
+
+  @override
+  String get svcMismatchNote => '更新服务会让隧道短暂中断。Windows 会请求管理员权限。';
+
+  @override
+  String get svcRepairingTitle => '正在修复服务';
+
+  @override
+  String get svcRepairingBody => '安装程序正在恢复服务，你的服务器和设置都会保留。';
+
+  @override
+  String get svcUpdatingTitle => '正在更新服务';
+
+  @override
+  String svcUpdatingBody(String server) {
+    return '隧道会暂停片刻，然后 Charon 重新连接到 $server。';
+  }
+
+  @override
+  String get svcUpdatingBodyNone => '隧道会暂停片刻，然后 Charon 重新连接。';
+
+  @override
+  String get svcInstallLineFile => '来自 charon-setup.exe · 签名已校验';
+
+  @override
+  String get svcInstallLineAdmin => '在 Windows 请求管理员权限之后';
+
+  @override
+  String get svcRunningTitle => '服务正在运行';
+
+  @override
+  String get svcRunningBodyBack => 'Charon 回来了。即使关闭这个窗口，隧道和断网保护也会继续工作。';
+
+  @override
+  String svcRunningBodyUpdated(String server) {
+    return '两边的版本又一致了。你的隧道已回到 $server。';
+  }
+
+  @override
+  String get svcRunningBodyUpdatedNone => '两边的版本又一致了。';
+
+  @override
+  String get svcOpenCharon => '打开 Charon';
+
+  @override
+  String get svcReleaseKicker => '如果你的网络被拦截';
+
+  @override
+  String get svcReleaseBody => 'Charon 的保护过滤器可能仍然有效。放行工具可以移除它们。';
+
+  @override
+  String get svcReleaseSub => '独立工具 · 需要管理员权限';
+
+  @override
+  String get svcMascotAsleep => 'Charon 正在睡觉';
+
+  @override
+  String get svcMascot => 'Charon';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -6314,7 +6425,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get serviceNotRunningTitle => 'Charon 服务未运行';
 
   @override
-  String get serviceNotRunningBody => '后台服务会在关闭此窗口时保持隧道与断网开关活跃。当前该服务未在运行。';
+  String get serviceNotRunningBody => '即使关闭这个窗口，服务也会让隧道和断网保护继续工作。它现在没有运行。';
 
   @override
   String get serviceStartAction => '启动服务';
@@ -6323,7 +6434,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get serviceStarting => '正在启动服务...';
 
   @override
-  String get serviceRepairInstaller => '使用安装程序修复';
+  String get serviceRepairInstaller => '用安装程序修复';
 
   @override
   String get serviceOpenGuide => '打开指南';
@@ -6338,13 +6449,13 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
       '若您的互联网已被切断，Charon 的防火墙保护规则可能仍然生效。使用清理工具可安全移除它们。';
 
   @override
-  String get serviceOpenReleaseTool => '打开清理工具';
+  String get serviceOpenReleaseTool => '打开放行工具';
 
   @override
   String get serviceNeedsUpdateTitle => 'Charon 服务需要更新';
 
   @override
-  String get serviceNeedsUpdateBody => '此应用窗口与后台服务的协议版本不一致。';
+  String get serviceNeedsUpdateBody => '这个窗口和服务使用的版本不同。';
 
   @override
   String get serviceUpdateAction => '更新';
@@ -7597,4 +7708,115 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String dlgCodeBusy(String host) {
     return '正在从 $host 获取配对码';
   }
+
+  @override
+  String get svcBadgeStopped => '服务已停止';
+
+  @override
+  String get svcBadgeStarting => '启动中';
+
+  @override
+  String get svcBadgeFailed => '无法启动';
+
+  @override
+  String get svcBadgeMismatch => '版本不一致';
+
+  @override
+  String get svcBadgeRepairing => '修复中';
+
+  @override
+  String get svcBadgeUpdating => '更新中';
+
+  @override
+  String get svcBadgeRunning => '服务运行中';
+
+  @override
+  String get svcStartingTitle => '正在启动服务';
+
+  @override
+  String get svcStartingBody => 'Windows 正在启动 Charon 的服务，需要几秒钟。';
+
+  @override
+  String get svcStartingLine => '等待服务响应';
+
+  @override
+  String get svcFailedTitle => '服务没有启动';
+
+  @override
+  String get svcFailedBody =>
+      'Windows 没有启动 Charon 的服务。用安装程序修复即可恢复，你的服务器和设置都会保留。';
+
+  @override
+  String get svcFailedNote => '安装程序会请求一次管理员权限';
+
+  @override
+  String get svcRetryLine => '正在重试 · 每 5 秒';
+
+  @override
+  String svcMismatchLine(String window, String service) {
+    return '窗口使用协议 $window · 服务使用 $service';
+  }
+
+  @override
+  String svcMismatchLineWindow(String window) {
+    return '窗口使用协议 $window';
+  }
+
+  @override
+  String get svcMismatchNote => '更新服务会让隧道短暂中断。Windows 会请求管理员权限。';
+
+  @override
+  String get svcRepairingTitle => '正在修复服务';
+
+  @override
+  String get svcRepairingBody => '安装程序正在恢复服务，你的服务器和设置都会保留。';
+
+  @override
+  String get svcUpdatingTitle => '正在更新服务';
+
+  @override
+  String svcUpdatingBody(String server) {
+    return '隧道会暂停片刻，然后 Charon 重新连接到 $server。';
+  }
+
+  @override
+  String get svcUpdatingBodyNone => '隧道会暂停片刻，然后 Charon 重新连接。';
+
+  @override
+  String get svcInstallLineFile => '来自 charon-setup.exe · 签名已校验';
+
+  @override
+  String get svcInstallLineAdmin => '在 Windows 请求管理员权限之后';
+
+  @override
+  String get svcRunningTitle => '服务正在运行';
+
+  @override
+  String get svcRunningBodyBack => 'Charon 回来了。即使关闭这个窗口，隧道和断网保护也会继续工作。';
+
+  @override
+  String svcRunningBodyUpdated(String server) {
+    return '两边的版本又一致了。你的隧道已回到 $server。';
+  }
+
+  @override
+  String get svcRunningBodyUpdatedNone => '两边的版本又一致了。';
+
+  @override
+  String get svcOpenCharon => '打开 Charon';
+
+  @override
+  String get svcReleaseKicker => '如果你的网络被拦截';
+
+  @override
+  String get svcReleaseBody => 'Charon 的保护过滤器可能仍然有效。放行工具可以移除它们。';
+
+  @override
+  String get svcReleaseSub => '独立工具 · 需要管理员权限';
+
+  @override
+  String get svcMascotAsleep => 'Charon 正在睡觉';
+
+  @override
+  String get svcMascot => 'Charon';
 }

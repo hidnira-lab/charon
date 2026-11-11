@@ -2676,20 +2676,20 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get serviceNotRunningTitle => 'Layanan Charon tidak berjalan';
+  String get serviceNotRunningTitle => 'Service Charon tidak berjalan';
 
   @override
   String get serviceNotRunningBody =>
-      'Layanan menjaga terowongan dan tombol pemutus tetap aktif meskipun jendela ini ditutup. Layanan sedang tidak berjalan saat ini.';
+      'Service menjaga tunnel dan kill switch tetap hidup walau jendela ini ditutup. Sekarang service sedang tidak berjalan.';
 
   @override
-  String get serviceStartAction => 'Mulai layanan';
+  String get serviceStartAction => 'Jalankan service';
 
   @override
   String get serviceStarting => 'Memulai layanan...';
 
   @override
-  String get serviceRepairInstaller => 'Perbaiki dengan pemasang';
+  String get serviceRepairInstaller => 'Perbaiki lewat installer';
 
   @override
   String get serviceOpenGuide => 'Buka panduan';
@@ -2707,17 +2707,17 @@ class AppLocalizationsId extends AppLocalizations {
   String get serviceOpenReleaseTool => 'Buka alat pelepas';
 
   @override
-  String get serviceNeedsUpdateTitle => 'Layanan Charon memerlukan pembaruan';
+  String get serviceNeedsUpdateTitle => 'Service Charon perlu diperbarui';
 
   @override
   String get serviceNeedsUpdateBody =>
-      'Jendela aplikasi ini dan layanan menggunakan versi protokol yang berbeda.';
+      'Jendela ini dan service memakai versi yang berbeda.';
 
   @override
-  String get serviceUpdateAction => 'Perbarui';
+  String get serviceUpdateAction => 'Update';
 
   @override
-  String get serviceUpdateFromFile => 'Perbarui dari berkas';
+  String get serviceUpdateFromFile => 'Perbarui dari file';
 
   @override
   String get serviceUpdateNote =>
@@ -4024,4 +4024,122 @@ class AppLocalizationsId extends AppLocalizations {
   String dlgCodeBusy(String host) {
     return 'meminta kode dari $host';
   }
+
+  @override
+  String get svcBadgeStopped => 'SERVICE BERHENTI';
+
+  @override
+  String get svcBadgeStarting => 'MEMULAI';
+
+  @override
+  String get svcBadgeFailed => 'GAGAL MULAI';
+
+  @override
+  String get svcBadgeMismatch => 'VERSI TIDAK COCOK';
+
+  @override
+  String get svcBadgeRepairing => 'MEMPERBAIKI';
+
+  @override
+  String get svcBadgeUpdating => 'MEMPERBARUI';
+
+  @override
+  String get svcBadgeRunning => 'SERVICE BERJALAN';
+
+  @override
+  String get svcStartingTitle => 'Menjalankan service';
+
+  @override
+  String get svcStartingBody =>
+      'Windows sedang menjalankan service Charon. Butuh beberapa detik.';
+
+  @override
+  String get svcStartingLine => 'menunggu service menjawab';
+
+  @override
+  String get svcFailedTitle => 'Service tidak mau jalan';
+
+  @override
+  String get svcFailedBody =>
+      'Windows tidak menjalankan service Charon. Perbaiki lewat installer untuk memasangnya lagi. Server dan pengaturanmu tetap ada.';
+
+  @override
+  String get svcFailedNote => 'installer minta hak admin sekali';
+
+  @override
+  String get svcRetryLine => 'Mencoba lagi · tiap 5 dtk';
+
+  @override
+  String svcMismatchLine(String window, String service) {
+    return 'jendela pakai protokol $window · service pakai $service';
+  }
+
+  @override
+  String svcMismatchLineWindow(String window) {
+    return 'jendela pakai protokol $window';
+  }
+
+  @override
+  String get svcMismatchNote =>
+      'Memperbarui service sempat memutus tunnel sebentar. Windows akan minta hak admin.';
+
+  @override
+  String get svcRepairingTitle => 'Memperbaiki service';
+
+  @override
+  String get svcRepairingBody =>
+      'Installer memasang service lagi. Server dan pengaturanmu tetap ada.';
+
+  @override
+  String get svcUpdatingTitle => 'Memperbarui service';
+
+  @override
+  String svcUpdatingBody(String server) {
+    return 'Tunnel berhenti sebentar, lalu Charon terhubung lagi ke $server.';
+  }
+
+  @override
+  String get svcUpdatingBodyNone =>
+      'Tunnel berhenti sebentar, lalu Charon terhubung lagi.';
+
+  @override
+  String get svcInstallLineFile => 'dari charon-setup.exe · tanda tangan dicek';
+
+  @override
+  String get svcInstallLineAdmin => 'setelah Windows minta hak admin';
+
+  @override
+  String get svcRunningTitle => 'Service sudah berjalan';
+
+  @override
+  String get svcRunningBodyBack =>
+      'Charon kembali. Tunnel dan kill switch tetap bekerja walau jendela ini ditutup.';
+
+  @override
+  String svcRunningBodyUpdated(String server) {
+    return 'Keduanya sudah pakai versi yang sama. Tunnel-mu kembali di $server.';
+  }
+
+  @override
+  String get svcRunningBodyUpdatedNone =>
+      'Keduanya sudah pakai versi yang sama lagi.';
+
+  @override
+  String get svcOpenCharon => 'Buka Charon';
+
+  @override
+  String get svcReleaseKicker => 'KALAU INTERNETMU TERBLOKIR';
+
+  @override
+  String get svcReleaseBody =>
+      'Filter perlindungan Charon mungkin masih aktif. Alat pelepas akan menghapusnya.';
+
+  @override
+  String get svcReleaseSub => 'alat terpisah · minta hak admin';
+
+  @override
+  String get svcMascotAsleep => 'Charon, sedang tidur';
+
+  @override
+  String get svcMascot => 'Charon';
 }

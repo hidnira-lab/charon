@@ -4026,4 +4026,122 @@ class AppLocalizationsEn extends AppLocalizations {
   String dlgCodeBusy(String host) {
     return 'getting a code from $host';
   }
+
+  @override
+  String get svcBadgeStopped => 'SERVICE STOPPED';
+
+  @override
+  String get svcBadgeStarting => 'STARTING';
+
+  @override
+  String get svcBadgeFailed => 'COULD NOT START';
+
+  @override
+  String get svcBadgeMismatch => 'VERSION MISMATCH';
+
+  @override
+  String get svcBadgeRepairing => 'REPAIRING';
+
+  @override
+  String get svcBadgeUpdating => 'UPDATING';
+
+  @override
+  String get svcBadgeRunning => 'SERVICE RUNNING';
+
+  @override
+  String get svcStartingTitle => 'Starting the service';
+
+  @override
+  String get svcStartingBody =>
+      'Windows is starting Charon\'s service. This takes a few seconds.';
+
+  @override
+  String get svcStartingLine => 'waiting for the service to answer';
+
+  @override
+  String get svcFailedTitle => 'The service did not start';
+
+  @override
+  String get svcFailedBody =>
+      'Windows did not start Charon\'s service. Repairing it with the installer puts it back. Your servers and settings stay.';
+
+  @override
+  String get svcFailedNote => 'the installer asks for admin rights once';
+
+  @override
+  String get svcRetryLine => 'Trying again · every 5 s';
+
+  @override
+  String svcMismatchLine(String window, String service) {
+    return 'window speaks protocol $window · service speaks $service';
+  }
+
+  @override
+  String svcMismatchLineWindow(String window) {
+    return 'window speaks protocol $window';
+  }
+
+  @override
+  String get svcMismatchNote =>
+      'Updating the service briefly interrupts the tunnel. Windows asks for admin rights.';
+
+  @override
+  String get svcRepairingTitle => 'Repairing the service';
+
+  @override
+  String get svcRepairingBody =>
+      'The installer puts the service back. Your servers and settings stay.';
+
+  @override
+  String get svcUpdatingTitle => 'Updating the service';
+
+  @override
+  String svcUpdatingBody(String server) {
+    return 'The tunnel pauses for a moment, then Charon reconnects to $server.';
+  }
+
+  @override
+  String get svcUpdatingBodyNone =>
+      'The tunnel pauses for a moment, then Charon reconnects.';
+
+  @override
+  String get svcInstallLineFile => 'from charon-setup.exe · signature checked';
+
+  @override
+  String get svcInstallLineAdmin => 'after Windows asks for admin rights';
+
+  @override
+  String get svcRunningTitle => 'The service is running';
+
+  @override
+  String get svcRunningBodyBack =>
+      'Charon is back. Your tunnel and kill switch keep working when this window is closed.';
+
+  @override
+  String svcRunningBodyUpdated(String server) {
+    return 'Both sides speak the same version again. Your tunnel is back on $server.';
+  }
+
+  @override
+  String get svcRunningBodyUpdatedNone =>
+      'Both sides speak the same version again.';
+
+  @override
+  String get svcOpenCharon => 'Open Charon';
+
+  @override
+  String get svcReleaseKicker => 'IF YOUR INTERNET IS BLOCKED';
+
+  @override
+  String get svcReleaseBody =>
+      'Charon\'s protection filters may still be active. The release tool removes them.';
+
+  @override
+  String get svcReleaseSub => 'separate tool · asks for admin rights';
+
+  @override
+  String get svcMascotAsleep => 'Charon, asleep';
+
+  @override
+  String get svcMascot => 'Charon';
 }

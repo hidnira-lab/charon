@@ -7029,6 +7029,210 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'getting a code from {host}'**
   String dlgCodeBusy(String host);
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'SERVICE STOPPED'**
+  String get svcBadgeStopped;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'STARTING'**
+  String get svcBadgeStarting;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'COULD NOT START'**
+  String get svcBadgeFailed;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'VERSION MISMATCH'**
+  String get svcBadgeMismatch;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'REPAIRING'**
+  String get svcBadgeRepairing;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'UPDATING'**
+  String get svcBadgeUpdating;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'SERVICE RUNNING'**
+  String get svcBadgeRunning;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting the service'**
+  String get svcStartingTitle;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows is starting Charon\'s service. This takes a few seconds.'**
+  String get svcStartingBody;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'waiting for the service to answer'**
+  String get svcStartingLine;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'The service did not start'**
+  String get svcFailedTitle;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows did not start Charon\'s service. Repairing it with the installer puts it back. Your servers and settings stay.'**
+  String get svcFailedBody;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'the installer asks for admin rights once'**
+  String get svcFailedNote;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Trying again · every 5 s'**
+  String get svcRetryLine;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'window speaks protocol {window} · service speaks {service}'**
+  String svcMismatchLine(String window, String service);
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'window speaks protocol {window}'**
+  String svcMismatchLineWindow(String window);
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Updating the service briefly interrupts the tunnel. Windows asks for admin rights.'**
+  String get svcMismatchNote;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Repairing the service'**
+  String get svcRepairingTitle;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'The installer puts the service back. Your servers and settings stay.'**
+  String get svcRepairingBody;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Updating the service'**
+  String get svcUpdatingTitle;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'The tunnel pauses for a moment, then Charon reconnects to {server}.'**
+  String svcUpdatingBody(String server);
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'The tunnel pauses for a moment, then Charon reconnects.'**
+  String get svcUpdatingBodyNone;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'from charon-setup.exe · signature checked'**
+  String get svcInstallLineFile;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'after Windows asks for admin rights'**
+  String get svcInstallLineAdmin;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'The service is running'**
+  String get svcRunningTitle;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon is back. Your tunnel and kill switch keep working when this window is closed.'**
+  String get svcRunningBodyBack;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Both sides speak the same version again. Your tunnel is back on {server}.'**
+  String svcRunningBodyUpdated(String server);
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Both sides speak the same version again.'**
+  String get svcRunningBodyUpdatedNone;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Charon'**
+  String get svcOpenCharon;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'IF YOUR INTERNET IS BLOCKED'**
+  String get svcReleaseKicker;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon\'s protection filters may still be active. The release tool removes them.'**
+  String get svcReleaseBody;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'separate tool · asks for admin rights'**
+  String get svcReleaseSub;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon, asleep'**
+  String get svcMascotAsleep;
+
+  /// Service screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon'**
+  String get svcMascot;
 }
 
 class _AppLocalizationsDelegate
