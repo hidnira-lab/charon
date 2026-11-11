@@ -1010,6 +1010,11 @@ class HomeController extends ChangeNotifier {
     if (_client != null) await _client!.switchNow();
   }
 
+  /// "Try SRV-01": go back to a server the core left on its own.
+  Future<void> trySrv(String serverId) async {
+    if (_client != null) await _client!.trySrv(serverId);
+  }
+
   Future<bool> addServer(Server server) async {
     _config ??= Config();
     if (_config!.servers.length >= 32) return false;
