@@ -948,6 +948,57 @@ class AppLocalizationsId extends AppLocalizations {
   String get splitHelperDomainExact => 'domain · nama persis saja';
 
   @override
+  String get splitCountNone => 'TANPA ATURAN';
+
+  @override
+  String splitCountN(int count) {
+    return '$count ATURAN';
+  }
+
+  @override
+  String splitRulesN(int count) {
+    return '$count aturan';
+  }
+
+  @override
+  String get splitNoRulesYet => 'belum ada aturan';
+
+  @override
+  String get splitNothingYet => 'belum ada';
+
+  @override
+  String get splitEverything => '× semuanya';
+
+  @override
+  String get splitEverythingElseDirect => '× sisanya';
+
+  @override
+  String get splitEverythingElseTunnel => '→ sisanya';
+
+  @override
+  String get splitLaptop => 'Laptop';
+
+  @override
+  String get splitTunnelTag => 'TUNNEL';
+
+  @override
+  String get splitDirectTag => 'LANGSUNG';
+
+  @override
+  String splitRemoveRule(String value) {
+    return 'Hapus $value';
+  }
+
+  @override
+  String get splitRulesLabel => 'Aturan';
+
+  @override
+  String get splitRouteMapLabel => 'Peta rute';
+
+  @override
+  String get splitDomainLabel => 'Domain';
+
+  @override
   String get telemetryTitle => 'Telemetri & Log';
 
   @override

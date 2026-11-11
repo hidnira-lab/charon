@@ -888,6 +888,57 @@ class AppLocalizationsZh extends AppLocalizations {
   String get splitHelperDomainExact => '域名 · 仅精确匹配';
 
   @override
+  String get splitCountNone => '无规则';
+
+  @override
+  String splitCountN(int count) {
+    return '$count 条规则';
+  }
+
+  @override
+  String splitRulesN(int count) {
+    return '$count 条规则';
+  }
+
+  @override
+  String get splitNoRulesYet => '尚无规则';
+
+  @override
+  String get splitNothingYet => '暂无';
+
+  @override
+  String get splitEverything => '× 全部';
+
+  @override
+  String get splitEverythingElseDirect => '× 其余全部';
+
+  @override
+  String get splitEverythingElseTunnel => '→ 其余全部';
+
+  @override
+  String get splitLaptop => '笔记本';
+
+  @override
+  String get splitTunnelTag => '隧道';
+
+  @override
+  String get splitDirectTag => '直连';
+
+  @override
+  String splitRemoveRule(String value) {
+    return '删除 $value';
+  }
+
+  @override
+  String get splitRulesLabel => '规则';
+
+  @override
+  String get splitRouteMapLabel => '路由图';
+
+  @override
+  String get splitDomainLabel => '域名';
+
+  @override
   String get telemetryTitle => '遥测与日志';
 
   @override
@@ -3194,6 +3245,57 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get splitHelperDomainExact => '域名 · 仅精确匹配';
+
+  @override
+  String get splitCountNone => '无规则';
+
+  @override
+  String splitCountN(int count) {
+    return '$count 条规则';
+  }
+
+  @override
+  String splitRulesN(int count) {
+    return '$count 条规则';
+  }
+
+  @override
+  String get splitNoRulesYet => '尚无规则';
+
+  @override
+  String get splitNothingYet => '暂无';
+
+  @override
+  String get splitEverything => '× 全部';
+
+  @override
+  String get splitEverythingElseDirect => '× 其余全部';
+
+  @override
+  String get splitEverythingElseTunnel => '→ 其余全部';
+
+  @override
+  String get splitLaptop => '笔记本';
+
+  @override
+  String get splitTunnelTag => '隧道';
+
+  @override
+  String get splitDirectTag => '直连';
+
+  @override
+  String splitRemoveRule(String value) {
+    return '删除 $value';
+  }
+
+  @override
+  String get splitRulesLabel => '规则';
+
+  @override
+  String get splitRouteMapLabel => '路由图';
+
+  @override
+  String get splitDomainLabel => '域名';
 
   @override
   String get telemetryTitle => '遥测与日志';

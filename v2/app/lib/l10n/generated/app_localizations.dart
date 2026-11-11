@@ -1727,6 +1727,96 @@ abstract class AppLocalizations {
   /// **'domain · exact name only'**
   String get splitHelperDomainExact;
 
+  /// Header count when the list is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'NO RULES'**
+  String get splitCountNone;
+
+  /// Header count and route map chip.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} RULES'**
+  String splitCountN(int count);
+
+  /// Plain rule count.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} rules'**
+  String splitRulesN(int count);
+
+  /// Route map note when the list is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'no rules yet'**
+  String get splitNoRulesYet;
+
+  /// Route map empty entry.
+  ///
+  /// In en, this message translates to:
+  /// **'nothing yet'**
+  String get splitNothingYet;
+
+  /// Route map entry, all traffic goes direct.
+  ///
+  /// In en, this message translates to:
+  /// **'× everything'**
+  String get splitEverything;
+
+  /// Route map entry, the rest goes direct.
+  ///
+  /// In en, this message translates to:
+  /// **'× everything else'**
+  String get splitEverythingElseDirect;
+
+  /// Route map entry, the rest uses the tunnel.
+  ///
+  /// In en, this message translates to:
+  /// **'→ everything else'**
+  String get splitEverythingElseTunnel;
+
+  /// Route map source box.
+  ///
+  /// In en, this message translates to:
+  /// **'Laptop'**
+  String get splitLaptop;
+
+  /// Route map tunnel box tag.
+  ///
+  /// In en, this message translates to:
+  /// **'TUNNEL'**
+  String get splitTunnelTag;
+
+  /// Route map direct box tag.
+  ///
+  /// In en, this message translates to:
+  /// **'DIRECT'**
+  String get splitDirectTag;
+
+  /// Tooltip of the remove button of a rule.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {value}'**
+  String splitRemoveRule(String value);
+
+  /// Accessible name of the rules list.
+  ///
+  /// In en, this message translates to:
+  /// **'Rules'**
+  String get splitRulesLabel;
+
+  /// Accessible name of the route map.
+  ///
+  /// In en, this message translates to:
+  /// **'Route map'**
+  String get splitRouteMapLabel;
+
+  /// Accessible name of the rule input.
+  ///
+  /// In en, this message translates to:
+  /// **'Domain'**
+  String get splitDomainLabel;
+
   /// Title of telemetry screen.
   ///
   /// In en, this message translates to:

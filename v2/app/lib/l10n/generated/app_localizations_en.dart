@@ -940,6 +940,57 @@ class AppLocalizationsEn extends AppLocalizations {
   String get splitHelperDomainExact => 'domain · exact name only';
 
   @override
+  String get splitCountNone => 'NO RULES';
+
+  @override
+  String splitCountN(int count) {
+    return '$count RULES';
+  }
+
+  @override
+  String splitRulesN(int count) {
+    return '$count rules';
+  }
+
+  @override
+  String get splitNoRulesYet => 'no rules yet';
+
+  @override
+  String get splitNothingYet => 'nothing yet';
+
+  @override
+  String get splitEverything => '× everything';
+
+  @override
+  String get splitEverythingElseDirect => '× everything else';
+
+  @override
+  String get splitEverythingElseTunnel => '→ everything else';
+
+  @override
+  String get splitLaptop => 'Laptop';
+
+  @override
+  String get splitTunnelTag => 'TUNNEL';
+
+  @override
+  String get splitDirectTag => 'DIRECT';
+
+  @override
+  String splitRemoveRule(String value) {
+    return 'Remove $value';
+  }
+
+  @override
+  String get splitRulesLabel => 'Rules';
+
+  @override
+  String get splitRouteMapLabel => 'Route map';
+
+  @override
+  String get splitDomainLabel => 'Domain';
+
+  @override
   String get telemetryTitle => 'Telemetry & Logs';
 
   @override
