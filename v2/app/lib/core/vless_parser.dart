@@ -118,7 +118,6 @@ VlessParseResult parseVlessLink(String rawLink, {String? nextId}) {
       fingerprint: fp,
     ),
     transport: transport,
-    countryCode: _guessCountry(host),
   );
 
   return VlessParseResult.success(server);
@@ -154,13 +153,4 @@ String nextServerId(List<Server> existing) {
   }
   final next = maxIndex + 1;
   return 'SRV-${next.toString().padLeft(2, '0')}';
-}
-
-String _guessCountry(String host) {
-  final lower = host.toLowerCase();
-  if (lower.contains('sg') || lower.contains('singapore')) return 'SG';
-  if (lower.contains('jp') || lower.contains('japan') || lower.contains('tokyo')) return 'JP';
-  if (lower.contains('us') || lower.contains('la') || lower.contains('los-angeles')) return 'US';
-  if (lower.contains('id') || lower.contains('indonesia') || lower.contains('jakarta')) return 'ID';
-  return 'SG';
 }
