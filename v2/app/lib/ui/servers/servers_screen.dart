@@ -428,9 +428,16 @@ class _ServersScreenState extends State<ServersScreen> {
   }
 
   Future<void> _openAddDialog(BuildContext context, List<Server> existing) async {
-    final server = await AddServerDialog.show(context, existing);
-    if (server != null) {
-      await widget.controller.addServer(server);
+    final outcome = await AddServerDialog.show(context, existing);
+    if (!context.mounted) return;
+    switch (outcome) {
+      case ServerAdded(:final server):
+        await widget.controller.addServer(server);
+      case EditRequested(:final id):
+        final target = existing.where((s) => s.id == id).firstOrNull;
+        if (target != null) await _openEditDialog(context, target);
+      case null:
+        break;
     }
   }
 

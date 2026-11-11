@@ -1108,5 +1108,7 @@
   "homeCountryGB": "英国",
   "homeCountryFR": "法国",
   "homeCountryRU": "俄罗斯",
-  "homeCountryAU": "澳大利亚"
+  "homeCountryAU": "澳大利亚",
+  "dlgAddReadLinkNamed": "从链接读取",
+  "dlgAddReadConfigNamed": "从配置读取"
 }

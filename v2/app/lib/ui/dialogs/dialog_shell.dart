@@ -378,3 +378,214 @@ class DialogOption extends StatelessWidget {
 }
 
 enum DialogTagTone { ok, warn, idle }
+
+/// A rounded panel on the dialog's darker ground: the preview, connection and
+/// quota cards of the server dialogs.
+class DialogPanel extends StatelessWidget {
+  const DialogPanel({super.key, required this.children, this.gap = 10});
+
+  final List<Widget> children;
+  final double gap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: colors.bg,
+        border: Border.all(color: colors.surface2),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (final (i, c) in children.indexed) ...[
+            if (i > 0) SizedBox(height: gap),
+            c,
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// Small mono label over a mono value, in rows of [flex].length columns.
+class DialogFacts extends StatelessWidget {
+  const DialogFacts(this.facts, {super.key, this.flex = const [1, 1, 1]});
+
+  /// (label, value) pairs.
+  final List<(String, String)> facts;
+  final List<int> flex;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
+    final rows = <List<(String, String)>>[];
+    for (var i = 0; i < facts.length; i += flex.length) {
+      rows.add(facts.sublist(i, i + flex.length > facts.length ? facts.length : i + flex.length));
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (final (r, row) in rows.indexed) ...[
+          if (r > 0) const SizedBox(height: 10),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (final (c, f) in row.indexed) ...[
+                if (c > 0) const SizedBox(width: 12),
+                Expanded(
+                  flex: flex[c],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(f.$1, style: monoStyle(colors.text3, 9, bold: true, em: 0.08)),
+                      const SizedBox(height: 2),
+                      Text(
+                        f.$2,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: monoStyle(colors.text, 11),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+/// A labelled text field in the dialog's style: a mono label, then a box with
+/// an optional prompt or prefix on the left and a hint on the right.
+class DialogField extends StatelessWidget {
+  const DialogField({
+    super.key,
+    required this.controller,
+    this.label,
+    this.semanticLabel,
+    this.prompt = true,
+    this.prefix,
+    this.suffix,
+    this.hint,
+    this.mono = false,
+    this.warn = false,
+    this.height = 42,
+    this.autofocus = false,
+    this.keyboardType,
+    this.onChanged,
+  });
+
+  final TextEditingController controller;
+  final String? label;
+  final String? semanticLabel;
+
+  /// Draws the accent ">" at the left, like the link field.
+  final bool prompt;
+
+  /// Mono text before the input (the "day" of the billing day field).
+  final String? prefix;
+
+  /// Mono text after the input ("GB per cycle", "empty = country name").
+  final String? suffix;
+  final String? hint;
+  final bool mono;
+
+  /// Amber edge, used when the text could not be read.
+  final bool warn;
+  final double height;
+  final bool autofocus;
+  final TextInputType? keyboardType;
+  final ValueChanged<String>? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
+    final box = Container(
+      height: height,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: colors.bg,
+        border: Border.all(color: warn ? colors.transitionFill : colors.controlBorder),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          if (prompt) ...[
+            Text('>', style: monoStyle(warn ? colors.transitionText : colors.accentText, 14, bold: true)),
+            const SizedBox(width: 8),
+          ],
+          if (prefix != null) ...[
+            Text(prefix!, style: monoStyle(colors.text3, 10)),
+            const SizedBox(width: 8),
+          ],
+          Expanded(
+            child: Semantics(
+              label: semanticLabel ?? label,
+              child: TextField(
+                controller: controller,
+                autofocus: autofocus,
+                keyboardType: keyboardType,
+                onChanged: onChanged,
+                style: mono
+                    ? monoStyle(colors.text, 13)
+                    : TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: colors.text),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  isDense: true,
+                  hintText: hint,
+                  hintStyle: mono
+                      ? monoStyle(colors.text3, 12)
+                      : TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: colors.text3),
+                ),
+              ),
+            ),
+          ),
+          if (suffix != null) ...[
+            const SizedBox(width: 8),
+            Text(suffix!, style: monoStyle(colors.text3, 10)),
+          ],
+        ],
+      ),
+    );
+    if (label == null) return box;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label!, style: monoStyle(colors.text2, 10, bold: true, em: 0.08)),
+        const SizedBox(height: 6),
+        box,
+      ],
+    );
+  }
+}
+
+/// The flag slot of a server: the country code in a small box until the pixel
+/// flags of the Flags board are drawn. [code] empty draws the no flag checker.
+class DialogFlag extends StatelessWidget {
+  const DialogFlag(this.code, {super.key, this.width = 36, this.height = 24});
+
+  final String code;
+  final double width;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
+    return Container(
+      width: width,
+      height: height,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: colors.surface2,
+        border: Border.all(color: colors.controlBorder),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(code.isEmpty ? '··' : code.toUpperCase(), style: monoStyle(colors.text, 10, bold: true)),
+    );
+  }
+}

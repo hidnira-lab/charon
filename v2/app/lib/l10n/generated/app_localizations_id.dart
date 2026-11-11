@@ -3780,4 +3780,10 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get homeCountryAU => 'Australia';
+
+  @override
+  String get dlgAddReadLinkNamed => 'DIBACA DARI LINK';
+
+  @override
+  String get dlgAddReadConfigNamed => 'DIBACA DARI CONFIG';
 }

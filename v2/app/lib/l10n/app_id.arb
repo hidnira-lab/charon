@@ -1107,5 +1107,7 @@
   "homeCountryGB": "Inggris Raya",
   "homeCountryFR": "Prancis",
   "homeCountryRU": "Rusia",
-  "homeCountryAU": "Australia"
+  "homeCountryAU": "Australia",
+  "dlgAddReadLinkNamed": "DIBACA DARI LINK",
+  "dlgAddReadConfigNamed": "DIBACA DARI CONFIG"
 }

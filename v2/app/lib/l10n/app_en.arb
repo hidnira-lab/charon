@@ -2602,5 +2602,9 @@
   "homeCountryRU": "Russia",
   "@homeCountryRU": { "description": "Dialog text." },
   "homeCountryAU": "Australia",
-  "@homeCountryAU": { "description": "Dialog text." }
+  "@homeCountryAU": { "description": "Dialog text." },
+  "dlgAddReadLinkNamed": "READ FROM THE LINK",
+  "@dlgAddReadLinkNamed": { "description": "Dialog text." },
+  "dlgAddReadConfigNamed": "READ FROM THE CONFIG",
+  "@dlgAddReadConfigNamed": { "description": "Dialog text." }
 }

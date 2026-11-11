@@ -3570,6 +3570,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get homeCountryAU => '澳大利亚';
+
+  @override
+  String get dlgAddReadLinkNamed => '从链接读取';
+
+  @override
+  String get dlgAddReadConfigNamed => '从配置读取';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -7137,4 +7143,10 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get homeCountryAU => '澳大利亚';
+
+  @override
+  String get dlgAddReadLinkNamed => '从链接读取';
+
+  @override
+  String get dlgAddReadConfigNamed => '从配置读取';
 }

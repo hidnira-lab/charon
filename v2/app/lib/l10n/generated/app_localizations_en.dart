@@ -3770,4 +3770,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeCountryAU => 'Australia';
+
+  @override
+  String get dlgAddReadLinkNamed => 'READ FROM THE LINK';
+
+  @override
+  String get dlgAddReadConfigNamed => 'READ FROM THE CONFIG';
 }

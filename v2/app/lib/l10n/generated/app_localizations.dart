@@ -6609,6 +6609,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Australia'**
   String get homeCountryAU;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'READ FROM THE LINK'**
+  String get dlgAddReadLinkNamed;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'READ FROM THE CONFIG'**
+  String get dlgAddReadConfigNamed;
 }
 
 class _AppLocalizationsDelegate
