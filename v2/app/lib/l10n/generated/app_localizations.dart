@@ -6633,6 +6633,408 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Data source ↗'**
   String get trustLinkGeo;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'SYNC · PAIR THIS DEVICE'**
+  String get dlgPairKicker;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Pair with your other device'**
+  String get dlgPairTitleCode;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Where is your sync server?'**
+  String get dlgPairTitleServer;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a sync passphrase'**
+  String get dlgPairTitleCreate;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your sync passphrase'**
+  String get dlgPairTitleEnter;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Paired'**
+  String get dlgPairTitleDone;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'step {step} of {total}'**
+  String dlgPairStepOf(int step, int total);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'CODE'**
+  String get dlgPairStepCode;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'SYNC SERVER'**
+  String get dlgPairStepServer;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'PASSPHRASE'**
+  String get dlgPairStepPass;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'DONE'**
+  String get dlgPairStepDone;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'PAIRING CODE · FROM YOUR OTHER DEVICE'**
+  String get dlgPairCodeLabel;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'on that device: Servers › Sync › Show pairing code'**
+  String get dlgPairCodeHelp;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'or paste the whole link that Copy link made'**
+  String get dlgPairCodeLinkHelp;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'SYNC SERVER ADDRESS'**
+  String get dlgPairAddressLabel;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'the sync endpoint on a server you control'**
+  String get dlgPairAddressHelp;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'DEVICE NAME'**
+  String get dlgPairNameLabel;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'only shown inside Charon on this device'**
+  String get dlgPairNameHelp;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'SERVER KEY'**
+  String get dlgPairKeyLabel;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown once when you start your sync server for the first time.'**
+  String get dlgPairKeyHelp;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'No other device? Enter the sync server address'**
+  String get dlgPairManualLink;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a pairing code instead'**
+  String get dlgPairByCodeLink;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get dlgPairBtnContinue;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get dlgPairBtnBack;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking…'**
+  String get dlgPairBtnChecking;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Create and pair'**
+  String get dlgPairBtnCreate;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock and pair'**
+  String get dlgPairBtnUnlock;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get dlgPairBtnLater;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Push now'**
+  String get dlgPairBtnPush;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Pull now'**
+  String get dlgPairBtnPull;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'reaching {host}'**
+  String dlgPairBusyReach(String host);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'checking the code'**
+  String get dlgPairBusyCode;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'checking the server key'**
+  String get dlgPairBusyKey;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'code accepted · {host} reached · empty, nothing stored yet'**
+  String dlgPairVaultEmptyCode(String host);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'{host} reached · empty, nothing stored yet'**
+  String dlgPairVaultEmpty(String host);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'reached · encrypted data found · last push {when}'**
+  String dlgPairVaultFound(String when);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'NEW PASSPHRASE'**
+  String get dlgPairPassNew;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'TYPE IT AGAIN'**
+  String get dlgPairPassAgain;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'The two passphrases do not match.'**
+  String get dlgPairMismatch;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'If you lose this passphrase, nobody can recover your data, including you.'**
+  String get dlgPairLoseWarn;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'I saved it somewhere safe, like a password manager'**
+  String get dlgPairSavedCheck;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'too short'**
+  String get dlgPairStrength0;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'weak'**
+  String get dlgPairStrength1;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'fair'**
+  String get dlgPairStrength2;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'good'**
+  String get dlgPairStrength3;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'strong'**
+  String get dlgPairStrength4;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} · {words, plural, =1{1 word} other{{words} words}}, {chars, plural, =1{1 character} other{{chars} characters}}'**
+  String dlgPairStrengthLine(String label, int words, int chars);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is paired'**
+  String dlgPairDoneTitle(String name);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'an empty vault now waits on {host}'**
+  String dlgPairDoneNew(String host);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'push once so your other devices have something to pull'**
+  String get dlgPairDoneNewNext;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'unlocked the vault on {host}'**
+  String dlgPairDoneFound(String host);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'pull now to bring in your profiles, rules and settings'**
+  String get dlgPairDoneFoundNext;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'A pairing code has 8 letters and digits, like K7QM 4XPD.'**
+  String get dlgPairErrCode;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the address of your sync server, like https://sync.example.com.'**
+  String get dlgPairErrAddress;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the server key the sync server printed when it first ran.'**
+  String get dlgPairErrKey;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'SYNC · PAIRING CODE'**
+  String get dlgCodeKicker;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Pair another device'**
+  String get dlgCodeTitle;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'no passphrase inside the code'**
+  String get dlgCodeHint;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'ON A COMPUTER, TYPE'**
+  String get dlgCodeTypeLabel;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'valid for 2 min · works once'**
+  String get dlgCodeValid;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'expired · press New code'**
+  String get dlgCodeExpired;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'New code'**
+  String get dlgCodeNew;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy link'**
+  String get dlgCodeCopyLink;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Link copied'**
+  String get dlgCodeCopied;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'the new device still asks for the passphrase itself'**
+  String get dlgCodeNote1;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'type the code and the address on the new device, or paste the link'**
+  String get dlgCodeNote2;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'getting a code from {host}'**
+  String dlgCodeBusy(String host);
 }
 
 class _AppLocalizationsDelegate

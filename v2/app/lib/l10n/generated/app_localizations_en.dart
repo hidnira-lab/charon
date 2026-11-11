@@ -3783,4 +3783,250 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustLinkGeo => 'Data source ↗';
+
+  @override
+  String get dlgPairKicker => 'SYNC · PAIR THIS DEVICE';
+
+  @override
+  String get dlgPairTitleCode => 'Pair with your other device';
+
+  @override
+  String get dlgPairTitleServer => 'Where is your sync server?';
+
+  @override
+  String get dlgPairTitleCreate => 'Create a sync passphrase';
+
+  @override
+  String get dlgPairTitleEnter => 'Enter your sync passphrase';
+
+  @override
+  String get dlgPairTitleDone => 'Paired';
+
+  @override
+  String dlgPairStepOf(int step, int total) {
+    return 'step $step of $total';
+  }
+
+  @override
+  String get dlgPairStepCode => 'CODE';
+
+  @override
+  String get dlgPairStepServer => 'SYNC SERVER';
+
+  @override
+  String get dlgPairStepPass => 'PASSPHRASE';
+
+  @override
+  String get dlgPairStepDone => 'DONE';
+
+  @override
+  String get dlgPairCodeLabel => 'PAIRING CODE · FROM YOUR OTHER DEVICE';
+
+  @override
+  String get dlgPairCodeHelp =>
+      'on that device: Servers › Sync › Show pairing code';
+
+  @override
+  String get dlgPairCodeLinkHelp =>
+      'or paste the whole link that Copy link made';
+
+  @override
+  String get dlgPairAddressLabel => 'SYNC SERVER ADDRESS';
+
+  @override
+  String get dlgPairAddressHelp => 'the sync endpoint on a server you control';
+
+  @override
+  String get dlgPairNameLabel => 'DEVICE NAME';
+
+  @override
+  String get dlgPairNameHelp => 'only shown inside Charon on this device';
+
+  @override
+  String get dlgPairKeyLabel => 'SERVER KEY';
+
+  @override
+  String get dlgPairKeyHelp =>
+      'Shown once when you start your sync server for the first time.';
+
+  @override
+  String get dlgPairManualLink =>
+      'No other device? Enter the sync server address';
+
+  @override
+  String get dlgPairByCodeLink => 'Use a pairing code instead';
+
+  @override
+  String get dlgPairBtnContinue => 'Continue';
+
+  @override
+  String get dlgPairBtnBack => 'Back';
+
+  @override
+  String get dlgPairBtnChecking => 'Checking…';
+
+  @override
+  String get dlgPairBtnCreate => 'Create and pair';
+
+  @override
+  String get dlgPairBtnUnlock => 'Unlock and pair';
+
+  @override
+  String get dlgPairBtnLater => 'Later';
+
+  @override
+  String get dlgPairBtnPush => 'Push now';
+
+  @override
+  String get dlgPairBtnPull => 'Pull now';
+
+  @override
+  String dlgPairBusyReach(String host) {
+    return 'reaching $host';
+  }
+
+  @override
+  String get dlgPairBusyCode => 'checking the code';
+
+  @override
+  String get dlgPairBusyKey => 'checking the server key';
+
+  @override
+  String dlgPairVaultEmptyCode(String host) {
+    return 'code accepted · $host reached · empty, nothing stored yet';
+  }
+
+  @override
+  String dlgPairVaultEmpty(String host) {
+    return '$host reached · empty, nothing stored yet';
+  }
+
+  @override
+  String dlgPairVaultFound(String when) {
+    return 'reached · encrypted data found · last push $when';
+  }
+
+  @override
+  String get dlgPairPassNew => 'NEW PASSPHRASE';
+
+  @override
+  String get dlgPairPassAgain => 'TYPE IT AGAIN';
+
+  @override
+  String get dlgPairMismatch => 'The two passphrases do not match.';
+
+  @override
+  String get dlgPairLoseWarn =>
+      'If you lose this passphrase, nobody can recover your data, including you.';
+
+  @override
+  String get dlgPairSavedCheck =>
+      'I saved it somewhere safe, like a password manager';
+
+  @override
+  String get dlgPairStrength0 => 'too short';
+
+  @override
+  String get dlgPairStrength1 => 'weak';
+
+  @override
+  String get dlgPairStrength2 => 'fair';
+
+  @override
+  String get dlgPairStrength3 => 'good';
+
+  @override
+  String get dlgPairStrength4 => 'strong';
+
+  @override
+  String dlgPairStrengthLine(String label, int words, int chars) {
+    String _temp0 = intl.Intl.pluralLogic(
+      words,
+      locale: localeName,
+      other: '$words words',
+      one: '1 word',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      chars,
+      locale: localeName,
+      other: '$chars characters',
+      one: '1 character',
+    );
+    return '$label · $_temp0, $_temp1';
+  }
+
+  @override
+  String dlgPairDoneTitle(String name) {
+    return '$name is paired';
+  }
+
+  @override
+  String dlgPairDoneNew(String host) {
+    return 'an empty vault now waits on $host';
+  }
+
+  @override
+  String get dlgPairDoneNewNext =>
+      'push once so your other devices have something to pull';
+
+  @override
+  String dlgPairDoneFound(String host) {
+    return 'unlocked the vault on $host';
+  }
+
+  @override
+  String get dlgPairDoneFoundNext =>
+      'pull now to bring in your profiles, rules and settings';
+
+  @override
+  String get dlgPairErrCode =>
+      'A pairing code has 8 letters and digits, like K7QM 4XPD.';
+
+  @override
+  String get dlgPairErrAddress =>
+      'Enter the address of your sync server, like https://sync.example.com.';
+
+  @override
+  String get dlgPairErrKey =>
+      'Enter the server key the sync server printed when it first ran.';
+
+  @override
+  String get dlgCodeKicker => 'SYNC · PAIRING CODE';
+
+  @override
+  String get dlgCodeTitle => 'Pair another device';
+
+  @override
+  String get dlgCodeHint => 'no passphrase inside the code';
+
+  @override
+  String get dlgCodeTypeLabel => 'ON A COMPUTER, TYPE';
+
+  @override
+  String get dlgCodeValid => 'valid for 2 min · works once';
+
+  @override
+  String get dlgCodeExpired => 'expired · press New code';
+
+  @override
+  String get dlgCodeNew => 'New code';
+
+  @override
+  String get dlgCodeCopyLink => 'Copy link';
+
+  @override
+  String get dlgCodeCopied => 'Link copied';
+
+  @override
+  String get dlgCodeNote1 =>
+      'the new device still asks for the passphrase itself';
+
+  @override
+  String get dlgCodeNote2 =>
+      'type the code and the address on the new device, or paste the link';
+
+  @override
+  String dlgCodeBusy(String host) {
+    return 'getting a code from $host';
+  }
 }

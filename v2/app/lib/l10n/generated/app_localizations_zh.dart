@@ -3582,6 +3582,227 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get trustLinkGeo => '数据来源 ↗';
+
+  @override
+  String get dlgPairKicker => '同步 · 配对此设备';
+
+  @override
+  String get dlgPairTitleCode => '与你的另一台设备配对';
+
+  @override
+  String get dlgPairTitleServer => '你的同步服务器在哪里？';
+
+  @override
+  String get dlgPairTitleCreate => '创建同步密码短语';
+
+  @override
+  String get dlgPairTitleEnter => '输入你的同步密码短语';
+
+  @override
+  String get dlgPairTitleDone => '已配对';
+
+  @override
+  String dlgPairStepOf(int step, int total) {
+    return '第 $step/$total 步';
+  }
+
+  @override
+  String get dlgPairStepCode => '配对码';
+
+  @override
+  String get dlgPairStepServer => '同步服务器';
+
+  @override
+  String get dlgPairStepPass => '密码短语';
+
+  @override
+  String get dlgPairStepDone => '完成';
+
+  @override
+  String get dlgPairCodeLabel => '配对码 · 来自你的另一台设备';
+
+  @override
+  String get dlgPairCodeHelp => '在那台设备上：服务器 › 同步 › 显示配对码';
+
+  @override
+  String get dlgPairCodeLinkHelp => '或粘贴「复制链接」得到的完整链接';
+
+  @override
+  String get dlgPairAddressLabel => '同步服务器地址';
+
+  @override
+  String get dlgPairAddressHelp => '你自己掌控的服务器上的同步端点';
+
+  @override
+  String get dlgPairNameLabel => '设备名称';
+
+  @override
+  String get dlgPairNameHelp => '只在本机的 Charon 内显示';
+
+  @override
+  String get dlgPairKeyLabel => '服务器密钥';
+
+  @override
+  String get dlgPairKeyHelp => '首次启动同步服务器时只显示一次。';
+
+  @override
+  String get dlgPairManualLink => '没有其他设备？输入同步服务器地址';
+
+  @override
+  String get dlgPairByCodeLink => '改用配对码';
+
+  @override
+  String get dlgPairBtnContinue => '继续';
+
+  @override
+  String get dlgPairBtnBack => '返回';
+
+  @override
+  String get dlgPairBtnChecking => '检查中…';
+
+  @override
+  String get dlgPairBtnCreate => '创建并配对';
+
+  @override
+  String get dlgPairBtnUnlock => '解锁并配对';
+
+  @override
+  String get dlgPairBtnLater => '稍后';
+
+  @override
+  String get dlgPairBtnPush => '立即推送';
+
+  @override
+  String get dlgPairBtnPull => '立即拉取';
+
+  @override
+  String dlgPairBusyReach(String host) {
+    return '正在连接 $host';
+  }
+
+  @override
+  String get dlgPairBusyCode => '正在检查配对码';
+
+  @override
+  String get dlgPairBusyKey => '正在检查服务器密钥';
+
+  @override
+  String dlgPairVaultEmptyCode(String host) {
+    return '配对码已接受 · 已连上 $host · 空的，尚未存储任何内容';
+  }
+
+  @override
+  String dlgPairVaultEmpty(String host) {
+    return '已连上 $host · 空的，尚未存储任何内容';
+  }
+
+  @override
+  String dlgPairVaultFound(String when) {
+    return '已连上 · 发现加密数据 · 上次推送 $when';
+  }
+
+  @override
+  String get dlgPairPassNew => '新密码短语';
+
+  @override
+  String get dlgPairPassAgain => '再输入一次';
+
+  @override
+  String get dlgPairMismatch => '两次输入的密码短语不一致。';
+
+  @override
+  String get dlgPairLoseWarn => '如果丢失这个密码短语，没有人能恢复你的数据，包括你自己。';
+
+  @override
+  String get dlgPairSavedCheck => '我已保存在安全的地方，比如密码管理器';
+
+  @override
+  String get dlgPairStrength0 => '太短';
+
+  @override
+  String get dlgPairStrength1 => '较弱';
+
+  @override
+  String get dlgPairStrength2 => '一般';
+
+  @override
+  String get dlgPairStrength3 => '良好';
+
+  @override
+  String get dlgPairStrength4 => '很强';
+
+  @override
+  String dlgPairStrengthLine(String label, int words, int chars) {
+    return '$label · $words 个词，$chars 个字符';
+  }
+
+  @override
+  String dlgPairDoneTitle(String name) {
+    return '$name 已配对';
+  }
+
+  @override
+  String dlgPairDoneNew(String host) {
+    return '一个空的保险库正在 $host 上等待';
+  }
+
+  @override
+  String get dlgPairDoneNewNext => '推送一次，让你的其他设备有内容可拉取';
+
+  @override
+  String dlgPairDoneFound(String host) {
+    return '已解锁 $host 上的保险库';
+  }
+
+  @override
+  String get dlgPairDoneFoundNext => '现在拉取，带入你的配置、规则和设置';
+
+  @override
+  String get dlgPairErrCode => '配对码由 8 个字母和数字组成，例如 K7QM 4XPD。';
+
+  @override
+  String get dlgPairErrAddress => '请输入你的同步服务器地址，例如 https://sync.example.com。';
+
+  @override
+  String get dlgPairErrKey => '请输入同步服务器首次运行时打印的服务器密钥。';
+
+  @override
+  String get dlgCodeKicker => '同步 · 配对码';
+
+  @override
+  String get dlgCodeTitle => '配对另一台设备';
+
+  @override
+  String get dlgCodeHint => '配对码中不含密码短语';
+
+  @override
+  String get dlgCodeTypeLabel => '在电脑上输入';
+
+  @override
+  String get dlgCodeValid => '2 分钟内有效 · 仅限一次';
+
+  @override
+  String get dlgCodeExpired => '已过期 · 请点新配对码';
+
+  @override
+  String get dlgCodeNew => '新配对码';
+
+  @override
+  String get dlgCodeCopyLink => '复制链接';
+
+  @override
+  String get dlgCodeCopied => '链接已复制';
+
+  @override
+  String get dlgCodeNote1 => '新设备仍会自己询问密码短语';
+
+  @override
+  String get dlgCodeNote2 => '在新设备上输入配对码和地址，或粘贴链接';
+
+  @override
+  String dlgCodeBusy(String host) {
+    return '正在从 $host 获取配对码';
+  }
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -7161,4 +7382,225 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get trustLinkGeo => '数据来源 ↗';
+
+  @override
+  String get dlgPairKicker => '同步 · 配对此设备';
+
+  @override
+  String get dlgPairTitleCode => '与你的另一台设备配对';
+
+  @override
+  String get dlgPairTitleServer => '你的同步服务器在哪里？';
+
+  @override
+  String get dlgPairTitleCreate => '创建同步密码短语';
+
+  @override
+  String get dlgPairTitleEnter => '输入你的同步密码短语';
+
+  @override
+  String get dlgPairTitleDone => '已配对';
+
+  @override
+  String dlgPairStepOf(int step, int total) {
+    return '第 $step/$total 步';
+  }
+
+  @override
+  String get dlgPairStepCode => '配对码';
+
+  @override
+  String get dlgPairStepServer => '同步服务器';
+
+  @override
+  String get dlgPairStepPass => '密码短语';
+
+  @override
+  String get dlgPairStepDone => '完成';
+
+  @override
+  String get dlgPairCodeLabel => '配对码 · 来自你的另一台设备';
+
+  @override
+  String get dlgPairCodeHelp => '在那台设备上：服务器 › 同步 › 显示配对码';
+
+  @override
+  String get dlgPairCodeLinkHelp => '或粘贴「复制链接」得到的完整链接';
+
+  @override
+  String get dlgPairAddressLabel => '同步服务器地址';
+
+  @override
+  String get dlgPairAddressHelp => '你自己掌控的服务器上的同步端点';
+
+  @override
+  String get dlgPairNameLabel => '设备名称';
+
+  @override
+  String get dlgPairNameHelp => '只在本机的 Charon 内显示';
+
+  @override
+  String get dlgPairKeyLabel => '服务器密钥';
+
+  @override
+  String get dlgPairKeyHelp => '首次启动同步服务器时只显示一次。';
+
+  @override
+  String get dlgPairManualLink => '没有其他设备？输入同步服务器地址';
+
+  @override
+  String get dlgPairByCodeLink => '改用配对码';
+
+  @override
+  String get dlgPairBtnContinue => '继续';
+
+  @override
+  String get dlgPairBtnBack => '返回';
+
+  @override
+  String get dlgPairBtnChecking => '检查中…';
+
+  @override
+  String get dlgPairBtnCreate => '创建并配对';
+
+  @override
+  String get dlgPairBtnUnlock => '解锁并配对';
+
+  @override
+  String get dlgPairBtnLater => '稍后';
+
+  @override
+  String get dlgPairBtnPush => '立即推送';
+
+  @override
+  String get dlgPairBtnPull => '立即拉取';
+
+  @override
+  String dlgPairBusyReach(String host) {
+    return '正在连接 $host';
+  }
+
+  @override
+  String get dlgPairBusyCode => '正在检查配对码';
+
+  @override
+  String get dlgPairBusyKey => '正在检查服务器密钥';
+
+  @override
+  String dlgPairVaultEmptyCode(String host) {
+    return '配对码已接受 · 已连上 $host · 空的，尚未存储任何内容';
+  }
+
+  @override
+  String dlgPairVaultEmpty(String host) {
+    return '已连上 $host · 空的，尚未存储任何内容';
+  }
+
+  @override
+  String dlgPairVaultFound(String when) {
+    return '已连上 · 发现加密数据 · 上次推送 $when';
+  }
+
+  @override
+  String get dlgPairPassNew => '新密码短语';
+
+  @override
+  String get dlgPairPassAgain => '再输入一次';
+
+  @override
+  String get dlgPairMismatch => '两次输入的密码短语不一致。';
+
+  @override
+  String get dlgPairLoseWarn => '如果丢失这个密码短语，没有人能恢复你的数据，包括你自己。';
+
+  @override
+  String get dlgPairSavedCheck => '我已保存在安全的地方，比如密码管理器';
+
+  @override
+  String get dlgPairStrength0 => '太短';
+
+  @override
+  String get dlgPairStrength1 => '较弱';
+
+  @override
+  String get dlgPairStrength2 => '一般';
+
+  @override
+  String get dlgPairStrength3 => '良好';
+
+  @override
+  String get dlgPairStrength4 => '很强';
+
+  @override
+  String dlgPairStrengthLine(String label, int words, int chars) {
+    return '$label · $words 个词，$chars 个字符';
+  }
+
+  @override
+  String dlgPairDoneTitle(String name) {
+    return '$name 已配对';
+  }
+
+  @override
+  String dlgPairDoneNew(String host) {
+    return '一个空的保险库正在 $host 上等待';
+  }
+
+  @override
+  String get dlgPairDoneNewNext => '推送一次，让你的其他设备有内容可拉取';
+
+  @override
+  String dlgPairDoneFound(String host) {
+    return '已解锁 $host 上的保险库';
+  }
+
+  @override
+  String get dlgPairDoneFoundNext => '现在拉取，带入你的配置、规则和设置';
+
+  @override
+  String get dlgPairErrCode => '配对码由 8 个字母和数字组成，例如 K7QM 4XPD。';
+
+  @override
+  String get dlgPairErrAddress => '请输入你的同步服务器地址，例如 https://sync.example.com。';
+
+  @override
+  String get dlgPairErrKey => '请输入同步服务器首次运行时打印的服务器密钥。';
+
+  @override
+  String get dlgCodeKicker => '同步 · 配对码';
+
+  @override
+  String get dlgCodeTitle => '配对另一台设备';
+
+  @override
+  String get dlgCodeHint => '配对码中不含密码短语';
+
+  @override
+  String get dlgCodeTypeLabel => '在电脑上输入';
+
+  @override
+  String get dlgCodeValid => '2 分钟内有效 · 仅限一次';
+
+  @override
+  String get dlgCodeExpired => '已过期 · 请点新配对码';
+
+  @override
+  String get dlgCodeNew => '新配对码';
+
+  @override
+  String get dlgCodeCopyLink => '复制链接';
+
+  @override
+  String get dlgCodeCopied => '链接已复制';
+
+  @override
+  String get dlgCodeNote1 => '新设备仍会自己询问密码短语';
+
+  @override
+  String get dlgCodeNote2 => '在新设备上输入配对码和地址，或粘贴链接';
+
+  @override
+  String dlgCodeBusy(String host) {
+    return '正在从 $host 获取配对码';
+  }
 }

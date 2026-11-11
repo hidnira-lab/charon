@@ -3793,4 +3793,238 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get trustLinkGeo => 'Sumber data ↗';
+
+  @override
+  String get dlgPairKicker => 'SYNC · PASANGKAN PERANGKAT INI';
+
+  @override
+  String get dlgPairTitleCode => 'Pasangkan dengan perangkatmu yang lain';
+
+  @override
+  String get dlgPairTitleServer => 'Di mana server sync-mu?';
+
+  @override
+  String get dlgPairTitleCreate => 'Buat passphrase sync';
+
+  @override
+  String get dlgPairTitleEnter => 'Masukkan passphrase sync-mu';
+
+  @override
+  String get dlgPairTitleDone => 'Terpasang';
+
+  @override
+  String dlgPairStepOf(int step, int total) {
+    return 'langkah $step dari $total';
+  }
+
+  @override
+  String get dlgPairStepCode => 'KODE';
+
+  @override
+  String get dlgPairStepServer => 'SERVER SYNC';
+
+  @override
+  String get dlgPairStepPass => 'PASSPHRASE';
+
+  @override
+  String get dlgPairStepDone => 'SELESAI';
+
+  @override
+  String get dlgPairCodeLabel => 'KODE PASANGAN · DARI PERANGKAT LAIN';
+
+  @override
+  String get dlgPairCodeHelp =>
+      'di perangkat itu: Server › Sync › Tampilkan kode pasangan';
+
+  @override
+  String get dlgPairCodeLinkHelp => 'atau tempel seluruh link hasil Salin link';
+
+  @override
+  String get dlgPairAddressLabel => 'ALAMAT SERVER SYNC';
+
+  @override
+  String get dlgPairAddressHelp =>
+      'endpoint sync di server yang kamu kendalikan';
+
+  @override
+  String get dlgPairNameLabel => 'NAMA PERANGKAT';
+
+  @override
+  String get dlgPairNameHelp =>
+      'hanya ditampilkan di dalam Charon di perangkat ini';
+
+  @override
+  String get dlgPairKeyLabel => 'KUNCI SERVER';
+
+  @override
+  String get dlgPairKeyHelp =>
+      'Ditampilkan sekali saat kamu pertama kali menjalankan server sync.';
+
+  @override
+  String get dlgPairManualLink =>
+      'Tidak ada perangkat lain? Masukkan alamat server sync';
+
+  @override
+  String get dlgPairByCodeLink => 'Pakai kode pasangan saja';
+
+  @override
+  String get dlgPairBtnContinue => 'Lanjut';
+
+  @override
+  String get dlgPairBtnBack => 'Kembali';
+
+  @override
+  String get dlgPairBtnChecking => 'Memeriksa…';
+
+  @override
+  String get dlgPairBtnCreate => 'Buat dan pasangkan';
+
+  @override
+  String get dlgPairBtnUnlock => 'Buka dan pasangkan';
+
+  @override
+  String get dlgPairBtnLater => 'Nanti';
+
+  @override
+  String get dlgPairBtnPush => 'Kirim sekarang';
+
+  @override
+  String get dlgPairBtnPull => 'Tarik sekarang';
+
+  @override
+  String dlgPairBusyReach(String host) {
+    return 'menghubungi $host';
+  }
+
+  @override
+  String get dlgPairBusyCode => 'memeriksa kode';
+
+  @override
+  String get dlgPairBusyKey => 'memeriksa kunci server';
+
+  @override
+  String dlgPairVaultEmptyCode(String host) {
+    return 'kode diterima · $host terjangkau · kosong, belum ada yang tersimpan';
+  }
+
+  @override
+  String dlgPairVaultEmpty(String host) {
+    return '$host terjangkau · kosong, belum ada yang tersimpan';
+  }
+
+  @override
+  String dlgPairVaultFound(String when) {
+    return 'terjangkau · data terenkripsi ditemukan · kirim terakhir $when';
+  }
+
+  @override
+  String get dlgPairPassNew => 'PASSPHRASE BARU';
+
+  @override
+  String get dlgPairPassAgain => 'KETIK LAGI';
+
+  @override
+  String get dlgPairMismatch => 'Kedua passphrase tidak sama.';
+
+  @override
+  String get dlgPairLoseWarn =>
+      'Kalau passphrase ini hilang, tidak ada yang bisa memulihkan datamu, termasuk kamu.';
+
+  @override
+  String get dlgPairSavedCheck =>
+      'Sudah kusimpan di tempat aman, misalnya password manager';
+
+  @override
+  String get dlgPairStrength0 => 'terlalu pendek';
+
+  @override
+  String get dlgPairStrength1 => 'lemah';
+
+  @override
+  String get dlgPairStrength2 => 'cukup';
+
+  @override
+  String get dlgPairStrength3 => 'bagus';
+
+  @override
+  String get dlgPairStrength4 => 'kuat';
+
+  @override
+  String dlgPairStrengthLine(String label, int words, int chars) {
+    return '$label · $words kata, $chars karakter';
+  }
+
+  @override
+  String dlgPairDoneTitle(String name) {
+    return '$name sudah terpasang';
+  }
+
+  @override
+  String dlgPairDoneNew(String host) {
+    return 'sebuah vault kosong kini menunggu di $host';
+  }
+
+  @override
+  String get dlgPairDoneNewNext =>
+      'kirim sekali supaya perangkatmu yang lain punya sesuatu untuk ditarik';
+
+  @override
+  String dlgPairDoneFound(String host) {
+    return 'membuka vault di $host';
+  }
+
+  @override
+  String get dlgPairDoneFoundNext =>
+      'tarik sekarang untuk membawa profil, aturan, dan pengaturanmu';
+
+  @override
+  String get dlgPairErrCode =>
+      'Kode pasangan terdiri dari 8 huruf dan angka, seperti K7QM 4XPD.';
+
+  @override
+  String get dlgPairErrAddress =>
+      'Masukkan alamat server sync-mu, seperti https://sync.example.com.';
+
+  @override
+  String get dlgPairErrKey =>
+      'Masukkan kunci server yang dicetak server sync saat pertama kali jalan.';
+
+  @override
+  String get dlgCodeKicker => 'SYNC · KODE PASANGAN';
+
+  @override
+  String get dlgCodeTitle => 'Pasangkan perangkat lain';
+
+  @override
+  String get dlgCodeHint => 'tidak ada passphrase di dalam kode';
+
+  @override
+  String get dlgCodeTypeLabel => 'DI KOMPUTER, KETIK';
+
+  @override
+  String get dlgCodeValid => 'berlaku 2 mnt · sekali pakai';
+
+  @override
+  String get dlgCodeExpired => 'kedaluwarsa · tekan Kode baru';
+
+  @override
+  String get dlgCodeNew => 'Kode baru';
+
+  @override
+  String get dlgCodeCopyLink => 'Salin link';
+
+  @override
+  String get dlgCodeCopied => 'Link disalin';
+
+  @override
+  String get dlgCodeNote1 => 'perangkat baru tetap meminta passphrase sendiri';
+
+  @override
+  String get dlgCodeNote2 =>
+      'ketik kode dan alamatnya di perangkat baru, atau tempel linknya';
+
+  @override
+  String dlgCodeBusy(String host) {
+    return 'meminta kode dari $host';
+  }
 }
