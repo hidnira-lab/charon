@@ -15,7 +15,7 @@ import 'ui/servers/servers_screen.dart';
 import 'ui/service/service_screen.dart';
 import 'ui/splash/splash_screen.dart';
 import 'ui/settings/settings_screen.dart';
-import 'ui/setup/first_run_setup_screen.dart';
+import 'ui/setup/setup_screen.dart';
 import 'ui/split/split_screen.dart';
 import 'ui/telemetry/telemetry_screen.dart';
 
@@ -98,7 +98,7 @@ class _CharonAppState extends State<CharonApp> {
         final activeTab = controller.activeTabIndex;
         Widget screen;
         if (controller.isFirstRun) {
-          screen = FirstRunSetupScreen(controller: controller);
+          screen = SetupScreen(controller: controller);
         } else if (controller.service.view != null) {
           screen = ServiceScreen(controller: controller);
         } else if (activeTab == 1) {
