@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../l10n/generated/app_localizations.dart';
 import '../../state/home_controller.dart';
-import '../../theme/tokens.dart';
 import '../home/widgets/rail_nav.dart';
 import '../home/widgets/title_bar.dart';
 import 'widgets/about_card.dart';
@@ -11,6 +10,7 @@ import 'widgets/failsafe_card.dart';
 import 'widgets/greeting_card.dart';
 import 'widgets/network_card.dart';
 import 'widgets/quota_card.dart';
+import '../../theme/theme.dart';
 
 /// Settings desktop screen (1024 x 768 px) matching SettingsDesktop board.
 class SettingsScreen extends StatelessWidget {
@@ -30,6 +30,8 @@ class SettingsScreen extends StatelessWidget {
   }
 
   Widget _buildCanvas(BuildContext context) {
+
+    final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
@@ -40,9 +42,9 @@ class SettingsScreen extends StatelessWidget {
           height: 768,
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
-            color: const Color(0xFF121212),
+            color: colors.bg,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFF333333)),
+            border: Border.all(color: colors.divider),
           ),
           child: Column(
             children: [
@@ -75,22 +77,22 @@ class SettingsScreen extends StatelessWidget {
                                   children: [
                                     Text(
                                       '> ${l10n.settingsSubtitle}',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontFamily: CharonTokens.fontMono,
                                         fontSize: 10,
                                         fontWeight: FontWeight.w700,
                                         letterSpacing: 0.08,
-                                        color: Color(0xFF8A8A8A),
+                                        color: colors.text3,
                                       ),
                                     ),
                                     const SizedBox(height: 2),
                                     Text(
                                       l10n.settingsTitle,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 22,
                                         fontWeight: FontWeight.w600,
                                         letterSpacing: -0.015,
-                                        color: Color(0xFFEDEDED),
+                                        color: colors.text,
                                       ),
                                     ),
                                   ],
@@ -99,10 +101,10 @@ class SettingsScreen extends StatelessWidget {
                                   padding: const EdgeInsets.only(bottom: 4),
                                   child: Text(
                                     l10n.settingsSavedHint,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontFamily: CharonTokens.fontMono,
                                       fontSize: 11,
-                                      color: Color(0xFF8A8A8A),
+                                      color: colors.text3,
                                     ),
                                   ),
                                 ),

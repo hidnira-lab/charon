@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
-import '../../../theme/tokens.dart';
+import '../../../theme/theme.dart';
 
 class EraseConfirmDialog extends StatelessWidget {
   const EraseConfirmDialog({super.key});
@@ -16,6 +16,7 @@ class EraseConfirmDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return Center(
@@ -24,9 +25,9 @@ class EraseConfirmDialog extends StatelessWidget {
         child: Container(
           width: 440,
           decoration: BoxDecoration(
-            color: const Color(0xFF1E1E1E),
+            color: colors.surface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFF333333)),
+            border: Border.all(color: colors.divider),
             boxShadow: const [
               BoxShadow(
                 color: Colors.black54,
@@ -46,19 +47,19 @@ class EraseConfirmDialog extends StatelessWidget {
                     width: 32,
                     height: 32,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF3E1F1F),
+                      color: colors.criticalSoft,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Icon(Icons.warning_amber_rounded, size: 20, color: Color(0xFFE57373)),
+                    child: Icon(Icons.warning_amber_rounded, size: 20, color: colors.criticalText),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       l10n.dialogEraseTitle,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFFEDEDED),
+                        color: colors.text,
                       ),
                     ),
                   ),
@@ -67,9 +68,9 @@ class EraseConfirmDialog extends StatelessWidget {
               const SizedBox(height: 14),
               Text(
                 l10n.dialogEraseMessage,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 13,
-                  color: Color(0xFFA3A3A3),
+                  color: colors.text2,
                   height: 1.4,
                 ),
               ),
@@ -80,8 +81,8 @@ class EraseConfirmDialog extends StatelessWidget {
                   OutlinedButton(
                     onPressed: () => Navigator.of(context).pop(false),
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFFEDEDED),
-                      side: const BorderSide(color: Color(0xFF4A4A4A)),
+                      foregroundColor: colors.text,
+                      side: BorderSide(color: colors.controlBorder.withValues(alpha: 0.6)),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(999),
                       ),
@@ -100,7 +101,7 @@ class EraseConfirmDialog extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () => Navigator.of(context).pop(true),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFD32F2F),
+                      backgroundColor: colors.criticalFill,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(999),

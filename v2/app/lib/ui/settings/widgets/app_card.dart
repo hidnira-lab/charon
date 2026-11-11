@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
-import '../../../theme/tokens.dart';
 import 'charon_switch.dart';
 import 'erase_confirm_dialog.dart';
+import '../../../theme/theme.dart';
 
 class AppCard extends StatelessWidget {
   const AppCard({
@@ -16,6 +16,7 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     final boot = controller.launchAtStartup;
     final ks = controller.killSwitch;
@@ -34,9 +35,9 @@ class AppCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E).withValues(alpha: 0.55),
+        color: colors.surface.withValues(alpha: 0.55),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF333333)),
+        border: Border.all(color: colors.divider),
       ),
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
       child: Column(
@@ -48,22 +49,22 @@ class AppCard extends StatelessWidget {
             children: [
               Text(
                 '> ${l10n.settingsAppTitle}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: CharonTokens.fontMono,
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.08,
-                  color: Color(0xFFA3A3A3),
+                  color: colors.text2,
                 ),
               ),
               Text(
                 l10n.settingsAppMeta,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: CharonTokens.fontMono,
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.08,
-                  color: Color(0xFF8A8A8A),
+                  color: colors.text3,
                 ),
               ),
             ],
@@ -78,13 +79,13 @@ class AppCard extends StatelessWidget {
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF262626),
+                  color: colors.surface2,
                   borderRadius: BorderRadius.circular(9),
                 ),
                 child: Icon(
                   Icons.power_settings_new_rounded,
                   size: 18,
-                  color: boot ? const Color(0xFF60A1D9) : const Color(0xFFA3A3A3),
+                  color: boot ? colors.accentText : colors.text2,
                 ),
               ),
               const SizedBox(width: 14),
@@ -94,18 +95,18 @@ class AppCard extends StatelessWidget {
                   children: [
                     Text(
                       l10n.settingsStartupTitle,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFFEDEDED),
+                        color: colors.text,
                       ),
                     ),
                     const SizedBox(height: 3),
                     Text(
                       l10n.settingsStartupDesc,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
-                        color: Color(0xFFA3A3A3),
+                        color: colors.text2,
                         height: 1.3,
                       ),
                     ),
@@ -116,8 +117,8 @@ class AppCard extends StatelessWidget {
                           width: 6,
                           height: 6,
                           color: boot
-                              ? const Color(0xFF60A1D9)
-                              : (ks ? const Color(0xFFE3B579) : const Color(0xFF8A8A8A)),
+                              ? colors.accentText
+                              : (ks ? colors.transitionText : colors.text3),
                         ),
                         const SizedBox(width: 8),
                         Expanded(
@@ -131,8 +132,8 @@ class AppCard extends StatelessWidget {
                               fontFamily: CharonTokens.fontMono,
                               fontSize: 11,
                               color: boot
-                                  ? const Color(0xFF60A1D9)
-                                  : (ks ? const Color(0xFFE3B579) : const Color(0xFF8A8A8A)),
+                                  ? colors.accentText
+                                  : (ks ? colors.transitionText : colors.text3),
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -150,7 +151,7 @@ class AppCard extends StatelessWidget {
               ),
             ],
           ),
-          const Divider(color: Color(0xFF333333), height: 20),
+          Divider(color: colors.divider, height: 20),
 
           // Row 2: Charon service
           Row(
@@ -160,13 +161,13 @@ class AppCard extends StatelessWidget {
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF262626),
+                  color: colors.surface2,
                   borderRadius: BorderRadius.circular(9),
                 ),
                 child: Icon(
                   Icons.miscellaneous_services_outlined,
                   size: 18,
-                  color: svcRestart ? const Color(0xFFE3B579) : const Color(0xFF60A1D9),
+                  color: svcRestart ? colors.transitionText : colors.accentText,
                 ),
               ),
               const SizedBox(width: 14),
@@ -176,18 +177,18 @@ class AppCard extends StatelessWidget {
                   children: [
                     Text(
                       l10n.settingsServiceTitle,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFFEDEDED),
+                        color: colors.text,
                       ),
                     ),
                     const SizedBox(height: 3),
                     Text(
                       l10n.settingsServiceDesc,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
-                        color: Color(0xFFA3A3A3),
+                        color: colors.text2,
                         height: 1.3,
                       ),
                     ),
@@ -197,7 +198,7 @@ class AppCard extends StatelessWidget {
                         Container(
                           width: 6,
                           height: 6,
-                          color: svcRestart ? const Color(0xFFE3B579) : const Color(0xFF8A8A8A),
+                          color: svcRestart ? colors.transitionText : colors.text3,
                         ),
                         const SizedBox(width: 8),
                         Expanded(
@@ -208,7 +209,7 @@ class AppCard extends StatelessWidget {
                             style: TextStyle(
                               fontFamily: CharonTokens.fontMono,
                               fontSize: 11,
-                              color: svcRestart ? const Color(0xFFE3B579) : const Color(0xFF8A8A8A),
+                              color: svcRestart ? colors.transitionText : colors.text3,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -222,8 +223,8 @@ class AppCard extends StatelessWidget {
               OutlinedButton(
                 onPressed: svcRestart ? null : controller.restartService,
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(0xFFEDEDED),
-                  side: const BorderSide(color: Color(0xFF737373)),
+                  foregroundColor: colors.text,
+                  side: BorderSide(color: colors.controlBorder),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(999),
                   ),
@@ -240,7 +241,7 @@ class AppCard extends StatelessWidget {
               ),
             ],
           ),
-          const Divider(color: Color(0xFF333333), height: 20),
+          Divider(color: colors.divider, height: 20),
 
           // Row 3: Pair Row (THEME & LANGUAGE)
           Row(
@@ -253,12 +254,12 @@ class AppCard extends StatelessWidget {
                   children: [
                     Text(
                       l10n.settingsThemeTitle,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: CharonTokens.fontMono,
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.08,
-                        color: Color(0xFFA3A3A3),
+                        color: colors.text2,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -266,7 +267,7 @@ class AppCard extends StatelessWidget {
                       height: 32,
                       padding: const EdgeInsets.all(2),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF262626),
+                        color: colors.surface2,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
@@ -305,10 +306,10 @@ class AppCard extends StatelessWidget {
                           : (thm == ThemeMode.dark
                               ? '> ${l10n.settingsThemeLineDark}'
                               : '> ${l10n.settingsThemeLineLight}'),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: CharonTokens.fontMono,
                         fontSize: 11,
-                        color: Color(0xFF8A8A8A),
+                        color: colors.text3,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -324,12 +325,12 @@ class AppCard extends StatelessWidget {
                   children: [
                     Text(
                       l10n.settingsLanguageTitle,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: CharonTokens.fontMono,
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.08,
-                        color: Color(0xFFA3A3A3),
+                        color: colors.text2,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -337,10 +338,10 @@ class AppCard extends StatelessWidget {
                     PopupMenuButton<Locale?>(
                       initialValue: loc,
                       onSelected: (newLoc) => controller.setLocale(newLoc),
-                      color: const Color(0xFF262626),
+                      color: colors.surface2,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
-                        side: const BorderSide(color: Color(0xFF333333)),
+                        side: BorderSide(color: colors.divider),
                       ),
                       itemBuilder: (context) => [
                         PopupMenuItem(
@@ -380,7 +381,7 @@ class AppCard extends StatelessWidget {
                         height: 36,
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF262626),
+                          color: colors.surface2,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
@@ -388,16 +389,16 @@ class AppCard extends StatelessWidget {
                           children: [
                             Text(
                               curLangName,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
-                                color: Color(0xFFEDEDED),
+                                color: colors.text,
                               ),
                             ),
-                            const Icon(
+                            Icon(
                               Icons.keyboard_arrow_down_rounded,
                               size: 16,
-                              color: Color(0xFFA3A3A3),
+                              color: colors.text2,
                             ),
                           ],
                         ),
@@ -408,10 +409,10 @@ class AppCard extends StatelessWidget {
                       loc == null
                           ? '> ${l10n.settingsLanguageLineSystem}'
                           : '> ${l10n.settingsLanguageLineManual}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: CharonTokens.fontMono,
                         fontSize: 11,
-                        color: Color(0xFF8A8A8A),
+                        color: colors.text3,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -424,13 +425,13 @@ class AppCard extends StatelessWidget {
           // Language note
           Text(
             '> ${l10n.settingsLanguageNote}',
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: CharonTokens.fontMono,
               fontSize: 10,
-              color: Color(0xFF737373),
+              color: colors.controlBorder,
             ),
           ),
-          const Divider(color: Color(0xFF333333), height: 20),
+          Divider(color: colors.divider, height: 20),
 
           // Row 4: Erase all data on this device
           Row(
@@ -440,10 +441,10 @@ class AppCard extends StatelessWidget {
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF262626),
+                  color: colors.surface2,
                   borderRadius: BorderRadius.circular(9),
                 ),
-                child: const Icon(Icons.delete_outline_rounded, size: 18, color: Color(0xFFA3A3A3)),
+                child: Icon(Icons.delete_outline_rounded, size: 18, color: colors.text2),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -452,18 +453,18 @@ class AppCard extends StatelessWidget {
                   children: [
                     Text(
                       l10n.settingsEraseTitle,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFFEDEDED),
+                        color: colors.text,
                       ),
                     ),
                     const SizedBox(height: 3),
                     Text(
                       l10n.settingsEraseDesc,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
-                        color: Color(0xFFA3A3A3),
+                        color: colors.text2,
                         height: 1.3,
                       ),
                     ),
@@ -473,16 +474,16 @@ class AppCard extends StatelessWidget {
                         Container(
                           width: 6,
                           height: 6,
-                          color: const Color(0xFF8A8A8A),
+                          color: colors.text3,
                         ),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
                             '> ${l10n.settingsEraseLine}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: CharonTokens.fontMono,
                               fontSize: 11,
-                              color: Color(0xFF8A8A8A),
+                              color: colors.text3,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -501,8 +502,8 @@ class AppCard extends StatelessWidget {
                   }
                 },
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(0xFFE57373),
-                  side: const BorderSide(color: Color(0xFF5C2B2B)),
+                  foregroundColor: colors.criticalText,
+                  side: BorderSide(color: colors.criticalFill.withValues(alpha: 0.4)),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(999),
                   ),
@@ -540,13 +541,14 @@ class _ThemeSegmentBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFFEDEDED) : Colors.transparent,
+          color: isSelected ? colors.text : Colors.transparent,
           borderRadius: BorderRadius.circular(6),
         ),
         child: Row(
@@ -555,7 +557,7 @@ class _ThemeSegmentBtn extends StatelessWidget {
             Icon(
               icon,
               size: 13,
-              color: isSelected ? const Color(0xFF121212) : const Color(0xFFA3A3A3),
+              color: isSelected ? colors.bg : colors.text2,
             ),
             const SizedBox(width: 4),
             Text(
@@ -565,7 +567,7 @@ class _ThemeSegmentBtn extends StatelessWidget {
                 fontSize: 9,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 0.06,
-                color: isSelected ? const Color(0xFF121212) : const Color(0xFFA3A3A3),
+                color: isSelected ? colors.bg : colors.text2,
               ),
             ),
           ],
@@ -588,13 +590,14 @@ class _LanguageMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
     return Row(
       children: [
         Container(
           width: 6,
           height: 6,
           decoration: BoxDecoration(
-            color: isSelected ? const Color(0xFF60A1D9) : const Color(0xFF555555),
+            color: isSelected ? colors.accentText : colors.controlBorder,
             shape: BoxShape.circle,
           ),
         ),
@@ -602,10 +605,10 @@ class _LanguageMenuItem extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w500,
-              color: Color(0xFFEDEDED),
+              color: colors.text,
             ),
           ),
         ),
@@ -615,7 +618,7 @@ class _LanguageMenuItem extends StatelessWidget {
             fontFamily: CharonTokens.fontMono,
             fontSize: 10,
             fontWeight: FontWeight.w700,
-            color: isSelected ? const Color(0xFF60A1D9) : const Color(0xFF737373),
+            color: isSelected ? colors.accentText : colors.controlBorder,
           ),
         ),
       ],

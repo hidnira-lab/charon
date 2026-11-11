@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
-import '../../../theme/tokens.dart';
+import '../../../theme/theme.dart';
 
 class NetworkCard extends StatefulWidget {
   const NetworkCard({
@@ -47,6 +47,7 @@ class _NetworkCardState extends State<NetworkCard> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     final dnsMode = widget.controller.dnsMode;
     final isCustomDns = dnsMode == DnsMode.custom;
@@ -55,9 +56,9 @@ class _NetworkCardState extends State<NetworkCard> {
 
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E).withValues(alpha: 0.55),
+        color: colors.surface.withValues(alpha: 0.55),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF333333)),
+        border: Border.all(color: colors.divider),
       ),
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
       child: Column(
@@ -69,22 +70,22 @@ class _NetworkCardState extends State<NetworkCard> {
             children: [
               Text(
                 '> ${l10n.settingsNetworkTitle}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: CharonTokens.fontMono,
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.08,
-                  color: Color(0xFFA3A3A3),
+                  color: colors.text2,
                 ),
               ),
               Text(
                 l10n.settingsNetworkMeta,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: CharonTokens.fontMono,
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.08,
-                  color: Color(0xFF8A8A8A),
+                  color: colors.text3,
                 ),
               ),
             ],
@@ -99,10 +100,10 @@ class _NetworkCardState extends State<NetworkCard> {
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF262626),
+                  color: colors.surface2,
                   borderRadius: BorderRadius.circular(9),
                 ),
-                child: const Icon(Icons.dns_outlined, size: 18, color: Color(0xFF60A1D9)),
+                child: Icon(Icons.dns_outlined, size: 18, color: colors.accentText),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -111,18 +112,18 @@ class _NetworkCardState extends State<NetworkCard> {
                   children: [
                     Text(
                       l10n.settingsDnsTitle,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFFEDEDED),
+                        color: colors.text,
                       ),
                     ),
                     const SizedBox(height: 3),
                     Text(
                       l10n.settingsDnsDesc,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
-                        color: Color(0xFFA3A3A3),
+                        color: colors.text2,
                         height: 1.3,
                       ),
                     ),
@@ -133,8 +134,8 @@ class _NetworkCardState extends State<NetworkCard> {
                           width: 6,
                           height: 6,
                           color: isCustomDns && !_isDnsValid
-                              ? const Color(0xFFE3B579)
-                              : (isCustomDns ? const Color(0xFF60A1D9) : const Color(0xFF8A8A8A)),
+                              ? colors.transitionText
+                              : (isCustomDns ? colors.accentText : colors.text3),
                         ),
                         const SizedBox(width: 8),
                         Expanded(
@@ -148,8 +149,8 @@ class _NetworkCardState extends State<NetworkCard> {
                               fontFamily: CharonTokens.fontMono,
                               fontSize: 11,
                               color: isCustomDns && !_isDnsValid
-                                  ? const Color(0xFFE3B579)
-                                  : (isCustomDns ? const Color(0xFF60A1D9) : const Color(0xFF8A8A8A)),
+                                  ? colors.transitionText
+                                  : (isCustomDns ? colors.accentText : colors.text3),
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -163,10 +164,10 @@ class _NetworkCardState extends State<NetworkCard> {
                         constraints: const BoxConstraints(maxWidth: 320),
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF121212),
+                          color: colors.bg,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: _isDnsValid ? const Color(0xFF737373) : const Color(0xFFE3B579),
+                            color: _isDnsValid ? colors.controlBorder : colors.transitionText,
                           ),
                         ),
                         child: Row(
@@ -177,7 +178,7 @@ class _NetworkCardState extends State<NetworkCard> {
                                 fontFamily: CharonTokens.fontMono,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w700,
-                                color: _isDnsValid ? const Color(0xFF60A1D9) : const Color(0xFFE3B579),
+                                color: _isDnsValid ? colors.accentText : colors.transitionText,
                               ),
                             ),
                             const SizedBox(width: 8),
@@ -185,10 +186,10 @@ class _NetworkCardState extends State<NetworkCard> {
                               child: TextField(
                                 controller: _dnsController,
                                 onChanged: _validateDns,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontFamily: CharonTokens.fontMono,
                                   fontSize: 13,
-                                  color: Color(0xFFEDEDED),
+                                  color: colors.text,
                                 ),
                                 decoration: const InputDecoration(
                                   border: InputBorder.none,
@@ -204,9 +205,9 @@ class _NetworkCardState extends State<NetworkCard> {
                         const SizedBox(height: 4),
                         Text(
                           l10n.settingsDnsFieldError,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 11,
-                            color: Color(0xFFE3B579),
+                            color: colors.transitionText,
                           ),
                         ),
                       ],
@@ -220,7 +221,7 @@ class _NetworkCardState extends State<NetworkCard> {
                 height: 30,
                 padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF262626),
+                  color: colors.surface2,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
@@ -241,7 +242,7 @@ class _NetworkCardState extends State<NetworkCard> {
               ),
             ],
           ),
-          const Divider(color: Color(0xFF333333), height: 20),
+          Divider(color: colors.divider, height: 20),
 
           // Row 2: IPv6
           Row(
@@ -251,10 +252,10 @@ class _NetworkCardState extends State<NetworkCard> {
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF262626),
+                  color: colors.surface2,
                   borderRadius: BorderRadius.circular(9),
                 ),
-                child: const Icon(Icons.block_outlined, size: 18, color: Color(0xFFA3A3A3)),
+                child: Icon(Icons.block_outlined, size: 18, color: colors.text2),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -267,26 +268,26 @@ class _NetworkCardState extends State<NetworkCard> {
                       children: [
                         Text(
                           l10n.settingsIpv6Title,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
-                            color: Color(0xFFEDEDED),
+                            color: colors.text,
                           ),
                         ),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF262626),
+                            color: colors.surface2,
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Text(
                             l10n.settingsIpv6Tag,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: CharonTokens.fontMono,
                               fontSize: 9,
                               fontWeight: FontWeight.w700,
                               letterSpacing: 0.08,
-                              color: Color(0xFFA3A3A3),
+                              color: colors.text2,
                             ),
                           ),
                         ),
@@ -295,9 +296,9 @@ class _NetworkCardState extends State<NetworkCard> {
                     const SizedBox(height: 3),
                     Text(
                       l10n.settingsIpv6Desc,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
-                        color: Color(0xFFA3A3A3),
+                        color: colors.text2,
                         height: 1.3,
                       ),
                     ),
@@ -307,16 +308,16 @@ class _NetworkCardState extends State<NetworkCard> {
                         Container(
                           width: 6,
                           height: 6,
-                          color: const Color(0xFF8A8A8A),
+                          color: colors.text3,
                         ),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
                             '> ${l10n.settingsIpv6Line}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: CharonTokens.fontMono,
                               fontSize: 11,
-                              color: Color(0xFF8A8A8A),
+                              color: colors.text3,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -328,7 +329,7 @@ class _NetworkCardState extends State<NetworkCard> {
               ),
             ],
           ),
-          const Divider(color: Color(0xFF333333), height: 20),
+          Divider(color: colors.divider, height: 20),
 
           // Row 3: Connection mode
           Row(
@@ -338,10 +339,10 @@ class _NetworkCardState extends State<NetworkCard> {
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF262626),
+                  color: colors.surface2,
                   borderRadius: BorderRadius.circular(9),
                 ),
-                child: const Icon(Icons.swap_calls_rounded, size: 18, color: Color(0xFF60A1D9)),
+                child: Icon(Icons.swap_calls_rounded, size: 18, color: colors.accentText),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -350,18 +351,18 @@ class _NetworkCardState extends State<NetworkCard> {
                   children: [
                     Text(
                       l10n.settingsConnModeTitle,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFFEDEDED),
+                        color: colors.text,
                       ),
                     ),
                     const SizedBox(height: 3),
                     Text(
                       l10n.settingsConnModeDesc,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
-                        color: Color(0xFFA3A3A3),
+                        color: colors.text2,
                         height: 1.3,
                       ),
                     ),
@@ -371,7 +372,7 @@ class _NetworkCardState extends State<NetworkCard> {
                         Container(
                           width: 6,
                           height: 6,
-                          color: isTun ? const Color(0xFF60A1D9) : const Color(0xFFE3B579),
+                          color: isTun ? colors.accentText : colors.transitionText,
                         ),
                         const SizedBox(width: 8),
                         Expanded(
@@ -382,7 +383,7 @@ class _NetworkCardState extends State<NetworkCard> {
                             style: TextStyle(
                               fontFamily: CharonTokens.fontMono,
                               fontSize: 11,
-                              color: isTun ? const Color(0xFF60A1D9) : const Color(0xFFE3B579),
+                              color: isTun ? colors.accentText : colors.transitionText,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -398,7 +399,7 @@ class _NetworkCardState extends State<NetworkCard> {
                 height: 30,
                 padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF262626),
+                  color: colors.surface2,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
@@ -438,6 +439,7 @@ class _SegmentBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
@@ -445,7 +447,7 @@ class _SegmentBtn extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFFEDEDED) : Colors.transparent,
+          color: isSelected ? colors.text : Colors.transparent,
           borderRadius: BorderRadius.circular(6),
         ),
         child: Text(
@@ -455,7 +457,7 @@ class _SegmentBtn extends StatelessWidget {
             fontSize: 10,
             fontWeight: FontWeight.w700,
             letterSpacing: 0.06,
-            color: isSelected ? const Color(0xFF121212) : const Color(0xFFA3A3A3),
+            color: isSelected ? colors.bg : colors.text2,
           ),
         ),
       ),

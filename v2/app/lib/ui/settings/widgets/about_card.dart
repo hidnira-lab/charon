@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
-import '../../../theme/tokens.dart';
+import '../../../theme/theme.dart';
 import '../../telemetry/widgets/export_diagnostics_dialog.dart';
 import '../../trust/guide_links.dart';
 import '../../trust/licences_screen.dart';
@@ -20,6 +20,7 @@ class AboutCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     final activeLocale = controller?.locale ?? Localizations.maybeLocaleOf(context);
 
@@ -68,9 +69,9 @@ class AboutCard extends StatelessWidget {
     return Container(
       width: 300,
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E).withValues(alpha: 0.55),
+        color: colors.surface.withValues(alpha: 0.55),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF333333)),
+        border: Border.all(color: colors.divider),
       ),
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -79,12 +80,12 @@ class AboutCard extends StatelessWidget {
           // Section header
           Text(
             '> ${l10n.settingsAboutTitle.toUpperCase()}',
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: CharonTokens.fontMono,
               fontSize: 10,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.08,
-              color: Color(0xFFA3A3A3),
+              color: colors.text2,
             ),
           ),
           const SizedBox(height: 10),
@@ -96,14 +97,14 @@ class AboutCard extends StatelessWidget {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF121212),
+                  color: colors.bg,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFF333333)),
+                  border: Border.all(color: colors.divider),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.shield_rounded,
                   size: 24,
-                  color: Color(0xFFEDEDED),
+                  color: colors.text,
                 ),
               ),
               const SizedBox(width: 12),
@@ -113,20 +114,20 @@ class AboutCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        const Text(
+                        Text(
                           'Charon ',
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: Color(0xFFEDEDED),
+                            color: colors.text,
                           ),
                         ),
                         Text(
                           'v0.1.0',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: CharonTokens.fontMono,
                             fontSize: 12,
-                            color: Color(0xFFA3A3A3),
+                            color: colors.text2,
                           ),
                         ),
                       ],
@@ -134,10 +135,10 @@ class AboutCard extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       l10n.settingsAboutBy,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: CharonTokens.fontMono,
                         fontSize: 10,
-                        color: Color(0xFF8A8A8A),
+                        color: colors.text3,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -151,7 +152,7 @@ class AboutCard extends StatelessWidget {
           // Link items
           Container(
             decoration: BoxDecoration(
-              color: const Color(0xFF121212),
+              color: colors.bg,
               borderRadius: BorderRadius.circular(10),
             ),
             padding: const EdgeInsets.all(4),
@@ -192,10 +193,10 @@ class AboutCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             item.label,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: CharonTokens.fontMono,
                               fontSize: 11,
-                              color: Color(0xFF8A8A8A),
+                              color: colors.text3,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -205,19 +206,19 @@ class AboutCard extends StatelessWidget {
                           children: [
                             Text(
                               item.value,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: CharonTokens.fontMono,
                                 fontSize: 11,
                                 fontWeight: FontWeight.w700,
-                                color: Color(0xFF60A1D9),
+                                color: colors.accentText,
                               ),
                             ),
                             if (item.isExternal) ...[
                               const SizedBox(width: 4),
-                              const Icon(
+                              Icon(
                                 Icons.open_in_new_rounded,
                                 size: 12,
-                                color: Color(0xFF60A1D9),
+                                color: colors.accentText,
                               ),
                             ],
                           ],

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
-import '../../../theme/tokens.dart';
 import 'charon_switch.dart';
+import '../../../theme/theme.dart';
 
 class FailsafeCard extends StatelessWidget {
   const FailsafeCard({
@@ -15,6 +15,7 @@ class FailsafeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     final ks = controller.killSwitch;
@@ -34,9 +35,9 @@ class FailsafeCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E).withValues(alpha: 0.55),
+        color: colors.surface.withValues(alpha: 0.55),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF333333)),
+        border: Border.all(color: colors.divider),
       ),
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
       child: Column(
@@ -48,12 +49,12 @@ class FailsafeCard extends StatelessWidget {
             children: [
               Text(
                 '> ${l10n.settingsFailsafeTitle}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: CharonTokens.fontMono,
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.08,
-                  color: Color(0xFFA3A3A3),
+                  color: colors.text2,
                 ),
               ),
               Text(
@@ -63,7 +64,7 @@ class FailsafeCard extends StatelessWidget {
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.08,
-                  color: armedCount > 0 ? const Color(0xFF60A1D9) : const Color(0xFF8A8A8A),
+                  color: armedCount > 0 ? colors.accentText : colors.text3,
                 ),
               ),
             ],
@@ -80,7 +81,7 @@ class FailsafeCard extends StatelessWidget {
             isOn: ks,
             onChanged: (v) => controller.setKillSwitch(v),
           ),
-          const Divider(color: Color(0xFF333333), height: 20),
+          Divider(color: colors.divider, height: 20),
 
           // Row 2: Auto reconnect
           _SwitchRow(
@@ -93,7 +94,7 @@ class FailsafeCard extends StatelessWidget {
             isOn: ar,
             onChanged: (v) => controller.setAutoReconnect(v),
           ),
-          const Divider(color: Color(0xFF333333), height: 20),
+          Divider(color: colors.divider, height: 20),
 
           // Row 3: Allow local network
           _SwitchRow(
@@ -109,16 +110,16 @@ class FailsafeCard extends StatelessWidget {
           // Footer link
           Container(
             padding: const EdgeInsets.only(top: 10),
-            decoration: const BoxDecoration(
-              border: Border(top: BorderSide(color: Color(0xFF333333))),
+            decoration: BoxDecoration(
+              border: Border(top: BorderSide(color: colors.divider)),
             ),
             child: Row(
               children: [
                 Container(
                   width: 6,
                   height: 6,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF8A8A8A),
+                  decoration: BoxDecoration(
+                    color: colors.text3,
                     shape: BoxShape.rectangle,
                   ),
                 ),
@@ -126,10 +127,10 @@ class FailsafeCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     '> ${l10n.settingsFailsafeFoot}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: CharonTokens.fontMono,
                       fontSize: 11,
-                      color: Color(0xFFA3A3A3),
+                      color: colors.text2,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -137,11 +138,11 @@ class FailsafeCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   '${l10n.settingsHowItWorks} ↗',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: CharonTokens.fontMono,
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF60A1D9),
+                    color: colors.accentText,
                   ),
                 ),
               ],
@@ -174,6 +175,7 @@ class _SwitchRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -182,13 +184,13 @@ class _SwitchRow extends StatelessWidget {
           width: 32,
           height: 32,
           decoration: BoxDecoration(
-            color: const Color(0xFF262626),
+            color: colors.surface2,
             borderRadius: BorderRadius.circular(9),
           ),
           child: Icon(
             icon,
             size: 18,
-            color: isOn ? const Color(0xFF60A1D9) : const Color(0xFFA3A3A3),
+            color: isOn ? colors.accentText : colors.text2,
           ),
         ),
         const SizedBox(width: 14),
@@ -204,27 +206,27 @@ class _SwitchRow extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFFEDEDED),
+                      color: colors.text,
                     ),
                   ),
                   if (tag != null)
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF262626),
+                        color: colors.surface2,
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Text(
                         tag!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: CharonTokens.fontMono,
                           fontSize: 9,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 0.08,
-                          color: Color(0xFFA3A3A3),
+                          color: colors.text2,
                         ),
                       ),
                     ),
@@ -233,9 +235,9 @@ class _SwitchRow extends StatelessWidget {
               const SizedBox(height: 3),
               Text(
                 desc,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 12,
-                  color: Color(0xFFA3A3A3),
+                  color: colors.text2,
                   height: 1.3,
                 ),
               ),
@@ -245,7 +247,7 @@ class _SwitchRow extends StatelessWidget {
                   Container(
                     width: 6,
                     height: 6,
-                    color: isOn ? const Color(0xFF60A1D9) : const Color(0xFF8A8A8A),
+                    color: isOn ? colors.accentText : colors.text3,
                   ),
                   const SizedBox(width: 8),
                   Expanded(
@@ -254,7 +256,7 @@ class _SwitchRow extends StatelessWidget {
                       style: TextStyle(
                         fontFamily: CharonTokens.fontMono,
                         fontSize: 11,
-                        color: isOn ? const Color(0xFF60A1D9) : const Color(0xFF8A8A8A),
+                        color: isOn ? colors.accentText : colors.text3,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),

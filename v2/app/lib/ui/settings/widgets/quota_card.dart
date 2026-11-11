@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
-import '../../../theme/tokens.dart';
+import '../../../theme/theme.dart';
 
 class QuotaCard extends StatefulWidget {
   const QuotaCard({
@@ -48,6 +48,7 @@ class _QuotaCardState extends State<QuotaCard> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     final srv = widget.controller.activeServer;
     final srvId = srv?.id ?? 'SRV-01';
@@ -63,9 +64,9 @@ class _QuotaCardState extends State<QuotaCard> {
 
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E).withValues(alpha: 0.55),
+        color: colors.surface.withValues(alpha: 0.55),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF333333)),
+        border: Border.all(color: colors.divider),
       ),
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -77,22 +78,22 @@ class _QuotaCardState extends State<QuotaCard> {
             children: [
               Text(
                 '> ${l10n.settingsQuotaTitle(srvId)}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: CharonTokens.fontMono,
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.08,
-                  color: Color(0xFFA3A3A3),
+                  color: colors.text2,
                 ),
               ),
               Text(
                 l10n.settingsQuotaMeta,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: CharonTokens.fontMono,
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.08,
-                  color: Color(0xFF8A8A8A),
+                  color: colors.text3,
                 ),
               ),
             ],
@@ -109,12 +110,12 @@ class _QuotaCardState extends State<QuotaCard> {
                   children: [
                     Text(
                       l10n.settingsQuotaMonthlyCap,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: CharonTokens.fontMono,
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.08,
-                        color: Color(0xFFA3A3A3),
+                        color: colors.text2,
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -122,19 +123,19 @@ class _QuotaCardState extends State<QuotaCard> {
                       height: 38,
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF121212),
+                        color: colors.bg,
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: const Color(0xFF737373)),
+                        border: Border.all(color: colors.controlBorder),
                       ),
                       child: Row(
                         children: [
-                          const Text(
+                          Text(
                             '>',
                             style: TextStyle(
                               fontFamily: CharonTokens.fontMono,
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
-                              color: Color(0xFF60A1D9),
+                              color: colors.accentText,
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -143,11 +144,11 @@ class _QuotaCardState extends State<QuotaCard> {
                               controller: _capCtrl,
                               keyboardType: TextInputType.number,
                               onChanged: (_) => _saveQuota(counts),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: CharonTokens.fontMono,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w700,
-                                color: Color(0xFFEDEDED),
+                                color: colors.text,
                               ),
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
@@ -156,12 +157,12 @@ class _QuotaCardState extends State<QuotaCard> {
                               ),
                             ),
                           ),
-                          const Text(
+                          Text(
                             'GB',
                             style: TextStyle(
                               fontFamily: CharonTokens.fontMono,
                               fontSize: 11,
-                              color: Color(0xFF8A8A8A),
+                              color: colors.text3,
                             ),
                           ),
                         ],
@@ -179,12 +180,12 @@ class _QuotaCardState extends State<QuotaCard> {
                   children: [
                     Text(
                       l10n.settingsQuotaBillingDay,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: CharonTokens.fontMono,
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.08,
-                        color: Color(0xFFA3A3A3),
+                        color: colors.text2,
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -192,19 +193,19 @@ class _QuotaCardState extends State<QuotaCard> {
                       height: 38,
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF121212),
+                        color: colors.bg,
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: const Color(0xFF737373)),
+                        border: Border.all(color: colors.controlBorder),
                       ),
                       child: Row(
                         children: [
-                          const Text(
+                          Text(
                             '>',
                             style: TextStyle(
                               fontFamily: CharonTokens.fontMono,
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
-                              color: Color(0xFF60A1D9),
+                              color: colors.accentText,
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -213,11 +214,11 @@ class _QuotaCardState extends State<QuotaCard> {
                               controller: _dayCtrl,
                               keyboardType: TextInputType.number,
                               onChanged: (_) => _saveQuota(counts),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: CharonTokens.fontMono,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w700,
-                                color: Color(0xFFEDEDED),
+                                color: colors.text,
                               ),
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
@@ -229,10 +230,10 @@ class _QuotaCardState extends State<QuotaCard> {
                           Flexible(
                             child: Text(
                               l10n.settingsQuotaEachMonth,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: CharonTokens.fontMono,
                                 fontSize: 10,
-                                color: Color(0xFF8A8A8A),
+                                color: colors.text3,
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -252,12 +253,12 @@ class _QuotaCardState extends State<QuotaCard> {
                   children: [
                     Text(
                       l10n.settingsQuotaCounts,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: CharonTokens.fontMono,
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.08,
-                        color: Color(0xFFA3A3A3),
+                        color: colors.text2,
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -265,7 +266,7 @@ class _QuotaCardState extends State<QuotaCard> {
                       height: 38,
                       padding: const EdgeInsets.all(2),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF262626),
+                        color: colors.surface2,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
@@ -298,19 +299,19 @@ class _QuotaCardState extends State<QuotaCard> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             decoration: BoxDecoration(
-              color: const Color(0xFF121212),
+              color: colors.bg,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Row(
               children: [
                 Text(
                   l10n.settingsQuotaPreview,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: CharonTokens.fontMono,
                     fontSize: 9,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.08,
-                    color: Color(0xFF737373),
+                    color: colors.controlBorder,
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -324,8 +325,8 @@ class _QuotaCardState extends State<QuotaCard> {
                           margin: const EdgeInsets.symmetric(horizontal: 1),
                           decoration: BoxDecoration(
                             color: isFilled
-                                ? const Color(0xFF60A1D9)
-                                : const Color(0xFF29333C),
+                                ? colors.accentText
+                                : colors.connectedSoft,
                             borderRadius: BorderRadius.circular(1),
                           ),
                         ),
@@ -337,18 +338,18 @@ class _QuotaCardState extends State<QuotaCard> {
                 Text.rich(
                   TextSpan(
                     text: '${usedGb.toStringAsFixed(1)} ',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: CharonTokens.fontMono,
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFFEDEDED),
+                      color: colors.text,
                     ),
                     children: [
                       TextSpan(
                         text: '/ $capGb GB',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.normal,
-                          color: Color(0xFFA3A3A3),
+                          color: colors.text2,
                         ),
                       ),
                     ],
@@ -362,17 +363,17 @@ class _QuotaCardState extends State<QuotaCard> {
           // Notes
           Row(
             children: [
-              Container(width: 6, height: 6, color: const Color(0xFF8A8A8A)),
+              Container(width: 6, height: 6, color: colors.text3),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   isOutOnly
                       ? '> ${l10n.settingsQuotaNoteOut}'
                       : '> ${l10n.settingsQuotaNoteBoth}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: CharonTokens.fontMono,
                     fontSize: 11,
-                    color: Color(0xFF8A8A8A),
+                    color: colors.text3,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -382,15 +383,15 @@ class _QuotaCardState extends State<QuotaCard> {
           const SizedBox(height: 4),
           Row(
             children: [
-              Container(width: 6, height: 6, color: const Color(0xFF8A8A8A)),
+              Container(width: 6, height: 6, color: colors.text3),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   '> ${l10n.settingsQuotaCountedDevice}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: CharonTokens.fontMono,
                     fontSize: 11,
-                    color: Color(0xFF8A8A8A),
+                    color: colors.text3,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -416,13 +417,14 @@ class _QuotaSegmentBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFFEDEDED) : Colors.transparent,
+          color: isSelected ? colors.text : Colors.transparent,
           borderRadius: BorderRadius.circular(6),
         ),
         child: Text(
@@ -432,7 +434,7 @@ class _QuotaSegmentBtn extends StatelessWidget {
             fontSize: 9,
             fontWeight: FontWeight.w700,
             letterSpacing: 0.06,
-            color: isSelected ? const Color(0xFF121212) : const Color(0xFFA3A3A3),
+            color: isSelected ? colors.bg : colors.text2,
           ),
         ),
       ),

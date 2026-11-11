@@ -6,6 +6,7 @@ import 'support/fonts.dart';
 import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/main.dart';
 import 'package:charon/state/home_controller.dart';
+import 'package:charon/theme/theme.dart';
 import 'package:charon/ui/settings/settings_screen.dart';
 import 'package:charon/ui/settings/widgets/charon_switch.dart';
 
@@ -216,6 +217,34 @@ void main() {
 
       expect(controller.hasServers, isFalse);
       expect(controller.config!.servers, isEmpty);
+    });
+
+    testWidgets('light theme uses the light tokens on every card', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+
+      final controller = HomeController(
+        initialConfig: Config(
+          chosenServerId: 'SRV-01',
+          servers: [Server(id: 'SRV-01', quota: QuotaPlan(capGb: 2000, billingDay: 1))],
+        ),
+      );
+      await tester.pumpWidget(CharonApp(controller: controller, themeData: CharonTheme.light));
+      controller.setTab(4);
+      await tester.pumpAndSettle();
+
+      // Titles of the Failsafe card and the Settings header read in the light ink,
+      // and nothing in the tree still draws the dark card background.
+      for (final t in ['Kill switch', 'Settings']) {
+        expect(tester.widget<Text>(find.text(t)).style!.color, CharonColors.light.text, reason: t);
+      }
+      final darkCards = tester.widgetList<Container>(find.byType(Container)).where((c) {
+        final d = c.decoration;
+        return d is BoxDecoration && (d.color == const Color(0xFF1E1E1E) || d.color == const Color(0x8C1E1E1E));
+      });
+      expect(darkCards, isEmpty);
+      expect(tester.takeException(), isNull);
     });
 
     testWidgets('renders Indonesian localization correctly without overflow', (tester) async {

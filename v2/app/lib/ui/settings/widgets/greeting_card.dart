@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
-import '../../../theme/tokens.dart';
 import 'charon_switch.dart';
+import '../../../theme/theme.dart';
 
 class GreetingCard extends StatefulWidget {
   const GreetingCard({
@@ -37,6 +37,7 @@ class _GreetingCardState extends State<GreetingCard> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     final detectCity = widget.controller.detectCity;
     final name = widget.controller.greetingName;
@@ -46,9 +47,9 @@ class _GreetingCardState extends State<GreetingCard> {
     return Container(
       width: 300,
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E).withValues(alpha: 0.55),
+        color: colors.surface.withValues(alpha: 0.55),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF333333)),
+        border: Border.all(color: colors.divider),
       ),
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -57,12 +58,12 @@ class _GreetingCardState extends State<GreetingCard> {
           // Header
           Text(
             '> ${l10n.settingsGreetingTitle}',
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: CharonTokens.fontMono,
               fontSize: 10,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.08,
-              color: Color(0xFFA3A3A3),
+              color: colors.text2,
             ),
           ),
           const SizedBox(height: 10),
@@ -70,12 +71,12 @@ class _GreetingCardState extends State<GreetingCard> {
           // Name Field
           Text(
             l10n.settingsGreetingNameLabel,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: CharonTokens.fontMono,
               fontSize: 10,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.08,
-              color: Color(0xFFA3A3A3),
+              color: colors.text2,
             ),
           ),
           const SizedBox(height: 6),
@@ -83,19 +84,19 @@ class _GreetingCardState extends State<GreetingCard> {
             height: 38,
             padding: const EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
-              color: const Color(0xFF121212),
+              color: colors.bg,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color(0xFF737373)),
+              border: Border.all(color: colors.controlBorder),
             ),
             child: Row(
               children: [
-                const Text(
+                Text(
                   '>',
                   style: TextStyle(
                     fontFamily: CharonTokens.fontMono,
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF60A1D9),
+                    color: colors.accentText,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -103,10 +104,10 @@ class _GreetingCardState extends State<GreetingCard> {
                   child: TextField(
                     controller: _nameCtrl,
                     onChanged: (val) => widget.controller.setGreetingName(val.trim()),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFFEDEDED),
+                      color: colors.text,
                     ),
                     decoration: const InputDecoration(
                       border: InputBorder.none,
@@ -130,10 +131,10 @@ class _GreetingCardState extends State<GreetingCard> {
                   children: [
                     Text(
                       l10n.settingsGreetingDetectCity,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFFEDEDED),
+                        color: colors.text,
                       ),
                     ),
                   ],
@@ -161,12 +162,12 @@ class _GreetingCardState extends State<GreetingCard> {
                       children: [
                         Text(
                           l10n.settingsGreetingCity,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: CharonTokens.fontMono,
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.08,
-                            color: Color(0xFFA3A3A3),
+                            color: colors.text2,
                           ),
                         ),
                         if (detectCity) ...[
@@ -174,16 +175,16 @@ class _GreetingCardState extends State<GreetingCard> {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF29333C),
+                              color: colors.connectedSoft,
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Text(
                               l10n.settingsGreetingAutoBadge,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: CharonTokens.fontMono,
                                 fontSize: 9,
                                 fontWeight: FontWeight.w700,
-                                color: Color(0xFF60A1D9),
+                                color: colors.accentText,
                               ),
                             ),
                           ),
@@ -195,10 +196,10 @@ class _GreetingCardState extends State<GreetingCard> {
                       height: 38,
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
-                        color: detectCity ? const Color(0xFF1A1A1A) : const Color(0xFF121212),
+                        color: detectCity ? colors.surface : colors.bg,
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: detectCity ? const Color(0xFF333333) : const Color(0xFF737373),
+                          color: detectCity ? colors.divider : colors.controlBorder,
                         ),
                       ),
                       child: Row(
@@ -209,7 +210,7 @@ class _GreetingCardState extends State<GreetingCard> {
                               fontFamily: CharonTokens.fontMono,
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
-                              color: detectCity ? const Color(0xFF4A4A4A) : const Color(0xFF60A1D9),
+                              color: detectCity ? colors.controlBorder.withValues(alpha: 0.6) : colors.accentText,
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -220,7 +221,7 @@ class _GreetingCardState extends State<GreetingCard> {
                               onChanged: (val) => widget.controller.setCity(val.trim()),
                               style: TextStyle(
                                 fontSize: 13,
-                                color: detectCity ? const Color(0xFF8A8A8A) : const Color(0xFFEDEDED),
+                                color: detectCity ? colors.text3 : colors.text,
                               ),
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
@@ -245,12 +246,12 @@ class _GreetingCardState extends State<GreetingCard> {
                   children: [
                     Text(
                       l10n.settingsGreetingCountry,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: CharonTokens.fontMono,
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.08,
-                        color: Color(0xFFA3A3A3),
+                        color: colors.text2,
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -258,9 +259,9 @@ class _GreetingCardState extends State<GreetingCard> {
                       height: 38,
                       padding: const EdgeInsets.symmetric(horizontal: 6),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF1A1A1A),
+                        color: colors.surface,
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: const Color(0xFF333333)),
+                        border: Border.all(color: colors.divider),
                       ),
                       alignment: Alignment.center,
                       child: Row(
@@ -270,11 +271,11 @@ class _GreetingCardState extends State<GreetingCard> {
                           const SizedBox(width: 4),
                           Text(
                             country,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: CharonTokens.fontMono,
                               fontSize: 11,
                               fontWeight: FontWeight.w700,
-                              color: Color(0xFFEDEDED),
+                              color: colors.text,
                             ),
                           ),
                         ],
@@ -291,29 +292,29 @@ class _GreetingCardState extends State<GreetingCard> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             decoration: BoxDecoration(
-              color: const Color(0xFF121212),
+              color: colors.bg,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
               children: [
                 Text(
                   l10n.settingsGreetingOnHome,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: CharonTokens.fontMono,
                     fontSize: 9,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.08,
-                    color: Color(0xFF737373),
+                    color: colors.controlBorder,
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     'Good evening, $name! · in $city',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFFEDEDED),
+                      color: colors.text,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -326,10 +327,10 @@ class _GreetingCardState extends State<GreetingCard> {
           // Privacy note
           Text(
             '> ${l10n.settingsGreetingNote}',
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: CharonTokens.fontMono,
               fontSize: 10,
-              color: Color(0xFF8A8A8A),
+              color: colors.text3,
               height: 1.3,
             ),
           ),
