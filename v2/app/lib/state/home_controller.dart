@@ -163,6 +163,7 @@ class HomeController extends ChangeNotifier {
     bool? killSwitch,
     bool? allowLocalNetwork,
     bool? launchAtStartup,
+    bool keepSetupOpen = false,
   }) async {
     if (server != null) {
       final exists = _config?.servers.any((s) => s.id == server.id) ?? false;
@@ -178,6 +179,11 @@ class HomeController extends ChangeNotifier {
     }
     if (launchAtStartup != null) {
       setLaunchAtStartup(launchAtStartup);
+    }
+    if (keepSetupOpen) {
+      // The setup applies the choices before the first connect and finishes after it.
+      notifyListeners();
+      return;
     }
     _isFirstRun = false;
     _activeTabIndex = 0;

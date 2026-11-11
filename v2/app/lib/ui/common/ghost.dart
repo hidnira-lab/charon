@@ -7,6 +7,15 @@ enum GhostEyes {
   /// Two flat lines, asleep (service stopped).
   sleep,
 
+  /// A short line each, concentrating (setup, verifying).
+  focused,
+
+  /// A smile (setup done, welcome).
+  happy,
+
+  /// Raised and wide, unsure (setup stuck).
+  worried,
+
   /// Waking up, two short bars (starting, installing).
   half,
 
@@ -53,6 +62,12 @@ const _body32 = [
 // Eye pixels as (x, y), from the Service board.
 const _eyes = {
   GhostEyes.sleep: [(12, 17), (13, 17), (14, 17), (17, 17), (18, 17), (19, 17)],
+  GhostEyes.focused: [(12, 16), (13, 16), (14, 16), (17, 16), (18, 16), (19, 16)],
+  GhostEyes.happy: [(13, 16), (12, 17), (14, 17), (18, 16), (17, 17), (19, 17)],
+  GhostEyes.worried: [
+    (12, 15), (13, 14), (14, 14), (19, 15), (18, 14), (17, 14), (13, 17), (14, 17), //
+    (13, 18), (14, 18), (17, 17), (18, 17), (17, 18), (18, 18),
+  ],
   GhostEyes.half: [(13, 16), (14, 16), (13, 17), (14, 17), (17, 16), (18, 16), (17, 17), (18, 17)],
   GhostEyes.open: [
     (13, 15), (14, 15), (13, 16), (14, 16), (13, 17), (14, 17), //
@@ -154,3 +169,40 @@ const _g27 = [
 
 /// The colours of the living logo: body, belly and eyes.
 const logoColors = {'W': Color(0xFFFFFFFF), 'G': Color(0xFFE1E1E1), 'E': Color(0xFF1E1E1E)};
+
+// The 16 x 16 mark of the title bar and the small places (the boards' BODY16).
+const _mark16 = [
+  '................',
+  '.......WW.......',
+  '.......WW.......',
+  '.......WW.......',
+  '......WWWW......',
+  '......WWWW......',
+  '.....WEWWEW.....',
+  '....WWEWWEWW....',
+  '..WWWWWWWWWWWW..',
+  '.....WWWWWW.....',
+  '......GGGG......',
+  '......GGGG......',
+  '.......GG.......',
+  '.......GG.......',
+  '.......GG.......',
+  '................',
+];
+
+/// The small ghost at the left of the title bar. On a light surface it gets the
+/// dark one pixel outline.
+class LogoMark extends StatelessWidget {
+  const LogoMark({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final light = Theme.of(context).brightness == Brightness.light;
+    return PixelSprite(
+      rows: _mark16,
+      palette: logoColors,
+      outline: light ? const Color(0xFF2A2A2A) : null,
+    );
+  }
+}
+

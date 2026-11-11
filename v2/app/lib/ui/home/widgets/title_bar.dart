@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../theme/theme.dart';
+import '../../common/ghost.dart';
+import '../../common/glass_card.dart';
 
 /// Desktop window title bar matching HomeDesktop board (36 px high).
 class TitleBar extends StatelessWidget {
@@ -8,10 +10,14 @@ class TitleBar extends StatelessWidget {
     super.key,
     this.onMinimize,
     this.onClose,
+    this.tag,
   });
 
   final VoidCallback? onMinimize;
   final VoidCallback? onClose;
+
+  /// A small mono word after the name, "SETUP" on the setup screen.
+  final String? tag;
 
   @override
   Widget build(BuildContext context) {
@@ -28,25 +34,7 @@ class TitleBar extends StatelessWidget {
       padding: const EdgeInsets.only(left: 12.0),
       child: Row(
         children: [
-          // Small ghost / logo mark
-          Container(
-            width: 16.0,
-            height: 16.0,
-            decoration: BoxDecoration(
-              color: colors.accent,
-              borderRadius: BorderRadius.circular(4.0),
-            ),
-            child: Center(
-              child: Container(
-                width: 6.0,
-                height: 6.0,
-                decoration: BoxDecoration(
-                  color: colors.onAccent,
-                  borderRadius: BorderRadius.circular(1.0),
-                ),
-              ),
-            ),
-          ),
+          const LogoMark(),
           const SizedBox(width: CharonSpacing.s2),
           Text(
             'Charon',
@@ -55,6 +43,10 @@ class TitleBar extends StatelessWidget {
               color: colors.text,
             ),
           ),
+          if (tag != null) ...[
+            const SizedBox(width: 6),
+            Text(tag!, style: monoStyle(colors.text3, 10, bold: true, em: 0.08)),
+          ],
           const Spacer(),
           // Window action buttons
           _WindowButton(
