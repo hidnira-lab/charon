@@ -41,7 +41,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String stateConnectedLine2(String ip) {
-    return 'egress $ip, matches server';
+    return 'egress $ip · matches server';
   }
 
   @override
@@ -52,7 +52,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String stateVerifyingLine2(String duration) {
-    return 'testing a real Reality round trip: $duration';
+    return 'testing a real Reality round trip · $duration';
   }
 
   @override
@@ -72,7 +72,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get stateBlockedBadge => 'HELD · ALL SERVERS FAILED';
 
   @override
-  String get stateBlockedLine2 => 'no server answered, kill switch holding';
+  String get stateBlockedLine2 => 'no server answered · kill switch holding';
 
   @override
   String get stateNoServerTitle => 'No server yet';
@@ -93,7 +93,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String stateReconnectingLine2(String server, int seconds) {
-    return '$server not answering, next try in $seconds s';
+    return '$server not answering · next try in $seconds s';
   }
 
   @override
@@ -106,7 +106,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String stateReconnectingHeldLine2(int attempt, int maxAttempts, int seconds) {
-    return 'try $attempt of $maxAttempts, next in $seconds s, traffic held';
+    return 'try $attempt of $maxAttempts · next in $seconds s · traffic held';
   }
 
   @override
@@ -119,7 +119,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String stateSwitchingLine2(String previousServer, String server) {
-    return '$previousServer failed 5 tries, checking $server';
+    return '$previousServer failed 5 tries · checking $server';
   }
 
   @override
@@ -135,7 +135,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String stateOnBackupLine2(String ip, String server) {
-    return 'egress $ip, matches $server';
+    return 'egress $ip · matches $server';
   }
 
   @override
@@ -154,7 +154,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stateTunnelLostLine2 =>
-      'traffic goes direct, auto reconnect is off';
+      'traffic goes direct · auto reconnect is off';
 
   @override
   String get stateWakingUpTitle => 'Waking up';
@@ -175,7 +175,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stateCheckingNetworkLine2 =>
-      'network changed, checking connection';
+      'network changed · checking connection';
 
   @override
   String get stateDisconnectingTitle => 'Disconnecting';
@@ -1515,18 +1515,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dialogQuitTunnelStops => 'TUNNEL STOPS';
 
   @override
-  String get dialogReleaseTitle => 'Disconnect and release?';
-
-  @override
-  String get dialogReleaseSubtitle =>
-      'Traffic will go direct until you connect again.';
+  String get dialogReleaseTitle => 'Release traffic?';
 
   @override
   String get dialogReleaseWarning =>
-      'The kill switch protection is released immediately. All system network traffic will bypass the tunnel and go through your ISP unencrypted.';
+      'Traffic will go direct until you connect again. The kill switch stays armed for the next connect.';
 
   @override
-  String get dialogReleaseConfirm => 'Disconnect & Release';
+  String get dialogReleaseConfirm => 'Disconnect and release';
 
   @override
   String get dialogConflictTitle => 'The server copy is newer';
@@ -1738,4 +1734,589 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get syncServerKeyHelper =>
       'Shown once when you start your sync server for the first time.';
+
+  @override
+  String get homeReadLatency => 'LATENCY';
+
+  @override
+  String get homeReadDown => 'DOWN';
+
+  @override
+  String get homeReadUp => 'UP';
+
+  @override
+  String get homeReadSession => 'SESSION';
+
+  @override
+  String get homeValueWait => 'wait';
+
+  @override
+  String get homeValueOff => 'off';
+
+  @override
+  String get homeValueLost => 'lost';
+
+  @override
+  String get homeValueDirect => 'direct';
+
+  @override
+  String get homeNoteLatencyLive => 'tcp connect · every 5 s';
+
+  @override
+  String homeNoteLatencyServer(String server) {
+    return 'tcp connect · $server';
+  }
+
+  @override
+  String get homeNoteLast60 => 'last 60 s';
+
+  @override
+  String get homeNoteMeasuredAfterVerify => 'measured after verify';
+
+  @override
+  String get homeNoteNoTunnelYet => 'no tunnel yet';
+
+  @override
+  String get homeNoteConnectingFor => 'connecting for';
+
+  @override
+  String get homeNoteNoServerYet => 'no server yet';
+
+  @override
+  String get homeNoteNoSessionsYet => 'no sessions yet';
+
+  @override
+  String get homeNoteNoTunnel => 'no tunnel';
+
+  @override
+  String get homeNoteLastSessionNotStored => 'last session not stored';
+
+  @override
+  String homeNoteNoReply(String server) {
+    return 'no reply from $server';
+  }
+
+  @override
+  String get homeNoteNotThroughCharon => 'not through Charon';
+
+  @override
+  String get homeNoteReconnectingFor => 'reconnecting for';
+
+  @override
+  String get homeNoteWithoutTunnel => 'without a tunnel';
+
+  @override
+  String get homeNoteTunnelDown => 'tunnel down';
+
+  @override
+  String get homeNoteHeldByKillSwitch => 'held by kill switch';
+
+  @override
+  String get homeNoteTrafficHeldFor => 'traffic held for';
+
+  @override
+  String get homeNoteTunnelStopped => 'tunnel stopped';
+
+  @override
+  String get homeNoteAutoReconnectOff => 'auto reconnect is off';
+
+  @override
+  String get homeNoteNothingSent => 'nothing was sent';
+
+  @override
+  String get homeNoteWakingUpFor => 'waking up for';
+
+  @override
+  String homeNoteConnectedSince(String time) {
+    return 'connected since $time';
+  }
+
+  @override
+  String homeNoteOnServerSince(String server, String time) {
+    return 'on $server since $time';
+  }
+
+  @override
+  String get homeNodeTitle => 'ACTIVE NODE';
+
+  @override
+  String get homeNodeLinkServers => 'Servers →';
+
+  @override
+  String get homeNodeLinkAdd => 'Add one →';
+
+  @override
+  String get homeNodeNoServerTitle => 'No server yet';
+
+  @override
+  String get homeNodeNoServerSub => '?? · unknown until you add one';
+
+  @override
+  String get homeNodeSwitchDisconnect => 'to switch nodes, disconnect first';
+
+  @override
+  String get homeNodeSwitchCancel => 'to switch nodes, cancel first';
+
+  @override
+  String get homeNodeTapConnect => 'tap Connect to use this node';
+
+  @override
+  String get homeNodeNothingSent => 'nothing was sent through the tunnel';
+
+  @override
+  String get homeNodePickOrRelease => 'pick another server, or release';
+
+  @override
+  String homeNodeAfterFailed(int count, String server) {
+    return 'after $count failed tries, Charon moves to $server';
+  }
+
+  @override
+  String homeNodeFailoverPicked(int position) {
+    return '#$position in failover order · picked for you';
+  }
+
+  @override
+  String homeNodeYouPicked(String server) {
+    return 'you picked $server';
+  }
+
+  @override
+  String homeNodeStaysOnBackup(String server) {
+    return 'stays on $server until you switch back';
+  }
+
+  @override
+  String get homeSceneMorning => 'MORNING';
+
+  @override
+  String get homeSceneDay => 'DAY';
+
+  @override
+  String get homeSceneDusk => 'DUSK';
+
+  @override
+  String get homeSceneNight => 'NIGHT';
+
+  @override
+  String homeLocalTime(String scene, String time) {
+    return '$scene · LOCAL $time';
+  }
+
+  @override
+  String homeGreetMorning(String name) {
+    return 'Good morning, $name!';
+  }
+
+  @override
+  String homeGreetAfternoon(String name) {
+    return 'Good afternoon, $name!';
+  }
+
+  @override
+  String homeGreetEvening(String name) {
+    return 'Good evening, $name!';
+  }
+
+  @override
+  String homeGreetNight(String name) {
+    return 'Good night, $name!';
+  }
+
+  @override
+  String homeLocation(String city) {
+    return 'You\'re now in $city';
+  }
+
+  @override
+  String homeCrossCrosses(String country) {
+    return 'your traffic crosses to $country';
+  }
+
+  @override
+  String homeCrossGettingReady(String country) {
+    return 'getting ready to cross to $country';
+  }
+
+  @override
+  String get homeCrossStays => 'your traffic stays on this side';
+
+  @override
+  String get homeCrossWaitingDirect =>
+      'the ferry is waiting · traffic goes direct for now';
+
+  @override
+  String get homeCrossWaitingHeld =>
+      'the ferry is waiting · traffic is held here';
+
+  @override
+  String homeCrossChanging(String country) {
+    return 'changing ferries · heading for $country';
+  }
+
+  @override
+  String get homeCrossNeverLeft => 'the ferry never left · traffic stays here';
+
+  @override
+  String get homeCrossHeldChoose => 'traffic is held here until you choose';
+
+  @override
+  String get homeCrossNoServer =>
+      'nothing to cross to yet · add a server first';
+
+  @override
+  String get homeCountrySG => 'Singapore';
+
+  @override
+  String get homeCountryJP => 'Japan';
+
+  @override
+  String get homeCountryKR => 'South Korea';
+
+  @override
+  String get homeCountryFI => 'Finland';
+
+  @override
+  String get homeCountryID => 'Indonesia';
+
+  @override
+  String get homeCountryCN => 'China';
+
+  @override
+  String get actionRetry => 'Retry';
+
+  @override
+  String get homeTapGhost => 'or tap the ghost';
+
+  @override
+  String get homeTapOpensServers => 'opens Servers';
+
+  @override
+  String get homeHeroNoServerHint => 'paste config · import link · restore';
+
+  @override
+  String get homeFailsafeTitle => 'FAILSAFE';
+
+  @override
+  String get homeFailsafeLink => 'Settings →';
+
+  @override
+  String get homeKillSwitch => 'Kill switch';
+
+  @override
+  String get homeAutoReconnect => 'Auto reconnect';
+
+  @override
+  String get homeChipOn => 'ON';
+
+  @override
+  String get homeChipOff => 'OFF';
+
+  @override
+  String get homeChipHolding => 'HOLDING';
+
+  @override
+  String homeChipTry(int attempt, int max) {
+    return 'TRY $attempt/$max';
+  }
+
+  @override
+  String get homeChipNext => 'NEXT';
+
+  @override
+  String homeArmed(int armed) {
+    return '$armed of 2 armed';
+  }
+
+  @override
+  String homeArmedDirect(int armed) {
+    return '$armed of 2 armed · traffic goes direct';
+  }
+
+  @override
+  String homeArmedHolding(int armed) {
+    return '$armed of 2 armed · kill switch holding';
+  }
+
+  @override
+  String homeArmedRetry(int armed, int attempt, int max) {
+    return '$armed of 2 armed · retry $attempt of $max';
+  }
+
+  @override
+  String homeArmedTriesFailed(int tries) {
+    return '$tries of $tries tries failed · next server';
+  }
+
+  @override
+  String homeArmedFailedOver(int armed, String time) {
+    return '$armed of 2 armed · failed over $time';
+  }
+
+  @override
+  String get homeQuotaTitle => 'THIS MONTH';
+
+  @override
+  String get homeQuotaLink => 'Telemetry →';
+
+  @override
+  String homeQuotaOf(int cap) {
+    return 'of $cap GB';
+  }
+
+  @override
+  String get homeQuotaMeter => 'Monthly traffic';
+
+  @override
+  String homeQuotaNote(String date, int block) {
+    return 'resets $date · 1 block = $block GB';
+  }
+
+  @override
+  String homeQuotaBlock(int block) {
+    return '1 block = $block GB';
+  }
+
+  @override
+  String homeQuotaNoteAmber(String date) {
+    return 'amber from 80% · resets $date';
+  }
+
+  @override
+  String homeQuotaNoteCap(String date) {
+    return 'cap reached · resets $date';
+  }
+
+  @override
+  String get homeQuotaNoCap => 'no cap set';
+
+  @override
+  String get homeQuotaCounted =>
+      'counted on this device, even when this window is closed';
+
+  @override
+  String get homeQuotaChipCap => 'CAP';
+
+  @override
+  String get homeQuotaNotCounting => 'Not counting yet';
+
+  @override
+  String get homeQuotaStartsAfter => 'starts after the first connect';
+
+  @override
+  String get homeQuotaCapFromPlan => 'the cap comes from your VPS plan';
+
+  @override
+  String get homeBannerBlockedTag => 'TRAFFIC HELD · ALL SERVERS FAILED';
+
+  @override
+  String homeBannerHeldTag(int attempt, int max) {
+    return 'TRAFFIC HELD WHILE CHARON RETRIES · TRY $attempt OF $max';
+  }
+
+  @override
+  String homeBannerHeldText(String server, String next) {
+    return '$server stopped answering. Charon retries every 5 s and holds your traffic meanwhile, then moves to $next.';
+  }
+
+  @override
+  String homeBannerHeldTextLast(String server) {
+    return '$server stopped answering. Charon retries every 5 s and holds your traffic meanwhile.';
+  }
+
+  @override
+  String homeBannerCapTag(String server) {
+    return 'CRITICAL · $server CAP REACHED';
+  }
+
+  @override
+  String homeBannerCapText(String used) {
+    return '$used GB used this month. Charon keeps the tunnel up, but your provider may slow, stop or bill extra traffic from here.';
+  }
+
+  @override
+  String homeBannerReachTag(String server) {
+    return 'COULD NOT REACH · $server';
+  }
+
+  @override
+  String homeBannerReconnectTag(int attempt, int max) {
+    return 'AUTO RECONNECT · TRY $attempt OF $max';
+  }
+
+  @override
+  String homeBannerReconnectText(String server, String next) {
+    return '$server stopped answering. Charon retries every 5 s, then moves to $next. The kill switch is off, so traffic goes direct meanwhile.';
+  }
+
+  @override
+  String homeBannerReconnectTextLast(String server) {
+    return '$server stopped answering. Charon retries every 5 s. The kill switch is off, so traffic goes direct meanwhile.';
+  }
+
+  @override
+  String homeBannerFailoverTag(String server) {
+    return 'FAILOVER · $server DOWN';
+  }
+
+  @override
+  String homeBannerFailoverText(
+    String server,
+    int tries,
+    int seconds,
+    String next,
+  ) {
+    return '$server failed $tries tries in $seconds s. Charon checks $next with a real round trip before it says connected.';
+  }
+
+  @override
+  String get homeBannerTunnelLostTag => 'TUNNEL LOST · AUTO RECONNECT OFF';
+
+  @override
+  String homeBannerQuotaTag(int percent, String server) {
+    return 'QUOTA · $percent% OF $server';
+  }
+
+  @override
+  String homeBannerQuotaText(String used, int cap, String date) {
+    return '$used of $cap GB used, resets $date. Past the cap your provider may slow, stop or bill extra traffic.';
+  }
+
+  @override
+  String homeBannerQuotaTextNoDate(String used, int cap) {
+    return '$used of $cap GB used. Past the cap your provider may slow, stop or bill extra traffic.';
+  }
+
+  @override
+  String homeBannerBackupTag(String server) {
+    return 'ON BACKUP · $server';
+  }
+
+  @override
+  String homeBannerBackupText(String primary, String time, String server) {
+    return '$primary stopped answering at $time. Charon stays on $server and won\'t switch back by itself.';
+  }
+
+  @override
+  String homeActionMoveTo(String server) {
+    return 'Move to $server';
+  }
+
+  @override
+  String homeActionTry(String server) {
+    return 'Try $server';
+  }
+
+  @override
+  String get homeActionSeeUsage => 'See usage';
+
+  @override
+  String get homeActionTurnOnAutoReconnect => 'Turn on auto reconnect';
+
+  @override
+  String get homeActionEditServer => 'Edit server';
+
+  @override
+  String get homeActionDnsSettings => 'DNS settings';
+
+  @override
+  String get homeHelpLink => 'How to fix this';
+
+  @override
+  String get homeHelpWebsite => 'WEBSITE ↗';
+
+  @override
+  String homeCauseNoAnswer(String server) {
+    return '$server did not answer.';
+  }
+
+  @override
+  String get homeTodoNoAnswer =>
+      'Check that the server is running, then retry.';
+
+  @override
+  String get homeCauseHandshake =>
+      'The server answered, but the Reality handshake failed.';
+
+  @override
+  String get homeTodoHandshake =>
+      'The public key or SNI may not match. Check the server, then edit it here.';
+
+  @override
+  String homeCauseEgress(String server) {
+    return 'Traffic came out somewhere other than $server.';
+  }
+
+  @override
+  String get homeTodoEgress =>
+      'Charon will not say connected until the exit matches the server.';
+
+  @override
+  String get homeCauseDns => 'DNS is not going through the tunnel.';
+
+  @override
+  String get homeTodoDns =>
+      'Charon will not say connected. Check the DNS setting, then retry.';
+
+  @override
+  String get homeCauseAdapter => 'Charon could not create its network adapter.';
+
+  @override
+  String get homeTodoAdapter =>
+      'Restart the Charon service, or repair it with the installer, then retry.';
+
+  @override
+  String get homeCausePort => 'Another program is using the port Charon needs.';
+
+  @override
+  String get homeTodoPort =>
+      'Close that program or restart your PC, then retry.';
+
+  @override
+  String homeCauseConfig(String server) {
+    return 'Xray rejected the config of $server, so Charon went back to the previous core.';
+  }
+
+  @override
+  String get homeTodoConfig =>
+      'Retry on the previous core, or edit the server.';
+
+  @override
+  String get androidAnotherVpnTitle => 'Another VPN took over';
+
+  @override
+  String get dialogReleaseKicker => 'RELEASE';
+
+  @override
+  String get dialogEscFoot => 'Esc cancels · focus on Cancel';
+
+  @override
+  String get homeSheetKicker => 'CHOOSE ANOTHER SERVER';
+
+  @override
+  String get homeSheetTitle => 'Pick a server to try';
+
+  @override
+  String homeSheetBody(String server, int tries) {
+    return '$server did not answer $tries tries. Charon starts fresh on the one you pick, and it stays your choice.';
+  }
+
+  @override
+  String homeSheetMetaFailed(String cc, String address) {
+    return '$cc · $address · did not answer';
+  }
+
+  @override
+  String homeSheetMetaOrder(String cc, String address, int position) {
+    return '$cc · $address · #$position in failover order';
+  }
+
+  @override
+  String get homeSheetTagTry => 'TRY';
+
+  @override
+  String get homeSheetTagFailed => 'FAILED';
+
+  @override
+  String get homeSheetFoot => 'the server list unlocks while traffic is held';
 }

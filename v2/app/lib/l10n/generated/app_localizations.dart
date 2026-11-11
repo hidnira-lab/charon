@@ -164,7 +164,7 @@ abstract class AppLocalizations {
   /// Subtitle showing matched egress IP.
   ///
   /// In en, this message translates to:
-  /// **'egress {ip}, matches server'**
+  /// **'egress {ip} · matches server'**
   String stateConnectedLine2(String ip);
 
   /// Title while verifying Reality handshake.
@@ -182,7 +182,7 @@ abstract class AppLocalizations {
   /// Subtitle during verification.
   ///
   /// In en, this message translates to:
-  /// **'testing a real Reality round trip: {duration}'**
+  /// **'testing a real Reality round trip · {duration}'**
   String stateVerifyingLine2(String duration);
 
   /// Title when disconnected.
@@ -218,7 +218,7 @@ abstract class AppLocalizations {
   /// Subtitle when kill switch is holding traffic.
   ///
   /// In en, this message translates to:
-  /// **'no server answered, kill switch holding'**
+  /// **'no server answered · kill switch holding'**
   String get stateBlockedLine2;
 
   /// Title when no server is configured.
@@ -254,7 +254,7 @@ abstract class AppLocalizations {
   /// Subtitle showing countdown to next retry.
   ///
   /// In en, this message translates to:
-  /// **'{server} not answering, next try in {seconds} s'**
+  /// **'{server} not answering · next try in {seconds} s'**
   String stateReconnectingLine2(String server, int seconds);
 
   /// Title during auto reconnect with kill switch holding.
@@ -272,7 +272,7 @@ abstract class AppLocalizations {
   /// Subtitle showing countdown while traffic is held.
   ///
   /// In en, this message translates to:
-  /// **'try {attempt} of {maxAttempts}, next in {seconds} s, traffic held'**
+  /// **'try {attempt} of {maxAttempts} · next in {seconds} s · traffic held'**
   String stateReconnectingHeldLine2(int attempt, int maxAttempts, int seconds);
 
   /// Title when failing over to next server.
@@ -290,7 +290,7 @@ abstract class AppLocalizations {
   /// Subtitle during failover.
   ///
   /// In en, this message translates to:
-  /// **'{previousServer} failed 5 tries, checking {server}'**
+  /// **'{previousServer} failed 5 tries · checking {server}'**
   String stateSwitchingLine2(String previousServer, String server);
 
   /// Subtitle while moving to a server the user picked (no server failed).
@@ -314,7 +314,7 @@ abstract class AppLocalizations {
   /// Subtitle when on backup server.
   ///
   /// In en, this message translates to:
-  /// **'egress {ip}, matches {server}'**
+  /// **'egress {ip} · matches {server}'**
   String stateOnBackupLine2(String ip, String server);
 
   /// Title when first connect attempt fails.
@@ -344,7 +344,7 @@ abstract class AppLocalizations {
   /// Subtitle when tunnel is lost.
   ///
   /// In en, this message translates to:
-  /// **'traffic goes direct, auto reconnect is off'**
+  /// **'traffic goes direct · auto reconnect is off'**
   String get stateTunnelLostLine2;
 
   /// Title when waking from sleep.
@@ -380,7 +380,7 @@ abstract class AppLocalizations {
   /// Subtitle when network changes.
   ///
   /// In en, this message translates to:
-  /// **'network changed, checking connection'**
+  /// **'network changed · checking connection'**
   String get stateCheckingNetworkLine2;
 
   /// Title while disconnecting.
@@ -2762,25 +2762,19 @@ abstract class AppLocalizations {
   /// Release confirmation title.
   ///
   /// In en, this message translates to:
-  /// **'Disconnect and release?'**
+  /// **'Release traffic?'**
   String get dialogReleaseTitle;
-
-  /// Release confirmation subtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Traffic will go direct until you connect again.'**
-  String get dialogReleaseSubtitle;
 
   /// Release confirmation warning details.
   ///
   /// In en, this message translates to:
-  /// **'The kill switch protection is released immediately. All system network traffic will bypass the tunnel and go through your ISP unencrypted.'**
+  /// **'Traffic will go direct until you connect again. The kill switch stays armed for the next connect.'**
   String get dialogReleaseWarning;
 
   /// Release confirmation button.
   ///
   /// In en, this message translates to:
-  /// **'Disconnect & Release'**
+  /// **'Disconnect and release'**
   String get dialogReleaseConfirm;
 
   /// Conflict dialog title.
@@ -3148,6 +3142,935 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Shown once when you start your sync server for the first time.'**
   String get syncServerKeyHelper;
+
+  /// Home readout card label.
+  ///
+  /// In en, this message translates to:
+  /// **'LATENCY'**
+  String get homeReadLatency;
+
+  /// Home readout card label.
+  ///
+  /// In en, this message translates to:
+  /// **'DOWN'**
+  String get homeReadDown;
+
+  /// Home readout card label.
+  ///
+  /// In en, this message translates to:
+  /// **'UP'**
+  String get homeReadUp;
+
+  /// Home readout card label.
+  ///
+  /// In en, this message translates to:
+  /// **'SESSION'**
+  String get homeReadSession;
+
+  /// Readout value while a tunnel is not up yet.
+  ///
+  /// In en, this message translates to:
+  /// **'wait'**
+  String get homeValueWait;
+
+  /// Readout value when there is nothing to measure.
+  ///
+  /// In en, this message translates to:
+  /// **'off'**
+  String get homeValueOff;
+
+  /// Readout value when replies stopped.
+  ///
+  /// In en, this message translates to:
+  /// **'lost'**
+  String get homeValueLost;
+
+  /// Readout value when traffic goes direct.
+  ///
+  /// In en, this message translates to:
+  /// **'direct'**
+  String get homeValueDirect;
+
+  /// Latency note while connected.
+  ///
+  /// In en, this message translates to:
+  /// **'tcp connect · every 5 s'**
+  String get homeNoteLatencyLive;
+
+  /// Latency note on a named server.
+  ///
+  /// In en, this message translates to:
+  /// **'tcp connect · {server}'**
+  String homeNoteLatencyServer(String server);
+
+  /// Throughput note.
+  ///
+  /// In en, this message translates to:
+  /// **'last 60 s'**
+  String get homeNoteLast60;
+
+  /// Latency note while verifying.
+  ///
+  /// In en, this message translates to:
+  /// **'measured after verify'**
+  String get homeNoteMeasuredAfterVerify;
+
+  /// Throughput note while verifying.
+  ///
+  /// In en, this message translates to:
+  /// **'no tunnel yet'**
+  String get homeNoteNoTunnelYet;
+
+  /// Session note while verifying.
+  ///
+  /// In en, this message translates to:
+  /// **'connecting for'**
+  String get homeNoteConnectingFor;
+
+  /// Note when no server is saved.
+  ///
+  /// In en, this message translates to:
+  /// **'no server yet'**
+  String get homeNoteNoServerYet;
+
+  /// Session note when no server is saved.
+  ///
+  /// In en, this message translates to:
+  /// **'no sessions yet'**
+  String get homeNoteNoSessionsYet;
+
+  /// Note when disconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'no tunnel'**
+  String get homeNoteNoTunnel;
+
+  /// Session note when disconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'last session not stored'**
+  String get homeNoteLastSessionNotStored;
+
+  /// Latency note while retrying.
+  ///
+  /// In en, this message translates to:
+  /// **'no reply from {server}'**
+  String homeNoteNoReply(String server);
+
+  /// Throughput note while traffic goes direct.
+  ///
+  /// In en, this message translates to:
+  /// **'not through Charon'**
+  String get homeNoteNotThroughCharon;
+
+  /// Session note while retrying.
+  ///
+  /// In en, this message translates to:
+  /// **'reconnecting for'**
+  String get homeNoteReconnectingFor;
+
+  /// Session note while switching.
+  ///
+  /// In en, this message translates to:
+  /// **'without a tunnel'**
+  String get homeNoteWithoutTunnel;
+
+  /// Latency note while blocked.
+  ///
+  /// In en, this message translates to:
+  /// **'tunnel down'**
+  String get homeNoteTunnelDown;
+
+  /// Throughput note while traffic is held.
+  ///
+  /// In en, this message translates to:
+  /// **'held by kill switch'**
+  String get homeNoteHeldByKillSwitch;
+
+  /// Session note while blocked.
+  ///
+  /// In en, this message translates to:
+  /// **'traffic held for'**
+  String get homeNoteTrafficHeldFor;
+
+  /// Latency note after the tunnel was lost.
+  ///
+  /// In en, this message translates to:
+  /// **'tunnel stopped'**
+  String get homeNoteTunnelStopped;
+
+  /// Session note after the tunnel was lost.
+  ///
+  /// In en, this message translates to:
+  /// **'auto reconnect is off'**
+  String get homeNoteAutoReconnectOff;
+
+  /// Session note after a failed first connect.
+  ///
+  /// In en, this message translates to:
+  /// **'nothing was sent'**
+  String get homeNoteNothingSent;
+
+  /// Session note after wake from sleep.
+  ///
+  /// In en, this message translates to:
+  /// **'waking up for'**
+  String get homeNoteWakingUpFor;
+
+  /// Session note while connected.
+  ///
+  /// In en, this message translates to:
+  /// **'connected since {time}'**
+  String homeNoteConnectedSince(String time);
+
+  /// Session note on the backup server.
+  ///
+  /// In en, this message translates to:
+  /// **'on {server} since {time}'**
+  String homeNoteOnServerSince(String server, String time);
+
+  /// Home card title.
+  ///
+  /// In en, this message translates to:
+  /// **'ACTIVE NODE'**
+  String get homeNodeTitle;
+
+  /// Link from the node card to Servers.
+  ///
+  /// In en, this message translates to:
+  /// **'Servers →'**
+  String get homeNodeLinkServers;
+
+  /// Link when no server exists.
+  ///
+  /// In en, this message translates to:
+  /// **'Add one →'**
+  String get homeNodeLinkAdd;
+
+  /// Node card when empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No server yet'**
+  String get homeNodeNoServerTitle;
+
+  /// Node card sub line when empty.
+  ///
+  /// In en, this message translates to:
+  /// **'?? · unknown until you add one'**
+  String get homeNodeNoServerSub;
+
+  /// Node note while connected.
+  ///
+  /// In en, this message translates to:
+  /// **'to switch nodes, disconnect first'**
+  String get homeNodeSwitchDisconnect;
+
+  /// Node note while verifying.
+  ///
+  /// In en, this message translates to:
+  /// **'to switch nodes, cancel first'**
+  String get homeNodeSwitchCancel;
+
+  /// Node note while disconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'tap Connect to use this node'**
+  String get homeNodeTapConnect;
+
+  /// Node note after a failed first connect.
+  ///
+  /// In en, this message translates to:
+  /// **'nothing was sent through the tunnel'**
+  String get homeNodeNothingSent;
+
+  /// Node note while blocked.
+  ///
+  /// In en, this message translates to:
+  /// **'pick another server, or release'**
+  String get homeNodePickOrRelease;
+
+  /// Node note while retrying.
+  ///
+  /// In en, this message translates to:
+  /// **'after {count} failed tries, Charon moves to {server}'**
+  String homeNodeAfterFailed(int count, String server);
+
+  /// Node note during an automatic move.
+  ///
+  /// In en, this message translates to:
+  /// **'#{position} in failover order · picked for you'**
+  String homeNodeFailoverPicked(int position);
+
+  /// Node note during a move the user chose.
+  ///
+  /// In en, this message translates to:
+  /// **'you picked {server}'**
+  String homeNodeYouPicked(String server);
+
+  /// Node note on backup.
+  ///
+  /// In en, this message translates to:
+  /// **'stays on {server} until you switch back'**
+  String homeNodeStaysOnBackup(String server);
+
+  /// Time of day tag.
+  ///
+  /// In en, this message translates to:
+  /// **'MORNING'**
+  String get homeSceneMorning;
+
+  /// Time of day tag.
+  ///
+  /// In en, this message translates to:
+  /// **'DAY'**
+  String get homeSceneDay;
+
+  /// Time of day tag.
+  ///
+  /// In en, this message translates to:
+  /// **'DUSK'**
+  String get homeSceneDusk;
+
+  /// Time of day tag.
+  ///
+  /// In en, this message translates to:
+  /// **'NIGHT'**
+  String get homeSceneNight;
+
+  /// Time card caption.
+  ///
+  /// In en, this message translates to:
+  /// **'{scene} · LOCAL {time}'**
+  String homeLocalTime(String scene, String time);
+
+  /// Greeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Good morning, {name}!'**
+  String homeGreetMorning(String name);
+
+  /// Greeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Good afternoon, {name}!'**
+  String homeGreetAfternoon(String name);
+
+  /// Greeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Good evening, {name}!'**
+  String homeGreetEvening(String name);
+
+  /// Greeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Good night, {name}!'**
+  String homeGreetNight(String name);
+
+  /// Where the user is.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re now in {city}'**
+  String homeLocation(String city);
+
+  /// Crossing line while connected.
+  ///
+  /// In en, this message translates to:
+  /// **'your traffic crosses to {country}'**
+  String homeCrossCrosses(String country);
+
+  /// Crossing line while verifying.
+  ///
+  /// In en, this message translates to:
+  /// **'getting ready to cross to {country}'**
+  String homeCrossGettingReady(String country);
+
+  /// Crossing line while disconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'your traffic stays on this side'**
+  String get homeCrossStays;
+
+  /// Crossing line while retrying.
+  ///
+  /// In en, this message translates to:
+  /// **'the ferry is waiting · traffic goes direct for now'**
+  String get homeCrossWaitingDirect;
+
+  /// Crossing line while retrying with traffic held.
+  ///
+  /// In en, this message translates to:
+  /// **'the ferry is waiting · traffic is held here'**
+  String get homeCrossWaitingHeld;
+
+  /// Crossing line while switching.
+  ///
+  /// In en, this message translates to:
+  /// **'changing ferries · heading for {country}'**
+  String homeCrossChanging(String country);
+
+  /// Crossing line after a failed first connect.
+  ///
+  /// In en, this message translates to:
+  /// **'the ferry never left · traffic stays here'**
+  String get homeCrossNeverLeft;
+
+  /// Crossing line while blocked.
+  ///
+  /// In en, this message translates to:
+  /// **'traffic is held here until you choose'**
+  String get homeCrossHeldChoose;
+
+  /// Crossing line when no server exists.
+  ///
+  /// In en, this message translates to:
+  /// **'nothing to cross to yet · add a server first'**
+  String get homeCrossNoServer;
+
+  /// Country name.
+  ///
+  /// In en, this message translates to:
+  /// **'Singapore'**
+  String get homeCountrySG;
+
+  /// Country name.
+  ///
+  /// In en, this message translates to:
+  /// **'Japan'**
+  String get homeCountryJP;
+
+  /// Country name.
+  ///
+  /// In en, this message translates to:
+  /// **'South Korea'**
+  String get homeCountryKR;
+
+  /// Country name.
+  ///
+  /// In en, this message translates to:
+  /// **'Finland'**
+  String get homeCountryFI;
+
+  /// Country name.
+  ///
+  /// In en, this message translates to:
+  /// **'Indonesia'**
+  String get homeCountryID;
+
+  /// Country name.
+  ///
+  /// In en, this message translates to:
+  /// **'China'**
+  String get homeCountryCN;
+
+  /// Retry button after a failed first connect.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get actionRetry;
+
+  /// Hint under the connect dial.
+  ///
+  /// In en, this message translates to:
+  /// **'or tap the ghost'**
+  String get homeTapGhost;
+
+  /// Hint under the dial when no server exists.
+  ///
+  /// In en, this message translates to:
+  /// **'opens Servers'**
+  String get homeTapOpensServers;
+
+  /// Hero line when no server exists.
+  ///
+  /// In en, this message translates to:
+  /// **'paste config · import link · restore'**
+  String get homeHeroNoServerHint;
+
+  /// Home card title.
+  ///
+  /// In en, this message translates to:
+  /// **'FAILSAFE'**
+  String get homeFailsafeTitle;
+
+  /// Link to Settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings →'**
+  String get homeFailsafeLink;
+
+  /// Setting name.
+  ///
+  /// In en, this message translates to:
+  /// **'Kill switch'**
+  String get homeKillSwitch;
+
+  /// Setting name.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto reconnect'**
+  String get homeAutoReconnect;
+
+  /// Chip.
+  ///
+  /// In en, this message translates to:
+  /// **'ON'**
+  String get homeChipOn;
+
+  /// Chip.
+  ///
+  /// In en, this message translates to:
+  /// **'OFF'**
+  String get homeChipOff;
+
+  /// Chip while the kill switch holds traffic.
+  ///
+  /// In en, this message translates to:
+  /// **'HOLDING'**
+  String get homeChipHolding;
+
+  /// Chip while retrying.
+  ///
+  /// In en, this message translates to:
+  /// **'TRY {attempt}/{max}'**
+  String homeChipTry(int attempt, int max);
+
+  /// Chip while moving to the next server.
+  ///
+  /// In en, this message translates to:
+  /// **'NEXT'**
+  String get homeChipNext;
+
+  /// Armed summary.
+  ///
+  /// In en, this message translates to:
+  /// **'{armed} of 2 armed'**
+  String homeArmed(int armed);
+
+  /// Armed summary after the tunnel was lost.
+  ///
+  /// In en, this message translates to:
+  /// **'{armed} of 2 armed · traffic goes direct'**
+  String homeArmedDirect(int armed);
+
+  /// Armed summary while traffic is held.
+  ///
+  /// In en, this message translates to:
+  /// **'{armed} of 2 armed · kill switch holding'**
+  String homeArmedHolding(int armed);
+
+  /// Armed summary while retrying.
+  ///
+  /// In en, this message translates to:
+  /// **'{armed} of 2 armed · retry {attempt} of {max}'**
+  String homeArmedRetry(int armed, int attempt, int max);
+
+  /// Armed summary while moving to the next server.
+  ///
+  /// In en, this message translates to:
+  /// **'{tries} of {tries} tries failed · next server'**
+  String homeArmedTriesFailed(int tries);
+
+  /// Armed summary on backup.
+  ///
+  /// In en, this message translates to:
+  /// **'{armed} of 2 armed · failed over {time}'**
+  String homeArmedFailedOver(int armed, String time);
+
+  /// Home card title.
+  ///
+  /// In en, this message translates to:
+  /// **'THIS MONTH'**
+  String get homeQuotaTitle;
+
+  /// Link to Telemetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Telemetry →'**
+  String get homeQuotaLink;
+
+  /// Quota cap after the used number.
+  ///
+  /// In en, this message translates to:
+  /// **'of {cap} GB'**
+  String homeQuotaOf(int cap);
+
+  /// Accessibility label of the meter.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly traffic'**
+  String get homeQuotaMeter;
+
+  /// Quota note.
+  ///
+  /// In en, this message translates to:
+  /// **'resets {date} · 1 block = {block} GB'**
+  String homeQuotaNote(String date, int block);
+
+  /// Quota note without a reset date.
+  ///
+  /// In en, this message translates to:
+  /// **'1 block = {block} GB'**
+  String homeQuotaBlock(int block);
+
+  /// Quota note near the cap.
+  ///
+  /// In en, this message translates to:
+  /// **'amber from 80% · resets {date}'**
+  String homeQuotaNoteAmber(String date);
+
+  /// Quota note at the cap.
+  ///
+  /// In en, this message translates to:
+  /// **'cap reached · resets {date}'**
+  String homeQuotaNoteCap(String date);
+
+  /// Quota note when the server has no cap.
+  ///
+  /// In en, this message translates to:
+  /// **'no cap set'**
+  String get homeQuotaNoCap;
+
+  /// Quota footnote.
+  ///
+  /// In en, this message translates to:
+  /// **'counted on this device, even when this window is closed'**
+  String get homeQuotaCounted;
+
+  /// Chip at the cap.
+  ///
+  /// In en, this message translates to:
+  /// **'CAP'**
+  String get homeQuotaChipCap;
+
+  /// Quota card when no server exists.
+  ///
+  /// In en, this message translates to:
+  /// **'Not counting yet'**
+  String get homeQuotaNotCounting;
+
+  /// Quota card when no server exists.
+  ///
+  /// In en, this message translates to:
+  /// **'starts after the first connect'**
+  String get homeQuotaStartsAfter;
+
+  /// Quota card when no server exists.
+  ///
+  /// In en, this message translates to:
+  /// **'the cap comes from your VPS plan'**
+  String get homeQuotaCapFromPlan;
+
+  /// Banner tag.
+  ///
+  /// In en, this message translates to:
+  /// **'TRAFFIC HELD · ALL SERVERS FAILED'**
+  String get homeBannerBlockedTag;
+
+  /// Banner tag.
+  ///
+  /// In en, this message translates to:
+  /// **'TRAFFIC HELD WHILE CHARON RETRIES · TRY {attempt} OF {max}'**
+  String homeBannerHeldTag(int attempt, int max);
+
+  /// Banner text.
+  ///
+  /// In en, this message translates to:
+  /// **'{server} stopped answering. Charon retries every 5 s and holds your traffic meanwhile, then moves to {next}.'**
+  String homeBannerHeldText(String server, String next);
+
+  /// Banner text on the last server.
+  ///
+  /// In en, this message translates to:
+  /// **'{server} stopped answering. Charon retries every 5 s and holds your traffic meanwhile.'**
+  String homeBannerHeldTextLast(String server);
+
+  /// Banner tag.
+  ///
+  /// In en, this message translates to:
+  /// **'CRITICAL · {server} CAP REACHED'**
+  String homeBannerCapTag(String server);
+
+  /// Banner text.
+  ///
+  /// In en, this message translates to:
+  /// **'{used} GB used this month. Charon keeps the tunnel up, but your provider may slow, stop or bill extra traffic from here.'**
+  String homeBannerCapText(String used);
+
+  /// Banner tag.
+  ///
+  /// In en, this message translates to:
+  /// **'COULD NOT REACH · {server}'**
+  String homeBannerReachTag(String server);
+
+  /// Banner tag.
+  ///
+  /// In en, this message translates to:
+  /// **'AUTO RECONNECT · TRY {attempt} OF {max}'**
+  String homeBannerReconnectTag(int attempt, int max);
+
+  /// Banner text.
+  ///
+  /// In en, this message translates to:
+  /// **'{server} stopped answering. Charon retries every 5 s, then moves to {next}. The kill switch is off, so traffic goes direct meanwhile.'**
+  String homeBannerReconnectText(String server, String next);
+
+  /// Banner text on the last server.
+  ///
+  /// In en, this message translates to:
+  /// **'{server} stopped answering. Charon retries every 5 s. The kill switch is off, so traffic goes direct meanwhile.'**
+  String homeBannerReconnectTextLast(String server);
+
+  /// Banner tag.
+  ///
+  /// In en, this message translates to:
+  /// **'FAILOVER · {server} DOWN'**
+  String homeBannerFailoverTag(String server);
+
+  /// Banner text.
+  ///
+  /// In en, this message translates to:
+  /// **'{server} failed {tries} tries in {seconds} s. Charon checks {next} with a real round trip before it says connected.'**
+  String homeBannerFailoverText(
+    String server,
+    int tries,
+    int seconds,
+    String next,
+  );
+
+  /// Banner tag.
+  ///
+  /// In en, this message translates to:
+  /// **'TUNNEL LOST · AUTO RECONNECT OFF'**
+  String get homeBannerTunnelLostTag;
+
+  /// Banner tag.
+  ///
+  /// In en, this message translates to:
+  /// **'QUOTA · {percent}% OF {server}'**
+  String homeBannerQuotaTag(int percent, String server);
+
+  /// Banner text.
+  ///
+  /// In en, this message translates to:
+  /// **'{used} of {cap} GB used, resets {date}. Past the cap your provider may slow, stop or bill extra traffic.'**
+  String homeBannerQuotaText(String used, int cap, String date);
+
+  /// Banner text without a reset date.
+  ///
+  /// In en, this message translates to:
+  /// **'{used} of {cap} GB used. Past the cap your provider may slow, stop or bill extra traffic.'**
+  String homeBannerQuotaTextNoDate(String used, int cap);
+
+  /// Banner tag.
+  ///
+  /// In en, this message translates to:
+  /// **'ON BACKUP · {server}'**
+  String homeBannerBackupTag(String server);
+
+  /// Banner text.
+  ///
+  /// In en, this message translates to:
+  /// **'{primary} stopped answering at {time}. Charon stays on {server} and won\'t switch back by itself.'**
+  String homeBannerBackupText(String primary, String time, String server);
+
+  /// Banner action.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to {server}'**
+  String homeActionMoveTo(String server);
+
+  /// Banner action.
+  ///
+  /// In en, this message translates to:
+  /// **'Try {server}'**
+  String homeActionTry(String server);
+
+  /// Banner action.
+  ///
+  /// In en, this message translates to:
+  /// **'See usage'**
+  String get homeActionSeeUsage;
+
+  /// Banner action.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on auto reconnect'**
+  String get homeActionTurnOnAutoReconnect;
+
+  /// Banner action.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit server'**
+  String get homeActionEditServer;
+
+  /// Banner action.
+  ///
+  /// In en, this message translates to:
+  /// **'DNS settings'**
+  String get homeActionDnsSettings;
+
+  /// Banner help link.
+  ///
+  /// In en, this message translates to:
+  /// **'How to fix this'**
+  String get homeHelpLink;
+
+  /// Chip showing that the help link opens the website.
+  ///
+  /// In en, this message translates to:
+  /// **'WEBSITE ↗'**
+  String get homeHelpWebsite;
+
+  /// Failure cause.
+  ///
+  /// In en, this message translates to:
+  /// **'{server} did not answer.'**
+  String homeCauseNoAnswer(String server);
+
+  /// Failure advice.
+  ///
+  /// In en, this message translates to:
+  /// **'Check that the server is running, then retry.'**
+  String get homeTodoNoAnswer;
+
+  /// Failure cause.
+  ///
+  /// In en, this message translates to:
+  /// **'The server answered, but the Reality handshake failed.'**
+  String get homeCauseHandshake;
+
+  /// Failure advice.
+  ///
+  /// In en, this message translates to:
+  /// **'The public key or SNI may not match. Check the server, then edit it here.'**
+  String get homeTodoHandshake;
+
+  /// Failure cause.
+  ///
+  /// In en, this message translates to:
+  /// **'Traffic came out somewhere other than {server}.'**
+  String homeCauseEgress(String server);
+
+  /// Failure advice.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon will not say connected until the exit matches the server.'**
+  String get homeTodoEgress;
+
+  /// Failure cause.
+  ///
+  /// In en, this message translates to:
+  /// **'DNS is not going through the tunnel.'**
+  String get homeCauseDns;
+
+  /// Failure advice.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon will not say connected. Check the DNS setting, then retry.'**
+  String get homeTodoDns;
+
+  /// Failure cause.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon could not create its network adapter.'**
+  String get homeCauseAdapter;
+
+  /// Failure advice.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart the Charon service, or repair it with the installer, then retry.'**
+  String get homeTodoAdapter;
+
+  /// Failure cause.
+  ///
+  /// In en, this message translates to:
+  /// **'Another program is using the port Charon needs.'**
+  String get homeCausePort;
+
+  /// Failure advice.
+  ///
+  /// In en, this message translates to:
+  /// **'Close that program or restart your PC, then retry.'**
+  String get homeTodoPort;
+
+  /// Failure cause.
+  ///
+  /// In en, this message translates to:
+  /// **'Xray rejected the config of {server}, so Charon went back to the previous core.'**
+  String homeCauseConfig(String server);
+
+  /// Failure advice.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry on the previous core, or edit the server.'**
+  String get homeTodoConfig;
+
+  /// Title when another VPN replaced the tunnel.
+  ///
+  /// In en, this message translates to:
+  /// **'Another VPN took over'**
+  String get androidAnotherVpnTitle;
+
+  /// Small label above the release dialog title.
+  ///
+  /// In en, this message translates to:
+  /// **'RELEASE'**
+  String get dialogReleaseKicker;
+
+  /// Footer of a confirm dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Esc cancels · focus on Cancel'**
+  String get dialogEscFoot;
+
+  /// Small label above the server picker title.
+  ///
+  /// In en, this message translates to:
+  /// **'CHOOSE ANOTHER SERVER'**
+  String get homeSheetKicker;
+
+  /// Server picker title.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a server to try'**
+  String get homeSheetTitle;
+
+  /// Server picker explanation.
+  ///
+  /// In en, this message translates to:
+  /// **'{server} did not answer {tries} tries. Charon starts fresh on the one you pick, and it stays your choice.'**
+  String homeSheetBody(String server, int tries);
+
+  /// Server row that failed.
+  ///
+  /// In en, this message translates to:
+  /// **'{cc} · {address} · did not answer'**
+  String homeSheetMetaFailed(String cc, String address);
+
+  /// Server row that can be tried.
+  ///
+  /// In en, this message translates to:
+  /// **'{cc} · {address} · #{position} in failover order'**
+  String homeSheetMetaOrder(String cc, String address, int position);
+
+  /// Tag on a server that can be tried.
+  ///
+  /// In en, this message translates to:
+  /// **'TRY'**
+  String get homeSheetTagTry;
+
+  /// Tag on the server that failed.
+  ///
+  /// In en, this message translates to:
+  /// **'FAILED'**
+  String get homeSheetTagFailed;
+
+  /// Footer of the server picker.
+  ///
+  /// In en, this message translates to:
+  /// **'the server list unlocks while traffic is held'**
+  String get homeSheetFoot;
 }
 
 class _AppLocalizationsDelegate

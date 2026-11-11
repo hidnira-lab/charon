@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/fonts.dart';
+
 import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/l10n/generated/app_localizations.dart';
 import 'package:charon/state/home_controller.dart';
@@ -23,6 +25,8 @@ Widget _buildTestApp({required Widget child}) {
 }
 
 void main() {
+  setUpAll(loadAppFonts);
+
   group('QuitWhileConnectedDialog (N08)', () {
     testWidgets('renders all 3 choices and returns selected option', (tester) async {
       QuitChoice? selectedChoice;
@@ -111,9 +115,11 @@ void main() {
       await tester.tap(find.text('Open Release Dialog'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Disconnect and release?'), findsOneWidget);
-      expect(find.text('Traffic will go direct until you connect again.'), findsOneWidget);
-      expect(find.textContaining('kill switch protection is released'), findsOneWidget);
+      // The copy of the HomeDesktop board.
+      expect(find.text('> RELEASE'), findsOneWidget);
+      expect(find.text('Release traffic?'), findsOneWidget);
+      expect(find.textContaining('The kill switch stays armed for the next connect.'), findsOneWidget);
+      expect(find.text('> Esc cancels · focus on Cancel'), findsOneWidget);
 
       await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
@@ -123,7 +129,7 @@ void main() {
       await tester.tap(find.text('Open Release Dialog'));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Disconnect & Release'));
+      await tester.tap(find.text('Disconnect and release'));
       await tester.pumpAndSettle();
       expect(confirmed, isTrue);
     });
@@ -191,10 +197,14 @@ void main() {
   });
 
   group('Dialog Integrations into UI Cards', () {
-    testWidgets('HeroConnectCard in blocked state shows Release button that opens dialog', (tester) async {
+    testWidgets('HeroConnectCard while retrying with traffic held: Release opens the dialog', (tester) async {
+      // On the board the held retry state has Release as its button. When all
+      // servers failed (blocked) the button is Retry now and Release is in the banner.
       final status = Status(
-        phase: Phase.PHASE_BLOCKED,
+        phase: Phase.PHASE_RETRYING,
         gate: Gate.GATE_HELD,
+        attempt: 2,
+        maxAttempts: 5,
       );
       final controller = HomeController(
         initialStatus: status,
@@ -214,7 +224,7 @@ void main() {
       await tester.tap(find.text('Release'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Disconnect and release?'), findsOneWidget);
+      expect(find.text('Release traffic?'), findsOneWidget);
       await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
     });

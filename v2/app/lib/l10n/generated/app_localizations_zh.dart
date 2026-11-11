@@ -41,7 +41,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String stateConnectedLine2(String ip) {
-    return '出口 $ip，与服务器匹配';
+    return '出口 $ip · 与服务器匹配';
   }
 
   @override
@@ -52,7 +52,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String stateVerifyingLine2(String duration) {
-    return '正在测试真实 Reality 往返：$duration';
+    return '正在测试真实 Reality 往返 · $duration';
   }
 
   @override
@@ -71,7 +71,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get stateBlockedBadge => '拦截 · 所有服务器均失败';
 
   @override
-  String get stateBlockedLine2 => '无服务器响应，断网保护已生效';
+  String get stateBlockedLine2 => '无服务器响应 · 断网保护拦截中';
 
   @override
   String get stateNoServerTitle => '暂无服务器';
@@ -92,7 +92,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String stateReconnectingLine2(String server, int seconds) {
-    return '$server 无响应，$seconds 秒 后重试';
+    return '$server 无响应 · $seconds 秒后重试';
   }
 
   @override
@@ -105,7 +105,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String stateReconnectingHeldLine2(int attempt, int maxAttempts, int seconds) {
-    return '尝试第 $attempt 次（共 $maxAttempts 次），$seconds 秒 后重试，流量已拦截';
+    return '第 $attempt/$maxAttempts 次 · $seconds 秒后重试 · 流量已拦截';
   }
 
   @override
@@ -118,7 +118,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String stateSwitchingLine2(String previousServer, String server) {
-    return '$previousServer 尝试 5 次失败，正在检查 $server';
+    return '$previousServer 尝试 5 次失败 · 正在检查 $server';
   }
 
   @override
@@ -134,7 +134,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String stateOnBackupLine2(String ip, String server) {
-    return '出口 $ip，与 $server 匹配';
+    return '出口 $ip · 与 $server 匹配';
   }
 
   @override
@@ -152,7 +152,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get stateTunnelLostBadge => '隧道中断';
 
   @override
-  String get stateTunnelLostLine2 => '流量直接发出，自动重连已关闭';
+  String get stateTunnelLostLine2 => '流量直接发出 · 自动重连已关闭';
 
   @override
   String get stateWakingUpTitle => '正在唤醒';
@@ -172,7 +172,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get stateCheckingNetworkBadge => '已连接 · 正在检查';
 
   @override
-  String get stateCheckingNetworkLine2 => '网络已变更，正在检查连接';
+  String get stateCheckingNetworkLine2 => '网络已变更 · 正在检查连接';
 
   @override
   String get stateDisconnectingTitle => '正在断开';
@@ -1426,14 +1426,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dialogQuitTunnelStops => '隧道断开';
 
   @override
-  String get dialogReleaseTitle => '断开并放行？';
+  String get dialogReleaseTitle => '放行流量？';
 
   @override
-  String get dialogReleaseSubtitle => '在您重新连接前，所有流量将直连外网。';
-
-  @override
-  String get dialogReleaseWarning =>
-      'Kill switch 防护将立即解除。所有系统网络流量将不再经过隧道，直接通过 ISP 发送且不加密。';
+  String get dialogReleaseWarning => '在你再次连接之前，流量会直连。断网保护会为下次连接保持启用。';
 
   @override
   String get dialogReleaseConfirm => '断开并放行';
@@ -1632,6 +1628,579 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get syncServerKeyHelper => '首次启动同步服务器时显示一次。';
+
+  @override
+  String get homeReadLatency => '延迟';
+
+  @override
+  String get homeReadDown => '下行';
+
+  @override
+  String get homeReadUp => '上行';
+
+  @override
+  String get homeReadSession => '会话';
+
+  @override
+  String get homeValueWait => '等待';
+
+  @override
+  String get homeValueOff => '关闭';
+
+  @override
+  String get homeValueLost => '丢失';
+
+  @override
+  String get homeValueDirect => '直连';
+
+  @override
+  String get homeNoteLatencyLive => 'TCP 连接 · 每 5 秒';
+
+  @override
+  String homeNoteLatencyServer(String server) {
+    return 'TCP 连接 · $server';
+  }
+
+  @override
+  String get homeNoteLast60 => '最近 60 秒';
+
+  @override
+  String get homeNoteMeasuredAfterVerify => '验证后测量';
+
+  @override
+  String get homeNoteNoTunnelYet => '尚无隧道';
+
+  @override
+  String get homeNoteConnectingFor => '已连接中';
+
+  @override
+  String get homeNoteNoServerYet => '尚无服务器';
+
+  @override
+  String get homeNoteNoSessionsYet => '尚无会话';
+
+  @override
+  String get homeNoteNoTunnel => '无隧道';
+
+  @override
+  String get homeNoteLastSessionNotStored => '不保存上次会话';
+
+  @override
+  String homeNoteNoReply(String server) {
+    return '$server 无回应';
+  }
+
+  @override
+  String get homeNoteNotThroughCharon => '不经过 Charon';
+
+  @override
+  String get homeNoteReconnectingFor => '已重连';
+
+  @override
+  String get homeNoteWithoutTunnel => '无隧道';
+
+  @override
+  String get homeNoteTunnelDown => '隧道断开';
+
+  @override
+  String get homeNoteHeldByKillSwitch => '被断网保护拦截';
+
+  @override
+  String get homeNoteTrafficHeldFor => '流量已拦截';
+
+  @override
+  String get homeNoteTunnelStopped => '隧道已停止';
+
+  @override
+  String get homeNoteAutoReconnectOff => '自动重连已关闭';
+
+  @override
+  String get homeNoteNothingSent => '未发送任何数据';
+
+  @override
+  String get homeNoteWakingUpFor => '已唤醒';
+
+  @override
+  String homeNoteConnectedSince(String time) {
+    return '自 $time 起已连接';
+  }
+
+  @override
+  String homeNoteOnServerSince(String server, String time) {
+    return '自 $time 起使用 $server';
+  }
+
+  @override
+  String get homeNodeTitle => '当前节点';
+
+  @override
+  String get homeNodeLinkServers => '服务器 →';
+
+  @override
+  String get homeNodeLinkAdd => '添加 →';
+
+  @override
+  String get homeNodeNoServerTitle => '尚无服务器';
+
+  @override
+  String get homeNodeNoServerSub => '?? · 添加后才知道';
+
+  @override
+  String get homeNodeSwitchDisconnect => '如需切换节点，请先断开';
+
+  @override
+  String get homeNodeSwitchCancel => '如需切换节点，请先取消';
+
+  @override
+  String get homeNodeTapConnect => '点击连接以使用此节点';
+
+  @override
+  String get homeNodeNothingSent => '没有任何流量经过隧道';
+
+  @override
+  String get homeNodePickOrRelease => '换一台服务器，或放行';
+
+  @override
+  String homeNodeAfterFailed(int count, String server) {
+    return '失败 $count 次后，Charon 会切换到 $server';
+  }
+
+  @override
+  String homeNodeFailoverPicked(int position) {
+    return '故障转移顺序第 $position · 已自动选择';
+  }
+
+  @override
+  String homeNodeYouPicked(String server) {
+    return '你选择了 $server';
+  }
+
+  @override
+  String homeNodeStaysOnBackup(String server) {
+    return '保持在 $server，直到你切回';
+  }
+
+  @override
+  String get homeSceneMorning => '早晨';
+
+  @override
+  String get homeSceneDay => '白天';
+
+  @override
+  String get homeSceneDusk => '黄昏';
+
+  @override
+  String get homeSceneNight => '夜晚';
+
+  @override
+  String homeLocalTime(String scene, String time) {
+    return '$scene · 当地 $time';
+  }
+
+  @override
+  String homeGreetMorning(String name) {
+    return '早上好，$name！';
+  }
+
+  @override
+  String homeGreetAfternoon(String name) {
+    return '下午好，$name！';
+  }
+
+  @override
+  String homeGreetEvening(String name) {
+    return '傍晚好，$name！';
+  }
+
+  @override
+  String homeGreetNight(String name) {
+    return '晚上好，$name！';
+  }
+
+  @override
+  String homeLocation(String city) {
+    return '你现在在$city';
+  }
+
+  @override
+  String homeCrossCrosses(String country) {
+    return '你的流量渡往$country';
+  }
+
+  @override
+  String homeCrossGettingReady(String country) {
+    return '准备渡往$country';
+  }
+
+  @override
+  String get homeCrossStays => '你的流量留在这一侧';
+
+  @override
+  String get homeCrossWaitingDirect => '渡船在等待 · 流量暂时直连';
+
+  @override
+  String get homeCrossWaitingHeld => '渡船在等待 · 流量被拦在这里';
+
+  @override
+  String homeCrossChanging(String country) {
+    return '换乘渡船 · 驶向$country';
+  }
+
+  @override
+  String get homeCrossNeverLeft => '渡船没有出发 · 流量留在这里';
+
+  @override
+  String get homeCrossHeldChoose => '流量被拦在这里，直到你做出选择';
+
+  @override
+  String get homeCrossNoServer => '还没有目的地 · 请先添加服务器';
+
+  @override
+  String get homeCountrySG => '新加坡';
+
+  @override
+  String get homeCountryJP => '日本';
+
+  @override
+  String get homeCountryKR => '韩国';
+
+  @override
+  String get homeCountryFI => '芬兰';
+
+  @override
+  String get homeCountryID => '印度尼西亚';
+
+  @override
+  String get homeCountryCN => '中国';
+
+  @override
+  String get actionRetry => '重试';
+
+  @override
+  String get homeTapGhost => '或点一下幽灵';
+
+  @override
+  String get homeTapOpensServers => '打开服务器';
+
+  @override
+  String get homeHeroNoServerHint => '粘贴配置 · 导入链接 · 恢复';
+
+  @override
+  String get homeFailsafeTitle => '故障保护';
+
+  @override
+  String get homeFailsafeLink => '设置 →';
+
+  @override
+  String get homeKillSwitch => '断网保护';
+
+  @override
+  String get homeAutoReconnect => '自动重连';
+
+  @override
+  String get homeChipOn => '开';
+
+  @override
+  String get homeChipOff => '关';
+
+  @override
+  String get homeChipHolding => '拦截中';
+
+  @override
+  String homeChipTry(int attempt, int max) {
+    return '第 $attempt/$max 次';
+  }
+
+  @override
+  String get homeChipNext => '下一台';
+
+  @override
+  String homeArmed(int armed) {
+    return '已启用 $armed/2';
+  }
+
+  @override
+  String homeArmedDirect(int armed) {
+    return '已启用 $armed/2 · 流量直连';
+  }
+
+  @override
+  String homeArmedHolding(int armed) {
+    return '已启用 $armed/2 · 断网保护拦截中';
+  }
+
+  @override
+  String homeArmedRetry(int armed, int attempt, int max) {
+    return '已启用 $armed/2 · 第 $attempt/$max 次重试';
+  }
+
+  @override
+  String homeArmedTriesFailed(int tries) {
+    return '$tries 次尝试均失败 · 切换下一台服务器';
+  }
+
+  @override
+  String homeArmedFailedOver(int armed, String time) {
+    return '已启用 $armed/2 · $time 已故障转移';
+  }
+
+  @override
+  String get homeQuotaTitle => '本月';
+
+  @override
+  String get homeQuotaLink => '遥测 →';
+
+  @override
+  String homeQuotaOf(int cap) {
+    return '/ $cap GB';
+  }
+
+  @override
+  String get homeQuotaMeter => '每月流量';
+
+  @override
+  String homeQuotaNote(String date, int block) {
+    return '$date重置 · 每格 $block GB';
+  }
+
+  @override
+  String homeQuotaBlock(int block) {
+    return '每格 $block GB';
+  }
+
+  @override
+  String homeQuotaNoteAmber(String date) {
+    return '80% 起变黄 · $date重置';
+  }
+
+  @override
+  String homeQuotaNoteCap(String date) {
+    return '已达上限 · $date重置';
+  }
+
+  @override
+  String get homeQuotaNoCap => '未设置上限';
+
+  @override
+  String get homeQuotaCounted => '在本机计数，即使关闭这个窗口';
+
+  @override
+  String get homeQuotaChipCap => '上限';
+
+  @override
+  String get homeQuotaNotCounting => '尚未统计';
+
+  @override
+  String get homeQuotaStartsAfter => '首次连接后开始统计';
+
+  @override
+  String get homeQuotaCapFromPlan => '上限来自你的 VPS 套餐';
+
+  @override
+  String get homeBannerBlockedTag => '流量已拦截 · 所有服务器均失败';
+
+  @override
+  String homeBannerHeldTag(int attempt, int max) {
+    return 'Charon 重试期间流量已拦截 · 第 $attempt/$max 次';
+  }
+
+  @override
+  String homeBannerHeldText(String server, String next) {
+    return '$server 不再响应。Charon 每 5 秒重试一次，期间拦截你的流量，然后切换到 $next。';
+  }
+
+  @override
+  String homeBannerHeldTextLast(String server) {
+    return '$server 不再响应。Charon 每 5 秒重试一次，期间拦截你的流量。';
+  }
+
+  @override
+  String homeBannerCapTag(String server) {
+    return '严重 · $server 已达上限';
+  }
+
+  @override
+  String homeBannerCapText(String used) {
+    return '本月已用 $used GB。Charon 会保持隧道连接，但此后服务商可能限速、停止或额外计费。';
+  }
+
+  @override
+  String homeBannerReachTag(String server) {
+    return '无法连接 · $server';
+  }
+
+  @override
+  String homeBannerReconnectTag(int attempt, int max) {
+    return '自动重连 · 第 $attempt/$max 次';
+  }
+
+  @override
+  String homeBannerReconnectText(String server, String next) {
+    return '$server 不再响应。Charon 每 5 秒重试一次，然后切换到 $next。断网保护已关闭，期间流量直连。';
+  }
+
+  @override
+  String homeBannerReconnectTextLast(String server) {
+    return '$server 不再响应。Charon 每 5 秒重试一次。断网保护已关闭，期间流量直连。';
+  }
+
+  @override
+  String homeBannerFailoverTag(String server) {
+    return '故障转移 · $server 已断开';
+  }
+
+  @override
+  String homeBannerFailoverText(
+    String server,
+    int tries,
+    int seconds,
+    String next,
+  ) {
+    return '$server 在 $seconds 秒内失败 $tries 次。Charon 会用真实往返检查 $next，通过后才显示已连接。';
+  }
+
+  @override
+  String get homeBannerTunnelLostTag => '隧道丢失 · 自动重连已关闭';
+
+  @override
+  String homeBannerQuotaTag(int percent, String server) {
+    return '流量 · $server 已用 $percent%';
+  }
+
+  @override
+  String homeBannerQuotaText(String used, int cap, String date) {
+    return '已用 $used / $cap GB，$date重置。超出上限后，服务商可能限速、停止或额外计费。';
+  }
+
+  @override
+  String homeBannerQuotaTextNoDate(String used, int cap) {
+    return '已用 $used / $cap GB。超出上限后，服务商可能限速、停止或额外计费。';
+  }
+
+  @override
+  String homeBannerBackupTag(String server) {
+    return '使用备用 · $server';
+  }
+
+  @override
+  String homeBannerBackupText(String primary, String time, String server) {
+    return '$primary 于 $time 停止响应。Charon 会保持在 $server，不会自行切回。';
+  }
+
+  @override
+  String homeActionMoveTo(String server) {
+    return '切换到 $server';
+  }
+
+  @override
+  String homeActionTry(String server) {
+    return '重试 $server';
+  }
+
+  @override
+  String get homeActionSeeUsage => '查看用量';
+
+  @override
+  String get homeActionTurnOnAutoReconnect => '开启自动重连';
+
+  @override
+  String get homeActionEditServer => '编辑服务器';
+
+  @override
+  String get homeActionDnsSettings => 'DNS 设置';
+
+  @override
+  String get homeHelpLink => '如何修复';
+
+  @override
+  String get homeHelpWebsite => '网站 ↗';
+
+  @override
+  String homeCauseNoAnswer(String server) {
+    return '$server 没有应答。';
+  }
+
+  @override
+  String get homeTodoNoAnswer => '请确认服务器正在运行，然后重试。';
+
+  @override
+  String get homeCauseHandshake => '服务器有应答，但 Reality 握手失败。';
+
+  @override
+  String get homeTodoHandshake => '公钥或 SNI 可能不匹配。请检查服务器，然后在这里编辑。';
+
+  @override
+  String homeCauseEgress(String server) {
+    return '流量没有从 $server 出口。';
+  }
+
+  @override
+  String get homeTodoEgress => '出口与服务器匹配之前，Charon 不会显示已连接。';
+
+  @override
+  String get homeCauseDns => 'DNS 没有经过隧道。';
+
+  @override
+  String get homeTodoDns => 'Charon 不会显示已连接。请检查 DNS 设置，然后重试。';
+
+  @override
+  String get homeCauseAdapter => 'Charon 无法创建网络适配器。';
+
+  @override
+  String get homeTodoAdapter => '请重启 Charon 服务，或用安装程序修复，然后重试。';
+
+  @override
+  String get homeCausePort => '另一个程序占用了 Charon 需要的端口。';
+
+  @override
+  String get homeTodoPort => '请关闭该程序或重启电脑，然后重试。';
+
+  @override
+  String homeCauseConfig(String server) {
+    return 'Xray 拒绝了 $server 的配置，因此 Charon 回退到了之前的核心。';
+  }
+
+  @override
+  String get homeTodoConfig => '请在之前的核心上重试，或编辑服务器。';
+
+  @override
+  String get androidAnotherVpnTitle => '另一个 VPN 已接管';
+
+  @override
+  String get dialogReleaseKicker => '放行';
+
+  @override
+  String get dialogEscFoot => 'Esc 取消 · 焦点在取消';
+
+  @override
+  String get homeSheetKicker => '换一台服务器';
+
+  @override
+  String get homeSheetTitle => '选择要尝试的服务器';
+
+  @override
+  String homeSheetBody(String server, int tries) {
+    return '$server 连续 $tries 次没有响应。Charon 会在你选择的服务器上重新开始，并保持你的选择。';
+  }
+
+  @override
+  String homeSheetMetaFailed(String cc, String address) {
+    return '$cc · $address · 无响应';
+  }
+
+  @override
+  String homeSheetMetaOrder(String cc, String address, int position) {
+    return '$cc · $address · 故障转移顺序第 $position';
+  }
+
+  @override
+  String get homeSheetTagTry => '尝试';
+
+  @override
+  String get homeSheetTagFailed => '失败';
+
+  @override
+  String get homeSheetFoot => '流量被拦截期间，服务器列表可以选择';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -1670,7 +2239,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String stateConnectedLine2(String ip) {
-    return '出口 $ip，与服务器匹配';
+    return '出口 $ip · 与服务器匹配';
   }
 
   @override
@@ -1681,7 +2250,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String stateVerifyingLine2(String duration) {
-    return '正在测试真实 Reality 往返：$duration';
+    return '正在测试真实 Reality 往返 · $duration';
   }
 
   @override
@@ -1700,7 +2269,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get stateBlockedBadge => '拦截 · 所有服务器均失败';
 
   @override
-  String get stateBlockedLine2 => '无服务器响应，断网保护已生效';
+  String get stateBlockedLine2 => '无服务器响应 · 断网保护拦截中';
 
   @override
   String get stateNoServerTitle => '暂无服务器';
@@ -1721,7 +2290,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String stateReconnectingLine2(String server, int seconds) {
-    return '$server 无响应，$seconds 秒 后重试';
+    return '$server 无响应 · $seconds 秒后重试';
   }
 
   @override
@@ -1734,7 +2303,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String stateReconnectingHeldLine2(int attempt, int maxAttempts, int seconds) {
-    return '尝试第 $attempt 次（共 $maxAttempts 次），$seconds 秒 后重试，流量已拦截';
+    return '第 $attempt/$maxAttempts 次 · $seconds 秒后重试 · 流量已拦截';
   }
 
   @override
@@ -1747,7 +2316,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String stateSwitchingLine2(String previousServer, String server) {
-    return '$previousServer 尝试 5 次失败，正在检查 $server';
+    return '$previousServer 尝试 5 次失败 · 正在检查 $server';
   }
 
   @override
@@ -1763,7 +2332,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String stateOnBackupLine2(String ip, String server) {
-    return '出口 $ip，与 $server 匹配';
+    return '出口 $ip · 与 $server 匹配';
   }
 
   @override
@@ -1781,7 +2350,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get stateTunnelLostBadge => '隧道中断';
 
   @override
-  String get stateTunnelLostLine2 => '流量直接发出，自动重连已关闭';
+  String get stateTunnelLostLine2 => '流量直接发出 · 自动重连已关闭';
 
   @override
   String get stateWakingUpTitle => '正在唤醒';
@@ -1801,7 +2370,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get stateCheckingNetworkBadge => '已连接 · 正在检查';
 
   @override
-  String get stateCheckingNetworkLine2 => '网络已变更，正在检查连接';
+  String get stateCheckingNetworkLine2 => '网络已变更 · 正在检查连接';
 
   @override
   String get stateDisconnectingTitle => '正在断开';
@@ -3055,14 +3624,10 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get dialogQuitTunnelStops => '隧道断开';
 
   @override
-  String get dialogReleaseTitle => '断开并放行？';
+  String get dialogReleaseTitle => '放行流量？';
 
   @override
-  String get dialogReleaseSubtitle => '在您重新连接前，所有流量将直连外网。';
-
-  @override
-  String get dialogReleaseWarning =>
-      'Kill switch 防护将立即解除。所有系统网络流量将不再经过隧道，直接通过 ISP 发送且不加密。';
+  String get dialogReleaseWarning => '在你再次连接之前，流量会直连。断网保护会为下次连接保持启用。';
 
   @override
   String get dialogReleaseConfirm => '断开并放行';
@@ -3261,4 +3826,577 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get syncServerKeyHelper => '首次启动同步服务器时显示一次。';
+
+  @override
+  String get homeReadLatency => '延迟';
+
+  @override
+  String get homeReadDown => '下行';
+
+  @override
+  String get homeReadUp => '上行';
+
+  @override
+  String get homeReadSession => '会话';
+
+  @override
+  String get homeValueWait => '等待';
+
+  @override
+  String get homeValueOff => '关闭';
+
+  @override
+  String get homeValueLost => '丢失';
+
+  @override
+  String get homeValueDirect => '直连';
+
+  @override
+  String get homeNoteLatencyLive => 'TCP 连接 · 每 5 秒';
+
+  @override
+  String homeNoteLatencyServer(String server) {
+    return 'TCP 连接 · $server';
+  }
+
+  @override
+  String get homeNoteLast60 => '最近 60 秒';
+
+  @override
+  String get homeNoteMeasuredAfterVerify => '验证后测量';
+
+  @override
+  String get homeNoteNoTunnelYet => '尚无隧道';
+
+  @override
+  String get homeNoteConnectingFor => '已连接中';
+
+  @override
+  String get homeNoteNoServerYet => '尚无服务器';
+
+  @override
+  String get homeNoteNoSessionsYet => '尚无会话';
+
+  @override
+  String get homeNoteNoTunnel => '无隧道';
+
+  @override
+  String get homeNoteLastSessionNotStored => '不保存上次会话';
+
+  @override
+  String homeNoteNoReply(String server) {
+    return '$server 无回应';
+  }
+
+  @override
+  String get homeNoteNotThroughCharon => '不经过 Charon';
+
+  @override
+  String get homeNoteReconnectingFor => '已重连';
+
+  @override
+  String get homeNoteWithoutTunnel => '无隧道';
+
+  @override
+  String get homeNoteTunnelDown => '隧道断开';
+
+  @override
+  String get homeNoteHeldByKillSwitch => '被断网保护拦截';
+
+  @override
+  String get homeNoteTrafficHeldFor => '流量已拦截';
+
+  @override
+  String get homeNoteTunnelStopped => '隧道已停止';
+
+  @override
+  String get homeNoteAutoReconnectOff => '自动重连已关闭';
+
+  @override
+  String get homeNoteNothingSent => '未发送任何数据';
+
+  @override
+  String get homeNoteWakingUpFor => '已唤醒';
+
+  @override
+  String homeNoteConnectedSince(String time) {
+    return '自 $time 起已连接';
+  }
+
+  @override
+  String homeNoteOnServerSince(String server, String time) {
+    return '自 $time 起使用 $server';
+  }
+
+  @override
+  String get homeNodeTitle => '当前节点';
+
+  @override
+  String get homeNodeLinkServers => '服务器 →';
+
+  @override
+  String get homeNodeLinkAdd => '添加 →';
+
+  @override
+  String get homeNodeNoServerTitle => '尚无服务器';
+
+  @override
+  String get homeNodeNoServerSub => '?? · 添加后才知道';
+
+  @override
+  String get homeNodeSwitchDisconnect => '如需切换节点，请先断开';
+
+  @override
+  String get homeNodeSwitchCancel => '如需切换节点，请先取消';
+
+  @override
+  String get homeNodeTapConnect => '点击连接以使用此节点';
+
+  @override
+  String get homeNodeNothingSent => '没有任何流量经过隧道';
+
+  @override
+  String get homeNodePickOrRelease => '换一台服务器，或放行';
+
+  @override
+  String homeNodeAfterFailed(int count, String server) {
+    return '失败 $count 次后，Charon 会切换到 $server';
+  }
+
+  @override
+  String homeNodeFailoverPicked(int position) {
+    return '故障转移顺序第 $position · 已自动选择';
+  }
+
+  @override
+  String homeNodeYouPicked(String server) {
+    return '你选择了 $server';
+  }
+
+  @override
+  String homeNodeStaysOnBackup(String server) {
+    return '保持在 $server，直到你切回';
+  }
+
+  @override
+  String get homeSceneMorning => '早晨';
+
+  @override
+  String get homeSceneDay => '白天';
+
+  @override
+  String get homeSceneDusk => '黄昏';
+
+  @override
+  String get homeSceneNight => '夜晚';
+
+  @override
+  String homeLocalTime(String scene, String time) {
+    return '$scene · 当地 $time';
+  }
+
+  @override
+  String homeGreetMorning(String name) {
+    return '早上好，$name！';
+  }
+
+  @override
+  String homeGreetAfternoon(String name) {
+    return '下午好，$name！';
+  }
+
+  @override
+  String homeGreetEvening(String name) {
+    return '傍晚好，$name！';
+  }
+
+  @override
+  String homeGreetNight(String name) {
+    return '晚上好，$name！';
+  }
+
+  @override
+  String homeLocation(String city) {
+    return '你现在在$city';
+  }
+
+  @override
+  String homeCrossCrosses(String country) {
+    return '你的流量渡往$country';
+  }
+
+  @override
+  String homeCrossGettingReady(String country) {
+    return '准备渡往$country';
+  }
+
+  @override
+  String get homeCrossStays => '你的流量留在这一侧';
+
+  @override
+  String get homeCrossWaitingDirect => '渡船在等待 · 流量暂时直连';
+
+  @override
+  String get homeCrossWaitingHeld => '渡船在等待 · 流量被拦在这里';
+
+  @override
+  String homeCrossChanging(String country) {
+    return '换乘渡船 · 驶向$country';
+  }
+
+  @override
+  String get homeCrossNeverLeft => '渡船没有出发 · 流量留在这里';
+
+  @override
+  String get homeCrossHeldChoose => '流量被拦在这里，直到你做出选择';
+
+  @override
+  String get homeCrossNoServer => '还没有目的地 · 请先添加服务器';
+
+  @override
+  String get homeCountrySG => '新加坡';
+
+  @override
+  String get homeCountryJP => '日本';
+
+  @override
+  String get homeCountryKR => '韩国';
+
+  @override
+  String get homeCountryFI => '芬兰';
+
+  @override
+  String get homeCountryID => '印度尼西亚';
+
+  @override
+  String get homeCountryCN => '中国';
+
+  @override
+  String get actionRetry => '重试';
+
+  @override
+  String get homeTapGhost => '或点一下幽灵';
+
+  @override
+  String get homeTapOpensServers => '打开服务器';
+
+  @override
+  String get homeHeroNoServerHint => '粘贴配置 · 导入链接 · 恢复';
+
+  @override
+  String get homeFailsafeTitle => '故障保护';
+
+  @override
+  String get homeFailsafeLink => '设置 →';
+
+  @override
+  String get homeKillSwitch => '断网保护';
+
+  @override
+  String get homeAutoReconnect => '自动重连';
+
+  @override
+  String get homeChipOn => '开';
+
+  @override
+  String get homeChipOff => '关';
+
+  @override
+  String get homeChipHolding => '拦截中';
+
+  @override
+  String homeChipTry(int attempt, int max) {
+    return '第 $attempt/$max 次';
+  }
+
+  @override
+  String get homeChipNext => '下一台';
+
+  @override
+  String homeArmed(int armed) {
+    return '已启用 $armed/2';
+  }
+
+  @override
+  String homeArmedDirect(int armed) {
+    return '已启用 $armed/2 · 流量直连';
+  }
+
+  @override
+  String homeArmedHolding(int armed) {
+    return '已启用 $armed/2 · 断网保护拦截中';
+  }
+
+  @override
+  String homeArmedRetry(int armed, int attempt, int max) {
+    return '已启用 $armed/2 · 第 $attempt/$max 次重试';
+  }
+
+  @override
+  String homeArmedTriesFailed(int tries) {
+    return '$tries 次尝试均失败 · 切换下一台服务器';
+  }
+
+  @override
+  String homeArmedFailedOver(int armed, String time) {
+    return '已启用 $armed/2 · $time 已故障转移';
+  }
+
+  @override
+  String get homeQuotaTitle => '本月';
+
+  @override
+  String get homeQuotaLink => '遥测 →';
+
+  @override
+  String homeQuotaOf(int cap) {
+    return '/ $cap GB';
+  }
+
+  @override
+  String get homeQuotaMeter => '每月流量';
+
+  @override
+  String homeQuotaNote(String date, int block) {
+    return '$date重置 · 每格 $block GB';
+  }
+
+  @override
+  String homeQuotaBlock(int block) {
+    return '每格 $block GB';
+  }
+
+  @override
+  String homeQuotaNoteAmber(String date) {
+    return '80% 起变黄 · $date重置';
+  }
+
+  @override
+  String homeQuotaNoteCap(String date) {
+    return '已达上限 · $date重置';
+  }
+
+  @override
+  String get homeQuotaNoCap => '未设置上限';
+
+  @override
+  String get homeQuotaCounted => '在本机计数，即使关闭这个窗口';
+
+  @override
+  String get homeQuotaChipCap => '上限';
+
+  @override
+  String get homeQuotaNotCounting => '尚未统计';
+
+  @override
+  String get homeQuotaStartsAfter => '首次连接后开始统计';
+
+  @override
+  String get homeQuotaCapFromPlan => '上限来自你的 VPS 套餐';
+
+  @override
+  String get homeBannerBlockedTag => '流量已拦截 · 所有服务器均失败';
+
+  @override
+  String homeBannerHeldTag(int attempt, int max) {
+    return 'Charon 重试期间流量已拦截 · 第 $attempt/$max 次';
+  }
+
+  @override
+  String homeBannerHeldText(String server, String next) {
+    return '$server 不再响应。Charon 每 5 秒重试一次，期间拦截你的流量，然后切换到 $next。';
+  }
+
+  @override
+  String homeBannerHeldTextLast(String server) {
+    return '$server 不再响应。Charon 每 5 秒重试一次，期间拦截你的流量。';
+  }
+
+  @override
+  String homeBannerCapTag(String server) {
+    return '严重 · $server 已达上限';
+  }
+
+  @override
+  String homeBannerCapText(String used) {
+    return '本月已用 $used GB。Charon 会保持隧道连接，但此后服务商可能限速、停止或额外计费。';
+  }
+
+  @override
+  String homeBannerReachTag(String server) {
+    return '无法连接 · $server';
+  }
+
+  @override
+  String homeBannerReconnectTag(int attempt, int max) {
+    return '自动重连 · 第 $attempt/$max 次';
+  }
+
+  @override
+  String homeBannerReconnectText(String server, String next) {
+    return '$server 不再响应。Charon 每 5 秒重试一次，然后切换到 $next。断网保护已关闭，期间流量直连。';
+  }
+
+  @override
+  String homeBannerReconnectTextLast(String server) {
+    return '$server 不再响应。Charon 每 5 秒重试一次。断网保护已关闭，期间流量直连。';
+  }
+
+  @override
+  String homeBannerFailoverTag(String server) {
+    return '故障转移 · $server 已断开';
+  }
+
+  @override
+  String homeBannerFailoverText(
+    String server,
+    int tries,
+    int seconds,
+    String next,
+  ) {
+    return '$server 在 $seconds 秒内失败 $tries 次。Charon 会用真实往返检查 $next，通过后才显示已连接。';
+  }
+
+  @override
+  String get homeBannerTunnelLostTag => '隧道丢失 · 自动重连已关闭';
+
+  @override
+  String homeBannerQuotaTag(int percent, String server) {
+    return '流量 · $server 已用 $percent%';
+  }
+
+  @override
+  String homeBannerQuotaText(String used, int cap, String date) {
+    return '已用 $used / $cap GB，$date重置。超出上限后，服务商可能限速、停止或额外计费。';
+  }
+
+  @override
+  String homeBannerQuotaTextNoDate(String used, int cap) {
+    return '已用 $used / $cap GB。超出上限后，服务商可能限速、停止或额外计费。';
+  }
+
+  @override
+  String homeBannerBackupTag(String server) {
+    return '使用备用 · $server';
+  }
+
+  @override
+  String homeBannerBackupText(String primary, String time, String server) {
+    return '$primary 于 $time 停止响应。Charon 会保持在 $server，不会自行切回。';
+  }
+
+  @override
+  String homeActionMoveTo(String server) {
+    return '切换到 $server';
+  }
+
+  @override
+  String homeActionTry(String server) {
+    return '重试 $server';
+  }
+
+  @override
+  String get homeActionSeeUsage => '查看用量';
+
+  @override
+  String get homeActionTurnOnAutoReconnect => '开启自动重连';
+
+  @override
+  String get homeActionEditServer => '编辑服务器';
+
+  @override
+  String get homeActionDnsSettings => 'DNS 设置';
+
+  @override
+  String get homeHelpLink => '如何修复';
+
+  @override
+  String get homeHelpWebsite => '网站 ↗';
+
+  @override
+  String homeCauseNoAnswer(String server) {
+    return '$server 没有应答。';
+  }
+
+  @override
+  String get homeTodoNoAnswer => '请确认服务器正在运行，然后重试。';
+
+  @override
+  String get homeCauseHandshake => '服务器有应答，但 Reality 握手失败。';
+
+  @override
+  String get homeTodoHandshake => '公钥或 SNI 可能不匹配。请检查服务器，然后在这里编辑。';
+
+  @override
+  String homeCauseEgress(String server) {
+    return '流量没有从 $server 出口。';
+  }
+
+  @override
+  String get homeTodoEgress => '出口与服务器匹配之前，Charon 不会显示已连接。';
+
+  @override
+  String get homeCauseDns => 'DNS 没有经过隧道。';
+
+  @override
+  String get homeTodoDns => 'Charon 不会显示已连接。请检查 DNS 设置，然后重试。';
+
+  @override
+  String get homeCauseAdapter => 'Charon 无法创建网络适配器。';
+
+  @override
+  String get homeTodoAdapter => '请重启 Charon 服务，或用安装程序修复，然后重试。';
+
+  @override
+  String get homeCausePort => '另一个程序占用了 Charon 需要的端口。';
+
+  @override
+  String get homeTodoPort => '请关闭该程序或重启电脑，然后重试。';
+
+  @override
+  String homeCauseConfig(String server) {
+    return 'Xray 拒绝了 $server 的配置，因此 Charon 回退到了之前的核心。';
+  }
+
+  @override
+  String get homeTodoConfig => '请在之前的核心上重试，或编辑服务器。';
+
+  @override
+  String get androidAnotherVpnTitle => '另一个 VPN 已接管';
+
+  @override
+  String get dialogReleaseKicker => '放行';
+
+  @override
+  String get dialogEscFoot => 'Esc 取消 · 焦点在取消';
+
+  @override
+  String get homeSheetKicker => '换一台服务器';
+
+  @override
+  String get homeSheetTitle => '选择要尝试的服务器';
+
+  @override
+  String homeSheetBody(String server, int tries) {
+    return '$server 连续 $tries 次没有响应。Charon 会在你选择的服务器上重新开始，并保持你的选择。';
+  }
+
+  @override
+  String homeSheetMetaFailed(String cc, String address) {
+    return '$cc · $address · 无响应';
+  }
+
+  @override
+  String homeSheetMetaOrder(String cc, String address, int position) {
+    return '$cc · $address · 故障转移顺序第 $position';
+  }
+
+  @override
+  String get homeSheetTagTry => '尝试';
+
+  @override
+  String get homeSheetTagFailed => '失败';
+
+  @override
+  String get homeSheetFoot => '流量被拦截期间，服务器列表可以选择';
 }

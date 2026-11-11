@@ -41,7 +41,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String stateConnectedLine2(String ip) {
-    return 'egress $ip, cocok dengan server';
+    return 'egress $ip · cocok dengan server';
   }
 
   @override
@@ -52,7 +52,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String stateVerifyingLine2(String duration) {
-    return 'menguji round trip Reality nyata: $duration';
+    return 'menguji round trip Reality nyata · $duration';
   }
 
   @override
@@ -73,7 +73,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get stateBlockedLine2 =>
-      'tidak ada server merespons, kill switch aktif';
+      'tidak ada server merespons · kill switch menahan';
 
   @override
   String get stateNoServerTitle => 'Belum ada server';
@@ -95,7 +95,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String stateReconnectingLine2(String server, int seconds) {
-    return '$server tidak merespons, coba lagi dalam $seconds dtk';
+    return '$server tidak merespons · coba lagi dalam $seconds dtk';
   }
 
   @override
@@ -108,7 +108,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String stateReconnectingHeldLine2(int attempt, int maxAttempts, int seconds) {
-    return 'percobaan $attempt dari $maxAttempts, berikutnya dalam $seconds dtk, traffic ditahan';
+    return 'percobaan $attempt dari $maxAttempts · berikutnya dalam $seconds dtk · traffic ditahan';
   }
 
   @override
@@ -121,7 +121,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String stateSwitchingLine2(String previousServer, String server) {
-    return '$previousServer gagal 5 kali, memeriksa $server';
+    return '$previousServer gagal 5 kali · memeriksa $server';
   }
 
   @override
@@ -137,7 +137,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String stateOnBackupLine2(String ip, String server) {
-    return 'egress $ip, cocok dengan $server';
+    return 'egress $ip · cocok dengan $server';
   }
 
   @override
@@ -156,7 +156,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get stateTunnelLostLine2 =>
-      'traffic langsung keluar, sambung ulang otomatis mati';
+      'traffic langsung keluar · sambung ulang otomatis mati';
 
   @override
   String get stateWakingUpTitle => 'Bangun dari tidur';
@@ -176,7 +176,8 @@ class AppLocalizationsId extends AppLocalizations {
   String get stateCheckingNetworkBadge => 'TERHUBUNG · MEMERIKSA';
 
   @override
-  String get stateCheckingNetworkLine2 => 'jaringan berubah, memeriksa koneksi';
+  String get stateCheckingNetworkLine2 =>
+      'jaringan berubah · memeriksa koneksi';
 
   @override
   String get stateDisconnectingTitle => 'Memutus koneksi';
@@ -1527,18 +1528,14 @@ class AppLocalizationsId extends AppLocalizations {
   String get dialogQuitTunnelStops => 'TEROWONGAN BERHENTI';
 
   @override
-  String get dialogReleaseTitle => 'Putuskan dan lepaskan?';
-
-  @override
-  String get dialogReleaseSubtitle =>
-      'Lalu lintas akan langsung keluar jaringan hingga Anda tersambung kembali.';
+  String get dialogReleaseTitle => 'Lepas trafik?';
 
   @override
   String get dialogReleaseWarning =>
-      'Perlindungan kill switch akan dilepas seketika. Seluruh lalu lintas jaringan perangkat tidak lagi terenkripsi dan melewati ISP secara langsung.';
+      'Trafik akan lewat langsung sampai kamu terhubung lagi. Kill switch tetap aktif untuk koneksi berikutnya.';
 
   @override
-  String get dialogReleaseConfirm => 'Putuskan & Lepaskan';
+  String get dialogReleaseConfirm => 'Putuskan dan lepas';
 
   @override
   String get dialogConflictTitle => 'Salinan server lebih baru';
@@ -1750,4 +1747,591 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get syncServerKeyHelper =>
       'Ditampilkan sekali saat Anda memulai server sinkronisasi untuk pertama kali.';
+
+  @override
+  String get homeReadLatency => 'LATENSI';
+
+  @override
+  String get homeReadDown => 'TURUN';
+
+  @override
+  String get homeReadUp => 'NAIK';
+
+  @override
+  String get homeReadSession => 'SESI';
+
+  @override
+  String get homeValueWait => 'tunggu';
+
+  @override
+  String get homeValueOff => 'mati';
+
+  @override
+  String get homeValueLost => 'hilang';
+
+  @override
+  String get homeValueDirect => 'langsung';
+
+  @override
+  String get homeNoteLatencyLive => 'koneksi tcp · tiap 5 dtk';
+
+  @override
+  String homeNoteLatencyServer(String server) {
+    return 'koneksi tcp · $server';
+  }
+
+  @override
+  String get homeNoteLast60 => '60 dtk terakhir';
+
+  @override
+  String get homeNoteMeasuredAfterVerify => 'diukur setelah verifikasi';
+
+  @override
+  String get homeNoteNoTunnelYet => 'belum ada tunnel';
+
+  @override
+  String get homeNoteConnectingFor => 'menghubungkan selama';
+
+  @override
+  String get homeNoteNoServerYet => 'belum ada server';
+
+  @override
+  String get homeNoteNoSessionsYet => 'belum ada sesi';
+
+  @override
+  String get homeNoteNoTunnel => 'tanpa tunnel';
+
+  @override
+  String get homeNoteLastSessionNotStored => 'sesi terakhir tidak disimpan';
+
+  @override
+  String homeNoteNoReply(String server) {
+    return 'tak ada balasan dari $server';
+  }
+
+  @override
+  String get homeNoteNotThroughCharon => 'tidak lewat Charon';
+
+  @override
+  String get homeNoteReconnectingFor => 'menyambung ulang selama';
+
+  @override
+  String get homeNoteWithoutTunnel => 'tanpa tunnel';
+
+  @override
+  String get homeNoteTunnelDown => 'tunnel mati';
+
+  @override
+  String get homeNoteHeldByKillSwitch => 'ditahan kill switch';
+
+  @override
+  String get homeNoteTrafficHeldFor => 'trafik ditahan selama';
+
+  @override
+  String get homeNoteTunnelStopped => 'tunnel berhenti';
+
+  @override
+  String get homeNoteAutoReconnectOff => 'sambung ulang mati';
+
+  @override
+  String get homeNoteNothingSent => 'tidak ada yang dikirim';
+
+  @override
+  String get homeNoteWakingUpFor => 'bangun selama';
+
+  @override
+  String homeNoteConnectedSince(String time) {
+    return 'terhubung sejak $time';
+  }
+
+  @override
+  String homeNoteOnServerSince(String server, String time) {
+    return 'di $server sejak $time';
+  }
+
+  @override
+  String get homeNodeTitle => 'NODE AKTIF';
+
+  @override
+  String get homeNodeLinkServers => 'Server →';
+
+  @override
+  String get homeNodeLinkAdd => 'Tambah →';
+
+  @override
+  String get homeNodeNoServerTitle => 'Belum ada server';
+
+  @override
+  String get homeNodeNoServerSub =>
+      '?? · belum diketahui sampai kamu menambahkan';
+
+  @override
+  String get homeNodeSwitchDisconnect => 'untuk ganti node, putuskan dulu';
+
+  @override
+  String get homeNodeSwitchCancel => 'untuk ganti node, batalkan dulu';
+
+  @override
+  String get homeNodeTapConnect => 'ketuk Sambung untuk memakai node ini';
+
+  @override
+  String get homeNodeNothingSent => 'tidak ada yang dikirim lewat tunnel';
+
+  @override
+  String get homeNodePickOrRelease => 'pilih server lain, atau lepas';
+
+  @override
+  String homeNodeAfterFailed(int count, String server) {
+    return 'setelah $count kali gagal, Charon pindah ke $server';
+  }
+
+  @override
+  String homeNodeFailoverPicked(int position) {
+    return '#$position di urutan failover · dipilih otomatis';
+  }
+
+  @override
+  String homeNodeYouPicked(String server) {
+    return 'kamu memilih $server';
+  }
+
+  @override
+  String homeNodeStaysOnBackup(String server) {
+    return 'tetap di $server sampai kamu pindah lagi';
+  }
+
+  @override
+  String get homeSceneMorning => 'PAGI';
+
+  @override
+  String get homeSceneDay => 'SIANG';
+
+  @override
+  String get homeSceneDusk => 'SORE';
+
+  @override
+  String get homeSceneNight => 'MALAM';
+
+  @override
+  String homeLocalTime(String scene, String time) {
+    return '$scene · LOKAL $time';
+  }
+
+  @override
+  String homeGreetMorning(String name) {
+    return 'Selamat pagi, $name!';
+  }
+
+  @override
+  String homeGreetAfternoon(String name) {
+    return 'Selamat siang, $name!';
+  }
+
+  @override
+  String homeGreetEvening(String name) {
+    return 'Selamat sore, $name!';
+  }
+
+  @override
+  String homeGreetNight(String name) {
+    return 'Selamat malam, $name!';
+  }
+
+  @override
+  String homeLocation(String city) {
+    return 'Kamu sedang di $city';
+  }
+
+  @override
+  String homeCrossCrosses(String country) {
+    return 'trafikmu menyeberang ke $country';
+  }
+
+  @override
+  String homeCrossGettingReady(String country) {
+    return 'bersiap menyeberang ke $country';
+  }
+
+  @override
+  String get homeCrossStays => 'trafikmu tetap di sisi ini';
+
+  @override
+  String get homeCrossWaitingDirect =>
+      'kapal menunggu · trafik lewat langsung untuk sementara';
+
+  @override
+  String get homeCrossWaitingHeld => 'kapal menunggu · trafik ditahan di sini';
+
+  @override
+  String homeCrossChanging(String country) {
+    return 'ganti kapal · menuju $country';
+  }
+
+  @override
+  String get homeCrossNeverLeft =>
+      'kapal belum berangkat · trafik tetap di sini';
+
+  @override
+  String get homeCrossHeldChoose =>
+      'trafik ditahan di sini sampai kamu memilih';
+
+  @override
+  String get homeCrossNoServer => 'belum ada tujuan · tambahkan server dulu';
+
+  @override
+  String get homeCountrySG => 'Singapura';
+
+  @override
+  String get homeCountryJP => 'Jepang';
+
+  @override
+  String get homeCountryKR => 'Korea Selatan';
+
+  @override
+  String get homeCountryFI => 'Finlandia';
+
+  @override
+  String get homeCountryID => 'Indonesia';
+
+  @override
+  String get homeCountryCN => 'Tiongkok';
+
+  @override
+  String get actionRetry => 'Coba lagi';
+
+  @override
+  String get homeTapGhost => 'atau ketuk hantunya';
+
+  @override
+  String get homeTapOpensServers => 'membuka Server';
+
+  @override
+  String get homeHeroNoServerHint => 'tempel config · impor link · pulihkan';
+
+  @override
+  String get homeFailsafeTitle => 'PENGAMAN';
+
+  @override
+  String get homeFailsafeLink => 'Pengaturan →';
+
+  @override
+  String get homeKillSwitch => 'Kill switch';
+
+  @override
+  String get homeAutoReconnect => 'Sambung ulang otomatis';
+
+  @override
+  String get homeChipOn => 'ON';
+
+  @override
+  String get homeChipOff => 'OFF';
+
+  @override
+  String get homeChipHolding => 'MENAHAN';
+
+  @override
+  String homeChipTry(int attempt, int max) {
+    return 'COBA $attempt/$max';
+  }
+
+  @override
+  String get homeChipNext => 'LANJUT';
+
+  @override
+  String homeArmed(int armed) {
+    return '$armed dari 2 aktif';
+  }
+
+  @override
+  String homeArmedDirect(int armed) {
+    return '$armed dari 2 aktif · trafik lewat langsung';
+  }
+
+  @override
+  String homeArmedHolding(int armed) {
+    return '$armed dari 2 aktif · kill switch menahan';
+  }
+
+  @override
+  String homeArmedRetry(int armed, int attempt, int max) {
+    return '$armed dari 2 aktif · coba $attempt dari $max';
+  }
+
+  @override
+  String homeArmedTriesFailed(int tries) {
+    return '$tries dari $tries percobaan gagal · server berikutnya';
+  }
+
+  @override
+  String homeArmedFailedOver(int armed, String time) {
+    return '$armed dari 2 aktif · failover $time';
+  }
+
+  @override
+  String get homeQuotaTitle => 'BULAN INI';
+
+  @override
+  String get homeQuotaLink => 'Telemetri →';
+
+  @override
+  String homeQuotaOf(int cap) {
+    return 'dari $cap GB';
+  }
+
+  @override
+  String get homeQuotaMeter => 'Trafik bulanan';
+
+  @override
+  String homeQuotaNote(String date, int block) {
+    return 'reset $date · 1 blok = $block GB';
+  }
+
+  @override
+  String homeQuotaBlock(int block) {
+    return '1 blok = $block GB';
+  }
+
+  @override
+  String homeQuotaNoteAmber(String date) {
+    return 'kuning mulai 80% · reset $date';
+  }
+
+  @override
+  String homeQuotaNoteCap(String date) {
+    return 'batas tercapai · reset $date';
+  }
+
+  @override
+  String get homeQuotaNoCap => 'batas belum diatur';
+
+  @override
+  String get homeQuotaCounted =>
+      'dihitung di perangkat ini, walau jendela ini ditutup';
+
+  @override
+  String get homeQuotaChipCap => 'BATAS';
+
+  @override
+  String get homeQuotaNotCounting => 'Belum menghitung';
+
+  @override
+  String get homeQuotaStartsAfter => 'mulai setelah koneksi pertama';
+
+  @override
+  String get homeQuotaCapFromPlan => 'batasnya dari paket VPS-mu';
+
+  @override
+  String get homeBannerBlockedTag => 'TRAFIK DITAHAN · SEMUA SERVER GAGAL';
+
+  @override
+  String homeBannerHeldTag(int attempt, int max) {
+    return 'TRAFIK DITAHAN SELAMA CHARON MENCOBA LAGI · COBA $attempt DARI $max';
+  }
+
+  @override
+  String homeBannerHeldText(String server, String next) {
+    return '$server berhenti merespons. Charon mencoba lagi tiap 5 dtk dan menahan trafikmu selama itu, lalu pindah ke $next.';
+  }
+
+  @override
+  String homeBannerHeldTextLast(String server) {
+    return '$server berhenti merespons. Charon mencoba lagi tiap 5 dtk dan menahan trafikmu selama itu.';
+  }
+
+  @override
+  String homeBannerCapTag(String server) {
+    return 'KRITIS · BATAS $server TERCAPAI';
+  }
+
+  @override
+  String homeBannerCapText(String used) {
+    return '$used GB terpakai bulan ini. Charon tetap menjaga tunnel, tapi mulai sekarang provider bisa memperlambat, menghentikan, atau menagih trafik tambahan.';
+  }
+
+  @override
+  String homeBannerReachTag(String server) {
+    return 'TIDAK TERJANGKAU · $server';
+  }
+
+  @override
+  String homeBannerReconnectTag(int attempt, int max) {
+    return 'SAMBUNG ULANG OTOMATIS · COBA $attempt DARI $max';
+  }
+
+  @override
+  String homeBannerReconnectText(String server, String next) {
+    return '$server berhenti merespons. Charon mencoba lagi tiap 5 dtk, lalu pindah ke $next. Kill switch mati, jadi trafik lewat langsung selama itu.';
+  }
+
+  @override
+  String homeBannerReconnectTextLast(String server) {
+    return '$server berhenti merespons. Charon mencoba lagi tiap 5 dtk. Kill switch mati, jadi trafik lewat langsung selama itu.';
+  }
+
+  @override
+  String homeBannerFailoverTag(String server) {
+    return 'FAILOVER · $server MATI';
+  }
+
+  @override
+  String homeBannerFailoverText(
+    String server,
+    int tries,
+    int seconds,
+    String next,
+  ) {
+    return '$server gagal $tries percobaan dalam $seconds dtk. Charon memeriksa $next dengan round trip nyata sebelum bilang terhubung.';
+  }
+
+  @override
+  String get homeBannerTunnelLostTag => 'TUNNEL HILANG · SAMBUNG ULANG MATI';
+
+  @override
+  String homeBannerQuotaTag(int percent, String server) {
+    return 'KUOTA · $percent% DARI $server';
+  }
+
+  @override
+  String homeBannerQuotaText(String used, int cap, String date) {
+    return '$used dari $cap GB terpakai, reset $date. Lewat batas, provider bisa memperlambat, menghentikan, atau menagih trafik tambahan.';
+  }
+
+  @override
+  String homeBannerQuotaTextNoDate(String used, int cap) {
+    return '$used dari $cap GB terpakai. Lewat batas, provider bisa memperlambat, menghentikan, atau menagih trafik tambahan.';
+  }
+
+  @override
+  String homeBannerBackupTag(String server) {
+    return 'DI CADANGAN · $server';
+  }
+
+  @override
+  String homeBannerBackupText(String primary, String time, String server) {
+    return '$primary berhenti merespons pukul $time. Charon tetap di $server dan tidak pindah balik sendiri.';
+  }
+
+  @override
+  String homeActionMoveTo(String server) {
+    return 'Pindah ke $server';
+  }
+
+  @override
+  String homeActionTry(String server) {
+    return 'Coba $server';
+  }
+
+  @override
+  String get homeActionSeeUsage => 'Lihat pemakaian';
+
+  @override
+  String get homeActionTurnOnAutoReconnect => 'Nyalakan sambung ulang otomatis';
+
+  @override
+  String get homeActionEditServer => 'Edit server';
+
+  @override
+  String get homeActionDnsSettings => 'Pengaturan DNS';
+
+  @override
+  String get homeHelpLink => 'Cara memperbaikinya';
+
+  @override
+  String get homeHelpWebsite => 'SITUS WEB ↗';
+
+  @override
+  String homeCauseNoAnswer(String server) {
+    return '$server tidak menjawab.';
+  }
+
+  @override
+  String get homeTodoNoAnswer => 'Pastikan servernya menyala, lalu coba lagi.';
+
+  @override
+  String get homeCauseHandshake =>
+      'Server menjawab, tapi handshake Reality gagal.';
+
+  @override
+  String get homeTodoHandshake =>
+      'Public key atau SNI mungkin tidak cocok. Periksa servernya, lalu edit di sini.';
+
+  @override
+  String homeCauseEgress(String server) {
+    return 'Trafik keluar di tempat lain, bukan di $server.';
+  }
+
+  @override
+  String get homeTodoEgress =>
+      'Charon tidak akan bilang terhubung sebelum pintu keluarnya cocok dengan server.';
+
+  @override
+  String get homeCauseDns => 'DNS tidak lewat tunnel.';
+
+  @override
+  String get homeTodoDns =>
+      'Charon tidak akan bilang terhubung. Periksa pengaturan DNS, lalu coba lagi.';
+
+  @override
+  String get homeCauseAdapter =>
+      'Charon tidak bisa membuat adapter jaringannya.';
+
+  @override
+  String get homeTodoAdapter =>
+      'Mulai ulang layanan Charon, atau perbaiki lewat installer, lalu coba lagi.';
+
+  @override
+  String get homeCausePort =>
+      'Program lain memakai port yang dibutuhkan Charon.';
+
+  @override
+  String get homeTodoPort =>
+      'Tutup program itu atau restart PC-mu, lalu coba lagi.';
+
+  @override
+  String homeCauseConfig(String server) {
+    return 'Xray menolak config $server, jadi Charon kembali ke core sebelumnya.';
+  }
+
+  @override
+  String get homeTodoConfig =>
+      'Coba lagi di core sebelumnya, atau edit servernya.';
+
+  @override
+  String get androidAnotherVpnTitle => 'VPN lain mengambil alih';
+
+  @override
+  String get dialogReleaseKicker => 'LEPAS';
+
+  @override
+  String get dialogEscFoot => 'Esc membatalkan · fokus di Batal';
+
+  @override
+  String get homeSheetKicker => 'PILIH SERVER LAIN';
+
+  @override
+  String get homeSheetTitle => 'Pilih server untuk dicoba';
+
+  @override
+  String homeSheetBody(String server, int tries) {
+    return '$server tidak menjawab $tries kali percobaan. Charon mulai dari awal di server yang kamu pilih, dan itu tetap pilihanmu.';
+  }
+
+  @override
+  String homeSheetMetaFailed(String cc, String address) {
+    return '$cc · $address · tidak menjawab';
+  }
+
+  @override
+  String homeSheetMetaOrder(String cc, String address, int position) {
+    return '$cc · $address · #$position di urutan failover';
+  }
+
+  @override
+  String get homeSheetTagTry => 'COBA';
+
+  @override
+  String get homeSheetTagFailed => 'GAGAL';
+
+  @override
+  String get homeSheetFoot => 'daftar server terbuka selama trafik ditahan';
 }

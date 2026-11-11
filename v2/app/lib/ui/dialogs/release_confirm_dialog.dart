@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/generated/app_localizations.dart';
-import '../../theme/tokens.dart';
+import '../../theme/theme.dart';
 
-/// Confirmation dialog when releasing traffic from Blocked / Held state.
-/// Warns that traffic will go direct until user connects again.
-/// Default focus is on Cancel.
+/// Confirmation when releasing traffic that the kill switch holds, as on the
+/// HomeDesktop board: kicker, title, one sentence, Cancel and "Disconnect and
+/// release", with focus on Cancel. Esc closes it as Cancel.
 class ReleaseConfirmDialog extends StatelessWidget {
   const ReleaseConfirmDialog({super.key});
 
   static Future<bool?> show(BuildContext context) {
     return showDialog<bool>(
       context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.65),
+      barrierColor: Colors.black.withValues(alpha: 0.55),
       builder: (context) => const ReleaseConfirmDialog(),
     );
   }
@@ -20,140 +20,74 @@ class ReleaseConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colors = CharonColors.of(context);
+    final mono = CharonTypography.caption.copyWith(
+      fontFamily: CharonFontFamilies.spaceMono,
+      fontSize: 10.0,
+      height: 14 / 10,
+    );
 
     return Center(
       child: Material(
         color: Colors.transparent,
         child: Container(
-          width: 460,
+          width: 472,
+          padding: const EdgeInsets.fromLTRB(24, 22, 24, 20),
           decoration: BoxDecoration(
-            color: const Color(0xFF1E1E1E),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFF333333)),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black54,
-                blurRadius: 28,
-                offset: Offset(0, 12),
-              ),
-            ],
+            color: colors.surface,
+            borderRadius: BorderRadius.circular(28),
+            border: Border.all(color: colors.divider),
+            boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 60, offset: Offset(0, 24))],
           ),
-          padding: const EdgeInsets.all(22),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header
-              Row(
-                children: [
-                  Container(
-                    width: 34,
-                    height: 34,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF3A2814),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: const Color(0xFFFFB74D).withValues(alpha: 0.5)),
-                    ),
-                    child: const Icon(
-                      Icons.warning_amber_rounded,
-                      size: 20,
-                      color: Color(0xFFFFB74D),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          l10n.dialogReleaseTitle,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFFEDEDED),
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          l10n.dialogReleaseSubtitle,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Color(0xFFFFB74D),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              Text('> ${l10n.dialogReleaseKicker}', style: mono.copyWith(fontWeight: FontWeight.w700, color: colors.text3)),
+              const SizedBox(height: 12),
+              Text(
+                l10n.dialogReleaseTitle,
+                style: CharonTypography.h2.copyWith(color: colors.text),
               ),
-              const SizedBox(height: 14),
-
-              // Warning box
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF141414),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: const Color(0xFF2A2A2A)),
-                ),
-                child: Text(
-                  l10n.dialogReleaseWarning,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFFA3A3A3),
-                    height: 1.4,
-                  ),
-                ),
+              const SizedBox(height: 12),
+              Text(
+                l10n.dialogReleaseWarning,
+                style: CharonTypography.body.copyWith(fontSize: 13, height: 19 / 13, color: colors.text2),
               ),
-              const SizedBox(height: 20),
-
-              // Actions
+              const SizedBox(height: 18),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  // Cancel button has default focus per spec
+                  // Focus starts on Cancel: the safe choice.
                   OutlinedButton(
                     autofocus: true,
                     onPressed: () => Navigator.of(context).pop(false),
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFFEDEDED),
-                      side: const BorderSide(color: Color(0xFF4A4A4A)),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      foregroundColor: colors.text,
+                      side: BorderSide(color: colors.controlBorder),
+                      shape: const StadiumBorder(),
+                      minimumSize: const Size(0, 40),
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
                     ),
-                    child: Text(
-                      l10n.dialogCancel,
-                      style: const TextStyle(
-                        fontFamily: CharonTokens.fontMono,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
+                    child: Text(l10n.dialogCancel, style: CharonTypography.button.copyWith(color: colors.text)),
                   ),
                   const SizedBox(width: 10),
-                  ElevatedButton(
+                  FilledButton(
                     onPressed: () => Navigator.of(context).pop(true),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFE57373),
-                      foregroundColor: const Color(0xFF121212),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: colors.surface2,
+                      foregroundColor: colors.text,
+                      side: BorderSide(color: colors.divider),
+                      shape: const StadiumBorder(),
+                      minimumSize: const Size(0, 40),
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
                     ),
-                    child: Text(
-                      l10n.dialogReleaseConfirm,
-                      style: const TextStyle(
-                        fontFamily: CharonTokens.fontMono,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
+                    child: Text(l10n.dialogReleaseConfirm, style: CharonTypography.button.copyWith(color: colors.text)),
                   ),
                 ],
               ),
+              const SizedBox(height: 12),
+              Text('> ${l10n.dialogEscFoot}', style: mono.copyWith(color: colors.text3)),
             ],
           ),
         ),
