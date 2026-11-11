@@ -98,6 +98,10 @@ void main() {
       expect(find.text('ACTIVE · CONNECTED'), findsOneWidget);
       expect(find.byIcon(Icons.lock_outline), findsAtLeastNWidgets(1));
       expect(find.text('Disconnect →'), findsOneWidget);
+      // The board names the server by its code and the country by its name.
+      expect(find.text('Switching and deleting are locked while connected to SRV-01. Editing is fine.'), findsOneWidget);
+      expect(find.text('SRV-01 · Singapore'), findsOneWidget);
+      expect(find.text('SRV-02 · Japan'), findsOneWidget);
     });
 
     testWidgets('can select another server when disconnected', (tester) async {
@@ -191,7 +195,7 @@ void main() {
       expect(find.text('> SERVERS · 32 PROFILES'), findsOneWidget);
       await tester.drag(find.byType(ListView), const Offset(0, -3000));
       await tester.pumpAndSettle();
-      expect(find.text('32 servers is the limit, delete one to add another.'), findsOneWidget);
+      expect(find.text('32 servers is the limit. Delete one to add another.'), findsOneWidget);
     });
 
     testWidgets('renders Indonesian localization correctly', (tester) async {

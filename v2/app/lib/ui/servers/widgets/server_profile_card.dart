@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
-import '../../../theme/tokens.dart';
+import '../../../state/country.dart' as country_names;
+import '../../../theme/theme.dart';
 
 /// Card showing one server profile in the failover list.
 class ServerProfileCard extends StatelessWidget {
@@ -28,25 +29,20 @@ class ServerProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colors = CharonColors.of(context);
     final canUse = !isActive && !isConnected;
     final useLocked = !isActive && isConnected;
     final canDelete = !isActive && !isConnected;
 
-    final country = server.countryCode.isNotEmpty ? server.countryCode : 'SG';
-    final countryName = country == 'SG'
-        ? 'Singapore'
-        : country == 'JP'
-            ? 'Japan'
-            : country == 'US'
-                ? 'United States'
-                : country;
+    final country = server.countryCode.toUpperCase();
+    final countryName = country_names.countryName(l10n, country);
 
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E).withValues(alpha: 0.55),
+        color: colors.surface.withValues(alpha: 0.55),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isActive ? const Color(0xFF60A1D9) : const Color(0xFF262626),
+          color: isActive ? colors.accent : colors.surface2,
           width: isActive ? 2 : 1,
         ),
       ),
@@ -58,17 +54,17 @@ class ServerProfileCard extends StatelessWidget {
             width: 28,
             height: 28,
             decoration: BoxDecoration(
-              color: const Color(0xFF262626),
+              color: colors.surface2,
               borderRadius: BorderRadius.circular(8),
             ),
             alignment: Alignment.center,
             child: Text(
               '$order',
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: CharonTokens.fontMono,
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFFA3A3A3),
+                color: colors.text2,
               ),
             ),
           ),
@@ -78,18 +74,18 @@ class ServerProfileCard extends StatelessWidget {
             width: 36,
             height: 24,
             decoration: BoxDecoration(
-              color: const Color(0xFF262626),
+              color: colors.surface2,
               borderRadius: BorderRadius.circular(4),
-              border: Border.all(color: const Color(0xFF737373)),
+              border: Border.all(color: colors.controlBorder),
             ),
             alignment: Alignment.center,
             child: Text(
               country,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: CharonTokens.fontMono,
                 fontSize: 10,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFFEDEDED),
+                color: colors.text,
               ),
             ),
           ),
@@ -107,10 +103,10 @@ class ServerProfileCard extends StatelessWidget {
                   children: [
                     Text(
                       server.displayName.isNotEmpty ? server.displayName : server.id,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFFEDEDED),
+                        color: colors.text,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -119,7 +115,7 @@ class ServerProfileCard extends StatelessWidget {
                         height: 20,
                         padding: const EdgeInsets.symmetric(horizontal: 7),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF29333C),
+                          color: colors.connectedSoft,
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Row(
@@ -128,20 +124,20 @@ class ServerProfileCard extends StatelessWidget {
                             Container(
                               width: 6,
                               height: 6,
-                              decoration: const BoxDecoration(
-                                color: Color(0xFF60A1D9),
+                              decoration: BoxDecoration(
+                                color: colors.accent,
                                 shape: BoxShape.circle,
                               ),
                             ),
                             const SizedBox(width: 5),
                             Text(
                               isConnected ? l10n.serversActiveConnected : l10n.serversActive,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: CharonTokens.fontMono,
                                 fontSize: 10,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: 0.08,
-                                color: Color(0xFF60A1D9),
+                                color: colors.accent,
                               ),
                             ),
                           ],
@@ -151,20 +147,20 @@ class ServerProfileCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  '${server.id} · $countryName',
-                  style: const TextStyle(
+                  [server.id, if (countryName.isNotEmpty) countryName].join(' · '),
+                  style: TextStyle(
                     fontFamily: CharonTokens.fontMono,
                     fontSize: 11,
-                    color: Color(0xFFA3A3A3),
+                    color: colors.text2,
                   ),
                 ),
                 const SizedBox(height: 1),
                 Text(
                   '${server.address}:${server.port} · VLESS + Reality',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: CharonTokens.fontMono,
                     fontSize: 11,
-                    color: Color(0xFF8A8A8A),
+                    color: colors.text3,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -180,8 +176,8 @@ class ServerProfileCard extends StatelessWidget {
                 OutlinedButton(
                   onPressed: onSelect,
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: const Color(0xFFEDEDED),
-                    side: const BorderSide(color: Color(0xFF737373)),
+                    foregroundColor: colors.text,
+                    side: BorderSide(color: colors.controlBorder),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(999),
                     ),
@@ -190,7 +186,7 @@ class ServerProfileCard extends StatelessWidget {
                   ),
                   child: Text(
                     l10n.serversActionUse,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: CharonTokens.fontMono,
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -204,21 +200,21 @@ class ServerProfileCard extends StatelessWidget {
                     height: 36,
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF262626),
+                      color: colors.surface2,
                       borderRadius: BorderRadius.circular(999),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.lock, size: 14, color: Color(0xFF8A8A8A)),
+                        Icon(Icons.lock, size: 14, color: colors.text3),
                         const SizedBox(width: 6),
                         Text(
                           l10n.serversActionUse,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: CharonTokens.fontMono,
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
-                            color: Color(0xFF8A8A8A),
+                            color: colors.text3,
                           ),
                         ),
                       ],
@@ -228,15 +224,15 @@ class ServerProfileCard extends StatelessWidget {
               const SizedBox(width: 4),
               // Edit button
               IconButton(
-                icon: const Icon(Icons.edit_outlined, size: 18),
-                color: const Color(0xFFA3A3A3),
+                icon: Icon(Icons.edit_outlined, size: 18),
+                color: colors.text2,
                 splashRadius: 20,
                 onPressed: onEdit,
               ),
               // Delete button
               IconButton(
-                icon: const Icon(Icons.delete_outline, size: 18),
-                color: canDelete ? const Color(0xFFA3A3A3) : const Color(0xFF4A4A4A),
+                icon: Icon(Icons.delete_outline, size: 18),
+                color: canDelete ? colors.text2 : colors.controlBorder,
                 splashRadius: 20,
                 onPressed: canDelete ? onDelete : null,
               ),

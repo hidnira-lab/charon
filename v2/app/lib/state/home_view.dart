@@ -4,6 +4,7 @@ import '../gen/charon/v1/charon.pb.dart';
 import '../l10n/generated/app_localizations.dart';
 import '../ui/home/widgets/failure_copy.dart';
 import '../ui/home/widgets/live_values.dart';
+import 'country.dart' as country_names;
 import 'home_controller.dart';
 import 'ui_state.dart';
 
@@ -172,15 +173,7 @@ class HomeView {
     return lang == 'zh' ? '${t.month} 月 ${t.day} 日' : DateFormat('d MMM', localeTag).format(t);
   }
 
-  String countryName(String code) => switch (code.toUpperCase()) {
-        'SG' => l10n.homeCountrySG,
-        'JP' => l10n.homeCountryJP,
-        'KR' => l10n.homeCountryKR,
-        'FI' => l10n.homeCountryFI,
-        'ID' => l10n.homeCountryID,
-        'CN' => l10n.homeCountryCN,
-        _ => code.toUpperCase(),
-      };
+  String countryName(String code) => country_names.countryName(l10n, code);
 
   String get _country => countryName(active?.countryCode ?? '');
 

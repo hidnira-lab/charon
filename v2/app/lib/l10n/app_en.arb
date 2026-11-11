@@ -360,7 +360,7 @@
   "@serversActionImportLink": { "description": "Action to import vless link." },
   "serversActionPasteConfig": "Paste config",
   "@serversActionPasteConfig": { "description": "Action to paste server configuration." },
-  "serversLockedBanner": "Switching and deleting are locked while connected to {server}, editing is fine.",
+  "serversLockedBanner": "Switching and deleting are locked while connected to {server}. Editing is fine.",
   "@serversLockedBanner": {
     "description": "Notice banner when connected to a server.",
     "placeholders": { "server": { "type": "String" } }
@@ -379,7 +379,7 @@
   "@serversAddCardTitle": { "description": "Title of empty add card." },
   "serversAddCardSubtitle": "paste a JSON config or import a vless:// link",
   "@serversAddCardSubtitle": { "description": "Subtitle of empty add card." },
-  "serversLimitReached": "32 servers is the limit, delete one to add another.",
+  "serversLimitReached": "32 servers is the limit. Delete one to add another.",
   "@serversLimitReached": { "description": "Notice when server limit of 32 is reached." },
   "serversFailoverRule1": "failover: if auto reconnect fails 5 times, Charon moves to the next profile and stays there",
   "@serversFailoverRule1": { "description": "First failover rule notice." },

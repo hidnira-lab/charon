@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../gen/charon/v1/charon.pb.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../state/home_controller.dart';
-import '../../theme/tokens.dart';
+import '../../theme/theme.dart';
 import '../home/widgets/rail_nav.dart';
 import '../home/widgets/title_bar.dart';
 import 'widgets/add_server_dialog.dart';
@@ -37,6 +37,7 @@ class _ServersScreenState extends State<ServersScreen> {
   Widget _buildCanvas(BuildContext context) {
     final controller = widget.controller;
     final l10n = AppLocalizations.of(context)!;
+    final colors = CharonColors.of(context);
     final config = controller.config ?? Config();
     final servers = config.servers;
     final isConnected = controller.status.phase == Phase.PHASE_UP;
@@ -51,9 +52,9 @@ class _ServersScreenState extends State<ServersScreen> {
           height: 768,
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
-            color: const Color(0xFF121212),
+            color: colors.bg,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFF333333)),
+            border: Border.all(color: colors.divider),
           ),
           child: Column(
             children: [
@@ -88,22 +89,22 @@ class _ServersScreenState extends State<ServersScreen> {
                                       children: [
                                         Text(
                                           '> ${l10n.serversCountSubtitle(servers.length)}',
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontFamily: CharonTokens.fontMono,
                                             fontSize: 10,
                                             fontWeight: FontWeight.w700,
                                             letterSpacing: 0.08,
-                                            color: Color(0xFF8A8A8A),
+                                            color: colors.text3,
                                           ),
                                         ),
                                         const SizedBox(height: 2),
                                         Text(
                                           l10n.serversTitle,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 22,
                                             fontWeight: FontWeight.w600,
                                             letterSpacing: -0.015,
-                                            color: Color(0xFFEDEDED),
+                                            color: colors.text,
                                           ),
                                         ),
                                       ],
@@ -122,18 +123,18 @@ class _ServersScreenState extends State<ServersScreen> {
                                           onPressed: atLimit
                                               ? null
                                               : () => _openAddDialog(context, servers),
-                                          icon: const Icon(Icons.link, size: 16),
+                                          icon: Icon(Icons.link, size: 16),
                                           label: Text(
                                             l10n.serversActionImportLink,
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontFamily: CharonTokens.fontMono,
                                               fontSize: 12,
                                               fontWeight: FontWeight.w700,
                                             ),
                                           ),
                                           style: OutlinedButton.styleFrom(
-                                            foregroundColor: const Color(0xFFEDEDED),
-                                            side: const BorderSide(color: Color(0xFF737373)),
+                                            foregroundColor: colors.text,
+                                            side: BorderSide(color: colors.controlBorder),
                                             shape: RoundedRectangleBorder(
                                               borderRadius: BorderRadius.circular(999),
                                             ),
@@ -147,8 +148,8 @@ class _ServersScreenState extends State<ServersScreen> {
                                               ? null
                                               : () => _openAddDialog(context, servers),
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor: const Color(0xFFEDEDED),
-                                            foregroundColor: const Color(0xFF121212),
+                                            backgroundColor: colors.text,
+                                            foregroundColor: colors.bg,
                                             shape: RoundedRectangleBorder(
                                               borderRadius: BorderRadius.circular(999),
                                             ),
@@ -158,7 +159,7 @@ class _ServersScreenState extends State<ServersScreen> {
                                             children: [
                                               Text(
                                                 l10n.serversActionPasteConfig,
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                   fontFamily: CharonTokens.fontMono,
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w700,
@@ -168,11 +169,11 @@ class _ServersScreenState extends State<ServersScreen> {
                                               Container(
                                                 width: 30,
                                                 height: 30,
-                                                decoration: const BoxDecoration(
-                                                  color: Color(0xFF60A1D9),
+                                                decoration: BoxDecoration(
+                                                  color: colors.accent,
                                                   shape: BoxShape.circle,
                                                 ),
-                                                child: const Icon(Icons.add, size: 18, color: Color(0xFF121212)),
+                                                child: Icon(Icons.add, size: 18, color: colors.bg),
                                               ),
                                             ],
                                           ),
@@ -190,20 +191,20 @@ class _ServersScreenState extends State<ServersScreen> {
                                 height: 40,
                                 padding: const EdgeInsets.symmetric(horizontal: 14),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF1E1E1E).withValues(alpha: 0.55),
+                                  color: colors.surface.withValues(alpha: 0.55),
                                   borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: const Color(0xFF333333)),
+                                  border: Border.all(color: colors.divider),
                                 ),
                                 child: Row(
                                   children: [
-                                    const Icon(Icons.lock_outline, size: 18, color: Color(0xFFA3A3A3)),
+                                    Icon(Icons.lock_outline, size: 18, color: colors.text2),
                                     const SizedBox(width: 10),
                                     Expanded(
                                       child: Text(
-                                        l10n.serversLockedBanner(activeServer.displayName.isNotEmpty ? activeServer.displayName : activeServer.id),
-                                        style: const TextStyle(
+                                        l10n.serversLockedBanner(activeServer.id),
+                                        style: TextStyle(
                                           fontSize: 12,
-                                          color: Color(0xFFA3A3A3),
+                                          color: colors.text2,
                                         ),
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -212,11 +213,11 @@ class _ServersScreenState extends State<ServersScreen> {
                                       onPressed: controller.disconnect,
                                       child: Text(
                                         l10n.serversActionDisconnectLink,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontFamily: CharonTokens.fontMono,
                                           fontSize: 11,
                                           fontWeight: FontWeight.w700,
-                                          color: Color(0xFFEDEDED),
+                                          color: colors.text,
                                         ),
                                       ),
                                     ),
@@ -241,21 +242,21 @@ class _ServersScreenState extends State<ServersScreen> {
                                           children: [
                                             Text(
                                               '> ${l10n.serversFailoverSubtitle}',
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontFamily: CharonTokens.fontMono,
                                                 fontSize: 10,
                                                 fontWeight: FontWeight.w700,
                                                 letterSpacing: 0.08,
-                                                color: Color(0xFFA3A3A3),
+                                                color: colors.text2,
                                               ),
                                             ),
                                             Flexible(
                                               child: Text(
                                                 l10n.serversFailoverHint,
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                   fontFamily: CharonTokens.fontMono,
                                                   fontSize: 10,
-                                                  color: Color(0xFF8A8A8A),
+                                                  color: colors.text3,
                                                 ),
                                                 overflow: TextOverflow.ellipsis,
                                               ),
@@ -286,9 +287,9 @@ class _ServersScreenState extends State<ServersScreen> {
                                               if (atLimit) {
                                                 return Container(
                                                   decoration: BoxDecoration(
-                                                    color: const Color(0xFF1E1E1E).withValues(alpha: 0.4),
+                                                    color: colors.surface.withValues(alpha: 0.4),
                                                     borderRadius: BorderRadius.circular(16),
-                                                    border: Border.all(color: const Color(0xFF333333)),
+                                                    border: Border.all(color: colors.divider),
                                                   ),
                                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                                                   child: Row(
@@ -297,10 +298,10 @@ class _ServersScreenState extends State<ServersScreen> {
                                                         width: 40,
                                                         height: 40,
                                                         decoration: BoxDecoration(
-                                                          color: const Color(0xFF1E1E1E),
+                                                          color: colors.surface,
                                                           borderRadius: BorderRadius.circular(12),
                                                         ),
-                                                        child: const Icon(Icons.warning_amber_rounded, size: 20, color: Color(0xFFE3B579)),
+                                                        child: Icon(Icons.warning_amber_rounded, size: 20, color: colors.transitionText),
                                                       ),
                                                       const SizedBox(width: 14),
                                                       Expanded(
@@ -309,18 +310,18 @@ class _ServersScreenState extends State<ServersScreen> {
                                                           children: [
                                                             Text(
                                                               l10n.serversAddCardTitle,
-                                                              style: const TextStyle(
+                                                              style: TextStyle(
                                                                 fontSize: 14,
                                                                 fontWeight: FontWeight.w600,
-                                                                color: Color(0xFF737373),
+                                                                color: colors.controlBorder,
                                                               ),
                                                             ),
                                                             const SizedBox(height: 3),
                                                             Text(
                                                               l10n.serversLimitReached,
-                                                              style: const TextStyle(
+                                                              style: TextStyle(
                                                                 fontSize: 12,
-                                                                color: Color(0xFFE3B579),
+                                                                color: colors.transitionText,
                                                               ),
                                                             ),
                                                           ],
@@ -336,9 +337,9 @@ class _ServersScreenState extends State<ServersScreen> {
                                                 borderRadius: BorderRadius.circular(16),
                                                 child: Container(
                                                   decoration: BoxDecoration(
-                                                    color: const Color(0xFF161616),
+                                                    color: colors.bg,
                                                     borderRadius: BorderRadius.circular(16),
-                                                    border: Border.all(color: const Color(0xFF4A4A4A), style: BorderStyle.solid),
+                                                    border: Border.all(color: colors.controlBorder, style: BorderStyle.solid),
                                                   ),
                                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                                                   child: Row(
@@ -347,10 +348,10 @@ class _ServersScreenState extends State<ServersScreen> {
                                                         width: 40,
                                                         height: 40,
                                                         decoration: BoxDecoration(
-                                                          color: const Color(0xFF262626),
+                                                          color: colors.surface2,
                                                           borderRadius: BorderRadius.circular(12),
                                                         ),
-                                                        child: const Icon(Icons.add, size: 20, color: Color(0xFFEDEDED)),
+                                                        child: Icon(Icons.add, size: 20, color: colors.text),
                                                       ),
                                                       const SizedBox(width: 14),
                                                       Expanded(
@@ -359,19 +360,19 @@ class _ServersScreenState extends State<ServersScreen> {
                                                           children: [
                                                             Text(
                                                               l10n.serversAddCardTitle,
-                                                              style: const TextStyle(
+                                                              style: TextStyle(
                                                                 fontSize: 14,
                                                                 fontWeight: FontWeight.w600,
-                                                                color: Color(0xFFEDEDED),
+                                                                color: colors.text,
                                                               ),
                                                             ),
                                                             const SizedBox(height: 2),
                                                             Text(
                                                               '> ${l10n.serversAddCardSubtitle}',
-                                                              style: const TextStyle(
+                                                              style: TextStyle(
                                                                 fontFamily: CharonTokens.fontMono,
                                                                 fontSize: 11,
-                                                                color: Color(0xFF8A8A8A),
+                                                                color: colors.text3,
                                                               ),
                                                             ),
                                                           ],
@@ -388,19 +389,19 @@ class _ServersScreenState extends State<ServersScreen> {
                                         // Bottom failover rule hints
                                         Text(
                                           '> ${l10n.serversFailoverRule1}',
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontFamily: CharonTokens.fontMono,
                                             fontSize: 11,
-                                            color: Color(0xFF8A8A8A),
+                                            color: colors.text3,
                                           ),
                                         ),
                                         const SizedBox(height: 2),
                                         Text(
                                           '> ${l10n.serversFailoverRule2}',
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontFamily: CharonTokens.fontMono,
                                             fontSize: 11,
-                                            color: Color(0xFF8A8A8A),
+                                            color: colors.text3,
                                           ),
                                         ),
                                       ],

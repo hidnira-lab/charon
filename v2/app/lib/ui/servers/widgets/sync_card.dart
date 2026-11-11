@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
 import '../../../sync/sync_client.dart';
-import '../../../theme/tokens.dart';
+import '../../../theme/theme.dart';
 import '../../dialogs/sync_conflict_dialog.dart';
 import '../../dialogs/unpair_confirm_dialog.dart';
 import '../../dialogs/vault_passphrase_dialog.dart';
@@ -30,6 +30,7 @@ class SyncCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colors = CharonColors.of(context);
     final syncState = controller?.sync.state ?? SyncState.unpaired;
     final isPaired = syncState != SyncState.unpaired;
     final amberError = controller?.sync.errorMessage;
@@ -37,9 +38,9 @@ class SyncCard extends StatelessWidget {
     return Container(
       width: 320,
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E).withValues(alpha: 0.55),
+        color: colors.surface.withValues(alpha: 0.55),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF333333)),
+        border: Border.all(color: colors.divider),
       ),
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -51,30 +52,30 @@ class SyncCard extends StatelessWidget {
             children: [
               Text(
                 '> ${l10n.syncTitle}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: CharonTokens.fontMono,
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.08,
-                  color: Color(0xFFA3A3A3),
+                  color: colors.text2,
                 ),
               ),
               Container(
                 height: 22,
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF262626),
+                  color: colors.surface2,
                   borderRadius: BorderRadius.circular(6),
                 ),
                 alignment: Alignment.center,
                 child: Text(
                   l10n.syncE2EBadge,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: CharonTokens.fontMono,
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.06,
-                    color: Color(0xFFA3A3A3),
+                    color: colors.text2,
                   ),
                 ),
               ),
@@ -85,7 +86,7 @@ class SyncCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: const Color(0xFF121212),
+              color: colors.bg,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -94,10 +95,10 @@ class SyncCard extends StatelessWidget {
                   width: 38,
                   height: 38,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF262626),
+                    color: colors.surface2,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Icon(Icons.laptop, size: 20, color: Color(0xFFEDEDED)),
+                  child: Icon(Icons.laptop, size: 20, color: colors.text),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -108,28 +109,28 @@ class SyncCard extends StatelessWidget {
                         crossAxisAlignment: WrapCrossAlignment.center,
                         spacing: 8,
                         children: [
-                          const Text(
+                          Text(
                             'Laptop',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              color: Color(0xFFEDEDED),
+                              color: colors.text,
                             ),
                           ),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFEDEDED),
+                              color: colors.text,
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Text(
                               l10n.syncThisUnit,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: CharonTokens.fontMono,
                                 fontSize: 9,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: 0.08,
-                                color: Color(0xFF121212),
+                                color: colors.bg,
                               ),
                             ),
                           ),
@@ -144,10 +145,10 @@ class SyncCard extends StatelessWidget {
                               isPaired
                                   ? 'rev ${controller!.sync.lastSeenRevision} · ${controller!.sync.serverUrl}'
                                   : l10n.syncNotPaired,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: CharonTokens.fontMono,
                                 fontSize: 11,
-                                color: Color(0xFF8A8A8A),
+                                color: colors.text3,
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -162,7 +163,7 @@ class SyncCard extends StatelessWidget {
                                   }
                                 },
                             borderRadius: BorderRadius.circular(4),
-                            child: const Padding(
+                            child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                               child: Text(
                                 'UNPAIR',
@@ -171,7 +172,7 @@ class SyncCard extends StatelessWidget {
                                   fontSize: 9,
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: 0.05,
-                                  color: Color(0xFFE57373),
+                                  color: colors.criticalText,
                                 ),
                               ),
                             ),
@@ -188,10 +189,10 @@ class SyncCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               '> $amberError',
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: CharonTokens.fontMono,
                 fontSize: 10.5,
-                color: Color(0xFFF59E0B),
+                color: colors.transitionText,
               ),
             ),
           ],
@@ -203,8 +204,8 @@ class SyncCard extends StatelessWidget {
                 child: OutlinedButton(
                   onPressed: onPush ?? () => SyncConflictDialog.show(context),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: const Color(0xFFEDEDED),
-                    side: const BorderSide(color: Color(0xFF4A4A4A)),
+                    foregroundColor: colors.text,
+                    side: BorderSide(color: colors.controlBorder),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(999),
                     ),
@@ -212,7 +213,7 @@ class SyncCard extends StatelessWidget {
                   ),
                   child: Text(
                     l10n.syncActionPush,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: CharonTokens.fontMono,
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -225,9 +226,9 @@ class SyncCard extends StatelessWidget {
                 child: OutlinedButton(
                   onPressed: onPull ?? (isPaired ? () {} : null),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: const Color(0xFFEDEDED),
-                    disabledForegroundColor: const Color(0xFF5C5C5C),
-                    side: const BorderSide(color: Color(0xFF4A4A4A)),
+                    foregroundColor: colors.text,
+                    disabledForegroundColor: colors.text3,
+                    side: BorderSide(color: colors.controlBorder),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(999),
                     ),
@@ -235,7 +236,7 @@ class SyncCard extends StatelessWidget {
                   ),
                   child: Text(
                     l10n.syncActionPull,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: CharonTokens.fontMono,
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -251,19 +252,19 @@ class SyncCard extends StatelessWidget {
             width: double.infinity,
             child: OutlinedButton.icon(
               onPressed: null,
-              icon: const Icon(Icons.qr_code, size: 16),
+              icon: Icon(Icons.qr_code, size: 16),
               label: Text(
                 l10n.syncActionShowPairingCode,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: CharonTokens.fontMono,
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               style: OutlinedButton.styleFrom(
-                foregroundColor: const Color(0xFFEDEDED),
-                disabledForegroundColor: const Color(0xFF5C5C5C),
-                side: const BorderSide(color: Color(0xFF4A4A4A)),
+                foregroundColor: colors.text,
+                disabledForegroundColor: colors.text3,
+                side: BorderSide(color: colors.controlBorder),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(999),
                 ),
@@ -275,8 +276,8 @@ class SyncCard extends StatelessWidget {
           // File backup
           Container(
             padding: const EdgeInsets.only(top: 10),
-            decoration: const BoxDecoration(
-              border: Border(top: BorderSide(color: Color(0xFF333333))),
+            decoration: BoxDecoration(
+              border: Border(top: BorderSide(color: colors.divider)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -286,20 +287,20 @@ class SyncCard extends StatelessWidget {
                   children: [
                     Text(
                       l10n.syncFileBackupTitle,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: CharonTokens.fontMono,
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF8A8A8A),
+                        color: colors.text3,
                       ),
                     ),
                     Flexible(
                       child: Text(
                         l10n.syncFileBackupSubtitle,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: CharonTokens.fontMono,
                           fontSize: 9,
-                          color: Color(0xFF737373),
+                          color: colors.controlBorder,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -317,8 +318,8 @@ class SyncCard extends StatelessWidget {
                                   mode: VaultDialogMode.backup,
                                 ),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: const Color(0xFFEDEDED),
-                          side: const BorderSide(color: Color(0xFF4A4A4A)),
+                          foregroundColor: colors.text,
+                          side: BorderSide(color: colors.controlBorder),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(999),
                           ),
@@ -326,7 +327,7 @@ class SyncCard extends StatelessWidget {
                         ),
                         child: Text(
                           l10n.syncActionBackupFile,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w500,
                           ),
@@ -342,8 +343,8 @@ class SyncCard extends StatelessWidget {
                                   mode: VaultDialogMode.restore,
                                 ),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: const Color(0xFFEDEDED),
-                          side: const BorderSide(color: Color(0xFF4A4A4A)),
+                          foregroundColor: colors.text,
+                          side: BorderSide(color: colors.controlBorder),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(999),
                           ),
@@ -351,7 +352,7 @@ class SyncCard extends StatelessWidget {
                         ),
                         child: Text(
                           l10n.syncActionRestoreFile,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w500,
                           ),
@@ -367,49 +368,49 @@ class SyncCard extends StatelessWidget {
           // What syncs
           Text(
             l10n.syncWhatSyncsTitle,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: CharonTokens.fontMono,
               fontSize: 10,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF8A8A8A),
+              color: colors.text3,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             l10n.syncWhatSyncsLine1,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11,
               height: 1.4,
-              color: Color(0xFFEDEDED),
+              color: colors.text,
             ),
           ),
           const SizedBox(height: 3),
           Text(
             '> ${l10n.syncWhatSyncsLine2}',
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: CharonTokens.fontMono,
               fontSize: 10,
               height: 1.4,
-              color: Color(0xFF8A8A8A),
+              color: colors.text3,
             ),
           ),
           const Spacer(),
           // Bottom hints
           Text(
             '> ${l10n.syncEncryptedHint}',
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: CharonTokens.fontMono,
               fontSize: 10,
-              color: Color(0xFF737373),
+              color: colors.controlBorder,
             ),
           ),
           const SizedBox(height: 2),
           Text(
             '> ${l10n.syncNoOtherDevicesHint}',
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: CharonTokens.fontMono,
               fontSize: 10,
-              color: Color(0xFF737373),
+              color: colors.controlBorder,
             ),
           ),
         ],

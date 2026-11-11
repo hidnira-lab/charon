@@ -584,7 +584,7 @@ abstract class AppLocalizations {
   /// Notice banner when connected to a server.
   ///
   /// In en, this message translates to:
-  /// **'Switching and deleting are locked while connected to {server}, editing is fine.'**
+  /// **'Switching and deleting are locked while connected to {server}. Editing is fine.'**
   String serversLockedBanner(String server);
 
   /// Button to activate a server.
@@ -632,7 +632,7 @@ abstract class AppLocalizations {
   /// Notice when server limit of 32 is reached.
   ///
   /// In en, this message translates to:
-  /// **'32 servers is the limit, delete one to add another.'**
+  /// **'32 servers is the limit. Delete one to add another.'**
   String get serversLimitReached;
 
   /// First failover rule notice.

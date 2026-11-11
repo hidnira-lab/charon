@@ -292,7 +292,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String serversLockedBanner(String server) {
-    return 'Switching and deleting are locked while connected to $server, editing is fine.';
+    return 'Switching and deleting are locked while connected to $server. Editing is fine.';
   }
 
   @override
@@ -319,7 +319,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get serversLimitReached =>
-      '32 servers is the limit, delete one to add another.';
+      '32 servers is the limit. Delete one to add another.';
 
   @override
   String get serversFailoverRule1 =>
