@@ -42,6 +42,7 @@ func serve(conn io.ReadWriteCloser, h *hub) {
 		_ = ipc.WriteEnvelope(conn, &charonv1.Envelope{
 			RequestId: first.RequestId,
 			Payload: &charonv1.Envelope_HelloAck{HelloAck: &charonv1.HelloAck{
+				ProtocolVersion: maxProtocol, // the newest version this side speaks
 				Error: &charonv1.Error{
 					Code:       charonv1.ErrorCode_ERROR_UNSUPPORTED,
 					MessageKey: "error.protocol_no_overlap",

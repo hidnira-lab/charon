@@ -196,6 +196,9 @@ func (s *Server) handleConn(conn net.Conn) {
 		_ = ipc.WriteEnvelope(conn, &charonv1.Envelope{
 			RequestId: first.GetRequestId(),
 			Payload: &charonv1.Envelope_HelloAck{HelloAck: &charonv1.HelloAck{
+				// The newest version this service speaks, so the UI can say
+				// "window speaks 3, service speaks 2" on its update screen.
+				ProtocolVersion: uint32(MaxProtocolVersion),
 				Error: &charonv1.Error{
 					Code:       charonv1.ErrorCode_ERROR_UNSUPPORTED,
 					MessageKey: "error.protocol_no_overlap",

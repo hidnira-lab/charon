@@ -165,6 +165,49 @@ func TestServer_OversizedFrameMaxClientsAndCommands(t *testing.T) {
 	}
 }
 
+func TestServer_NoCommonProtocolNamesItsOwnVersionAndCloses(t *testing.T) {
+	mySID, err := CurrentProcessUserSID()
+	if err != nil {
+		t.Fatal(err)
+	}
+	pipeName := fmt.Sprintf(`\\.\pipe\charon-test-ver-%d`, time.Now().UnixNano())
+	ln, err := ListenNamedPipe(pipeName, mySID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer ln.Close()
+
+	srv := NewServer(Config{ServiceVersion: "0.1.0", XrayVersion: "26.3.27", PingEvery: 10 * time.Second})
+	defer srv.Close()
+	go func() { _ = srv.Serve(ln) }()
+
+	c := dialPipe(t, pipeName)
+	defer c.Close()
+	// A window that only speaks versions newer than the service.
+	_ = ipc.WriteEnvelope(c, &charonv1.Envelope{
+		ProtocolVersion: 3,
+		RequestId:       1,
+		Payload: &charonv1.Envelope_Hello{Hello: &charonv1.Hello{
+			MinProtocolVersion: MaxProtocolVersion + 1,
+			MaxProtocolVersion: MaxProtocolVersion + 2,
+		}},
+	})
+	env, err := ipc.ReadEnvelope(c)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ack := env.GetHelloAck()
+	if ack.GetError().GetCode() != charonv1.ErrorCode_ERROR_UNSUPPORTED {
+		t.Fatalf("got error %v, want ERROR_UNSUPPORTED", ack.GetError())
+	}
+	if ack.GetProtocolVersion() != MaxProtocolVersion {
+		t.Fatalf("ack names protocol %d, want the service's own %d", ack.GetProtocolVersion(), MaxProtocolVersion)
+	}
+	if _, err := ipc.ReadEnvelope(c); err == nil {
+		t.Fatal("the connection should close after a failed handshake")
+	}
+}
+
 func TestVerifyConn_ChecksClientIdentity(t *testing.T) {
 	mySID, err := CurrentProcessUserSID()
 	if err != nil {

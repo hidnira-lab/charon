@@ -83,6 +83,10 @@ func TestHandshakeWithNoOverlapReturnsErrorAndCloses(t *testing.T) {
 	if code := env.GetHelloAck().GetError().GetCode(); code != charonv1.ErrorCode_ERROR_UNSUPPORTED {
 		t.Fatalf("got error code %v", code)
 	}
+	// The UI says which version this side speaks on its update screen.
+	if got := env.GetHelloAck().GetProtocolVersion(); got != 1 {
+		t.Fatalf("mismatch ack names protocol %d, want 1", got)
+	}
 	if _, err := ipc.ReadEnvelope(c); err != io.EOF {
 		t.Fatalf("connection should close after a failed handshake, got %v", err)
 	}
