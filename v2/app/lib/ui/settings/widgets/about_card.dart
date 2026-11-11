@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../state/app_info.dart';
 import '../../../state/home_controller.dart';
 import '../../../theme/theme.dart';
-import '../../telemetry/widgets/export_diagnostics_dialog.dart';
+import '../../trust/diagnostics_screen.dart';
 import '../../trust/guide_links.dart';
 import '../../trust/licences_screen.dart';
 import '../../trust/privacy_screen.dart';
@@ -123,7 +124,7 @@ class AboutCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          'v0.1.0',
+                          'v$appVersion',
                           style: TextStyle(
                             fontFamily: CharonTokens.fontMono,
                             fontSize: 12,
@@ -180,7 +181,7 @@ class AboutCard extends StatelessWidget {
                         ),
                       );
                     } else if (item.label == l10n.settingsAboutDiagnostics) {
-                      ExportDiagnosticsDialog.show(context, controller!);
+                      DiagnosticsScreen.show(context, controller!);
                     }
                   },
                   borderRadius: BorderRadius.circular(7),

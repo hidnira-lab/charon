@@ -7,6 +7,7 @@ import 'support/fonts.dart';
 import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/l10n/generated/app_localizations.dart';
 import 'package:charon/main.dart';
+import 'package:charon/state/app_info.dart';
 import 'package:charon/state/home_controller.dart';
 import 'package:charon/theme/theme.dart';
 import 'package:charon/ui/updates/updates_screen.dart';
@@ -124,6 +125,9 @@ void main() {
       expect(find.text('Core updates arrive inside a signed Charon release, never straight from upstream.'), findsOneWidget);
       expect(find.text('Apply now'), findsOneWidget);
       expect(find.text('When I disconnect'), findsOneWidget);
+
+      expect(find.text('SIGNING KEY'), findsOneWidget);
+      expect(find.text(updateSigningFingerprint), findsOneWidget);
 
       // App card
       expect(find.text('> CHARON · THIS APP'), findsOneWidget);

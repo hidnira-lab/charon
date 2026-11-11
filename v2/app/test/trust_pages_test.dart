@@ -7,14 +7,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:charon/gen/charon/v1/charon.pbenum.dart';
 import 'package:charon/l10n/generated/app_localizations.dart';
 import 'package:charon/main.dart';
+import 'package:charon/state/app_info.dart';
 import 'package:charon/state/home_controller.dart';
-import 'package:charon/ui/telemetry/widgets/export_diagnostics_dialog.dart';
+import 'package:charon/theme/theme.dart';
+import 'package:charon/ui/trust/diagnostics_screen.dart';
 import 'package:charon/ui/trust/guide_links.dart';
 import 'package:charon/ui/trust/licences_screen.dart';
 import 'package:charon/ui/trust/privacy_screen.dart';
 
-Widget _buildTestTrustApp({required Widget home, Locale? locale}) {
+Widget _buildTestTrustApp({required Widget home, Locale? locale, ThemeData? theme}) {
   return MaterialApp(
+    theme: theme,
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
     locale: locale,
@@ -23,91 +26,168 @@ Widget _buildTestTrustApp({required Widget home, Locale? locale}) {
 }
 
 void main() {
-  group('LicencesScreen UI and Interactions', () {
-    testWidgets('renders all required open source licences and expands full text', (tester) async {
-      tester.view.physicalSize = const Size(1280, 800);
+  group('LicencesScreen follows the Trust board', () {
+    testWidgets('lists the six entries, with the Charon text open and the others closed', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() => tester.view.resetPhysicalSize());
 
       final controller = HomeController();
-      await tester.pumpWidget(_buildTestTrustApp(
-        home: LicencesScreen(controller: controller),
-      ));
+      await tester.pumpWidget(_buildTestTrustApp(home: LicencesScreen(controller: controller)));
       await tester.pumpAndSettle();
 
-      expect(find.byType(LicencesScreen), findsOneWidget);
-      expect(find.text('Open Source Licences'), findsOneWidget);
-      expect(find.text('> TRUST · LEGAL'), findsOneWidget);
-      expect(find.text('← Back to Settings'), findsOneWidget);
+      expect(find.text('> SETTINGS · ABOUT · LICENCES'), findsOneWidget);
+      expect(find.text('Licences'), findsOneWidget);
+      expect(find.text('Charon v$appVersion'), findsOneWidget);
+      expect(find.text('Charon is free software. These are the licences of everything it ships with.'), findsOneWidget);
 
-      // Verify first sections
-      expect(find.text('Charon Client & Service'), findsOneWidget);
-      expect(find.text('Xray Core Engine'), findsOneWidget);
-
-      // Expand Charon full text while at top of list
-      expect(find.text('View full text'), findsWidgets);
-      await tester.tap(find.text('View full text').first);
-      await tester.pumpAndSettle();
-
-      expect(find.text('Hide text'), findsOneWidget);
+      for (final name in ['Charon', 'Xray core', 'wintun', 'Go modules', 'Flutter packages', 'Fonts']) {
+        expect(find.text(name), findsOneWidget, reason: name);
+      }
+      for (final chip in ['GPL 3.0', 'MPL 2.0', 'TO CONFIRM', 'OFL 1.1']) {
+        expect(find.text(chip), findsOneWidget, reason: chip);
+      }
+      expect(find.text('MIXED'), findsNWidgets(2));
       expect(find.textContaining('GNU GENERAL PUBLIC LICENSE'), findsOneWidget);
+      expect(find.text('Source code ↗'), findsOneWidget);
+      expect(find.text('Full text ↗'), findsOneWidget);
+      expect(find.text('> the list is generated from the build · the exact terms come from the legal review'),
+          findsOneWidget);
+    });
 
-      // Collapse text
-      await tester.tap(find.text('Hide text'));
+    testWidgets('tapping a row opens it and closes the one that was open', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+
+      await tester.pumpWidget(_buildTestTrustApp(home: LicencesScreen(controller: HomeController())));
       await tester.pumpAndSettle();
-      expect(find.text('Hide text'), findsNothing);
 
-      // Scroll down to verify remaining sections
-      await tester.scrollUntilVisible(find.text('Typography & Fonts (Inter, Space Mono)'), 200.0);
-      expect(find.text('Go Runtime Modules'), findsOneWidget);
-      expect(find.text('Dart & Flutter Packages'), findsOneWidget);
-      expect(find.text('Typography & Fonts (Inter, Space Mono)'), findsOneWidget);
+      await tester.tap(find.text('Xray core'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Mozilla Public License Version 2.0'), findsOneWidget);
+      expect(find.textContaining('GNU GENERAL PUBLIC LICENSE'), findsNothing);
+
+      await tester.tap(find.text('Xray core'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Mozilla Public License Version 2.0'), findsNothing);
+    });
+
+    testWidgets('wintun says its terms are still to be confirmed, not a licence it may not have', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+
+      await tester.pumpWidget(_buildTestTrustApp(home: LicencesScreen(controller: HomeController())));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('wintun'));
+      await tester.pumpAndSettle();
+      expect(find.text('Terms are confirmed in the legal review before the first release.'), findsOneWidget);
     });
   });
 
-  group('PrivacyScreen UI and Behaviour Details', () {
-    testWidgets('renders network destinations, privacy facts, and security fingerprint', (tester) async {
-      tester.view.physicalSize = const Size(1280, 800);
+  group('PrivacyScreen follows the Trust board', () {
+    testWidgets('three connections, four facts, two links and the note', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+
+      await tester.pumpWidget(_buildTestTrustApp(home: PrivacyScreen(controller: HomeController())));
+      await tester.pumpAndSettle();
+
+      expect(find.text('> SETTINGS · ABOUT · PRIVACY AND NETWORK'), findsOneWidget);
+      expect(find.text('Privacy and network'), findsOneWidget);
+      expect(find.text('no analytics · no crash reports'), findsOneWidget);
+      expect(find.text('Charon talks to three kinds of places, and nothing else.'), findsOneWidget);
+      for (final t in ['YOUR SERVERS', 'SYNC SERVER', 'GITHUB']) {
+        expect(find.text(t), findsOneWidget, reason: t);
+      }
+      expect(find.text('> whenever you connect'), findsOneWidget);
+      expect(find.text('> at start, then once a day · downloads only while connected'), findsOneWidget);
+      for (final f in ['No analytics', 'No crash reports', 'Location stays here', 'No account needed']) {
+        expect(find.text(f), findsOneWidget, reason: f);
+      }
+      expect(find.text('Threat model ↗'), findsOneWidget);
+      expect(find.text('SECURITY.md ↗'), findsOneWidget);
+      // What is not on the board is gone from this page.
+      expect(find.text('NOTHING ELSE'), findsNothing);
+      expect(find.text('UPDATE SIGNING FINGERPRINT'), findsNothing);
+    });
+  });
+
+  group('DiagnosticsScreen follows the Trust board', () {
+    testWidgets('seven choices, access log off, a live preview and a copy button', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() => tester.view.resetPhysicalSize());
 
       final controller = HomeController();
       await tester.pumpWidget(_buildTestTrustApp(
-        home: PrivacyScreen(controller: controller),
+        home: DiagnosticsScreen(controller: controller, osName: 'windows 11'),
       ));
       await tester.pumpAndSettle();
 
-      expect(find.byType(PrivacyScreen), findsOneWidget);
-      expect(find.text('Network & Privacy'), findsOneWidget);
-      expect(find.text('> TRUST · BEHAVIOUR'), findsOneWidget);
-      expect(find.text('← Back to Settings'), findsOneWidget);
+      expect(find.text('> SETTINGS · ABOUT · EXPORT DIAGNOSTICS'), findsOneWidget);
+      expect(find.text('Export diagnostics'), findsOneWidget);
+      expect(find.text('copied, never uploaded'), findsOneWidget);
+      for (final t in [
+        'App and core versions',
+        'State changes',
+        'Core log lines',
+        'Server summaries',
+        'Settings',
+        'Access log',
+      ]) {
+        expect(find.text(t), findsOneWidget, reason: t);
+      }
+      expect(find.text('off by default · it lists the sites you opened'), findsOneWidget);
+      expect(find.text('> PREVIEW'), findsOneWidget);
+      expect(find.text('windows 11'), findsOneWidget);
+      expect(find.text('Copy to clipboard'), findsOneWidget);
+      expect(find.text('Cancel'), findsOneWidget);
+    });
 
-      // Destinations
-      expect(find.text('NETWORK DESTINATIONS'), findsOneWidget);
-      expect(find.text('YOUR SERVERS'), findsOneWidget);
-      expect(find.text('SYNC SERVER (ONLY WHEN PAIRED)'), findsOneWidget);
-      expect(find.text('GITHUB (UPDATES ONLY)'), findsOneWidget);
-      expect(find.text('NOTHING ELSE'), findsOneWidget);
+    testWidgets('turning every choice off says nothing is selected and disables Copy', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
 
-      // Four Plain Facts
-      expect(find.text('PLAIN PRIVACY FACTS'), findsOneWidget);
-      expect(find.text('Zero Analytics & Telemetry'), findsOneWidget);
-      expect(find.text('Location Stays On Your Device'), findsOneWidget);
-      expect(find.text('Scheduled Updates'), findsOneWidget);
-      expect(find.text('No Activity History'), findsOneWidget);
+      await tester.pumpWidget(_buildTestTrustApp(
+        home: DiagnosticsScreen(controller: HomeController(), osName: 'windows 11'),
+      ));
+      await tester.pumpAndSettle();
 
-      // Security Fingerprint
-      expect(find.text('SECURITY & THREAT MODEL'), findsOneWidget);
-      expect(find.text('UPDATE SIGNING FINGERPRINT'), findsOneWidget);
-      expect(
-        find.text(updateSigningFingerprint),
-        findsOneWidget,
-      );
+      for (final t in [
+        'App and core versions',
+        'Windows version',
+        'State changes',
+        'Core log lines',
+        'Server summaries',
+        'Settings',
+      ]) {
+        await tester.tap(find.text(t));
+        await tester.pumpAndSettle();
+      }
+      expect(find.text('nothing selected'), findsOneWidget);
+      expect(find.text('windows 11'), findsNothing);
+    });
+
+    testWidgets('the access log joins the text only when chosen', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+
+      final controller = HomeController();
+      await tester.pumpWidget(_buildTestTrustApp(
+        home: DiagnosticsScreen(controller: controller, osName: 'windows 11'),
+      ));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('access '), findsNothing);
     });
   });
 
   group('Settings Screen Navigation to Trust Pages', () {
-    testWidgets('navigates to Licences, Privacy, and Diagnostics from About card', (tester) async {
+    testWidgets('opens Licences, Privacy and Diagnostics from the About card and comes back', (tester) async {
       tester.view.physicalSize = const Size(1280, 1000);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() => tester.view.resetPhysicalSize());
@@ -117,42 +197,47 @@ void main() {
       controller.setTab(4); // Settings tab
       await tester.pumpAndSettle();
 
-      // 1. Open Licences
       await tester.ensureVisible(find.text('LICENCES →'));
       await tester.tap(find.text('LICENCES →'));
       await tester.pumpAndSettle();
-
       expect(find.byType(LicencesScreen), findsOneWidget);
-      await tester.tap(find.text('← Back to Settings'));
+      await tester.tap(find.text('> SETTINGS · ABOUT · LICENCES'));
       await tester.pumpAndSettle();
-
       expect(find.byType(LicencesScreen), findsNothing);
 
-      // 2. Open Privacy & Network
       await tester.ensureVisible(find.text('OPEN →'));
       await tester.tap(find.text('OPEN →'));
       await tester.pumpAndSettle();
-
       expect(find.byType(PrivacyScreen), findsOneWidget);
-      await tester.tap(find.text('← Back to Settings'));
+      await tester.tap(find.text('> SETTINGS · ABOUT · PRIVACY AND NETWORK'));
       await tester.pumpAndSettle();
-
       expect(find.byType(PrivacyScreen), findsNothing);
 
-      // 3. Open Diagnostics Preview
       await tester.ensureVisible(find.text('PREVIEW →'));
       await tester.tap(find.text('PREVIEW →'));
       await tester.pumpAndSettle();
-
-      expect(find.byType(ExportDiagnosticsDialog), findsOneWidget);
+      expect(find.byType(DiagnosticsScreen), findsOneWidget);
       await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
-
-      expect(find.byType(ExportDiagnosticsDialog), findsNothing);
+      expect(find.byType(DiagnosticsScreen), findsNothing);
     });
 
-    testWidgets('renders Indonesian localization cleanly across trust pages', (tester) async {
-      tester.view.physicalSize = const Size(1280, 800);
+    testWidgets('light theme uses the light tokens on the trust pages', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+
+      await tester.pumpWidget(_buildTestTrustApp(
+        home: LicencesScreen(controller: HomeController()),
+        theme: CharonTheme.light,
+      ));
+      await tester.pumpAndSettle();
+      expect(tester.widget<Text>(find.text('Licences')).style!.color, CharonColors.light.text);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('renders Indonesian and Chinese on the trust pages without overflow', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() => tester.view.resetPhysicalSize());
 
@@ -162,23 +247,27 @@ void main() {
         locale: const Locale('id'),
       ));
       await tester.pumpAndSettle();
-
-      expect(find.text('Lisensi Sumber Terbuka'), findsOneWidget);
-      expect(find.text('> KEPERCAYAAN · LEGAL'), findsOneWidget);
-      expect(find.text('Klien & Layanan Charon'), findsOneWidget);
-      expect(find.text('Lihat teks lengkap'), findsWidgets);
+      expect(find.text('Lisensi'), findsOneWidget);
+      expect(find.text('> PENGATURAN · TENTANG · LISENSI'), findsOneWidget);
+      expect(find.text('aplikasi ini'), findsOneWidget);
 
       await tester.pumpWidget(_buildTestTrustApp(
         home: PrivacyScreen(controller: controller),
         locale: const Locale('id'),
       ));
       await tester.pumpAndSettle();
+      expect(find.text('Privasi dan jaringan'), findsOneWidget);
+      expect(find.text('SERVERMU'), findsOneWidget);
+      expect(find.text('Tanpa akun'), findsOneWidget);
 
-      expect(find.text('Jaringan & Privasi'), findsOneWidget);
-      expect(find.text('> KEPERCAYAAN · PERILAKU'), findsOneWidget);
-      expect(find.text('TUJUAN JARINGAN'), findsOneWidget);
-      expect(find.text('FAKTA PRIVASI NYATA'), findsOneWidget);
-      expect(find.text('Nol Analitik & Telemetri'), findsOneWidget);
+      await tester.pumpWidget(_buildTestTrustApp(
+        home: DiagnosticsScreen(controller: controller, osName: 'windows 11'),
+        locale: const Locale('zh'),
+      ));
+      await tester.pumpAndSettle();
+      expect(find.text('导出诊断信息'), findsOneWidget);
+      expect(find.text('复制到剪贴板'), findsOneWidget);
+      expect(tester.takeException(), isNull);
     });
   });
 
@@ -250,7 +339,7 @@ void main() {
     });
   });
 
-  test('the fingerprint on the Privacy screen is the SHA-256 of the embedded primary release key', () async {
+  test('the fingerprint on the Updates screen is the SHA-256 of the embedded primary release key', () async {
     final manifestGo = File('../core/update/manifest.go').readAsStringSync();
     final hex = RegExp('DefaultPrimaryPublicKeyHex = "([0-9a-f]{64})"').firstMatch(manifestGo)!.group(1)!;
     final key = [for (var i = 0; i < hex.length; i += 2) int.parse(hex.substring(i, i + 2), radix: 16)];

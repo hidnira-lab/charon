@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/updates_view.dart';
 import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
@@ -91,6 +92,7 @@ class UpdateCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final v = view;
     return Semantics(
       label: v.tag,
@@ -156,6 +158,11 @@ class UpdateCard extends StatelessWidget {
                   ),
                 ],
               ),
+            ],
+            if (v.signingKey != null) ...[
+              const SizedBox(height: 6),
+              Text(l10n.updSigningKeyLabel, style: monoStyle(colors.text3, 9, bold: true, em: 0.08)),
+              SelectableText(v.signingKey!, style: monoStyle(colors.accentText, 9).copyWith(height: 1.4)),
             ],
             const SizedBox(height: 8),
             const Spacer(),

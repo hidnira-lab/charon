@@ -2,6 +2,7 @@ import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/l10n/generated/app_localizations_en.dart';
 import 'package:charon/l10n/generated/app_localizations_id.dart';
 import 'package:charon/l10n/generated/app_localizations_zh.dart';
+import 'package:charon/state/app_info.dart';
 import 'package:charon/state/home_controller.dart';
 import 'package:charon/state/updates_view.dart';
 import 'package:fixnum/fixnum.dart';
@@ -132,6 +133,12 @@ void main() {
       expect(v.current, '—');
       expect(v.meta, isNull);
       expect(v.foot, isNull);
+    });
+
+    test('the core card carries the fingerprint of the release signing key', () {
+      final v = coreOf(ctl(c: core(UpdateStage.UPDATE_AVAILABLE)));
+      expect(v.signingKey, updateSigningFingerprint);
+      expect(UpdatesView(AppLocalizationsEn(), ctl()).app.signingKey, isNull);
     });
 
     test('the steps name the saved servers that get tested', () {

@@ -8,7 +8,7 @@ import '../../state/telemetry_view.dart';
 import '../../theme/theme.dart';
 import '../common/glass_card.dart';
 import '../home/widgets/rail_nav.dart';
-import 'widgets/export_diagnostics_dialog.dart';
+import '../trust/diagnostics_screen.dart';
 import 'widgets/history_card.dart';
 import 'widgets/log_terminal_card.dart';
 import 'widgets/session_card.dart';
@@ -160,7 +160,7 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
                                       onCopy: () => _handleCopy(visibleLogs),
                                       onShare: () => _handleShare(visibleLogs),
                                       onExportDiagnostics: () =>
-                                          ExportDiagnosticsDialog.show(context, controller),
+                                          DiagnosticsScreen.show(context, controller),
                                     ),
                                   ),
                                 ],

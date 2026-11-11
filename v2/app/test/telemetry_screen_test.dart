@@ -8,7 +8,7 @@ import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/main.dart';
 import 'package:charon/state/home_controller.dart';
 import 'package:charon/ui/telemetry/telemetry_screen.dart';
-import 'package:charon/ui/telemetry/widgets/export_diagnostics_dialog.dart';
+import 'package:charon/ui/trust/diagnostics_screen.dart';
 import 'package:charon/ui/telemetry/widgets/history_card.dart';
 import 'package:charon/ui/telemetry/widgets/log_terminal_card.dart';
 import 'package:charon/ui/telemetry/widgets/session_card.dart';
@@ -54,27 +54,6 @@ void main() {
       controller.clearLogs(source: LogSource.LOG_SOURCE_CHARON_CORE);
       expect(controller.coreLogs.isEmpty, isTrue);
       expect(controller.coreDroppedCount, 0);
-    });
-
-    test('generates diagnostics text respecting privacy switch', () {
-      final controller = HomeController(
-        initialStatus: Status(
-          phase: Phase.PHASE_UP,
-          gate: Gate.GATE_ARMED,
-          activeServerId: 'SRV-01',
-          killSwitchOn: true,
-        ),
-      );
-
-      final diagWithoutAccess = controller.exportDiagnosticsText(includeAccess: false);
-      expect(diagWithoutAccess.contains('Charon Diagnostics Export'), isTrue);
-      expect(diagWithoutAccess.contains('PHASE_UP'), isTrue);
-      expect(diagWithoutAccess.contains('SRV-01'), isTrue);
-      expect(diagWithoutAccess.contains('Xray Access Log: [Excluded by user preference]'), isTrue);
-
-      final diagWithAccess = controller.exportDiagnosticsText(includeAccess: true);
-      expect(diagWithAccess.contains('Xray Access Log ('), isTrue);
-      expect(diagWithAccess.contains('198.51.100.'), isTrue);
     });
   });
 
@@ -283,7 +262,7 @@ void main() {
       expect(find.byType(ShareDialog), findsNothing);
     });
 
-    testWidgets('Export Diagnostics dialog opens with preview and access checkbox', (tester) async {
+    testWidgets('Export diagnostics link opens the Export diagnostics page', (tester) async {
       tester.view.physicalSize = const Size(1280, 800);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() => tester.view.resetPhysicalSize());
@@ -293,27 +272,13 @@ void main() {
       controller.setTab(3);
       await tester.pumpAndSettle();
 
-      // Switch to core tab
       await tester.tap(find.text('CHARON CORE'));
       await tester.pumpAndSettle();
-
-      // Tap Export diagnostics link
       await tester.tap(find.text('Export diagnostics →'));
       await tester.pumpAndSettle();
 
-      expect(find.byType(ExportDiagnosticsDialog), findsOneWidget);
-      expect(find.text('Export diagnostics'), findsOneWidget);
-      expect(find.text('DIAGNOSTICS PREVIEW'), findsOneWidget);
-      expect(find.textContaining('Stored on device only. Nothing uploaded.'), findsOneWidget);
-
-      // Checkbox for access log exists and defaults to off
-      expect(find.text('Include access logs (may contain visited destinations)'), findsOneWidget);
-
-      // Save diagnostics
-      await tester.tap(find.text('Save diagnostics'));
-      await tester.pumpAndSettle();
-
-      expect(find.byType(ExportDiagnosticsDialog), findsNothing);
+      expect(find.byType(DiagnosticsScreen), findsOneWidget);
+      expect(find.text('> PREVIEW'), findsOneWidget);
     });
 
     testWidgets('renders Indonesian localization cleanly without overflow', (tester) async {

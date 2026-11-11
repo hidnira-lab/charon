@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../state/home_controller.dart';
 import '../../theme/theme.dart';
-import '../home/widgets/rail_nav.dart';
+import '../common/glass_card.dart';
+import 'widgets/trust_page.dart';
 
-/// SHA-256 of the 32 byte primary Ed25519 release key embedded in
-/// `core/update/manifest.go`. A test recomputes it from that file, so the two
-/// cannot drift apart.
-const updateSigningFingerprint = 'SHA256: eb8ccdaedf05f04707c7bb4be99aadafc0f93ca801b89abd32b48700b2c97034';
-
+/// "Privacy and network": the three kinds of places Charon talks to, four plain
+/// facts, and the links to the threat model and SECURITY.md (Trust board).
 class PrivacyScreen extends StatelessWidget {
   const PrivacyScreen({
     super.key,
@@ -18,370 +16,128 @@ class PrivacyScreen extends StatelessWidget {
 
   final HomeController controller;
 
-  void _handleBack(BuildContext context) {
-    if (Navigator.of(context).canPop()) {
-      Navigator.of(context).pop();
-    } else {
-      controller.setTab(4); // Back to Settings tab
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      body: Row(
+    final conns = [
+      (l10n.trustConnServersTag, l10n.trustConnServersWhat, l10n.trustConnServersWhen, true),
+      (l10n.trustConnSyncTag, l10n.trustConnSyncWhat, l10n.trustConnSyncWhen, false),
+      (l10n.trustConnGithubTag, l10n.trustConnGithubWhat, l10n.trustConnGithubWhen, false),
+    ];
+    final facts = [
+      l10n.trustFactAnalytics,
+      l10n.trustFactCrash,
+      l10n.trustFactLocation,
+      l10n.trustFactAccount,
+    ];
+
+    return TrustPage(
+      controller: controller,
+      crumb: l10n.trustNetCrumb,
+      title: l10n.trustNetTitle,
+      meta: l10n.trustNetMeta,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          RailNav(
-            controller: controller,
-            selectedIndex: 4,
-            onTabSelected: controller.setTab,
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 18, 24, 20),
+          Text(l10n.trustNetIntro, style: TextStyle(fontSize: 13, height: 1.45, color: colors.text2)),
+          const SizedBox(height: 12),
+          Semantics(
+            label: l10n.trustConnLabel,
+            container: true,
+            child: GlassCard(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Header Row
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Column(
+                  for (final (i, c) in conns.indexed)
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      decoration: BoxDecoration(
+                        border: i == 0 ? null : Border(top: BorderSide(color: colors.divider)),
+                      ),
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          InkWell(
-                            onTap: () => _handleBack(context),
-                            borderRadius: BorderRadius.circular(4.0),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 2.0),
-                              child: Text(
-                                l10n.updatesBackToSettings,
-                                style: CharonTypography.caption.copyWith(
-                                  color: colors.accent,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 11.5,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: CharonSpacing.s1),
-                          Text(
-                            '> ${l10n.privacyTag}',
-                            style: CharonTypography.label.copyWith(
-                              color: colors.text3,
-                              letterSpacing: 1.2,
-                              fontSize: 10.5,
-                            ),
-                          ),
-                          const SizedBox(height: CharonSpacing.s1),
-                          Text(
-                            l10n.privacyTitle,
-                            style: CharonTypography.h1.copyWith(fontSize: 22.0),
-                          ),
-                          const SizedBox(height: CharonSpacing.s1),
-                          Text(
-                            l10n.privacySubtitle,
-                            style: CharonTypography.body.copyWith(
-                              color: colors.text2,
-                              fontSize: 12.5,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: CharonSpacing.s4),
-
-                  // Content
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          // Card 1: Network Destinations
                           Container(
-                            padding: const EdgeInsets.all(20.0),
+                            height: 22,
+                            constraints: const BoxConstraints(minWidth: 112),
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: colors.surface,
-                              borderRadius: BorderRadius.circular(16.0),
-                              border: Border.all(color: colors.divider, width: 1.0),
+                              color: c.$4 ? colors.connectedSoft : colors.surface2,
+                              borderRadius: BorderRadius.circular(6),
                             ),
+                            child: Text(
+                              c.$1,
+                              style: monoStyle(c.$4 ? colors.connectedText : colors.text2, 10, bold: true, em: 0.06),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  l10n.privacyDestinationsTitle,
-                                  style: CharonTypography.label.copyWith(
-                                    color: colors.text3,
-                                    fontSize: 11.0,
-                                    letterSpacing: 1.0,
-                                  ),
-                                ),
-                                const SizedBox(height: CharonSpacing.s3),
-                                _DestinationRow(
-                                  tag: l10n.privacyDestYourServers,
-                                  description: l10n.privacyDestYourServersDesc,
-                                  tagColor: colors.accent,
-                                  colors: colors,
-                                ),
-                                const Divider(height: 20.0),
-                                _DestinationRow(
-                                  tag: l10n.privacyDestSync,
-                                  description: l10n.privacyDestSyncDesc,
-                                  tagColor: colors.transitionText,
-                                  colors: colors,
-                                ),
-                                const Divider(height: 20.0),
-                                _DestinationRow(
-                                  tag: l10n.privacyDestGithub,
-                                  description: l10n.privacyDestGithubDesc,
-                                  tagColor: colors.text2,
-                                  colors: colors,
-                                ),
-                                const Divider(height: 20.0),
-                                _DestinationRow(
-                                  tag: l10n.privacyDestNothingElse,
-                                  description: l10n.privacyDestNothingElseDesc,
-                                  tagColor: colors.accent,
-                                  colors: colors,
-                                ),
+                                Text(c.$2, style: TextStyle(fontSize: 13, height: 1.4, color: colors.text)),
+                                const SizedBox(height: 3),
+                                Text('> ${c.$3}', style: monoStyle(colors.text3, 10).copyWith(height: 1.4)),
                               ],
                             ),
                           ),
-                          const SizedBox(height: CharonSpacing.s4),
-
-                          // Card 2: Plain Privacy Facts
-                          Container(
-                            padding: const EdgeInsets.all(20.0),
-                            decoration: BoxDecoration(
-                              color: colors.surface,
-                              borderRadius: BorderRadius.circular(16.0),
-                              border: Border.all(color: colors.divider, width: 1.0),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  l10n.privacyPrinciplesTitle,
-                                  style: CharonTypography.label.copyWith(
-                                    color: colors.text3,
-                                    fontSize: 11.0,
-                                    letterSpacing: 1.0,
-                                  ),
-                                ),
-                                const SizedBox(height: CharonSpacing.s3),
-                                _FactItem(
-                                  icon: Icons.track_changes_outlined,
-                                  title: l10n.privacyFact1Title,
-                                  desc: l10n.privacyFact1Desc,
-                                  colors: colors,
-                                ),
-                                const SizedBox(height: CharonSpacing.s3),
-                                _FactItem(
-                                  icon: Icons.location_off_outlined,
-                                  title: l10n.privacyFact2Title,
-                                  desc: l10n.privacyFact2Desc,
-                                  colors: colors,
-                                ),
-                                const SizedBox(height: CharonSpacing.s3),
-                                _FactItem(
-                                  icon: Icons.schedule_rounded,
-                                  title: l10n.privacyFact3Title,
-                                  desc: l10n.privacyFact3Desc,
-                                  colors: colors,
-                                ),
-                                const SizedBox(height: CharonSpacing.s3),
-                                _FactItem(
-                                  icon: Icons.history_toggle_off_rounded,
-                                  title: l10n.privacyFact4Title,
-                                  desc: l10n.privacyFact4Desc,
-                                  colors: colors,
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: CharonSpacing.s4),
-
-                          // Card 3: Security & Threat Model
-                          Container(
-                            padding: const EdgeInsets.all(20.0),
-                            decoration: BoxDecoration(
-                              color: colors.surface,
-                              borderRadius: BorderRadius.circular(16.0),
-                              border: Border.all(color: colors.divider, width: 1.0),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  l10n.privacySecurityTitle,
-                                  style: CharonTypography.label.copyWith(
-                                    color: colors.text3,
-                                    fontSize: 11.0,
-                                    letterSpacing: 1.0,
-                                  ),
-                                ),
-                                const SizedBox(height: CharonSpacing.s2),
-                                Text(
-                                  l10n.privacySecurityDesc,
-                                  style: CharonTypography.body.copyWith(
-                                    color: colors.text2,
-                                    fontSize: 12.5,
-                                  ),
-                                ),
-                                const SizedBox(height: CharonSpacing.s3),
-                                Container(
-                                  padding: const EdgeInsets.all(12.0),
-                                  decoration: BoxDecoration(
-                                    color: colors.surface2,
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    border: Border.all(color: colors.controlBorder),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        l10n.privacySecurityFingerprintLabel,
-                                        style: CharonTypography.label.copyWith(
-                                          color: colors.text3,
-                                          fontSize: 10.0,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4.0),
-                                      SelectableText(
-                                        updateSigningFingerprint,
-                                        style: CharonTypography.code.copyWith(
-                                          color: colors.accent,
-                                          fontSize: 11.0,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: CharonSpacing.s5),
                         ],
                       ),
                     ),
-                  ),
                 ],
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _DestinationRow extends StatelessWidget {
-  const _DestinationRow({
-    required this.tag,
-    required this.description,
-    required this.tagColor,
-    required this.colors,
-  });
-
-  final String tag;
-  final String description;
-  final Color tagColor;
-  final CharonColors colors;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 2.5),
-          decoration: BoxDecoration(
-            color: tagColor.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(4.0),
-            border: Border.all(color: tagColor.withValues(alpha: 0.35)),
-          ),
-          child: Text(
-            tag,
-            style: CharonTypography.code.copyWith(
-              color: tagColor,
-              fontSize: 10.0,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-        const SizedBox(height: 6.0),
-        Text(
-          description,
-          style: CharonTypography.body.copyWith(
-            color: colors.text2,
-            fontSize: 12.0,
-            height: 1.4,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _FactItem extends StatelessWidget {
-  const _FactItem({
-    required this.icon,
-    required this.title,
-    required this.desc,
-    required this.colors,
-  });
-
-  final IconData icon;
-  final String title;
-  final String desc;
-  final CharonColors colors;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: 32.0,
-          height: 32.0,
-          decoration: BoxDecoration(
-            color: colors.surface2,
-            borderRadius: BorderRadius.circular(8.0),
-            border: Border.all(color: colors.controlBorder),
-          ),
-          child: Icon(icon, size: 16.0, color: colors.accent),
-        ),
-        const SizedBox(width: CharonSpacing.s3),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          const SizedBox(height: 12),
+          GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+            childAspectRatio: 7,
             children: [
-              Text(
-                title,
-                style: CharonTypography.label.copyWith(
-                  color: colors.text,
-                  fontSize: 12.0,
-                  letterSpacing: 0.5,
+              for (final f in facts)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(color: colors.surface, borderRadius: BorderRadius.circular(12)),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 18,
+                        height: 18,
+                        color: colors.connectedSoft,
+                        child: Icon(Icons.check, size: 12, color: colors.connectedText),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          f,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: colors.text),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 2.0),
-              Text(
-                desc,
-                style: CharonTypography.body.copyWith(
-                  color: colors.text2,
-                  fontSize: 11.5,
-                  height: 1.35,
-                ),
-              ),
             ],
           ),
-        ),
-      ],
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              TrustLink('${l10n.trustLinkThreat} ↗', pill: true),
+              const TrustLink('SECURITY.md ↗', pill: true),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text('> ${l10n.trustNetNote}', style: monoStyle(colors.text3, 10).copyWith(height: 1.5)),
+        ],
+      ),
     );
   }
 }
