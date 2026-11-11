@@ -5,6 +5,7 @@ import '../../state/app_info.dart';
 import '../../state/home_controller.dart';
 import '../../theme/theme.dart';
 import '../common/glass_card.dart';
+import 'guide_links.dart';
 import 'widgets/trust_page.dart';
 
 const _gplText = 'GNU GENERAL PUBLIC LICENSE\n'
@@ -30,13 +31,17 @@ const _oflText = 'SIL OPEN FONT LICENSE Version 1.1\n\n'
 /// not translated: they are names and legal text. [chip] null means the terms
 /// are still to be confirmed.
 class _Lic {
-  const _Lic(this.name, this.chip, this.sub, this.text, this.link);
+  const _Lic(this.name, this.chip, this.sub, this.text, this.link, {required this.textUrl, required this.linkUrl});
 
   final String name;
   final String? chip;
   final String sub;
   final String text;
   final String link;
+
+  /// Where "Full text" and the project link go. Both are https pages.
+  final String textUrl;
+  final String linkUrl;
 }
 
 /// Licences of everything Charon ships with, from the Trust board.
@@ -62,14 +67,22 @@ class _LicencesScreenState extends State<LicencesScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     final items = [
-      _Lic('Charon', 'GPL 3.0', l10n.trustLicSubApp, _gplText, l10n.trustLinkSource),
-      _Lic('Xray core', 'MPL 2.0', l10n.trustLicSubXray, _mplText, l10n.trustLinkBundled),
-      _Lic('wintun', null, l10n.trustLicSubWintun, l10n.trustLicTextWintun, l10n.trustLinkProject),
-      _Lic('Go modules', l10n.trustChipMixed, l10n.trustLicSubGo, l10n.trustLicTextGo, l10n.trustLinkModules),
+      _Lic('Charon', 'GPL 3.0', l10n.trustLicSubApp, _gplText, l10n.trustLinkSource,
+          textUrl: CharonGuideLinks.licenseUrl, linkUrl: CharonGuideLinks.repoUrl),
+      _Lic('Xray core', 'MPL 2.0', l10n.trustLicSubXray, _mplText, l10n.trustLinkBundled,
+          textUrl: 'https://www.mozilla.org/en-US/MPL/2.0/', linkUrl: 'https://github.com/XTLS/Xray-core'),
+      _Lic('wintun', null, l10n.trustLicSubWintun, l10n.trustLicTextWintun, l10n.trustLinkProject,
+          textUrl: 'https://www.wintun.net/', linkUrl: 'https://www.wintun.net/'),
+      _Lic('Go modules', l10n.trustChipMixed, l10n.trustLicSubGo, l10n.trustLicTextGo, l10n.trustLinkModules,
+          textUrl: CharonGuideLinks.thirdPartyNoticesUrl, linkUrl: CharonGuideLinks.thirdPartyNoticesUrl),
       _Lic('Flutter packages', l10n.trustChipMixed, l10n.trustLicSubFlutter, l10n.trustLicTextFlutter,
-          l10n.trustLinkPackages),
-      _Lic('DB-IP', 'CC BY 4.0', l10n.trustLicSubGeo, _geoText, l10n.trustLinkGeo),
-      _Lic('Fonts', 'OFL 1.1', l10n.trustLicSubFonts, _oflText, l10n.trustLinkFonts),
+          l10n.trustLinkPackages,
+          textUrl: CharonGuideLinks.thirdPartyNoticesUrl, linkUrl: CharonGuideLinks.thirdPartyNoticesUrl),
+      _Lic('DB-IP', 'CC BY 4.0', l10n.trustLicSubGeo, _geoText, l10n.trustLinkGeo,
+          textUrl: 'https://creativecommons.org/licenses/by/4.0/',
+          linkUrl: 'https://db-ip.com/db/download/ip-to-country-lite'),
+      _Lic('Fonts', 'OFL 1.1', l10n.trustLicSubFonts, _oflText, l10n.trustLinkFonts,
+          textUrl: 'https://openfontlicense.org/', linkUrl: 'https://github.com/rsms/inter'),
     ];
 
     return TrustPage(
@@ -175,9 +188,9 @@ class _LicencesScreenState extends State<LicencesScreen> {
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      TrustLink(l10n.trustLicFullText),
+                      TrustLink(l10n.trustLicFullText, url: l.textUrl),
                       const SizedBox(width: 16),
-                      TrustLink(l.link),
+                      TrustLink(l.link, url: l.linkUrl),
                     ],
                   ),
                 ],

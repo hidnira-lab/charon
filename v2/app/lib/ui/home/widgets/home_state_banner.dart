@@ -4,7 +4,9 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
 import '../../../state/home_view.dart';
 import '../../../theme/theme.dart';
+import '../../../core/external_link.dart';
 import '../../dialogs/release_confirm_dialog.dart';
+import '../../trust/guide_links.dart';
 import 'choose_server_sheet.dart';
 
 // Rail tabs some actions open.
@@ -177,9 +179,8 @@ class _HelpLink extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    // The link is shown as on the board. Opening the guide needs a way to open
-    // the browser, which the app does not have yet, so it has no action here.
-    return Row(
+    final guide = CharonGuideId.fromCode(help.guideCode);
+    final row = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
@@ -201,6 +202,18 @@ class _HelpLink extends StatelessWidget {
           ),
         ),
       ],
+    );
+    // A banner with a reason that has no guide keeps the link as plain text.
+    if (guide == null) return row;
+    return Semantics(
+      link: true,
+      child: InkWell(
+        onTap: () => ExternalLinks.open(
+          CharonGuideLinks.urlFor(guide, locale: Localizations.localeOf(context)),
+        ),
+        borderRadius: BorderRadius.circular(4),
+        child: row,
+      ),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/external_link.dart';
 import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/app_info.dart';
@@ -161,6 +162,12 @@ class AboutCard extends StatelessWidget {
               children: links.map((item) {
                 return InkWell(
                   onTap: () {
+                    // A link that leaves the app needs no controller.
+                    final url = item.url;
+                    if (item.isExternal && url != null) {
+                      ExternalLinks.open(url);
+                      return;
+                    }
                     if (controller == null) return;
                     if (item.label == l10n.settingsAboutUpdates) {
                       Navigator.of(context).push(

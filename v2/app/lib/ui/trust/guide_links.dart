@@ -18,6 +18,14 @@ enum CharonGuideId {
 
   final String code;
   final String fileName;
+
+  /// The guide with this code, null when there is none.
+  static CharonGuideId? fromCode(String code) {
+    for (final g in values) {
+      if (g.code == code) return g;
+    }
+    return null;
+  }
 }
 
 /// Resolves language-aware guide paths and trust document URLs (`GUIDE2`).

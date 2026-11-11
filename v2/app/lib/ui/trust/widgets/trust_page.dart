@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/external_link.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
 import '../../../theme/theme.dart';
@@ -95,13 +96,15 @@ class TrustPage extends StatelessWidget {
   }
 }
 
-/// A link of the board ("Full text ↗", "Threat model ↗"). Charon has no way to
-/// open a web page yet (no url_launcher), so it is drawn dimmed and cannot be
-/// pressed, like the same kind of button on the Updates screen.
+/// A link of the board ("Full text ↗", "Threat model ↗"). It opens [url] in the
+/// browser. With no [url] it is drawn dimmed and cannot be pressed.
 class TrustLink extends StatelessWidget {
-  const TrustLink(this.label, {super.key, this.pill = false});
+  const TrustLink(this.label, {super.key, this.url, this.pill = false});
 
   final String label;
+
+  /// An https address. [ExternalLinks] refuses anything else.
+  final String? url;
 
   /// The outlined pill of the Privacy page, instead of the plain accent text.
   final bool pill;
@@ -113,19 +116,26 @@ class TrustLink extends StatelessWidget {
       label,
       style: monoStyle(pill ? colors.text : colors.accentText, pill ? 12 : 11, bold: true),
     );
-    return Opacity(
-      opacity: 0.4,
-      child: pill
-          ? Container(
-              height: 34,
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              decoration: BoxDecoration(
-                border: Border.all(color: colors.controlBorder),
-                borderRadius: BorderRadius.circular(999),
-              ),
-              child: Row(mainAxisSize: MainAxisSize.min, children: [text]),
-            )
-          : text,
+    final body = pill
+        ? Container(
+            height: 34,
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            decoration: BoxDecoration(
+              border: Border.all(color: colors.controlBorder),
+              borderRadius: BorderRadius.circular(999),
+            ),
+            child: Row(mainAxisSize: MainAxisSize.min, children: [text]),
+          )
+        : text;
+    final target = url;
+    if (target == null) return Opacity(opacity: 0.4, child: body);
+    return Semantics(
+      link: true,
+      child: InkWell(
+        onTap: () => ExternalLinks.open(target),
+        borderRadius: BorderRadius.circular(pill ? 999 : 4),
+        child: body,
+      ),
     );
   }
 }

@@ -4,6 +4,7 @@ import '../../l10n/generated/app_localizations.dart';
 import '../../state/home_controller.dart';
 import '../../theme/theme.dart';
 import '../common/glass_card.dart';
+import 'guide_links.dart';
 import 'widgets/trust_page.dart';
 
 /// "Privacy and network": the three kinds of places Charon talks to, four plain
@@ -130,8 +131,8 @@ class PrivacyScreen extends StatelessWidget {
             spacing: 8,
             runSpacing: 8,
             children: [
-              TrustLink('${l10n.trustLinkThreat} ↗', pill: true),
-              const TrustLink('SECURITY.md ↗', pill: true),
+              TrustLink('${l10n.trustLinkThreat} ↗', url: CharonGuideLinks.threatModelUrl, pill: true),
+              const TrustLink('SECURITY.md ↗', url: CharonGuideLinks.securityUrl, pill: true),
             ],
           ),
           const SizedBox(height: 12),
