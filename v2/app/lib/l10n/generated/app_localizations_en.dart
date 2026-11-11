@@ -3860,9 +3860,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dlgPairBtnContinue => 'Continue';
 
   @override
-  String get dlgPairBtnBack => 'Back';
-
-  @override
   String get dlgPairBtnChecking => 'Checking…';
 
   @override

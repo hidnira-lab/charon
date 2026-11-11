@@ -7,6 +7,8 @@ import '../../../state/home_controller.dart';
 import '../../../state/sync_view.dart';
 import '../../../sync/sync_client.dart';
 import '../../../theme/theme.dart';
+import '../../dialogs/pair_device_dialog.dart';
+import '../../dialogs/pairing_code_dialog.dart';
 import '../../dialogs/sync_conflict_dialog.dart';
 import '../../dialogs/unpair_confirm_dialog.dart';
 import '../../dialogs/sync_passphrase_dialog.dart';
@@ -17,19 +19,12 @@ const int _tabSettings = 4;
 
 /// Right column Sync card of the ServersDesktop board (320 px). What it says in
 /// each state comes from [syncNote] and [syncPairLine]. Push, Pull, Resolve and
-/// Unpair call the controller. Pairing a device and the file picker for backups
-/// are not built yet, so [onPair] is optional and the button is off without it.
+/// Unpair call the controller, and Pair this device and Show pairing code open
+/// their dialogs. The file picker for backups is not built yet.
 class SyncCard extends StatefulWidget {
-  const SyncCard({
-    super.key,
-    required this.controller,
-    this.onPair,
-  });
+  const SyncCard({super.key, required this.controller});
 
   final HomeController controller;
-
-  /// Called with the device name when the user presses "Pair this device".
-  final void Function(String deviceName)? onPair;
 
   @override
   State<SyncCard> createState() => _SyncCardState();
@@ -52,6 +47,16 @@ class _SyncCardState extends State<SyncCard> {
   Future<void> _push() => SyncPassphraseDialog.show(context, _c, push: true);
 
   Future<void> _pull() => SyncPassphraseDialog.show(context, _c, push: false);
+
+  /// The pairing dialog hands back push or pull now, with the passphrase it just
+  /// asked for, so that one dialog follows it.
+  Future<void> _pair(String deviceName) async {
+    final next = await PairDeviceDialog.show(context, _c, deviceName: deviceName);
+    if (next == null || !mounted) return;
+    await SyncPassphraseDialog.show(context, _c, push: next.push, initialPassphrase: next.passphrase);
+  }
+
+  Future<void> _showCode() => PairingCodeDialog.show(context, _c);
 
   Future<void> _resolve() async {
     final choice = await SyncConflictDialog.show(context);
@@ -239,8 +244,7 @@ class _SyncCardState extends State<SyncCard> {
                 ],
               ),
               const SizedBox(height: 8),
-              // The pairing code needs a dialog that does not exist yet.
-              pill(l10n.syncActionShowPairingCode, null),
+              pill(l10n.syncActionShowPairingCode, busy ? null : _showCode),
               const SizedBox(height: 10),
               Container(
                 padding: const EdgeInsets.only(top: 10),
@@ -317,7 +321,7 @@ class _SyncCardState extends State<SyncCard> {
               SizedBox(
                 height: 44,
                 child: FilledButton(
-                  onPressed: widget.onPair == null || busy ? null : () => widget.onPair!(_name.text.trim()),
+                  onPressed: busy ? null : () => _pair(_name.text.trim()),
                   style: FilledButton.styleFrom(
                     backgroundColor: colors.text,
                     foregroundColor: colors.bg,

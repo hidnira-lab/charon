@@ -1136,7 +1136,6 @@
   "dlgPairManualLink": "没有其他设备？输入同步服务器地址",
   "dlgPairByCodeLink": "改用配对码",
   "dlgPairBtnContinue": "继续",
-  "dlgPairBtnBack": "返回",
   "dlgPairBtnChecking": "检查中…",
   "dlgPairBtnCreate": "创建并配对",
   "dlgPairBtnUnlock": "解锁并配对",

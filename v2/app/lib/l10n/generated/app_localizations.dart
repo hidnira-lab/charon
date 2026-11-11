@@ -6775,12 +6775,6 @@ abstract class AppLocalizations {
   /// Dialog text.
   ///
   /// In en, this message translates to:
-  /// **'Back'**
-  String get dlgPairBtnBack;
-
-  /// Dialog text.
-  ///
-  /// In en, this message translates to:
   /// **'Checking…'**
   String get dlgPairBtnChecking;
 

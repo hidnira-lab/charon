@@ -3655,9 +3655,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dlgPairBtnContinue => '继续';
 
   @override
-  String get dlgPairBtnBack => '返回';
-
-  @override
   String get dlgPairBtnChecking => '检查中…';
 
   @override
@@ -7453,9 +7450,6 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get dlgPairBtnContinue => '继续';
-
-  @override
-  String get dlgPairBtnBack => '返回';
 
   @override
   String get dlgPairBtnChecking => '检查中…';

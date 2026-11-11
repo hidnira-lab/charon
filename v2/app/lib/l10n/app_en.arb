@@ -2660,8 +2660,6 @@
   "@dlgPairByCodeLink": { "description": "Dialog text." },
   "dlgPairBtnContinue": "Continue",
   "@dlgPairBtnContinue": { "description": "Dialog text." },
-  "dlgPairBtnBack": "Back",
-  "@dlgPairBtnBack": { "description": "Dialog text." },
   "dlgPairBtnChecking": "Checking…",
   "@dlgPairBtnChecking": { "description": "Dialog text." },
   "dlgPairBtnCreate": "Create and pair",

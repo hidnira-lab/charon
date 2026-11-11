@@ -3871,9 +3871,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get dlgPairBtnContinue => 'Lanjut';
 
   @override
-  String get dlgPairBtnBack => 'Kembali';
-
-  @override
   String get dlgPairBtnChecking => 'Memeriksa…';
 
   @override
