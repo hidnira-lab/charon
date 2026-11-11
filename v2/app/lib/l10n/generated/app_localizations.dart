@@ -7257,6 +7257,1092 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Skip the splash'**
   String get splSkip;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'SETUP'**
+  String get stpTitleTag;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Setup progress'**
+  String get stpProgressLabel;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Steps'**
+  String get stpStepsLabel;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a server'**
+  String get stpStep1;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety'**
+  String get stpStep2;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Make it yours'**
+  String get stpStep3;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'First connect'**
+  String get stpStep4;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'OPTIONAL'**
+  String get stpOptional;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'HELLO'**
+  String get stpBubbleHello;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'ALL SET'**
+  String get stpBubbleAllSet;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'STEP {n}'**
+  String stpBubbleStep(int n);
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'hiii, this is Charon. I carry your traffic across to a server you own.'**
+  String get stpBubWelcome;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste a link or a config. I only need it once.'**
+  String get stpBubServer;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Almost. The link is missing one piece.'**
+  String get stpBubServerError;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back! Let me fetch your stuff.'**
+  String get stpBubRestore;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick how careful I should be when things break.'**
+  String get stpBubSafety;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Totally optional. I just like saying hi properly.'**
+  String get stpBubYours;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready when you are. I check for real before saying yes.'**
+  String get stpBubReady;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Testing a real round trip…'**
+  String get stpBubVerifying;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'We made it across. See you on the other side.'**
+  String get stpBubConnected;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'I can\'t reach {server}. Not your fault, probably.'**
+  String stpBubUnreachable(String server);
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'HELP FOR THIS STEP'**
+  String get stpHelpLabel;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'What Charon is, in 5 minutes'**
+  String get stpHelpWelcome;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Where to find your vless:// link'**
+  String get stpHelpLink;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'What a valid xray config needs'**
+  String get stpHelpPaste;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'What pbk and sid are'**
+  String get stpHelpError;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'How Sync keeps your data private'**
+  String get stpHelpRestore;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'What the kill switch can and cannot do'**
+  String get stpHelpSafety;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Why location stays on this device'**
+  String get stpHelpYours;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'What the four checks mean'**
+  String get stpHelpConnect;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Your first week with Charon'**
+  String get stpHelpConnected;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixing a server that will not answer'**
+  String get stpHelpUnreachable;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'~2 min · 1 step required'**
+  String get stpProgressStart;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'step {n} of 4'**
+  String stpProgressStep(int n);
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'setup done · 4 of 4'**
+  String get stpProgressDone;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip setup'**
+  String get stpSkipSetup;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'{pct}% ACROSS'**
+  String stpAcross(int pct);
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'ARRIVED'**
+  String get stpArrived;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'STUCK MIDWAY'**
+  String get stpStuck;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon ferrying across, {pct} percent of the way'**
+  String stpSceneLabel(int pct);
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'THIS DEVICE'**
+  String get stpSceneThis;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'YOUR SERVER'**
+  String get stpSceneServer;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'STEP {n} OF {total} · {name}'**
+  String stpKicker(int n, int total, String name);
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'WELCOME'**
+  String get stpKickerWelcome;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'SETUP DONE'**
+  String get stpKickerDone;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'SERVER'**
+  String get stpKickServer;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'RESTORE'**
+  String get stpKickRestore;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'SAFETY'**
+  String get stpKickSafety;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'FIRST CONNECT'**
+  String get stpKickConnect;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'A tunnel to a server you control.'**
+  String get stpTitleWelcome;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first server'**
+  String get stpTitleServer;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from another device'**
+  String get stpTitleRestore;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety switches'**
+  String get stpTitleSafety;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'First connect'**
+  String get stpTitleConnect;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon is ready'**
+  String get stpTitleReady;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon connects this device to your own VLESS + Reality server. No accounts, no Charon servers, nothing to sign up for.'**
+  String get stpLeadWelcome;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the link or config from the server you set up. It stays on this device unless you push it with Sync.'**
+  String get stpLeadServer;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Pull the profiles, rules and settings you pushed from your other device. They were encrypted there, and only your passphrase can open them.'**
+  String get stpLeadRestore;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Sensible defaults are already set. Change them now or any time in Settings.'**
+  String get stpLeadSafety;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Used for the greeting on Home. Leave everything empty and Home simply says hello.'**
+  String get stpLeadYours;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'One real connection to make sure everything works before you start.'**
+  String get stpLeadConnect;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Your first connection is verified. Home, Servers and the rest are waiting.'**
+  String get stpLeadReady;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'READ FIRST · 5 MIN'**
+  String get stpIntroTag;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'New here? Read the intro before you set up'**
+  String get stpIntroTitle;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'What Charon is, and what it is not'**
+  String get stpIntro1;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'How it differs from VPN apps you pay for'**
+  String get stpIntro2;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'How it differs from other xray clients'**
+  String get stpIntro3;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'What to prepare before this setup'**
+  String get stpIntro4;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Read the intro'**
+  String get stpIntroButton;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'opens Charon\'s page in your browser'**
+  String get stpIntroNote;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'BEFORE YOU START'**
+  String get stpNeedsTitle;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'A server you control'**
+  String get stpNeed1;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'any VPS you can log in to'**
+  String get stpNeed1d;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'xray with VLESS + Reality'**
+  String get stpNeed2;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'running on that server'**
+  String get stpNeed2d;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Its vless:// link or JSON'**
+  String get stpNeed3;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'copied from the server side'**
+  String get stpNeed3d;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync passphrase'**
+  String get stpNeed4;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'optional, only to restore'**
+  String get stpNeed4d;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing one? The intro shows how to set up the server side first.'**
+  String get stpNeedsFoot;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Why Charon installs a service:'**
+  String get stpServiceWhy;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'it creates the network adapter and keeps the kill switch working, so Windows asked for admin rights once, at install.'**
+  String get stpServiceWhyText;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Get started'**
+  String get stpGetStarted;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'I already use Charon on another device'**
+  String get stpAlreadyUse;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Import vless:// link'**
+  String get stpWayLink;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'one line from your server panel'**
+  String get stpWayLinkD;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste config'**
+  String get stpWayPaste;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'xray JSON with one outbound'**
+  String get stpWayPasteD;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from a device'**
+  String get stpWayRestore;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'pull with your sync passphrase'**
+  String get stpWayRestoreD;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'How to add'**
+  String get stpWaysLabel;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'needs one VLESS + Reality outbound · inbounds and routing in the file are ignored'**
+  String get stpPasteNeeds;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'becomes {code} · country guessed offline from the IP · you can change it'**
+  String stpBecomesGuessed(String code);
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'becomes {code} · country not known, set it later in Edit'**
+  String stpBecomesNone(String code);
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get stpBack;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Save server'**
+  String get stpSaveServer;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'ll add one later'**
+  String get stpAddLater;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'enter the server address instead'**
+  String get stpEnterAddress;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'PAIRING CODE · FROM YOUR OTHER DEVICE'**
+  String get stpRestoreCode;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'on that device: Servers › Sync › Show pairing code · valid 2 min'**
+  String get stpRestoreCodeHelp;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'PASSPHRASE'**
+  String get stpRestorePass;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'asked every time, never saved'**
+  String get stpRestorePassHelp;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'NAME THIS DEVICE'**
+  String get stpRestoreName;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'shown as THIS UNIT in Sync'**
+  String get stpRestoreNameHelp;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'[x] server profiles\n[x] split tunnel rules\n[x] settings'**
+  String get stpRestoreList;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'decrypted here with your passphrase'**
+  String get stpRestoreNote1;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'the passphrase is never saved'**
+  String get stpRestoreNote2;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'this device joins as a new unit'**
+  String get stpRestoreNote3;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Pull and decrypt'**
+  String get stpRestorePull;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Kill switch'**
+  String get stpKillSwitch;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Holds your traffic if Charon\'s tunnel stops unexpectedly, including after a restart. Does not hold it when you disconnect yourself.'**
+  String get stpKillDesc;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'armed · holds traffic if the tunnel stops'**
+  String get stpKillOn;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'off · if the tunnel stops, traffic goes direct'**
+  String get stpKillOff;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto reconnect'**
+  String get stpAutoReconnect;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'5 retries, 5 s apart. With more servers later, it moves to the next one.'**
+  String get stpAutoDesc;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'armed · 5 tries × 5 s'**
+  String get stpAutoOn;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'off · if the tunnel drops, it stays down'**
+  String get stpAutoOff;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Launch at startup'**
+  String get stpLaunch;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Opens the Charon window when you sign in. Your connection does not depend on it.'**
+  String get stpLaunchDesc;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'on · the window opens after you sign in'**
+  String get stpLaunchOn;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'off · the tunnel still comes back, the window does not'**
+  String get stpLaunchOff;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'IF THE TUNNEL DROPS, WITH THESE SETTINGS'**
+  String get stpDropTitle;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'DROP'**
+  String get stpDrop;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'tunnel lost'**
+  String get stpDropLost;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'RETRY'**
+  String get stpRetry;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'5 × every 5 s'**
+  String get stpRetryV;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'NEXT'**
+  String get stpNext;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'next server, if any'**
+  String get stpNextV;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'ELSE'**
+  String get stpElse;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'stays down, goes direct'**
+  String get stpElseV;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'all three live in Settings later, nothing here is permanent'**
+  String get stpSafetyFoot;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get stpContinue;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'YOUR NAME · OPTIONAL'**
+  String get stpYourName;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'CITY · OPTIONAL'**
+  String get stpYourCity;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'typed by you · device detection can be turned on later in Settings, it stays off for now'**
+  String get stpYourHint;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'THEME'**
+  String get stpTheme;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'DARK'**
+  String get stpThemeDark;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'LIGHT'**
+  String get stpThemeLight;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'PREVIEW ON HOME'**
+  String get stpPreview;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re now in {city}'**
+  String stpCityNow(String city);
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip this step'**
+  String get stpSkipStep;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'READY'**
+  String get stpBadgeReady;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'VERIFYING · {time}'**
+  String stpBadgeVerifying(String time);
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'CONNECTED · VERIFIED'**
+  String get stpBadgeConnected;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'NOT REACHABLE'**
+  String get stpBadgeUnreachable;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect and verify'**
+  String get stpConnTitleReady;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Verifying handshake'**
+  String get stpConnTitleVerifying;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'You made it across'**
+  String get stpConnTitleDone;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach {server}'**
+  String stpConnTitleFail(String server);
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'tap the ghost or the button · Charon checks a real Reality round trip before it says connected'**
+  String get stpConnLineReady;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'testing a real Reality round trip · this can take up to 15 s'**
+  String get stpConnLineVerifying;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'your traffic crosses to {place} · egress {ip} matches the server'**
+  String stpConnLineDone(String place, String ip);
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'nothing was sent through the tunnel · your connection is unchanged'**
+  String get stpConnLineFail;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect & verify'**
+  String get stpConnectVerify;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get stpCancel;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Charon'**
+  String get stpOpenCharon;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get stpRetryBtn;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit server'**
+  String get stpEditServer;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish without connecting'**
+  String get stpFinishWithout;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'What Charon checks'**
+  String get stpChecksLabel;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Reach the server'**
+  String get stpCheck1;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'tcp connect to :443'**
+  String get stpCheck1Wait;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'tcp connect timed out'**
+  String get stpCheck1Fail;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'tcp connect · {ms} ms'**
+  String stpCheck1Ok(int ms);
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Reality handshake'**
+  String get stpCheck2;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'a real round trip, not a ping'**
+  String get stpCheck2Wait;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'real round trip ok'**
+  String get stpCheck2Ok;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Egress matches'**
+  String get stpCheck3;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'your public IP is the server'**
+  String get stpCheck3Wait;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'{ip} = {code}'**
+  String stpCheck3Ok(String ip, String code);
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'DNS through the tunnel'**
+  String get stpCheck4;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'no lookup goes around the tunnel'**
+  String get stpCheck4Wait;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'lookups answered via {code}'**
+  String stpCheck4Ok(String code);
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'QUEUED'**
+  String get stpStateQueued;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'RUNNING'**
+  String get stpStateRunning;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get stpStateOk;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'FAILED'**
+  String get stpStateFailed;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'SKIPPED'**
+  String get stpStateSkipped;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'TRANSITION · SERVER'**
+  String get stpFailTag;
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'{server} is not reachable'**
+  String stpFailTitle(String server);
+
+  /// Setup screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'TCP connect and ping both failed. This looks like a network or server problem, not a block. Check that the server is running, then retry.'**
+  String get stpFailBody;
 }
 
 class _AppLocalizationsDelegate

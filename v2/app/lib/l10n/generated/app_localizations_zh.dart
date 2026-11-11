@@ -3922,6 +3922,584 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get splSkip => '跳过启动画面';
+
+  @override
+  String get stpTitleTag => '设置';
+
+  @override
+  String get stpProgressLabel => '设置进度';
+
+  @override
+  String get stpStepsLabel => '步骤';
+
+  @override
+  String get stpStep1 => '添加服务器';
+
+  @override
+  String get stpStep2 => '安全';
+
+  @override
+  String get stpStep3 => '个性化';
+
+  @override
+  String get stpStep4 => '首次连接';
+
+  @override
+  String get stpOptional => '可选';
+
+  @override
+  String get stpBubbleHello => '你好';
+
+  @override
+  String get stpBubbleAllSet => '全部就绪';
+
+  @override
+  String stpBubbleStep(int n) {
+    return '第 $n 步';
+  }
+
+  @override
+  String get stpBubWelcome => '嗨～我是 Charon。我会把你的流量渡到你自己的服务器。';
+
+  @override
+  String get stpBubServer => '粘贴链接或配置，只需要一次。';
+
+  @override
+  String get stpBubServerError => '差一点，链接少了一项。';
+
+  @override
+  String get stpBubRestore => '欢迎回来！我去把你的东西取来。';
+
+  @override
+  String get stpBubSafety => '选择出问题时我该多谨慎。';
+
+  @override
+  String get stpBubYours => '完全可选。我只是想好好打个招呼。';
+
+  @override
+  String get stpBubReady => '你准备好我就开始。我会真的检查过再说可以。';
+
+  @override
+  String get stpBubVerifying => '正在测试真实往返…';
+
+  @override
+  String get stpBubConnected => '我们渡过去了。对岸见。';
+
+  @override
+  String stpBubUnreachable(String server) {
+    return '我连不上 $server。多半不是你的问题。';
+  }
+
+  @override
+  String get stpHelpLabel => '此步骤帮助';
+
+  @override
+  String get stpHelpWelcome => '5 分钟了解 Charon';
+
+  @override
+  String get stpHelpLink => '在哪里找到你的 vless:// 链接';
+
+  @override
+  String get stpHelpPaste => '有效的 xray 配置需要什么';
+
+  @override
+  String get stpHelpError => 'pbk 和 sid 是什么';
+
+  @override
+  String get stpHelpRestore => '同步如何保护你的数据隐私';
+
+  @override
+  String get stpHelpSafety => '断网保护能做什么、不能做什么';
+
+  @override
+  String get stpHelpYours => '为什么位置信息只留在本机';
+
+  @override
+  String get stpHelpConnect => '四项检查是什么意思';
+
+  @override
+  String get stpHelpConnected => '使用 Charon 的第一周';
+
+  @override
+  String get stpHelpUnreachable => '修复无响应的服务器';
+
+  @override
+  String get stpProgressStart => '约 2 分钟 · 1 步必填';
+
+  @override
+  String stpProgressStep(int n) {
+    return '第 $n/4 步';
+  }
+
+  @override
+  String get stpProgressDone => '设置完成 · 4/4';
+
+  @override
+  String get stpSkipSetup => '跳过设置';
+
+  @override
+  String stpAcross(int pct) {
+    return '已渡 $pct%';
+  }
+
+  @override
+  String get stpArrived => '已抵达';
+
+  @override
+  String get stpStuck => '卡在半路';
+
+  @override
+  String stpSceneLabel(int pct) {
+    return 'Charon 正在渡河，已走 $pct%';
+  }
+
+  @override
+  String get stpSceneThis => '本机';
+
+  @override
+  String get stpSceneServer => '你的服务器';
+
+  @override
+  String stpKicker(int n, int total, String name) {
+    return '第 $n/$total 步 · $name';
+  }
+
+  @override
+  String get stpKickerWelcome => '欢迎';
+
+  @override
+  String get stpKickerDone => '设置完成';
+
+  @override
+  String get stpKickServer => '服务器';
+
+  @override
+  String get stpKickRestore => '恢复';
+
+  @override
+  String get stpKickSafety => '安全';
+
+  @override
+  String get stpKickConnect => '首次连接';
+
+  @override
+  String get stpTitleWelcome => '通往你自己服务器的隧道。';
+
+  @override
+  String get stpTitleServer => '添加你的第一台服务器';
+
+  @override
+  String get stpTitleRestore => '从另一台设备恢复';
+
+  @override
+  String get stpTitleSafety => '安全开关';
+
+  @override
+  String get stpTitleConnect => '首次连接';
+
+  @override
+  String get stpTitleReady => 'Charon 已就绪';
+
+  @override
+  String get stpLeadWelcome =>
+      'Charon 把本机连接到你自己的 VLESS + Reality 服务器。没有账号，没有 Charon 服务器，无需注册。';
+
+  @override
+  String get stpLeadServer => '使用你搭建的服务器的链接或配置。除非用同步推送，否则它只留在本机。';
+
+  @override
+  String get stpLeadRestore => '拉取你从另一台设备推送的配置、规则和设置。它们在那台设备上已加密，只有你的密码短语能打开。';
+
+  @override
+  String get stpLeadSafety => '已经设好了合理的默认值。现在或以后都可以在设置中修改。';
+
+  @override
+  String get stpLeadYours => '用于首页问候。全部留空的话，首页只会说你好。';
+
+  @override
+  String get stpLeadConnect => '先做一次真实连接，确保一切正常再开始。';
+
+  @override
+  String get stpLeadReady => '首次连接已验证。首页、服务器和其他功能都在等你。';
+
+  @override
+  String get stpIntroTag => '先读 · 5 分钟';
+
+  @override
+  String get stpIntroTitle => '第一次使用？设置前先读一下介绍';
+
+  @override
+  String get stpIntro1 => 'Charon 是什么，不是什么';
+
+  @override
+  String get stpIntro2 => '与付费 VPN 应用有何不同';
+
+  @override
+  String get stpIntro3 => '与其他 xray 客户端有何不同';
+
+  @override
+  String get stpIntro4 => '设置前需要准备什么';
+
+  @override
+  String get stpIntroButton => '阅读介绍';
+
+  @override
+  String get stpIntroNote => '在浏览器中打开 Charon 的页面';
+
+  @override
+  String get stpNeedsTitle => '开始之前';
+
+  @override
+  String get stpNeed1 => '你自己的服务器';
+
+  @override
+  String get stpNeed1d => '任何你能登录的 VPS';
+
+  @override
+  String get stpNeed2 => '使用 VLESS + Reality 的 xray';
+
+  @override
+  String get stpNeed2d => '在那台服务器上运行';
+
+  @override
+  String get stpNeed3 => '它的 vless:// 链接或 JSON';
+
+  @override
+  String get stpNeed3d => '从服务器端复制';
+
+  @override
+  String get stpNeed4 => '同步密码短语';
+
+  @override
+  String get stpNeed4d => '可选，仅用于恢复';
+
+  @override
+  String get stpNeedsFoot => '缺少某项？介绍里讲了如何先配置服务器端。';
+
+  @override
+  String get stpServiceWhy => '为什么 Charon 要安装服务：';
+
+  @override
+  String get stpServiceWhyText =>
+      '服务负责创建网卡并让断网保护持续工作，所以 Windows 只在安装时请求一次管理员权限。';
+
+  @override
+  String get stpGetStarted => '开始';
+
+  @override
+  String get stpAlreadyUse => '我已在另一台设备上使用 Charon';
+
+  @override
+  String get stpWayLink => '导入 vless:// 链接';
+
+  @override
+  String get stpWayLinkD => '服务器面板里的一行';
+
+  @override
+  String get stpWayPaste => '粘贴配置';
+
+  @override
+  String get stpWayPasteD => '含一个出站的 xray JSON';
+
+  @override
+  String get stpWayRestore => '从设备恢复';
+
+  @override
+  String get stpWayRestoreD => '用同步密码短语拉取';
+
+  @override
+  String get stpWaysLabel => '如何添加';
+
+  @override
+  String get stpPasteNeeds => '需要一个 VLESS + Reality 出站 · 文件中的入站和路由会被忽略';
+
+  @override
+  String stpBecomesGuessed(String code) {
+    return '成为 $code · 根据 IP 离线推测国家 · 可以修改';
+  }
+
+  @override
+  String stpBecomesNone(String code) {
+    return '成为 $code · 国家未知，稍后可在编辑中设置';
+  }
+
+  @override
+  String get stpBack => '返回';
+
+  @override
+  String get stpSaveServer => '保存服务器';
+
+  @override
+  String get stpAddLater => '稍后再添加';
+
+  @override
+  String get stpEnterAddress => '改为输入服务器地址';
+
+  @override
+  String get stpRestoreCode => '配对码 · 来自你的另一台设备';
+
+  @override
+  String get stpRestoreCodeHelp => '在那台设备上：服务器 › 同步 › 显示配对码 · 2 分钟内有效';
+
+  @override
+  String get stpRestorePass => '密码短语';
+
+  @override
+  String get stpRestorePassHelp => '每次询问，从不保存';
+
+  @override
+  String get stpRestoreName => '为本机命名';
+
+  @override
+  String get stpRestoreNameHelp => '在同步中显示为本机';
+
+  @override
+  String get stpRestoreList => '[x] 服务器配置\n[x] 分流规则\n[x] 设置';
+
+  @override
+  String get stpRestoreNote1 => '在本机用你的密码短语解密';
+
+  @override
+  String get stpRestoreNote2 => '密码短语从不保存';
+
+  @override
+  String get stpRestoreNote3 => '本机将作为新设备加入';
+
+  @override
+  String get stpRestorePull => '拉取并解密';
+
+  @override
+  String get stpKillSwitch => '断网保护';
+
+  @override
+  String get stpKillDesc => '如果 Charon 的隧道意外中断（包括重启之后），会拦截你的流量。你自己断开时不会拦截。';
+
+  @override
+  String get stpKillOn => '已启用 · 隧道中断时拦截流量';
+
+  @override
+  String get stpKillOff => '关闭 · 隧道中断时流量会直连';
+
+  @override
+  String get stpAutoReconnect => '自动重连';
+
+  @override
+  String get stpAutoDesc => '重试 5 次，每次间隔 5 秒。以后有更多服务器时，会切换到下一台。';
+
+  @override
+  String get stpAutoOn => '已启用 · 5 次 × 5 秒';
+
+  @override
+  String get stpAutoOff => '关闭 · 隧道断开后保持断开';
+
+  @override
+  String get stpLaunch => '开机启动';
+
+  @override
+  String get stpLaunchDesc => '登录时打开 Charon 窗口。你的连接不依赖它。';
+
+  @override
+  String get stpLaunchOn => '开启 · 登录后打开窗口';
+
+  @override
+  String get stpLaunchOff => '关闭 · 隧道仍会恢复，窗口不会';
+
+  @override
+  String get stpDropTitle => '隧道断开时，按这些设置';
+
+  @override
+  String get stpDrop => '断开时';
+
+  @override
+  String get stpDropLost => '隧道丢失';
+
+  @override
+  String get stpRetry => '重试';
+
+  @override
+  String get stpRetryV => '5 次 × 每 5 秒';
+
+  @override
+  String get stpNext => '下一台';
+
+  @override
+  String get stpNextV => '下一台服务器（如有）';
+
+  @override
+  String get stpElse => '否则';
+
+  @override
+  String get stpElseV => '保持断开，直连';
+
+  @override
+  String get stpSafetyFoot => '这三项以后都在设置里，这里没有什么是永久的';
+
+  @override
+  String get stpContinue => '继续';
+
+  @override
+  String get stpYourName => '你的名字 · 可选';
+
+  @override
+  String get stpYourCity => '城市 · 可选';
+
+  @override
+  String get stpYourHint => '由你输入 · 设备定位以后可在设置中开启，目前保持关闭';
+
+  @override
+  String get stpTheme => '主题';
+
+  @override
+  String get stpThemeDark => '深色';
+
+  @override
+  String get stpThemeLight => '浅色';
+
+  @override
+  String get stpPreview => '首页预览';
+
+  @override
+  String stpCityNow(String city) {
+    return '你现在在 $city';
+  }
+
+  @override
+  String get stpSkipStep => '跳过此步';
+
+  @override
+  String get stpBadgeReady => '就绪';
+
+  @override
+  String stpBadgeVerifying(String time) {
+    return '验证中 · $time';
+  }
+
+  @override
+  String get stpBadgeConnected => '已连接 · 已验证';
+
+  @override
+  String get stpBadgeUnreachable => '无法连接';
+
+  @override
+  String get stpConnTitleReady => '连接并验证';
+
+  @override
+  String get stpConnTitleVerifying => '正在验证握手';
+
+  @override
+  String get stpConnTitleDone => '你渡过去了';
+
+  @override
+  String stpConnTitleFail(String server) {
+    return '无法连接 $server';
+  }
+
+  @override
+  String get stpConnLineReady => '点幽灵或按钮 · Charon 会先检查真实的 Reality 往返，再显示已连接';
+
+  @override
+  String get stpConnLineVerifying => '正在测试真实的 Reality 往返 · 最多可能需要 15 秒';
+
+  @override
+  String stpConnLineDone(String place, String ip) {
+    return '你的流量经由 $place 传输 · 出口 $ip 与服务器一致';
+  }
+
+  @override
+  String get stpConnLineFail => '没有任何流量经过隧道 · 你的连接没有变化';
+
+  @override
+  String get stpConnectVerify => '连接并验证';
+
+  @override
+  String get stpCancel => '取消';
+
+  @override
+  String get stpOpenCharon => '打开 Charon';
+
+  @override
+  String get stpRetryBtn => '重试';
+
+  @override
+  String get stpEditServer => '编辑服务器';
+
+  @override
+  String get stpFinishWithout => '不连接直接完成';
+
+  @override
+  String get stpChecksLabel => 'Charon 检查什么';
+
+  @override
+  String get stpCheck1 => '连接服务器';
+
+  @override
+  String get stpCheck1Wait => 'TCP 连接到 :443';
+
+  @override
+  String get stpCheck1Fail => 'TCP 连接超时';
+
+  @override
+  String stpCheck1Ok(int ms) {
+    return 'tcp 连接 · $ms ms';
+  }
+
+  @override
+  String get stpCheck2 => 'Reality 握手';
+
+  @override
+  String get stpCheck2Wait => '真实往返，而不是 ping';
+
+  @override
+  String get stpCheck2Ok => '真实往返正常';
+
+  @override
+  String get stpCheck3 => '出口一致';
+
+  @override
+  String get stpCheck3Wait => '你的公网 IP 就是服务器';
+
+  @override
+  String stpCheck3Ok(String ip, String code) {
+    return '$ip = $code';
+  }
+
+  @override
+  String get stpCheck4 => 'DNS 经过隧道';
+
+  @override
+  String get stpCheck4Wait => '没有解析绕过隧道';
+
+  @override
+  String stpCheck4Ok(String code) {
+    return '查询经由 $code 解析';
+  }
+
+  @override
+  String get stpStateQueued => '排队中';
+
+  @override
+  String get stpStateRunning => '进行中';
+
+  @override
+  String get stpStateOk => '正常';
+
+  @override
+  String get stpStateFailed => '失败';
+
+  @override
+  String get stpStateSkipped => '已跳过';
+
+  @override
+  String get stpFailTag => '过渡 · 服务器';
+
+  @override
+  String stpFailTitle(String server) {
+    return '$server 无法连接';
+  }
+
+  @override
+  String get stpFailBody =>
+      'TCP 连接和 ping 都失败了。这像是网络或服务器问题，而不是被屏蔽。请确认服务器在运行，然后重试。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -7841,4 +8419,582 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get splSkip => '跳过启动画面';
+
+  @override
+  String get stpTitleTag => '设置';
+
+  @override
+  String get stpProgressLabel => '设置进度';
+
+  @override
+  String get stpStepsLabel => '步骤';
+
+  @override
+  String get stpStep1 => '添加服务器';
+
+  @override
+  String get stpStep2 => '安全';
+
+  @override
+  String get stpStep3 => '个性化';
+
+  @override
+  String get stpStep4 => '首次连接';
+
+  @override
+  String get stpOptional => '可选';
+
+  @override
+  String get stpBubbleHello => '你好';
+
+  @override
+  String get stpBubbleAllSet => '全部就绪';
+
+  @override
+  String stpBubbleStep(int n) {
+    return '第 $n 步';
+  }
+
+  @override
+  String get stpBubWelcome => '嗨～我是 Charon。我会把你的流量渡到你自己的服务器。';
+
+  @override
+  String get stpBubServer => '粘贴链接或配置，只需要一次。';
+
+  @override
+  String get stpBubServerError => '差一点，链接少了一项。';
+
+  @override
+  String get stpBubRestore => '欢迎回来！我去把你的东西取来。';
+
+  @override
+  String get stpBubSafety => '选择出问题时我该多谨慎。';
+
+  @override
+  String get stpBubYours => '完全可选。我只是想好好打个招呼。';
+
+  @override
+  String get stpBubReady => '你准备好我就开始。我会真的检查过再说可以。';
+
+  @override
+  String get stpBubVerifying => '正在测试真实往返…';
+
+  @override
+  String get stpBubConnected => '我们渡过去了。对岸见。';
+
+  @override
+  String stpBubUnreachable(String server) {
+    return '我连不上 $server。多半不是你的问题。';
+  }
+
+  @override
+  String get stpHelpLabel => '此步骤帮助';
+
+  @override
+  String get stpHelpWelcome => '5 分钟了解 Charon';
+
+  @override
+  String get stpHelpLink => '在哪里找到你的 vless:// 链接';
+
+  @override
+  String get stpHelpPaste => '有效的 xray 配置需要什么';
+
+  @override
+  String get stpHelpError => 'pbk 和 sid 是什么';
+
+  @override
+  String get stpHelpRestore => '同步如何保护你的数据隐私';
+
+  @override
+  String get stpHelpSafety => '断网保护能做什么、不能做什么';
+
+  @override
+  String get stpHelpYours => '为什么位置信息只留在本机';
+
+  @override
+  String get stpHelpConnect => '四项检查是什么意思';
+
+  @override
+  String get stpHelpConnected => '使用 Charon 的第一周';
+
+  @override
+  String get stpHelpUnreachable => '修复无响应的服务器';
+
+  @override
+  String get stpProgressStart => '约 2 分钟 · 1 步必填';
+
+  @override
+  String stpProgressStep(int n) {
+    return '第 $n/4 步';
+  }
+
+  @override
+  String get stpProgressDone => '设置完成 · 4/4';
+
+  @override
+  String get stpSkipSetup => '跳过设置';
+
+  @override
+  String stpAcross(int pct) {
+    return '已渡 $pct%';
+  }
+
+  @override
+  String get stpArrived => '已抵达';
+
+  @override
+  String get stpStuck => '卡在半路';
+
+  @override
+  String stpSceneLabel(int pct) {
+    return 'Charon 正在渡河，已走 $pct%';
+  }
+
+  @override
+  String get stpSceneThis => '本机';
+
+  @override
+  String get stpSceneServer => '你的服务器';
+
+  @override
+  String stpKicker(int n, int total, String name) {
+    return '第 $n/$total 步 · $name';
+  }
+
+  @override
+  String get stpKickerWelcome => '欢迎';
+
+  @override
+  String get stpKickerDone => '设置完成';
+
+  @override
+  String get stpKickServer => '服务器';
+
+  @override
+  String get stpKickRestore => '恢复';
+
+  @override
+  String get stpKickSafety => '安全';
+
+  @override
+  String get stpKickConnect => '首次连接';
+
+  @override
+  String get stpTitleWelcome => '通往你自己服务器的隧道。';
+
+  @override
+  String get stpTitleServer => '添加你的第一台服务器';
+
+  @override
+  String get stpTitleRestore => '从另一台设备恢复';
+
+  @override
+  String get stpTitleSafety => '安全开关';
+
+  @override
+  String get stpTitleConnect => '首次连接';
+
+  @override
+  String get stpTitleReady => 'Charon 已就绪';
+
+  @override
+  String get stpLeadWelcome =>
+      'Charon 把本机连接到你自己的 VLESS + Reality 服务器。没有账号，没有 Charon 服务器，无需注册。';
+
+  @override
+  String get stpLeadServer => '使用你搭建的服务器的链接或配置。除非用同步推送，否则它只留在本机。';
+
+  @override
+  String get stpLeadRestore => '拉取你从另一台设备推送的配置、规则和设置。它们在那台设备上已加密，只有你的密码短语能打开。';
+
+  @override
+  String get stpLeadSafety => '已经设好了合理的默认值。现在或以后都可以在设置中修改。';
+
+  @override
+  String get stpLeadYours => '用于首页问候。全部留空的话，首页只会说你好。';
+
+  @override
+  String get stpLeadConnect => '先做一次真实连接，确保一切正常再开始。';
+
+  @override
+  String get stpLeadReady => '首次连接已验证。首页、服务器和其他功能都在等你。';
+
+  @override
+  String get stpIntroTag => '先读 · 5 分钟';
+
+  @override
+  String get stpIntroTitle => '第一次使用？设置前先读一下介绍';
+
+  @override
+  String get stpIntro1 => 'Charon 是什么，不是什么';
+
+  @override
+  String get stpIntro2 => '与付费 VPN 应用有何不同';
+
+  @override
+  String get stpIntro3 => '与其他 xray 客户端有何不同';
+
+  @override
+  String get stpIntro4 => '设置前需要准备什么';
+
+  @override
+  String get stpIntroButton => '阅读介绍';
+
+  @override
+  String get stpIntroNote => '在浏览器中打开 Charon 的页面';
+
+  @override
+  String get stpNeedsTitle => '开始之前';
+
+  @override
+  String get stpNeed1 => '你自己的服务器';
+
+  @override
+  String get stpNeed1d => '任何你能登录的 VPS';
+
+  @override
+  String get stpNeed2 => '使用 VLESS + Reality 的 xray';
+
+  @override
+  String get stpNeed2d => '在那台服务器上运行';
+
+  @override
+  String get stpNeed3 => '它的 vless:// 链接或 JSON';
+
+  @override
+  String get stpNeed3d => '从服务器端复制';
+
+  @override
+  String get stpNeed4 => '同步密码短语';
+
+  @override
+  String get stpNeed4d => '可选，仅用于恢复';
+
+  @override
+  String get stpNeedsFoot => '缺少某项？介绍里讲了如何先配置服务器端。';
+
+  @override
+  String get stpServiceWhy => '为什么 Charon 要安装服务：';
+
+  @override
+  String get stpServiceWhyText =>
+      '服务负责创建网卡并让断网保护持续工作，所以 Windows 只在安装时请求一次管理员权限。';
+
+  @override
+  String get stpGetStarted => '开始';
+
+  @override
+  String get stpAlreadyUse => '我已在另一台设备上使用 Charon';
+
+  @override
+  String get stpWayLink => '导入 vless:// 链接';
+
+  @override
+  String get stpWayLinkD => '服务器面板里的一行';
+
+  @override
+  String get stpWayPaste => '粘贴配置';
+
+  @override
+  String get stpWayPasteD => '含一个出站的 xray JSON';
+
+  @override
+  String get stpWayRestore => '从设备恢复';
+
+  @override
+  String get stpWayRestoreD => '用同步密码短语拉取';
+
+  @override
+  String get stpWaysLabel => '如何添加';
+
+  @override
+  String get stpPasteNeeds => '需要一个 VLESS + Reality 出站 · 文件中的入站和路由会被忽略';
+
+  @override
+  String stpBecomesGuessed(String code) {
+    return '成为 $code · 根据 IP 离线推测国家 · 可以修改';
+  }
+
+  @override
+  String stpBecomesNone(String code) {
+    return '成为 $code · 国家未知，稍后可在编辑中设置';
+  }
+
+  @override
+  String get stpBack => '返回';
+
+  @override
+  String get stpSaveServer => '保存服务器';
+
+  @override
+  String get stpAddLater => '稍后再添加';
+
+  @override
+  String get stpEnterAddress => '改为输入服务器地址';
+
+  @override
+  String get stpRestoreCode => '配对码 · 来自你的另一台设备';
+
+  @override
+  String get stpRestoreCodeHelp => '在那台设备上：服务器 › 同步 › 显示配对码 · 2 分钟内有效';
+
+  @override
+  String get stpRestorePass => '密码短语';
+
+  @override
+  String get stpRestorePassHelp => '每次询问，从不保存';
+
+  @override
+  String get stpRestoreName => '为本机命名';
+
+  @override
+  String get stpRestoreNameHelp => '在同步中显示为本机';
+
+  @override
+  String get stpRestoreList => '[x] 服务器配置\n[x] 分流规则\n[x] 设置';
+
+  @override
+  String get stpRestoreNote1 => '在本机用你的密码短语解密';
+
+  @override
+  String get stpRestoreNote2 => '密码短语从不保存';
+
+  @override
+  String get stpRestoreNote3 => '本机将作为新设备加入';
+
+  @override
+  String get stpRestorePull => '拉取并解密';
+
+  @override
+  String get stpKillSwitch => '断网保护';
+
+  @override
+  String get stpKillDesc => '如果 Charon 的隧道意外中断（包括重启之后），会拦截你的流量。你自己断开时不会拦截。';
+
+  @override
+  String get stpKillOn => '已启用 · 隧道中断时拦截流量';
+
+  @override
+  String get stpKillOff => '关闭 · 隧道中断时流量会直连';
+
+  @override
+  String get stpAutoReconnect => '自动重连';
+
+  @override
+  String get stpAutoDesc => '重试 5 次，每次间隔 5 秒。以后有更多服务器时，会切换到下一台。';
+
+  @override
+  String get stpAutoOn => '已启用 · 5 次 × 5 秒';
+
+  @override
+  String get stpAutoOff => '关闭 · 隧道断开后保持断开';
+
+  @override
+  String get stpLaunch => '开机启动';
+
+  @override
+  String get stpLaunchDesc => '登录时打开 Charon 窗口。你的连接不依赖它。';
+
+  @override
+  String get stpLaunchOn => '开启 · 登录后打开窗口';
+
+  @override
+  String get stpLaunchOff => '关闭 · 隧道仍会恢复，窗口不会';
+
+  @override
+  String get stpDropTitle => '隧道断开时，按这些设置';
+
+  @override
+  String get stpDrop => '断开时';
+
+  @override
+  String get stpDropLost => '隧道丢失';
+
+  @override
+  String get stpRetry => '重试';
+
+  @override
+  String get stpRetryV => '5 次 × 每 5 秒';
+
+  @override
+  String get stpNext => '下一台';
+
+  @override
+  String get stpNextV => '下一台服务器（如有）';
+
+  @override
+  String get stpElse => '否则';
+
+  @override
+  String get stpElseV => '保持断开，直连';
+
+  @override
+  String get stpSafetyFoot => '这三项以后都在设置里，这里没有什么是永久的';
+
+  @override
+  String get stpContinue => '继续';
+
+  @override
+  String get stpYourName => '你的名字 · 可选';
+
+  @override
+  String get stpYourCity => '城市 · 可选';
+
+  @override
+  String get stpYourHint => '由你输入 · 设备定位以后可在设置中开启，目前保持关闭';
+
+  @override
+  String get stpTheme => '主题';
+
+  @override
+  String get stpThemeDark => '深色';
+
+  @override
+  String get stpThemeLight => '浅色';
+
+  @override
+  String get stpPreview => '首页预览';
+
+  @override
+  String stpCityNow(String city) {
+    return '你现在在 $city';
+  }
+
+  @override
+  String get stpSkipStep => '跳过此步';
+
+  @override
+  String get stpBadgeReady => '就绪';
+
+  @override
+  String stpBadgeVerifying(String time) {
+    return '验证中 · $time';
+  }
+
+  @override
+  String get stpBadgeConnected => '已连接 · 已验证';
+
+  @override
+  String get stpBadgeUnreachable => '无法连接';
+
+  @override
+  String get stpConnTitleReady => '连接并验证';
+
+  @override
+  String get stpConnTitleVerifying => '正在验证握手';
+
+  @override
+  String get stpConnTitleDone => '你渡过去了';
+
+  @override
+  String stpConnTitleFail(String server) {
+    return '无法连接 $server';
+  }
+
+  @override
+  String get stpConnLineReady => '点幽灵或按钮 · Charon 会先检查真实的 Reality 往返，再显示已连接';
+
+  @override
+  String get stpConnLineVerifying => '正在测试真实的 Reality 往返 · 最多可能需要 15 秒';
+
+  @override
+  String stpConnLineDone(String place, String ip) {
+    return '你的流量经由 $place 传输 · 出口 $ip 与服务器一致';
+  }
+
+  @override
+  String get stpConnLineFail => '没有任何流量经过隧道 · 你的连接没有变化';
+
+  @override
+  String get stpConnectVerify => '连接并验证';
+
+  @override
+  String get stpCancel => '取消';
+
+  @override
+  String get stpOpenCharon => '打开 Charon';
+
+  @override
+  String get stpRetryBtn => '重试';
+
+  @override
+  String get stpEditServer => '编辑服务器';
+
+  @override
+  String get stpFinishWithout => '不连接直接完成';
+
+  @override
+  String get stpChecksLabel => 'Charon 检查什么';
+
+  @override
+  String get stpCheck1 => '连接服务器';
+
+  @override
+  String get stpCheck1Wait => 'TCP 连接到 :443';
+
+  @override
+  String get stpCheck1Fail => 'TCP 连接超时';
+
+  @override
+  String stpCheck1Ok(int ms) {
+    return 'tcp 连接 · $ms ms';
+  }
+
+  @override
+  String get stpCheck2 => 'Reality 握手';
+
+  @override
+  String get stpCheck2Wait => '真实往返，而不是 ping';
+
+  @override
+  String get stpCheck2Ok => '真实往返正常';
+
+  @override
+  String get stpCheck3 => '出口一致';
+
+  @override
+  String get stpCheck3Wait => '你的公网 IP 就是服务器';
+
+  @override
+  String stpCheck3Ok(String ip, String code) {
+    return '$ip = $code';
+  }
+
+  @override
+  String get stpCheck4 => 'DNS 经过隧道';
+
+  @override
+  String get stpCheck4Wait => '没有解析绕过隧道';
+
+  @override
+  String stpCheck4Ok(String code) {
+    return '查询经由 $code 解析';
+  }
+
+  @override
+  String get stpStateQueued => '排队中';
+
+  @override
+  String get stpStateRunning => '进行中';
+
+  @override
+  String get stpStateOk => '正常';
+
+  @override
+  String get stpStateFailed => '失败';
+
+  @override
+  String get stpStateSkipped => '已跳过';
+
+  @override
+  String get stpFailTag => '过渡 · 服务器';
+
+  @override
+  String stpFailTitle(String server) {
+    return '$server 无法连接';
+  }
+
+  @override
+  String get stpFailBody =>
+      'TCP 连接和 ping 都失败了。这像是网络或服务器问题，而不是被屏蔽。请确认服务器在运行，然后重试。';
 }

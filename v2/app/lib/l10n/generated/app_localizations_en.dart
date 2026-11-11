@@ -4161,4 +4161,603 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get splSkip => 'Skip the splash';
+
+  @override
+  String get stpTitleTag => 'SETUP';
+
+  @override
+  String get stpProgressLabel => 'Setup progress';
+
+  @override
+  String get stpStepsLabel => 'Steps';
+
+  @override
+  String get stpStep1 => 'Add a server';
+
+  @override
+  String get stpStep2 => 'Safety';
+
+  @override
+  String get stpStep3 => 'Make it yours';
+
+  @override
+  String get stpStep4 => 'First connect';
+
+  @override
+  String get stpOptional => 'OPTIONAL';
+
+  @override
+  String get stpBubbleHello => 'HELLO';
+
+  @override
+  String get stpBubbleAllSet => 'ALL SET';
+
+  @override
+  String stpBubbleStep(int n) {
+    return 'STEP $n';
+  }
+
+  @override
+  String get stpBubWelcome =>
+      'hiii, this is Charon. I carry your traffic across to a server you own.';
+
+  @override
+  String get stpBubServer => 'Paste a link or a config. I only need it once.';
+
+  @override
+  String get stpBubServerError => 'Almost. The link is missing one piece.';
+
+  @override
+  String get stpBubRestore => 'Welcome back! Let me fetch your stuff.';
+
+  @override
+  String get stpBubSafety => 'Pick how careful I should be when things break.';
+
+  @override
+  String get stpBubYours => 'Totally optional. I just like saying hi properly.';
+
+  @override
+  String get stpBubReady =>
+      'Ready when you are. I check for real before saying yes.';
+
+  @override
+  String get stpBubVerifying => 'Testing a real round trip…';
+
+  @override
+  String get stpBubConnected => 'We made it across. See you on the other side.';
+
+  @override
+  String stpBubUnreachable(String server) {
+    return 'I can\'t reach $server. Not your fault, probably.';
+  }
+
+  @override
+  String get stpHelpLabel => 'HELP FOR THIS STEP';
+
+  @override
+  String get stpHelpWelcome => 'What Charon is, in 5 minutes';
+
+  @override
+  String get stpHelpLink => 'Where to find your vless:// link';
+
+  @override
+  String get stpHelpPaste => 'What a valid xray config needs';
+
+  @override
+  String get stpHelpError => 'What pbk and sid are';
+
+  @override
+  String get stpHelpRestore => 'How Sync keeps your data private';
+
+  @override
+  String get stpHelpSafety => 'What the kill switch can and cannot do';
+
+  @override
+  String get stpHelpYours => 'Why location stays on this device';
+
+  @override
+  String get stpHelpConnect => 'What the four checks mean';
+
+  @override
+  String get stpHelpConnected => 'Your first week with Charon';
+
+  @override
+  String get stpHelpUnreachable => 'Fixing a server that will not answer';
+
+  @override
+  String get stpProgressStart => '~2 min · 1 step required';
+
+  @override
+  String stpProgressStep(int n) {
+    return 'step $n of 4';
+  }
+
+  @override
+  String get stpProgressDone => 'setup done · 4 of 4';
+
+  @override
+  String get stpSkipSetup => 'Skip setup';
+
+  @override
+  String stpAcross(int pct) {
+    return '$pct% ACROSS';
+  }
+
+  @override
+  String get stpArrived => 'ARRIVED';
+
+  @override
+  String get stpStuck => 'STUCK MIDWAY';
+
+  @override
+  String stpSceneLabel(int pct) {
+    return 'Charon ferrying across, $pct percent of the way';
+  }
+
+  @override
+  String get stpSceneThis => 'THIS DEVICE';
+
+  @override
+  String get stpSceneServer => 'YOUR SERVER';
+
+  @override
+  String stpKicker(int n, int total, String name) {
+    return 'STEP $n OF $total · $name';
+  }
+
+  @override
+  String get stpKickerWelcome => 'WELCOME';
+
+  @override
+  String get stpKickerDone => 'SETUP DONE';
+
+  @override
+  String get stpKickServer => 'SERVER';
+
+  @override
+  String get stpKickRestore => 'RESTORE';
+
+  @override
+  String get stpKickSafety => 'SAFETY';
+
+  @override
+  String get stpKickConnect => 'FIRST CONNECT';
+
+  @override
+  String get stpTitleWelcome => 'A tunnel to a server you control.';
+
+  @override
+  String get stpTitleServer => 'Add your first server';
+
+  @override
+  String get stpTitleRestore => 'Restore from another device';
+
+  @override
+  String get stpTitleSafety => 'Safety switches';
+
+  @override
+  String get stpTitleConnect => 'First connect';
+
+  @override
+  String get stpTitleReady => 'Charon is ready';
+
+  @override
+  String get stpLeadWelcome =>
+      'Charon connects this device to your own VLESS + Reality server. No accounts, no Charon servers, nothing to sign up for.';
+
+  @override
+  String get stpLeadServer =>
+      'Use the link or config from the server you set up. It stays on this device unless you push it with Sync.';
+
+  @override
+  String get stpLeadRestore =>
+      'Pull the profiles, rules and settings you pushed from your other device. They were encrypted there, and only your passphrase can open them.';
+
+  @override
+  String get stpLeadSafety =>
+      'Sensible defaults are already set. Change them now or any time in Settings.';
+
+  @override
+  String get stpLeadYours =>
+      'Used for the greeting on Home. Leave everything empty and Home simply says hello.';
+
+  @override
+  String get stpLeadConnect =>
+      'One real connection to make sure everything works before you start.';
+
+  @override
+  String get stpLeadReady =>
+      'Your first connection is verified. Home, Servers and the rest are waiting.';
+
+  @override
+  String get stpIntroTag => 'READ FIRST · 5 MIN';
+
+  @override
+  String get stpIntroTitle => 'New here? Read the intro before you set up';
+
+  @override
+  String get stpIntro1 => 'What Charon is, and what it is not';
+
+  @override
+  String get stpIntro2 => 'How it differs from VPN apps you pay for';
+
+  @override
+  String get stpIntro3 => 'How it differs from other xray clients';
+
+  @override
+  String get stpIntro4 => 'What to prepare before this setup';
+
+  @override
+  String get stpIntroButton => 'Read the intro';
+
+  @override
+  String get stpIntroNote => 'opens Charon\'s page in your browser';
+
+  @override
+  String get stpNeedsTitle => 'BEFORE YOU START';
+
+  @override
+  String get stpNeed1 => 'A server you control';
+
+  @override
+  String get stpNeed1d => 'any VPS you can log in to';
+
+  @override
+  String get stpNeed2 => 'xray with VLESS + Reality';
+
+  @override
+  String get stpNeed2d => 'running on that server';
+
+  @override
+  String get stpNeed3 => 'Its vless:// link or JSON';
+
+  @override
+  String get stpNeed3d => 'copied from the server side';
+
+  @override
+  String get stpNeed4 => 'Sync passphrase';
+
+  @override
+  String get stpNeed4d => 'optional, only to restore';
+
+  @override
+  String get stpNeedsFoot =>
+      'Missing one? The intro shows how to set up the server side first.';
+
+  @override
+  String get stpServiceWhy => 'Why Charon installs a service:';
+
+  @override
+  String get stpServiceWhyText =>
+      'it creates the network adapter and keeps the kill switch working, so Windows asked for admin rights once, at install.';
+
+  @override
+  String get stpGetStarted => 'Get started';
+
+  @override
+  String get stpAlreadyUse => 'I already use Charon on another device';
+
+  @override
+  String get stpWayLink => 'Import vless:// link';
+
+  @override
+  String get stpWayLinkD => 'one line from your server panel';
+
+  @override
+  String get stpWayPaste => 'Paste config';
+
+  @override
+  String get stpWayPasteD => 'xray JSON with one outbound';
+
+  @override
+  String get stpWayRestore => 'Restore from a device';
+
+  @override
+  String get stpWayRestoreD => 'pull with your sync passphrase';
+
+  @override
+  String get stpWaysLabel => 'How to add';
+
+  @override
+  String get stpPasteNeeds =>
+      'needs one VLESS + Reality outbound · inbounds and routing in the file are ignored';
+
+  @override
+  String stpBecomesGuessed(String code) {
+    return 'becomes $code · country guessed offline from the IP · you can change it';
+  }
+
+  @override
+  String stpBecomesNone(String code) {
+    return 'becomes $code · country not known, set it later in Edit';
+  }
+
+  @override
+  String get stpBack => 'Back';
+
+  @override
+  String get stpSaveServer => 'Save server';
+
+  @override
+  String get stpAddLater => 'I\'ll add one later';
+
+  @override
+  String get stpEnterAddress => 'enter the server address instead';
+
+  @override
+  String get stpRestoreCode => 'PAIRING CODE · FROM YOUR OTHER DEVICE';
+
+  @override
+  String get stpRestoreCodeHelp =>
+      'on that device: Servers › Sync › Show pairing code · valid 2 min';
+
+  @override
+  String get stpRestorePass => 'PASSPHRASE';
+
+  @override
+  String get stpRestorePassHelp => 'asked every time, never saved';
+
+  @override
+  String get stpRestoreName => 'NAME THIS DEVICE';
+
+  @override
+  String get stpRestoreNameHelp => 'shown as THIS UNIT in Sync';
+
+  @override
+  String get stpRestoreList =>
+      '[x] server profiles\n[x] split tunnel rules\n[x] settings';
+
+  @override
+  String get stpRestoreNote1 => 'decrypted here with your passphrase';
+
+  @override
+  String get stpRestoreNote2 => 'the passphrase is never saved';
+
+  @override
+  String get stpRestoreNote3 => 'this device joins as a new unit';
+
+  @override
+  String get stpRestorePull => 'Pull and decrypt';
+
+  @override
+  String get stpKillSwitch => 'Kill switch';
+
+  @override
+  String get stpKillDesc =>
+      'Holds your traffic if Charon\'s tunnel stops unexpectedly, including after a restart. Does not hold it when you disconnect yourself.';
+
+  @override
+  String get stpKillOn => 'armed · holds traffic if the tunnel stops';
+
+  @override
+  String get stpKillOff => 'off · if the tunnel stops, traffic goes direct';
+
+  @override
+  String get stpAutoReconnect => 'Auto reconnect';
+
+  @override
+  String get stpAutoDesc =>
+      '5 retries, 5 s apart. With more servers later, it moves to the next one.';
+
+  @override
+  String get stpAutoOn => 'armed · 5 tries × 5 s';
+
+  @override
+  String get stpAutoOff => 'off · if the tunnel drops, it stays down';
+
+  @override
+  String get stpLaunch => 'Launch at startup';
+
+  @override
+  String get stpLaunchDesc =>
+      'Opens the Charon window when you sign in. Your connection does not depend on it.';
+
+  @override
+  String get stpLaunchOn => 'on · the window opens after you sign in';
+
+  @override
+  String get stpLaunchOff =>
+      'off · the tunnel still comes back, the window does not';
+
+  @override
+  String get stpDropTitle => 'IF THE TUNNEL DROPS, WITH THESE SETTINGS';
+
+  @override
+  String get stpDrop => 'DROP';
+
+  @override
+  String get stpDropLost => 'tunnel lost';
+
+  @override
+  String get stpRetry => 'RETRY';
+
+  @override
+  String get stpRetryV => '5 × every 5 s';
+
+  @override
+  String get stpNext => 'NEXT';
+
+  @override
+  String get stpNextV => 'next server, if any';
+
+  @override
+  String get stpElse => 'ELSE';
+
+  @override
+  String get stpElseV => 'stays down, goes direct';
+
+  @override
+  String get stpSafetyFoot =>
+      'all three live in Settings later, nothing here is permanent';
+
+  @override
+  String get stpContinue => 'Continue';
+
+  @override
+  String get stpYourName => 'YOUR NAME · OPTIONAL';
+
+  @override
+  String get stpYourCity => 'CITY · OPTIONAL';
+
+  @override
+  String get stpYourHint =>
+      'typed by you · device detection can be turned on later in Settings, it stays off for now';
+
+  @override
+  String get stpTheme => 'THEME';
+
+  @override
+  String get stpThemeDark => 'DARK';
+
+  @override
+  String get stpThemeLight => 'LIGHT';
+
+  @override
+  String get stpPreview => 'PREVIEW ON HOME';
+
+  @override
+  String stpCityNow(String city) {
+    return 'You\'re now in $city';
+  }
+
+  @override
+  String get stpSkipStep => 'Skip this step';
+
+  @override
+  String get stpBadgeReady => 'READY';
+
+  @override
+  String stpBadgeVerifying(String time) {
+    return 'VERIFYING · $time';
+  }
+
+  @override
+  String get stpBadgeConnected => 'CONNECTED · VERIFIED';
+
+  @override
+  String get stpBadgeUnreachable => 'NOT REACHABLE';
+
+  @override
+  String get stpConnTitleReady => 'Connect and verify';
+
+  @override
+  String get stpConnTitleVerifying => 'Verifying handshake';
+
+  @override
+  String get stpConnTitleDone => 'You made it across';
+
+  @override
+  String stpConnTitleFail(String server) {
+    return 'Could not reach $server';
+  }
+
+  @override
+  String get stpConnLineReady =>
+      'tap the ghost or the button · Charon checks a real Reality round trip before it says connected';
+
+  @override
+  String get stpConnLineVerifying =>
+      'testing a real Reality round trip · this can take up to 15 s';
+
+  @override
+  String stpConnLineDone(String place, String ip) {
+    return 'your traffic crosses to $place · egress $ip matches the server';
+  }
+
+  @override
+  String get stpConnLineFail =>
+      'nothing was sent through the tunnel · your connection is unchanged';
+
+  @override
+  String get stpConnectVerify => 'Connect & verify';
+
+  @override
+  String get stpCancel => 'Cancel';
+
+  @override
+  String get stpOpenCharon => 'Open Charon';
+
+  @override
+  String get stpRetryBtn => 'Retry';
+
+  @override
+  String get stpEditServer => 'Edit server';
+
+  @override
+  String get stpFinishWithout => 'Finish without connecting';
+
+  @override
+  String get stpChecksLabel => 'What Charon checks';
+
+  @override
+  String get stpCheck1 => 'Reach the server';
+
+  @override
+  String get stpCheck1Wait => 'tcp connect to :443';
+
+  @override
+  String get stpCheck1Fail => 'tcp connect timed out';
+
+  @override
+  String stpCheck1Ok(int ms) {
+    return 'tcp connect · $ms ms';
+  }
+
+  @override
+  String get stpCheck2 => 'Reality handshake';
+
+  @override
+  String get stpCheck2Wait => 'a real round trip, not a ping';
+
+  @override
+  String get stpCheck2Ok => 'real round trip ok';
+
+  @override
+  String get stpCheck3 => 'Egress matches';
+
+  @override
+  String get stpCheck3Wait => 'your public IP is the server';
+
+  @override
+  String stpCheck3Ok(String ip, String code) {
+    return '$ip = $code';
+  }
+
+  @override
+  String get stpCheck4 => 'DNS through the tunnel';
+
+  @override
+  String get stpCheck4Wait => 'no lookup goes around the tunnel';
+
+  @override
+  String stpCheck4Ok(String code) {
+    return 'lookups answered via $code';
+  }
+
+  @override
+  String get stpStateQueued => 'QUEUED';
+
+  @override
+  String get stpStateRunning => 'RUNNING';
+
+  @override
+  String get stpStateOk => 'OK';
+
+  @override
+  String get stpStateFailed => 'FAILED';
+
+  @override
+  String get stpStateSkipped => 'SKIPPED';
+
+  @override
+  String get stpFailTag => 'TRANSITION · SERVER';
+
+  @override
+  String stpFailTitle(String server) {
+    return '$server is not reachable';
+  }
+
+  @override
+  String get stpFailBody =>
+      'TCP connect and ping both failed. This looks like a network or server problem, not a block. Check that the server is running, then retry.';
 }

@@ -4153,4 +4153,607 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get splSkip => 'Lewati splash';
+
+  @override
+  String get stpTitleTag => 'SETUP';
+
+  @override
+  String get stpProgressLabel => 'Progres setup';
+
+  @override
+  String get stpStepsLabel => 'Langkah';
+
+  @override
+  String get stpStep1 => 'Tambah server';
+
+  @override
+  String get stpStep2 => 'Keamanan';
+
+  @override
+  String get stpStep3 => 'Jadikan milikmu';
+
+  @override
+  String get stpStep4 => 'Koneksi pertama';
+
+  @override
+  String get stpOptional => 'OPSIONAL';
+
+  @override
+  String get stpBubbleHello => 'HALO';
+
+  @override
+  String get stpBubbleAllSet => 'SIAP SEMUA';
+
+  @override
+  String stpBubbleStep(int n) {
+    return 'LANGKAH $n';
+  }
+
+  @override
+  String get stpBubWelcome =>
+      'haii, ini Charon. Aku membawa trafikmu menyeberang ke server milikmu.';
+
+  @override
+  String get stpBubServer => 'Tempel link atau config. Aku cuma butuh sekali.';
+
+  @override
+  String get stpBubServerError => 'Hampir. Link-nya kurang satu bagian.';
+
+  @override
+  String get stpBubRestore =>
+      'Selamat datang kembali! Biar aku ambilkan barangmu.';
+
+  @override
+  String get stpBubSafety =>
+      'Pilih seberapa hati-hati aku saat ada yang rusak.';
+
+  @override
+  String get stpBubYours =>
+      'Sepenuhnya opsional. Aku cuma suka menyapa dengan benar.';
+
+  @override
+  String get stpBubReady =>
+      'Siap kapan pun kamu siap. Aku cek beneran sebelum bilang iya.';
+
+  @override
+  String get stpBubVerifying => 'Menguji round trip asli…';
+
+  @override
+  String get stpBubConnected =>
+      'Kita sudah menyeberang. Sampai jumpa di seberang.';
+
+  @override
+  String stpBubUnreachable(String server) {
+    return 'Aku tidak bisa menjangkau $server. Mungkin bukan salahmu.';
+  }
+
+  @override
+  String get stpHelpLabel => 'BANTUAN LANGKAH INI';
+
+  @override
+  String get stpHelpWelcome => 'Apa itu Charon, dalam 5 menit';
+
+  @override
+  String get stpHelpLink => 'Di mana menemukan link vless://';
+
+  @override
+  String get stpHelpPaste => 'Yang dibutuhkan config xray yang valid';
+
+  @override
+  String get stpHelpError => 'Apa itu pbk dan sid';
+
+  @override
+  String get stpHelpRestore => 'Cara Sync menjaga datamu tetap privat';
+
+  @override
+  String get stpHelpSafety => 'Yang bisa dan tidak bisa dilakukan kill switch';
+
+  @override
+  String get stpHelpYours => 'Kenapa lokasi tetap di perangkat ini';
+
+  @override
+  String get stpHelpConnect => 'Arti empat pengecekan';
+
+  @override
+  String get stpHelpConnected => 'Minggu pertamamu dengan Charon';
+
+  @override
+  String get stpHelpUnreachable => 'Memperbaiki server yang tidak menjawab';
+
+  @override
+  String get stpProgressStart => '~2 mnt · 1 langkah wajib';
+
+  @override
+  String stpProgressStep(int n) {
+    return 'langkah $n dari 4';
+  }
+
+  @override
+  String get stpProgressDone => 'setup selesai · 4 dari 4';
+
+  @override
+  String get stpSkipSetup => 'Lewati setup';
+
+  @override
+  String stpAcross(int pct) {
+    return '$pct% MENYEBERANG';
+  }
+
+  @override
+  String get stpArrived => 'SAMPAI';
+
+  @override
+  String get stpStuck => 'TERHENTI DI TENGAH';
+
+  @override
+  String stpSceneLabel(int pct) {
+    return 'Charon menyeberang, $pct persen perjalanan';
+  }
+
+  @override
+  String get stpSceneThis => 'PERANGKAT INI';
+
+  @override
+  String get stpSceneServer => 'SERVERMU';
+
+  @override
+  String stpKicker(int n, int total, String name) {
+    return 'LANGKAH $n DARI $total · $name';
+  }
+
+  @override
+  String get stpKickerWelcome => 'SELAMAT DATANG';
+
+  @override
+  String get stpKickerDone => 'SETUP SELESAI';
+
+  @override
+  String get stpKickServer => 'SERVER';
+
+  @override
+  String get stpKickRestore => 'PULIHKAN';
+
+  @override
+  String get stpKickSafety => 'KEAMANAN';
+
+  @override
+  String get stpKickConnect => 'KONEKSI PERTAMA';
+
+  @override
+  String get stpTitleWelcome => 'Tunnel ke server milikmu.';
+
+  @override
+  String get stpTitleServer => 'Tambahkan server pertamamu';
+
+  @override
+  String get stpTitleRestore => 'Pulihkan dari perangkat lain';
+
+  @override
+  String get stpTitleSafety => 'Sakelar keamanan';
+
+  @override
+  String get stpTitleConnect => 'Koneksi pertama';
+
+  @override
+  String get stpTitleReady => 'Charon siap';
+
+  @override
+  String get stpLeadWelcome =>
+      'Charon menghubungkan perangkat ini ke server VLESS + Reality milikmu sendiri. Tanpa akun, tanpa server Charon, tidak perlu daftar apa pun.';
+
+  @override
+  String get stpLeadServer =>
+      'Pakai link atau config dari server yang kamu siapkan. Tetap di perangkat ini kecuali kamu kirim lewat Sync.';
+
+  @override
+  String get stpLeadRestore =>
+      'Tarik profil, aturan, dan pengaturan yang kamu kirim dari perangkat lain. Semuanya dienkripsi di sana, dan hanya passphrase-mu yang bisa membukanya.';
+
+  @override
+  String get stpLeadSafety =>
+      'Bawaan yang masuk akal sudah diatur. Ubah sekarang atau kapan saja di Pengaturan.';
+
+  @override
+  String get stpLeadYours =>
+      'Dipakai untuk sapaan di Beranda. Kosongkan semuanya dan Beranda cukup bilang halo.';
+
+  @override
+  String get stpLeadConnect =>
+      'Satu koneksi asli untuk memastikan semuanya jalan sebelum mulai.';
+
+  @override
+  String get stpLeadReady =>
+      'Koneksi pertamamu terverifikasi. Beranda, Server, dan lainnya sudah menunggu.';
+
+  @override
+  String get stpIntroTag => 'BACA DULU · 5 MNT';
+
+  @override
+  String get stpIntroTitle => 'Baru di sini? Baca intro sebelum setup';
+
+  @override
+  String get stpIntro1 => 'Apa itu Charon, dan apa yang bukan';
+
+  @override
+  String get stpIntro2 => 'Bedanya dengan aplikasi VPN berbayar';
+
+  @override
+  String get stpIntro3 => 'Bedanya dengan klien xray lain';
+
+  @override
+  String get stpIntro4 => 'Yang perlu disiapkan sebelum setup';
+
+  @override
+  String get stpIntroButton => 'Baca intro';
+
+  @override
+  String get stpIntroNote => 'membuka halaman Charon di browser-mu';
+
+  @override
+  String get stpNeedsTitle => 'SEBELUM MULAI';
+
+  @override
+  String get stpNeed1 => 'Server milikmu';
+
+  @override
+  String get stpNeed1d => 'VPS apa pun yang bisa kamu masuki';
+
+  @override
+  String get stpNeed2 => 'xray dengan VLESS + Reality';
+
+  @override
+  String get stpNeed2d => 'berjalan di server itu';
+
+  @override
+  String get stpNeed3 => 'Link vless:// atau JSON-nya';
+
+  @override
+  String get stpNeed3d => 'disalin dari sisi server';
+
+  @override
+  String get stpNeed4 => 'Passphrase sync';
+
+  @override
+  String get stpNeed4d => 'opsional, hanya untuk memulihkan';
+
+  @override
+  String get stpNeedsFoot =>
+      'Ada yang kurang? Intro menunjukkan cara menyiapkan sisi server dulu.';
+
+  @override
+  String get stpServiceWhy => 'Kenapa Charon memasang service:';
+
+  @override
+  String get stpServiceWhyText =>
+      'service membuat adaptor jaringan dan menjaga kill switch tetap bekerja, jadi Windows meminta hak admin sekali saja, saat instalasi.';
+
+  @override
+  String get stpGetStarted => 'Mulai';
+
+  @override
+  String get stpAlreadyUse => 'Aku sudah pakai Charon di perangkat lain';
+
+  @override
+  String get stpWayLink => 'Impor link vless://';
+
+  @override
+  String get stpWayLinkD => 'satu baris dari panel servermu';
+
+  @override
+  String get stpWayPaste => 'Tempel config';
+
+  @override
+  String get stpWayPasteD => 'JSON xray dengan satu outbound';
+
+  @override
+  String get stpWayRestore => 'Pulihkan dari perangkat';
+
+  @override
+  String get stpWayRestoreD => 'tarik dengan passphrase sync-mu';
+
+  @override
+  String get stpWaysLabel => 'Cara menambahkan';
+
+  @override
+  String get stpPasteNeeds =>
+      'butuh satu outbound VLESS + Reality · inbound dan routing di file diabaikan';
+
+  @override
+  String stpBecomesGuessed(String code) {
+    return 'jadi $code · negara ditebak offline dari IP · bisa kamu ubah';
+  }
+
+  @override
+  String stpBecomesNone(String code) {
+    return 'jadi $code · negara belum diketahui, atur nanti di Edit';
+  }
+
+  @override
+  String get stpBack => 'Kembali';
+
+  @override
+  String get stpSaveServer => 'Simpan server';
+
+  @override
+  String get stpAddLater => 'Nanti saja';
+
+  @override
+  String get stpEnterAddress => 'masukkan alamat server saja';
+
+  @override
+  String get stpRestoreCode => 'KODE PASANGAN · DARI PERANGKAT LAIN';
+
+  @override
+  String get stpRestoreCodeHelp =>
+      'di perangkat itu: Server › Sync › Tampilkan kode pasangan · berlaku 2 mnt';
+
+  @override
+  String get stpRestorePass => 'PASSPHRASE';
+
+  @override
+  String get stpRestorePassHelp => 'ditanya setiap kali, tidak pernah disimpan';
+
+  @override
+  String get stpRestoreName => 'NAMAI PERANGKAT INI';
+
+  @override
+  String get stpRestoreNameHelp => 'tampil sebagai PERANGKAT INI di Sync';
+
+  @override
+  String get stpRestoreList =>
+      '[x] profil server\n[x] aturan split tunnel\n[x] pengaturan';
+
+  @override
+  String get stpRestoreNote1 => 'didekripsi di sini dengan passphrase-mu';
+
+  @override
+  String get stpRestoreNote2 => 'passphrase tidak pernah disimpan';
+
+  @override
+  String get stpRestoreNote3 => 'perangkat ini bergabung sebagai unit baru';
+
+  @override
+  String get stpRestorePull => 'Tarik dan dekripsi';
+
+  @override
+  String get stpKillSwitch => 'Kill switch';
+
+  @override
+  String get stpKillDesc =>
+      'Menahan trafikmu kalau tunnel Charon berhenti tiba-tiba, termasuk setelah restart. Tidak menahan saat kamu sendiri yang memutus.';
+
+  @override
+  String get stpKillOn => 'aktif · menahan trafik kalau tunnel berhenti';
+
+  @override
+  String get stpKillOff =>
+      'mati · kalau tunnel berhenti, trafik lewat langsung';
+
+  @override
+  String get stpAutoReconnect => 'Sambung ulang otomatis';
+
+  @override
+  String get stpAutoDesc =>
+      '5 kali coba, jeda 5 dtk. Kalau nanti ada server lain, pindah ke yang berikutnya.';
+
+  @override
+  String get stpAutoOn => 'aktif · 5 kali × 5 dtk';
+
+  @override
+  String get stpAutoOff => 'mati · kalau tunnel putus, tetap putus';
+
+  @override
+  String get stpLaunch => 'Jalankan saat startup';
+
+  @override
+  String get stpLaunchDesc =>
+      'Membuka jendela Charon saat kamu masuk. Koneksimu tidak bergantung padanya.';
+
+  @override
+  String get stpLaunchOn => 'nyala · jendela terbuka setelah kamu masuk';
+
+  @override
+  String get stpLaunchOff => 'mati · tunnel tetap kembali, jendelanya tidak';
+
+  @override
+  String get stpDropTitle => 'KALAU TUNNEL PUTUS, DENGAN PENGATURAN INI';
+
+  @override
+  String get stpDrop => 'PUTUS';
+
+  @override
+  String get stpDropLost => 'tunnel hilang';
+
+  @override
+  String get stpRetry => 'COBA LAGI';
+
+  @override
+  String get stpRetryV => '5 × tiap 5 dtk';
+
+  @override
+  String get stpNext => 'LANJUT';
+
+  @override
+  String get stpNextV => 'server berikutnya, kalau ada';
+
+  @override
+  String get stpElse => 'SELAIN ITU';
+
+  @override
+  String get stpElseV => 'tetap putus, lewat langsung';
+
+  @override
+  String get stpSafetyFoot =>
+      'ketiganya ada di Pengaturan nanti, tidak ada yang permanen di sini';
+
+  @override
+  String get stpContinue => 'Lanjut';
+
+  @override
+  String get stpYourName => 'NAMAMU · OPSIONAL';
+
+  @override
+  String get stpYourCity => 'KOTA · OPSIONAL';
+
+  @override
+  String get stpYourHint =>
+      'diketik olehmu · deteksi perangkat bisa dinyalakan nanti di Pengaturan, untuk sekarang mati';
+
+  @override
+  String get stpTheme => 'TEMA';
+
+  @override
+  String get stpThemeDark => 'GELAP';
+
+  @override
+  String get stpThemeLight => 'TERANG';
+
+  @override
+  String get stpPreview => 'PRATINJAU DI BERANDA';
+
+  @override
+  String stpCityNow(String city) {
+    return 'Sekarang kamu di $city';
+  }
+
+  @override
+  String get stpSkipStep => 'Lewati langkah ini';
+
+  @override
+  String get stpBadgeReady => 'SIAP';
+
+  @override
+  String stpBadgeVerifying(String time) {
+    return 'MEMVERIFIKASI · $time';
+  }
+
+  @override
+  String get stpBadgeConnected => 'TERHUBUNG · TERVERIFIKASI';
+
+  @override
+  String get stpBadgeUnreachable => 'TIDAK TERJANGKAU';
+
+  @override
+  String get stpConnTitleReady => 'Hubungkan dan verifikasi';
+
+  @override
+  String get stpConnTitleVerifying => 'Memverifikasi handshake';
+
+  @override
+  String get stpConnTitleDone => 'Kamu sudah menyeberang';
+
+  @override
+  String stpConnTitleFail(String server) {
+    return 'Tidak bisa menjangkau $server';
+  }
+
+  @override
+  String get stpConnLineReady =>
+      'ketuk hantu atau tombolnya · Charon mengecek round trip Reality asli sebelum menyatakan terhubung';
+
+  @override
+  String get stpConnLineVerifying =>
+      'menguji round trip Reality asli · bisa sampai 15 dtk';
+
+  @override
+  String stpConnLineDone(String place, String ip) {
+    return 'trafikmu menyeberang ke $place · egress $ip cocok dengan server';
+  }
+
+  @override
+  String get stpConnLineFail =>
+      'tidak ada yang dikirim lewat tunnel · koneksimu tidak berubah';
+
+  @override
+  String get stpConnectVerify => 'Hubungkan & verifikasi';
+
+  @override
+  String get stpCancel => 'Batal';
+
+  @override
+  String get stpOpenCharon => 'Buka Charon';
+
+  @override
+  String get stpRetryBtn => 'Coba lagi';
+
+  @override
+  String get stpEditServer => 'Edit server';
+
+  @override
+  String get stpFinishWithout => 'Selesai tanpa terhubung';
+
+  @override
+  String get stpChecksLabel => 'Yang dicek Charon';
+
+  @override
+  String get stpCheck1 => 'Jangkau server';
+
+  @override
+  String get stpCheck1Wait => 'koneksi tcp ke :443';
+
+  @override
+  String get stpCheck1Fail => 'koneksi tcp timeout';
+
+  @override
+  String stpCheck1Ok(int ms) {
+    return 'tcp connect · $ms ms';
+  }
+
+  @override
+  String get stpCheck2 => 'Handshake Reality';
+
+  @override
+  String get stpCheck2Wait => 'round trip asli, bukan ping';
+
+  @override
+  String get stpCheck2Ok => 'round trip asli oke';
+
+  @override
+  String get stpCheck3 => 'Egress sesuai';
+
+  @override
+  String get stpCheck3Wait => 'IP publikmu adalah server';
+
+  @override
+  String stpCheck3Ok(String ip, String code) {
+    return '$ip = $code';
+  }
+
+  @override
+  String get stpCheck4 => 'DNS lewat tunnel';
+
+  @override
+  String get stpCheck4Wait => 'tak ada lookup yang lewat luar tunnel';
+
+  @override
+  String stpCheck4Ok(String code) {
+    return 'lookup dijawab lewat $code';
+  }
+
+  @override
+  String get stpStateQueued => 'DIANTREKAN';
+
+  @override
+  String get stpStateRunning => 'BERJALAN';
+
+  @override
+  String get stpStateOk => 'OK';
+
+  @override
+  String get stpStateFailed => 'GAGAL';
+
+  @override
+  String get stpStateSkipped => 'DILEWATI';
+
+  @override
+  String get stpFailTag => 'TRANSISI · SERVER';
+
+  @override
+  String stpFailTitle(String server) {
+    return '$server tidak terjangkau';
+  }
+
+  @override
+  String get stpFailBody =>
+      'Koneksi TCP dan ping sama-sama gagal. Ini terlihat seperti masalah jaringan atau server, bukan blokir. Cek apakah server berjalan, lalu coba lagi.';
 }
