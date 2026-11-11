@@ -1292,7 +1292,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get updatesTitle => 'Pembaruan';
 
   @override
-  String get updatesTag => 'PENGATURAN · TENTANG';
+  String get updatesTag => 'PENGATURAN · TENTANG · PEMBARUAN';
 
   @override
   String get updatesBackToSettings => '← Kembali ke Pengaturan';
@@ -1315,19 +1315,19 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get updatesCoreTrustNote =>
-      'Pembaruan core hadir di dalam rilis Charon yang terverifikasi, bukan langsung dari upstream.';
+      'Pembaruan core datang di dalam rilis Charon yang ditandatangani, tidak pernah langsung dari upstream.';
 
   @override
   String get updatesCoreStepDownload => 'Unduh';
 
   @override
-  String get updatesCoreStepSignature => 'Periksa tanda tangan dan sha256';
+  String get updatesCoreStepSignature => 'Cek tanda tangan dan sha256';
 
   @override
-  String get updatesCoreStepConfig => 'Uji konfigurasi Anda';
+  String get updatesCoreStepConfig => 'Uji config-mu';
 
   @override
-  String get updatesCoreStepSwap => 'Tukar dan verifikasi';
+  String get updatesCoreStepSwap => 'Ganti dan verifikasi';
 
   @override
   String get updatesCoreReadyCostNote =>
@@ -1337,13 +1337,13 @@ class AppLocalizationsId extends AppLocalizations {
   String get updatesCoreApplyNowBtn => 'Terapkan sekarang';
 
   @override
-  String get updatesCoreApplyWhenDisconnectBtn => 'Saat saya putuskan';
+  String get updatesCoreApplyWhenDisconnectBtn => 'Saat aku memutuskan';
 
   @override
   String get updatesCoreQueuedBadge => 'MENUNGGU · BERLAKU SAAT PUTUS KONEKSI';
 
   @override
-  String get updatesCoreCheckBtn => 'Periksa pembaruan';
+  String get updatesCoreCheckBtn => 'Cek pembaruan';
 
   @override
   String get updatesCoreRollbackBtn => 'Kembalikan versi core';
@@ -1364,7 +1364,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get updatesAppAndroidNotice =>
-      'Charon tidak memasang pembaruan sendiri di Android. Obtainium dapat melakukannya untuk Anda.';
+      'Di Android, Charon tidak memasang pembaruan sendiri. Obtainium bisa melakukannya untukmu.';
 
   @override
   String get updatesAppOpenReleaseBtn => 'Buka halaman rilis';
@@ -1402,6 +1402,325 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get updatesFileApplyBtn => 'Terapkan pembaruan file';
+
+  @override
+  String get updChipUpToDate => 'TERBARU';
+
+  @override
+  String get updChipUpdate => 'PEMBARUAN';
+
+  @override
+  String get updChipDownloading => 'MENGUNDUH';
+
+  @override
+  String get updChipReady => 'SIAP';
+
+  @override
+  String get updChipQueued => 'DIANTREKAN';
+
+  @override
+  String get updChipApplying => 'MENERAPKAN';
+
+  @override
+  String get updChipUpdated => 'DIPERBARUI';
+
+  @override
+  String get updChipRolledBack => 'DIKEMBALIKAN';
+
+  @override
+  String get updChipCantCheck => 'TIDAK BISA CEK';
+
+  @override
+  String get updChipSigInvalid => 'TANDA TANGAN TIDAK VALID';
+
+  @override
+  String get updChipFailed => 'PEMBARUAN GAGAL';
+
+  @override
+  String get updChipConfigFailed => 'TES CONFIG GAGAL';
+
+  @override
+  String get updChipDowngrade => 'TURUN VERSI DITOLAK';
+
+  @override
+  String get updChipChecking => 'MENGECEK';
+
+  @override
+  String get updChipVerified => 'TERVERIFIKASI';
+
+  @override
+  String get updChipNotValid => 'TIDAK VALID';
+
+  @override
+  String get updChipOlder => 'LEBIH LAMA';
+
+  @override
+  String get updChipWrongPlatform => 'PLATFORM SALAH';
+
+  @override
+  String get updCheckNow => 'Cek sekarang';
+
+  @override
+  String get updCheckingLine => 'mengecek github.com…';
+
+  @override
+  String get updOfflineTag => 'TIDAK TERHUBUNG · UNDUH LANGSUNG';
+
+  @override
+  String get updOfflineText =>
+      'GitHub sering lambat atau diblokir dari sini tanpa tunnel.';
+
+  @override
+  String get updTagCore => 'XRAY-CORE · THE ENGINE';
+
+  @override
+  String get updTagApp => 'CHARON · THIS APP';
+
+  @override
+  String get updStepsLabel => 'Langkah pembaruan';
+
+  @override
+  String get updSubDownload => 'di rilis Charon bertanda tangan';
+
+  @override
+  String get updSubSignature => 'oleh service Charon · digest cocok';
+
+  @override
+  String updSubConfig(String servers) {
+    return 'xray run -test di $servers';
+  }
+
+  @override
+  String get updSubSwap => 'restart xray, tes asli';
+
+  @override
+  String get updSubSwapDone => 'handshake terverifikasi';
+
+  @override
+  String get updFailDownload => 'terhenti, dibuang';
+
+  @override
+  String get updFailSignature => 'tanda tangan tidak valid, file dihapus';
+
+  @override
+  String get updFailConfig => 'ada server tersimpan yang gagal xray run -test';
+
+  @override
+  String get updFailSwap => 'handshake gagal, roll back';
+
+  @override
+  String updMetaAvailable(String size) {
+    return '$size MB · digest bertanda tangan';
+  }
+
+  @override
+  String get updMetaAvailableNoSize => 'digest bertanda tangan';
+
+  @override
+  String updMetaViaServer(String server) {
+    return 'lewat $server, GitHub lambat kalau langsung dari sini';
+  }
+
+  @override
+  String get updMetaDirectSlow => 'langsung, ini bisa lambat atau diblokir';
+
+  @override
+  String get updMetaReady => 'terunduh · dicek · config-mu lolos';
+
+  @override
+  String get updMetaQueued => 'berlaku saat kamu memutuskan berikutnya';
+
+  @override
+  String updMetaApplying(String version) {
+    return 'me-restart xray dengan $version';
+  }
+
+  @override
+  String get updMetaUpdated => 'handshake terverifikasi';
+
+  @override
+  String updMetaRolledBack(String version) {
+    return '$version gagal handshake';
+  }
+
+  @override
+  String get updMetaUnreachable => 'github.com tidak menjawab dalam 15 dtk';
+
+  @override
+  String get updMetaSigInvalid =>
+      'manifest rilis tidak cocok dengan kunci tanda tangan Charon';
+
+  @override
+  String get updMetaFailed => 'unduhan terputus dan dibuang';
+
+  @override
+  String updMetaConfigFailed(String version) {
+    return '$version menolak config server tersimpan';
+  }
+
+  @override
+  String updMetaDowngrade(String offered, String current) {
+    return 'core yang ditawarkan $offered lebih lama dari $current';
+  }
+
+  @override
+  String updMetaAppInstaller(String size) {
+    return 'installer · $size MB · bertanda tangan';
+  }
+
+  @override
+  String get updMetaAppReady => 'terunduh · dicek oleh service Charon';
+
+  @override
+  String get updMetaAppDirectSlow => 'langsung, ini bisa lambat';
+
+  @override
+  String updMetaAppViaServer(String server) {
+    return 'lewat $server';
+  }
+
+  @override
+  String get updMetaAppSigInvalid => 'installer tidak ditandatangani Charon';
+
+  @override
+  String get updFootAvailable =>
+      'tidak ada yang berubah sampai kamu menerapkannya';
+
+  @override
+  String get updFootDownloading => 'kamu tetap bisa memakai Charon';
+
+  @override
+  String get updFootReadyOnline =>
+      'menerapkan me-restart xray: tunnel putus sekitar 2 dtk, dan kalau kill switch mati, momen itu lewat langsung';
+
+  @override
+  String get updFootReadyOffline =>
+      'tidak terhubung, jadi menerapkan tidak memutus apa pun';
+
+  @override
+  String get updFootQueued =>
+      'penggantian terjadi saat tidak ada yang memakai tunnel';
+
+  @override
+  String updFootApplying(String version) {
+    return 'kalau handshake gagal, Charon kembali ke $version sendiri';
+  }
+
+  @override
+  String get updFootUpdated =>
+      'roll back sekali ketuk kalau yang baru bermasalah';
+
+  @override
+  String updFootRolledBack(String version) {
+    return 'kembali ke $version · tidak ada yang lain berubah';
+  }
+
+  @override
+  String get updFootUnreachable =>
+      'GitHub sering diblokir di sini tanpa tunnel · hubungkan dulu, atau perbarui dari file di bawah';
+
+  @override
+  String updFootSigInvalid(String version) {
+    return 'tidak ada yang terpasang · $version tetap berjalan';
+  }
+
+  @override
+  String updFootFailed(String version) {
+    return '$version tetap berjalan · tidak ada yang berubah';
+  }
+
+  @override
+  String get updFootConfigFailed =>
+      'pembaruan berhenti sebelum penggantian · tidak ada yang berubah';
+
+  @override
+  String get updFootDowngrade =>
+      'Charon tidak pernah memasang core yang lebih lama sendiri';
+
+  @override
+  String get updFootAppUpToDate => 'pembaruan datang dari GitHub Releases';
+
+  @override
+  String get updFootAppAvailable =>
+      'server dan pengaturanmu tetap seperti semula';
+
+  @override
+  String get updFootAppReady =>
+      'Windows minta hak admin · memperbarui service menjeda tunnel sebentar';
+
+  @override
+  String get updFootAppSigInvalid => 'tidak ada yang terpasang · file dihapus';
+
+  @override
+  String updProgressOf(String done, String total) {
+    return '$done dari $total MB';
+  }
+
+  @override
+  String get updBtnDownload => 'Unduh';
+
+  @override
+  String get updBtnReleaseNotes => 'Catatan rilis ↗';
+
+  @override
+  String get updBtnAllReleases => 'Semua rilis ↗';
+
+  @override
+  String get updBtnCancel => 'Batal';
+
+  @override
+  String get updBtnApplyNowInstead => 'Terapkan sekarang saja';
+
+  @override
+  String get updBtnTryAgain => 'Coba lagi';
+
+  @override
+  String get updBtnCopyLog => 'Salin log';
+
+  @override
+  String get updBtnEditServers => 'Edit server';
+
+  @override
+  String get updBtnInstallUpdate => 'Pasang pembaruan';
+
+  @override
+  String get updBtnInstall => 'Pasang';
+
+  @override
+  String get updBtnChooseAnother => 'Pilih yang lain';
+
+  @override
+  String get updBtnDisabledNote => 'Belum tersedia';
+
+  @override
+  String get updLogCopied => 'Log core disalin';
+
+  @override
+  String get updFileIdle =>
+      'Untuk saat GitHub diblokir dan tunnel mati. Pilih file rilis Charon, service mengeceknya dulu.';
+
+  @override
+  String get updFileSending => 'mengirim ke service';
+
+  @override
+  String updFileVerified(String version) {
+    return '$version · tanda tangan valid';
+  }
+
+  @override
+  String get updFileBadSignature =>
+      'Tanda tangannya tidak valid. Charon tidak akan memasang file ini.';
+
+  @override
+  String get updFileOlder =>
+      'File ini tidak lebih baru dari yang kamu pakai. Charon tidak mundur versi lewat cara ini.';
+
+  @override
+  String get updFileWrongPlatform =>
+      'File ini untuk platform lain. Pilih installer Windows.';
+
+  @override
+  String get updChipNotChecked => 'BELUM DICEK';
 
   @override
   String get licencesTitle => 'Lisensi Sumber Terbuka';

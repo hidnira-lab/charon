@@ -2324,7 +2324,7 @@ abstract class AppLocalizations {
   /// Category tag above title.
   ///
   /// In en, this message translates to:
-  /// **'SETTINGS · ABOUT'**
+  /// **'SETTINGS · ABOUT · UPDATES'**
   String get updatesTag;
 
   /// Back button to settings screen.
@@ -2524,6 +2524,552 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Apply file update'**
   String get updatesFileApplyBtn;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'UP TO DATE'**
+  String get updChipUpToDate;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'UPDATE'**
+  String get updChipUpdate;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'DOWNLOADING'**
+  String get updChipDownloading;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'READY'**
+  String get updChipReady;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'QUEUED'**
+  String get updChipQueued;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'APPLYING'**
+  String get updChipApplying;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'UPDATED'**
+  String get updChipUpdated;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'ROLLED BACK'**
+  String get updChipRolledBack;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'CAN\'T CHECK'**
+  String get updChipCantCheck;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'SIGNATURE INVALID'**
+  String get updChipSigInvalid;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'UPDATE FAILED'**
+  String get updChipFailed;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'CONFIG TEST FAILED'**
+  String get updChipConfigFailed;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'DOWNGRADE REFUSED'**
+  String get updChipDowngrade;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'CHECKING'**
+  String get updChipChecking;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'VERIFIED'**
+  String get updChipVerified;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'NOT VALID'**
+  String get updChipNotValid;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'OLDER'**
+  String get updChipOlder;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'WRONG PLATFORM'**
+  String get updChipWrongPlatform;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Check now'**
+  String get updCheckNow;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'checking github.com…'**
+  String get updCheckingLine;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'NOT CONNECTED · DIRECT DOWNLOAD'**
+  String get updOfflineTag;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'GitHub is often slow or blocked from here without the tunnel.'**
+  String get updOfflineText;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'XRAY-CORE · THE ENGINE'**
+  String get updTagCore;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'CHARON · THIS APP'**
+  String get updTagApp;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Update steps'**
+  String get updStepsLabel;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'inside the signed Charon release'**
+  String get updSubDownload;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'by the Charon service · digest matches'**
+  String get updSubSignature;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'xray run -test on {servers}'**
+  String updSubConfig(String servers);
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'restart xray, real round trip'**
+  String get updSubSwap;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'handshake verified'**
+  String get updSubSwapDone;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'stopped, thrown away'**
+  String get updFailDownload;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'signature not valid, file deleted'**
+  String get updFailSignature;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'a saved server failed xray run -test'**
+  String get updFailConfig;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'handshake failed, rolled back'**
+  String get updFailSwap;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'{size} MB · signed digest'**
+  String updMetaAvailable(String size);
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'signed digest'**
+  String get updMetaAvailableNoSize;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'through {server}, GitHub is slow direct from here'**
+  String updMetaViaServer(String server);
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'direct, this may be slow or blocked'**
+  String get updMetaDirectSlow;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'downloaded · checked · your config passes'**
+  String get updMetaReady;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'applies the next time you disconnect'**
+  String get updMetaQueued;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'restarting xray with {version}'**
+  String updMetaApplying(String version);
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'handshake verified'**
+  String get updMetaUpdated;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'{version} failed the handshake'**
+  String updMetaRolledBack(String version);
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'github.com did not answer in 15 s'**
+  String get updMetaUnreachable;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'the release manifest does not match Charon\'s signing key'**
+  String get updMetaSigInvalid;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'the download broke off and was thrown away'**
+  String get updMetaFailed;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'{version} rejected the config of a saved server'**
+  String updMetaConfigFailed(String version);
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'the offered core {offered} is older than {current}'**
+  String updMetaDowngrade(String offered, String current);
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'installer · {size} MB · signed'**
+  String updMetaAppInstaller(String size);
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'downloaded · checked by the Charon service'**
+  String get updMetaAppReady;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'direct, this may be slow'**
+  String get updMetaAppDirectSlow;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'through {server}'**
+  String updMetaAppViaServer(String server);
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'the installer is not signed by Charon'**
+  String get updMetaAppSigInvalid;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'nothing changes until you apply it'**
+  String get updFootAvailable;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'you can keep using Charon'**
+  String get updFootDownloading;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'applying restarts xray: the tunnel drops for about 2 s, and with the kill switch off that moment goes direct'**
+  String get updFootReadyOnline;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'not connected, so applying has nothing to interrupt'**
+  String get updFootReadyOffline;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'the swap happens while nothing is using the tunnel'**
+  String get updFootQueued;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'if the handshake fails, Charon goes back to {version} on its own'**
+  String updFootApplying(String version);
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'one tap roll back if the new one acts up'**
+  String get updFootUpdated;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'back on {version} · nothing else changed'**
+  String updFootRolledBack(String version);
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'GitHub is often blocked here without the tunnel · connect first, or update from a file below'**
+  String get updFootUnreachable;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'nothing was installed · {version} keeps running'**
+  String updFootSigInvalid(String version);
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'{version} keeps running · nothing changed'**
+  String updFootFailed(String version);
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'the update stopped before the swap · nothing changed'**
+  String get updFootConfigFailed;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon never installs an older core on its own'**
+  String get updFootDowngrade;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'updates come from GitHub Releases'**
+  String get updFootAppUpToDate;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'your servers and settings stay as they are'**
+  String get updFootAppAvailable;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows asks for admin rights · updating the service pauses the tunnel for a moment'**
+  String get updFootAppReady;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'nothing was installed · the file was deleted'**
+  String get updFootAppSigInvalid;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} MB'**
+  String updProgressOf(String done, String total);
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get updBtnDownload;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Release notes ↗'**
+  String get updBtnReleaseNotes;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'All releases ↗'**
+  String get updBtnAllReleases;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get updBtnCancel;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply now instead'**
+  String get updBtnApplyNowInstead;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get updBtnTryAgain;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy log'**
+  String get updBtnCopyLog;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit servers'**
+  String get updBtnEditServers;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Install update'**
+  String get updBtnInstallUpdate;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Install'**
+  String get updBtnInstall;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose another'**
+  String get updBtnChooseAnother;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Not available yet'**
+  String get updBtnDisabledNote;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied the core log'**
+  String get updLogCopied;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'For when GitHub is blocked and the tunnel is down. Pick a Charon release file, the service checks it first.'**
+  String get updFileIdle;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'sending to the service'**
+  String get updFileSending;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'{version} · signature valid'**
+  String updFileVerified(String version);
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'The signature is not valid. Charon will not install this file.'**
+  String get updFileBadSignature;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'This file is not newer than what you run. Charon does not go back this way.'**
+  String get updFileOlder;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'This file is for another platform. Pick the Windows installer.'**
+  String get updFileWrongPlatform;
+
+  /// Updates screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'NOT CHECKED'**
+  String get updChipNotChecked;
 
   /// Title of licences screen.
   ///

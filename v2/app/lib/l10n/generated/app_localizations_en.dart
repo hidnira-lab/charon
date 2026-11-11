@@ -1280,7 +1280,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get updatesTitle => 'Updates';
 
   @override
-  String get updatesTag => 'SETTINGS · ABOUT';
+  String get updatesTag => 'SETTINGS · ABOUT · UPDATES';
 
   @override
   String get updatesBackToSettings => '← Back to Settings';
@@ -1389,6 +1389,324 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updatesFileApplyBtn => 'Apply file update';
+
+  @override
+  String get updChipUpToDate => 'UP TO DATE';
+
+  @override
+  String get updChipUpdate => 'UPDATE';
+
+  @override
+  String get updChipDownloading => 'DOWNLOADING';
+
+  @override
+  String get updChipReady => 'READY';
+
+  @override
+  String get updChipQueued => 'QUEUED';
+
+  @override
+  String get updChipApplying => 'APPLYING';
+
+  @override
+  String get updChipUpdated => 'UPDATED';
+
+  @override
+  String get updChipRolledBack => 'ROLLED BACK';
+
+  @override
+  String get updChipCantCheck => 'CAN\'T CHECK';
+
+  @override
+  String get updChipSigInvalid => 'SIGNATURE INVALID';
+
+  @override
+  String get updChipFailed => 'UPDATE FAILED';
+
+  @override
+  String get updChipConfigFailed => 'CONFIG TEST FAILED';
+
+  @override
+  String get updChipDowngrade => 'DOWNGRADE REFUSED';
+
+  @override
+  String get updChipChecking => 'CHECKING';
+
+  @override
+  String get updChipVerified => 'VERIFIED';
+
+  @override
+  String get updChipNotValid => 'NOT VALID';
+
+  @override
+  String get updChipOlder => 'OLDER';
+
+  @override
+  String get updChipWrongPlatform => 'WRONG PLATFORM';
+
+  @override
+  String get updCheckNow => 'Check now';
+
+  @override
+  String get updCheckingLine => 'checking github.com…';
+
+  @override
+  String get updOfflineTag => 'NOT CONNECTED · DIRECT DOWNLOAD';
+
+  @override
+  String get updOfflineText =>
+      'GitHub is often slow or blocked from here without the tunnel.';
+
+  @override
+  String get updTagCore => 'XRAY-CORE · THE ENGINE';
+
+  @override
+  String get updTagApp => 'CHARON · THIS APP';
+
+  @override
+  String get updStepsLabel => 'Update steps';
+
+  @override
+  String get updSubDownload => 'inside the signed Charon release';
+
+  @override
+  String get updSubSignature => 'by the Charon service · digest matches';
+
+  @override
+  String updSubConfig(String servers) {
+    return 'xray run -test on $servers';
+  }
+
+  @override
+  String get updSubSwap => 'restart xray, real round trip';
+
+  @override
+  String get updSubSwapDone => 'handshake verified';
+
+  @override
+  String get updFailDownload => 'stopped, thrown away';
+
+  @override
+  String get updFailSignature => 'signature not valid, file deleted';
+
+  @override
+  String get updFailConfig => 'a saved server failed xray run -test';
+
+  @override
+  String get updFailSwap => 'handshake failed, rolled back';
+
+  @override
+  String updMetaAvailable(String size) {
+    return '$size MB · signed digest';
+  }
+
+  @override
+  String get updMetaAvailableNoSize => 'signed digest';
+
+  @override
+  String updMetaViaServer(String server) {
+    return 'through $server, GitHub is slow direct from here';
+  }
+
+  @override
+  String get updMetaDirectSlow => 'direct, this may be slow or blocked';
+
+  @override
+  String get updMetaReady => 'downloaded · checked · your config passes';
+
+  @override
+  String get updMetaQueued => 'applies the next time you disconnect';
+
+  @override
+  String updMetaApplying(String version) {
+    return 'restarting xray with $version';
+  }
+
+  @override
+  String get updMetaUpdated => 'handshake verified';
+
+  @override
+  String updMetaRolledBack(String version) {
+    return '$version failed the handshake';
+  }
+
+  @override
+  String get updMetaUnreachable => 'github.com did not answer in 15 s';
+
+  @override
+  String get updMetaSigInvalid =>
+      'the release manifest does not match Charon\'s signing key';
+
+  @override
+  String get updMetaFailed => 'the download broke off and was thrown away';
+
+  @override
+  String updMetaConfigFailed(String version) {
+    return '$version rejected the config of a saved server';
+  }
+
+  @override
+  String updMetaDowngrade(String offered, String current) {
+    return 'the offered core $offered is older than $current';
+  }
+
+  @override
+  String updMetaAppInstaller(String size) {
+    return 'installer · $size MB · signed';
+  }
+
+  @override
+  String get updMetaAppReady => 'downloaded · checked by the Charon service';
+
+  @override
+  String get updMetaAppDirectSlow => 'direct, this may be slow';
+
+  @override
+  String updMetaAppViaServer(String server) {
+    return 'through $server';
+  }
+
+  @override
+  String get updMetaAppSigInvalid => 'the installer is not signed by Charon';
+
+  @override
+  String get updFootAvailable => 'nothing changes until you apply it';
+
+  @override
+  String get updFootDownloading => 'you can keep using Charon';
+
+  @override
+  String get updFootReadyOnline =>
+      'applying restarts xray: the tunnel drops for about 2 s, and with the kill switch off that moment goes direct';
+
+  @override
+  String get updFootReadyOffline =>
+      'not connected, so applying has nothing to interrupt';
+
+  @override
+  String get updFootQueued =>
+      'the swap happens while nothing is using the tunnel';
+
+  @override
+  String updFootApplying(String version) {
+    return 'if the handshake fails, Charon goes back to $version on its own';
+  }
+
+  @override
+  String get updFootUpdated => 'one tap roll back if the new one acts up';
+
+  @override
+  String updFootRolledBack(String version) {
+    return 'back on $version · nothing else changed';
+  }
+
+  @override
+  String get updFootUnreachable =>
+      'GitHub is often blocked here without the tunnel · connect first, or update from a file below';
+
+  @override
+  String updFootSigInvalid(String version) {
+    return 'nothing was installed · $version keeps running';
+  }
+
+  @override
+  String updFootFailed(String version) {
+    return '$version keeps running · nothing changed';
+  }
+
+  @override
+  String get updFootConfigFailed =>
+      'the update stopped before the swap · nothing changed';
+
+  @override
+  String get updFootDowngrade =>
+      'Charon never installs an older core on its own';
+
+  @override
+  String get updFootAppUpToDate => 'updates come from GitHub Releases';
+
+  @override
+  String get updFootAppAvailable =>
+      'your servers and settings stay as they are';
+
+  @override
+  String get updFootAppReady =>
+      'Windows asks for admin rights · updating the service pauses the tunnel for a moment';
+
+  @override
+  String get updFootAppSigInvalid =>
+      'nothing was installed · the file was deleted';
+
+  @override
+  String updProgressOf(String done, String total) {
+    return '$done of $total MB';
+  }
+
+  @override
+  String get updBtnDownload => 'Download';
+
+  @override
+  String get updBtnReleaseNotes => 'Release notes ↗';
+
+  @override
+  String get updBtnAllReleases => 'All releases ↗';
+
+  @override
+  String get updBtnCancel => 'Cancel';
+
+  @override
+  String get updBtnApplyNowInstead => 'Apply now instead';
+
+  @override
+  String get updBtnTryAgain => 'Try again';
+
+  @override
+  String get updBtnCopyLog => 'Copy log';
+
+  @override
+  String get updBtnEditServers => 'Edit servers';
+
+  @override
+  String get updBtnInstallUpdate => 'Install update';
+
+  @override
+  String get updBtnInstall => 'Install';
+
+  @override
+  String get updBtnChooseAnother => 'Choose another';
+
+  @override
+  String get updBtnDisabledNote => 'Not available yet';
+
+  @override
+  String get updLogCopied => 'Copied the core log';
+
+  @override
+  String get updFileIdle =>
+      'For when GitHub is blocked and the tunnel is down. Pick a Charon release file, the service checks it first.';
+
+  @override
+  String get updFileSending => 'sending to the service';
+
+  @override
+  String updFileVerified(String version) {
+    return '$version · signature valid';
+  }
+
+  @override
+  String get updFileBadSignature =>
+      'The signature is not valid. Charon will not install this file.';
+
+  @override
+  String get updFileOlder =>
+      'This file is not newer than what you run. Charon does not go back this way.';
+
+  @override
+  String get updFileWrongPlatform =>
+      'This file is for another platform. Pick the Windows installer.';
+
+  @override
+  String get updChipNotChecked => 'NOT CHECKED';
 
   @override
   String get licencesTitle => 'Open Source Licences';

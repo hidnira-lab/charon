@@ -1219,7 +1219,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get updatesTitle => '更新';
 
   @override
-  String get updatesTag => '设置 · 关于';
+  String get updatesTag => '设置 · 关于 · 更新';
 
   @override
   String get updatesBackToSettings => '← 返回设置';
@@ -1228,7 +1228,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get updatesOfflineBannerTitle => '从此处直连 GitHub 通常很慢或被阻断。';
 
   @override
-  String get updatesOfflineBannerActionFile => '或从文件更新';
+  String get updatesOfflineBannerActionFile => '或者用文件更新';
 
   @override
   String get updatesOfflineBannerActionConnect => '尝试连接';
@@ -1240,19 +1240,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get updatesCoreCardSubtitle => '隧道引擎二进制组件';
 
   @override
-  String get updatesCoreTrustNote => '核心更新包含在经签名的 Charon 发布版本中，绝不会直接从上游拉取。';
+  String get updatesCoreTrustNote => '核心更新只随已签名的 Charon 版本发布，绝不直接来自上游。';
 
   @override
   String get updatesCoreStepDownload => '下载';
 
   @override
-  String get updatesCoreStepSignature => '校验签名与 sha256';
+  String get updatesCoreStepSignature => '校验签名和 sha256';
 
   @override
-  String get updatesCoreStepConfig => '测试您的配置';
+  String get updatesCoreStepConfig => '测试你的配置';
 
   @override
-  String get updatesCoreStepSwap => '替换与验证';
+  String get updatesCoreStepSwap => '替换并验证';
 
   @override
   String get updatesCoreReadyCostNote =>
@@ -1262,7 +1262,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get updatesCoreApplyNowBtn => '立即应用';
 
   @override
-  String get updatesCoreApplyWhenDisconnectBtn => '断开连接时应用';
+  String get updatesCoreApplyWhenDisconnectBtn => '断开时';
 
   @override
   String get updatesCoreQueuedBadge => '已排队 · 下次断开连接时生效';
@@ -1287,16 +1287,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get updatesAppAndroidNotice =>
-      'Charon 在 Android 上不会自行安装更新。Obtainium 可为您代劳。';
+      '在 Android 上，Charon 不会自行安装更新。Obtainium 可以替你完成。';
 
   @override
   String get updatesAppOpenReleaseBtn => '打开发布页面';
 
   @override
-  String get updatesAppWhatsNew => '更新内容';
+  String get updatesAppWhatsNew => '新内容';
 
   @override
-  String get updatesFileCardTitle => '从本地文件更新';
+  String get updatesFileCardTitle => '用文件更新';
 
   @override
   String get updatesFileCardDesc =>
@@ -1324,6 +1324,310 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get updatesFileApplyBtn => '应用文件更新';
+
+  @override
+  String get updChipUpToDate => '已是最新';
+
+  @override
+  String get updChipUpdate => '更新';
+
+  @override
+  String get updChipDownloading => '正在下载';
+
+  @override
+  String get updChipReady => '就绪';
+
+  @override
+  String get updChipQueued => '排队中';
+
+  @override
+  String get updChipApplying => '正在应用';
+
+  @override
+  String get updChipUpdated => '已更新';
+
+  @override
+  String get updChipRolledBack => '已回滚';
+
+  @override
+  String get updChipCantCheck => '无法检查';
+
+  @override
+  String get updChipSigInvalid => '签名无效';
+
+  @override
+  String get updChipFailed => '更新失败';
+
+  @override
+  String get updChipConfigFailed => '配置测试失败';
+
+  @override
+  String get updChipDowngrade => '已拒绝降级';
+
+  @override
+  String get updChipChecking => '校验中';
+
+  @override
+  String get updChipVerified => '已验证';
+
+  @override
+  String get updChipNotValid => '无效';
+
+  @override
+  String get updChipOlder => '更旧';
+
+  @override
+  String get updChipWrongPlatform => '平台不对';
+
+  @override
+  String get updCheckNow => '立即检查';
+
+  @override
+  String get updCheckingLine => '正在检查 github.com…';
+
+  @override
+  String get updOfflineTag => '未连接 · 直接下载';
+
+  @override
+  String get updOfflineText => '没有隧道时，这里访问 GitHub 常常很慢或被拦截。';
+
+  @override
+  String get updTagCore => 'XRAY-CORE · THE ENGINE';
+
+  @override
+  String get updTagApp => 'CHARON · THIS APP';
+
+  @override
+  String get updStepsLabel => '更新步骤';
+
+  @override
+  String get updSubDownload => '包含在已签名的 Charon 版本里';
+
+  @override
+  String get updSubSignature => '由 Charon 服务校验 · 摘要一致';
+
+  @override
+  String updSubConfig(String servers) {
+    return '在 $servers 上运行 xray run -test';
+  }
+
+  @override
+  String get updSubSwap => '重启 xray，真实往返';
+
+  @override
+  String get updSubSwapDone => '握手已验证';
+
+  @override
+  String get updFailDownload => '已中断，已丢弃';
+
+  @override
+  String get updFailSignature => '签名无效，文件已删除';
+
+  @override
+  String get updFailConfig => '有已保存的服务器未通过 xray run -test';
+
+  @override
+  String get updFailSwap => '握手失败，已回滚';
+
+  @override
+  String updMetaAvailable(String size) {
+    return '$size MB · 已签名摘要';
+  }
+
+  @override
+  String get updMetaAvailableNoSize => '已签名摘要';
+
+  @override
+  String updMetaViaServer(String server) {
+    return '经由 $server，从这里直连 GitHub 很慢';
+  }
+
+  @override
+  String get updMetaDirectSlow => '直连，可能很慢或被拦截';
+
+  @override
+  String get updMetaReady => '已下载 · 已校验 · 你的配置通过测试';
+
+  @override
+  String get updMetaQueued => '下次断开时应用';
+
+  @override
+  String updMetaApplying(String version) {
+    return '正在用 $version 重启 xray';
+  }
+
+  @override
+  String get updMetaUpdated => '握手已验证';
+
+  @override
+  String updMetaRolledBack(String version) {
+    return '$version 握手失败';
+  }
+
+  @override
+  String get updMetaUnreachable => 'github.com 15 秒内无响应';
+
+  @override
+  String get updMetaSigInvalid => '版本清单与 Charon 的签名密钥不符';
+
+  @override
+  String get updMetaFailed => '下载中断，已丢弃';
+
+  @override
+  String updMetaConfigFailed(String version) {
+    return '$version 拒绝了已保存服务器的配置';
+  }
+
+  @override
+  String updMetaDowngrade(String offered, String current) {
+    return '提供的核心 $offered 比 $current 更旧';
+  }
+
+  @override
+  String updMetaAppInstaller(String size) {
+    return '安装程序 · $size MB · 已签名';
+  }
+
+  @override
+  String get updMetaAppReady => '已下载 · 已由 Charon 服务校验';
+
+  @override
+  String get updMetaAppDirectSlow => '直连，可能很慢';
+
+  @override
+  String updMetaAppViaServer(String server) {
+    return '经由 $server';
+  }
+
+  @override
+  String get updMetaAppSigInvalid => '安装程序没有 Charon 的签名';
+
+  @override
+  String get updFootAvailable => '应用前不会有任何变化';
+
+  @override
+  String get updFootDownloading => '你可以继续使用 Charon';
+
+  @override
+  String get updFootReadyOnline =>
+      '应用会重启 xray：隧道约断开 2 秒，若 kill switch 关闭，这段时间流量直连';
+
+  @override
+  String get updFootReadyOffline => '当前未连接，应用更新不会打断任何东西';
+
+  @override
+  String get updFootQueued => '在无人使用隧道时进行替换';
+
+  @override
+  String updFootApplying(String version) {
+    return '如果握手失败，Charon 会自动回到 $version';
+  }
+
+  @override
+  String get updFootUpdated => '新版有问题时一键回滚';
+
+  @override
+  String updFootRolledBack(String version) {
+    return '已回到 $version · 其他均未改变';
+  }
+
+  @override
+  String get updFootUnreachable => '没有隧道时这里常常打不开 GitHub · 先连接，或在下方用文件更新';
+
+  @override
+  String updFootSigInvalid(String version) {
+    return '没有安装任何东西 · $version 继续运行';
+  }
+
+  @override
+  String updFootFailed(String version) {
+    return '$version 继续运行 · 没有任何改动';
+  }
+
+  @override
+  String get updFootConfigFailed => '更新在替换前已停止 · 没有任何改动';
+
+  @override
+  String get updFootDowngrade => 'Charon 绝不会自行安装更旧的核心';
+
+  @override
+  String get updFootAppUpToDate => '更新来自 GitHub Releases';
+
+  @override
+  String get updFootAppAvailable => '你的服务器和设置保持不变';
+
+  @override
+  String get updFootAppReady => 'Windows 会请求管理员权限 · 更新服务会让隧道短暂暂停';
+
+  @override
+  String get updFootAppSigInvalid => '没有安装任何东西 · 文件已删除';
+
+  @override
+  String updProgressOf(String done, String total) {
+    return '$done / $total MB';
+  }
+
+  @override
+  String get updBtnDownload => '下载';
+
+  @override
+  String get updBtnReleaseNotes => '更新说明 ↗';
+
+  @override
+  String get updBtnAllReleases => '全部版本 ↗';
+
+  @override
+  String get updBtnCancel => '取消';
+
+  @override
+  String get updBtnApplyNowInstead => '改为立即应用';
+
+  @override
+  String get updBtnTryAgain => '重试';
+
+  @override
+  String get updBtnCopyLog => '复制日志';
+
+  @override
+  String get updBtnEditServers => '编辑服务器';
+
+  @override
+  String get updBtnInstallUpdate => '安装更新';
+
+  @override
+  String get updBtnInstall => '安装';
+
+  @override
+  String get updBtnChooseAnother => '换一个文件';
+
+  @override
+  String get updBtnDisabledNote => '暂不可用';
+
+  @override
+  String get updLogCopied => '已复制核心日志';
+
+  @override
+  String get updFileIdle => '适用于 GitHub 被拦截、隧道也断开的时候。选一个 Charon 发布文件，服务会先检查它。';
+
+  @override
+  String get updFileSending => '正在发送给服务';
+
+  @override
+  String updFileVerified(String version) {
+    return '$version · 签名有效';
+  }
+
+  @override
+  String get updFileBadSignature => '签名无效。Charon 不会安装这个文件。';
+
+  @override
+  String get updFileOlder => '这个文件并不比你正在用的版本新。Charon 不会用这种方式回退。';
+
+  @override
+  String get updFileWrongPlatform => '这个文件是给其他平台的。请选择 Windows 安装程序。';
+
+  @override
+  String get updChipNotChecked => '尚未检查';
 
   @override
   String get licencesTitle => '开源许可证';
@@ -3752,7 +4056,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get updatesTitle => '更新';
 
   @override
-  String get updatesTag => '设置 · 关于';
+  String get updatesTag => '设置 · 关于 · 更新';
 
   @override
   String get updatesBackToSettings => '← 返回设置';
@@ -3761,7 +4065,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get updatesOfflineBannerTitle => '从此处直连 GitHub 通常很慢或被阻断。';
 
   @override
-  String get updatesOfflineBannerActionFile => '或从文件更新';
+  String get updatesOfflineBannerActionFile => '或者用文件更新';
 
   @override
   String get updatesOfflineBannerActionConnect => '尝试连接';
@@ -3773,19 +4077,19 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get updatesCoreCardSubtitle => '隧道引擎二进制组件';
 
   @override
-  String get updatesCoreTrustNote => '核心更新包含在经签名的 Charon 发布版本中，绝不会直接从上游拉取。';
+  String get updatesCoreTrustNote => '核心更新只随已签名的 Charon 版本发布，绝不直接来自上游。';
 
   @override
   String get updatesCoreStepDownload => '下载';
 
   @override
-  String get updatesCoreStepSignature => '校验签名与 sha256';
+  String get updatesCoreStepSignature => '校验签名和 sha256';
 
   @override
-  String get updatesCoreStepConfig => '测试您的配置';
+  String get updatesCoreStepConfig => '测试你的配置';
 
   @override
-  String get updatesCoreStepSwap => '替换与验证';
+  String get updatesCoreStepSwap => '替换并验证';
 
   @override
   String get updatesCoreReadyCostNote =>
@@ -3795,7 +4099,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get updatesCoreApplyNowBtn => '立即应用';
 
   @override
-  String get updatesCoreApplyWhenDisconnectBtn => '断开连接时应用';
+  String get updatesCoreApplyWhenDisconnectBtn => '断开时';
 
   @override
   String get updatesCoreQueuedBadge => '已排队 · 下次断开连接时生效';
@@ -3820,16 +4124,16 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get updatesAppAndroidNotice =>
-      'Charon 在 Android 上不会自行安装更新。Obtainium 可为您代劳。';
+      '在 Android 上，Charon 不会自行安装更新。Obtainium 可以替你完成。';
 
   @override
   String get updatesAppOpenReleaseBtn => '打开发布页面';
 
   @override
-  String get updatesAppWhatsNew => '更新内容';
+  String get updatesAppWhatsNew => '新内容';
 
   @override
-  String get updatesFileCardTitle => '从本地文件更新';
+  String get updatesFileCardTitle => '用文件更新';
 
   @override
   String get updatesFileCardDesc =>
@@ -3857,6 +4161,310 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get updatesFileApplyBtn => '应用文件更新';
+
+  @override
+  String get updChipUpToDate => '已是最新';
+
+  @override
+  String get updChipUpdate => '更新';
+
+  @override
+  String get updChipDownloading => '正在下载';
+
+  @override
+  String get updChipReady => '就绪';
+
+  @override
+  String get updChipQueued => '排队中';
+
+  @override
+  String get updChipApplying => '正在应用';
+
+  @override
+  String get updChipUpdated => '已更新';
+
+  @override
+  String get updChipRolledBack => '已回滚';
+
+  @override
+  String get updChipCantCheck => '无法检查';
+
+  @override
+  String get updChipSigInvalid => '签名无效';
+
+  @override
+  String get updChipFailed => '更新失败';
+
+  @override
+  String get updChipConfigFailed => '配置测试失败';
+
+  @override
+  String get updChipDowngrade => '已拒绝降级';
+
+  @override
+  String get updChipChecking => '校验中';
+
+  @override
+  String get updChipVerified => '已验证';
+
+  @override
+  String get updChipNotValid => '无效';
+
+  @override
+  String get updChipOlder => '更旧';
+
+  @override
+  String get updChipWrongPlatform => '平台不对';
+
+  @override
+  String get updCheckNow => '立即检查';
+
+  @override
+  String get updCheckingLine => '正在检查 github.com…';
+
+  @override
+  String get updOfflineTag => '未连接 · 直接下载';
+
+  @override
+  String get updOfflineText => '没有隧道时，这里访问 GitHub 常常很慢或被拦截。';
+
+  @override
+  String get updTagCore => 'XRAY-CORE · THE ENGINE';
+
+  @override
+  String get updTagApp => 'CHARON · THIS APP';
+
+  @override
+  String get updStepsLabel => '更新步骤';
+
+  @override
+  String get updSubDownload => '包含在已签名的 Charon 版本里';
+
+  @override
+  String get updSubSignature => '由 Charon 服务校验 · 摘要一致';
+
+  @override
+  String updSubConfig(String servers) {
+    return '在 $servers 上运行 xray run -test';
+  }
+
+  @override
+  String get updSubSwap => '重启 xray，真实往返';
+
+  @override
+  String get updSubSwapDone => '握手已验证';
+
+  @override
+  String get updFailDownload => '已中断，已丢弃';
+
+  @override
+  String get updFailSignature => '签名无效，文件已删除';
+
+  @override
+  String get updFailConfig => '有已保存的服务器未通过 xray run -test';
+
+  @override
+  String get updFailSwap => '握手失败，已回滚';
+
+  @override
+  String updMetaAvailable(String size) {
+    return '$size MB · 已签名摘要';
+  }
+
+  @override
+  String get updMetaAvailableNoSize => '已签名摘要';
+
+  @override
+  String updMetaViaServer(String server) {
+    return '经由 $server，从这里直连 GitHub 很慢';
+  }
+
+  @override
+  String get updMetaDirectSlow => '直连，可能很慢或被拦截';
+
+  @override
+  String get updMetaReady => '已下载 · 已校验 · 你的配置通过测试';
+
+  @override
+  String get updMetaQueued => '下次断开时应用';
+
+  @override
+  String updMetaApplying(String version) {
+    return '正在用 $version 重启 xray';
+  }
+
+  @override
+  String get updMetaUpdated => '握手已验证';
+
+  @override
+  String updMetaRolledBack(String version) {
+    return '$version 握手失败';
+  }
+
+  @override
+  String get updMetaUnreachable => 'github.com 15 秒内无响应';
+
+  @override
+  String get updMetaSigInvalid => '版本清单与 Charon 的签名密钥不符';
+
+  @override
+  String get updMetaFailed => '下载中断，已丢弃';
+
+  @override
+  String updMetaConfigFailed(String version) {
+    return '$version 拒绝了已保存服务器的配置';
+  }
+
+  @override
+  String updMetaDowngrade(String offered, String current) {
+    return '提供的核心 $offered 比 $current 更旧';
+  }
+
+  @override
+  String updMetaAppInstaller(String size) {
+    return '安装程序 · $size MB · 已签名';
+  }
+
+  @override
+  String get updMetaAppReady => '已下载 · 已由 Charon 服务校验';
+
+  @override
+  String get updMetaAppDirectSlow => '直连，可能很慢';
+
+  @override
+  String updMetaAppViaServer(String server) {
+    return '经由 $server';
+  }
+
+  @override
+  String get updMetaAppSigInvalid => '安装程序没有 Charon 的签名';
+
+  @override
+  String get updFootAvailable => '应用前不会有任何变化';
+
+  @override
+  String get updFootDownloading => '你可以继续使用 Charon';
+
+  @override
+  String get updFootReadyOnline =>
+      '应用会重启 xray：隧道约断开 2 秒，若 kill switch 关闭，这段时间流量直连';
+
+  @override
+  String get updFootReadyOffline => '当前未连接，应用更新不会打断任何东西';
+
+  @override
+  String get updFootQueued => '在无人使用隧道时进行替换';
+
+  @override
+  String updFootApplying(String version) {
+    return '如果握手失败，Charon 会自动回到 $version';
+  }
+
+  @override
+  String get updFootUpdated => '新版有问题时一键回滚';
+
+  @override
+  String updFootRolledBack(String version) {
+    return '已回到 $version · 其他均未改变';
+  }
+
+  @override
+  String get updFootUnreachable => '没有隧道时这里常常打不开 GitHub · 先连接，或在下方用文件更新';
+
+  @override
+  String updFootSigInvalid(String version) {
+    return '没有安装任何东西 · $version 继续运行';
+  }
+
+  @override
+  String updFootFailed(String version) {
+    return '$version 继续运行 · 没有任何改动';
+  }
+
+  @override
+  String get updFootConfigFailed => '更新在替换前已停止 · 没有任何改动';
+
+  @override
+  String get updFootDowngrade => 'Charon 绝不会自行安装更旧的核心';
+
+  @override
+  String get updFootAppUpToDate => '更新来自 GitHub Releases';
+
+  @override
+  String get updFootAppAvailable => '你的服务器和设置保持不变';
+
+  @override
+  String get updFootAppReady => 'Windows 会请求管理员权限 · 更新服务会让隧道短暂暂停';
+
+  @override
+  String get updFootAppSigInvalid => '没有安装任何东西 · 文件已删除';
+
+  @override
+  String updProgressOf(String done, String total) {
+    return '$done / $total MB';
+  }
+
+  @override
+  String get updBtnDownload => '下载';
+
+  @override
+  String get updBtnReleaseNotes => '更新说明 ↗';
+
+  @override
+  String get updBtnAllReleases => '全部版本 ↗';
+
+  @override
+  String get updBtnCancel => '取消';
+
+  @override
+  String get updBtnApplyNowInstead => '改为立即应用';
+
+  @override
+  String get updBtnTryAgain => '重试';
+
+  @override
+  String get updBtnCopyLog => '复制日志';
+
+  @override
+  String get updBtnEditServers => '编辑服务器';
+
+  @override
+  String get updBtnInstallUpdate => '安装更新';
+
+  @override
+  String get updBtnInstall => '安装';
+
+  @override
+  String get updBtnChooseAnother => '换一个文件';
+
+  @override
+  String get updBtnDisabledNote => '暂不可用';
+
+  @override
+  String get updLogCopied => '已复制核心日志';
+
+  @override
+  String get updFileIdle => '适用于 GitHub 被拦截、隧道也断开的时候。选一个 Charon 发布文件，服务会先检查它。';
+
+  @override
+  String get updFileSending => '正在发送给服务';
+
+  @override
+  String updFileVerified(String version) {
+    return '$version · 签名有效';
+  }
+
+  @override
+  String get updFileBadSignature => '签名无效。Charon 不会安装这个文件。';
+
+  @override
+  String get updFileOlder => '这个文件并不比你正在用的版本新。Charon 不会用这种方式回退。';
+
+  @override
+  String get updFileWrongPlatform => '这个文件是给其他平台的。请选择 Windows 安装程序。';
+
+  @override
+  String get updChipNotChecked => '尚未检查';
 
   @override
   String get licencesTitle => '开源许可证';
