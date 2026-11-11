@@ -442,7 +442,12 @@ class _ServersScreenState extends State<ServersScreen> {
   }
 
   Future<void> _openEditDialog(BuildContext context, Server server) async {
-    final updated = await EditServerDialog.show(context, server);
+    final c = widget.controller;
+    final updated = await EditServerDialog.show(
+      context,
+      server,
+      carryingTraffic: c.status.phase == Phase.PHASE_UP && c.activeServer?.id == server.id,
+    );
     if (updated != null) {
       await widget.controller.updateServer(updated);
     }

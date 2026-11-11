@@ -2,6 +2,8 @@ import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/l10n/generated/app_localizations.dart';
 import 'package:charon/theme/theme.dart';
 import 'package:charon/ui/servers/widgets/add_server_dialog.dart';
+import 'package:charon/ui/servers/widgets/edit_server_dialog.dart';
+import 'package:charon/ui/settings/widgets/charon_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -48,6 +50,38 @@ Future<void> _open(WidgetTester tester, List<Server> existing, void Function(Add
 Finder _saveButton() => find.widgetWithText(InkWell, 'Save server');
 
 bool _saveEnabled(WidgetTester tester) => tester.widget<InkWell>(_saveButton()).onTap != null;
+
+Server _full({String name = 'Home VPS', String country = 'SG', QuotaPlan? quota}) => Server(
+      id: 'SRV-01',
+      displayName: name,
+      address: '198.51.100.7',
+      port: 443,
+      uuid: '8f3c1a2b-3c4d-5e6f-7a8b-9c0d1e2f3a4b',
+      flow: 'xtls-rprx-vision',
+      countryCode: country,
+      reality: Reality(publicKey: _pbk, shortId: '6ba8', serverName: 'example.com'),
+      quota: quota,
+    );
+
+Future<void> _openEdit(WidgetTester tester, Server server, void Function(Server?) done,
+    {bool carrying = false, Locale locale = const Locale('en')}) async {
+  tester.view.physicalSize = const Size(1024, 768);
+  tester.view.devicePixelRatio = 1;
+  addTearDown(tester.view.reset);
+  await tester.pumpWidget(_app(
+    (context) => TextButton(
+      onPressed: () async => done(await EditServerDialog.show(context, server, carryingTraffic: carrying)),
+      child: const Text('open'),
+    ),
+    locale: locale,
+  ));
+  await tester.tap(find.text('open'));
+  await tester.pumpAndSettle();
+}
+
+Finder _combo() => find.byType(PopupMenuButton<String>);
+
+Finder _saveChanges() => find.widgetWithText(InkWell, 'Save changes');
 
 void main() {
   setUpAll(loadAppFonts);
@@ -181,6 +215,146 @@ void main() {
       expect(find.text('> SERVER · TAMBAH'), findsOneWidget);
       expect(find.text('Tambah server'), findsOneWidget);
       expect(find.text('Impor link vless://'), findsOneWidget);
+    });
+  });
+
+  group('Edit server dialog', () {
+    testWidgets('shows the board: name, country, read only connection, quota', (tester) async {
+      await _openEdit(tester, _full(), (_) {});
+      expect(find.text('> SERVERS · EDIT SRV-01'), findsOneWidget);
+      expect(find.text('Edit Home VPS'), findsOneWidget);
+      expect(find.descendant(of: _combo(), matching: find.text('Singapore')), findsOneWidget);
+      expect(find.text('198.51.100.7:443'), findsOneWidget);
+      expect(find.text('Zx9…'), findsOneWidget); // the public key never in full
+      expect(find.text('8f3c… hidden'), findsOneWidget);
+      expect(find.textContaining(_pbk), findsNothing);
+      expect(find.textContaining('8f3c1a2b'), findsNothing);
+      expect(find.text('off · Home only shows traffic, no limit'), findsOneWidget);
+      expect(find.textContaining('is carrying your traffic'), findsNothing);
+    });
+
+    testWidgets('a name equal to the country name starts as an empty field', (tester) async {
+      await _openEdit(tester, _full(name: 'Singapore'), (_) {});
+      final field = tester.widget<TextField>(find.byType(TextField).first);
+      expect(field.controller!.text, isEmpty);
+    });
+
+    testWidgets('names the server carrying traffic', (tester) async {
+      await _openEdit(tester, _full(), (_) {}, carrying: true);
+      expect(find.text('SRV-01 is carrying your traffic right now. Changes apply on the next connect.'), findsOneWidget);
+    });
+
+    testWidgets('saves a new name and keeps the connection fields as they were', (tester) async {
+      Server? out;
+      await _openEdit(tester, _full(), (s) => out = s);
+      await tester.enterText(find.byType(TextField).first, 'Tokyo box');
+      await tester.tap(_saveChanges());
+      await tester.pumpAndSettle();
+      expect(out!.displayName, 'Tokyo box');
+      expect(out!.address, '198.51.100.7');
+      expect(out!.uuid, '8f3c1a2b-3c4d-5e6f-7a8b-9c0d1e2f3a4b');
+      expect(out!.reality.publicKey, _pbk);
+      expect(out!.id, 'SRV-01');
+      expect(out!.hasQuota(), isFalse);
+    });
+
+    testWidgets('an empty name becomes the country name', (tester) async {
+      Server? out;
+      await _openEdit(tester, _full(), (s) => out = s);
+      await tester.enterText(find.byType(TextField).first, '');
+      await tester.tap(_saveChanges());
+      await tester.pumpAndSettle();
+      expect(out!.displayName, 'Singapore');
+    });
+
+    testWidgets('picking another country changes the code and an empty name follows it', (tester) async {
+      Server? out;
+      await _openEdit(tester, _full(), (s) => out = s);
+      await tester.enterText(find.byType(TextField).first, '');
+      await tester.tap(_combo());
+      await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(find.text('Japan'), 80, scrollable: find.byType(Scrollable).last);
+      await tester.tap(find.text('Japan').last);
+      await tester.pumpAndSettle();
+      await tester.tap(_saveChanges());
+      await tester.pumpAndSettle();
+      expect(out!.countryCode, 'JP');
+      expect(out!.displayName, 'Japan');
+    });
+
+    testWidgets('a server with no country can be given one', (tester) async {
+      Server? out;
+      await _openEdit(tester, _full(country: ''), (s) => out = s);
+      expect(find.text('not set'), findsOneWidget);
+      await tester.tap(_combo());
+      await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(find.text('United States'), 80, scrollable: find.byType(Scrollable).last);
+      await tester.tap(find.text('United States'));
+      await tester.pumpAndSettle();
+      await tester.tap(_saveChanges());
+      await tester.pumpAndSettle();
+      expect(out!.countryCode, 'US');
+    });
+
+    testWidgets('quota on shows the two fields and writes the plan, keeping the counts mode', (tester) async {
+      Server? out;
+      final plan = QuotaPlan(capGb: 1000, billingDay: 3, counts: CountsMode.COUNTS_IN_AND_OUT);
+      await _openEdit(tester, _full(quota: plan), (s) => out = s);
+      expect(find.text('PLAN CAP'), findsOneWidget);
+      expect(find.text('RESETS ON'), findsOneWidget);
+      await tester.enterText(find.widgetWithText(TextField, '1000'), '2000');
+      await tester.enterText(find.widgetWithText(TextField, '3'), '14');
+      await tester.tap(_saveChanges());
+      await tester.pumpAndSettle();
+      expect(out!.quota.capGb, 2000);
+      expect(out!.quota.billingDay, 14);
+      expect(out!.quota.counts, CountsMode.COUNTS_IN_AND_OUT);
+    });
+
+    testWidgets('the switch on starts at 2000 GB on day 1', (tester) async {
+      Server? out;
+      await _openEdit(tester, _full(), (s) => out = s);
+      await tester.tap(find.byType(CharonSwitch));
+      await tester.pumpAndSettle();
+      expect(find.text('Home shows how much of the plan is left this cycle'), findsOneWidget);
+      await tester.tap(_saveChanges());
+      await tester.pumpAndSettle();
+      expect(out!.quota.capGb, 2000);
+      expect(out!.quota.billingDay, 1);
+    });
+
+    testWidgets('the switch off removes the plan', (tester) async {
+      Server? out;
+      await _openEdit(tester, _full(quota: QuotaPlan(capGb: 1000, billingDay: 3)), (s) => out = s);
+      await tester.tap(find.byType(CharonSwitch));
+      await tester.pumpAndSettle();
+      await tester.tap(_saveChanges());
+      await tester.pumpAndSettle();
+      expect(out!.hasQuota(), isFalse);
+    });
+
+    testWidgets('an invalid quota number keeps Save off', (tester) async {
+      await _openEdit(tester, _full(quota: QuotaPlan(capGb: 1000, billingDay: 3)), (_) {});
+      await tester.enterText(find.widgetWithText(TextField, '3'), '40');
+      await tester.pump();
+      expect(tester.widget<InkWell>(_saveChanges()).onTap, isNull);
+      await tester.enterText(find.widgetWithText(TextField, '40'), '28');
+      await tester.pump();
+      expect(tester.widget<InkWell>(_saveChanges()).onTap, isNotNull);
+    });
+
+    testWidgets('cancel returns nothing', (tester) async {
+      Server? out = _full();
+      await _openEdit(tester, _full(), (s) => out = s);
+      await tester.tap(find.widgetWithText(InkWell, 'Cancel'));
+      await tester.pumpAndSettle();
+      expect(out, isNull);
+    });
+
+    testWidgets('speaks Chinese', (tester) async {
+      await _openEdit(tester, _full(), (_) {}, locale: const Locale('zh'));
+      expect(find.text('> 服务器 · 编辑 SRV-01'), findsOneWidget);
+      expect(find.descendant(of: _combo(), matching: find.text('新加坡')), findsOneWidget);
     });
   });
 }
