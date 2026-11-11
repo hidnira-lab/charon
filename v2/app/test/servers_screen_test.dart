@@ -161,9 +161,10 @@ void main() {
 
       // Confirmation dialog shows
       expect(find.text('Delete Backup VPS?'), findsOneWidget);
-      expect(find.text('Delete'), findsOneWidget);
+      expect(find.text('Delete SRV-02'), findsOneWidget);
+      expect(find.text('> SERVERS · DELETE'), findsOneWidget);
 
-      await tester.tap(find.text('Delete'));
+      await tester.tap(find.text('Delete SRV-02'));
       await tester.pumpAndSettle();
 
       expect(controller.config!.servers.length, 1);

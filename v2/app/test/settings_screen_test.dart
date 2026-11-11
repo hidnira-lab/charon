@@ -199,20 +199,20 @@ void main() {
       await tester.tap(find.text('Erase…'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Erase all data on this device?'), findsOneWidget);
+      expect(find.text('Erase all data on this PC?'), findsOneWidget);
 
       // Tap Cancel first
       await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Erase all data on this device?'), findsNothing);
+      expect(find.text('Erase all data on this PC?'), findsNothing);
       expect(controller.hasServers, isTrue);
 
       // Tap Erase… again and confirm
       await tester.tap(find.text('Erase…'));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Erase all data'));
+      await tester.tap(find.text('Erase everything'));
       await tester.pumpAndSettle();
 
       expect(controller.hasServers, isFalse);

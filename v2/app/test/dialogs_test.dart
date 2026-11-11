@@ -14,6 +14,8 @@ import 'package:charon/ui/dialogs/release_confirm_dialog.dart';
 import 'package:charon/ui/dialogs/sync_conflict_dialog.dart';
 import 'package:charon/ui/dialogs/unpair_confirm_dialog.dart';
 import 'package:charon/ui/home/widgets/hero_connect_card.dart';
+import 'package:charon/ui/servers/widgets/delete_server_dialog.dart';
+import 'package:charon/ui/settings/widgets/erase_confirm_dialog.dart';
 import 'package:charon/ui/servers/widgets/sync_card.dart';
 
 Widget _buildTestApp({required Widget child}) {
@@ -50,12 +52,15 @@ void main() {
       await tester.tap(find.text('Open Quit Dialog'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Close Charon'), findsOneWidget);
+      expect(find.text('> QUIT'), findsOneWidget);
+      expect(find.text('Close Charon?'), findsOneWidget);
       expect(find.textContaining("Your tunnel runs in Charon's service"), findsOneWidget);
 
       // Verify badges
-      expect(find.text('TUNNEL STAYS ON'), findsNWidgets(2));
-      expect(find.text('TUNNEL STOPS'), findsOneWidget);
+      expect(find.text('TUNNEL ON'), findsNWidgets(2));
+      expect(find.text('TUNNEL OFF'), findsOneWidget);
+      expect(find.text('> Esc cancels · focus on Cancel'), findsOneWidget);
+      expect(find.text('> kill switch stays out of it, quitting is your choice'), findsOneWidget);
 
       // Verify choices text
       expect(find.text('Hide to tray'), findsOneWidget);
@@ -158,12 +163,13 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('The server copy is newer'), findsOneWidget);
-      expect(find.textContaining('Changes were made on another device'), findsOneWidget);
-      expect(find.text('Pull first (replaces local)'), findsOneWidget);
+      expect(find.text('> SYNC · PUSH'), findsOneWidget);
+      expect(find.textContaining('Another device pushed after this one last synced'), findsOneWidget);
+      expect(find.text('Pull first'), findsOneWidget);
       expect(find.text('Overwrite the server copy'), findsOneWidget);
 
       // Tap Pull first
-      await tester.tap(find.text('Pull first (replaces local)'));
+      await tester.tap(find.text('Pull first'));
       await tester.pumpAndSettle();
       expect(choice, SyncConflictChoice.pullFirst);
     });
@@ -190,11 +196,153 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Unpair this device?'), findsOneWidget);
-      expect(find.textContaining('encrypted backup copy remains on the sync server'), findsOneWidget);
+      expect(find.text('> SYNC · UNPAIR'), findsOneWidget);
+      expect(find.textContaining('The encrypted copy stays on the sync server'), findsOneWidget);
+      expect(find.text('> Charon cannot list your other paired devices yet'), findsOneWidget);
 
-      await tester.tap(find.text('Unpair device'));
+      await tester.tap(find.text('Unpair'));
       await tester.pumpAndSettle();
       expect(confirmed, isTrue);
+    });
+  });
+
+  group('The shell of the Dialogs board', () {
+    testWidgets('delete server: kicker, what happens, Cancel has focus, Delete SRV-02 confirms', (tester) async {
+      bool? confirmed;
+      await tester.pumpWidget(_buildTestApp(
+        child: Builder(
+          builder: (context) => ElevatedButton(
+            onPressed: () async {
+              confirmed = await DeleteServerDialog.show(
+                context,
+                Server(id: 'SRV-02', displayName: 'Backup VPS', countryCode: 'JP', address: '203.0.113.2', port: 443),
+                order: 2,
+                otherServerIds: ['SRV-01'],
+              );
+            },
+            child: const Text('Open'),
+          ),
+        ),
+      ));
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('> SERVERS · DELETE'), findsOneWidget);
+      expect(find.text('Delete Backup VPS?'), findsOneWidget);
+      expect(find.text('It leaves this device only. Your VPS keeps running and nothing changes on it.'), findsOneWidget);
+      expect(find.text('SRV-02 · JP · 203.0.113.2:443'), findsOneWidget);
+      expect(find.text('#2 failover'), findsOneWidget);
+      expect(find.text('> failover becomes SRV-01 only, nothing to fall back to'), findsOneWidget);
+      expect(find.text('> its quota count on this device is erased'), findsOneWidget);
+      expect(find.text('> the synced copy stays until your next Push'), findsOneWidget);
+
+      await tester.tap(find.text('Delete SRV-02'));
+      await tester.pumpAndSettle();
+      expect(confirmed, isTrue);
+    });
+
+    testWidgets('delete server with several others left does not claim a single fallback', (tester) async {
+      await tester.pumpWidget(_buildTestApp(
+        child: Builder(
+          builder: (context) => ElevatedButton(
+            onPressed: () => DeleteServerDialog.show(
+              context,
+              Server(id: 'SRV-02'),
+              order: 2,
+              otherServerIds: ['SRV-01', 'SRV-03'],
+            ),
+            child: const Text('Open'),
+          ),
+        ),
+      ));
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('nothing to fall back to'), findsNothing);
+      expect(find.text('> the other profiles keep their failover order'), findsOneWidget);
+    });
+
+    testWidgets('erase all data: what is removed, what stays, the notes', (tester) async {
+      bool? confirmed;
+      await tester.pumpWidget(_buildTestApp(
+        child: Builder(
+          builder: (context) => ElevatedButton(
+            onPressed: () async => confirmed = await EraseConfirmDialog.show(context),
+            child: const Text('Open'),
+          ),
+        ),
+      ));
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('> SETTINGS · ERASE'), findsOneWidget);
+      expect(find.text('Erase all data on this PC?'), findsOneWidget);
+      expect(find.text('REMOVED'), findsOneWidget);
+      expect(find.text('servers, rules, settings'), findsOneWidget);
+      expect(find.text('STAYS'), findsOneWidget);
+      expect(find.text('the sync copy'), findsOneWidget);
+      expect(find.text('> this cannot be undone'), findsOneWidget);
+
+      await tester.tap(find.text('Cancel'));
+      await tester.pumpAndSettle();
+      expect(confirmed, isFalse);
+    });
+
+    testWidgets('the close button answers like Cancel', (tester) async {
+      QuitChoice? choice;
+      await tester.pumpWidget(_buildTestApp(
+        child: Builder(
+          builder: (context) => ElevatedButton(
+            onPressed: () async => choice = await QuitWhileConnectedDialog.show(context),
+            child: const Text('Open'),
+          ),
+        ),
+      ));
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.close));
+      await tester.pumpAndSettle();
+      expect(choice, QuitChoice.cancel);
+    });
+
+    testWidgets('light theme gives the dialog light tokens', (tester) async {
+      await tester.pumpWidget(MaterialApp(
+        theme: CharonTheme.light,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: Builder(
+            builder: (context) => ElevatedButton(
+              onPressed: () => UnpairConfirmDialog.show(context),
+              child: const Text('Open'),
+            ),
+          ),
+        ),
+      ));
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+      expect(tester.widget<Text>(find.text('Unpair this device?')).style!.color, CharonColors.light.text);
+    });
+
+    testWidgets('Indonesian copy of the unpair dialog', (tester) async {
+      await tester.pumpWidget(MaterialApp(
+        theme: CharonTheme.dark,
+        locale: const Locale('id'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: Builder(
+            builder: (context) => ElevatedButton(
+              onPressed: () => UnpairConfirmDialog.show(context),
+              child: const Text('Open'),
+            ),
+          ),
+        ),
+      ));
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+      expect(find.text('> SYNC · LEPAS PASANGAN'), findsOneWidget);
+      expect(find.text('Lepas pasangan perangkat ini?'), findsOneWidget);
+      expect(tester.takeException(), isNull);
     });
   });
 

@@ -442,7 +442,13 @@ class _ServersScreenState extends State<ServersScreen> {
   }
 
   Future<void> _openDeleteDialog(BuildContext context, Server server) async {
-    final confirm = await DeleteServerDialog.show(context, server);
+    final servers = widget.controller.config?.servers ?? const <Server>[];
+    final confirm = await DeleteServerDialog.show(
+      context,
+      server,
+      order: servers.indexWhere((s) => s.id == server.id) + 1,
+      otherServerIds: [for (final s in servers) if (s.id != server.id) s.id],
+    );
     if (confirm == true) {
       await widget.controller.deleteServer(server.id);
     }

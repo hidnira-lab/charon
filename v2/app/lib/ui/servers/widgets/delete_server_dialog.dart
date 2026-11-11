@@ -2,118 +2,111 @@ import 'package:flutter/material.dart';
 
 import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
-import '../../../theme/tokens.dart';
+import '../../../state/country.dart' as country_names;
+import '../../../theme/theme.dart';
+import '../../common/glass_card.dart';
+import '../../dialogs/dialog_shell.dart';
 
-/// Confirmation dialog for deleting a server profile.
+/// Confirmation for deleting a server profile (Dialogs board, "delete server"):
+/// what happens to failover, the quota count and the synced copy. Focus starts
+/// on Cancel, Esc cancels.
 class DeleteServerDialog extends StatelessWidget {
   const DeleteServerDialog({
     super.key,
     required this.server,
+    this.order = 0,
+    this.otherServerIds = const [],
   });
 
   final Server server;
 
-  static Future<bool?> show(BuildContext context, Server server) {
-    return showDialog<bool>(
-      context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.65),
-      builder: (context) => DeleteServerDialog(server: server),
+  /// Place in the failover order (1 based), 0 when not known.
+  final int order;
+
+  /// The ids of the servers that stay, in failover order.
+  final List<String> otherServerIds;
+
+  static Future<bool?> show(
+    BuildContext context,
+    Server server, {
+    int order = 0,
+    List<String> otherServerIds = const [],
+  }) {
+    return showCharonDialog<bool>(
+      context,
+      (_) => DeleteServerDialog(server: server, order: order, otherServerIds: otherServerIds),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final serverName = server.displayName.isNotEmpty ? server.displayName : server.id;
+    final colors = CharonColors.of(context);
+    final name = server.displayName.isNotEmpty ? server.displayName : server.id;
+    final country = server.countryCode.toUpperCase();
+    final countryName = country_names.countryName(l10n, country);
+    final sub = [server.id, if (country.isNotEmpty) country, if (server.address.isNotEmpty) '${server.address}:${server.port}'];
 
-    return Center(
-      child: Material(
-        color: Colors.transparent,
-        child: Container(
-          width: 420,
-          padding: const EdgeInsets.all(24),
+    return CharonDialog(
+      kicker: l10n.dlgDeleteKicker,
+      title: l10n.dlgDeleteTitle(name),
+      tile: Icons.delete_outline,
+      width: 460,
+      hint: l10n.dialogEscFoot,
+      onClose: () => Navigator.of(context).pop(false),
+      actions: [
+        DialogAction(l10n.dialogCancel, () => Navigator.of(context).pop(false), autofocus: true),
+        DialogAction(l10n.dlgDeleteBtn(server.id), () => Navigator.of(context).pop(true), primary: true),
+      ],
+      children: [
+        DialogText(l10n.dlgDeleteIntro),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           decoration: BoxDecoration(
-            color: const Color(0xFF1E1E1E),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFF333333)),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black54,
-                blurRadius: 24,
-                offset: Offset(0, 8),
-              ),
-            ],
+            color: colors.bg,
+            border: Border.all(color: colors.surface2),
+            borderRadius: BorderRadius.circular(14),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
             children: [
-              Text(
-                l10n.dialogDeleteServerTitle(serverName),
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFFEDEDED),
+              Container(
+                width: 36,
+                height: 24,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: colors.surface2,
+                  border: Border.all(color: colors.controlBorder),
+                ),
+                child: Text(country, style: monoStyle(colors.text, 9, bold: true)),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name.isNotEmpty ? name : countryName,
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: colors.text),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(sub.join(' · '), style: monoStyle(colors.text3, 11), overflow: TextOverflow.ellipsis),
+                  ],
                 ),
               ),
-              const SizedBox(height: 12),
-              Text(
-                l10n.dialogDeleteServerMessage,
-                style: const TextStyle(
-                  fontSize: 13,
-                  height: 1.5,
-                  color: Color(0xFFA3A3A3),
-                ),
-              ),
-              const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  OutlinedButton(
-                    onPressed: () => Navigator.of(context).pop(false),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFFEDEDED),
-                      side: const BorderSide(color: Color(0xFF737373)),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    ),
-                    child: Text(
-                      l10n.dialogCancel,
-                      style: const TextStyle(
-                        fontFamily: CharonTokens.fontMono,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  ElevatedButton(
-                    onPressed: () => Navigator.of(context).pop(true),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFDC7C7D),
-                      foregroundColor: const Color(0xFF121212),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    ),
-                    child: Text(
-                      l10n.dialogDelete,
-                      style: const TextStyle(
-                        fontFamily: CharonTokens.fontMono,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              if (order > 0) Text(l10n.dlgDeleteOrder('$order'), style: monoStyle(colors.text3, 10)),
             ],
           ),
         ),
-      ),
+        DialogNotes([
+          if (otherServerIds.length == 1)
+            l10n.dlgDeleteNoteLast(otherServerIds.single)
+          else if (otherServerIds.length > 1)
+            l10n.dlgDeleteNoteOthers,
+          l10n.dlgDeleteNoteQuota,
+          l10n.dlgDeleteNoteSync,
+        ]),
+      ],
     );
   }
 }

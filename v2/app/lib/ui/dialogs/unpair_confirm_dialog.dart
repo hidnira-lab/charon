@@ -1,163 +1,34 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/generated/app_localizations.dart';
-import '../../theme/tokens.dart';
+import 'dialog_shell.dart';
 
-/// P1 Unpair device confirmation dialog.
-/// Explains that the sync copy stays on the server and other devices
-/// are unaffected. Default focus is on Cancel.
+/// Confirmation before this device stops syncing (Dialogs board, "unpair
+/// device"). The encrypted copy stays on the sync server.
 class UnpairConfirmDialog extends StatelessWidget {
   const UnpairConfirmDialog({super.key});
 
-  static Future<bool?> show(BuildContext context) {
-    return showDialog<bool>(
-      context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.65),
-      builder: (context) => const UnpairConfirmDialog(),
-    );
-  }
+  static Future<bool?> show(BuildContext context) =>
+      showCharonDialog<bool>(context, (_) => const UnpairConfirmDialog());
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-
-    return Center(
-      child: Material(
-        color: Colors.transparent,
-        child: Container(
-          width: 460,
-          decoration: BoxDecoration(
-            color: const Color(0xFF1E1E1E),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFF333333)),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black54,
-                blurRadius: 28,
-                offset: Offset(0, 12),
-              ),
-            ],
-          ),
-          padding: const EdgeInsets.all(22),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header
-              Row(
-                children: [
-                  Container(
-                    width: 34,
-                    height: 34,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF3E1F1F),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: const Color(0xFFE57373).withValues(alpha: 0.5)),
-                    ),
-                    child: const Icon(
-                      Icons.link_off_rounded,
-                      size: 20,
-                      color: Color(0xFFE57373),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          l10n.dialogUnpairTitle,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFFEDEDED),
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          l10n.dialogUnpairSubtitle,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Color(0xFFA3A3A3),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 14),
-
-              // Explanatory notice
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF141414),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: const Color(0xFF2A2A2A)),
-                ),
-                child: Text(
-                  l10n.dialogUnpairNotice,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFFA3A3A3),
-                    height: 1.4,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Actions
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  // Cancel button has default focus per spec
-                  OutlinedButton(
-                    autofocus: true,
-                    onPressed: () => Navigator.of(context).pop(false),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFFEDEDED),
-                      side: const BorderSide(color: Color(0xFF4A4A4A)),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    ),
-                    child: Text(
-                      l10n.dialogCancel,
-                      style: const TextStyle(
-                        fontFamily: CharonTokens.fontMono,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  ElevatedButton(
-                    onPressed: () => Navigator.of(context).pop(true),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFE57373),
-                      foregroundColor: const Color(0xFF121212),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    ),
-                    child: Text(
-                      l10n.dialogUnpairConfirm,
-                      style: const TextStyle(
-                        fontFamily: CharonTokens.fontMono,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+    return CharonDialog(
+      kicker: l10n.dlgUnpairKicker,
+      title: l10n.dlgUnpairHeading,
+      tile: Icons.link,
+      width: 480,
+      hint: l10n.dialogEscFoot,
+      onClose: () => Navigator.of(context).pop(false),
+      actions: [
+        DialogAction(l10n.dialogCancel, () => Navigator.of(context).pop(false), autofocus: true),
+        DialogAction(l10n.dlgUnpairBtn, () => Navigator.of(context).pop(true), primary: true),
+      ],
+      children: [
+        DialogText(l10n.dlgUnpairIntro),
+        DialogNotes([l10n.dlgUnpairNote1, l10n.dlgUnpairNote2, l10n.dlgUnpairNote3]),
+      ],
     );
   }
 }
