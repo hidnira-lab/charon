@@ -27,15 +27,24 @@ enum SyncRunResult {
 /// its steps in the same dialog, then "Pushed just now" or a wrong passphrase.
 /// The dialog runs the work itself so it can show where it is.
 class SyncPassphraseDialog extends StatefulWidget {
-  const SyncPassphraseDialog({super.key, required this.controller, required this.push});
+  const SyncPassphraseDialog({super.key, required this.controller, required this.push, this.initialPassphrase});
 
   final HomeController controller;
   final bool push;
 
-  static Future<SyncRunResult> show(BuildContext context, HomeController controller, {required bool push}) async {
+  /// The passphrase the pairing dialog just asked for, so "Push now" and "Pull
+  /// now" do not ask for it a third time. It lives in this field only.
+  final String? initialPassphrase;
+
+  static Future<SyncRunResult> show(
+    BuildContext context,
+    HomeController controller, {
+    required bool push,
+    String? initialPassphrase,
+  }) async {
     final r = await showCharonDialog<SyncRunResult>(
       context,
-      (_) => SyncPassphraseDialog(controller: controller, push: push),
+      (_) => SyncPassphraseDialog(controller: controller, push: push, initialPassphrase: initialPassphrase),
     );
     return r ?? SyncRunResult.cancelled;
   }
@@ -54,6 +63,7 @@ class _SyncPassphraseDialogState extends State<SyncPassphraseDialog> {
   @override
   void initState() {
     super.initState();
+    _field.text = widget.initialPassphrase ?? '';
     _field.addListener(() => setState(() {}));
   }
 
@@ -118,20 +128,23 @@ class _SyncPassphraseDialogState extends State<SyncPassphraseDialog> {
     final body = <Widget>[];
     switch (_phase) {
       case _Phase.form || _Phase.wrong:
-        body.add(_PassField(
+        body.add(DialogField(
           label: l10n.dlgSyncPassphraseLabel,
           controller: _field,
-          show: _show,
+          mono: true,
+          height: 44,
+          autofocus: true,
+          obscure: !_show,
           warn: _phase == _Phase.wrong,
           eyeLabel: _show ? l10n.dlgSyncHide : l10n.dlgSyncShow,
           onEye: () => setState(() => _show = !_show),
-          onSubmit: canRun ? _run : null,
+          onSubmitted: (_) => canRun ? _run() : null,
         ));
         if (_phase == _Phase.wrong) {
-          body.add(_Alert(title: l10n.dlgSyncWrongTitle, line: l10n.dlgSyncWrongLine));
+          body.add(DialogAlert(title: l10n.dlgSyncWrongTitle, line: l10n.dlgSyncWrongLine));
         }
       case _Phase.busy:
-        body.add(_Busy(
+        body.add(DialogBusy(
           lines: push
               ? [l10n.dlgSyncBusyDerive, l10n.dlgSyncBusyEncrypt, l10n.dlgSyncBusyUpload(_host)]
               : [l10n.dlgSyncBusyDownload(_host), l10n.dlgSyncBusyDecrypt],
@@ -185,142 +198,6 @@ class _SyncPassphraseDialogState extends State<SyncPassphraseDialog> {
           .pop(_phase == _Phase.done ? SyncRunResult.done : SyncRunResult.cancelled),
       actions: actions(),
       children: body,
-    );
-  }
-}
-
-class _PassField extends StatelessWidget {
-  const _PassField({
-    required this.label,
-    required this.controller,
-    required this.show,
-    required this.warn,
-    required this.eyeLabel,
-    required this.onEye,
-    required this.onSubmit,
-  });
-
-  final String label;
-  final TextEditingController controller;
-  final bool show;
-  final bool warn;
-  final String eyeLabel;
-  final VoidCallback onEye;
-  final VoidCallback? onSubmit;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = CharonColors.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: monoStyle(colors.text2, 10, bold: true, em: 0.08)),
-        const SizedBox(height: 6),
-        Container(
-          height: 44,
-          padding: const EdgeInsets.only(left: 12, right: 4),
-          decoration: BoxDecoration(
-            color: colors.bg,
-            border: Border.all(color: warn ? colors.transitionFill : colors.controlBorder),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Row(
-            children: [
-              Text('>', style: monoStyle(warn ? colors.transitionText : colors.accentText, 14, bold: true)),
-              const SizedBox(width: 8),
-              Expanded(
-                child: TextField(
-                  controller: controller,
-                  autofocus: true,
-                  obscureText: !show,
-                  onSubmitted: (_) => onSubmit?.call(),
-                  style: monoStyle(colors.text, 13),
-                  decoration: const InputDecoration(border: InputBorder.none, isDense: true),
-                ),
-              ),
-              Tooltip(
-                message: eyeLabel,
-                child: InkWell(
-                  onTap: onEye,
-                  borderRadius: BorderRadius.circular(8),
-                  child: SizedBox(
-                    width: 36,
-                    height: 36,
-                    child: Icon(show ? Icons.visibility_off : Icons.visibility, size: 18, color: colors.text2),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _Alert extends StatelessWidget {
-  const _Alert({required this.title, required this.line});
-
-  final String title;
-  final String line;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = CharonColors.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: Container(width: 8, height: 8, color: colors.transitionFill),
-            ),
-            const SizedBox(width: 8),
-            Expanded(child: Text(title, style: TextStyle(fontSize: 12, height: 1.35, color: colors.text))),
-          ],
-        ),
-        const SizedBox(height: 3),
-        Text('> $line', style: monoStyle(colors.text3, 11)),
-      ],
-    );
-  }
-}
-
-/// The steps of a running Push or Pull, with 12 blocks that fill over a few
-/// seconds (Argon2id takes that long on a phone, so the bar never pretends to
-/// know the real progress and just holds full while the work finishes).
-class _Busy extends StatelessWidget {
-  const _Busy({required this.lines});
-
-  final List<String> lines;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = CharonColors.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        TweenAnimationBuilder<double>(
-          tween: Tween(begin: 0, end: 12),
-          duration: const Duration(seconds: 4),
-          builder: (_, v, _) => Row(
-            children: [
-              for (var i = 0; i < 12; i++)
-                Expanded(
-                  child: Container(
-                    height: 10,
-                    margin: EdgeInsets.only(right: i < 11 ? 2 : 0),
-                    color: i < v ? colors.accent : colors.connectedSoft,
-                  ),
-                ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 10),
-        DialogNotes(lines),
-      ],
     );
   }
 }

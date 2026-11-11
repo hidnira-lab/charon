@@ -478,6 +478,11 @@ class DialogField extends StatelessWidget {
     this.autofocus = false,
     this.keyboardType,
     this.onChanged,
+    this.onSubmitted,
+    this.style,
+    this.obscure = false,
+    this.onEye,
+    this.eyeLabel,
   });
 
   final TextEditingController controller;
@@ -501,13 +506,22 @@ class DialogField extends StatelessWidget {
   final bool autofocus;
   final TextInputType? keyboardType;
   final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
+
+  /// Replaces the text style, for the big pairing code.
+  final TextStyle? style;
+
+  /// Hides the text. With [onEye] an eye button at the right shows or hides it.
+  final bool obscure;
+  final VoidCallback? onEye;
+  final String? eyeLabel;
 
   @override
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
     final box = Container(
       height: height,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.only(left: 12, right: onEye != null ? 4 : 12),
       decoration: BoxDecoration(
         color: colors.bg,
         border: Border.all(color: warn ? colors.transitionFill : colors.controlBorder),
@@ -531,9 +545,12 @@ class DialogField extends StatelessWidget {
                 autofocus: autofocus,
                 keyboardType: keyboardType,
                 onChanged: onChanged,
-                style: mono
+                onSubmitted: onSubmitted,
+                obscureText: obscure,
+                style: style ??
+                    (mono
                     ? monoStyle(colors.text, 13)
-                    : TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: colors.text),
+                    : TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: colors.text)),
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   isDense: true,
@@ -549,6 +566,19 @@ class DialogField extends StatelessWidget {
             const SizedBox(width: 8),
             Text(suffix!, style: monoStyle(colors.text3, 10)),
           ],
+          if (onEye != null)
+            Tooltip(
+              message: eyeLabel ?? '',
+              child: InkWell(
+                onTap: onEye,
+                borderRadius: BorderRadius.circular(8),
+                child: SizedBox(
+                  width: 36,
+                  height: 36,
+                  child: Icon(obscure ? Icons.visibility : Icons.visibility_off, size: 18, color: colors.text2),
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -586,6 +616,76 @@ class DialogFlag extends StatelessWidget {
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(code.isEmpty ? '··' : code.toUpperCase(), style: monoStyle(colors.text, 10, bold: true)),
+    );
+  }
+}
+
+/// An amber line with what went wrong, and a mono line under it with what to do.
+class DialogAlert extends StatelessWidget {
+  const DialogAlert({super.key, required this.title, this.line});
+
+  final String title;
+  final String? line;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: Container(width: 8, height: 8, color: colors.transitionFill),
+            ),
+            const SizedBox(width: 8),
+            Expanded(child: Text(title, style: TextStyle(fontSize: 12, height: 1.35, color: colors.text))),
+          ],
+        ),
+        if (line != null) ...[
+          const SizedBox(height: 3),
+          Text('> $line', style: monoStyle(colors.text3, 11)),
+        ],
+      ],
+    );
+  }
+}
+
+/// The steps of a running Push, Pull or pairing, with 12 blocks that fill over a few
+/// seconds (Argon2id takes that long on a phone, so the bar never pretends to
+/// know the real progress and just holds full while the work finishes).
+class DialogBusy extends StatelessWidget {
+  const DialogBusy({super.key, required this.lines});
+
+  final List<String> lines;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TweenAnimationBuilder<double>(
+          tween: Tween(begin: 0, end: 12),
+          duration: const Duration(seconds: 4),
+          builder: (_, v, _) => Row(
+            children: [
+              for (var i = 0; i < 12; i++)
+                Expanded(
+                  child: Container(
+                    height: 10,
+                    margin: EdgeInsets.only(right: i < 11 ? 2 : 0),
+                    color: i < v ? colors.accent : colors.connectedSoft,
+                  ),
+                ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
+        DialogNotes(lines),
+      ],
     );
   }
 }
