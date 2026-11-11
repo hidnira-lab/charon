@@ -939,7 +939,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get splitDomainLabel => '域名';
 
   @override
-  String get telemetryTitle => '遥测与日志';
+  String get telemetryTitle => '遥测';
 
   @override
   String get telemetryTag => '系统日志';
@@ -948,10 +948,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get telemetryMemoryOnlyNote => '仅在内存中保留最新 2000 行。';
 
   @override
-  String get telemetryTabAccess => 'XRAY ACCESS';
+  String get telemetryTabAccess => 'XRAY · 访问';
 
   @override
-  String get telemetryTabCore => 'CHARON CORE';
+  String get telemetryTabCore => 'CHARON 核心';
 
   @override
   String get telemetryPrivacyNote => '每行都会显示连接的目标地址。在分享或粘贴到任何地方前请仔细检查。';
@@ -963,7 +963,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String telemetryLinesSkippedPill(int count) {
-    return '已跳过 $count 行';
+    return '跳过了 $count 行';
   }
 
   @override
@@ -979,7 +979,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get telemetryLevelError => '错误';
 
   @override
-  String get telemetryRawMode => 'RAW';
+  String get telemetryRawMode => '原始';
 
   @override
   String get telemetryCopyBtn => '复制';
@@ -1001,10 +1001,10 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get telemetryExportDiagnosticsBtn => '导出诊断日志 →';
+  String get telemetryExportDiagnosticsBtn => '导出诊断信息 →';
 
   @override
-  String get telemetryExportDialogTitle => '导出诊断日志';
+  String get telemetryExportDialogTitle => '导出诊断信息';
 
   @override
   String get telemetryExportDialogDesc => '生成设备状态和核心日志诊断包。不会上传任何内容到远程服务器。';
@@ -1019,19 +1019,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get telemetryExportSavedToast => '诊断日志已导出至剪贴板/文件';
 
   @override
-  String get telemetryHistoryCardTitle => '会话历史';
+  String get telemetryHistoryCardTitle => '历史';
 
   @override
-  String get telemetryHistoryLaterBadge => '后续支持';
+  String get telemetryHistoryLaterBadge => '稍后';
 
   @override
-  String get telemetryHistoryEmptyDesc => 'Charon 不记录会话历史，因此此处始终为空。';
+  String get telemetryHistoryEmptyDesc => 'Charon 不保存会话历史，所以这里保持为空。';
 
   @override
-  String get telemetryHistoryUptime => '运行时间';
+  String get telemetryHistoryUptime => '在线时长';
 
   @override
-  String get telemetryHistoryPastSessions => '往期会话';
+  String get telemetryHistoryPastSessions => '历史会话';
 
   @override
   String get telemetryHistoryNoHistoryNote => '隐私优先 · 本设备不保存任何活动记录。';
@@ -1040,6 +1040,180 @@ class AppLocalizationsZh extends AppLocalizations {
   String telemetryLinesCount(int count) {
     return '$count 行';
   }
+
+  @override
+  String telemetryHeadTitle(String tag) {
+    return '遥测 · $tag';
+  }
+
+  @override
+  String get telemetryTagLive => '实时';
+
+  @override
+  String get telemetryTagNoSession => '无会话';
+
+  @override
+  String telemetryTagCollecting(String done, String total) {
+    return '$done / $total';
+  }
+
+  @override
+  String get telemetrySubtitle => '在本机测量，数据不会离开设备';
+
+  @override
+  String get telemetryThroughput => '吞吐量';
+
+  @override
+  String telemetryLiveChip(String server) {
+    return '实时 · $server';
+  }
+
+  @override
+  String get telemetryChipOff => '关';
+
+  @override
+  String get telemetryViewLabel => '视图';
+
+  @override
+  String get telemetryViewChart => '图表';
+
+  @override
+  String get telemetryViewTable => '表格';
+
+  @override
+  String get telemetryReadDownNow => '当前下行';
+
+  @override
+  String get telemetryReadUpNow => '当前上行';
+
+  @override
+  String get telemetryReadPeak => '下行峰值 · 5 分钟';
+
+  @override
+  String telemetryReadPeakSoFar(String time) {
+    return '下行峰值 · $time';
+  }
+
+  @override
+  String get telemetryNoSamplesBefore => '连接前无采样';
+
+  @override
+  String get telemetryTipDown => '下行';
+
+  @override
+  String get telemetryTipUp => '上行';
+
+  @override
+  String get telemetryChartLabel => '吞吐量图表，悬停查看数值';
+
+  @override
+  String get telemetryNoSamples => '尚无采样';
+
+  @override
+  String get telemetryNoSamplesDesc => '连接后开始绘制图表，每次断开都会重置。';
+
+  @override
+  String get telemetryTableLabel => '最近 60 个采样';
+
+  @override
+  String get telemetryColTime => '时间';
+
+  @override
+  String get telemetryColDown => 'DOWN · MBPS';
+
+  @override
+  String get telemetryColUp => 'UP · MBPS';
+
+  @override
+  String get telemetryTableEmpty => '尚无采样 · 连接后开始';
+
+  @override
+  String get telemetryAgoNow => '现在';
+
+  @override
+  String telemetryAgo(String time) {
+    return '$time 前';
+  }
+
+  @override
+  String get telemetryLegendDown => '下载';
+
+  @override
+  String get telemetryLegendUp => '上传';
+
+  @override
+  String get telemetryAxisNote => 'MBPS · 每秒采样 · 断开后重置';
+
+  @override
+  String get telemetryLogLabel => '日志';
+
+  @override
+  String get telemetryLogHead => '日志';
+
+  @override
+  String get telemetryLogSource => '日志来源';
+
+  @override
+  String get telemetryNoteXray => '最近 2000 行，仅存于内存 · 每行都显示目标地址';
+
+  @override
+  String get telemetryNoteXrayOff => '没有访问记录，xray 未运行';
+
+  @override
+  String get telemetryNoteCore => '最近 2000 行，仅存于内存 · 这里不含目标地址';
+
+  @override
+  String get telemetryXrayLog => 'xray 访问日志';
+
+  @override
+  String get telemetryCoreLog => 'Charon 核心日志';
+
+  @override
+  String get telemetrySessEgress => '出口';
+
+  @override
+  String get telemetryNoteLatency => 'TCP 连接 · 每 5 秒';
+
+  @override
+  String get telemetryNoteSince => '自验证起';
+
+  @override
+  String telemetryNoteMatches(String server) {
+    return '与 $server 一致';
+  }
+
+  @override
+  String get telemetryNoteNoTunnel => '无隧道';
+
+  @override
+  String get telemetryNoteLastNotStored => '不保存上次会话';
+
+  @override
+  String get telemetryNoteCheckedAfter => '连接后检查';
+
+  @override
+  String telemetryQuotaResets(String date) {
+    return '$date重置';
+  }
+
+  @override
+  String telemetryQuotaOfPct(String cap, String pct) {
+    return '/ $cap GB · $pct%';
+  }
+
+  @override
+  String telemetryQuotaCapFrom(String server) {
+    return '上限来自 $server 的 VPS 套餐';
+  }
+
+  @override
+  String get telemetryQuotaCountedHere => '仅在本机统计';
+
+  @override
+  String get telemetryHistoryTitle => '暂未记录';
+
+  @override
+  String get telemetryNoData => '无数据';
 
   @override
   String get updatesTitle => '更新';
@@ -3298,7 +3472,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get splitDomainLabel => '域名';
 
   @override
-  String get telemetryTitle => '遥测与日志';
+  String get telemetryTitle => '遥测';
 
   @override
   String get telemetryTag => '系统日志';
@@ -3307,10 +3481,10 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get telemetryMemoryOnlyNote => '仅在内存中保留最新 2000 行。';
 
   @override
-  String get telemetryTabAccess => 'XRAY ACCESS';
+  String get telemetryTabAccess => 'XRAY · 访问';
 
   @override
-  String get telemetryTabCore => 'CHARON CORE';
+  String get telemetryTabCore => 'CHARON 核心';
 
   @override
   String get telemetryPrivacyNote => '每行都会显示连接的目标地址。在分享或粘贴到任何地方前请仔细检查。';
@@ -3322,7 +3496,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String telemetryLinesSkippedPill(int count) {
-    return '已跳过 $count 行';
+    return '跳过了 $count 行';
   }
 
   @override
@@ -3338,7 +3512,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get telemetryLevelError => '错误';
 
   @override
-  String get telemetryRawMode => 'RAW';
+  String get telemetryRawMode => '原始';
 
   @override
   String get telemetryCopyBtn => '复制';
@@ -3360,10 +3534,10 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   }
 
   @override
-  String get telemetryExportDiagnosticsBtn => '导出诊断日志 →';
+  String get telemetryExportDiagnosticsBtn => '导出诊断信息 →';
 
   @override
-  String get telemetryExportDialogTitle => '导出诊断日志';
+  String get telemetryExportDialogTitle => '导出诊断信息';
 
   @override
   String get telemetryExportDialogDesc => '生成设备状态和核心日志诊断包。不会上传任何内容到远程服务器。';
@@ -3378,19 +3552,19 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get telemetryExportSavedToast => '诊断日志已导出至剪贴板/文件';
 
   @override
-  String get telemetryHistoryCardTitle => '会话历史';
+  String get telemetryHistoryCardTitle => '历史';
 
   @override
-  String get telemetryHistoryLaterBadge => '后续支持';
+  String get telemetryHistoryLaterBadge => '稍后';
 
   @override
-  String get telemetryHistoryEmptyDesc => 'Charon 不记录会话历史，因此此处始终为空。';
+  String get telemetryHistoryEmptyDesc => 'Charon 不保存会话历史，所以这里保持为空。';
 
   @override
-  String get telemetryHistoryUptime => '运行时间';
+  String get telemetryHistoryUptime => '在线时长';
 
   @override
-  String get telemetryHistoryPastSessions => '往期会话';
+  String get telemetryHistoryPastSessions => '历史会话';
 
   @override
   String get telemetryHistoryNoHistoryNote => '隐私优先 · 本设备不保存任何活动记录。';
@@ -3399,6 +3573,180 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String telemetryLinesCount(int count) {
     return '$count 行';
   }
+
+  @override
+  String telemetryHeadTitle(String tag) {
+    return '遥测 · $tag';
+  }
+
+  @override
+  String get telemetryTagLive => '实时';
+
+  @override
+  String get telemetryTagNoSession => '无会话';
+
+  @override
+  String telemetryTagCollecting(String done, String total) {
+    return '$done / $total';
+  }
+
+  @override
+  String get telemetrySubtitle => '在本机测量，数据不会离开设备';
+
+  @override
+  String get telemetryThroughput => '吞吐量';
+
+  @override
+  String telemetryLiveChip(String server) {
+    return '实时 · $server';
+  }
+
+  @override
+  String get telemetryChipOff => '关';
+
+  @override
+  String get telemetryViewLabel => '视图';
+
+  @override
+  String get telemetryViewChart => '图表';
+
+  @override
+  String get telemetryViewTable => '表格';
+
+  @override
+  String get telemetryReadDownNow => '当前下行';
+
+  @override
+  String get telemetryReadUpNow => '当前上行';
+
+  @override
+  String get telemetryReadPeak => '下行峰值 · 5 分钟';
+
+  @override
+  String telemetryReadPeakSoFar(String time) {
+    return '下行峰值 · $time';
+  }
+
+  @override
+  String get telemetryNoSamplesBefore => '连接前无采样';
+
+  @override
+  String get telemetryTipDown => '下行';
+
+  @override
+  String get telemetryTipUp => '上行';
+
+  @override
+  String get telemetryChartLabel => '吞吐量图表，悬停查看数值';
+
+  @override
+  String get telemetryNoSamples => '尚无采样';
+
+  @override
+  String get telemetryNoSamplesDesc => '连接后开始绘制图表，每次断开都会重置。';
+
+  @override
+  String get telemetryTableLabel => '最近 60 个采样';
+
+  @override
+  String get telemetryColTime => '时间';
+
+  @override
+  String get telemetryColDown => 'DOWN · MBPS';
+
+  @override
+  String get telemetryColUp => 'UP · MBPS';
+
+  @override
+  String get telemetryTableEmpty => '尚无采样 · 连接后开始';
+
+  @override
+  String get telemetryAgoNow => '现在';
+
+  @override
+  String telemetryAgo(String time) {
+    return '$time 前';
+  }
+
+  @override
+  String get telemetryLegendDown => '下载';
+
+  @override
+  String get telemetryLegendUp => '上传';
+
+  @override
+  String get telemetryAxisNote => 'MBPS · 每秒采样 · 断开后重置';
+
+  @override
+  String get telemetryLogLabel => '日志';
+
+  @override
+  String get telemetryLogHead => '日志';
+
+  @override
+  String get telemetryLogSource => '日志来源';
+
+  @override
+  String get telemetryNoteXray => '最近 2000 行，仅存于内存 · 每行都显示目标地址';
+
+  @override
+  String get telemetryNoteXrayOff => '没有访问记录，xray 未运行';
+
+  @override
+  String get telemetryNoteCore => '最近 2000 行，仅存于内存 · 这里不含目标地址';
+
+  @override
+  String get telemetryXrayLog => 'xray 访问日志';
+
+  @override
+  String get telemetryCoreLog => 'Charon 核心日志';
+
+  @override
+  String get telemetrySessEgress => '出口';
+
+  @override
+  String get telemetryNoteLatency => 'TCP 连接 · 每 5 秒';
+
+  @override
+  String get telemetryNoteSince => '自验证起';
+
+  @override
+  String telemetryNoteMatches(String server) {
+    return '与 $server 一致';
+  }
+
+  @override
+  String get telemetryNoteNoTunnel => '无隧道';
+
+  @override
+  String get telemetryNoteLastNotStored => '不保存上次会话';
+
+  @override
+  String get telemetryNoteCheckedAfter => '连接后检查';
+
+  @override
+  String telemetryQuotaResets(String date) {
+    return '$date重置';
+  }
+
+  @override
+  String telemetryQuotaOfPct(String cap, String pct) {
+    return '/ $cap GB · $pct%';
+  }
+
+  @override
+  String telemetryQuotaCapFrom(String server) {
+    return '上限来自 $server 的 VPS 套餐';
+  }
+
+  @override
+  String get telemetryQuotaCountedHere => '仅在本机统计';
+
+  @override
+  String get telemetryHistoryTitle => '暂未记录';
+
+  @override
+  String get telemetryNoData => '无数据';
 
   @override
   String get updatesTitle => '更新';

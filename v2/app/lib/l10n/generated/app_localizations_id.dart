@@ -999,7 +999,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get splitDomainLabel => 'Domain';
 
   @override
-  String get telemetryTitle => 'Telemetri & Log';
+  String get telemetryTitle => 'Telemetri';
 
   @override
   String get telemetryTag => 'LOG SISTEM';
@@ -1009,7 +1009,7 @@ class AppLocalizationsId extends AppLocalizations {
       '2000 baris terakhir, hanya disimpan di memori.';
 
   @override
-  String get telemetryTabAccess => 'XRAY ACCESS';
+  String get telemetryTabAccess => 'XRAY · AKSES';
 
   @override
   String get telemetryTabCore => 'CHARON CORE';
@@ -1025,7 +1025,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String telemetryLinesSkippedPill(int count) {
-    return '$count baris dilewati';
+    return '$count baris terlewat';
   }
 
   @override
@@ -1041,7 +1041,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get telemetryLevelError => 'KESALAHAN';
 
   @override
-  String get telemetryRawMode => 'RAW';
+  String get telemetryRawMode => 'MENTAH';
 
   @override
   String get telemetryCopyBtn => 'Salin';
@@ -1066,7 +1066,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get telemetryExportDiagnosticsBtn => 'Ekspor diagnostik →';
 
   @override
-  String get telemetryExportDialogTitle => 'Ekspor Diagnostik';
+  String get telemetryExportDialogTitle => 'Ekspor diagnostik';
 
   @override
   String get telemetryExportDialogDesc =>
@@ -1084,17 +1084,17 @@ class AppLocalizationsId extends AppLocalizations {
       'Diagnostik diekspor ke papan klip / file';
 
   @override
-  String get telemetryHistoryCardTitle => 'RIWAYAT SESI';
+  String get telemetryHistoryCardTitle => 'RIWAYAT';
 
   @override
   String get telemetryHistoryLaterBadge => 'NANTI';
 
   @override
   String get telemetryHistoryEmptyDesc =>
-      'Charon tidak menyimpan riwayat sesi, sehingga ini tetap kosong.';
+      'Charon tidak menyimpan riwayat sesi, jadi ini tetap kosong.';
 
   @override
-  String get telemetryHistoryUptime => 'WAKTU AKTIF';
+  String get telemetryHistoryUptime => 'UPTIME';
 
   @override
   String get telemetryHistoryPastSessions => 'SESI SEBELUMNYA';
@@ -1107,6 +1107,186 @@ class AppLocalizationsId extends AppLocalizations {
   String telemetryLinesCount(int count) {
     return '$count baris';
   }
+
+  @override
+  String telemetryHeadTitle(String tag) {
+    return 'TELEMETRI · $tag';
+  }
+
+  @override
+  String get telemetryTagLive => 'LANGSUNG';
+
+  @override
+  String get telemetryTagNoSession => 'TANPA SESI';
+
+  @override
+  String telemetryTagCollecting(String done, String total) {
+    return '$done DARI $total';
+  }
+
+  @override
+  String get telemetrySubtitle =>
+      'diukur di perangkat ini, tidak ada yang keluar';
+
+  @override
+  String get telemetryThroughput => 'Throughput';
+
+  @override
+  String telemetryLiveChip(String server) {
+    return 'LANGSUNG · $server';
+  }
+
+  @override
+  String get telemetryChipOff => 'OFF';
+
+  @override
+  String get telemetryViewLabel => 'Tampilan';
+
+  @override
+  String get telemetryViewChart => 'GRAFIK';
+
+  @override
+  String get telemetryViewTable => 'TABEL';
+
+  @override
+  String get telemetryReadDownNow => 'TURUN SEKARANG';
+
+  @override
+  String get telemetryReadUpNow => 'NAIK SEKARANG';
+
+  @override
+  String get telemetryReadPeak => 'PUNCAK TURUN · 5 MNT';
+
+  @override
+  String telemetryReadPeakSoFar(String time) {
+    return 'PUNCAK TURUN · $time';
+  }
+
+  @override
+  String get telemetryNoSamplesBefore => 'tanpa sampel sebelum terhubung';
+
+  @override
+  String get telemetryTipDown => 'Turun';
+
+  @override
+  String get telemetryTipUp => 'Naik';
+
+  @override
+  String get telemetryChartLabel =>
+      'Grafik throughput, arahkan kursor untuk membaca nilai';
+
+  @override
+  String get telemetryNoSamples => 'Belum ada sampel';
+
+  @override
+  String get telemetryNoSamplesDesc =>
+      'Hubungkan untuk memulai grafik. Grafik reset setiap kali terputus.';
+
+  @override
+  String get telemetryTableLabel => '60 sampel terakhir';
+
+  @override
+  String get telemetryColTime => 'WAKTU';
+
+  @override
+  String get telemetryColDown => 'DOWN · MBPS';
+
+  @override
+  String get telemetryColUp => 'UP · MBPS';
+
+  @override
+  String get telemetryTableEmpty => 'belum ada sampel · hubungkan untuk mulai';
+
+  @override
+  String get telemetryAgoNow => 'SEKARANG';
+
+  @override
+  String telemetryAgo(String time) {
+    return '$time LALU';
+  }
+
+  @override
+  String get telemetryLegendDown => 'Unduh';
+
+  @override
+  String get telemetryLegendUp => 'Unggah';
+
+  @override
+  String get telemetryAxisNote => 'MBPS · SAMPEL 1 DTK · RESET SAAT TERPUTUS';
+
+  @override
+  String get telemetryLogLabel => 'Log';
+
+  @override
+  String get telemetryLogHead => 'LOG';
+
+  @override
+  String get telemetryLogSource => 'Sumber log';
+
+  @override
+  String get telemetryNoteXray =>
+      '2000 baris terakhir, hanya di memori · tiap baris menampilkan tujuan';
+
+  @override
+  String get telemetryNoteXrayOff =>
+      'tidak ada baris akses, xray tidak berjalan';
+
+  @override
+  String get telemetryNoteCore =>
+      '2000 baris terakhir, hanya di memori · tanpa tujuan di sini';
+
+  @override
+  String get telemetryXrayLog => 'log akses xray';
+
+  @override
+  String get telemetryCoreLog => 'log core charon';
+
+  @override
+  String get telemetrySessEgress => 'EGRESS';
+
+  @override
+  String get telemetryNoteLatency => 'koneksi tcp · tiap 5 dtk';
+
+  @override
+  String get telemetryNoteSince => 'sejak terverifikasi';
+
+  @override
+  String telemetryNoteMatches(String server) {
+    return 'sesuai $server';
+  }
+
+  @override
+  String get telemetryNoteNoTunnel => 'tanpa tunnel';
+
+  @override
+  String get telemetryNoteLastNotStored => 'sesi terakhir tidak disimpan';
+
+  @override
+  String get telemetryNoteCheckedAfter => 'dicek setelah terhubung';
+
+  @override
+  String telemetryQuotaResets(String date) {
+    return 'RESET $date';
+  }
+
+  @override
+  String telemetryQuotaOfPct(String cap, String pct) {
+    return 'dari $cap GB · $pct%';
+  }
+
+  @override
+  String telemetryQuotaCapFrom(String server) {
+    return 'batas dari paket VPS $server';
+  }
+
+  @override
+  String get telemetryQuotaCountedHere => 'dihitung di perangkat ini saja';
+
+  @override
+  String get telemetryHistoryTitle => 'Belum dilacak';
+
+  @override
+  String get telemetryNoData => 'tanpa data';
 
   @override
   String get updatesTitle => 'Pembaruan';

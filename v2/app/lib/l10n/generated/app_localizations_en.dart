@@ -991,7 +991,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get splitDomainLabel => 'Domain';
 
   @override
-  String get telemetryTitle => 'Telemetry & Logs';
+  String get telemetryTitle => 'Telemetry';
 
   @override
   String get telemetryTag => 'SYSTEM LOGS';
@@ -1000,7 +1000,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get telemetryMemoryOnlyNote => 'Last 2000 lines, kept in memory only.';
 
   @override
-  String get telemetryTabAccess => 'XRAY ACCESS';
+  String get telemetryTabAccess => 'XRAY · ACCESS';
 
   @override
   String get telemetryTabCore => 'CHARON CORE';
@@ -1075,7 +1075,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Diagnostics exported to clipboard / file';
 
   @override
-  String get telemetryHistoryCardTitle => 'SESSION HISTORY';
+  String get telemetryHistoryCardTitle => 'HISTORY';
 
   @override
   String get telemetryHistoryLaterBadge => 'LATER';
@@ -1098,6 +1098,183 @@ class AppLocalizationsEn extends AppLocalizations {
   String telemetryLinesCount(int count) {
     return '$count lines';
   }
+
+  @override
+  String telemetryHeadTitle(String tag) {
+    return 'TELEMETRY · $tag';
+  }
+
+  @override
+  String get telemetryTagLive => 'LIVE';
+
+  @override
+  String get telemetryTagNoSession => 'NO SESSION';
+
+  @override
+  String telemetryTagCollecting(String done, String total) {
+    return '$done OF $total';
+  }
+
+  @override
+  String get telemetrySubtitle => 'measured on this device, nothing leaves it';
+
+  @override
+  String get telemetryThroughput => 'Throughput';
+
+  @override
+  String telemetryLiveChip(String server) {
+    return 'LIVE · $server';
+  }
+
+  @override
+  String get telemetryChipOff => 'OFF';
+
+  @override
+  String get telemetryViewLabel => 'View';
+
+  @override
+  String get telemetryViewChart => 'CHART';
+
+  @override
+  String get telemetryViewTable => 'TABLE';
+
+  @override
+  String get telemetryReadDownNow => 'DOWN NOW';
+
+  @override
+  String get telemetryReadUpNow => 'UP NOW';
+
+  @override
+  String get telemetryReadPeak => 'PEAK DOWN · 5 MIN';
+
+  @override
+  String telemetryReadPeakSoFar(String time) {
+    return 'PEAK DOWN · $time';
+  }
+
+  @override
+  String get telemetryNoSamplesBefore => 'no samples before connect';
+
+  @override
+  String get telemetryTipDown => 'Down';
+
+  @override
+  String get telemetryTipUp => 'Up';
+
+  @override
+  String get telemetryChartLabel => 'Throughput chart, hover to read values';
+
+  @override
+  String get telemetryNoSamples => 'No samples yet';
+
+  @override
+  String get telemetryNoSamplesDesc =>
+      'Connect to start the chart. It resets on every disconnect.';
+
+  @override
+  String get telemetryTableLabel => 'Last 60 samples';
+
+  @override
+  String get telemetryColTime => 'TIME';
+
+  @override
+  String get telemetryColDown => 'DOWN · MBPS';
+
+  @override
+  String get telemetryColUp => 'UP · MBPS';
+
+  @override
+  String get telemetryTableEmpty => 'no samples yet · connect to start';
+
+  @override
+  String get telemetryAgoNow => 'NOW';
+
+  @override
+  String telemetryAgo(String time) {
+    return '$time AGO';
+  }
+
+  @override
+  String get telemetryLegendDown => 'Download';
+
+  @override
+  String get telemetryLegendUp => 'Upload';
+
+  @override
+  String get telemetryAxisNote => 'MBPS · 1 S SAMPLES · RESETS ON DISCONNECT';
+
+  @override
+  String get telemetryLogLabel => 'Log';
+
+  @override
+  String get telemetryLogHead => 'LOG';
+
+  @override
+  String get telemetryLogSource => 'Log source';
+
+  @override
+  String get telemetryNoteXray =>
+      'last 2000 lines, in memory only · every line shows a destination';
+
+  @override
+  String get telemetryNoteXrayOff => 'no access lines, xray is not running';
+
+  @override
+  String get telemetryNoteCore =>
+      'last 2000 lines, in memory only · no destinations in here';
+
+  @override
+  String get telemetryXrayLog => 'xray access log';
+
+  @override
+  String get telemetryCoreLog => 'charon core log';
+
+  @override
+  String get telemetrySessEgress => 'EGRESS';
+
+  @override
+  String get telemetryNoteLatency => 'tcp connect · every 5 s';
+
+  @override
+  String get telemetryNoteSince => 'since verified';
+
+  @override
+  String telemetryNoteMatches(String server) {
+    return 'matches $server';
+  }
+
+  @override
+  String get telemetryNoteNoTunnel => 'no tunnel';
+
+  @override
+  String get telemetryNoteLastNotStored => 'last session not stored';
+
+  @override
+  String get telemetryNoteCheckedAfter => 'checked after connect';
+
+  @override
+  String telemetryQuotaResets(String date) {
+    return 'RESETS $date';
+  }
+
+  @override
+  String telemetryQuotaOfPct(String cap, String pct) {
+    return 'of $cap GB · $pct%';
+  }
+
+  @override
+  String telemetryQuotaCapFrom(String server) {
+    return 'cap from $server\'s VPS plan';
+  }
+
+  @override
+  String get telemetryQuotaCountedHere => 'counted on this device only';
+
+  @override
+  String get telemetryHistoryTitle => 'Not tracked yet';
+
+  @override
+  String get telemetryNoData => 'no data';
 
   @override
   String get updatesTitle => 'Updates';

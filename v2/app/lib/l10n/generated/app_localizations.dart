@@ -1820,7 +1820,7 @@ abstract class AppLocalizations {
   /// Title of telemetry screen.
   ///
   /// In en, this message translates to:
-  /// **'Telemetry & Logs'**
+  /// **'Telemetry'**
   String get telemetryTitle;
 
   /// Category tag above title.
@@ -1838,7 +1838,7 @@ abstract class AppLocalizations {
   /// Access log tab label.
   ///
   /// In en, this message translates to:
-  /// **'XRAY ACCESS'**
+  /// **'XRAY · ACCESS'**
   String get telemetryTabAccess;
 
   /// Core log tab label.
@@ -1964,7 +1964,7 @@ abstract class AppLocalizations {
   /// Title of session history card.
   ///
   /// In en, this message translates to:
-  /// **'SESSION HISTORY'**
+  /// **'HISTORY'**
   String get telemetryHistoryCardTitle;
 
   /// Later badge on history card.
@@ -2002,6 +2002,318 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} lines'**
   String telemetryLinesCount(int count);
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'TELEMETRY · {tag}'**
+  String telemetryHeadTitle(String tag);
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'LIVE'**
+  String get telemetryTagLive;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'NO SESSION'**
+  String get telemetryTagNoSession;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} OF {total}'**
+  String telemetryTagCollecting(String done, String total);
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'measured on this device, nothing leaves it'**
+  String get telemetrySubtitle;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Throughput'**
+  String get telemetryThroughput;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'LIVE · {server}'**
+  String telemetryLiveChip(String server);
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'OFF'**
+  String get telemetryChipOff;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get telemetryViewLabel;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'CHART'**
+  String get telemetryViewChart;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'TABLE'**
+  String get telemetryViewTable;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'DOWN NOW'**
+  String get telemetryReadDownNow;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'UP NOW'**
+  String get telemetryReadUpNow;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'PEAK DOWN · 5 MIN'**
+  String get telemetryReadPeak;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'PEAK DOWN · {time}'**
+  String telemetryReadPeakSoFar(String time);
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'no samples before connect'**
+  String get telemetryNoSamplesBefore;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Down'**
+  String get telemetryTipDown;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Up'**
+  String get telemetryTipUp;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Throughput chart, hover to read values'**
+  String get telemetryChartLabel;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'No samples yet'**
+  String get telemetryNoSamples;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect to start the chart. It resets on every disconnect.'**
+  String get telemetryNoSamplesDesc;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 60 samples'**
+  String get telemetryTableLabel;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'TIME'**
+  String get telemetryColTime;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'DOWN · MBPS'**
+  String get telemetryColDown;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'UP · MBPS'**
+  String get telemetryColUp;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'no samples yet · connect to start'**
+  String get telemetryTableEmpty;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'NOW'**
+  String get telemetryAgoNow;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} AGO'**
+  String telemetryAgo(String time);
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get telemetryLegendDown;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload'**
+  String get telemetryLegendUp;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'MBPS · 1 S SAMPLES · RESETS ON DISCONNECT'**
+  String get telemetryAxisNote;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Log'**
+  String get telemetryLogLabel;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'LOG'**
+  String get telemetryLogHead;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Log source'**
+  String get telemetryLogSource;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'last 2000 lines, in memory only · every line shows a destination'**
+  String get telemetryNoteXray;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'no access lines, xray is not running'**
+  String get telemetryNoteXrayOff;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'last 2000 lines, in memory only · no destinations in here'**
+  String get telemetryNoteCore;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'xray access log'**
+  String get telemetryXrayLog;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'charon core log'**
+  String get telemetryCoreLog;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'EGRESS'**
+  String get telemetrySessEgress;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'tcp connect · every 5 s'**
+  String get telemetryNoteLatency;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'since verified'**
+  String get telemetryNoteSince;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'matches {server}'**
+  String telemetryNoteMatches(String server);
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'no tunnel'**
+  String get telemetryNoteNoTunnel;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'last session not stored'**
+  String get telemetryNoteLastNotStored;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'checked after connect'**
+  String get telemetryNoteCheckedAfter;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'RESETS {date}'**
+  String telemetryQuotaResets(String date);
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'of {cap} GB · {pct}%'**
+  String telemetryQuotaOfPct(String cap, String pct);
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'cap from {server}\'s VPS plan'**
+  String telemetryQuotaCapFrom(String server);
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'counted on this device only'**
+  String get telemetryQuotaCountedHere;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'Not tracked yet'**
+  String get telemetryHistoryTitle;
+
+  /// Telemetry screen text.
+  ///
+  /// In en, this message translates to:
+  /// **'no data'**
+  String get telemetryNoData;
 
   /// Title of updates screen.
   ///
