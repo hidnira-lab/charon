@@ -11,6 +11,9 @@ import '../sync/sync_client.dart';
 import 'throughput_history.dart';
 import 'ui_state.dart';
 
+/// One change of the tunnel phase, as the service clock saw it.
+typedef StateChange = ({int atMs, Phase from, Phase to});
+
 enum DnsMode { tunnelDefault, custom }
 enum ConnectionMode { tun, systemProxy }
 enum ServiceStatus { running, notRunning, needsUpdate }
@@ -35,6 +38,7 @@ class HomeController extends ChangeNotifier {
         _hasServers = hasServers ?? (initialConfig?.servers.isNotEmpty ?? true),
         _sync = syncController ?? SyncController() {
     _platformTransport = platformTransport;
+    _lastPhase = _status.phase;
     _syncAndroidAnomaly(_status);
     _sync.addListener(_onSyncChanged);
     _client = client;
@@ -353,12 +357,25 @@ class HomeController extends ChangeNotifier {
   void setStatus(Status status) {
     _status = status;
     _syncAndroidAnomaly(status);
-    _endHistoryIfIdle(status);
+    _onStatus(status);
     notifyListeners();
   }
 
-  void _endHistoryIfIdle(Status status) {
+  /// The last 500 phase changes, oldest first, for the diagnostics export.
+  static const maxStateChanges = 500;
+  final List<StateChange> _stateChanges = [];
+  Phase? _lastPhase;
+
+  List<StateChange> get stateChanges => List.unmodifiable(_stateChanges);
+
+  void _onStatus(Status status) {
     if (status.phase == Phase.PHASE_IDLE) throughputHistory.clear();
+    final from = _lastPhase;
+    if (from != null && from != status.phase) {
+      _stateChanges.add((atMs: serviceNowMs, from: from, to: status.phase));
+      if (_stateChanges.length > maxStateChanges) _stateChanges.removeAt(0);
+    }
+    _lastPhase = status.phase;
   }
 
   void _recordThroughput(Throughput t) {
@@ -870,7 +887,7 @@ class HomeController extends ChangeNotifier {
     if (event.hasStatusChanged()) {
       _status = event.statusChanged;
       _syncAndroidAnomaly(_status);
-      _endHistoryIfIdle(_status);
+      _onStatus(_status);
       if (_status.phase == Phase.PHASE_IDLE) {
         _hasPendingSplitChanges = false;
         _pendingSplitRules.clear();
@@ -938,44 +955,10 @@ class HomeController extends ChangeNotifier {
       }
   }
 
-  String exportDiagnosticsText({bool includeAccess = false}) {
-    final now = DateTime.now().toUtc().toIso8601String();
-    final buffer = StringBuffer();
-    buffer.writeln('=== Charon Diagnostics Export ===');
-    buffer.writeln('Generated (UTC): $now');
-    buffer.writeln('Platform: Windows / Dart');
-    buffer.writeln('Client Version: 0.1.0');
-    buffer.writeln('Active Server: ${_status.activeServerId.isNotEmpty ? _status.activeServerId : "none"}');
-    buffer.writeln('Phase: ${_status.phase.name}');
-    buffer.writeln('Gate: ${_status.gate.name}');
-    buffer.writeln('Kill Switch: ${_status.killSwitchOn ? "enabled" : "disabled"}');
-    buffer.writeln('DNS Mode: ${_dnsMode.name} ($_customDns)');
-    buffer.writeln('Connection Mode: ${_connectionMode.name}');
-    buffer.writeln('----------------------------------------');
-    buffer.writeln('Charon Core Log (${_coreLogs.length} lines):');
-    for (final line in _coreLogs) {
-      final ts = DateTime.fromMillisecondsSinceEpoch(line.atMs.toInt()).toIso8601String();
-      buffer.writeln('[$ts] [${line.level.name}] ${line.text}');
-    }
-    if (includeAccess) {
-      buffer.writeln('----------------------------------------');
-      buffer.writeln('Xray Access Log (${_xrayLogs.length} lines):');
-      for (final line in _xrayLogs) {
-        final ts = DateTime.fromMillisecondsSinceEpoch(line.atMs.toInt()).toIso8601String();
-        buffer.writeln('[$ts] ${line.text}');
-      }
-    } else {
-      buffer.writeln('----------------------------------------');
-      buffer.writeln('Xray Access Log: [Excluded by user preference]');
-    }
-    buffer.writeln('=== End of Diagnostics ===');
-    return buffer.toString();
-  }
-
   void updateStatus(Status status) {
     _status = status;
     _syncAndroidAnomaly(status);
-    _endHistoryIfIdle(status);
+    _onStatus(status);
     notifyListeners();
   }
 

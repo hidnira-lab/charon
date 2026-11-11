@@ -1,5 +1,6 @@
 import '../gen/charon/v1/charon.pb.dart';
 import '../l10n/generated/app_localizations.dart';
+import 'app_info.dart';
 import 'home_controller.dart';
 
 /// What the Updates screen says in each state, taken from the Design artifact
@@ -81,6 +82,7 @@ class UpdateCardView {
     this.steps = const [],
     this.progress,
     this.signatureNote,
+    this.signingKey,
     this.buttons = const [],
     this.foot,
   });
@@ -95,6 +97,9 @@ class UpdateCardView {
   final List<UpdateStep> steps;
   final UpdateProgress? progress;
   final String? signatureNote;
+
+  /// Fingerprint of the release signing key, on the core card.
+  final String? signingKey;
   final List<UpdateButton> buttons;
   final String? foot;
 }
@@ -359,6 +364,7 @@ class UpdatesView {
       steps: _steps(c),
       progress: c == _Case.downloading ? _progress(s) : null,
       signatureNote: l10n.updatesCoreTrustNote,
+      signingKey: updateSigningFingerprint,
       buttons: buttons,
       foot: foot,
     );
