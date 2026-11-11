@@ -40,6 +40,7 @@ class Rig {
 Future<void> settle([int ms = 120]) => Future<void>.delayed(Duration(milliseconds: ms));
 
 void main() {
+  settledTests();
   group('reconnect', () {
     test('a service that answers is running', () async {
       final r = Rig();
@@ -228,5 +229,33 @@ void main() {
     await r.sup.openReleaseTool();
     expect(r.launched, ['charon-release.exe']);
     expect(r.ran, isEmpty);
+  });
+}
+
+void settledTests() {
+  group('hasSettled (the splash waits for it)', () {
+    test('is true at once when there is nothing to connect to', () {
+      expect(ServiceSupervisor().hasSettled, isTrue);
+    });
+
+    test('is false until the first try is over, and tells the listeners', () async {
+      final r = Rig()..script.add('down');
+      expect(r.sup.hasSettled, isFalse);
+      var told = 0;
+      r.sup.addListener(() => told++);
+      await r.sup.reconnect();
+      expect(r.sup.hasSettled, isTrue);
+      expect(told, greaterThan(0));
+    });
+
+    test('an answer, a version mismatch and silence all settle it', () async {
+      for (final first in [null, 'mismatch', 'down']) {
+        final r = Rig();
+        if (first != null) r.script.add(first);
+        await r.sup.reconnect();
+        expect(r.sup.hasSettled, isTrue, reason: '$first');
+        r.sup.dispose();
+      }
+    });
   });
 }

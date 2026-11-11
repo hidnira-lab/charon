@@ -66,11 +66,16 @@ class ServiceSupervisor extends ChangeNotifier {
   int _serviceProtocol = 0;
 
   Future<void> Function()? _connector;
+  bool _tried = false;
   Future<bool>? _attempt;
   Timer? _retry;
   bool _disposed = false;
 
   ServiceStatus get status => _status;
+
+  /// The first try to reach the service is over, whether it answered or not.
+  /// True at once when there is nothing to connect to. The splash waits for this.
+  bool get hasSettled => _connector == null || _tried;
   bool get isStarting => _starting;
   bool get startFailed => _startFailed;
   bool get isRestarting => _restarting;
@@ -107,16 +112,25 @@ class ServiceSupervisor extends ChangeNotifier {
     _retry?.cancel();
     try {
       await connector();
+      _markTried();
       setStatus(ServiceStatus.running);
       return true;
     } on ProtocolMismatch catch (e) {
       _serviceProtocol = e.serviceProtocol;
+      _markTried();
       setStatus(ServiceStatus.needsUpdate);
     } catch (_) {
+      _markTried();
       setStatus(ServiceStatus.notRunning);
     }
     _scheduleRetry();
     return false;
+  }
+
+  void _markTried() {
+    if (_tried || _disposed) return;
+    _tried = true;
+    notifyListeners();
   }
 
   void _scheduleRetry() {
