@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'core/core_client.dart';
+import 'core/geoip.dart';
 import 'core/transport.dart';
 import 'l10n/generated/app_localizations.dart';
 import 'state/home_controller.dart';
@@ -19,6 +20,7 @@ import 'ui/telemetry/telemetry_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  unawaited(GeoIp.load()); // only needed once the user adds a server
   final controller = HomeController();
   runApp(CharonApp(controller: controller));
 

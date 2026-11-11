@@ -51,3 +51,12 @@ Charon is licensed under the GNU General Public License v3.0 (`LICENSE`). It shi
 * **Author**: Colophon Foundry
 * **License**: SIL Open Font License 1.1
 * **Source**: https://github.com/googlefonts/spacemono
+
+## 6. Data
+
+### IP to Country Lite (DB-IP)
+
+* **Provider**: DB-IP.com, https://db-ip.com
+* **License**: Creative Commons Attribution 4.0 International (CC BY 4.0), https://creativecommons.org/licenses/by/4.0/
+* **Attribution**: This product includes the IP to Country Lite database by DB-IP, available from https://db-ip.com.
+* **Usage**: The IPv4 part of the November 2026 release is packed by `app/tool/build_geoip.dart` into `app/assets/geo/ipv4_country.bin.gz` (neighbouring ranges of one country merged, IPv6 left out). The Add server dialog uses it offline to suggest the country of a server given as an IP address. The address is never sent anywhere. The data is changed only by that packing. To refresh it, download a newer CSV from DB-IP and run the tool.

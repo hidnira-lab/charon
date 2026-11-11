@@ -1,3 +1,4 @@
+import '../core/geoip.dart';
 import '../core/vless_parser.dart';
 import '../core/xray_json_parser.dart';
 import '../gen/charon/v1/charon.pb.dart';
@@ -12,11 +13,14 @@ const flaggedCountries = [
 
 /// A best guess of the country of a server from its address, or null.
 ///
-/// Offline only: a hostname cannot be placed without a DNS call, and Charon
-/// makes no network call the user did not start. An IP address could be placed
-/// from a bundled table, which does not exist yet, so this answers null until
-/// that table is added. Callers must treat null as "unknown", never as a country.
-String? guessCountry(String address) => null;
+/// Offline only, from the bundled table (see [GeoIp]). A hostname cannot be
+/// placed without a DNS call, and Charon makes no network call the user did not
+/// start, so only an IPv4 address gets an answer. Callers must treat null as
+/// "unknown", never as a country, and only the flagged countries are kept.
+String? guessCountry(String address) {
+  final code = GeoIp.instance?.lookup(address);
+  return code != null && flaggedCountries.contains(code) ? code : null;
+}
 
 /// What the Add server dialog knows after reading what the user typed.
 class ServerImport {

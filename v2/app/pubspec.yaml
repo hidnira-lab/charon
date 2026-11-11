@@ -28,6 +28,9 @@ flutter:
   uses-material-design: true
   generate: true
 
+  assets:
+    - assets/geo/ipv4_country.bin.gz
+
   fonts:
     - family: Inter
       fonts:
