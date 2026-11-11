@@ -429,6 +429,12 @@ class HomeView {
     );
   }
 
+  /// The day the active server's quota resets ("1 Dec"), null when unknown.
+  String? resetsOn() {
+    final q = _quota;
+    return q != null && q.resetsAtMs.toInt() > 0 ? _date(q.resetsAtMs.toInt()) : null;
+  }
+
   // Banner.
 
   /// The one banner the board would show, or null. The order is the board's:

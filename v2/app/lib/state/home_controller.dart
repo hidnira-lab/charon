@@ -8,6 +8,7 @@ import '../core/core_client.dart';
 import '../core/transport.dart';
 import '../gen/charon/v1/charon.pb.dart';
 import '../sync/sync_client.dart';
+import 'throughput_history.dart';
 import 'ui_state.dart';
 
 enum DnsMode { tunnelDefault, custom }
@@ -75,6 +76,10 @@ class HomeController extends ChangeNotifier {
   Config? _config;
   Throughput? _throughput;
   Quota? _quota;
+
+  /// The last five minutes of throughput for the Telemetry chart. Cleared when
+  /// the session ends, so an old line never looks live.
+  final ThroughputHistory throughputHistory = ThroughputHistory();
   bool _hasServers;
   bool _isFirstRun;
   int _activeTabIndex = 0;
@@ -328,7 +333,17 @@ class HomeController extends ChangeNotifier {
   void setStatus(Status status) {
     _status = status;
     _syncAndroidAnomaly(status);
+    _endHistoryIfIdle(status);
     notifyListeners();
+  }
+
+  void _endHistoryIfIdle(Status status) {
+    if (status.phase == Phase.PHASE_IDLE) throughputHistory.clear();
+  }
+
+  void _recordThroughput(Throughput t) {
+    _throughput = t;
+    throughputHistory.add(t.downBps.toInt() / 1e6, t.upBps.toInt() / 1e6);
   }
 
   void _syncAndroidAnomaly(Status status) {
@@ -835,13 +850,14 @@ class HomeController extends ChangeNotifier {
     if (event.hasStatusChanged()) {
       _status = event.statusChanged;
       _syncAndroidAnomaly(_status);
+      _endHistoryIfIdle(_status);
       if (_status.phase == Phase.PHASE_IDLE) {
         _hasPendingSplitChanges = false;
         _pendingSplitRules.clear();
       }
       notifyListeners();
     } else if (event.hasThroughput()) {
-      _throughput = event.throughput;
+      _recordThroughput(event.throughput);
       notifyListeners();
     } else if (event.hasQuotaChanged()) {
       _quota = event.quotaChanged;
@@ -939,6 +955,7 @@ class HomeController extends ChangeNotifier {
   void updateStatus(Status status) {
     _status = status;
     _syncAndroidAnomaly(status);
+    _endHistoryIfIdle(status);
     notifyListeners();
   }
 
@@ -949,7 +966,7 @@ class HomeController extends ChangeNotifier {
   }
 
   void updateThroughput(Throughput throughput) {
-    _throughput = throughput;
+    _recordThroughput(throughput);
     notifyListeners();
   }
 
