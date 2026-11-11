@@ -2201,6 +2201,116 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get homeSheetFoot => '流量被拦截期间，服务器列表可以选择';
+
+  @override
+  String get syncDeviceNameLabel => '设备名称';
+
+  @override
+  String get syncActionPair => '配对此设备';
+
+  @override
+  String get syncPairHint => '配对后可以推送\n配置、规则和设置，\n再在另一台设备上拉取';
+
+  @override
+  String get syncActionTryAgain => '重试';
+
+  @override
+  String get syncActionResolve => '处理';
+
+  @override
+  String get syncActionUpdates => '更新';
+
+  @override
+  String get syncActionUnpair => '解除配对';
+
+  @override
+  String get syncLinePushing => '正在推送';
+
+  @override
+  String get syncLinePulling => '正在拉取';
+
+  @override
+  String get syncLineConflict => '已配对 · 需要你决定';
+
+  @override
+  String get syncLineFailed => '已配对 · 上次同步失败';
+
+  @override
+  String get syncTagPushing => '推送中';
+
+  @override
+  String get syncTextPushing => '先在本机加密再上传。你可以继续使用 Charon。';
+
+  @override
+  String get syncTagPulling => '拉取中';
+
+  @override
+  String get syncTextPulling => '先下载再在本机解密。你可以继续使用 Charon。';
+
+  @override
+  String get syncTagConflict => '服务器上的副本更新';
+
+  @override
+  String get syncTextConflict => '另一台设备在这台上次同步之后推送过。';
+
+  @override
+  String get syncTagUnreachable => '无法连接同步服务器';
+
+  @override
+  String syncTextUnreachable(String server) {
+    return '无法连接 $server。没有任何改动。';
+  }
+
+  @override
+  String get syncTagCertificate => '证书未通过验证';
+
+  @override
+  String get syncTextCertificate => '无法验证同步服务器的证书。Charon 在发送任何内容之前就已停止。';
+
+  @override
+  String get syncTagWrongPassphrase => '密码短语错误';
+
+  @override
+  String get syncTextWrongPassphrase => '用这个密码短语无法解密。没有任何改动。';
+
+  @override
+  String get syncTagNewerFormat => '格式更新';
+
+  @override
+  String get syncTextNewerFormat => '这份副本由更新版本的 Charon 生成。请更新应用后再读取。';
+
+  @override
+  String get syncTagWeak => '低于安全下限';
+
+  @override
+  String get syncTextWeak => '这份副本使用的密钥参数低于安全下限。请在装有当前版本应用的设备上重新推送。';
+
+  @override
+  String get syncTagOlder => '比预期的旧';
+
+  @override
+  String get syncTextOlder => '服务器上的副本比这台设备见过的更旧。Charon 没有拉取它。';
+
+  @override
+  String get syncTagFailed => '同步失败';
+
+  @override
+  String get syncTextBootstrapKey => '同步服务器没有接受这个服务器密钥。';
+
+  @override
+  String get syncTextAlreadyClaimed => '这台同步服务器已经注册。请改用配对码加入。';
+
+  @override
+  String get syncTextPairingCode => '这个配对码无效或已过期。';
+
+  @override
+  String get syncTextRateLimited => '尝试次数过多。请等一分钟再试。';
+
+  @override
+  String get syncTextUnauthorized => '这台设备已不再与同步服务器配对。';
+
+  @override
+  String get syncTextTooLarge => '保险库超过了 1 MiB 的上限。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -4399,4 +4509,114 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get homeSheetFoot => '流量被拦截期间，服务器列表可以选择';
+
+  @override
+  String get syncDeviceNameLabel => '设备名称';
+
+  @override
+  String get syncActionPair => '配对此设备';
+
+  @override
+  String get syncPairHint => '配对后可以推送\n配置、规则和设置，\n再在另一台设备上拉取';
+
+  @override
+  String get syncActionTryAgain => '重试';
+
+  @override
+  String get syncActionResolve => '处理';
+
+  @override
+  String get syncActionUpdates => '更新';
+
+  @override
+  String get syncActionUnpair => '解除配对';
+
+  @override
+  String get syncLinePushing => '正在推送';
+
+  @override
+  String get syncLinePulling => '正在拉取';
+
+  @override
+  String get syncLineConflict => '已配对 · 需要你决定';
+
+  @override
+  String get syncLineFailed => '已配对 · 上次同步失败';
+
+  @override
+  String get syncTagPushing => '推送中';
+
+  @override
+  String get syncTextPushing => '先在本机加密再上传。你可以继续使用 Charon。';
+
+  @override
+  String get syncTagPulling => '拉取中';
+
+  @override
+  String get syncTextPulling => '先下载再在本机解密。你可以继续使用 Charon。';
+
+  @override
+  String get syncTagConflict => '服务器上的副本更新';
+
+  @override
+  String get syncTextConflict => '另一台设备在这台上次同步之后推送过。';
+
+  @override
+  String get syncTagUnreachable => '无法连接同步服务器';
+
+  @override
+  String syncTextUnreachable(String server) {
+    return '无法连接 $server。没有任何改动。';
+  }
+
+  @override
+  String get syncTagCertificate => '证书未通过验证';
+
+  @override
+  String get syncTextCertificate => '无法验证同步服务器的证书。Charon 在发送任何内容之前就已停止。';
+
+  @override
+  String get syncTagWrongPassphrase => '密码短语错误';
+
+  @override
+  String get syncTextWrongPassphrase => '用这个密码短语无法解密。没有任何改动。';
+
+  @override
+  String get syncTagNewerFormat => '格式更新';
+
+  @override
+  String get syncTextNewerFormat => '这份副本由更新版本的 Charon 生成。请更新应用后再读取。';
+
+  @override
+  String get syncTagWeak => '低于安全下限';
+
+  @override
+  String get syncTextWeak => '这份副本使用的密钥参数低于安全下限。请在装有当前版本应用的设备上重新推送。';
+
+  @override
+  String get syncTagOlder => '比预期的旧';
+
+  @override
+  String get syncTextOlder => '服务器上的副本比这台设备见过的更旧。Charon 没有拉取它。';
+
+  @override
+  String get syncTagFailed => '同步失败';
+
+  @override
+  String get syncTextBootstrapKey => '同步服务器没有接受这个服务器密钥。';
+
+  @override
+  String get syncTextAlreadyClaimed => '这台同步服务器已经注册。请改用配对码加入。';
+
+  @override
+  String get syncTextPairingCode => '这个配对码无效或已过期。';
+
+  @override
+  String get syncTextRateLimited => '尝试次数过多。请等一分钟再试。';
+
+  @override
+  String get syncTextUnauthorized => '这台设备已不再与同步服务器配对。';
+
+  @override
+  String get syncTextTooLarge => '保险库超过了 1 MiB 的上限。';
 }

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:charon/sync/sync_client.dart';
+
+import 'support/fake_sync.dart';
+import 'support/fonts.dart';
 
 import 'package:charon/l10n/generated/app_localizations.dart';
 import 'package:charon/theme/theme.dart';
@@ -17,6 +21,8 @@ Widget _buildTestApp({required Widget child}) {
 }
 
 void main() {
+  setUpAll(loadAppFonts);
+
   group('VaultPassphraseDialog (N11)', () {
     testWidgets('renders backup mode with Argon2id notice and 3-tier strength hint', (tester) async {
       String? resultPassphrase;
@@ -102,7 +108,7 @@ void main() {
     });
 
     testWidgets('SyncCard opens VaultPassphraseDialog for backup and restore', (tester) async {
-      await tester.pumpWidget(_buildTestApp(child: const SyncCard()));
+      await tester.pumpWidget(_buildTestApp(child: SyncCard(controller: controllerWithSync(FakeSync(SyncState.paired)))));
       await tester.pump();
 
       // Tap Back up to file

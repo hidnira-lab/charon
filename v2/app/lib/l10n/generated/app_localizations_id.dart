@@ -2334,4 +2334,128 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get homeSheetFoot => 'daftar server terbuka selama trafik ditahan';
+
+  @override
+  String get syncDeviceNameLabel => 'NAMA PERANGKAT';
+
+  @override
+  String get syncActionPair => 'Pasangkan perangkat ini';
+
+  @override
+  String get syncPairHint =>
+      'setelah dipasangkan, kamu bisa\nkirim profil, aturan, dan pengaturan,\nlalu tarik di perangkat lain';
+
+  @override
+  String get syncActionTryAgain => 'Coba lagi';
+
+  @override
+  String get syncActionResolve => 'Selesaikan';
+
+  @override
+  String get syncActionUpdates => 'Pembaruan';
+
+  @override
+  String get syncActionUnpair => 'LEPAS';
+
+  @override
+  String get syncLinePushing => 'mengirim';
+
+  @override
+  String get syncLinePulling => 'menarik';
+
+  @override
+  String get syncLineConflict => 'dipasangkan · perlu keputusan';
+
+  @override
+  String get syncLineFailed => 'dipasangkan · sync terakhir gagal';
+
+  @override
+  String get syncTagPushing => 'MENGIRIM';
+
+  @override
+  String get syncTextPushing =>
+      'Mengenkripsi di sini, lalu mengunggah. Kamu tetap bisa memakai Charon.';
+
+  @override
+  String get syncTagPulling => 'MENARIK';
+
+  @override
+  String get syncTextPulling =>
+      'Mengunduh, lalu mendekripsi di sini. Kamu tetap bisa memakai Charon.';
+
+  @override
+  String get syncTagConflict => 'SALINAN SERVER LEBIH BARU';
+
+  @override
+  String get syncTextConflict =>
+      'Perangkat lain mengirim setelah perangkat ini terakhir sinkron.';
+
+  @override
+  String get syncTagUnreachable => 'SERVER SYNC TIDAK TERJANGKAU';
+
+  @override
+  String syncTextUnreachable(String server) {
+    return 'Tidak bisa menjangkau $server. Tidak ada yang diubah.';
+  }
+
+  @override
+  String get syncTagCertificate => 'SERTIFIKAT TIDAK TERVERIFIKASI';
+
+  @override
+  String get syncTextCertificate =>
+      'Sertifikat server sync tidak bisa diverifikasi. Charon berhenti sebelum mengirim apa pun.';
+
+  @override
+  String get syncTagWrongPassphrase => 'PASSPHRASE SALAH';
+
+  @override
+  String get syncTextWrongPassphrase =>
+      'Tidak bisa mendekripsi dengan passphrase itu. Tidak ada yang diubah.';
+
+  @override
+  String get syncTagNewerFormat => 'FORMAT LEBIH BARU';
+
+  @override
+  String get syncTextNewerFormat =>
+      'Salinan ini dibuat oleh Charon yang lebih baru. Perbarui aplikasinya untuk membacanya.';
+
+  @override
+  String get syncTagWeak => 'DI BAWAH BATAS AMAN';
+
+  @override
+  String get syncTextWeak =>
+      'Salinan ini memakai pengaturan kunci di bawah batas aman. Kirim ulang dari perangkat dengan aplikasi terbaru.';
+
+  @override
+  String get syncTagOlder => 'LEBIH LAMA DARI YANG DIHARAPKAN';
+
+  @override
+  String get syncTextOlder =>
+      'Salinan di server lebih lama dari yang pernah dilihat perangkat ini. Charon tidak menariknya.';
+
+  @override
+  String get syncTagFailed => 'SYNC GAGAL';
+
+  @override
+  String get syncTextBootstrapKey =>
+      'Kunci server tidak diterima oleh server sync.';
+
+  @override
+  String get syncTextAlreadyClaimed =>
+      'Server sync ini sudah terdaftar. Gabung dengan kode pasangan saja.';
+
+  @override
+  String get syncTextPairingCode =>
+      'Kode pasangan itu tidak valid atau sudah kedaluwarsa.';
+
+  @override
+  String get syncTextRateLimited =>
+      'Terlalu banyak percobaan. Tunggu semenit lalu coba lagi.';
+
+  @override
+  String get syncTextUnauthorized =>
+      'Perangkat ini tidak lagi dipasangkan dengan server sync.';
+
+  @override
+  String get syncTextTooLarge => 'Vault melebihi ukuran maksimum 1 MiB.';
 }

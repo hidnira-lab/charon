@@ -2319,4 +2319,128 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeSheetFoot => 'the server list unlocks while traffic is held';
+
+  @override
+  String get syncDeviceNameLabel => 'DEVICE NAME';
+
+  @override
+  String get syncActionPair => 'Pair this device';
+
+  @override
+  String get syncPairHint =>
+      'after pairing you can push\nprofiles, rules and settings,\nthen pull them on another device';
+
+  @override
+  String get syncActionTryAgain => 'Try again';
+
+  @override
+  String get syncActionResolve => 'Resolve';
+
+  @override
+  String get syncActionUpdates => 'Updates';
+
+  @override
+  String get syncActionUnpair => 'UNPAIR';
+
+  @override
+  String get syncLinePushing => 'pushing';
+
+  @override
+  String get syncLinePulling => 'pulling';
+
+  @override
+  String get syncLineConflict => 'paired · needs a decision';
+
+  @override
+  String get syncLineFailed => 'paired · last sync failed';
+
+  @override
+  String get syncTagPushing => 'PUSHING';
+
+  @override
+  String get syncTextPushing =>
+      'Encrypting here, then uploading. You can keep using Charon.';
+
+  @override
+  String get syncTagPulling => 'PULLING';
+
+  @override
+  String get syncTextPulling =>
+      'Downloading, then decrypting here. You can keep using Charon.';
+
+  @override
+  String get syncTagConflict => 'SERVER COPY IS NEWER';
+
+  @override
+  String get syncTextConflict =>
+      'Another device pushed after this one last synced.';
+
+  @override
+  String get syncTagUnreachable => 'SYNC SERVER UNREACHABLE';
+
+  @override
+  String syncTextUnreachable(String server) {
+    return 'Couldn\'t reach $server. Nothing was changed.';
+  }
+
+  @override
+  String get syncTagCertificate => 'CERTIFICATE NOT VERIFIED';
+
+  @override
+  String get syncTextCertificate =>
+      'The sync server\'s certificate can\'t be verified. Charon stopped before sending anything.';
+
+  @override
+  String get syncTagWrongPassphrase => 'WRONG PASSPHRASE';
+
+  @override
+  String get syncTextWrongPassphrase =>
+      'Couldn\'t decrypt with that passphrase. Nothing was changed.';
+
+  @override
+  String get syncTagNewerFormat => 'NEWER FORMAT';
+
+  @override
+  String get syncTextNewerFormat =>
+      'This copy was made by a newer Charon. Update the app to read it.';
+
+  @override
+  String get syncTagWeak => 'BELOW THE SAFE FLOOR';
+
+  @override
+  String get syncTextWeak =>
+      'This copy uses key settings below the safe floor. Push again from a device with the current app.';
+
+  @override
+  String get syncTagOlder => 'OLDER THAN EXPECTED';
+
+  @override
+  String get syncTextOlder =>
+      'The server copy is older than one this device has already seen. Charon did not pull it.';
+
+  @override
+  String get syncTagFailed => 'SYNC FAILED';
+
+  @override
+  String get syncTextBootstrapKey =>
+      'The server key was not accepted by the sync server.';
+
+  @override
+  String get syncTextAlreadyClaimed =>
+      'This sync server is already enrolled. Join with a pairing code instead.';
+
+  @override
+  String get syncTextPairingCode =>
+      'That pairing code is invalid or has expired.';
+
+  @override
+  String get syncTextRateLimited =>
+      'Too many attempts. Wait a minute and try again.';
+
+  @override
+  String get syncTextUnauthorized =>
+      'This device is no longer paired with the sync server.';
+
+  @override
+  String get syncTextTooLarge => 'Vault exceeds the 1 MiB maximum size.';
 }

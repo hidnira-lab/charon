@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:charon/sync/sync_client.dart';
 
+import 'support/fake_sync.dart';
 import 'support/fonts.dart';
 
 import 'package:charon/gen/charon/v1/charon.pb.dart';
@@ -229,12 +231,13 @@ void main() {
       await tester.pumpAndSettle();
     });
 
-    testWidgets('SyncCard opens conflict and unpair dialogs on click', (tester) async {
-      await tester.pumpWidget(_buildTestApp(child: const SyncCard()));
+    testWidgets('SyncCard opens the conflict and unpair dialogs on click', (tester) async {
+      final controller = controllerWithSync(FakeSync(SyncState.conflict));
+      await tester.pumpWidget(_buildTestApp(child: SyncCard(controller: controller)));
       await tester.pump();
 
-      // Tap Push -> opens conflict dialog
-      await tester.tap(find.text('Push'));
+      // The conflict note offers Resolve, which opens the conflict dialog.
+      await tester.tap(find.text('Resolve →'));
       await tester.pumpAndSettle();
       expect(find.text('The server copy is newer'), findsOneWidget);
       await tester.tap(find.text('Cancel'));

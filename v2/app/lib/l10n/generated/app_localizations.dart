@@ -4071,6 +4071,222 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'the server list unlocks while traffic is held'**
   String get homeSheetFoot;
+
+  /// Label of the device name field.
+  ///
+  /// In en, this message translates to:
+  /// **'DEVICE NAME'**
+  String get syncDeviceNameLabel;
+
+  /// Button that pairs the device.
+  ///
+  /// In en, this message translates to:
+  /// **'Pair this device'**
+  String get syncActionPair;
+
+  /// Three line hint under the pair button.
+  ///
+  /// In en, this message translates to:
+  /// **'after pairing you can push\nprofiles, rules and settings,\nthen pull them on another device'**
+  String get syncPairHint;
+
+  /// Sync note action.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get syncActionTryAgain;
+
+  /// Sync conflict action.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolve'**
+  String get syncActionResolve;
+
+  /// Opens the update screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Updates'**
+  String get syncActionUpdates;
+
+  /// Link that removes this device from sync.
+  ///
+  /// In en, this message translates to:
+  /// **'UNPAIR'**
+  String get syncActionUnpair;
+
+  /// Pair line while pushing.
+  ///
+  /// In en, this message translates to:
+  /// **'pushing'**
+  String get syncLinePushing;
+
+  /// Pair line while pulling.
+  ///
+  /// In en, this message translates to:
+  /// **'pulling'**
+  String get syncLinePulling;
+
+  /// Pair line on a conflict.
+  ///
+  /// In en, this message translates to:
+  /// **'paired · needs a decision'**
+  String get syncLineConflict;
+
+  /// Pair line after an error.
+  ///
+  /// In en, this message translates to:
+  /// **'paired · last sync failed'**
+  String get syncLineFailed;
+
+  /// Sync note tag.
+  ///
+  /// In en, this message translates to:
+  /// **'PUSHING'**
+  String get syncTagPushing;
+
+  /// Sync note text.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypting here, then uploading. You can keep using Charon.'**
+  String get syncTextPushing;
+
+  /// Sync note tag.
+  ///
+  /// In en, this message translates to:
+  /// **'PULLING'**
+  String get syncTagPulling;
+
+  /// Sync note text.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading, then decrypting here. You can keep using Charon.'**
+  String get syncTextPulling;
+
+  /// Sync note tag.
+  ///
+  /// In en, this message translates to:
+  /// **'SERVER COPY IS NEWER'**
+  String get syncTagConflict;
+
+  /// Sync note text.
+  ///
+  /// In en, this message translates to:
+  /// **'Another device pushed after this one last synced.'**
+  String get syncTextConflict;
+
+  /// Sync note tag.
+  ///
+  /// In en, this message translates to:
+  /// **'SYNC SERVER UNREACHABLE'**
+  String get syncTagUnreachable;
+
+  /// Sync note text.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t reach {server}. Nothing was changed.'**
+  String syncTextUnreachable(String server);
+
+  /// Sync note tag.
+  ///
+  /// In en, this message translates to:
+  /// **'CERTIFICATE NOT VERIFIED'**
+  String get syncTagCertificate;
+
+  /// Sync note text.
+  ///
+  /// In en, this message translates to:
+  /// **'The sync server\'s certificate can\'t be verified. Charon stopped before sending anything.'**
+  String get syncTextCertificate;
+
+  /// Sync note tag.
+  ///
+  /// In en, this message translates to:
+  /// **'WRONG PASSPHRASE'**
+  String get syncTagWrongPassphrase;
+
+  /// Sync note text.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t decrypt with that passphrase. Nothing was changed.'**
+  String get syncTextWrongPassphrase;
+
+  /// Sync note tag.
+  ///
+  /// In en, this message translates to:
+  /// **'NEWER FORMAT'**
+  String get syncTagNewerFormat;
+
+  /// Sync note text.
+  ///
+  /// In en, this message translates to:
+  /// **'This copy was made by a newer Charon. Update the app to read it.'**
+  String get syncTextNewerFormat;
+
+  /// Sync note tag.
+  ///
+  /// In en, this message translates to:
+  /// **'BELOW THE SAFE FLOOR'**
+  String get syncTagWeak;
+
+  /// Sync note text.
+  ///
+  /// In en, this message translates to:
+  /// **'This copy uses key settings below the safe floor. Push again from a device with the current app.'**
+  String get syncTextWeak;
+
+  /// Sync note tag.
+  ///
+  /// In en, this message translates to:
+  /// **'OLDER THAN EXPECTED'**
+  String get syncTagOlder;
+
+  /// Sync note text.
+  ///
+  /// In en, this message translates to:
+  /// **'The server copy is older than one this device has already seen. Charon did not pull it.'**
+  String get syncTextOlder;
+
+  /// Generic sync note tag for reasons the board does not name.
+  ///
+  /// In en, this message translates to:
+  /// **'SYNC FAILED'**
+  String get syncTagFailed;
+
+  /// Sync note text.
+  ///
+  /// In en, this message translates to:
+  /// **'The server key was not accepted by the sync server.'**
+  String get syncTextBootstrapKey;
+
+  /// Sync note text.
+  ///
+  /// In en, this message translates to:
+  /// **'This sync server is already enrolled. Join with a pairing code instead.'**
+  String get syncTextAlreadyClaimed;
+
+  /// Sync note text.
+  ///
+  /// In en, this message translates to:
+  /// **'That pairing code is invalid or has expired.'**
+  String get syncTextPairingCode;
+
+  /// Sync note text.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts. Wait a minute and try again.'**
+  String get syncTextRateLimited;
+
+  /// Sync note text.
+  ///
+  /// In en, this message translates to:
+  /// **'This device is no longer paired with the sync server.'**
+  String get syncTextUnauthorized;
+
+  /// Sync note text.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault exceeds the 1 MiB maximum size.'**
+  String get syncTextTooLarge;
 }
 
 class _AppLocalizationsDelegate

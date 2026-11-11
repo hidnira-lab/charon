@@ -54,7 +54,7 @@ void main() {
       expect(find.text('ACTIVE'), findsOneWidget);
       expect(find.text('Use'), findsOneWidget); // For SRV-02
       expect(find.text('> SYNC'), findsOneWidget);
-      expect(find.text('Laptop'), findsOneWidget);
+      expect(find.text('not paired yet'), findsOneWidget); // unpaired: the device name field and Pair
     });
 
     testWidgets('shows locked banner and disables deleting active server when connected', (tester) async {
@@ -225,7 +225,7 @@ void main() {
       expect(find.text('Impor link vless://'), findsOneWidget);
       expect(find.text('Tempel config'), findsOneWidget);
       expect(find.text('Pakai'), findsOneWidget);
-      expect(find.text('CADANGAN FILE'), findsOneWidget);
+      expect(find.text('NAMA PERANGKAT'), findsOneWidget);
     });
   });
 }
