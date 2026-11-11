@@ -9,6 +9,7 @@ import '../../../sync/sync_client.dart';
 import '../../../theme/theme.dart';
 import '../../dialogs/sync_conflict_dialog.dart';
 import '../../dialogs/unpair_confirm_dialog.dart';
+import '../../dialogs/sync_passphrase_dialog.dart';
 import '../../dialogs/vault_passphrase_dialog.dart';
 
 // Rail tab of Settings, where the update screen lives.
@@ -46,17 +47,11 @@ class _SyncCardState extends State<SyncCard> {
 
   HomeController get _c => widget.controller;
 
-  Future<void> _push() async {
-    final pass = await VaultPassphraseDialog.show(context, mode: VaultDialogMode.backup);
-    if (pass == null) return;
-    await _c.pushSyncVault(pass);
-  }
+  // The dialog runs the work itself and shows its steps. A conflict or another
+  // error it hands back stays in the card's own note.
+  Future<void> _push() => SyncPassphraseDialog.show(context, _c, push: true);
 
-  Future<void> _pull() async {
-    final pass = await VaultPassphraseDialog.show(context, mode: VaultDialogMode.restore);
-    if (pass == null) return;
-    await _c.pullSyncVault(pass);
-  }
+  Future<void> _pull() => SyncPassphraseDialog.show(context, _c, push: false);
 
   Future<void> _resolve() async {
     final choice = await SyncConflictDialog.show(context);

@@ -124,7 +124,8 @@ void main() {
 
       await tester.tap(find.text('Push'));
       await tester.pumpAndSettle();
-      expect(find.text('Back up to .charonvault'), findsOneWidget);
+      expect(find.text('Push to sync server'), findsOneWidget);
+      expect(find.text('SYNC PASSPHRASE'), findsOneWidget);
     });
 
     testWidgets('pushing: the note shows and Push and Pull are off', (tester) async {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../l10n/generated/app_localizations.dart';
-import '../../../theme/tokens.dart';
+import '../../l10n/generated/app_localizations.dart';
+import '../../theme/theme.dart';
 
 enum VaultDialogMode {
   backup,
@@ -57,13 +57,13 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
   }
 
   // Passphrase strength: muted, amber, blue (never red)
-  (Color, String) _getStrength(AppLocalizations l10n, String text) {
+  (Color, String) _getStrength(CharonColors colors, AppLocalizations l10n, String text) {
     if (text.length < 8) {
-      return (const Color(0xFF8A8A8A), l10n.dialogVaultStrengthShort);
+      return (colors.text3, l10n.dialogVaultStrengthShort);
     } else if (text.length < 14) {
-      return (const Color(0xFFF59E0B), l10n.dialogVaultStrengthFair);
+      return (colors.transitionText, l10n.dialogVaultStrengthFair);
     } else {
-      return (const Color(0xFF60A1D9), l10n.dialogVaultStrengthStrong);
+      return (colors.accentText, l10n.dialogVaultStrengthStrong);
     }
   }
 
@@ -88,20 +88,21 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
     final theme = Theme.of(context);
     final isLight = theme.brightness == Brightness.light;
     final l10n = AppLocalizations.of(context)!;
 
-    final cardBg = isLight ? Colors.white : const Color(0xFF1E1E1E);
-    final borderColor = isLight ? const Color(0xFFE5E7EB) : const Color(0xFF333333);
+    final cardBg = isLight ? Colors.white : colors.surface;
+    final borderColor = isLight ? const Color(0xFFE5E7EB) : colors.divider;
     final textPrimary = isLight ? const Color(0xFF111827) : Colors.white;
-    final textMuted = isLight ? const Color(0xFF6B7280) : const Color(0xFFA3A3A3);
+    final textMuted = isLight ? const Color(0xFF6B7280) : colors.text2;
 
     final isBackup = widget.mode == VaultDialogMode.backup;
     final title = isBackup ? l10n.dialogVaultBackupTitle : l10n.dialogVaultRestoreTitle;
     final actionLabel = isBackup ? l10n.dialogVaultActionBackup : l10n.dialogVaultActionRestore;
 
-    final (strengthColor, strengthLabel) = _getStrength(l10n, _passphraseCtrl.text);
+    final (strengthColor, strengthLabel) = _getStrength(colors, l10n, _passphraseCtrl.text);
 
     return Center(
       child: Material(
@@ -144,16 +145,16 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF262626),
+                      color: colors.surface2,
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: const Text(
+                    child: Text(
                       '.CHARONVAULT',
                       style: TextStyle(
                         fontFamily: CharonTokens.fontMono,
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF60A1D9),
+                        color: colors.accentText,
                       ),
                     ),
                   ),
@@ -165,10 +166,10 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF59E0B).withValues(alpha: isLight ? 0.08 : 0.12),
+                  color: colors.transitionText.withValues(alpha: isLight ? 0.08 : 0.12),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                    color: const Color(0xFFF59E0B).withValues(alpha: 0.35),
+                    color: colors.transitionText.withValues(alpha: 0.35),
                   ),
                 ),
                 child: Row(
@@ -238,7 +239,7 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: Color(0xFF60A1D9)),
+                    borderSide: BorderSide(color: colors.accentText),
                   ),
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -302,7 +303,7 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
                       child: Checkbox(
                         value: _savedConfirmed,
                         onChanged: (val) => setState(() => _savedConfirmed = val ?? false),
-                        activeColor: const Color(0xFF60A1D9),
+                        activeColor: colors.accentText,
                       ),
                     ),
                     const SizedBox(width: 8),
