@@ -2259,6 +2259,128 @@ class AppLocalizationsId extends AppLocalizations {
   String get dlgConflictOverwriteTag => 'MENIMPA';
 
   @override
+  String get dlgSyncPushKicker => 'SYNC · KIRIM';
+
+  @override
+  String get dlgSyncPullKicker => 'SYNC · TARIK';
+
+  @override
+  String get dlgSyncPushTitle => 'Kirim ke server sync';
+
+  @override
+  String get dlgSyncPullTitle => 'Tarik dari server sync';
+
+  @override
+  String get dlgSyncPassphraseLabel => 'PASSPHRASE SYNC';
+
+  @override
+  String get dlgSyncShow => 'Tampilkan passphrase';
+
+  @override
+  String get dlgSyncHide => 'Sembunyikan passphrase';
+
+  @override
+  String get dlgSyncHint => 'passphrase dipakai sekali, tidak pernah disimpan';
+
+  @override
+  String get dlgSyncPushBtn => 'Enkripsi dan kirim';
+
+  @override
+  String get dlgSyncPullBtn => 'Tarik dan dekripsi';
+
+  @override
+  String get dlgSyncPushing => 'Mengirim…';
+
+  @override
+  String get dlgSyncPulling => 'Menarik…';
+
+  @override
+  String get dlgSyncDone => 'Selesai';
+
+  @override
+  String get dlgSyncWhatUp => 'YANG DIKIRIM';
+
+  @override
+  String get dlgSyncWhatPull => 'MENGGANTI DI PERANGKAT INI';
+
+  @override
+  String dlgSyncListProfiles(int count) {
+    return '$count profil server';
+  }
+
+  @override
+  String dlgSyncListRules(int count) {
+    return '$count aturan split tunnel';
+  }
+
+  @override
+  String get dlgSyncListSettings => 'pengaturan';
+
+  @override
+  String get dlgSyncListAllProfiles => 'profil server';
+
+  @override
+  String get dlgSyncListAllRules => 'aturan split tunnel';
+
+  @override
+  String get dlgSyncPushNote1 => 'menggantikan salinan di server sync';
+
+  @override
+  String get dlgSyncPushNote2 => 'dienkripsi di perangkat ini sebelum diunggah';
+
+  @override
+  String get dlgSyncPushNote3 => 'server hanya pernah melihat ciphertext';
+
+  @override
+  String get dlgSyncPullNote1 => 'daftarmu di sini akan ditimpa';
+
+  @override
+  String get dlgSyncPullNote2 => 'hitungan kuota di perangkat ini tetap';
+
+  @override
+  String get dlgSyncBusyDerive =>
+      'menurunkan kuncimu · Argon2id, beberapa detik';
+
+  @override
+  String get dlgSyncBusyEncrypt => 'mengenkripsi di sini dengan AES 256 GCM';
+
+  @override
+  String dlgSyncBusyUpload(String host) {
+    return 'mengunggah ciphertext ke $host';
+  }
+
+  @override
+  String dlgSyncBusyDownload(String host) {
+    return 'mengunduh ciphertext dari $host';
+  }
+
+  @override
+  String get dlgSyncBusyDecrypt => 'mendekripsi di sini dengan passphrase-mu';
+
+  @override
+  String get dlgSyncPushedTitle => 'Baru saja dikirim';
+
+  @override
+  String get dlgSyncPulledTitle => 'Ditarik dan didekripsi';
+
+  @override
+  String dlgSyncPushedLine(String profiles, String rules) {
+    return '$profiles, $rules, dan pengaturan ada di server sync';
+  }
+
+  @override
+  String get dlgSyncPulledLine =>
+      'berlaku di koneksi berikutnya · tunnel yang berjalan tidak berubah';
+
+  @override
+  String get dlgSyncWrongTitle =>
+      'Tidak bisa mendekripsi. Passphrase salah, atau data di server berubah.';
+
+  @override
+  String get dlgSyncWrongLine =>
+      'tidak ada yang diganti di perangkat ini · coba lagi';
+
+  @override
   String get setupTag => 'PENYIAPAN AWAL';
 
   @override

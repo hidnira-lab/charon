@@ -2243,6 +2243,139 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dlgConflictOverwriteTag => 'REPLACES';
 
   @override
+  String get dlgSyncPushKicker => 'SYNC · PUSH';
+
+  @override
+  String get dlgSyncPullKicker => 'SYNC · PULL';
+
+  @override
+  String get dlgSyncPushTitle => 'Push to sync server';
+
+  @override
+  String get dlgSyncPullTitle => 'Pull from sync server';
+
+  @override
+  String get dlgSyncPassphraseLabel => 'SYNC PASSPHRASE';
+
+  @override
+  String get dlgSyncShow => 'Show passphrase';
+
+  @override
+  String get dlgSyncHide => 'Hide passphrase';
+
+  @override
+  String get dlgSyncHint => 'passphrase used once, never saved';
+
+  @override
+  String get dlgSyncPushBtn => 'Encrypt and push';
+
+  @override
+  String get dlgSyncPullBtn => 'Pull and decrypt';
+
+  @override
+  String get dlgSyncPushing => 'Pushing…';
+
+  @override
+  String get dlgSyncPulling => 'Pulling…';
+
+  @override
+  String get dlgSyncDone => 'Done';
+
+  @override
+  String get dlgSyncWhatUp => 'WHAT GOES UP';
+
+  @override
+  String get dlgSyncWhatPull => 'REPLACES ON THIS DEVICE';
+
+  @override
+  String dlgSyncListProfiles(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count server profiles',
+      one: '1 server profile',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dlgSyncListRules(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count split tunnel rules',
+      one: '1 split tunnel rule',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dlgSyncListSettings => 'settings';
+
+  @override
+  String get dlgSyncListAllProfiles => 'server profiles';
+
+  @override
+  String get dlgSyncListAllRules => 'split tunnel rules';
+
+  @override
+  String get dlgSyncPushNote1 => 'replaces the copy on the sync server';
+
+  @override
+  String get dlgSyncPushNote2 => 'encrypted here before upload';
+
+  @override
+  String get dlgSyncPushNote3 => 'server only ever sees ciphertext';
+
+  @override
+  String get dlgSyncPullNote1 => 'your current list here is overwritten';
+
+  @override
+  String get dlgSyncPullNote2 => 'quota counts on this device are kept';
+
+  @override
+  String get dlgSyncBusyDerive => 'deriving your key · Argon2id, a few seconds';
+
+  @override
+  String get dlgSyncBusyEncrypt => 'encrypting here with AES 256 GCM';
+
+  @override
+  String dlgSyncBusyUpload(String host) {
+    return 'uploading ciphertext to $host';
+  }
+
+  @override
+  String dlgSyncBusyDownload(String host) {
+    return 'downloading ciphertext from $host';
+  }
+
+  @override
+  String get dlgSyncBusyDecrypt => 'decrypting here with your passphrase';
+
+  @override
+  String get dlgSyncPushedTitle => 'Pushed just now';
+
+  @override
+  String get dlgSyncPulledTitle => 'Pulled and decrypted';
+
+  @override
+  String dlgSyncPushedLine(String profiles, String rules) {
+    return '$profiles, $rules and settings are on the sync server';
+  }
+
+  @override
+  String get dlgSyncPulledLine =>
+      'applies on the next connect · the current tunnel stays as is';
+
+  @override
+  String get dlgSyncWrongTitle =>
+      'Couldn\'t decrypt. Wrong passphrase, or the data was changed on the server.';
+
+  @override
+  String get dlgSyncWrongLine =>
+      'nothing on this device was replaced · try again';
+
+  @override
   String get setupTag => 'FIRST RUN SETUP';
 
   @override

@@ -2129,6 +2129,124 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dlgConflictOverwriteTag => '会覆盖';
 
   @override
+  String get dlgSyncPushKicker => '同步 · 推送';
+
+  @override
+  String get dlgSyncPullKicker => '同步 · 拉取';
+
+  @override
+  String get dlgSyncPushTitle => '推送到同步服务器';
+
+  @override
+  String get dlgSyncPullTitle => '从同步服务器拉取';
+
+  @override
+  String get dlgSyncPassphraseLabel => '同步密码短语';
+
+  @override
+  String get dlgSyncShow => '显示密码短语';
+
+  @override
+  String get dlgSyncHide => '隐藏密码短语';
+
+  @override
+  String get dlgSyncHint => '密码短语只用一次，从不保存';
+
+  @override
+  String get dlgSyncPushBtn => '加密并推送';
+
+  @override
+  String get dlgSyncPullBtn => '拉取并解密';
+
+  @override
+  String get dlgSyncPushing => '正在推送…';
+
+  @override
+  String get dlgSyncPulling => '正在拉取…';
+
+  @override
+  String get dlgSyncDone => '完成';
+
+  @override
+  String get dlgSyncWhatUp => '将上传的内容';
+
+  @override
+  String get dlgSyncWhatPull => '将替换本机上的内容';
+
+  @override
+  String dlgSyncListProfiles(int count) {
+    return '$count 个服务器配置';
+  }
+
+  @override
+  String dlgSyncListRules(int count) {
+    return '$count 条分流规则';
+  }
+
+  @override
+  String get dlgSyncListSettings => '设置';
+
+  @override
+  String get dlgSyncListAllProfiles => '服务器配置';
+
+  @override
+  String get dlgSyncListAllRules => '分流规则';
+
+  @override
+  String get dlgSyncPushNote1 => '会替换同步服务器上的副本';
+
+  @override
+  String get dlgSyncPushNote2 => '上传前在本机加密';
+
+  @override
+  String get dlgSyncPushNote3 => '服务器只会看到密文';
+
+  @override
+  String get dlgSyncPullNote1 => '你这里现有的列表会被覆盖';
+
+  @override
+  String get dlgSyncPullNote2 => '本机的流量统计会保留';
+
+  @override
+  String get dlgSyncBusyDerive => '正在派生密钥 · Argon2id，需要几秒';
+
+  @override
+  String get dlgSyncBusyEncrypt => '正在本机用 AES 256 GCM 加密';
+
+  @override
+  String dlgSyncBusyUpload(String host) {
+    return '正在把密文上传到 $host';
+  }
+
+  @override
+  String dlgSyncBusyDownload(String host) {
+    return '正在从 $host 下载密文';
+  }
+
+  @override
+  String get dlgSyncBusyDecrypt => '正在本机用你的密码短语解密';
+
+  @override
+  String get dlgSyncPushedTitle => '刚刚已推送';
+
+  @override
+  String get dlgSyncPulledTitle => '已拉取并解密';
+
+  @override
+  String dlgSyncPushedLine(String profiles, String rules) {
+    return '$profiles、$rules和设置已在同步服务器上';
+  }
+
+  @override
+  String get dlgSyncPulledLine => '下次连接时生效 · 当前隧道保持不变';
+
+  @override
+  String get dlgSyncWrongTitle => '无法解密。密码短语错误，或服务器上的数据已被改动。';
+
+  @override
+  String get dlgSyncWrongLine => '本机没有任何内容被替换 · 请重试';
+
+  @override
   String get setupTag => '首次运行设置';
 
   @override
@@ -5336,6 +5454,124 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get dlgConflictOverwriteTag => '会覆盖';
+
+  @override
+  String get dlgSyncPushKicker => '同步 · 推送';
+
+  @override
+  String get dlgSyncPullKicker => '同步 · 拉取';
+
+  @override
+  String get dlgSyncPushTitle => '推送到同步服务器';
+
+  @override
+  String get dlgSyncPullTitle => '从同步服务器拉取';
+
+  @override
+  String get dlgSyncPassphraseLabel => '同步密码短语';
+
+  @override
+  String get dlgSyncShow => '显示密码短语';
+
+  @override
+  String get dlgSyncHide => '隐藏密码短语';
+
+  @override
+  String get dlgSyncHint => '密码短语只用一次，从不保存';
+
+  @override
+  String get dlgSyncPushBtn => '加密并推送';
+
+  @override
+  String get dlgSyncPullBtn => '拉取并解密';
+
+  @override
+  String get dlgSyncPushing => '正在推送…';
+
+  @override
+  String get dlgSyncPulling => '正在拉取…';
+
+  @override
+  String get dlgSyncDone => '完成';
+
+  @override
+  String get dlgSyncWhatUp => '将上传的内容';
+
+  @override
+  String get dlgSyncWhatPull => '将替换本机上的内容';
+
+  @override
+  String dlgSyncListProfiles(int count) {
+    return '$count 个服务器配置';
+  }
+
+  @override
+  String dlgSyncListRules(int count) {
+    return '$count 条分流规则';
+  }
+
+  @override
+  String get dlgSyncListSettings => '设置';
+
+  @override
+  String get dlgSyncListAllProfiles => '服务器配置';
+
+  @override
+  String get dlgSyncListAllRules => '分流规则';
+
+  @override
+  String get dlgSyncPushNote1 => '会替换同步服务器上的副本';
+
+  @override
+  String get dlgSyncPushNote2 => '上传前在本机加密';
+
+  @override
+  String get dlgSyncPushNote3 => '服务器只会看到密文';
+
+  @override
+  String get dlgSyncPullNote1 => '你这里现有的列表会被覆盖';
+
+  @override
+  String get dlgSyncPullNote2 => '本机的流量统计会保留';
+
+  @override
+  String get dlgSyncBusyDerive => '正在派生密钥 · Argon2id，需要几秒';
+
+  @override
+  String get dlgSyncBusyEncrypt => '正在本机用 AES 256 GCM 加密';
+
+  @override
+  String dlgSyncBusyUpload(String host) {
+    return '正在把密文上传到 $host';
+  }
+
+  @override
+  String dlgSyncBusyDownload(String host) {
+    return '正在从 $host 下载密文';
+  }
+
+  @override
+  String get dlgSyncBusyDecrypt => '正在本机用你的密码短语解密';
+
+  @override
+  String get dlgSyncPushedTitle => '刚刚已推送';
+
+  @override
+  String get dlgSyncPulledTitle => '已拉取并解密';
+
+  @override
+  String dlgSyncPushedLine(String profiles, String rules) {
+    return '$profiles、$rules和设置已在同步服务器上';
+  }
+
+  @override
+  String get dlgSyncPulledLine => '下次连接时生效 · 当前隧道保持不变';
+
+  @override
+  String get dlgSyncWrongTitle => '无法解密。密码短语错误，或服务器上的数据已被改动。';
+
+  @override
+  String get dlgSyncWrongLine => '本机没有任何内容被替换 · 请重试';
 
   @override
   String get setupTag => '首次运行设置';

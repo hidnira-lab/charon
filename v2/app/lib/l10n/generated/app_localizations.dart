@@ -4037,6 +4037,222 @@ abstract class AppLocalizations {
   /// **'REPLACES'**
   String get dlgConflictOverwriteTag;
 
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'SYNC · PUSH'**
+  String get dlgSyncPushKicker;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'SYNC · PULL'**
+  String get dlgSyncPullKicker;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Push to sync server'**
+  String get dlgSyncPushTitle;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Pull from sync server'**
+  String get dlgSyncPullTitle;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'SYNC PASSPHRASE'**
+  String get dlgSyncPassphraseLabel;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Show passphrase'**
+  String get dlgSyncShow;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide passphrase'**
+  String get dlgSyncHide;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'passphrase used once, never saved'**
+  String get dlgSyncHint;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypt and push'**
+  String get dlgSyncPushBtn;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Pull and decrypt'**
+  String get dlgSyncPullBtn;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Pushing…'**
+  String get dlgSyncPushing;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Pulling…'**
+  String get dlgSyncPulling;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get dlgSyncDone;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'WHAT GOES UP'**
+  String get dlgSyncWhatUp;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'REPLACES ON THIS DEVICE'**
+  String get dlgSyncWhatPull;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 server profile} other{{count} server profiles}}'**
+  String dlgSyncListProfiles(int count);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 split tunnel rule} other{{count} split tunnel rules}}'**
+  String dlgSyncListRules(int count);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'settings'**
+  String get dlgSyncListSettings;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'server profiles'**
+  String get dlgSyncListAllProfiles;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'split tunnel rules'**
+  String get dlgSyncListAllRules;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'replaces the copy on the sync server'**
+  String get dlgSyncPushNote1;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'encrypted here before upload'**
+  String get dlgSyncPushNote2;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'server only ever sees ciphertext'**
+  String get dlgSyncPushNote3;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'your current list here is overwritten'**
+  String get dlgSyncPullNote1;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'quota counts on this device are kept'**
+  String get dlgSyncPullNote2;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'deriving your key · Argon2id, a few seconds'**
+  String get dlgSyncBusyDerive;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'encrypting here with AES 256 GCM'**
+  String get dlgSyncBusyEncrypt;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'uploading ciphertext to {host}'**
+  String dlgSyncBusyUpload(String host);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'downloading ciphertext from {host}'**
+  String dlgSyncBusyDownload(String host);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'decrypting here with your passphrase'**
+  String get dlgSyncBusyDecrypt;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Pushed just now'**
+  String get dlgSyncPushedTitle;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Pulled and decrypted'**
+  String get dlgSyncPulledTitle;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'{profiles}, {rules} and settings are on the sync server'**
+  String dlgSyncPushedLine(String profiles, String rules);
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'applies on the next connect · the current tunnel stays as is'**
+  String get dlgSyncPulledLine;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t decrypt. Wrong passphrase, or the data was changed on the server.'**
+  String get dlgSyncWrongTitle;
+
+  /// Dialog text.
+  ///
+  /// In en, this message translates to:
+  /// **'nothing on this device was replaced · try again'**
+  String get dlgSyncWrongLine;
+
   /// Tag at top of setup screen.
   ///
   /// In en, this message translates to:
