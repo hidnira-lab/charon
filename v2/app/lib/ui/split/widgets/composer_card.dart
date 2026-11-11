@@ -4,7 +4,7 @@ import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/theme.dart';
 import '../rule_validator.dart';
-import 'split_card.dart';
+import '../../common/glass_card.dart';
 
 class ComposerCard extends StatefulWidget {
   const ComposerCard({
@@ -100,7 +100,7 @@ class _ComposerCardState extends State<ComposerCard> {
         : l10n.splitConsequenceDirect;
     final modeTag = widget.isOnlyListed ? l10n.splitTagUseTunnel : l10n.splitTagGoDirect;
 
-    return SplitCard(
+    return GlassCard(
       padding: const EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,7 +146,7 @@ class _ComposerCardState extends State<ComposerCard> {
                               const SizedBox(width: 6),
                               Text(
                                 l10n.splitTypeApp,
-                                style: splitMono(colors.text3.withValues(alpha: 0.6), 11, bold: true, em: 0.06),
+                                style: monoStyle(colors.text3.withValues(alpha: 0.6), 11, bold: true, em: 0.06),
                               ),
                             ],
                           ),
@@ -169,7 +169,7 @@ class _ComposerCardState extends State<ComposerCard> {
                     Flexible(
                       child: Text(
                         modeTag,
-                        style: splitMono(colors.text3, 10, bold: true, em: 0.08),
+                        style: monoStyle(colors.text3, 10, bold: true, em: 0.08),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -194,7 +194,7 @@ class _ComposerCardState extends State<ComposerCard> {
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: Row(
                     children: [
-                      Text('>', style: splitMono(colors.accentText, 14, bold: true)),
+                      Text('>', style: monoStyle(colors.accentText, 14, bold: true)),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Semantics(
@@ -204,7 +204,7 @@ class _ComposerCardState extends State<ComposerCard> {
                             controller: _textController,
                             onChanged: (_) => _recheck(),
                             onSubmitted: (_) => _submit(),
-                            style: splitMono(colors.text, 13),
+                            style: monoStyle(colors.text, 13),
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               isDense: true,
@@ -212,7 +212,7 @@ class _ComposerCardState extends State<ComposerCard> {
                               hintText: _selectedKind == RuleKind.RULE_DOMAIN
                                   ? l10n.splitDomainPlaceholder
                                   : l10n.splitCidrPlaceholder,
-                              hintStyle: splitMono(colors.text3, 13),
+                              hintStyle: monoStyle(colors.text3, 13),
                             ),
                           ),
                         ),
@@ -238,7 +238,7 @@ class _ComposerCardState extends State<ComposerCard> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(l10n.splitAddRuleBtn, style: splitMono(colors.bg, 12, bold: true)),
+                        Text(l10n.splitAddRuleBtn, style: monoStyle(colors.bg, 12, bold: true)),
                         const SizedBox(width: 12),
                         Container(
                           width: 34,
@@ -287,7 +287,7 @@ class _ComposerCardState extends State<ComposerCard> {
                 const SizedBox(height: 3),
                 Text(
                   '> ${l10n.splitConflictHint(_conflictCoverer!)}',
-                  style: splitMono(colors.text3, 11),
+                  style: monoStyle(colors.text3, 11),
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
@@ -295,7 +295,7 @@ class _ComposerCardState extends State<ComposerCard> {
           else
             Text(
               '> $consequence',
-              style: splitMono(colors.text3, 11),
+              style: monoStyle(colors.text3, 11),
               overflow: TextOverflow.ellipsis,
             ),
         ],
@@ -326,7 +326,7 @@ class _ComposerCardState extends State<ComposerCard> {
           children: [
             Icon(icon, size: 14, color: ink),
             const SizedBox(width: 6),
-            Text(label, style: splitMono(ink, 11, bold: true, em: 0.06)),
+            Text(label, style: monoStyle(ink, 11, bold: true, em: 0.06)),
           ],
         ),
       ),

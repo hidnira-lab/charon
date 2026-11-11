@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/theme.dart';
-import 'split_card.dart';
+import '../../common/glass_card.dart';
 
 class WindowsInfoCard extends StatelessWidget {
   const WindowsInfoCard({super.key});
@@ -34,7 +34,7 @@ class WindowsInfoCard extends StatelessWidget {
               children: [
                 Text(
                   '> ${l10n.splitInfoWindowsTitle}',
-                  style: splitMono(colors.idleText, 10, bold: true, em: 0.08),
+                  style: monoStyle(colors.idleText, 10, bold: true, em: 0.08),
                 ),
                 const SizedBox(height: 6),
                 Text(

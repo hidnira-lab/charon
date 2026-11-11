@@ -4,7 +4,7 @@ import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/theme.dart';
 import '../rule_validator.dart';
-import 'split_card.dart';
+import '../../common/glass_card.dart';
 
 class RulesListCard extends StatelessWidget {
   const RulesListCard({
@@ -75,7 +75,7 @@ class RulesListCard extends StatelessWidget {
                       Flexible(
                         child: Text(
                           rule.value,
-                          style: splitMono(colors.text, 13, bold: true),
+                          style: monoStyle(colors.text, 13, bold: true),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -91,7 +91,7 @@ class RulesListCard extends StatelessWidget {
                           alignment: Alignment.center,
                           child: Text(
                             l10n.splitNextConnect,
-                            style: splitMono(colors.transitionText, 9, bold: true, em: 0.08),
+                            style: monoStyle(colors.transitionText, 9, bold: true, em: 0.08),
                           ),
                         ),
                       ],
@@ -100,7 +100,7 @@ class RulesListCard extends StatelessWidget {
                   const SizedBox(height: 1),
                   Text(
                     '> ${RuleValidator.describeRule(rule, l10n)}',
-                    style: splitMono(colors.text3, 11),
+                    style: monoStyle(colors.text3, 11),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
@@ -120,7 +120,7 @@ class RulesListCard extends StatelessWidget {
     return Semantics(
       label: l10n.splitRulesLabel,
       container: true,
-      child: SplitCard(
+      child: GlassCard(
         padding: const EdgeInsets.fromLTRB(12, 14, 12, 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -130,8 +130,8 @@ class RulesListCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('> $listName', style: splitMono(colors.text2, 10, bold: true, em: 0.08)),
-                  Text(tally, style: splitMono(colors.text3, 10)),
+                  Text('> $listName', style: monoStyle(colors.text2, 10, bold: true, em: 0.08)),
+                  Text(tally, style: monoStyle(colors.text3, 10)),
                 ],
               ),
             ),
@@ -189,7 +189,7 @@ class RulesListCard extends StatelessWidget {
                     l10n.splitNoteModeList,
                     l10n.splitNoteSync,
                   ])
-                    Text('> $note', style: splitMono(colors.text3, 10).copyWith(height: 1.5)),
+                    Text('> $note', style: monoStyle(colors.text3, 10).copyWith(height: 1.5)),
                 ],
               ),
             ),

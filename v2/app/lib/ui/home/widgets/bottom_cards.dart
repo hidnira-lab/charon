@@ -263,7 +263,7 @@ class _QuotaBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
     final q = view.quotaView();
-    final (Color fill, Color soft, Color ink) = _quotaColors(colors, q.tone);
+    final (Color fill, Color soft, Color ink) = quotaColors(colors, q.tone);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -380,7 +380,7 @@ class _QuotaEmpty extends StatelessWidget {
   }
 }
 
-(Color fill, Color soft, Color ink) _quotaColors(CharonColors c, QuotaTone tone) => switch (tone) {
+(Color fill, Color soft, Color ink) quotaColors(CharonColors c, QuotaTone tone) => switch (tone) {
       QuotaTone.ok => (c.connectedFill, c.connectedSoft, c.text2),
       QuotaTone.warn => (c.transitionFill, c.transitionSoft, c.transitionText),
       QuotaTone.crit => (c.criticalFill, c.criticalSoft, c.criticalText),
@@ -406,7 +406,7 @@ class _BottomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
-    final (Color _, Color soft, Color ink) = _quotaColors(colors, chipTone);
+    final (Color _, Color soft, Color ink) = quotaColors(colors, chipTone);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),

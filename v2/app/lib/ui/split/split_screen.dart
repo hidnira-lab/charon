@@ -10,7 +10,7 @@ import 'widgets/composer_card.dart';
 import 'widgets/pending_banner.dart';
 import 'widgets/route_map_card.dart';
 import 'widgets/rules_list_card.dart';
-import 'widgets/split_card.dart';
+import '../common/glass_card.dart';
 import 'widgets/windows_info_card.dart';
 
 class SplitScreen extends StatefulWidget {
@@ -86,7 +86,7 @@ class _SplitScreenState extends State<SplitScreen> {
                             children: [
                               Text(
                                 '> ${l10n.splitCountTitle(view.countLine)}',
-                                style: splitMono(colors.text3, 10, bold: true, em: 0.08),
+                                style: monoStyle(colors.text3, 10, bold: true, em: 0.08),
                               ),
                               const SizedBox(height: 2),
                               Text(
@@ -102,7 +102,7 @@ class _SplitScreenState extends State<SplitScreen> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 4),
-                            child: Text(subtitle, style: splitMono(colors.text3, 11)),
+                            child: Text(subtitle, style: monoStyle(colors.text3, 11)),
                           ),
                         ],
                       ),

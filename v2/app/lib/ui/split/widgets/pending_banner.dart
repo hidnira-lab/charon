@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/theme.dart';
-import 'split_card.dart';
+import '../../common/glass_card.dart';
 
 class PendingBanner extends StatelessWidget {
   const PendingBanner({
@@ -45,7 +45,7 @@ class PendingBanner extends StatelessWidget {
               foregroundColor: colors.text,
             ),
             icon: const Icon(Icons.refresh, size: 14),
-            label: Text(l10n.splitReconnectNow, style: splitMono(colors.text, 11, bold: true)),
+            label: Text(l10n.splitReconnectNow, style: monoStyle(colors.text, 11, bold: true)),
           ),
         ],
       ),

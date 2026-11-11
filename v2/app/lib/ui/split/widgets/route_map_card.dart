@@ -4,7 +4,7 @@ import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/split_view.dart';
 import '../../../theme/theme.dart';
-import 'split_card.dart';
+import '../../common/glass_card.dart';
 
 class RouteMapCard extends StatelessWidget {
   const RouteMapCard({
@@ -29,12 +29,12 @@ class RouteMapCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final colors = CharonColors.of(context);
     final isOnly = splitMode == SplitMode.SPLIT_ONLY_LISTED;
-    final label = splitMono(colors.text2, 10, bold: true, em: 0.08);
+    final label = monoStyle(colors.text2, 10, bold: true, em: 0.08);
 
     return Semantics(
       label: l10n.splitRouteMapLabel,
       container: true,
-      child: SplitCard(
+      child: GlassCard(
         padding: const EdgeInsets.all(14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -57,7 +57,7 @@ class RouteMapCard extends StatelessWidget {
               onTap: () => onSelectMode(SplitMode.SPLIT_ONLY_LISTED),
             ),
             const SizedBox(height: 8),
-            Text('> ${l10n.splitNextConnectNote}', style: splitMono(colors.text3, 10)),
+            Text('> ${l10n.splitNextConnectNote}', style: monoStyle(colors.text3, 10)),
             const SizedBox(height: 10),
             Divider(color: colors.divider, height: 1),
             const SizedBox(height: 10),
@@ -79,7 +79,7 @@ class RouteMapCard extends StatelessWidget {
                     style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: colors.text),
                   ),
                   const Spacer(),
-                  Text(l10n.splitThisUnit, style: splitMono(colors.text3, 10, bold: true, em: 0.08)),
+                  Text(l10n.splitThisUnit, style: monoStyle(colors.text3, 10, bold: true, em: 0.08)),
                 ],
               ),
             ),
@@ -107,14 +107,14 @@ class RouteMapCard extends StatelessWidget {
                                 ),
                                 child: Text(
                                   countryCode.toUpperCase(),
-                                  style: splitMono(colors.text, 8, bold: true),
+                                  style: monoStyle(colors.text, 8, bold: true),
                                 ),
                               ),
                               const SizedBox(width: 6),
                             ],
                             Text(
                               l10n.splitTunnelTag,
-                              style: splitMono(
+                              style: monoStyle(
                                 isConnected ? colors.accentText : colors.text3,
                                 10,
                                 bold: true,
@@ -139,7 +139,7 @@ class RouteMapCard extends StatelessWidget {
                         children: [
                           Icon(Icons.wifi, size: 14, color: colors.text2),
                           const SizedBox(width: 6),
-                          Text(l10n.splitDirectTag, style: splitMono(colors.text2, 10, bold: true, em: 0.08)),
+                          Text(l10n.splitDirectTag, style: monoStyle(colors.text2, 10, bold: true, em: 0.08)),
                         ],
                       ),
                       title: l10n.splitYourNetwork,
@@ -183,7 +183,7 @@ class RouteMapCard extends StatelessWidget {
             style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: colors.text),
             overflow: TextOverflow.ellipsis,
           ),
-          Text(note, style: splitMono(colors.text2, 10).copyWith(height: 1.4)),
+          Text(note, style: monoStyle(colors.text2, 10).copyWith(height: 1.4)),
           const SizedBox(height: 6),
           Divider(color: dash, height: 1),
           const SizedBox(height: 4),
@@ -194,7 +194,7 @@ class RouteMapCard extends StatelessWidget {
                 for (final e in entries)
                   Text(
                     e.text,
-                    style: splitMono(e.dim ? colors.controlBorder : colors.text, 11).copyWith(height: 1.4),
+                    style: monoStyle(e.dim ? colors.controlBorder : colors.text, 11).copyWith(height: 1.4),
                     overflow: TextOverflow.ellipsis,
                   ),
               ],
@@ -254,7 +254,7 @@ class RouteMapCard extends StatelessWidget {
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Text(desc, style: splitMono(colors.text3, 10), overflow: TextOverflow.ellipsis),
+                  Text(desc, style: monoStyle(colors.text3, 10), overflow: TextOverflow.ellipsis),
                 ],
               ),
             ),
@@ -299,7 +299,7 @@ class _Fork extends StatelessWidget {
                 border: Border.all(color: colors.controlBorder),
                 borderRadius: BorderRadius.circular(6),
               ),
-              child: Text(chip, style: splitMono(colors.text, 10, bold: true, em: 0.06)),
+              child: Text(chip, style: monoStyle(colors.text, 10, bold: true, em: 0.06)),
             ),
           ),
         ],

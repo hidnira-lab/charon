@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../theme/theme.dart';
+import '../../theme/theme.dart';
 
 /// Space Mono as the Split board uses it. [em] is the CSS letter spacing in em.
-TextStyle splitMono(Color color, double size, {bool bold = false, double em = 0}) {
+TextStyle monoStyle(Color color, double size, {bool bold = false, double em = 0}) {
   return TextStyle(
     fontFamily: CharonTokens.fontMono,
     fontSize: size,
@@ -14,8 +14,8 @@ TextStyle splitMono(Color color, double size, {bool bold = false, double em = 0}
 }
 
 /// The glass card of the Split board (same recipe as the Servers cards).
-class SplitCard extends StatelessWidget {
-  const SplitCard({super.key, required this.padding, required this.child});
+class GlassCard extends StatelessWidget {
+  const GlassCard({super.key, required this.padding, required this.child});
 
   final EdgeInsetsGeometry padding;
   final Widget child;
