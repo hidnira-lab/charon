@@ -75,11 +75,26 @@ const _eyes = {
   ],
 };
 
-/// The rows of the ghost with [eyes] drawn in (`E` is the eye colour).
-List<String> ghostRows(GhostEyes eyes) {
+/// The rows of the ghost with [eyes] drawn in (`E` is the eye colour), moved
+/// [glance] cells sideways. A [blink] leaves only a lid: the bottom row of each
+/// eye, as wide as the eye (the Home dial's eyesL and lidL).
+List<String> ghostRows(GhostEyes eyes, {int glance = 0, bool blink = false}) {
   final g = [for (final r in _body32) r.split('')];
-  for (final (x, y) in _eyes[eyes]!) {
-    g[y][x] = 'E';
+  final pts = _eyes[eyes]!;
+  if (!blink) {
+    for (final (x, y) in pts) {
+      g[y][x + glance] = 'E';
+    }
+  } else {
+    for (final left in [true, false]) {
+      final side = pts.where((p) => left ? p.$1 < 16 : p.$1 >= 16).toList();
+      if (side.isEmpty) continue;
+      final y = side.map((p) => p.$2).reduce((a, b) => a > b ? a : b);
+      final xs = side.map((p) => p.$1);
+      for (var x = xs.reduce((a, b) => a < b ? a : b); x <= xs.reduce((a, b) => a > b ? a : b); x++) {
+        g[y][x + glance] = 'E';
+      }
+    }
   }
   return [for (final r in g) r.join()];
 }

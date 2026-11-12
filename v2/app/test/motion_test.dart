@@ -86,4 +86,27 @@ void main() {
     final box = t.widget<DecoratedBox>(find.byType(DecoratedBox).last).decoration as BoxDecoration;
     expect(box.boxShadow!.single.spreadRadius, greaterThan(0));
   });
+
+  test('stepped loops wake only when a step changes', () {
+    const tw2 = (period: 3200, delay: 800, at: [0.5, 1.0]);
+    expect(nextStep(0, [tw2]), 800, reason: 'waits for its delay');
+    expect(nextStep(800, [tw2]), 2400);
+    expect(nextStep(2400, [tw2]), 4000);
+    expect(nextStep(0, [tw2, (period: 1000, delay: 0, at: [0.5, 1.0])]), 500);
+  });
+
+  testWidgets('a blink is full for half its period, then a quarter', (t) async {
+    await t.pumpWidget(host(const Blink(child: Text('dot'))));
+    expect(opacityOf(t, 'dot'), 1);
+    await t.pump(const Duration(milliseconds: 500));
+    expect(opacityOf(t, 'dot'), 0.25);
+    await t.pump(const Duration(milliseconds: 500));
+    expect(opacityOf(t, 'dot'), 1);
+  });
+
+  testWidgets('nothing blinks under reduced motion', (t) async {
+    await t.pumpWidget(host(const Blink(child: Text('dot')), reduce: true));
+    await t.pump(const Duration(milliseconds: 600));
+    expect(opacityOf(t, 'dot'), 1);
+  });
 }

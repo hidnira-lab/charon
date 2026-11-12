@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import '../../../state/ui_state.dart';
 import '../../../theme/colors.dart';
 import '../../common/ghost.dart';
+import '../../common/living_logo.dart' show logoBlinkAt, logoGlanceAt;
+import '../../common/motion.dart';
 import '../../common/pixel_sprite.dart';
+import 'home_scene.dart' show SceneAnim, sceneLook, sceneTracks;
 
 /// How the ring of 24 squares around the ghost looks (HomeDesktop board).
 enum DialRing { idle, chase, ok, crit }
@@ -63,8 +66,20 @@ List<(int, int, int)> dialPlateRows() {
   ];
 }
 
+// (x, y, twinkle clock) from the centre of the plate (STARO).
 const _stars = [
-  (-12, -6), (-9, -11), (-4, -13), (5, -12), (10, -9), (13, -3), (12, 6), (8, 11), (2, 13), (-6, 12), (-11, 8), (-14, 2), (-7, -8), (8, -6),
+  (-12, -6, 1), (-9, -11, 2), (-4, -13, 3), (5, -12, 1), (10, -9, 2), (13, -3, 3), (12, 6, 1), //
+  (8, 11, 2), (2, 13, 3), (-6, 12, 1), (-11, 8, 2), (-14, 2, 3), (-7, -8, 1), (8, -6, 3),
+];
+
+const _twinkle = [SceneAnim.tw1, SceneAnim.tw2, SceneAnim.tw3];
+
+/// The loops of the dial: the stars twinkle on the scene's clocks, and the
+/// ghost glances (6.4 s) and blinks (3.9 s) like the logo, without its delays.
+final _dialTracks = <StepTrack>[
+  ...sceneTracks.take(3),
+  (period: 6400, delay: 0, at: const [0.27, 0.41, 0.59, 0.73]),
+  (period: 3900, delay: 0, at: const [0.89, 0.93]),
 ];
 
 /// The round dial of the Home card: a dark plate with little stars, the ring of
@@ -114,7 +129,10 @@ class _HomeDialState extends State<HomeDial> with SingleTickerProviderStateMixin
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) =>
+      StepLoop(tracks: _dialTracks, builder: (context, ms) => _build(context, ms));
+
+  Widget _build(BuildContext context, int ms) {
     final look = DialLook.of(widget.state);
     final light = Theme.of(context).brightness == Brightness.light;
     return Semantics(
@@ -143,14 +161,15 @@ class _HomeDialState extends State<HomeDial> with SingleTickerProviderStateMixin
                 Positioned.fill(
                   child: AnimatedBuilder(
                     animation: _c,
-                    builder: (_, _) => CustomPaint(painter: _DialPainter(widget.state, look, _c.value * _chase.inMilliseconds / 1000, CharonColors.of(context))),
+                    builder: (_, _) => CustomPaint(
+                        painter: _DialPainter(widget.state, look, _c.value * _chase.inMilliseconds / 1000, CharonColors.of(context), ms)),
                   ),
                 ),
                 Positioned(
                   left: 36,
                   top: 36,
                   child: PixelSprite(
-                    rows: ghostRows(look.eyes),
+                    rows: ghostRows(look.eyes, glance: logoGlanceAt(ms), blink: logoBlinkAt(ms)),
                     palette: const {'W': Color(0xFFFFFFFF), 'G': Color(0xFFE1E1E1), 'E': Color(0xFF1E1E1E)},
                     scale: 3,
                     outline: light ? const Color(0xFF2A2A2A) : null,
@@ -167,7 +186,7 @@ class _HomeDialState extends State<HomeDial> with SingleTickerProviderStateMixin
 }
 
 class _DialPainter extends CustomPainter {
-  _DialPainter(this.state, this.look, this.seconds, this.colors);
+  _DialPainter(this.state, this.look, this.seconds, this.colors, this.ms);
 
   final UiState state;
   final DialLook look;
@@ -177,6 +196,9 @@ class _DialPainter extends CustomPainter {
 
   /// The ring takes the theme's inks, like the Light board does.
   final CharonColors colors;
+
+  /// Milliseconds into the twinkle loops.
+  final int ms;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -193,11 +215,14 @@ class _DialPainter extends CustomPainter {
     var i = 0;
     for (final (k, s) in _stars.indexed) {
       if (!live && k.isOdd) continue;
-      p.color = quiet
+      final ink = quiet
           ? const Color(0xFF4A3A3A)
           : !live
               ? const Color(0xFF4F5A66)
               : (i % 4 == 1 ? const Color(0xFF60A1D9) : const Color(0xFFC9D6E3));
+      // Held traffic keeps the stars still.
+      final (_, twinkle) = quiet ? (0.0, 1.0) : sceneLook(_twinkle[s.$3 - 1], ms);
+      p.color = ink.withValues(alpha: twinkle);
       canvas.drawRect(Rect.fromLTWH((21 + s.$1) * 4.0, (21 + s.$2) * 4.0, 4, 4), p);
       i++;
     }
@@ -226,5 +251,5 @@ class _DialPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_DialPainter old) => old.state != state || old.seconds != seconds || old.colors != colors;
+  bool shouldRepaint(_DialPainter old) => old.state != state || old.seconds != seconds || old.colors != colors || old.ms != ms;
 }

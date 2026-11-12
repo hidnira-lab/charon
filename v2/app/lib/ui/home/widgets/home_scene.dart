@@ -2,6 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
 
+import '../../common/motion.dart';
+
 /// The four skies of the Home scene card (HomeDesktop board): morning from 5 to
 /// 10, day to 15, dusk to 18, night otherwise.
 enum SceneTime {
@@ -22,13 +24,57 @@ enum SceneTime {
 /// One filled rectangle of the scene, in scene cells (the board's grid is
 /// 93 x 61 cells of 6 pixels).
 class SceneRect {
-  const SceneRect(this.x, this.y, this.w, this.h, this.color);
+  const SceneRect(this.x, this.y, this.w, this.h, this.color, [this.anim = SceneAnim.none]);
 
   final double x, y, w, h;
   final Color color;
+  final SceneAnim anim;
 
   @override
   String toString() => 'SceneRect($x, $y, $w, $h, $color)';
+}
+
+/// The stepped loops of the scene (HomeDesktop board): the stars twinkle on
+/// three clocks, the ripples shift 12 px and back, the clouds drift 36 px in six
+/// steps and back, the reflection shimmers.
+enum SceneAnim { none, tw1, tw2, tw3, rip, rip2, drift, shim }
+
+/// Every loop of the scene as stepped tracks, for [StepLoop].
+const sceneTracks = <({int period, int delay, List<double> at})>[
+  (period: 2400, delay: 0, at: [0.5, 1]),
+  (period: 3200, delay: 800, at: [0.5, 1]),
+  (period: 4000, delay: 1600, at: [0.5, 1]),
+  (period: 3000, delay: 0, at: [0.5, 1]),
+  (period: 3000, delay: 1500, at: [0.5, 1]),
+  (period: 3000, delay: 0, at: [1]),
+  (period: 2000, delay: 0, at: [0.5, 1]),
+];
+
+/// How a rect of [anim] looks [ms] into the loops: its shift in pixels and its opacity.
+(double dx, double opacity) sceneLook(SceneAnim anim, int ms) {
+  // tw: 1, then .25 for the second half; it waits for its delay at 1.
+  double tw(int period, int delay) => ms < delay || (ms - delay) % period < period / 2 ? 1 : 0.25;
+  double half(int period, int delay) => ms >= delay && (ms - delay) % period >= period / 2 ? 1 : 0;
+  switch (anim) {
+    case SceneAnim.none:
+      return (0, 1);
+    case SceneAnim.tw1:
+      return (0, tw(2400, 0));
+    case SceneAnim.tw2:
+      return (0, tw(3200, 800));
+    case SceneAnim.tw3:
+      return (0, tw(4000, 1600));
+    case SceneAnim.rip:
+      return (12 * half(3000, 0), 1);
+    case SceneAnim.rip2:
+      return (12 * half(3000, 1500), 1);
+    case SceneAnim.drift:
+      // 18 s each way in steps of 6 px, there and back (alternate).
+      final k = (ms ~/ 3000) % 12;
+      return ((k < 6 ? k : 12 - k) * 6.0, 1);
+    case SceneAnim.shim:
+      return (0, ms % 2000 < 1000 ? 0.95 : 0.45);
+  }
 }
 
 const sceneWidth = 93;
@@ -63,12 +109,12 @@ class _Cfg {
   final List<(String, double, int)> clouds; // model, x fraction, y
   final ({double f, int y, int r, String c, String h})? sun;
   final ({double f, int y, int r, String c, String sh})? moon;
-  final List<(int, int, bool)> stars; // x, y, twinkles
+  final List<(int, int, int)> stars; // x, y, twinkle clock (0 for none)
 }
 
 const _stars = [
-  (4, 3, true), (11, 9, true), (19, 2, false), (25, 7, true), (32, 3, false), (38, 11, true), (55, 3, true), //
-  (60, 10, false), (7, 14, true), (22, 13, false), (53, 15, true), (30, 16, true), (41, 2, false), (15, 6, false),
+  (4, 3, 1), (11, 9, 2), (19, 2, 0), (25, 7, 3), (32, 3, 0), (38, 11, 1), (55, 3, 2), //
+  (60, 10, 0), (7, 14, 3), (22, 13, 0), (53, 15, 1), (30, 16, 2), (41, 2, 0), (15, 6, 0),
 ];
 
 final _nightStars = [
@@ -137,13 +183,12 @@ const _cloudShapes = {
 /// The scene of [time] as filled rectangles, drawn in this order. It is the
 /// board's generator ported as it is: the sky in bands that dither where two
 /// colours meet, the sun or the moon, clouds, two ridges, the water with the
-/// reflection and the ripples. It stays still; the board's drifting clouds and
-/// twinkling stars are decoration.
+/// reflection and the ripples. Each rect carries the loop it moves with.
 List<SceneRect> sceneRects(SceneTime time) {
   final cfg = _configs[time]!;
   final out = <SceneRect>[];
-  void px(num x, num y, num w, num h, String c) {
-    if (w > 0 && h > 0) out.add(SceneRect(x.toDouble(), y.toDouble(), w.toDouble(), h.toDouble(), _c(c)));
+  void px(num x, num y, num w, num h, String c, [SceneAnim anim = SceneAnim.none]) {
+    if (w > 0 && h > 0) out.add(SceneRect(x.toDouble(), y.toDouble(), w.toDouble(), h.toDouble(), _c(c), anim));
   }
 
   // A row where two colours alternate every cell: the dither between two bands.
@@ -154,14 +199,14 @@ List<SceneRect> sceneRects(SceneTime time) {
     }
   }
 
-  void runs(List<int> xs, int y, String c) {
+  void runs(List<int> xs, int y, String c, [SceneAnim anim = SceneAnim.none]) {
     var i = 0;
     while (i < xs.length) {
       var j = i;
       while (j + 1 < xs.length && xs[j + 1] == xs[j] + 1) {
         j++;
       }
-      px(xs[i], y, xs[j] - xs[i] + 1, 1, c);
+      px(xs[i], y, xs[j] - xs[i] + 1, 1, c, anim);
       i = j + 1;
     }
   }
@@ -192,7 +237,7 @@ List<SceneRect> sceneRects(SceneTime time) {
     }
   }
   for (final s in cfg.stars) {
-    if (s.$2 < _horizon - 6) px(s.$1, s.$2, 1, 1, s.$3 ? '#EDEDED' : '#8A8A8A');
+    if (s.$2 < _horizon - 6) px(s.$1, s.$2, 1, 1, s.$3 > 0 ? '#EDEDED' : '#8A8A8A', const [SceneAnim.none, SceneAnim.tw1, SceneAnim.tw2, SceneAnim.tw3][s.$3]);
   }
   final sun = cfg.sun;
   if (sun != null) {
@@ -216,8 +261,8 @@ List<SceneRect> sceneRects(SceneTime time) {
         if (row[xx] == 'X') body.add(ox + xx);
         if (row[xx] == 'S') shade.add(ox + xx);
       }
-      runs(body, y + yy, cfg.cloud[0]);
-      runs(shade, y + yy, cfg.cloud[1]);
+      runs(body, y + yy, cfg.cloud[0], SceneAnim.drift);
+      runs(shade, y + yy, cfg.cloud[1], SceneAnim.drift);
     }
   }
 
@@ -247,15 +292,17 @@ List<SceneRect> sceneRects(SceneTime time) {
   final rx = ((sun?.f ?? moon!.f) * sceneWidth).round();
   const widths = [6, 4, 5, 3, 4, 2, 3, 1];
   for (final (k, w) in widths.indexed) {
-    px(rx - (w / 2).floor(), _horizon + 1 + k * 2, w, 1, cfg.refl);
+    px(rx - (w / 2).floor(), _horizon + 1 + k * 2, w, 1, cfg.refl, SceneAnim.shim);
   }
   for (var k = 0; k < 16; k++) {
-    px((k * 23 + (cfg.seed * 7).round()) % (sceneWidth - 8) + 2, _horizon + 2 + (k * 7) % 18, 2 + k % 3, 1, cfg.ripple);
+    px((k * 23 + (cfg.seed * 7).round()) % (sceneWidth - 8) + 2, _horizon + 2 + (k * 7) % 18, 2 + k % 3, 1, cfg.ripple,
+        k.isOdd ? SceneAnim.rip : SceneAnim.rip2);
   }
   return out;
 }
 
-/// The scene of the Home card, 558 x 366 pixels (93 x 61 cells of 6).
+/// The scene of the Home card, 558 x 366 pixels (93 x 61 cells of 6), with its
+/// stepped loops running.
 class HomeScene extends StatelessWidget {
   const HomeScene({super.key, required this.time});
 
@@ -263,30 +310,37 @@ class HomeScene extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ExcludeSemantics(
-        child: CustomPaint(
-          size: const Size(sceneWidth * sceneCell, sceneHeight * sceneCell),
-          painter: _ScenePainter(time),
+        child: StepLoop(
+          tracks: sceneTracks,
+          builder: (context, ms) => CustomPaint(
+            size: const Size(sceneWidth * sceneCell, sceneHeight * sceneCell),
+            painter: _ScenePainter(time, ms),
+          ),
         ),
       );
 }
 
 class _ScenePainter extends CustomPainter {
-  _ScenePainter(this.time) : rects = sceneRects(time);
+  _ScenePainter(this.time, this.ms) : rects = _cache[time] ??= sceneRects(time);
+
+  static final _cache = <SceneTime, List<SceneRect>>{};
 
   final SceneTime time;
+  final int ms;
   final List<SceneRect> rects;
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..isAntiAlias = false;
     for (final r in rects) {
+      final (dx, opacity) = sceneLook(r.anim, ms);
       canvas.drawRect(
-        Rect.fromLTWH(r.x * sceneCell, r.y * sceneCell, r.w * sceneCell, r.h * sceneCell + (r.w >= 6 ? 1 : 0)),
-        paint..color = r.color,
+        Rect.fromLTWH(r.x * sceneCell + dx, r.y * sceneCell, r.w * sceneCell, r.h * sceneCell + (r.w >= 6 ? 1 : 0)),
+        paint..color = opacity == 1 ? r.color : r.color.withValues(alpha: opacity),
       );
     }
   }
 
   @override
-  bool shouldRepaint(_ScenePainter old) => old.time != time;
+  bool shouldRepaint(_ScenePainter old) => old.time != time || old.ms != ms;
 }

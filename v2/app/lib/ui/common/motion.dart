@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -301,4 +302,108 @@ class _PulseState extends State<Pulse> with SingleTickerProviderStateMixin {
       },
     );
   }
+}
+
+/// One stepped CSS loop (steps(1), infinite): [period] ms long, starting after
+/// [delay] ms, changing at the [at] fractions of each period.
+typedef StepTrack = ({int period, int delay, List<double> at});
+
+/// The next moment after [ms] at which any of [tracks] changes.
+int nextStep(int ms, List<StepTrack> tracks) {
+  var best = 1 << 40;
+  for (final t in tracks) {
+    final local = ms - t.delay;
+    if (local < 0) {
+      if (t.delay < best) best = t.delay;
+      continue;
+    }
+    final base = local - local % t.period;
+    for (final k in [0, 1]) {
+      for (final f in t.at) {
+        final b = t.delay + base + k * t.period + (f * t.period).round();
+        if (b > ms && b < best) best = b;
+      }
+    }
+  }
+  return best;
+}
+
+/// Rebuilds at the moments the stepped [tracks] change, with the milliseconds
+/// since it appeared. A timer waits for the next change, so nothing runs
+/// between steps and tests can still settle. Still at 0 under reduced motion
+/// or when not [on].
+class StepLoop extends StatefulWidget {
+  const StepLoop({super.key, required this.tracks, required this.builder, this.on = true});
+
+  final List<StepTrack> tracks;
+  final Widget Function(BuildContext context, int ms) builder;
+  final bool on;
+
+  @override
+  State<StepLoop> createState() => _StepLoopState();
+}
+
+class _StepLoopState extends State<StepLoop> {
+  int _ms = 0;
+  Timer? _timer;
+
+  bool get _running => widget.on && !(MediaQuery.maybeDisableAnimationsOf(context) ?? false);
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _restart();
+  }
+
+  @override
+  void didUpdateWidget(StepLoop old) {
+    super.didUpdateWidget(old);
+    if (old.on != widget.on) _restart();
+  }
+
+  void _restart() {
+    _timer?.cancel();
+    _timer = null;
+    if (!_running) {
+      _ms = 0;
+      return;
+    }
+    _schedule();
+  }
+
+  void _schedule() {
+    final next = nextStep(_ms, widget.tracks);
+    _timer = Timer(Duration(milliseconds: next - _ms), () {
+      if (!mounted) return;
+      setState(() => _ms = next);
+      _schedule();
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.builder(context, _ms);
+}
+
+/// The boards' blink: full for the first half of [period], then [low] (live
+/// dots, the log cursor, a waiting dot).
+class Blink extends StatelessWidget {
+  const Blink({super.key, required this.child, this.period = 1000, this.low = 0.25, this.on = true});
+
+  final Widget child;
+  final int period;
+  final double low;
+  final bool on;
+
+  @override
+  Widget build(BuildContext context) => StepLoop(
+        on: on,
+        tracks: [(period: period, delay: 0, at: const [0.5, 1])],
+        builder: (context, ms) => Opacity(opacity: ms % period < period / 2 ? 1 : low, child: child),
+      );
 }

@@ -278,8 +278,9 @@ class _SetupScreenState extends State<SetupScreen> {
       backgroundColor: colors.bg,
       body: Ambient(
         time: day ? SceneTime.day : SceneTime.night,
-        child: CustomPaint(
-          painter: AmbientPainter(colors.bg, AmbientPainter.setup(day, colors)),
+        child: AmbientLayer(
+          lights: AmbientPainter.setup(day, colors),
+          origin: const Offset(0.20, 0.25),
           child: Center(
         child: SizedBox(
           width: 1024,

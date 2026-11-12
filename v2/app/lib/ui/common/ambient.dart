@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../theme/theme.dart';
 import '../home/widgets/home_scene.dart' show SceneTime;
+import 'motion.dart';
 
 /// The four tints of the window light at each time of day (the boards' AP: the sky,
 /// the sun or moon, the deep water and the near water of the Home scene).
@@ -53,8 +54,8 @@ class PageBackdrop extends StatelessWidget {
     final t = time ?? SceneTime.ofHour(DateTime.now().hour);
     return Ambient(
       time: t,
-      child: CustomPaint(
-        painter: AmbientPainter(colors.bg, AmbientPainter.page(t, colors.lt, home: home)),
+      child: AmbientLayer(
+        lights: AmbientPainter.page(t, colors.lt, home: home),
         child: BackdropGroup(child: child),
       ),
     );
@@ -65,10 +66,55 @@ class PageBackdrop extends StatelessWidget {
 /// [color] at the centre fading out at 72 %.
 typedef AmbientLight = ({int w, int h, int x, int y, Color color});
 
+/// The window colour and [lights] under [child]. The light breathes (amb): 11 s
+/// each way, in quarter second steps so the glass above is not blurred again on
+/// every frame, growing around [origin] (fractions of the window). Under reduced
+/// motion it rests at full strength, as the board's does.
+class AmbientLayer extends StatelessWidget {
+  const AmbientLayer({super.key, required this.lights, this.origin = const Offset(0.35, 0.30), required this.child});
+
+  final List<AmbientLight> lights;
+  final Offset origin;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final bg = CharonColors.of(context).bg;
+    final still = MediaQuery.maybeDisableAnimationsOf(context) ?? false;
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        StepLoop(
+          tracks: [ambientBreath],
+          builder: (context, ms) => CustomPaint(
+            painter: AmbientPainter(bg, lights, breath: still ? 1 : ambientBreathAt(ms), origin: origin),
+          ),
+        ),
+        child,
+      ],
+    );
+  }
+}
+
+/// The stepped clock of the breathing light: a 22 s loop, a step every 250 ms.
+final StepTrack ambientBreath = (period: 22000, delay: 0, at: [for (var k = 1; k <= 88; k++) k / 88]);
+
+/// How far the light has breathed in at [ms], 0 to 1: 11 s in, 11 s out, eased.
+double ambientBreathAt(int ms) {
+  final p = (ms % 22000) / 11000;
+  return Curves.easeInOut.transform(p <= 1 ? p : 2 - p);
+}
+
 class AmbientPainter extends CustomPainter {
-  AmbientPainter(this.bg, this.lights);
+  AmbientPainter(this.bg, this.lights, {this.breath = 0, this.origin = const Offset(0.35, 0.30)});
+
+  final Offset origin;
 
   final Color bg;
+
+  /// 0 to 1: the light grows 4 % around 35 % 30 % of the window and goes from
+  /// 82 % to full strength.
+  final double breath;
 
   /// Topmost first, as the boards list them.
   final List<AmbientLight> lights;
@@ -106,6 +152,11 @@ class AmbientPainter extends CustomPainter {
     // The light is laid out on the 1024 x 768 window, centred in whatever is around it.
     canvas.save();
     canvas.translate((size.width - 1024) / 2, (size.height - 768) / 2);
+    final grow = 1 + 0.04 * breath;
+    canvas.translate(1024 * origin.dx, 768 * origin.dy);
+    canvas.scale(grow);
+    canvas.translate(-1024 * origin.dx, -768 * origin.dy);
+    final strength = 0.82 + 0.18 * breath;
     for (final l in lights.reversed) {
       canvas.save();
       canvas.translate(l.x.toDouble(), l.y.toDouble());
@@ -114,7 +165,9 @@ class AmbientPainter extends CustomPainter {
       canvas.drawCircle(
         Offset.zero,
         r * 0.72,
-        Paint()..shader = ui.Gradient.radial(Offset.zero, r, [l.color, l.color.withValues(alpha: 0)], const [0, 0.72]),
+        Paint()
+          ..shader = ui.Gradient.radial(
+              Offset.zero, r, [l.color.withValues(alpha: l.color.a * strength), l.color.withValues(alpha: 0)], const [0, 0.72]),
       );
       canvas.restore();
     }
@@ -122,7 +175,7 @@ class AmbientPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(AmbientPainter old) => old.bg != bg || !_same(old.lights, lights);
+  bool shouldRepaint(AmbientPainter old) => old.bg != bg || old.breath != breath || old.origin != origin || !_same(old.lights, lights);
 
   static bool _same(List<AmbientLight> a, List<AmbientLight> b) {
     if (a.length != b.length) return false;
