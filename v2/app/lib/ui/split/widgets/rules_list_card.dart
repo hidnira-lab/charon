@@ -5,6 +5,9 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/theme.dart';
 import '../rule_validator.dart';
 import '../../common/glass_card.dart';
+import '../../common/ghost.dart';
+import '../../common/pixel_sprite.dart';
+import '../../tray/tray_art.dart';
 
 class RulesListCard extends StatelessWidget {
   const RulesListCard({
@@ -154,7 +157,12 @@ class RulesListCard extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.alt_route, size: 40, color: colors.controlBorder),
+                          PixelSprite(
+                            rows: ghost16Rows(GhostEyes.focused),
+                            palette: logoColors,
+                            scale: 3,
+                            outline: Theme.of(context).brightness == Brightness.light ? const Color(0xFF2A2A2A) : null,
+                          ),
                           const SizedBox(height: 10),
                           Text(
                             l10n.splitNoRulesTitle,
