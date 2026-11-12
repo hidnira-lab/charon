@@ -138,6 +138,7 @@ class _RailItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
+    final light = Theme.of(context).brightness == Brightness.light;
 
     return Tooltip(
       message: tooltip,
@@ -149,17 +150,18 @@ class _RailItem extends StatelessWidget {
           height: 44.0,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14.0),
+            // The active tile is a dark pill on Dark and a white one on Light (HomeDesktopLight).
             gradient: isActive
-                ? const LinearGradient(
+                ? LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Color(0xFF2C2C2C), Color(0xFF111111)],
+                    colors: light ? const [Color(0xFFFFFFFF), Color(0xFFF1F1F1)] : const [Color(0xFF2C2C2C), Color(0xFF111111)],
                   )
                 : null,
             boxShadow: isActive
                 ? [
                     BoxShadow(
-                      color: Colors.white.withValues(alpha: 0.2),
+                      color: light ? const Color(0x08000000) : Colors.white.withValues(alpha: 0.2),
                       spreadRadius: 0.5,
                       blurRadius: 1.0,
                     )
@@ -169,7 +171,7 @@ class _RailItem extends StatelessWidget {
           child: Icon(
             icon,
             size: 22.0,
-            color: isActive ? Colors.white : colors.text2,
+            color: isActive ? (light ? const Color(0xFF141414) : Colors.white) : colors.text2,
           ),
         ),
       ),

@@ -105,7 +105,7 @@ class TimePlaceCard extends StatelessWidget {
                                 Icon(
                                   Icons.location_on_rounded,
                                   size: 16.0,
-                                  color: colors.accent,
+                                  color: colors.accentText,
                                 ),
                                 const SizedBox(width: CharonSpacing.s2),
                                 Expanded(

@@ -304,7 +304,7 @@ class _SyncCardState extends State<SyncCard> {
                 ),
                 child: Row(
                   children: [
-                    Text('>', style: mono(14, weight: FontWeight.w700, color: colors.accent)),
+                    Text('>', style: mono(14, weight: FontWeight.w700, color: colors.accentText)),
                     const SizedBox(width: 8),
                     Expanded(
                       child: TextField(

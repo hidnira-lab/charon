@@ -447,7 +447,7 @@ class _BottomCard extends StatelessWidget {
                   link,
                   style: CharonTypography.caption.copyWith(
                     fontFamily: CharonFontFamilies.spaceMono,
-                    color: colors.accent,
+                    color: colors.accentText,
                     fontWeight: FontWeight.w700,
                     fontSize: 11.0,
                   ),

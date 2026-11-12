@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../../state/ui_state.dart';
+import '../../../theme/colors.dart';
 import '../../common/ghost.dart';
 import '../../common/pixel_sprite.dart';
 
@@ -142,7 +143,7 @@ class _HomeDialState extends State<HomeDial> with SingleTickerProviderStateMixin
                 Positioned.fill(
                   child: AnimatedBuilder(
                     animation: _c,
-                    builder: (_, _) => CustomPaint(painter: _DialPainter(widget.state, look, _c.value * _chase.inMilliseconds / 1000)),
+                    builder: (_, _) => CustomPaint(painter: _DialPainter(widget.state, look, _c.value * _chase.inMilliseconds / 1000, CharonColors.of(context))),
                   ),
                 ),
                 Positioned(
@@ -166,13 +167,16 @@ class _HomeDialState extends State<HomeDial> with SingleTickerProviderStateMixin
 }
 
 class _DialPainter extends CustomPainter {
-  _DialPainter(this.state, this.look, this.seconds);
+  _DialPainter(this.state, this.look, this.seconds, this.colors);
 
   final UiState state;
   final DialLook look;
 
   /// Seconds into the 1.2 s chase.
   final double seconds;
+
+  /// The ring takes the theme's inks, like the Light board does.
+  final CharonColors colors;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -200,20 +204,20 @@ class _DialPainter extends CustomPainter {
     // The ring.
     final squares = dialRingSquares();
     for (final (i, o) in squares.indexed) {
-      var color = const Color(0xFF737373);
+      var color = colors.controlBorder;
       var opacity = 1.0;
       switch (look.ring) {
         case DialRing.idle:
           opacity = 0.6;
         case DialRing.chase:
-          color = const Color(0xFFE3B579);
+          color = colors.transitionText;
           // Each square starts the 1.2 s fade a little earlier than the next.
           final phase = ((seconds + (24 - i) / 24 * 1.2) % 1.2) / 1.2;
           opacity = phase < 0.35 ? 1 - (1 - 0.18) * phase / 0.35 : 0.18;
         case DialRing.ok:
-          color = const Color(0xFF60A1D9);
+          color = colors.accentText;
         case DialRing.crit:
-          color = const Color(0xFFDC7C7D);
+          color = colors.criticalFill;
           opacity = i.isOdd ? 0.25 : 1;
       }
       p.color = color.withValues(alpha: opacity);
@@ -222,5 +226,5 @@ class _DialPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_DialPainter old) => old.state != state || old.seconds != seconds;
+  bool shouldRepaint(_DialPainter old) => old.state != state || old.seconds != seconds || old.colors != colors;
 }

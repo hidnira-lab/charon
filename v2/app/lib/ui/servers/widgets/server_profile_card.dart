@@ -120,7 +120,7 @@ class ServerProfileCard extends StatelessWidget {
                                 fontSize: 10,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: 0.08,
-                                color: colors.accent,
+                                color: colors.accentText,
                               ),
                             ),
                           ],
