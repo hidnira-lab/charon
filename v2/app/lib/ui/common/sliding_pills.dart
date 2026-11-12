@@ -18,6 +18,7 @@ class SlidingPills extends StatefulWidget {
     this.track,
     this.pill,
     this.ink,
+    this.inkOff,
     this.trackRadius = 10,
     this.pillRadius = 7,
     this.padding = const EdgeInsets.all(3),
@@ -47,6 +48,9 @@ class SlidingPills extends StatefulWidget {
 
   /// The picked label, #121212 or #1A1A1A by default (SEGC.ink); the others are text2.
   final Color? ink;
+
+  /// The other labels, text2 by default.
+  final Color? inkOff;
   final double trackRadius, pillRadius;
   final EdgeInsets padding;
   final double gap;
@@ -125,7 +129,7 @@ class _SlidingPillsState extends State<SlidingPills> {
                           borderRadius: BorderRadius.circular(widget.pillRadius),
                         ),
                         child: TweenAnimationBuilder<Color?>(
-                          tween: ColorTween(end: i == widget.selected ? inkOn : colors.text2),
+                          tween: ColorTween(end: i == widget.selected ? inkOn : (widget.inkOff ?? colors.text2)),
                           duration: tint,
                           curve: CharonCurves.entry,
                           builder: (context, ink, _) => widget.itemBuilder(context, i, i == widget.selected, ink!),

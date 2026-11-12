@@ -11,6 +11,8 @@ import '../../common/glass_card.dart';
 import '../../dialogs/dialog_shell.dart';
 import 'server_import_parts.dart';
 import '../../common/pixel_icon.dart';
+import '../../common/sliding_pills.dart';
+import '../../common/motion.dart';
 
 /// What the Add server dialog hands back.
 sealed class AddServerOutcome {
@@ -164,8 +166,14 @@ class _AddServerDialogState extends State<AddServerDialog> {
           pasteLabel: l10n.dlgAddTabPaste,
           onPick: _pickTab,
         ),
-        if (!_json)
-          DialogField(
+        // The field of the new tab rises 4 px in, 220 ms after 60 ms (pFA).
+        RiseOnChange(
+          value: _json,
+          offset: const Offset(0, 4),
+          duration: const Duration(milliseconds: 220),
+          delay: const Duration(milliseconds: 60),
+          child: !_json
+              ? DialogField(
             label: l10n.dlgAddLinkLabel,
             semanticLabel: l10n.dlgAddLinkField,
             controller: _link,
@@ -175,8 +183,7 @@ class _AddServerDialogState extends State<AddServerDialog> {
             warn: _read.hasError,
             onChanged: (_) => _recompute(),
           )
-        else
-          ServerJsonEditor(
+              : ServerJsonEditor(
             controller: _config,
             label: l10n.dlgAddJsonLabel,
             semanticLabel: l10n.dlgAddJsonField,
@@ -187,6 +194,7 @@ class _AddServerDialogState extends State<AddServerDialog> {
             onChanged: (_) => _recompute(),
             onPaste: _paste,
           ),
+        ),
         if (_read.hasError) ImportErrorLines(_errorLines(l10n)),
         if (s != null && !_read.isDuplicate)
           ServerPreview(
@@ -235,51 +243,36 @@ class _Tabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
-    Widget tab(bool isJson, String icon, String text) {
-      final on = json == isJson;
-      return Expanded(
-        child: Semantics(
-          inMutuallyExclusiveGroup: true,
-          checked: on,
-          button: true,
-          label: text,
-          excludeSemantics: true,
-          child: InkWell(
-            onTap: () => onPick(isJson),
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              height: 38,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: on ? colors.surface2 : Colors.transparent,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  PixelIcon(icon, size: 18, color: on ? colors.text : colors.text3),
-                  const SizedBox(width: 8),
-                  Text(text, style: monoStyle(on ? colors.text : colors.text3, 12, bold: true)),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-
+    const icons = [PixelIcons.link, PixelIcons.clipboard];
+    final labels = [linkLabel, pasteLabel];
+    // The dark pill slides to the picked tab (pSA) and the words tween (pCA).
     return Semantics(
       label: label,
       container: true,
-      child: Container(
+      child: SlidingPills(
+        count: 2,
+        stretch: true,
+        selected: json ? 1 : 0,
+        track: colors.bg,
+        trackRadius: 14,
+        pill: colors.surface2,
+        pillRadius: 10,
         padding: const EdgeInsets.all(4),
-        decoration: BoxDecoration(color: colors.bg, borderRadius: BorderRadius.circular(14)),
-        child: Row(
-          children: [
-            tab(false, PixelIcons.link, linkLabel),
-            const SizedBox(width: 4),
-            tab(true, PixelIcons.clipboard, pasteLabel),
-          ],
+        gap: 4,
+        ink: colors.text,
+        inkOff: colors.text3,
+        semanticLabels: labels,
+        onSelect: (i) => onPick(i == 1),
+        itemBuilder: (context, i, on, ink) => SizedBox(
+          height: 38,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              PixelIcon(icons[i], size: 18, color: ink),
+              const SizedBox(width: 8),
+              Text(labels[i], style: monoStyle(ink, 12, bold: true)),
+            ],
+          ),
         ),
       ),
     );
