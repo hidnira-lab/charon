@@ -35,6 +35,65 @@ void main() {
       }
     });
 
+    test('every pixel icon of the boards reads and stays inside the 24 pixel box', () {
+      for (final d in [
+        PixelIcons.power,
+        PixelIcons.close,
+        PixelIcons.plus,
+        PixelIcons.server,
+        PixelIcons.window,
+        PixelIcons.copy,
+        PixelIcons.check,
+        PixelIcons.reload,
+        PixelIcons.arrow,
+        PixelIcons.block,
+        PixelIcons.book,
+        PixelIcons.chev,
+        PixelIcons.clipboard,
+        PixelIcons.dns,
+        PixelIcons.download,
+        PixelIcons.edit,
+        PixelIcons.ext,
+        PixelIcons.eye,
+        PixelIcons.eyeOff,
+        PixelIcons.globe,
+        PixelIcons.hash,
+        PixelIcons.house,
+        PixelIcons.laptop,
+        PixelIcons.link,
+        PixelIcons.lock,
+        PixelIcons.moon,
+        PixelIcons.phone,
+        PixelIcons.qr,
+        PixelIcons.service,
+        PixelIcons.shield,
+        PixelIcons.sun,
+        PixelIcons.trash,
+        PixelIcons.tray,
+        PixelIcons.upload,
+        PixelIcons.wifi,
+        PixelIcons.winq,
+        PixelIcons.wrench,
+        PixelIcons.minimize,
+        PixelIcons.navHome,
+        PixelIcons.navServers,
+        PixelIcons.navSplit,
+        PixelIcons.navTelemetry,
+        PixelIcons.navSettings,
+        PixelIcons.expand,
+        PixelIcons.collapse,
+        PixelIcons.file,
+        PixelIcons.chevRight,
+        PixelIcons.adapter,
+        PixelIcons.monitor,
+        PixelIcons.share,
+        PixelIcons.arrowDown,
+      ]) {
+        final b = pixelPath(d).getBounds();
+        expect(const Rect.fromLTRB(0, 0, 24, 24).contains(b.topLeft) && b.right <= 24 && b.bottom <= 24, isTrue, reason: d);
+      }
+    });
+
     test('a curve is refused loudly, not drawn wrong', () {
       expect(() => pixelPath('M0 0C1 1 2 2 3 3z'), throwsFormatException);
     });
