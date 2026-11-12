@@ -145,7 +145,7 @@ void main() {
       s.hold!.complete();
       await tester.pump();
       await tester.pump();
-      expect(s.ran, ['sc.exe start charon']);
+      expect(s.ran, ['sc.exe start charon-service']);
       expect(find.text('SERVICE RUNNING'), findsOneWidget);
       expect(find.text('The service is running'), findsOneWidget);
       expect(find.text('Charon is back. Your tunnel and kill switch keep working when this window is closed.'), findsOneWidget);
@@ -185,7 +185,7 @@ void main() {
       s.hold!.complete();
       await tester.pump();
       await tester.pump();
-      expect(s.ran, ['sc.exe start charon', 'charon-installer.exe']);
+      expect(s.ran, ['sc.exe start charon-service', 'charon-installer.exe']);
       expect(find.text('The service is running'), findsOneWidget);
     });
   });

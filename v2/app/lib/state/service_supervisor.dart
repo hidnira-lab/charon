@@ -31,6 +31,10 @@ Future<int> _defaultRun(String exe, List<String> args) async => (await Process.r
 /// only wants it running, that is a success.
 const _errorServiceAlreadyRunning = 1056;
 
+/// The name the installer registers the service under (`ServiceName` in
+/// `platform/windows/service`). `sc.exe` finds the service by this name.
+const charonServiceName = 'charon-service';
+
 /// The life of the Charon service as the window sees it: is it there, is it
 /// being started or repaired, did that work. It keeps asking for the pipe every
 /// [retryEvery] while the service is away, so the window comes back by itself
@@ -146,7 +150,7 @@ class ServiceSupervisor extends ChangeNotifier {
     var ok = false;
     try {
       if (_windows) {
-        final code = await _run('sc.exe', ['start', 'charon']);
+        final code = await _run('sc.exe', ['start', charonServiceName]);
         ok = code == 0 || code == _errorServiceAlreadyRunning;
       } else {
         ok = true;
@@ -218,8 +222,8 @@ class ServiceSupervisor extends ChangeNotifier {
       if (_windows) {
         // The installing user may start the service but not stop it (service
         // SDDL), so stopping asks for administrator rights; starting does not.
-        await _runAdmin('sc.exe', ['stop', 'charon']);
-        await _run('sc.exe', ['start', 'charon']);
+        await _runAdmin('sc.exe', ['stop', charonServiceName]);
+        await _run('sc.exe', ['start', charonServiceName]);
       }
     } catch (_) {
     } finally {

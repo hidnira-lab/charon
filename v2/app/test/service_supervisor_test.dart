@@ -101,7 +101,7 @@ void main() {
       final states = <bool>[];
       r.sup.addListener(() => states.add(r.sup.isStarting));
       await r.sup.start();
-      expect(r.ran, ['sc.exe start charon']);
+      expect(r.ran, ['sc.exe start charon-service']);
       expect(r.sup.status, ServiceStatus.running);
       expect(r.sup.recovered, Recovery.back);
       expect(r.sup.isStarting, isFalse);
@@ -149,7 +149,7 @@ void main() {
       final r = Rig();
       r.sup.setStatus(ServiceStatus.notRunning);
       await Future.wait([r.sup.start(), r.sup.start()]);
-      expect(r.ran, ['sc.exe start charon']);
+      expect(r.ran, ['sc.exe start charon-service']);
     });
 
     test('on a platform without the Windows service it just connects', () async {
@@ -218,7 +218,7 @@ void main() {
     final seen = <bool>[];
     r.sup.addListener(() => seen.add(r.sup.isRestarting));
     await r.sup.restart();
-    expect(r.ran, ['sc.exe stop charon', 'sc.exe start charon']);
+    expect(r.ran, ['sc.exe stop charon-service', 'sc.exe start charon-service']);
     expect(seen, [true, false]);
   });
 
@@ -231,7 +231,7 @@ void main() {
   test('restart stops the service as an administrator and starts it again', () async {
     final r = Rig();
     await r.sup.restart();
-    expect(r.ran, ['sc.exe stop charon', 'sc.exe start charon']);
+    expect(r.ran, ['sc.exe stop charon-service', 'sc.exe start charon-service']);
   });
 }
 
