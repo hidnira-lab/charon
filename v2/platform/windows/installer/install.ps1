@@ -25,6 +25,14 @@ if ([string]::IsNullOrWhiteSpace($InstallingUserSID)) {
     $InstallingUserSID = [System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value
 }
 
+# A running service keeps charon-service.exe locked, so stop it before the copy
+# (an upgrade over an existing install would otherwise fail with "in use").
+$existing = Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
+if ($null -ne $existing -and $existing.Status -ne "Stopped") {
+    Stop-Service -Name $ServiceName -Force -ErrorAction SilentlyContinue
+    $existing.WaitForStatus("Stopped", [TimeSpan]::FromSeconds(15))
+}
+
 Write-Host "[1/4] Copying the Charon window and binaries to $ProgramDir..."
 New-Item -ItemType Directory -Force -Path $ProgramDir | Out-Null
 New-Item -ItemType Directory -Force -Path $DataDir | Out-Null
@@ -46,12 +54,7 @@ foreach ($file in @("charon.exe", "charon-service.exe", "charon-release.exe", "x
 }
 
 Write-Host "[2/4] Installing the Charon service..."
-$existing = Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
 if ($null -ne $existing) {
-    if ($existing.Status -ne "Stopped") {
-        Stop-Service -Name $ServiceName -Force -ErrorAction SilentlyContinue
-        Start-Sleep -Seconds 1
-    }
     & sc.exe delete $ServiceName | Out-Null
     Start-Sleep -Seconds 1
 }
