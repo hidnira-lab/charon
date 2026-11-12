@@ -72,7 +72,7 @@ class AndroidNotificationProjector {
       return AndroidNotificationPayload(
         title: 'Charon · ${l10n.androidVpnPermissionTitle}',
         body: l10n.androidVpnRevokedNotice,
-        accentColor: const Color(0xFFF59E0B), // amber
+        accentColor: const Color(0xFFE3B579), // transition
         channelId: channelTunnel,
         isOngoing: true,
         actions: [
@@ -88,7 +88,7 @@ class AndroidNotificationProjector {
       return AndroidNotificationPayload(
         title: 'Charon · Direct',
         body: l10n.androidAnotherVpnNotice,
-        accentColor: const Color(0xFFF59E0B), // amber
+        accentColor: const Color(0xFFE3B579), // transition
         channelId: channelTunnel,
         isOngoing: true,
         actions: [
@@ -104,7 +104,7 @@ class AndroidNotificationProjector {
       return AndroidNotificationPayload(
         title: 'Charon · Stopped by Android',
         body: l10n.androidStoppedNotice,
-        accentColor: const Color(0xFFF59E0B), // amber
+        accentColor: const Color(0xFFE3B579), // transition
         channelId: channelTunnel,
         isOngoing: false,
         actions: [
@@ -131,7 +131,7 @@ class AndroidNotificationProjector {
       UiState.blocked => AndroidNotificationPayload(
           title: 'Charon · Traffic held',
           body: 'All servers unreachable. Traffic held by kill switch.',
-          accentColor: const Color(0xFFEF4444), // red
+          accentColor: const Color(0xFFDC7C7D), // critical
           channelId: channelTunnel,
           isOngoing: true,
           isCritical: true,
@@ -150,7 +150,7 @@ class AndroidNotificationProjector {
       UiState.reconnectingHeld => AndroidNotificationPayload(
           title: 'Charon · Traffic held while retrying',
           body: 'Reconnecting to $serverName...',
-          accentColor: const Color(0xFFEF4444),
+          accentColor: const Color(0xFFDC7C7D),
           channelId: channelTunnel,
           isOngoing: true,
           isCritical: true,
@@ -165,7 +165,7 @@ class AndroidNotificationProjector {
       UiState.reconnecting => AndroidNotificationPayload(
           title: 'Charon · Reconnecting',
           body: 'Retrying $serverName...',
-          accentColor: const Color(0xFFF59E0B), // amber
+          accentColor: const Color(0xFFE3B579), // transition
           channelId: channelTunnel,
           isOngoing: true,
           actions: [
@@ -178,7 +178,7 @@ class AndroidNotificationProjector {
       UiState.connected => AndroidNotificationPayload(
           title: 'Charon · Connected',
           body: '$serverName · ${controller.status.egressAddress.isNotEmpty ? controller.status.egressAddress : "Protected"}',
-          accentColor: const Color(0xFF3B82F6), // blue
+          accentColor: const Color(0xFF60A1D9), // connected
           channelId: channelTunnel,
           isOngoing: true,
           actions: [
@@ -191,7 +191,7 @@ class AndroidNotificationProjector {
       UiState.onBackup => AndroidNotificationPayload(
           title: 'Charon · On backup server',
           body: '$serverName · Failover active',
-          accentColor: const Color(0xFF3B82F6),
+          accentColor: const Color(0xFF60A1D9),
           channelId: channelTunnel,
           isOngoing: true,
           actions: [
@@ -205,7 +205,7 @@ class AndroidNotificationProjector {
         AndroidNotificationPayload(
           title: 'Charon · Connecting',
           body: 'Verifying tunnel to $serverName...',
-          accentColor: const Color(0xFFF59E0B),
+          accentColor: const Color(0xFFE3B579),
           channelId: channelTunnel,
           isOngoing: true,
           actions: [
@@ -218,7 +218,7 @@ class AndroidNotificationProjector {
       UiState.tunnelLost => AndroidNotificationPayload(
           title: 'Charon · Tunnel lost',
           body: 'Traffic is going direct.',
-          accentColor: const Color(0xFFF59E0B),
+          accentColor: const Color(0xFFE3B579),
           channelId: channelTunnel,
           isOngoing: false,
           actions: [
@@ -231,7 +231,7 @@ class AndroidNotificationProjector {
       UiState.couldNotReach => AndroidNotificationPayload(
           title: 'Charon · Connection failed',
           body: 'Could not reach server.',
-          accentColor: const Color(0xFFF59E0B),
+          accentColor: const Color(0xFFE3B579),
           channelId: channelTunnel,
           isOngoing: false,
           actions: [
@@ -245,7 +245,7 @@ class AndroidNotificationProjector {
         const AndroidNotificationPayload(
           title: 'Charon',
           body: 'Disconnected · Traffic direct',
-          accentColor: Color(0xFF6B7280),
+          accentColor: Color(0xFF8A8A8A),
           channelId: channelTunnel,
           isOngoing: false,
         ),

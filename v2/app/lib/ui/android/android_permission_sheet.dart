@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../theme/colors.dart';
 import '../../../theme/tokens.dart';
 
 enum AndroidPermissionKind {
@@ -40,14 +41,13 @@ class AndroidPermissionSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
+    final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    final cardBg = isLight ? Colors.white : const Color(0xFF1E1E1E);
-    final borderColor = isLight ? const Color(0xFFE5E7EB) : const Color(0xFF333333);
-    final textPrimary = isLight ? const Color(0xFF111827) : Colors.white;
-    final textMuted = isLight ? const Color(0xFF6B7280) : const Color(0xFFA3A3A3);
+    final cardBg = colors.surface;
+    final borderColor = colors.divider;
+    final textPrimary = colors.text;
+    final textMuted = colors.text2;
 
     final isVpn = kind == AndroidPermissionKind.vpn;
     final title = isVpn ? l10n.androidVpnPermissionTitle : l10n.androidNotificationPermissionTitle;
@@ -86,10 +86,10 @@ class AndroidPermissionSheet extends StatelessWidget {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF3B82F6).withValues(alpha: isLight ? 0.12 : 0.2),
+                    color: colors.connectedSoft,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(icon, color: const Color(0xFF3B82F6), size: 24),
+                  child: Icon(icon, color: colors.accentText, size: 24),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
@@ -143,8 +143,8 @@ class AndroidPermissionSheet extends StatelessWidget {
                   child: FilledButton(
                     onPressed: onContinue,
                     style: FilledButton.styleFrom(
-                      backgroundColor: const Color(0xFF3B82F6),
-                      foregroundColor: Colors.white,
+                      backgroundColor: colors.text,
+                      foregroundColor: colors.bg,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -181,26 +181,25 @@ class AndroidAnomalyBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
+    final colors = CharonColors.of(context);
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: const Color(0xFFF59E0B).withValues(alpha: isLight ? 0.10 : 0.16),
+        color: colors.transitionSoft,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: const Color(0xFFF59E0B).withValues(alpha: 0.4),
+          color: colors.transitionFill.withValues(alpha: 0.4),
           width: 1,
         ),
       ),
       child: Row(
         children: [
-          const Icon(
+          Icon(
             Icons.warning_amber_rounded,
             size: 20,
-            color: Color(0xFFF59E0B),
+            color: colors.transitionFill,
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -209,7 +208,7 @@ class AndroidAnomalyBanner extends StatelessWidget {
               style: TextStyle(
                 fontFamily: CharonTokens.fontBody,
                 fontSize: 12.5,
-                color: isLight ? const Color(0xFF92400E) : const Color(0xFFFDE68A),
+                color: colors.text,
               ),
             ),
           ),
@@ -218,8 +217,8 @@ class AndroidAnomalyBanner extends StatelessWidget {
             onPressed: onAction,
             style: FilledButton.styleFrom(
               visualDensity: VisualDensity.compact,
-              backgroundColor: const Color(0xFFF59E0B),
-              foregroundColor: Colors.black,
+              backgroundColor: colors.transitionFill,
+              foregroundColor: colors.onAccent,
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
@@ -254,11 +253,12 @@ class AndroidAlwaysOnVpnCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final isLight = theme.brightness == Brightness.light;
+    final colors = CharonColors.of(context);
 
-    final cardBg = isLight ? Colors.white : const Color(0xFF1E1E1E).withValues(alpha: 0.55);
-    final borderColor = isLight ? const Color(0xFFE5E7EB) : const Color(0xFF333333);
-    final textPrimary = isLight ? const Color(0xFF111827) : Colors.white;
-    final textMuted = isLight ? const Color(0xFF6B7280) : const Color(0xFFA3A3A3);
+    final cardBg = isLight ? colors.surface : colors.surface.withValues(alpha: 0.55);
+    final borderColor = colors.divider;
+    final textPrimary = colors.text;
+    final textMuted = colors.text2;
 
     return Container(
       decoration: BoxDecoration(
@@ -272,10 +272,10 @@ class AndroidAlwaysOnVpnCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.security_rounded,
                 size: 18,
-                color: Color(0xFF60A1D9),
+                color: colors.accentText,
               ),
               const SizedBox(width: 8),
               Text(
@@ -306,8 +306,8 @@ class AndroidAlwaysOnVpnCard extends StatelessWidget {
             label: Text(l10n.androidOpenVpnSettings),
             style: OutlinedButton.styleFrom(
               visualDensity: VisualDensity.compact,
-              foregroundColor: const Color(0xFF60A1D9),
-              side: const BorderSide(color: Color(0xFF60A1D9)),
+              foregroundColor: colors.accentText,
+              side: BorderSide(color: colors.accentText),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
               ),

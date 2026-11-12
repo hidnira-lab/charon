@@ -27,7 +27,7 @@ class VaultPassphraseDialog extends StatefulWidget {
   }) {
     return showDialog<String>(
       context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.65),
+      barrierColor: CharonColors.of(context).scrim,
       builder: (ctx) => VaultPassphraseDialog(mode: mode),
     );
   }
@@ -89,14 +89,12 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
   @override
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
-    final theme = Theme.of(context);
-    final isLight = theme.brightness == Brightness.light;
     final l10n = AppLocalizations.of(context)!;
 
-    final cardBg = isLight ? Colors.white : colors.surface;
-    final borderColor = isLight ? const Color(0xFFE5E7EB) : colors.divider;
-    final textPrimary = isLight ? const Color(0xFF111827) : Colors.white;
-    final textMuted = isLight ? const Color(0xFF6B7280) : colors.text2;
+    final cardBg = colors.raised;
+    final borderColor = colors.divider;
+    final textPrimary = colors.text;
+    final textMuted = colors.text2;
 
     final isBackup = widget.mode == VaultDialogMode.backup;
     final title = isBackup ? l10n.dialogVaultBackupTitle : l10n.dialogVaultRestoreTitle;
@@ -116,9 +114,9 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
             border: Border.all(color: borderColor),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: isLight ? 0.08 : 0.5),
-                blurRadius: 24,
-                offset: const Offset(0, 8),
+                color: colors.overlayShadow,
+                blurRadius: 64,
+                offset: const Offset(0, 24),
               ),
             ],
           ),
@@ -166,21 +164,18 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: colors.transitionText.withValues(alpha: isLight ? 0.08 : 0.12),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: colors.transitionText.withValues(alpha: 0.35),
-                  ),
+                  color: colors.transitionSoft,
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(top: 2),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 2),
                       child: Icon(
                         Icons.warning_amber_rounded,
                         size: 16,
-                        color: Color(0xFFF59E0B),
+                        color: colors.transitionFill,
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -191,7 +186,7 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
                           fontFamily: CharonTokens.fontBody,
                           fontSize: 12,
                           height: 1.4,
-                          color: isLight ? const Color(0xFF92400E) : const Color(0xFFFDE68A),
+                          color: colors.text,
                         ),
                       ),
                     ),
@@ -221,7 +216,7 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
                 ),
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: isLight ? const Color(0xFFF9FAFB) : const Color(0xFF141414),
+                  fillColor: colors.bg,
                   hintText: 'Enter passphrase...',
                   hintStyle: TextStyle(
                     fontFamily: CharonTokens.fontMono,
@@ -284,10 +279,10 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
               if (_error != null) ...[
                 Text(
                   _error!,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: CharonTokens.fontBody,
                     fontSize: 11.5,
-                    color: Color(0xFFF59E0B),
+                    color: colors.transitionText,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -342,8 +337,8 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
                   FilledButton(
                     onPressed: _onSubmit,
                     style: FilledButton.styleFrom(
-                      backgroundColor: const Color(0xFF3B82F6),
-                      foregroundColor: Colors.white,
+                      backgroundColor: colors.text,
+                      foregroundColor: colors.bg,
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     ),
                     child: Text(
