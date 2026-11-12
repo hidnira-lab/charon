@@ -32,9 +32,9 @@ void main() {
       const light = CharonColors.light;
       expect(light.bg, const Color(0xFFF5F5F5));
       expect(light.surface, const Color(0xFFFFFFFF));
-      expect(light.surface2, const Color(0xFFEDEDED));
+      expect(light.surface2, const Color(0xFFEBEBEB));
       expect(light.divider, const Color(0xFFE1E1E1));
-      expect(light.controlBorder, const Color(0xFF8A8A8A));
+      expect(light.controlBorder, const Color(0xFFA3A3A3));
       expect(light.text, const Color(0xFF1A1A1A));
       expect(light.text2, const Color(0xFF5C5C5C));
       expect(light.text3, const Color(0xFF6B6B6B));
@@ -44,11 +44,18 @@ void main() {
 
       // Status light
       expect(light.connectedText, const Color(0xFF2B6894));
-      expect(light.connectedSoft, const Color(0xFFE9F2FA));
+      expect(light.connectedSoft, const Color(0xFFE6F0F9));
       expect(light.transitionText, const Color(0xFF905B2F));
-      expect(light.transitionSoft, const Color(0xFFFBF5EC));
+      expect(light.transitionSoft, const Color(0xFFFBF1E3));
+      expect(light.criticalFill, const Color(0xFFC24548));
       expect(light.criticalText, const Color(0xFFA03F41));
-      expect(light.criticalSoft, const Color(0xFFFAEDED));
+      expect(light.criticalSoft, const Color(0xFFFAEBEB));
+
+      // Overlays (Dialogs boards): raised card, scrim and shadow per theme.
+      expect(light.raised, const Color(0xFFFAFAFA));
+      expect(light.scrim, const Color(0x47141414));
+      expect(CharonColors.dark.raised, const Color(0xFF1A1A1A));
+      expect(CharonColors.dark.scrim, const Color(0xBD080808));
     });
 
     test('lerp interpolates between dark and light smoothly', () {

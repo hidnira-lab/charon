@@ -12,7 +12,7 @@ class ReleaseConfirmDialog extends StatelessWidget {
   static Future<bool?> show(BuildContext context) {
     return showDialog<bool>(
       context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.55),
+      barrierColor: CharonColors.of(context).scrim,
       builder: (context) => const ReleaseConfirmDialog(),
     );
   }
@@ -34,10 +34,10 @@ class ReleaseConfirmDialog extends StatelessWidget {
           width: 472,
           padding: const EdgeInsets.fromLTRB(24, 22, 24, 20),
           decoration: BoxDecoration(
-            color: colors.surface,
+            color: colors.raised,
             borderRadius: BorderRadius.circular(28),
             border: Border.all(color: colors.divider),
-            boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 60, offset: Offset(0, 24))],
+            boxShadow: [BoxShadow(color: colors.overlayShadow, blurRadius: 64, offset: const Offset(0, 24))],
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,

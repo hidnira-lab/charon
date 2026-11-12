@@ -20,7 +20,7 @@ class ChooseServerSheet extends StatelessWidget {
   static Future<Server?> show(BuildContext context, HomeController controller) {
     return showDialog<Server>(
       context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.55),
+      barrierColor: CharonColors.of(context).scrim,
       builder: (ctx) => ChooseServerSheet(controller: controller),
     );
   }
@@ -47,10 +47,10 @@ class ChooseServerSheet extends StatelessWidget {
           constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height - 48),
           padding: const EdgeInsets.fromLTRB(24, 22, 24, 20),
           decoration: BoxDecoration(
-            color: colors.surface,
+            color: colors.raised,
             borderRadius: BorderRadius.circular(28),
             border: Border.all(color: colors.divider),
-            boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 60, offset: Offset(0, 24))],
+            boxShadow: [BoxShadow(color: colors.overlayShadow, blurRadius: 64, offset: const Offset(0, 24))],
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,

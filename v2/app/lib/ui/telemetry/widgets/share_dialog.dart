@@ -24,6 +24,7 @@ class ShareDialog extends StatelessWidget {
   }) {
     return showDialog<bool>(
       context: context,
+      barrierColor: CharonColors.of(context).scrim,
       builder: (context) => ShareDialog(
         visibleLinesText: visibleLinesText,
         lineCount: lineCount,
@@ -37,7 +38,7 @@ class ShareDialog extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Dialog(
-      backgroundColor: colors.surface,
+      backgroundColor: colors.raised,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
         side: BorderSide(color: colors.divider, width: 1.0),
@@ -56,7 +57,7 @@ class ShareDialog extends StatelessWidget {
                   Icon(
                     Icons.share_rounded,
                     size: 20.0,
-                    color: colors.accent,
+                    color: colors.accentText,
                   ),
                   const SizedBox(width: CharonSpacing.s2),
                   Expanded(

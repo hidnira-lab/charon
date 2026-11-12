@@ -28,6 +28,9 @@ class CharonColors extends ThemeExtension<CharonColors> {
     required this.idleFill,
     required this.idleSoft,
     required this.idleText,
+    required this.raised,
+    required this.scrim,
+    required this.overlayShadow,
   });
 
   final Color bg;
@@ -56,6 +59,16 @@ class CharonColors extends ThemeExtension<CharonColors> {
   final Color idleSoft;
   final Color idleText;
 
+  // Overlays (01b Light Mode, Dialogs boards)
+  /// Dialog and sheet surface.
+  final Color raised;
+
+  /// The dim layer behind a dialog.
+  final Color scrim;
+
+  /// The drop shadow of a dialog, 0 24 64.
+  final Color overlayShadow;
+
   static const CharonColors dark = CharonColors(
     bg: Color(0xFF121212),
     surface: Color(0xFF1E1E1E),
@@ -80,14 +93,18 @@ class CharonColors extends ThemeExtension<CharonColors> {
     idleFill: Color(0xFF8A8A8A),
     idleSoft: Color(0xFF303030),
     idleText: Color(0xFFA3A3A3),
+    raised: Color(0xFF1A1A1A),
+    scrim: Color(0xBD080808),
+    overlayShadow: Color(0x99000000),
   );
 
+  // The Light screen boards use the 01b Light Mode values where they differ from 01 Color.
   static const CharonColors light = CharonColors(
     bg: Color(0xFFF5F5F5),
     surface: Color(0xFFFFFFFF),
-    surface2: Color(0xFFEDEDED),
+    surface2: Color(0xFFEBEBEB),
     divider: Color(0xFFE1E1E1),
-    controlBorder: Color(0xFF8A8A8A),
+    controlBorder: Color(0xFFA3A3A3),
     text: Color(0xFF1A1A1A),
     text2: Color(0xFF5C5C5C),
     text3: Color(0xFF6B6B6B),
@@ -95,17 +112,20 @@ class CharonColors extends ThemeExtension<CharonColors> {
     onAccent: Color(0xFF121212),
     accentText: Color(0xFF2B6894),
     connectedFill: Color(0xFF60A1D9),
-    connectedSoft: Color(0xFFE9F2FA),
+    connectedSoft: Color(0xFFE6F0F9),
     connectedText: Color(0xFF2B6894),
     transitionFill: Color(0xFFE3B579),
-    transitionSoft: Color(0xFFFBF5EC),
+    transitionSoft: Color(0xFFFBF1E3),
     transitionText: Color(0xFF905B2F),
-    criticalFill: Color(0xFFDC7C7D),
-    criticalSoft: Color(0xFFFAEDED),
+    criticalFill: Color(0xFFC24548),
+    criticalSoft: Color(0xFFFAEBEB),
     criticalText: Color(0xFFA03F41),
     idleFill: Color(0xFF8A8A8A),
     idleSoft: Color(0xFFEFEFEF),
     idleText: Color(0xFF5C5C5C),
+    raised: Color(0xFFFAFAFA),
+    scrim: Color(0x47141414),
+    overlayShadow: Color(0x3D000000),
   );
 
   static CharonColors of(BuildContext context) {
@@ -138,6 +158,9 @@ class CharonColors extends ThemeExtension<CharonColors> {
     Color? idleFill,
     Color? idleSoft,
     Color? idleText,
+    Color? raised,
+    Color? scrim,
+    Color? overlayShadow,
   }) {
     return CharonColors(
       bg: bg ?? this.bg,
@@ -163,6 +186,9 @@ class CharonColors extends ThemeExtension<CharonColors> {
       idleFill: idleFill ?? this.idleFill,
       idleSoft: idleSoft ?? this.idleSoft,
       idleText: idleText ?? this.idleText,
+      raised: raised ?? this.raised,
+      scrim: scrim ?? this.scrim,
+      overlayShadow: overlayShadow ?? this.overlayShadow,
     );
   }
 
@@ -193,6 +219,9 @@ class CharonColors extends ThemeExtension<CharonColors> {
       idleFill: Color.lerp(idleFill, other.idleFill, t)!,
       idleSoft: Color.lerp(idleSoft, other.idleSoft, t)!,
       idleText: Color.lerp(idleText, other.idleText, t)!,
+      raised: Color.lerp(raised, other.raised, t)!,
+      scrim: Color.lerp(scrim, other.scrim, t)!,
+      overlayShadow: Color.lerp(overlayShadow, other.overlayShadow, t)!,
     );
   }
 }

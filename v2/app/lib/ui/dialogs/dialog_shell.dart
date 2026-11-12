@@ -9,7 +9,7 @@ import '../common/pixel_flag.dart';
 Future<T?> showCharonDialog<T>(BuildContext context, WidgetBuilder builder) {
   return showDialog<T>(
     context: context,
-    barrierColor: Colors.black.withValues(alpha: 0.74),
+    barrierColor: CharonColors.of(context).scrim,
     builder: builder,
   );
 }
@@ -73,10 +73,10 @@ class CharonDialog extends StatelessWidget {
             constraints: const BoxConstraints(maxHeight: 700),
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
-              color: colors.surface,
+              color: colors.raised,
               border: Border.all(color: colors.divider),
               borderRadius: BorderRadius.circular(20),
-              boxShadow: const [BoxShadow(color: Color(0x99000000), blurRadius: 64, offset: Offset(0, 24))],
+              boxShadow: [BoxShadow(color: colors.overlayShadow, blurRadius: 64, offset: const Offset(0, 24))],
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
