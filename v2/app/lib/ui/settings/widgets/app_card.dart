@@ -6,6 +6,7 @@ import 'charon_switch.dart';
 import 'erase_confirm_dialog.dart';
 import '../../../theme/theme.dart';
 import '../../common/pixel_icon.dart';
+import '../../common/glass_card.dart';
 
 class AppCard extends StatelessWidget {
   const AppCard({
@@ -34,12 +35,7 @@ class AppCard extends StatelessWidget {
       curLangName = '简体中文';
     }
 
-    return Container(
-      decoration: BoxDecoration(
-        color: colors.surface.withValues(alpha: 0.55),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: colors.divider),
-      ),
+    return Glass(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

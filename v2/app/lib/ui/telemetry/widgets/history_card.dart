@@ -1,3 +1,5 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
@@ -37,9 +39,14 @@ class HistoryCard extends StatelessWidget {
 
     return Semantics(
       container: true,
-      child: DashedBox(
-        color: colors.controlBorder.withValues(alpha: 0.6),
-        fill: colors.bg.withValues(alpha: 0.4),
+      // Frosted and dashed: blur(16px) over rgba(22,22,22,.4), on Light white .54.
+      child: ClipRRect(
+       borderRadius: BorderRadius.circular(16),
+       child: BackdropFilter.grouped(
+        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+        child: DashedBox(
+        color: DashedBox.slot(colors).line,
+        fill: Color.lerp(const Color(0x66161616), const Color(0x8AFFFFFF), colors.lt),
         padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -97,6 +104,8 @@ class HistoryCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      ),
       ),
     );
   }

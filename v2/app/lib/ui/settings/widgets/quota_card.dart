@@ -4,6 +4,7 @@ import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
 import '../../../theme/theme.dart';
+import '../../common/glass_card.dart';
 
 class QuotaCard extends StatefulWidget {
   const QuotaCard({
@@ -62,12 +63,7 @@ class _QuotaCardState extends State<QuotaCard> {
     final ratio = capGb > 0 ? (usedGb / capGb).clamp(0.0, 1.0) : 0.0;
     final fullBlocks = (ratio * 20).floor();
 
-    return Container(
-      decoration: BoxDecoration(
-        color: colors.surface.withValues(alpha: 0.55),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: colors.divider),
-      ),
+    return Glass(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

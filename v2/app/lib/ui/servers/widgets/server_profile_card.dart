@@ -6,6 +6,7 @@ import '../../../state/country.dart' as country_names;
 import '../../../theme/theme.dart';
 import '../../common/pixel_flag.dart';
 import '../../common/pixel_icon.dart';
+import '../../common/glass_card.dart';
 
 /// Card showing one server profile in the failover list.
 class ServerProfileCard extends StatelessWidget {
@@ -39,15 +40,11 @@ class ServerProfileCard extends StatelessWidget {
     final country = server.countryCode.toUpperCase();
     final countryName = country_names.countryName(l10n, country);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: colors.surface.withValues(alpha: 0.55),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isActive ? colors.accent : colors.surface2,
-          width: isActive ? 2 : 1,
-        ),
-      ),
+    // The active profile has a 2 px blue edge and a glow from its left end (profGlow).
+    return Glass(
+      edge: isActive ? colors.accentText : colors.surface2,
+      edgeWidth: isActive ? 2 : 1,
+      glows: [if (isActive) GlassGlow(300, 150, 0.06, 0.5, colors.accentText, 0.12)],
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       child: Row(
         children: [

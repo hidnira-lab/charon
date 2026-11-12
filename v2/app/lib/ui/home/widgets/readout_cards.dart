@@ -6,6 +6,8 @@ import '../../../state/home_view.dart';
 import '../../../state/throughput_history.dart';
 import '../../../theme/theme.dart';
 import 'sparkline.dart';
+import '../../../state/ui_state.dart';
+import '../../common/glass_card.dart';
 import '../../common/motion.dart';
 
 /// The 4 readout cards row matching HomeDesktop board (height 84 px).
@@ -31,6 +33,15 @@ class ReadoutCards extends StatelessWidget {
     final readouts = view.readouts();
     // The key line before each label, as on the board: quiet, accent, text, quiet.
     final keys = [colors.text3, colors.accent, colors.text, colors.text3];
+    // While the tunnel carries traffic each card glows from its own corner (READ_GLOW).
+    final live = const {UiState.connected, UiState.verifying, UiState.onBackup, UiState.switching}
+        .contains(controller.uiState);
+    final glows = [
+      GlassGlow.board(240, 120, 0, 1, colors.accentText, live ? 0.36 : 0),
+      GlassGlow.board(240, 110, 0.82, 0.62, colors.accentText, live ? 0.50 : 0),
+      GlassGlow.board(240, 110, 0.82, 0.62, colors.text, live ? 0.20 : 0),
+      GlassGlow.board(240, 120, 1, 0, colors.accentText, live ? 0.30 : 0),
+    ];
 
     return SizedBox(
       height: 84.0,
@@ -42,6 +53,7 @@ class ReadoutCards extends StatelessWidget {
               child: _ReadoutCard(
                 readout: readouts[i],
                 keyColor: keys[i],
+                glow: glows[i],
                 history: controller.throughputHistory,
                 swapKey: controller.uiState,
                 index: i,
@@ -58,6 +70,7 @@ class _ReadoutCard extends StatelessWidget {
   const _ReadoutCard({
     required this.readout,
     required this.keyColor,
+    required this.glow,
     required this.history,
     required this.swapKey,
     required this.index,
@@ -65,6 +78,7 @@ class _ReadoutCard extends StatelessWidget {
 
   final Readout readout;
   final Color keyColor;
+  final GlassGlow glow;
   final ThroughputHistory history;
 
   /// The Home state: when it changes, the value and the note swap (rd), one card after another.
@@ -77,13 +91,9 @@ class _ReadoutCard extends StatelessWidget {
     final valueDelay = Duration(milliseconds: index * 40);
     final noteDelay = Duration(milliseconds: index * 40 + 60);
 
-    return Container(
+    return Glass(
       padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0),
-      decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(16.0),
-        border: Border.all(color: colors.divider, width: 1.0),
-      ),
+      glows: [if (glow.alpha > 0) glow],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

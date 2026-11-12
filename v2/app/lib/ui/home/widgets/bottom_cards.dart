@@ -6,6 +6,10 @@ import '../../../state/home_view.dart';
 import '../../../state/ui_state.dart';
 import '../../../theme/theme.dart';
 import '../../common/pixel_flag.dart';
+import '../../common/ambient.dart';
+import '../../common/dashed_box.dart';
+import '../../common/glass_card.dart';
+import 'home_scene.dart' show SceneTime;
 
 // Rail tabs the card links open.
 const int _tabServers = 1;
@@ -31,6 +35,25 @@ class BottomCards extends StatelessWidget {
       localeTag: Localizations.localeOf(context).toLanguageTag(),
     );
     final noServer = controller.uiState == UiState.noServer;
+    final colors = CharonColors.of(context);
+    final ui = controller.uiState;
+    final live = const {UiState.connected, UiState.verifying, UiState.onBackup, UiState.switching}.contains(ui);
+    final quota = view.quotaView();
+    final usedFrac = noServer || quota.cap <= 0 ? 0.0 : ((quota.used ?? 0) / quota.cap).clamp(0.0, 1.0);
+    final quotaGlow = switch (quota.tone) {
+      QuotaTone.ok => colors.accentText,
+      QuotaTone.warn => colors.transitionText,
+      QuotaTone.crit => colors.criticalFill,
+    };
+    final time = Ambient.of(context);
+    // Each card glows on its own (glassNode, glassFail, glassMonth): the node with the sky,
+    // the failsafe blue, or red when blocked, the month in its tone and wider as it fills.
+    final nodeGlow = GlassGlow.board(300, 200, 0.12, 0.42, ambientSky(time), noServer ? 0 : (time == SceneTime.night ? 0.6 : 0.40));
+    final failGlow = ui == UiState.blocked
+        ? GlassGlow.board(260, 170, 0.96, 0.58, colors.criticalFill, 0.42)
+        : GlassGlow.board(260, 170, 0.96, 0.58, colors.accentText, 0.32);
+    final monthGlow = GlassGlow.board(200 + (usedFrac * 400).roundToDouble(), 150, 0.06, 0.62, quotaGlow,
+        noServer ? 0 : (live ? 0.26 : 0.16) + usedFrac * 0.4);
 
     return Row(
       children: [
@@ -40,6 +63,7 @@ class BottomCards extends StatelessWidget {
             title: l10n.homeNodeTitle,
             link: noServer ? l10n.homeNodeLinkAdd : l10n.homeNodeLinkServers,
             onLink: () => controller.setTab(_tabServers),
+            glow: nodeGlow,
             child: noServer ? const _NodeEmpty() : _NodeBody(view: view),
           ),
         ),
@@ -50,6 +74,7 @@ class BottomCards extends StatelessWidget {
             title: l10n.homeFailsafeTitle,
             link: l10n.homeFailsafeLink,
             onLink: () => controller.setTab(_tabSettings),
+            glow: failGlow,
             child: _FailsafeBody(view: view),
           ),
         ),
@@ -62,6 +87,7 @@ class BottomCards extends StatelessWidget {
             chipTone: view.quotaView().tone,
             link: l10n.homeQuotaLink,
             onLink: () => controller.setTab(_tabTelemetry),
+            glow: monthGlow,
             child: noServer ? const _QuotaEmpty() : _QuotaBody(view: view),
           ),
         ),
@@ -147,27 +173,28 @@ class _NodeEmpty extends StatelessWidget {
     final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    return Container(
+    final slot = DashedBox.slot(colors);
+    // The dashed, dotted slot with an empty checkered flag; the words sit on the plain fill.
+    return DashedBox(
+      color: slot.line,
+      fill: slot.fill,
+      dots: slot.dots,
+      radius: 12.0,
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      decoration: BoxDecoration(
-        color: colors.bg,
-        borderRadius: BorderRadius.circular(12.0),
-        border: Border.all(color: colors.divider),
-      ),
       child: Row(
         children: [
           Container(
             width: 36.0,
             height: 24.0,
-            decoration: BoxDecoration(
-              color: colors.surface2,
-              border: Border.all(color: colors.controlBorder),
-            ),
+            decoration: BoxDecoration(border: Border.all(color: slot.line)),
+            child: CustomPaint(painter: _Checker(colors.surface, colors.divider)),
           ),
           const SizedBox(width: 12.0),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+          Flexible(
+            child: ColoredBox(
+              color: slot.fill,
+              child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
@@ -189,12 +216,35 @@ class _NodeEmpty extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
+              ),
             ),
           ),
         ],
       ),
     );
   }
+}
+
+/// The empty flag: a checkerboard of 3 px squares (conic-gradient, 6 px tiles).
+class _Checker extends CustomPainter {
+  const _Checker(this.base, this.check);
+
+  final Color base, check;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.drawRect(Offset.zero & size, Paint()..color = base);
+    final p = Paint()..color = check;
+    for (var y = 0.0; y < size.height; y += 6) {
+      for (var x = 0.0; x < size.width; x += 6) {
+        canvas.drawRect(Rect.fromLTWH(x + 3, y, 3, 3), p);
+        canvas.drawRect(Rect.fromLTWH(x, y + 3, 3, 3), p);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_Checker old) => old.base != base || old.check != check;
 }
 
 class _FailsafeBody extends StatelessWidget {
@@ -383,9 +433,12 @@ class _BottomCard extends StatelessWidget {
     required this.link,
     required this.onLink,
     required this.child,
+    required this.glow,
     this.chip,
     this.chipTone = QuotaTone.ok,
   });
+
+  final GlassGlow glow;
 
   final String title;
   final String link;
@@ -399,13 +452,9 @@ class _BottomCard extends StatelessWidget {
     final colors = CharonColors.of(context);
     final (Color _, Color soft, Color ink) = quotaColors(colors, chipTone);
 
-    return Container(
+    return Glass(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-      decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(16.0),
-        border: Border.all(color: colors.divider, width: 1.0),
-      ),
+      glows: [if (glow.alpha > 0) glow],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -5,6 +5,7 @@ import '../../../state/home_controller.dart';
 import 'charon_switch.dart';
 import '../../../theme/theme.dart';
 import '../../common/pixel_icon.dart';
+import '../../common/glass_card.dart';
 
 class FailsafeCard extends StatelessWidget {
   const FailsafeCard({
@@ -34,12 +35,7 @@ class FailsafeCard extends StatelessWidget {
             : servers[activeIdx + 1].id)
         : (servers.length > 1 ? servers.first.id : 'SRV-02');
 
-    return Container(
-      decoration: BoxDecoration(
-        color: colors.surface.withValues(alpha: 0.55),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: colors.divider),
-      ),
+    return Glass(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

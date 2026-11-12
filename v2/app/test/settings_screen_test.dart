@@ -50,7 +50,7 @@ void main() {
       expect(find.text('> APP'), findsOneWidget);
       expect(find.text('> QUOTA · SRV-01'), findsOneWidget);
       expect(find.text('> HOME GREETING'), findsOneWidget);
-      expect(find.text('> ABOUT'), findsOneWidget);
+      expect(find.text('> ABOUT'), findsNothing, reason: 'the About card of the board has no heading');
       expect(find.text('Charon '), findsOneWidget);
       expect(find.text('v0.1.0'), findsOneWidget);
     });
@@ -287,7 +287,7 @@ void main() {
       expect(find.text('> KUOTA · SRV-01'), findsOneWidget);
       expect(find.text('TIAP SERVER PUNYA SENDIRI'), findsOneWidget);
       expect(find.text('> SAPAAN BERANDA'), findsOneWidget);
-      expect(find.text('> TENTANG'), findsOneWidget);
+      expect(find.text('> TENTANG'), findsNothing);
     });
   });
 }

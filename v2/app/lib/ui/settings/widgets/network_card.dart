@@ -4,6 +4,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
 import '../../../theme/theme.dart';
 import '../../common/pixel_icon.dart';
+import '../../common/glass_card.dart';
 
 class NetworkCard extends StatefulWidget {
   const NetworkCard({
@@ -55,12 +56,7 @@ class _NetworkCardState extends State<NetworkCard> {
     final connMode = widget.controller.connectionMode;
     final isTun = connMode == ConnectionMode.tun;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: colors.surface.withValues(alpha: 0.55),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: colors.divider),
-      ),
+    return Glass(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

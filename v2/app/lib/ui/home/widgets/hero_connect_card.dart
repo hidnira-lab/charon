@@ -13,6 +13,8 @@ import 'home_dial.dart';
 import '../../common/motion.dart';
 import '../../common/notch_box.dart';
 import '../../common/state_tone.dart';
+import '../../common/dashed_box.dart';
+import '../../common/glass_card.dart';
 
 /// The Connect Control / Hero Card matching HomeDesktop board (332 x 364 px).
 class HeroConnectCard extends StatelessWidget {
@@ -175,22 +177,25 @@ class HeroConnectCard extends StatelessWidget {
         ),
     };
 
-    return Container(
+    // Notched glass with no edge, lit from above in the colour of the state (connGlow).
+    return Glass(
       width: 332.0,
       height: 364.0,
-      decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(16.0),
-        border: Border.all(color: colors.divider, width: 1.0),
-      ),
+      clipper: NotchClipper(16),
+      sheen: false,
+      glows: [GlassGlow(340, 300, 0.5, 0.26, toneDot, uiState == UiState.noServer ? 0.04 : 0.11)],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Top dial button area
-          SizedBox(
+          // The dial sits on a dotted strip.
+          Container(
             height: 180.0,
-            child: Center(
+            color: Color.lerp(const Color(0x59121212), const Color(0x7DFFFFFF), colors.lt),
+            child: CustomPaint(
+              painter: DotsPainter(Color.lerp(const Color(0x12FFFFFF), const Color(0x12000000), colors.lt)!),
+              child: Center(
               child: SwapFade(swapKey: uiState, child: HomeDial(state: uiState, onTap: onCta, semanticLabel: cta)),
+              ),
             ),
           ),
           // 2px status hairline

@@ -198,7 +198,7 @@ class _ThroughputChartState extends State<ThroughputChart> {
   Widget _empty(BuildContext context, AppLocalizations l10n, CharonColors colors, double plotW) {
     return Stack(
       children: [
-        Positioned.fill(child: CustomPaint(painter: _DotsPainter(colors.surface2))),
+        Positioned.fill(child: CustomPaint(painter: _DotsPainter(Color.lerp(const Color(0xFF2A2A2A), const Color(0xFFE4E4E4), colors.lt)!))),
         Positioned(left: 0, right: 0, top: _ThroughputChartState.plotH - 1, height: 1, child: ColoredBox(color: colors.divider)),
         Center(
           child: Column(

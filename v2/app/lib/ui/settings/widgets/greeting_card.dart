@@ -6,6 +6,7 @@ import '../../../state/home_controller.dart';
 import '../../common/pixel_flag.dart';
 import 'charon_switch.dart';
 import '../../../theme/theme.dart';
+import '../../common/glass_card.dart';
 
 class GreetingCard extends StatefulWidget {
   const GreetingCard({
@@ -48,14 +49,9 @@ class _GreetingCardState extends State<GreetingCard> {
     final greeting = greetingFor(l10n, DateTime.now().hour, name);
     final preview = city.trim().isEmpty ? greeting : '$greeting · ${l10n.homeLocation(city)}';
 
-    return Container(
+    return Glass(
       width: 300,
-      decoration: BoxDecoration(
-        color: colors.surface.withValues(alpha: 0.55),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: colors.divider),
-      ),
-      padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

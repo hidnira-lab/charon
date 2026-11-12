@@ -14,6 +14,7 @@ import '../../dialogs/unpair_confirm_dialog.dart';
 import '../../dialogs/sync_passphrase_dialog.dart';
 import '../../dialogs/vault_passphrase_dialog.dart';
 import '../../common/pixel_icon.dart';
+import '../../common/glass_card.dart';
 
 // Rail tab of Settings, where the update screen lives.
 const int _tabSettings = 4;
@@ -129,14 +130,9 @@ class _SyncCardState extends State<SyncCard> {
       );
     }
 
-    return Container(
+    return Glass(
       width: 320,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: colors.divider),
-      ),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

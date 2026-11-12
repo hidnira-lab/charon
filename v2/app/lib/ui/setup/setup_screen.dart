@@ -26,6 +26,9 @@ import '../settings/widgets/charon_switch.dart';
 import '../trust/guide_links.dart';
 import 'widgets/setup_scene.dart';
 import '../common/pixel_icon.dart';
+import '../common/dashed_box.dart';
+import '../common/ambient.dart';
+import '../home/widgets/home_scene.dart' show SceneTime;
 
 /// The first run setup of the Setup board: a welcome, the first server (a link,
 /// a pasted config or a restore from another device), the safety switches, a few
@@ -264,12 +267,20 @@ class _SetupScreenState extends State<SetupScreen> {
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final palette = splashPalette(dayPart((widget.now ?? DateTime.now)().hour));
+    final hour = (widget.now ?? DateTime.now)().hour;
+    final palette = splashPalette(dayPart(hour));
     final stop = setupStop(_step, _phase);
+    // Setup has its own window light, by day from 6 to 18 or by night, and its glass
+    // edges follow it.
+    final day = hour >= 6 && hour < 18;
 
     return Scaffold(
       backgroundColor: colors.bg,
-      body: Center(
+      body: Ambient(
+        time: day ? SceneTime.day : SceneTime.night,
+        child: CustomPaint(
+          painter: AmbientPainter(colors.bg, AmbientPainter.setup(day, colors)),
+          child: Center(
         child: SizedBox(
           width: 1024,
           height: 768,
@@ -295,6 +306,8 @@ class _SetupScreenState extends State<SetupScreen> {
               ),
             ],
           ),
+        ),
+      ),
         ),
       ),
     );
@@ -472,13 +485,18 @@ class _Aside extends StatelessWidget {
           InkWell(
             onTap: () => ExternalLinks.open(CharonGuideLinks.urlFor(guide, locale: Localizations.localeOf(context))),
             borderRadius: BorderRadius.circular(14),
+            // A dotted card; the words sit on the plain fill.
             child: Container(
-              padding: const EdgeInsets.all(12),
+              clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
-                color: colors.surface.withValues(alpha: 0.7),
-                border: Border.all(color: colors.divider),
+                color: colors.raised,
+                border: Border.all(color: Color.lerp(const Color(0xFF2A2A2A), const Color(0xFFE4E4E4), colors.lt)!),
                 borderRadius: BorderRadius.circular(14),
               ),
+              child: CustomPaint(
+               painter: DotsPainter(colors.surface2),
+               child: Padding(
+              padding: const EdgeInsets.all(12),
               child: Row(
                 children: [
                   Container(
@@ -489,17 +507,22 @@ class _Aside extends StatelessWidget {
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: Column(
+                    child: ColoredBox(
+                     color: colors.raised,
+                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(l10n.stpHelpLabel, style: monoStyle(colors.text3, 9, bold: true, em: 0.08)),
                         const SizedBox(height: 2),
                         Text(helpTitle, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: colors.text)),
                       ],
+                     ),
                     ),
                   ),
                   PixelIcon(PixelIcons.ext, size: 14, color: colors.accentText),
                 ],
+              ),
+               ),
               ),
             ),
           ),
@@ -752,13 +775,10 @@ class _Welcome extends StatelessWidget {
                 child: InkWell(
                   onTap: () => ExternalLinks.open(CharonGuideLinks.urlFor(CharonGuideId.hub, locale: Localizations.localeOf(context))),
                   borderRadius: BorderRadius.circular(16),
-                  child: Container(
+                  child: Glass(
                     padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: colors.surface.withValues(alpha: 0.55),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: colors.accent, width: 2),
-                    ),
+                    edge: colors.accent,
+                    edgeWidth: 2,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -867,13 +887,10 @@ class _Welcome extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        Container(
+        Glass(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-          decoration: BoxDecoration(
-            color: colors.surface.withValues(alpha: 0.5),
-            border: Border.all(color: colors.surface2),
-            borderRadius: BorderRadius.circular(12),
-          ),
+          radius: 12,
+          edge: colors.surface2,
           child: Row(
             children: [
               PixelIcon(PixelIcons.shield, size: 16, color: colors.text3),
@@ -1261,13 +1278,10 @@ class _SafetyStep extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                Container(
+                Glass(
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                  decoration: BoxDecoration(
-                    color: colors.surface.withValues(alpha: 0.5),
-                    border: Border.all(color: colors.surface2),
-                    borderRadius: BorderRadius.circular(14),
-                  ),
+                  radius: 14,
+                  edge: colors.surface2,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -1599,19 +1613,14 @@ class _ConnectStep extends StatelessWidget {
                       for (var i = 0; i < 4; i++)
                         Builder(builder: (_) {
                           final (word, dot, ink) = stateWords(checks[i]);
-                          return Container(
+                          return Glass(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: colors.surface.withValues(alpha: 0.55),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: checks[i] == CheckState.ok
-                                    ? colors.accent.withValues(alpha: 0.4)
-                                    : checks[i] == CheckState.running || checks[i] == CheckState.failed
-                                        ? colors.transitionFill.withValues(alpha: 0.4)
-                                        : colors.divider,
-                              ),
-                            ),
+                            radius: 12,
+                            edge: checks[i] == CheckState.ok
+                                ? colors.accent.withValues(alpha: 0.4)
+                                : checks[i] == CheckState.running || checks[i] == CheckState.failed
+                                    ? colors.transitionFill.withValues(alpha: 0.4)
+                                    : colors.divider,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,

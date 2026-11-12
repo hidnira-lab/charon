@@ -1,3 +1,5 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:flutter/material.dart';
 
 import '../../../core/external_link.dart';
@@ -13,6 +15,8 @@ import '../../trust/privacy_screen.dart';
 import '../../updates/updates_screen.dart';
 import '../../common/motion.dart';
 import '../../common/pixel_icon.dart';
+import '../../common/dashed_box.dart';
+import '../../common/ghost.dart';
 
 class AboutCard extends StatelessWidget {
   const AboutCard({
@@ -70,53 +74,56 @@ class AboutCard extends StatelessWidget {
       ),
     ];
 
-    return Container(
+    final ground = colors.surface;
+    // The board's About: a dotted card with no edge, the ghost on the window colour and the
+    // words on the plain ground so the dots stay out of them.
+    return Semantics(
+      container: true,
+      label: l10n.settingsAboutTitle,
+      child: Container(
       width: 300,
-      decoration: BoxDecoration(
-        color: colors.surface.withValues(alpha: 0.55),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: colors.divider),
-      ),
-      padding: const EdgeInsets.all(16),
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(color: ground, borderRadius: BorderRadius.circular(16)),
+      child: CustomPaint(
+        painter: DotsPainter(Color.lerp(const Color(0xFF2A2A2A), const Color(0xFFE4E4E4), colors.lt)!),
+        child: Padding(
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Section header
-          Text(
-            '> ${l10n.settingsAboutTitle.toUpperCase()}',
-            style: TextStyle(
-              fontFamily: CharonTokens.fontMono,
-              fontSize: 10,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.08,
-              color: colors.text2,
-            ),
-          ),
-          const SizedBox(height: 10),
-
-          // App header with icon
           Row(
             children: [
               Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: colors.bg,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: colors.divider),
-                ),
-                child: PixelIcon(
-                  PixelIcons.shield,
-                  size: 24,
-                  color: colors.text,
-                ),
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(color: colors.bg, borderRadius: BorderRadius.circular(12)),
+                padding: const EdgeInsets.fromLTRB(8, 7, 8, 9),
+                child: Stack(clipBehavior: Clip.none, children: [
+                  // glow-32: drop-shadow(0 1px 3px white 25 %), seen on Dark.
+                  Transform.translate(
+                    offset: const Offset(0, 1),
+                    child: ImageFiltered(
+                      imageFilter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
+                      child: ColorFiltered(
+                        colorFilter: ColorFilter.mode(const Color(0x40FFFFFF).withValues(alpha: 0.25 * (1 - colors.lt)), BlendMode.srcIn),
+                        child: const LogoMark(scale: 2),
+                      ),
+                    ),
+                  ),
+                  const LogoMark(scale: 2),
+                ]),
               ),
               const SizedBox(width: 12),
-              Expanded(
-                child: Column(
+              Flexible(
+                child: Container(
+                  color: ground,
+                  padding: const EdgeInsets.only(right: 6),
+                  child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           'Charon ',
@@ -136,7 +143,7 @@ class AboutCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 1),
                     Text(
                       l10n.settingsAboutBy,
                       style: TextStyle(
@@ -147,11 +154,12 @@ class AboutCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
+                  ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 10),
 
           // Link items
           Container(
@@ -241,6 +249,9 @@ class AboutCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+        ),
+      ),
       ),
     );
   }
