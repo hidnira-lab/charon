@@ -178,7 +178,7 @@ void main() {
       );
 
       await tester.pumpWidget(CharonApp(controller: controller));
-      await tester.pumpAndSettle();
+      await tester.pump(const Duration(milliseconds: 500)); // the ring chases forever, so never settles
 
       expect(find.text('Verifying handshake'), findsOneWidget);
       expect(find.text('Cancel'), findsOneWidget);

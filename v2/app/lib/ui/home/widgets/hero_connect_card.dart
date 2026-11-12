@@ -9,6 +9,7 @@ import '../../dialogs/release_confirm_dialog.dart';
 import 'failure_copy.dart';
 import 'live_values.dart';
 import '../../common/pixel_flag.dart';
+import 'home_dial.dart';
 
 /// The Connect Control / Hero Card matching HomeDesktop board (332 x 364 px).
 class HeroConnectCard extends StatelessWidget {
@@ -214,34 +215,7 @@ class HeroConnectCard extends StatelessWidget {
           SizedBox(
             height: 180.0,
             child: Center(
-              child: GestureDetector(
-                onTap: onCta,
-                child: Container(
-                  width: 140.0,
-                  height: 140.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: colors.surface2,
-                    border: Border.all(color: toneDot, width: 2.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: toneDot.withValues(alpha: 0.25),
-                        blurRadius: 20.0,
-                        spreadRadius: 2.0,
-                      )
-                    ],
-                  ),
-                  child: Center(
-                    child: Icon(
-                      uiState == UiState.connected || uiState == UiState.onBackup
-                          ? Icons.power_settings_new_rounded
-                          : Icons.bolt_rounded,
-                      size: 48.0,
-                      color: toneDot,
-                    ),
-                  ),
-                ),
-              ),
+              child: HomeDial(state: uiState, onTap: onCta, semanticLabel: cta),
             ),
           ),
           // 2px status hairline
