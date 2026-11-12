@@ -28,6 +28,7 @@ import 'widgets/setup_scene.dart';
 import '../common/pixel_icon.dart';
 import '../common/dashed_box.dart';
 import '../common/ambient.dart';
+import '../common/motion.dart';
 import '../home/widgets/home_scene.dart' show SceneTime;
 
 /// The first run setup of the Setup board: a welcome, the first server (a link,
@@ -56,6 +57,11 @@ class SetupScreen extends StatefulWidget {
 
 class _SetupScreenState extends State<SetupScreen> {
   late SetupStep _step = widget.initialStep;
+
+  /// How many times the main column has turned to new content, and whether the
+  /// last turn went back (enF slides in from the right, enB from the left).
+  int _turns = 0;
+  bool _back = false;
   var _phase = ConnectPhase.ready;
 
   // The first server.
@@ -117,10 +123,18 @@ class _SetupScreenState extends State<SetupScreen> {
     final st = _c.status;
     if (st.phase == Phase.PHASE_UP) {
       _clock?.cancel();
-      setState(() => _phase = ConnectPhase.connected);
+      setState(() {
+        _phase = ConnectPhase.connected;
+        _back = false;
+        _turns++;
+      });
     } else if (st.phase == Phase.PHASE_IDLE && st.lastEnd == SessionEnd.SESSION_END_COULD_NOT_REACH) {
       _clock?.cancel();
-      setState(() => _phase = ConnectPhase.unreachable);
+      setState(() {
+        _phase = ConnectPhase.unreachable;
+        _back = false;
+        _turns++;
+      });
     }
   }
 
@@ -157,6 +171,8 @@ class _SetupScreenState extends State<SetupScreen> {
   // ---- steps ---------------------------------------------------------------------
 
   void _go(SetupStep step) => setState(() {
+        _back = step.index < _step.index;
+        _turns++;
         _step = step;
         if (step != SetupStep.connect) _phase = ConnectPhase.ready;
       });
@@ -167,6 +183,8 @@ class _SetupScreenState extends State<SetupScreen> {
     setState(() {
       _server = server;
       _phase = ConnectPhase.verifying;
+      _back = false;
+      _turns++;
       _verifyStarted = DateTime.now();
       _verifySeconds = 0;
     });
@@ -403,7 +421,10 @@ class _Aside extends StatelessWidget {
         children: [
           Semantics(
             liveRegion: true,
-            child: Container(
+            child: RiseOnChange(
+              value: text,
+              offset: const Offset(0, 4),
+              child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               decoration: BoxDecoration(color: colors.text, borderRadius: BorderRadius.circular(8)),
               child: Column(
@@ -414,6 +435,7 @@ class _Aside extends StatelessWidget {
                   Text(text, style: TextStyle(fontSize: 13, height: 18 / 13, fontWeight: FontWeight.w500, color: colors.bg)),
                 ],
               ),
+            ),
             ),
           ),
           const SizedBox(height: 8),
@@ -434,6 +456,7 @@ class _Aside extends StatelessWidget {
                         : done
                             ? colors.accent
                             : const Color(0xFF4A4A4A),
+                    blink: (phase == ConnectPhase.unreachable && step == SetupStep.connect) || done,
                   ),
                 ),
               ),
@@ -560,23 +583,43 @@ class _StepperRow extends StatelessWidget {
     final colors = CharonColors.of(context);
     final done = mark == StepperMark.done;
     final cur = mark == StepperMark.current;
+    final reduce = MediaQuery.maybeDisableAnimationsOf(context) ?? false;
+    final box = Container(
+      width: 20,
+      height: 20,
+      decoration: BoxDecoration(
+        color: done ? colors.accent : Colors.transparent,
+        border: Border.all(color: done ? colors.accent : cur ? colors.text : colors.divider, width: 2),
+      ),
+      child: done ? PixelIcon(PixelIcons.check, size: 14, color: colors.onAccent) : null,
+    );
     return Semantics(
       selected: cur,
-      child: Container(
-        height: 38,
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        decoration: BoxDecoration(color: cur ? colors.surface : Colors.transparent, borderRadius: BorderRadius.circular(10)),
+      child: TweenAnimationBuilder<Color?>(
+        // The row that becomes current fades its ground in over 320 ms (cur).
+        tween: ColorTween(end: cur ? colors.surface : colors.surface.withValues(alpha: 0)),
+        duration: cur && !reduce ? const Duration(milliseconds: 320) : Duration.zero,
+        curve: Curves.easeOut,
+        builder: (context, ground, child) => Container(
+          height: 38,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          decoration: BoxDecoration(color: ground, borderRadius: BorderRadius.circular(10)),
+          child: child,
+        ),
         child: Row(
           children: [
-            Container(
-              width: 20,
-              height: 20,
-              decoration: BoxDecoration(
-                color: done ? colors.accent : Colors.transparent,
-                border: Border.all(color: done ? colors.accent : cur ? colors.text : colors.divider, width: 2),
-              ),
-              child: done ? PixelIcon(PixelIcons.check, size: 14, color: colors.onAccent) : null,
-            ),
+            // A box that gets its tick pops: 50 % to 118 % to full in 300 ms (pop).
+            done && !reduce
+                ? TweenAnimationBuilder<double>(
+                    key: const ValueKey('done'),
+                    tween: Tween(begin: 0, end: 1),
+                    duration: const Duration(milliseconds: 300),
+                    curve: CharonCurves.entry,
+                    builder: (context, t, child) =>
+                        Transform.scale(scale: t < 0.6 ? 0.5 + 0.68 * t / 0.6 : 1.18 - 0.18 * (t - 0.6) / 0.4, child: child),
+                    child: box,
+                  )
+                : box,
             const SizedBox(width: 12),
             Text(n, style: monoStyle(colors.controlBorder, 10, bold: true)),
             const SizedBox(width: 12),
@@ -635,27 +678,47 @@ class _Main extends StatelessWidget {
       SetupStep.connect => _ConnectStep(state: state, palette: palette),
     };
 
+    // After a turn the header slides in 28 px from the side it came from, and the
+    // step 70 ms later (enF, enB: 380 ms).
+    Widget turn(int i, Widget child) => state._turns == 0
+        ? child
+        : Enter(
+            key: ValueKey((state._turns, i)),
+            offset: Offset(state._back ? -28 : 28, 0),
+            duration: const Duration(milliseconds: 380),
+            delay: Duration(milliseconds: i == 0 ? 0 : 70),
+            child: child,
+          );
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(36, 30, 36, 22),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('> $kick', style: monoStyle(colors.text3, 10, bold: true, em: 0.08)),
-          const SizedBox(height: 6),
-          Semantics(
-            header: true,
-            child: Text(
-              title,
-              style: TextStyle(fontSize: 28, height: 34 / 28, fontWeight: FontWeight.w600, letterSpacing: -0.56, color: colors.text),
+          turn(
+            0,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text('> $kick', style: monoStyle(colors.text3, 10, bold: true, em: 0.08)),
+                const SizedBox(height: 6),
+                Semantics(
+                  header: true,
+                  child: Text(
+                    title,
+                    style: TextStyle(fontSize: 28, height: 34 / 28, fontWeight: FontWeight.w600, letterSpacing: -0.56, color: colors.text),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 560),
+                  child: Text(lead, style: TextStyle(fontSize: 14, height: 21 / 14, color: colors.text2)),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 6),
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 560),
-            child: Text(lead, style: TextStyle(fontSize: 14, height: 21 / 14, color: colors.text2)),
-          ),
           const SizedBox(height: 18),
-          Expanded(child: body),
+          Expanded(child: turn(1, body)),
         ],
       ),
     );
@@ -1700,7 +1763,15 @@ class _Dial extends StatelessWidget {
       height: 200,
       child: Stack(
         children: [
-          Positioned.fill(child: CustomPaint(painter: _RingPainter(phase, colors))),
+          // While verifying each square fades to 18 % over the first 35 % of 1.2 s,
+          // the next one 1/28 of the loop later (chase).
+          Positioned.fill(
+            child: StepLoop(
+              on: phase == ConnectPhase.verifying,
+              tracks: [(period: 1200, delay: 0, at: [for (var k = 1; k <= 24; k++) k / 24])],
+              builder: (context, ms) => CustomPaint(painter: _RingPainter(phase, colors, ms)),
+            ),
+          ),
           Positioned(left: 52, top: 52, child: GhostSprite(eyes: eyes)),
         ],
       ),
@@ -1709,10 +1780,11 @@ class _Dial extends StatelessWidget {
 }
 
 class _RingPainter extends CustomPainter {
-  _RingPainter(this.phase, this.colors);
+  _RingPainter(this.phase, this.colors, this.ms);
 
   final ConnectPhase phase;
   final CharonColors colors;
+  final int ms;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -1725,7 +1797,9 @@ class _RingPainter extends CustomPainter {
         case ConnectPhase.ready:
           p.color = colors.controlBorder.withValues(alpha: 0.45);
         case ConnectPhase.verifying:
-          p.color = colors.transitionFill;
+          final t = ms - (i / 28 * 1200).round();
+          final ph = t < 0 ? 0.0 : (t % 1200) / 1200;
+          p.color = colors.transitionFill.withValues(alpha: ph < 0.35 ? 1 - 0.82 * ph / 0.35 : 0.18);
         case ConnectPhase.connected:
           p.color = colors.accent;
         case ConnectPhase.unreachable:
@@ -1736,5 +1810,5 @@ class _RingPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_RingPainter old) => old.phase != phase || old.colors != colors;
+  bool shouldRepaint(_RingPainter old) => old.phase != phase || old.colors != colors || old.ms != ms;
 }
