@@ -5,8 +5,8 @@ Charon is licensed under GPL 3.0 (see `LICENSE`). It includes or ships the follo
 ## Xray core
 
 * Licence: Mozilla Public License 2.0
-* Source: https://github.com/XTLS/Xray-core (release v26.3.27)
-* Use: runs as a separate `xray` binary on Windows (placed by hand in a git ignored folder, not stored in this repository). On Android a prebuilt `libxray.so` from the official release is stored at `charon_vpn/android/app/src/main/jniLibs/arm64-v8a/`. It is unmodified.
+* Source: https://github.com/XTLS/Xray-core (release v26.3.27 for the v1 app, release 26.10.31 for the v2 service)
+* Use: runs as a separate `xray` binary on Windows (placed by hand in a git ignored folder, not stored in this repository). On Android the v1 app stores a prebuilt `libxray.so` from the official release at `charon_vpn/android/app/src/main/jniLibs/arm64-v8a/`. It is unmodified.
 
 ## tproxy-config
 
@@ -19,6 +19,18 @@ Charon is licensed under GPL 3.0 (see `LICENSE`). It includes or ships the follo
 * Licence: BSD 3 Clause
 * Source: https://github.com/protocolbuffers/protobuf-go (`google.golang.org/protobuf`, version v1.36.12)
 * Use: runtime library of the Go module in `v2/core/`. The generated file `v2/core/gen/charonv1/charon.pb.go` is produced from `v2/proto/` with `protoc` and `protoc-gen-go`. Both are build tools and are not shipped.
+
+## Go crypto
+
+* Licence: BSD 3 Clause
+* Source: https://pkg.go.dev/golang.org/x/crypto (`golang.org/x/crypto`, version v0.59.0)
+* Use: `argon2` derives the key of `.charonvault` files in `v2/core/vault/` and the sync server. It pulls in `golang.org/x/sys` (BSD 3 Clause).
+
+## Wintun
+
+* Licence: the prebuilt `wintun.dll` is distributed under the Wintun "Prebuilt Binaries License" of WireGuard LLC, which allows redistributing it unmodified with an application. Check the licence text on https://www.wintun.net before each release.
+* Source: https://www.wintun.net (version 0.14.1, Microsoft signed)
+* Use: the layer 3 network adapter driver under the Windows tunnel. The installer places the official `wintun.dll` unmodified next to the service.
 
 ## go-winio
 
@@ -40,8 +52,15 @@ Used by `v2/app/`. Versions are pinned in `v2/app/pubspec.lock`.
 | protobuf 6.1.0 | BSD 3 Clause | Runtime for the generated message classes in `v2/app/lib/gen/` |
 | fixnum 1.1.1 | BSD 3 Clause | 64 bit integers, which protobuf uses for uint64 fields |
 | intl | BSD 3 Clause | Message formatting for the three languages |
+| url_launcher 6.3.3 | BSD 3 Clause | Opens the guides and other links in the browser (https only) |
 
 `protoc_plugin` (BSD 3 Clause) generates the Dart message classes and is a build tool that is not shipped. The Flutter SDK and its libraries are BSD 3 Clause.
+
+## IP to Country Lite
+
+* Licence: Creative Commons Attribution 4.0 (CC BY 4.0)
+* Source: https://db-ip.com (IP to Country Lite database by DB-IP)
+* Use: `v2/app/assets/geo/ipv4_country.bin.gz`, an offline IPv4 to country table that guesses the country of a server from its address. It is built with `v2/app/tool/build_geoip.dart`. The attribution is also shown on the Licences screen of the app.
 
 ## Fonts
 
