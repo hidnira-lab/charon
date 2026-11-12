@@ -93,8 +93,9 @@ void main() {
       // Wait for fakecore scenario to transition to UP
       await reachedUp.future.timeout(const Duration(seconds: 5));
 
-      // Pump widgets with new state
+      // Pump past the state swap: the old words leave in 140 ms, the new ones arrive in 240.
       await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump(const Duration(milliseconds: 400));
 
       expect(find.text('Connected'), findsOneWidget);
       expect(find.text('Disconnect'), findsOneWidget);

@@ -137,4 +137,26 @@ void main() {
       expect(missing, isEmpty);
     });
   });
+
+  test('tones and pulses follow the STATES of the Home board', () {
+    const expected = {
+      UiState.connected: StateTone.connected,
+      UiState.onBackup: StateTone.connected,
+      UiState.checkingNetwork: StateTone.connected,
+      UiState.verifying: StateTone.transition,
+      UiState.wakingUp: StateTone.transition,
+      UiState.reconnecting: StateTone.transition,
+      UiState.switching: StateTone.transition,
+      UiState.blocked: StateTone.critical,
+      UiState.reconnectingHeld: StateTone.critical,
+      UiState.noServer: StateTone.idle,
+      UiState.disconnected: StateTone.idle,
+      UiState.couldNotReach: StateTone.idle,
+      UiState.tunnelLost: StateTone.idle,
+      UiState.disconnecting: StateTone.idle,
+    };
+    expect({for (final s in UiState.values) s: s.tone}, expected);
+    expect([for (final s in UiState.values) if (s.pulses) s],
+        [UiState.verifying, UiState.wakingUp, UiState.reconnecting, UiState.switching]);
+  });
 }

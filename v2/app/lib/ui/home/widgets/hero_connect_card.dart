@@ -10,6 +10,9 @@ import 'failure_copy.dart';
 import 'live_values.dart';
 import '../../common/pixel_flag.dart';
 import 'home_dial.dart';
+import '../../common/motion.dart';
+import '../../common/notch_box.dart';
+import '../../common/state_tone.dart';
 
 /// The Connect Control / Hero Card matching HomeDesktop board (332 x 364 px).
 class HeroConnectCard extends StatelessWidget {
@@ -28,35 +31,7 @@ class HeroConnectCard extends StatelessWidget {
     final status = controller.status;
     final server = controller.activeServer;
 
-    final (Color toneFg, Color toneSoft, Color toneDot) = switch (uiState) {
-      UiState.connected || UiState.onBackup => (
-          colors.connectedText,
-          colors.connectedSoft,
-          colors.connectedFill,
-        ),
-      UiState.verifying ||
-      UiState.reconnecting ||
-      UiState.switching ||
-      UiState.wakingUp ||
-      UiState.checkingNetwork ||
-      UiState.couldNotReach ||
-      UiState.tunnelLost =>
-        (
-          colors.transitionText,
-          colors.transitionSoft,
-          colors.transitionFill,
-        ),
-      UiState.blocked || UiState.reconnectingHeld => (
-          colors.criticalText,
-          colors.criticalSoft,
-          colors.criticalFill,
-        ),
-      UiState.noServer || UiState.disconnected || UiState.disconnecting => (
-          colors.idleText,
-          colors.idleSoft,
-          colors.idleFill,
-        ),
-    };
+    final (Color toneFg, Color toneSoft, Color toneDot) = colors.tone(uiState.tone);
 
     // Sentences name a server by its SRV code, as the board does. The display
     // name only appears next to the code in the server row.
@@ -215,7 +190,7 @@ class HeroConnectCard extends StatelessWidget {
           SizedBox(
             height: 180.0,
             child: Center(
-              child: HomeDial(state: uiState, onTap: onCta, semanticLabel: cta),
+              child: SwapFade(swapKey: uiState, child: HomeDial(state: uiState, onTap: onCta, semanticLabel: cta)),
             ),
           ),
           // 2px status hairline
@@ -225,29 +200,27 @@ class HeroConnectCard extends StatelessWidget {
           ),
           // Info Area
           Expanded(
-            child: Padding(
+            child: SwapFade(
+              swapKey: uiState,
+              child: Padding(
               padding: const EdgeInsets.fromLTRB(18.0, 14.0, 18.0, 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Status Badge
-                  Container(
+                  // Stepped corners and a square dot that pulses while it waits, as on the board.
+                  ClipPath(
+                    clipper: NotchClipper(4),
+                    child: Container(
                     height: 22.0,
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    decoration: BoxDecoration(
-                      color: toneSoft,
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 9.0),
+                    color: toneSoft,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Container(
-                          width: 6.0,
-                          height: 6.0,
-                          decoration: BoxDecoration(
-                            color: toneDot,
-                            shape: BoxShape.circle,
-                          ),
+                        Pulse(
+                          on: uiState.pulses,
+                          child: SizedBox(width: 7.0, height: 7.0, child: ColoredBox(color: toneDot)),
                         ),
                         const SizedBox(width: 6.0),
                         Flexible(
@@ -256,6 +229,7 @@ class HeroConnectCard extends StatelessWidget {
                             style: CharonTypography.label.copyWith(
                               color: toneFg,
                               fontSize: 10.0,
+                              letterSpacing: 0.8,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -263,6 +237,7 @@ class HeroConnectCard extends StatelessWidget {
                         ),
                       ],
                     ),
+                  ),
                   ),
                   const SizedBox(height: 6.0),
                   Text(
@@ -354,6 +329,7 @@ class HeroConnectCard extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
             ),
           ),
         ],

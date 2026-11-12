@@ -4942,4 +4942,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => 'System';
+
+  @override
+  String get railChipOn => 'ON';
+
+  @override
+  String get railChipWait => 'WAIT';
+
+  @override
+  String get railChipHeld => 'HELD';
+
+  @override
+  String get railChipOff => 'OFF';
 }

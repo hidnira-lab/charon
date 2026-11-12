@@ -48,7 +48,24 @@ enum UiState {
         (s) => s.wireName == name,
         orElse: () => throw ArgumentError('unknown ui state "$name"'),
       );
+
+  /// The color family of the state, the `tone` of the Home board's STATES:
+  /// checking the network is still connected, a failed first connect and a
+  /// lost tunnel are idle (the board builds them on disconnected).
+  StateTone get tone => switch (this) {
+        connected || onBackup || checkingNetwork => StateTone.connected,
+        verifying || wakingUp || reconnecting || switching => StateTone.transition,
+        blocked || reconnectingHeld => StateTone.critical,
+        noServer || disconnected || couldNotReach || tunnelLost || disconnecting => StateTone.idle,
+      };
+
+  /// The amber glow pulse runs for transition states only (board 03:
+  /// "connected and critical never pulse").
+  bool get pulses => tone == StateTone.transition;
 }
+
+/// The four color families of connection state (board 01 Color).
+enum StateTone { connected, transition, critical, idle }
 
 /// Projects a snapshot to the state the UI shows. [hasServers] is false when the
 /// saved server list is empty, which is the only state the core does not know.

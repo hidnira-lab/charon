@@ -3528,5 +3528,13 @@
   "navHome": "Home",
   "@navHome": { "description": "Rail tooltip for the Home screen (board dictionary)." },
   "settingsLanguageSystem": "System",
-  "@settingsLanguageSystem": { "description": "Language menu: follow the system language (board dictionary)." }
+  "@settingsLanguageSystem": { "description": "Language menu: follow the system language (board dictionary)." },
+  "railChipOn": "ON",
+  "@railChipOn": { "description": "Rail status chip, connected (HomeDesktop board)." },
+  "railChipWait": "WAIT",
+  "@railChipWait": { "description": "Rail status chip, a transition state (HomeDesktop board)." },
+  "railChipHeld": "HELD",
+  "@railChipHeld": { "description": "Rail status chip, traffic held (HomeDesktop board)." },
+  "railChipOff": "OFF",
+  "@railChipOff": { "description": "Rail status chip, idle (HomeDesktop board)." }
 }

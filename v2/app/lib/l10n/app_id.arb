@@ -1430,5 +1430,9 @@
   "dlgReplaceKeeps": "tetap {code} · nama, urutan failover, dan kuota tidak berubah",
   "dlgReplaceChosen": "koneksi baru dipilih · berlaku setelah disimpan",
   "navHome": "Beranda",
-  "settingsLanguageSystem": "Sistem"
+  "settingsLanguageSystem": "Sistem",
+  "railChipOn": "ON",
+  "railChipWait": "CEK",
+  "railChipHeld": "TAHAN",
+  "railChipOff": "OFF"
 }

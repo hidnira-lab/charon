@@ -4668,6 +4668,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => '跟随系统';
+
+  @override
+  String get railChipOn => '开';
+
+  @override
+  String get railChipWait => '等待';
+
+  @override
+  String get railChipHeld => '拦截';
+
+  @override
+  String get railChipOff => '关';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -9333,4 +9345,16 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get settingsLanguageSystem => '跟随系统';
+
+  @override
+  String get railChipOn => '开';
+
+  @override
+  String get railChipWait => '等待';
+
+  @override
+  String get railChipHeld => '拦截';
+
+  @override
+  String get railChipOff => '关';
 }

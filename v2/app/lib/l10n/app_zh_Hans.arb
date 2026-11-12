@@ -1431,5 +1431,9 @@
   "dlgReplaceKeeps": "仍是 {code} · 名称、故障转移顺序和流量设置保持不变",
   "dlgReplaceChosen": "已选新连接 · 保存后生效",
   "navHome": "首页",
-  "settingsLanguageSystem": "跟随系统"
+  "settingsLanguageSystem": "跟随系统",
+  "railChipOn": "开",
+  "railChipWait": "等待",
+  "railChipHeld": "拦截",
+  "railChipOff": "关"
 }

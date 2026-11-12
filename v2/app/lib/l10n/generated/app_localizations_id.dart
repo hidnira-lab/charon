@@ -4909,4 +4909,16 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get settingsLanguageSystem => 'Sistem';
+
+  @override
+  String get railChipOn => 'ON';
+
+  @override
+  String get railChipWait => 'CEK';
+
+  @override
+  String get railChipHeld => 'TAHAN';
+
+  @override
+  String get railChipOff => 'OFF';
 }

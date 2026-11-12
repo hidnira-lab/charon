@@ -6,6 +6,7 @@ import '../../../state/home_view.dart';
 import '../../../state/throughput_history.dart';
 import '../../../theme/theme.dart';
 import 'sparkline.dart';
+import '../../common/motion.dart';
 
 /// The 4 readout cards row matching HomeDesktop board (height 84 px).
 /// What each card says in each state comes from [HomeView.readouts].
@@ -37,7 +38,15 @@ class ReadoutCards extends StatelessWidget {
         children: [
           for (var i = 0; i < readouts.length; i++) ...[
             if (i > 0) const SizedBox(width: CharonSpacing.s3),
-            Expanded(child: _ReadoutCard(readout: readouts[i], keyColor: keys[i], history: controller.throughputHistory)),
+            Expanded(
+              child: _ReadoutCard(
+                readout: readouts[i],
+                keyColor: keys[i],
+                history: controller.throughputHistory,
+                swapKey: controller.uiState,
+                index: i,
+              ),
+            ),
           ],
         ],
       ),
@@ -46,15 +55,27 @@ class ReadoutCards extends StatelessWidget {
 }
 
 class _ReadoutCard extends StatelessWidget {
-  const _ReadoutCard({required this.readout, required this.keyColor, required this.history});
+  const _ReadoutCard({
+    required this.readout,
+    required this.keyColor,
+    required this.history,
+    required this.swapKey,
+    required this.index,
+  });
 
   final Readout readout;
   final Color keyColor;
   final ThroughputHistory history;
 
+  /// The Home state: when it changes, the value and the note swap (rd), one card after another.
+  final Object swapKey;
+  final int index;
+
   @override
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
+    final valueDelay = Duration(milliseconds: index * 40);
+    final noteDelay = Duration(milliseconds: index * 40 + 60);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0),
@@ -82,7 +103,10 @@ class _ReadoutCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Flexible(
-                child: Row(
+                child: SwapFade.readout(
+                  swapKey: swapKey,
+                  delay: valueDelay,
+                  child: Row(
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   textBaseline: TextBaseline.alphabetic,
                   children: [
@@ -105,25 +129,34 @@ class _ReadoutCard extends StatelessWidget {
                       ),
                     ],
                   ],
+                  ),
                 ),
               ),
               if (readout.spark != null && history.length >= 2)
-                Sparkline(
-                  values: [for (final s in history.samples) readout.spark == SparkSeries.down ? s.down : s.up],
-                  max: history.yMax.toDouble(),
-                  color: readout.spark == SparkSeries.down ? colors.accent : colors.text,
+                SwapFade.reveal(
+                  swapKey: swapKey,
+                  delay: noteDelay,
+                  child: Sparkline(
+                    values: [for (final s in history.samples) readout.spark == SparkSeries.down ? s.down : s.up],
+                    max: history.yMax.toDouble(),
+                    color: readout.spark == SparkSeries.down ? colors.accent : colors.text,
+                  ),
                 ),
             ],
           ),
-          Text(
-            readout.note,
-            style: CharonTypography.caption.copyWith(
-              fontFamily: CharonFontFamilies.spaceMono,
-              color: colors.text3,
-              fontSize: 10.0,
+          SwapFade.readout(
+            swapKey: swapKey,
+            delay: noteDelay,
+            child: Text(
+              readout.note,
+              style: CharonTypography.caption.copyWith(
+                fontFamily: CharonFontFamilies.spaceMono,
+                color: colors.text3,
+                fontSize: 10.0,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

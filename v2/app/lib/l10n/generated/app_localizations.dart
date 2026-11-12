@@ -8547,6 +8547,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'System'**
   String get settingsLanguageSystem;
+
+  /// Rail status chip, connected (HomeDesktop board).
+  ///
+  /// In en, this message translates to:
+  /// **'ON'**
+  String get railChipOn;
+
+  /// Rail status chip, a transition state (HomeDesktop board).
+  ///
+  /// In en, this message translates to:
+  /// **'WAIT'**
+  String get railChipWait;
+
+  /// Rail status chip, traffic held (HomeDesktop board).
+  ///
+  /// In en, this message translates to:
+  /// **'HELD'**
+  String get railChipHeld;
+
+  /// Rail status chip, idle (HomeDesktop board).
+  ///
+  /// In en, this message translates to:
+  /// **'OFF'**
+  String get railChipOff;
 }
 
 class _AppLocalizationsDelegate
