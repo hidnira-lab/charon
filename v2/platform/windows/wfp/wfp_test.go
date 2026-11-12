@@ -1,6 +1,7 @@
 package wfp
 
 import (
+	"errors"
 	"testing"
 
 	charonv1 "github.com/hidnira-lab/charon/core/gen/charonv1"
@@ -127,4 +128,134 @@ func TestGate_ArmHoldDisarmAndReconcile(t *testing.T) {
 	if hasProv || hasSub {
 		t.Fatal("expected provider and sublayer to be removed on Disarm")
 	}
+}
+
+// The TUN adapter only exists after Xray starts, so Arm cannot know its LUID.
+// The Armed set must permit the adapter once it appears, or the kill switch
+// blocks all user traffic that Windows routes into it.
+func TestGate_ArmedPermitsTUNOnceItAppears(t *testing.T) {
+	mem := NewMemoryEngine()
+	gate := NewGate(mem, `C:\Program Files\Charon\xray.exe`)
+
+	var luid uint64
+	var lookupErr error = errNoAdapter
+	gate.SetTUNLookup("charon0", func(name string) (uint64, error) {
+		if name != "charon0" {
+			t.Fatalf("looked up %q, want charon0", name)
+		}
+		return luid, lookupErr
+	})
+
+	cfg := fixtureConfig(false)
+	if err := gate.Arm(cfg, cfg.Servers[0]); err != nil {
+		t.Fatal(err)
+	}
+	if got := tunFilters(mem); len(got) != 0 {
+		t.Fatalf("no adapter yet, want no tun permit, got %d", len(got))
+	}
+
+	// Adapter appears: refresh adds one permit per IP family, with its LUID.
+	luid, lookupErr = 0x1234, nil
+	if err := gate.RefreshTUN(); err != nil {
+		t.Fatal(err)
+	}
+	got := tunFilters(mem)
+	if len(got) != 2 {
+		t.Fatalf("want 2 tun permits (v4+v6), got %d", len(got))
+	}
+	for _, f := range got {
+		if f.Action != ActionPermit || f.LocalInterfaceLUID != 0x1234 || !f.Persistent {
+			t.Fatalf("bad tun permit: %+v", f)
+		}
+	}
+	if countKind(mustList(t, mem), RuleBlockAll) != 2 {
+		t.Fatal("refresh must keep the block rules")
+	}
+
+	// Same LUID again: nothing to do, no second transaction.
+	mem.FailOnApply = true
+	if err := gate.RefreshTUN(); err != nil {
+		t.Fatalf("unchanged adapter must not touch WFP: %v", err)
+	}
+	mem.FailOnApply = false
+
+	// Adapter recreated with a new LUID: permit follows it.
+	luid = 0x9999
+	if err := gate.RefreshTUN(); err != nil {
+		t.Fatal(err)
+	}
+	if got := tunFilters(mem); len(got) != 2 || got[0].LocalInterfaceLUID != 0x9999 {
+		t.Fatalf("permit did not follow the new adapter: %+v", got)
+	}
+
+	// Held (Xray died, kill switch holds): the permit goes away and a refresh
+	// must not bring it back.
+	if err := gate.Hold(cfg); err != nil {
+		t.Fatal(err)
+	}
+	if got := tunFilters(mem); len(got) != 0 {
+		t.Fatalf("Held must not permit the TUN adapter, got %d", len(got))
+	}
+	if err := gate.RefreshTUN(); err != nil {
+		t.Fatal(err)
+	}
+	if got := tunFilters(mem); len(got) != 0 {
+		t.Fatalf("refresh in Held must not permit the TUN adapter, got %d", len(got))
+	}
+
+	// Disarmed: nothing is installed and refresh stays out of it.
+	if err := gate.Disarm(); err != nil {
+		t.Fatal(err)
+	}
+	if err := gate.RefreshTUN(); err != nil {
+		t.Fatal(err)
+	}
+	if flts := mustList(t, mem); len(flts) != 0 {
+		t.Fatalf("refresh after Disarm installed %d filters", len(flts))
+	}
+}
+
+// A new Arm after the adapter is gone must not keep a stale permit.
+func TestGate_ArmDropsTUNPermitWhenAdapterIsGone(t *testing.T) {
+	mem := NewMemoryEngine()
+	gate := NewGate(mem, "")
+	present := true
+	gate.SetTUNLookup("charon0", func(string) (uint64, error) {
+		if present {
+			return 7, nil
+		}
+		return 0, errNoAdapter
+	})
+	cfg := fixtureConfig(false)
+	_ = gate.Arm(cfg, cfg.Servers[0])
+	if len(tunFilters(mem)) != 2 {
+		t.Fatal("adapter present at Arm: want the permit right away")
+	}
+	present = false
+	_ = gate.Arm(cfg, cfg.Servers[0])
+	if len(tunFilters(mem)) != 0 {
+		t.Fatal("adapter gone: want no tun permit")
+	}
+}
+
+var errNoAdapter = errors.New("adapter not found")
+
+func tunFilters(m *MemoryEngine) []FilterSpec {
+	all, _ := m.ListCharonFilters()
+	var out []FilterSpec
+	for _, f := range all {
+		if f.Kind == RuleTUNInterface {
+			out = append(out, f)
+		}
+	}
+	return out
+}
+
+func mustList(t *testing.T, m *MemoryEngine) []FilterSpec {
+	t.Helper()
+	l, err := m.ListCharonFilters()
+	if err != nil {
+		t.Fatal(err)
+	}
+	return l
 }

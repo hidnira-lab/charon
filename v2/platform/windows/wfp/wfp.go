@@ -46,6 +46,7 @@ const (
 	RuleXrayApp       RuleKind = "xray_app"
 	RuleLocalNetwork  RuleKind = "local_network"
 	RuleSplitDirectIP RuleKind = "split_direct_ip"
+	RuleTUNInterface  RuleKind = "tun_interface"
 )
 
 // FilterSpec describes one persistent WFP filter owned by Charon.
@@ -62,6 +63,9 @@ type FilterSpec struct {
 	RemotePort uint16       // optional UDP remote port
 	RemotePfx  netip.Prefix // optional remote IPv4/IPv6 prefix
 	AppPath    string       // optional full path to Xray executable
+	// LocalInterfaceLUID, when not 0, matches traffic that leaves through the
+	// interface with this NET_LUID (the TUN adapter).
+	LocalInterfaceLUID uint64
 }
 
 // Engine abstracts the low-level WFP Base Filtering Engine transaction and
@@ -103,6 +107,15 @@ type Gate struct {
 	eng      Engine
 	xrayPath string
 	lookupIP func(host string) ([]netip.Addr, error)
+
+	// What is installed now, so RefreshTUN can rebuild the Armed set when the
+	// TUN adapter shows up after Arm (Xray creates it, and Xray starts later).
+	armed     bool
+	cfg       *charonv1.Config
+	server    *charonv1.Server
+	tunName   string
+	tunLookup func(name string) (luid uint64, err error)
+	tunLUID   uint64 // LUID the installed Armed set permits, 0 when none
 }
 
 // NewGate constructs a WFP Gate backed by eng. xrayPath is the protected path
@@ -139,8 +152,70 @@ func (g *Gate) Arm(cfg *charonv1.Config, activeServer *charonv1.Server) error {
 	g.mu.Lock()
 	defer g.mu.Unlock()
 
-	specs := g.buildArmedSpecs(cfg, activeServer)
-	return g.eng.ApplyFilters(specs)
+	g.armed, g.cfg, g.server = true, cfg, activeServer
+	return g.applyArmedLocked()
+}
+
+// SetTUNLookup tells the Gate how to find the TUN adapter's LUID by name. Without
+// it the Armed set never permits the adapter. The lookup fails while the
+// adapter does not exist.
+func (g *Gate) SetTUNLookup(name string, lookup func(name string) (uint64, error)) {
+	g.mu.Lock()
+	defer g.mu.Unlock()
+	g.tunName, g.tunLookup = name, lookup
+}
+
+// RefreshTUN re-installs the Armed set when the TUN adapter appeared, vanished
+// or was recreated since the set was installed. It does nothing in Held or
+// Disarmed, and nothing (no WFP call) when the adapter is unchanged. Without the
+// permit, the kill switch blocks every connection Windows routes into the TUN.
+func (g *Gate) RefreshTUN() error {
+	g.mu.Lock()
+	defer g.mu.Unlock()
+
+	if !g.armed {
+		return nil
+	}
+	if luid, _ := g.lookupTUNLocked(); luid == g.tunLUID {
+		return nil
+	}
+	return g.applyArmedLocked()
+}
+
+func (g *Gate) lookupTUNLocked() (uint64, bool) {
+	if g.tunLookup == nil {
+		return 0, false
+	}
+	luid, err := g.tunLookup(g.tunName)
+	if err != nil || luid == 0 {
+		return 0, false
+	}
+	return luid, true
+}
+
+func (g *Gate) applyArmedLocked() error {
+	specs := g.buildArmedSpecs(g.cfg, g.server)
+	luid, ok := g.lookupTUNLocked()
+	if ok {
+		// Traffic that Windows routes into the TUN is what Xray carries to the
+		// server. It is the whole point of the tunnel, so permit it.
+		for _, layer := range []Layer{LayerConnectV4, LayerConnectV6} {
+			specs = append(specs, FilterSpec{
+				Name:               fmt.Sprintf("Charon Permit TUN Adapter IPv%d", layer),
+				Kind:               RuleTUNInterface,
+				Layer:              layer,
+				Weight:             12,
+				Action:             ActionPermit,
+				Persistent:         true,
+				LocalInterfaceLUID: luid,
+			})
+		}
+	}
+	if err := g.eng.ApplyFilters(specs); err != nil {
+		return err
+	}
+	g.tunLUID = luid
+	return nil
 }
 
 // Hold installs the Held filter set: blocks all traffic except loopback,
@@ -150,7 +225,11 @@ func (g *Gate) Hold(cfg *charonv1.Config) error {
 	defer g.mu.Unlock()
 
 	specs := g.buildHeldSpecs(cfg)
-	return g.eng.ApplyFilters(specs)
+	if err := g.eng.ApplyFilters(specs); err != nil {
+		return err
+	}
+	g.armed, g.tunLUID = false, 0
+	return nil
 }
 
 // Disarm removes all Charon filters, sublayer, and provider from WFP.
@@ -158,7 +237,11 @@ func (g *Gate) Disarm() error {
 	g.mu.Lock()
 	defer g.mu.Unlock()
 
-	return g.eng.RemoveAllCharonObjects()
+	if err := g.eng.RemoveAllCharonObjects(); err != nil {
+		return err
+	}
+	g.armed, g.tunLUID = false, 0
+	return nil
 }
 
 // ReleaseAll is an alias for Disarm used by the standalone emergency release

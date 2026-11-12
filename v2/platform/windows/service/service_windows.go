@@ -108,6 +108,7 @@ func NewRuntime(opts Options) (*Runtime, error) {
 
 	xrayPath := filepath.Join(opts.ProgramDir, "xray.exe")
 	gate := wfp.NewGate(opts.WFPEngine, xrayPath)
+	gate.SetTUNLookup(xrayconfig.DefaultTUNName, wfp.LuidByName)
 	reconcileErr := gate.ReconcileOnBoot(saved.Connected)
 
 	clock := NewRealClock()
@@ -301,7 +302,7 @@ func (r *Runtime) statsLoop(ctx context.Context) {
 func (r *Runtime) watchNetworkLoop(ctx context.Context) {
 	tick := time.NewTicker(2 * time.Second)
 	defer tick.Stop()
-	var prevSig string
+	var prevSig, lastGateErr string
 	for {
 		select {
 		case <-ctx.Done():
@@ -317,6 +318,12 @@ func (r *Runtime) watchNetworkLoop(ctx context.Context) {
 				r.drv.HandleEvent(machine.Event{Type: machine.TunAdapterLost})
 				prevSig = ""
 				continue
+			}
+			// Xray creates the adapter after the Armed set went in. Let the gate
+			// permit it, or the kill switch blocks all traffic routed into it.
+			if err := r.gate.RefreshTUN(); err != nil && err.Error() != lastGateErr {
+				lastGateErr = err.Error()
+				r.coreLogs.Append(charonv1.LogLevel_LOG_LEVEL_ERROR, "gate: permitting the TUN adapter failed: "+lastGateErr, r.clock.NowMs())
 			}
 			if prevSig != "" && sig != prevSig {
 				r.drv.HandleEvent(machine.Event{Type: machine.NetworkChanged})

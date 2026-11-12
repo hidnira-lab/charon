@@ -5,6 +5,7 @@ package wfp
 import (
 	"encoding/binary"
 	"fmt"
+	"net"
 	"runtime"
 	"unsafe"
 
@@ -21,6 +22,7 @@ const (
 	fwpDataTypeUint8         = 1
 	fwpDataTypeUint16        = 2
 	fwpDataTypeUint32        = 3
+	fwpDataTypeUint64        = 4 // FWP_UINT64: the value is a pointer to a uint64
 	fwpDataTypeByteArray16   = 11
 	fwpDataTypeByteBlob      = 12
 	fwpDataTypeV4AddrMask    = 0x100 // FWP_V4_ADDR_MASK
@@ -86,6 +88,11 @@ var (
 		Data1: 0xb235ae9a, Data2: 0x1d64, Data3: 0x49b8,
 		Data4: [8]byte{0xa4, 0x4c, 0x5f, 0xf3, 0xd9, 0x09, 0x50, 0x45},
 	}
+	// FWPM_CONDITION_IP_LOCAL_INTERFACE: the NET_LUID of the local interface.
+	guidCondIPLocalInterface = windows.GUID{
+		Data1: 0x4cd62a49, Data2: 0x59c3, Data3: 0x4969,
+		Data4: [8]byte{0xb7, 0xf3, 0xbd, 0xa5, 0xd3, 0x28, 0x90, 0xa4},
+	}
 	guidCondALEAppID = windows.GUID{
 		Data1: 0xd78e1e87, Data2: 0x8644, Data3: 0x4ea5,
 		Data4: [8]byte{0x94, 0x37, 0xd8, 0x09, 0xec, 0xef, 0xc9, 0x71},
@@ -106,7 +113,25 @@ var (
 	procFwpmFilterGetByKey0     = modfwpuclnt.NewProc("FwpmFilterGetByKey0")
 	procFwpmGetAppIdFromFile0   = modfwpuclnt.NewProc("FwpmGetAppIdFromFileName0")
 	procFwpmFreeMemory0         = modfwpuclnt.NewProc("FwpmFreeMemory0")
+
+	modiphlpapi                     = windows.NewLazySystemDLL("iphlpapi.dll")
+	procConvertInterfaceIndexToLuid = modiphlpapi.NewProc("ConvertInterfaceIndexToLuid")
 )
+
+// LuidByName returns the NET_LUID of the network interface called name, for
+// Gate.SetTUNLookup. It fails while the interface does not exist.
+func LuidByName(name string) (uint64, error) {
+	ifc, err := net.InterfaceByName(name)
+	if err != nil {
+		return 0, err
+	}
+	var luid uint64
+	r0, _, _ := procConvertInterfaceIndexToLuid.Call(uintptr(ifc.Index), uintptr(unsafe.Pointer(&luid)))
+	if r0 != 0 {
+		return 0, fmt.Errorf("ConvertInterfaceIndexToLuid(%s) failed: %d", name, r0)
+	}
+	return luid, nil
+}
 
 type fwpmDisplayData0 struct {
 	Name        *uint16
@@ -317,6 +342,19 @@ func addFilter(engine uintptr, idx int, sp FilterSpec) error {
 	defer pin.Unpin()
 	pin.Pin(&v4Mask)
 	pin.Pin(&v6Mask)
+	luid := sp.LocalInterfaceLUID
+	pin.Pin(&luid)
+
+	if luid != 0 {
+		conds = append(conds, fwpmFilterCondition0{
+			FieldKey:  guidCondIPLocalInterface,
+			MatchType: fwpMatchEqual,
+			ConditionValue: fwpValue0{
+				Type:  fwpDataTypeUint64,
+				Value: uintptr(unsafe.Pointer(&luid)),
+			},
+		})
+	}
 
 	if sp.Loopback {
 		conds = append(conds, fwpmFilterCondition0{
