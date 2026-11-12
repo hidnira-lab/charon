@@ -11,6 +11,7 @@ import 'widgets/delete_server_dialog.dart';
 import 'widgets/edit_server_dialog.dart';
 import 'widgets/server_profile_card.dart';
 import 'widgets/sync_card.dart';
+import '../common/motion.dart';
 
 /// Servers desktop screen (1024 x 768 px) matching ServersDesktop board.
 class ServersScreen extends StatefulWidget {
@@ -77,8 +78,10 @@ class _ServersScreenState extends State<ServersScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Header row
-                            Row(
+                            // Each block rises on arrival, 40 ms apart (mPg).
+                            Enter.page(
+                              index: 0,
+                              child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
@@ -183,11 +186,13 @@ class _ServersScreenState extends State<ServersScreen> {
                                   ),
                                 ),
                               ],
-                            ),
+                            )),
                             const SizedBox(height: 12),
                             // Connected lock banner
                             if (isConnected && activeServer != null) ...[
-                              Container(
+                              Enter.page(
+                                index: 1,
+                                child: Container(
                                 height: 40,
                                 padding: const EdgeInsets.symmetric(horizontal: 14),
                                 decoration: BoxDecoration(
@@ -223,12 +228,14 @@ class _ServersScreenState extends State<ServersScreen> {
                                     ),
                                   ],
                                 ),
-                              ),
+                              )),
                               const SizedBox(height: 14),
                             ],
                             // Two-column layout
                             Expanded(
-                              child: Row(
+                              child: Enter.page(
+                                index: isConnected && activeServer != null ? 2 : 1,
+                                child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   // Left column: Profiles list
@@ -411,7 +418,7 @@ class _ServersScreenState extends State<ServersScreen> {
                                   // Right column: SyncCard
                                   SyncCard(controller: controller),
                                 ],
-                              ),
+                              )),
                             ),
                           ],
                         ),

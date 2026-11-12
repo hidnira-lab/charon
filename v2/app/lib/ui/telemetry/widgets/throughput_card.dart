@@ -5,6 +5,7 @@ import '../../../state/telemetry_view.dart';
 import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
 import 'throughput_chart.dart';
+import '../../common/motion.dart';
 
 /// Throughput card of the Telemetry board: live pill, Chart/Table tabs, the
 /// three readouts, the chart or the last 60 samples, and the legend.
@@ -94,7 +95,8 @@ class _ThroughputCardState extends State<ThroughputCard> {
             const SizedBox(height: 12),
             SizedBox(
               height: 184,
-              child: _table ? _tableView(l10n, colors) : ThroughputChart(view: view),
+              // The table slides in from the right when it replaces the chart (mTab).
+              child: _table ? Enter.tab(dx: 10, child: _tableView(l10n, colors)) : ThroughputChart(view: view),
             ),
             const SizedBox(height: 12),
             Container(

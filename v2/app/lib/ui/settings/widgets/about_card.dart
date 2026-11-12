@@ -11,6 +11,7 @@ import '../../trust/guide_links.dart';
 import '../../trust/licences_screen.dart';
 import '../../trust/privacy_screen.dart';
 import '../../updates/updates_screen.dart';
+import '../../common/motion.dart';
 
 class AboutCard extends StatelessWidget {
   const AboutCard({
@@ -171,20 +172,20 @@ class AboutCard extends StatelessWidget {
                     if (controller == null) return;
                     if (item.label == l10n.settingsAboutUpdates) {
                       Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => UpdatesScreen(controller: controller!),
+                        charonPageRoute(
+                          (_) => UpdatesScreen(controller: controller!),
                         ),
                       );
                     } else if (item.label == l10n.settingsAboutLicense) {
                       Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => LicencesScreen(controller: controller!),
+                        charonPageRoute(
+                          (_) => LicencesScreen(controller: controller!),
                         ),
                       );
                     } else if (item.label == l10n.settingsAboutPrivacy) {
                       Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => PrivacyScreen(controller: controller!),
+                        charonPageRoute(
+                          (_) => PrivacyScreen(controller: controller!),
                         ),
                       );
                     } else if (item.label == l10n.settingsAboutDiagnostics) {

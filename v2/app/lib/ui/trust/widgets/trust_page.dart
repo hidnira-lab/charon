@@ -6,6 +6,7 @@ import '../../../state/home_controller.dart';
 import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
 import '../../home/widgets/rail_nav.dart';
+import '../../common/motion.dart';
 
 /// The frame of the three Trust pages (Licences, Privacy and network, Export
 /// diagnostics): the rail, the breadcrumb that goes back to Settings, the
@@ -51,8 +52,11 @@ class TrustPage extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(24, 18, 24, 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
+                // The header, then the page, rise on arrival (mPg).
                 children: [
-                  Row(
+                  Enter.page(
+                    index: 0,
+                    child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
@@ -83,9 +87,9 @@ class TrustPage extends StatelessWidget {
                         child: Text(meta, style: monoStyle(colors.text3, 11)),
                       ),
                     ],
-                  ),
+                  )),
                   const SizedBox(height: 12),
-                  Expanded(child: scroll ? SingleChildScrollView(child: child) : child),
+                  Expanded(child: Enter.page(index: 1, child: scroll ? SingleChildScrollView(child: child) : child)),
                 ],
               ),
             ),

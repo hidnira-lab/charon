@@ -12,6 +12,7 @@ import 'widgets/route_map_card.dart';
 import 'widgets/rules_list_card.dart';
 import '../common/glass_card.dart';
 import 'widgets/windows_info_card.dart';
+import '../common/motion.dart';
 
 class SplitScreen extends StatefulWidget {
   const SplitScreen({
@@ -76,8 +77,11 @@ class _SplitScreenState extends State<SplitScreen> {
                   padding: const EdgeInsets.fromLTRB(24, 18, 24, 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
+                    // Each block rises on arrival, 40 ms apart (mPg).
                     children: [
-                      Row(
+                      Enter.page(
+                        index: 0,
+                        child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
@@ -105,14 +109,16 @@ class _SplitScreenState extends State<SplitScreen> {
                             child: Text(subtitle, style: monoStyle(colors.text3, 11)),
                           ),
                         ],
-                      ),
+                      )),
                       const SizedBox(height: 14),
                       if (controller.hasPendingSplitChanges) ...[
-                        PendingBanner(onReconnect: controller.reconnectForPendingSplit),
+                        Enter.page(index: 1, child: PendingBanner(onReconnect: controller.reconnectForPendingSplit)),
                         const SizedBox(height: 14),
                       ],
                       Expanded(
-                        child: Row(
+                        child: Enter.page(
+                          index: controller.hasPendingSplitChanges ? 2 : 1,
+                          child: Row(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Expanded(
@@ -166,7 +172,7 @@ class _SplitScreenState extends State<SplitScreen> {
                               ),
                             ),
                           ],
-                        ),
+                        )),
                       ),
                     ],
                   ),

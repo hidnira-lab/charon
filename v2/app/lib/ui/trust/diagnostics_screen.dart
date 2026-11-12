@@ -10,6 +10,7 @@ import '../../state/home_controller.dart';
 import '../../theme/theme.dart';
 import '../common/glass_card.dart';
 import 'widgets/trust_page.dart';
+import '../common/motion.dart';
 
 /// "Export diagnostics" (Trust board): pick what goes into a text for a bug
 /// report, read it in a live preview, then copy it. Nothing is uploaded and
@@ -30,7 +31,7 @@ class DiagnosticsScreen extends StatefulWidget {
   /// Opens the page on top of the current one.
   static Future<void> show(BuildContext context, HomeController controller) =>
       Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => DiagnosticsScreen(controller: controller)),
+        charonPageRoute<void>((_) => DiagnosticsScreen(controller: controller)),
       );
 
   @override

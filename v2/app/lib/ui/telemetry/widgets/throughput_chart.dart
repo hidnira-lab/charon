@@ -11,6 +11,7 @@ import '../../common/ghost.dart';
 import '../../common/glass_card.dart';
 import '../../common/pixel_sprite.dart';
 import '../../tray/tray_art.dart';
+import '../../common/motion.dart';
 
 /// The Throughput chart of the Telemetry board: a rolling five minute window,
 /// two step lines on one Mbps axis (2 px, snapped to a 2 px grid), a halftone
@@ -61,10 +62,14 @@ class _ThroughputChartState extends State<ThroughputChart> {
                   left: 0,
                   top: yOf(v) + top - 7,
                   width: 26,
-                  child: Text(
-                    '$v',
-                    textAlign: TextAlign.right,
-                    style: monoStyle(colors.text3, 10),
+                  // The labels slide in from the left whenever the chart appears (mTab).
+                  child: Enter.tab(
+                    dx: -10,
+                    child: Text(
+                      '$v',
+                      textAlign: TextAlign.right,
+                      style: monoStyle(colors.text3, 10),
+                    ),
                   ),
                 ),
               Positioned(

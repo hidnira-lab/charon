@@ -13,6 +13,7 @@ import '../home/widgets/rail_nav.dart';
 import 'widgets/file_update_card.dart';
 import 'widgets/offline_banner.dart';
 import 'widgets/update_card.dart';
+import '../common/motion.dart';
 
 class UpdatesScreen extends StatefulWidget {
   const UpdatesScreen({
@@ -115,8 +116,11 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
                   padding: const EdgeInsets.fromLTRB(24, 18, 24, 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
+                    // Each block rises on arrival, 40 ms apart (mPg).
                     children: [
-                      Row(
+                      Enter.page(
+                        index: 0,
+                        child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
@@ -168,7 +172,7 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
                             ],
                           ),
                         ],
-                      ),
+                      )),
                       const SizedBox(height: 14),
                       Expanded(
                         child: SingleChildScrollView(
@@ -177,10 +181,12 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               if (!view.online) ...[
-                                OfflineBanner(onScrollToFileUpdate: _scrollToFileCard),
+                                Enter.page(index: 1, child: OfflineBanner(onScrollToFileUpdate: _scrollToFileCard)),
                                 const SizedBox(height: 14),
                               ],
-                              IntrinsicHeight(
+                              Enter.page(
+                                index: view.online ? 1 : 2,
+                                child: IntrinsicHeight(
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
@@ -189,11 +195,11 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
                                     Expanded(child: UpdateCard(view: view.app, onAction: _act)),
                                   ],
                                 ),
-                              ),
+                              )),
                               const SizedBox(height: 14),
                               KeyedSubtree(
                                 key: _fileCardKey,
-                                child: FileUpdateCard(view: view.file, onAction: _act),
+                                child: Enter.page(index: view.online ? 2 : 3, child: FileUpdateCard(view: view.file, onAction: _act)),
                               ),
                             ],
                           ),

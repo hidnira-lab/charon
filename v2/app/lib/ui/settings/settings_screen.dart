@@ -11,6 +11,7 @@ import 'widgets/greeting_card.dart';
 import 'widgets/network_card.dart';
 import 'widgets/quota_card.dart';
 import '../../theme/theme.dart';
+import '../common/motion.dart';
 
 /// Settings desktop screen (1024 x 768 px) matching SettingsDesktop board.
 class SettingsScreen extends StatelessWidget {
@@ -67,8 +68,10 @@ class SettingsScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Header row
-                            Row(
+                            // Each block rises on arrival, 40 ms apart (mPg).
+                            Enter.page(
+                              index: 0,
+                              child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
@@ -109,12 +112,14 @@ class SettingsScreen extends StatelessWidget {
                                   ),
                                 ),
                               ],
-                            ),
+                            )),
                             const SizedBox(height: 14),
 
                             // Scrollable 2-Column content
                             Expanded(
-                              child: SingleChildScrollView(
+                              child: Enter.page(
+                                index: 1,
+                                child: SingleChildScrollView(
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -144,7 +149,7 @@ class SettingsScreen extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                              ),
+                              )),
                             ),
                           ],
                         ),

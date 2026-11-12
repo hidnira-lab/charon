@@ -15,6 +15,7 @@ import 'widgets/session_card.dart';
 import 'widgets/share_dialog.dart';
 import 'widgets/throughput_card.dart';
 import 'widgets/traffic_card.dart';
+import '../common/motion.dart';
 
 class TelemetryScreen extends StatefulWidget {
   const TelemetryScreen({
@@ -105,8 +106,11 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
                   padding: const EdgeInsets.fromLTRB(24, 18, 24, 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
+                    // Each block rises on arrival, 40 ms apart (mPg).
                     children: [
-                      Row(
+                      Enter.page(
+                        index: 0,
+                        child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
@@ -134,10 +138,12 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
                             child: Text(l10n.telemetrySubtitle, style: monoStyle(colors.text3, 11)),
                           ),
                         ],
-                      ),
+                      )),
                       const SizedBox(height: 14),
                       Expanded(
-                        child: Row(
+                        child: Enter.page(
+                          index: 1,
+                          child: Row(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Expanded(
@@ -185,7 +191,7 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
                               ),
                             ),
                           ],
-                        ),
+                        )),
                       ),
                     ],
                   ),
