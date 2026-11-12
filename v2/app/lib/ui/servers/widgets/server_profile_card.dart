@@ -4,6 +4,7 @@ import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/country.dart' as country_names;
 import '../../../theme/theme.dart';
+import '../../common/pixel_flag.dart';
 
 /// Card showing one server profile in the failover list.
 class ServerProfileCard extends StatelessWidget {
@@ -70,25 +71,7 @@ class ServerProfileCard extends StatelessWidget {
           ),
           const SizedBox(width: 14),
           // Flag badge
-          Container(
-            width: 36,
-            height: 24,
-            decoration: BoxDecoration(
-              color: colors.surface2,
-              borderRadius: BorderRadius.circular(4),
-              border: Border.all(color: colors.controlBorder),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              country,
-              style: TextStyle(
-                fontFamily: CharonTokens.fontMono,
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
-                color: colors.text,
-              ),
-            ),
-          ),
+          PixelFlag(country, scale: 3, semanticLabel: countryName),
           const SizedBox(width: 14),
           // Server information
           Expanded(

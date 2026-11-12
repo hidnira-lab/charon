@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../theme/theme.dart';
 import '../common/glass_card.dart';
+import '../common/pixel_flag.dart';
 
 /// Opens a dialog with the scrim of the Dialogs board.
 Future<T?> showCharonDialog<T>(BuildContext context, WidgetBuilder builder) {
@@ -611,20 +612,7 @@ class DialogFlag extends StatelessWidget {
   final double height;
 
   @override
-  Widget build(BuildContext context) {
-    final colors = CharonColors.of(context);
-    return Container(
-      width: width,
-      height: height,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: colors.surface2,
-        border: Border.all(color: colors.controlBorder),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Text(code.isEmpty ? '··' : code.toUpperCase(), style: monoStyle(colors.text, 10, bold: true)),
-    );
-  }
+  Widget build(BuildContext context) => PixelFlag(code, scale: width / 12);
 }
 
 /// An amber line with what went wrong, and a mono line under it with what to do.

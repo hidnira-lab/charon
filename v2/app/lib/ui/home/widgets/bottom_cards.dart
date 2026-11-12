@@ -5,6 +5,7 @@ import '../../../state/home_controller.dart';
 import '../../../state/home_view.dart';
 import '../../../state/ui_state.dart';
 import '../../../theme/theme.dart';
+import '../../common/pixel_flag.dart';
 
 // Rail tabs the card links open.
 const int _tabServers = 1;
@@ -86,17 +87,7 @@ class _NodeBody extends StatelessWidget {
       children: [
         Row(
           children: [
-            Container(
-              width: 36.0,
-              height: 24.0,
-              decoration: BoxDecoration(
-                color: colors.surface2,
-                border: Border.all(color: colors.controlBorder, width: 1.0),
-              ),
-              child: Center(
-                child: Text(cc.toUpperCase(), style: CharonTypography.label.copyWith(fontSize: 9.0)),
-              ),
-            ),
+            PixelFlag(cc, scale: 3),
             const SizedBox(width: 12.0),
             Expanded(
               child: Column(

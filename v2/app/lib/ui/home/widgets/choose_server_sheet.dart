@@ -4,6 +4,7 @@ import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
 import '../../../theme/theme.dart';
+import '../../common/pixel_flag.dart';
 
 /// The "Pick a server to try" dialog of the HomeDesktop board. Opened from the
 /// held banners: the server that failed is listed but cannot be picked, any
@@ -150,16 +151,7 @@ class _ServerRow extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               child: Row(
                 children: [
-                  Container(
-                    width: 36,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      color: colors.surface2,
-                      border: Border.all(color: colors.controlBorder),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(cc, style: CharonTypography.label.copyWith(fontSize: 9, color: colors.text)),
-                  ),
+                  PixelFlag(cc, scale: 3),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(

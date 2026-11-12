@@ -5,6 +5,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/split_view.dart';
 import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
+import '../../common/pixel_flag.dart';
 
 class RouteMapCard extends StatelessWidget {
   const RouteMapCard({
@@ -97,19 +98,7 @@ class RouteMapCard extends StatelessWidget {
                         head: Row(
                           children: [
                             if (countryCode.isNotEmpty) ...[
-                              Container(
-                                width: 24,
-                                height: 16,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: colors.surface2,
-                                  border: Border.all(color: colors.controlBorder),
-                                ),
-                                child: Text(
-                                  countryCode.toUpperCase(),
-                                  style: monoStyle(colors.text, 8, bold: true),
-                                ),
-                              ),
+                              PixelFlag(countryCode, scale: 2),
                               const SizedBox(width: 6),
                             ],
                             Text(

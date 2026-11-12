@@ -8,6 +8,7 @@ import '../../../theme/theme.dart';
 import '../../dialogs/release_confirm_dialog.dart';
 import 'failure_copy.dart';
 import 'live_values.dart';
+import '../../common/pixel_flag.dart';
 
 /// The Connect Control / Hero Card matching HomeDesktop board (332 x 364 px).
 class HeroConnectCard extends StatelessWidget {
@@ -302,20 +303,7 @@ class HeroConnectCard extends StatelessWidget {
                   if (controller.hasServers)
                     Row(
                       children: [
-                        Container(
-                          width: 24.0,
-                          height: 16.0,
-                          decoration: BoxDecoration(
-                            color: colors.surface2,
-                            border: Border.all(color: colors.controlBorder, width: 1.0),
-                          ),
-                          child: Center(
-                            child: Text(
-                              (server?.countryCode ?? '').toUpperCase(),
-                              style: CharonTypography.label.copyWith(fontSize: 8.0),
-                            ),
-                          ),
-                        ),
+                        PixelFlag(server?.countryCode ?? '', scale: 2),
                         const SizedBox(width: 8.0),
                         Expanded(
                           child: Text(

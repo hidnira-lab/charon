@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:charon/ui/common/pixel_flag.dart';
 
 import 'support/fonts.dart';
 
@@ -348,7 +349,7 @@ void main() {
       expect(find.text('NO RULES'), findsOneWidget); // the chip on the route map
       expect(find.text('0 rules'), findsOneWidget); // no "· go direct" when empty
       expect(find.text('No rules yet'), findsOneWidget);
-      expect(find.text('SG'), findsOneWidget); // server country on the tunnel box
+      expect(find.byWidgetPredicate((w) => w is PixelFlag && w.code == 'SG'), findsOneWidget); // server flag on the tunnel box
       expect(tester.takeException(), isNull);
     });
 
