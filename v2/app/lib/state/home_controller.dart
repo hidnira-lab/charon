@@ -139,10 +139,10 @@ class HomeController extends ChangeNotifier {
   bool _hasNotificationPermission = true;
   bool _anotherVpnTookOver = false;
   bool _stoppedByAndroid = false;
-  String _greetingName = 'Day';
+  String _greetingName = '';
   bool _detectCity = true;
-  String _city = 'Yogyakarta';
-  String _countryCode = 'CN';
+  String _city = '';
+  String _countryCode = '';
 
   CoreClient? get client => _client;
   Status get status => _status;

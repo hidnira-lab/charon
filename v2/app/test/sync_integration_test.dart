@@ -252,8 +252,8 @@ void main() {
           expect(devB.locale?.languageCode, 'id');
 
           // SY6: Non-synced local fields on Device B were NOT overwritten by Device A.
-          expect(devB.greetingName, 'Day');
-          expect(devB.city, 'Yogyakarta');
+          expect(devB.greetingName, isNot('LocalOnlyNameA'));
+          expect(devB.city, isNot('LocalOnlyCityA'));
           expect(devB.launchAtStartup, isFalse);
 
           // 3. Optimistic concurrency conflict (412):

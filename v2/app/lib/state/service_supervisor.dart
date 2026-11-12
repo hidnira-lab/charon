@@ -205,7 +205,10 @@ class ServiceSupervisor extends ChangeNotifier {
     if (!_windows) return;
     try {
       await _launch('charon-release.exe', const []);
-    } catch (_) {}
+    } catch (_) {
+      // The tool is a last resort with its own console window; if it cannot
+      // start there is nothing more this screen can do.
+    }
   }
 
   /// Settings, "Restart service".

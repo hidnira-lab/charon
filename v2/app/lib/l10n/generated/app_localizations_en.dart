@@ -4875,4 +4875,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get toastPublicUsage => 'Usage alert';
+
+  @override
+  String get homeGreetMorningPlain => 'Good morning!';
+
+  @override
+  String get homeGreetAfternoonPlain => 'Good afternoon!';
+
+  @override
+  String get homeGreetEveningPlain => 'Good evening!';
+
+  @override
+  String get homeGreetNightPlain => 'Good night!';
 }

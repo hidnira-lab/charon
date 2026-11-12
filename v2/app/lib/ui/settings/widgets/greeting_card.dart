@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../state/greeting.dart';
 import '../../../state/home_controller.dart';
+import '../../common/pixel_flag.dart';
 import 'charon_switch.dart';
 import '../../../theme/theme.dart';
 
@@ -43,6 +45,8 @@ class _GreetingCardState extends State<GreetingCard> {
     final name = widget.controller.greetingName;
     final city = widget.controller.city;
     final country = widget.controller.countryCode;
+    final greeting = greetingFor(l10n, DateTime.now().hour, name);
+    final preview = city.trim().isEmpty ? greeting : '$greeting · ${l10n.homeLocation(city)}';
 
     return Container(
       width: 300,
@@ -267,8 +271,10 @@ class _GreetingCardState extends State<GreetingCard> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('🇨🇳', style: TextStyle(fontSize: 13)),
-                          const SizedBox(width: 4),
+                          if (country.isNotEmpty) ...[
+                            PixelFlag(country, frame: colors.controlBorder),
+                            const SizedBox(width: 4),
+                          ],
                           Text(
                             country,
                             style: TextStyle(
@@ -310,7 +316,7 @@ class _GreetingCardState extends State<GreetingCard> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'Good evening, $name! · in $city',
+                    preview,
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,

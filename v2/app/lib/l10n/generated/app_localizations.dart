@@ -8475,6 +8475,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Usage alert'**
   String get toastPublicUsage;
+
+  /// Home greeting in the morning when no name is set.
+  ///
+  /// In en, this message translates to:
+  /// **'Good morning!'**
+  String get homeGreetMorningPlain;
+
+  /// Home greeting in the afternoon when no name is set.
+  ///
+  /// In en, this message translates to:
+  /// **'Good afternoon!'**
+  String get homeGreetAfternoonPlain;
+
+  /// Home greeting in the evening when no name is set.
+  ///
+  /// In en, this message translates to:
+  /// **'Good evening!'**
+  String get homeGreetEveningPlain;
+
+  /// Home greeting at night when no name is set.
+  ///
+  /// In en, this message translates to:
+  /// **'Good night!'**
+  String get homeGreetNightPlain;
 }
 
 class _AppLocalizationsDelegate

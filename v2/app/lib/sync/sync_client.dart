@@ -358,7 +358,9 @@ class SyncServerClient {
     if (rawBytes.isNotEmpty) {
       try {
         jsonMap = json.decode(utf8.decode(rawBytes)) as Map<String, dynamic>;
-      } catch (_) {}
+      } catch (_) {
+        // Not JSON: the caller reads the HTTP status, an empty map is fine.
+      }
     }
 
     if (resp.statusCode == HttpStatus.preconditionFailed) {
@@ -471,7 +473,9 @@ class SyncServerClient {
     if (bytes.isNotEmpty) {
       try {
         parsed = json.decode(utf8.decode(bytes)) as Map<String, dynamic>;
-      } catch (_) {}
+      } catch (_) {
+        // Not JSON: the caller reads the HTTP status, an empty map is fine.
+      }
     }
     return (statusCode: resp.statusCode, json: parsed);
   }
@@ -863,7 +867,9 @@ class SyncController extends ChangeNotifier {
     if (token != null && _serverClient != null) {
       try {
         await _serverClient!.unpairSelf(token: token);
-      } catch (_) {}
+      } catch (_) {
+        // Best effort: the server may be gone. The local token is deleted below either way.
+      }
     }
     await _tokenStore.deleteToken();
     _serverClient?.close();

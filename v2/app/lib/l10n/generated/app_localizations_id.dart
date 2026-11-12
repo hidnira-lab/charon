@@ -4869,4 +4869,16 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get toastPublicUsage => 'Peringatan pemakaian';
+
+  @override
+  String get homeGreetMorningPlain => 'Selamat pagi!';
+
+  @override
+  String get homeGreetAfternoonPlain => 'Selamat siang!';
+
+  @override
+  String get homeGreetEveningPlain => 'Selamat sore!';
+
+  @override
+  String get homeGreetNightPlain => 'Selamat malam!';
 }

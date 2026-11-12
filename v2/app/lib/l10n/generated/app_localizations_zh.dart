@@ -4627,6 +4627,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get toastPublicUsage => '用量提醒';
+
+  @override
+  String get homeGreetMorningPlain => '早上好！';
+
+  @override
+  String get homeGreetAfternoonPlain => '下午好！';
+
+  @override
+  String get homeGreetEveningPlain => '傍晚好！';
+
+  @override
+  String get homeGreetNightPlain => '晚上好！';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -9251,4 +9263,16 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get toastPublicUsage => '用量提醒';
+
+  @override
+  String get homeGreetMorningPlain => '早上好！';
+
+  @override
+  String get homeGreetAfternoonPlain => '下午好！';
+
+  @override
+  String get homeGreetEveningPlain => '傍晚好！';
+
+  @override
+  String get homeGreetNightPlain => '晚上好！';
 }

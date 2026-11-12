@@ -3489,5 +3489,13 @@
   "toastPublicLost": "Tunnel lost",
   "@toastPublicLost": { "description": "Lock screen version of the tunnel lost toast." },
   "toastPublicUsage": "Usage alert",
-  "@toastPublicUsage": { "description": "Lock screen version of the quota toasts." }
+  "@toastPublicUsage": { "description": "Lock screen version of the quota toasts." },
+  "homeGreetMorningPlain": "Good morning!",
+  "@homeGreetMorningPlain": { "description": "Home greeting in the morning when no name is set." },
+  "homeGreetAfternoonPlain": "Good afternoon!",
+  "@homeGreetAfternoonPlain": { "description": "Home greeting in the afternoon when no name is set." },
+  "homeGreetEveningPlain": "Good evening!",
+  "@homeGreetEveningPlain": { "description": "Home greeting in the evening when no name is set." },
+  "homeGreetNightPlain": "Good night!",
+  "@homeGreetNightPlain": { "description": "Home greeting at night when no name is set." }
 }

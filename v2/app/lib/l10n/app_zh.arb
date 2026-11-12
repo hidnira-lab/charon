@@ -1419,5 +1419,9 @@
   "toastPublicConnected": "已连接",
   "toastPublicHeld": "流量已拦截",
   "toastPublicLost": "隧道丢失",
-  "toastPublicUsage": "用量提醒"
+  "toastPublicUsage": "用量提醒",
+  "homeGreetMorningPlain": "早上好！",
+  "homeGreetAfternoonPlain": "下午好！",
+  "homeGreetEveningPlain": "傍晚好！",
+  "homeGreetNightPlain": "晚上好！"
 }

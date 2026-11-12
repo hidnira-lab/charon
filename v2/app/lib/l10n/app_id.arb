@@ -1418,5 +1418,9 @@
   "toastPublicConnected": "Terhubung",
   "toastPublicHeld": "Trafik ditahan",
   "toastPublicLost": "Tunnel hilang",
-  "toastPublicUsage": "Peringatan pemakaian"
+  "toastPublicUsage": "Peringatan pemakaian",
+  "homeGreetMorningPlain": "Selamat pagi!",
+  "homeGreetAfternoonPlain": "Selamat siang!",
+  "homeGreetEveningPlain": "Selamat sore!",
+  "homeGreetNightPlain": "Selamat malam!"
 }

@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
+import '../../../state/country.dart' as country_names;
+import '../../../state/greeting.dart';
 import '../../../state/home_view.dart';
 import '../../../theme/theme.dart';
+import '../../common/pixel_flag.dart';
 
 /// Time & Place Card matching HomeDesktop board (558 x 364 px).
 class TimePlaceCard extends StatelessWidget {
@@ -30,13 +33,15 @@ class TimePlaceCard extends StatelessWidget {
     final hour = now.hour;
     final timeStr = '${hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
     final name = controller.greetingName;
-    final (String sceneTag, String greeting) = hour >= 5 && hour < 10
-        ? (l10n.homeSceneMorning, l10n.homeGreetMorning(name))
+    final sceneTag = hour >= 5 && hour < 10
+        ? l10n.homeSceneMorning
         : hour >= 10 && hour < 15
-            ? (l10n.homeSceneDay, l10n.homeGreetAfternoon(name))
+            ? l10n.homeSceneDay
             : hour >= 15 && hour < 18
-                ? (l10n.homeSceneDusk, l10n.homeGreetEvening(name))
-                : (l10n.homeSceneNight, l10n.homeGreetNight(name));
+                ? l10n.homeSceneDusk
+                : l10n.homeSceneNight;
+    final greeting = greetingFor(l10n, hour, name);
+    final hasPlace = controller.city.trim().isNotEmpty;
 
     return Container(
       width: 558.0,
@@ -94,6 +99,7 @@ class TimePlaceCard extends StatelessWidget {
                       color: colors.text,
                     ),
                   ),
+                  if (hasPlace) ...[
                   const SizedBox(height: CharonSpacing.s2),
                   Row(
                     children: [
@@ -115,23 +121,11 @@ class TimePlaceCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: CharonSpacing.s2),
-                      Container(
-                        width: 20.0,
-                        height: 14.0,
-                        decoration: BoxDecoration(
-                          color: colors.surface2,
-                          border: Border.all(color: colors.controlBorder, width: 1.0),
-                          borderRadius: BorderRadius.circular(2.0),
-                        ),
-                        child: Center(
-                          child: Text(
-                            controller.countryCode.toUpperCase(),
-                            style: CharonTypography.label.copyWith(fontSize: 8.0),
-                          ),
-                        ),
-                      ),
+                      if (controller.countryCode.isNotEmpty)
+                        PixelFlag(controller.countryCode, frame: colors.controlBorder, semanticLabel: country_names.countryName(l10n, controller.countryCode)),
                     ],
                   ),
+                  ],
                   const SizedBox(height: CharonSpacing.s2),
                   Text(
                     '> $crossingText',

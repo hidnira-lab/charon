@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:charon/ui/settings/widgets/greeting_card.dart';
 
 import 'support/fonts.dart';
 
@@ -162,14 +163,15 @@ void main() {
       await tester.pumpAndSettle();
 
       // Update Greeting Name
-      final nameInput = find.widgetWithText(TextField, 'Day');
+      final nameInput = find.descendant(of: find.byType(GreetingCard), matching: find.byType(TextField)).first;
       expect(nameInput, findsOneWidget);
 
       await tester.enterText(nameInput, 'Alex');
       await tester.pumpAndSettle();
 
       expect(controller.greetingName, 'Alex');
-      expect(find.text('Good evening, Alex! · in Yogyakarta'), findsOneWidget);
+      // The preview line follows the hour; a name is in it whatever the hour.
+      expect(find.byWidgetPredicate((w) => w is Text && (w.data ?? '').contains('Alex')), findsOneWidget);
     });
 
     testWidgets('erase all data triggers modal and cleans state', (tester) async {
