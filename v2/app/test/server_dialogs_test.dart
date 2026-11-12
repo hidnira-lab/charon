@@ -64,13 +64,13 @@ Server _full({String name = 'Home VPS', String country = 'SG', QuotaPlan? quota}
     );
 
 Future<void> _openEdit(WidgetTester tester, Server server, void Function(Server?) done,
-    {bool carrying = false, Locale locale = const Locale('en')}) async {
+    {bool carrying = false, Locale locale = const Locale('en'), List<Server> others = const []}) async {
   tester.view.physicalSize = const Size(1024, 768);
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
   await tester.pumpWidget(_app(
     (context) => TextButton(
-      onPressed: () async => done(await EditServerDialog.show(context, server, carryingTraffic: carrying)),
+      onPressed: () async => done(await EditServerDialog.show(context, server, carryingTraffic: carrying, others: others)),
       child: const Text('open'),
     ),
     locale: locale,
@@ -256,6 +256,52 @@ void main() {
       expect(out!.reality.publicKey, _pbk);
       expect(out!.id, 'SRV-01');
       expect(out!.hasQuota(), isFalse);
+    });
+
+    testWidgets('Replace swaps the whole connection and keeps the code, name and quota', (tester) async {
+      Server? out;
+      final old = _full(quota: QuotaPlan(capGb: 500, billingDay: 3));
+      await _openEdit(tester, old, (s) => out = s);
+      await tester.tap(find.text('Replace with new link or config'));
+      await tester.pumpAndSettle();
+      expect(find.text('Replace the connection of Home VPS'), findsOneWidget);
+      expect(find.text('Use this connection'), findsOneWidget);
+      await tester.enterText(find.byType(TextField).last, _link.replaceAll('198.51.100.7', '198.51.100.99'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('stays SRV-01'), findsOneWidget);
+      await tester.tap(find.widgetWithText(InkWell, 'Use this connection'));
+      await tester.pumpAndSettle();
+      expect(find.text('198.51.100.99:443'), findsOneWidget);
+      expect(find.text('> new connection chosen · applies when you save'), findsOneWidget);
+      await tester.tap(_saveChanges());
+      await tester.pumpAndSettle();
+      expect(out!.address, '198.51.100.99');
+      expect(out!.id, 'SRV-01');
+      expect(out!.displayName, 'Home VPS');
+      expect(out!.quota.capGb, 500);
+    });
+
+    testWidgets('Replace refuses a link that is another saved server', (tester) async {
+      await _openEdit(tester, _full(), (_) {}, others: [_saved('SRV-02', '198.51.100.7')]);
+      await tester.tap(find.text('Replace with new link or config'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField).last, _link);
+      await tester.pumpAndSettle();
+      expect(find.text('This is already SRV-02 · Home VPS'), findsOneWidget);
+      expect(find.widgetWithText(InkWell, 'Use this connection'), findsOneWidget);
+      expect(tester.widget<InkWell>(find.widgetWithText(InkWell, 'Use this connection')).onTap, isNull);
+    });
+
+    testWidgets('cancelling Replace changes nothing', (tester) async {
+      Server? out;
+      await _openEdit(tester, _full(), (s) => out = s);
+      await tester.tap(find.text('Replace with new link or config'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Cancel').last);
+      await tester.pumpAndSettle();
+      await tester.tap(_saveChanges());
+      await tester.pumpAndSettle();
+      expect(out!.address, '198.51.100.7');
     });
 
     testWidgets('an empty name becomes the country name', (tester) async {

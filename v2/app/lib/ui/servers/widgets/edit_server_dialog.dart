@@ -8,22 +8,26 @@ import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
 import '../../dialogs/dialog_shell.dart';
 import '../../settings/widgets/charon_switch.dart';
+import 'add_server_dialog.dart';
 
 /// Edits the name, the country and the monthly quota of a saved server, as
 /// drawn on the Dialogs board. The connection fields are shown read only:
 /// one wrong character breaks Reality, so a changed connection is a new link.
 class EditServerDialog extends StatefulWidget {
-  const EditServerDialog({super.key, required this.server, this.carryingTraffic = false});
+  const EditServerDialog({super.key, required this.server, this.carryingTraffic = false, this.others = const []});
 
   final Server server;
+
+  /// The other saved servers, so a replacing link that matches one is refused.
+  final List<Server> others;
 
   /// This server is the one carrying traffic now, so changes wait for the next connect.
   final bool carryingTraffic;
 
-  static Future<Server?> show(BuildContext context, Server server, {bool carryingTraffic = false}) {
+  static Future<Server?> show(BuildContext context, Server server, {bool carryingTraffic = false, List<Server> others = const []}) {
     return showCharonDialog<Server>(
       context,
-      (_) => EditServerDialog(server: server, carryingTraffic: carryingTraffic),
+      (_) => EditServerDialog(server: server, carryingTraffic: carryingTraffic, others: others),
     );
   }
 
@@ -38,6 +42,9 @@ class _EditServerDialogState extends State<EditServerDialog> {
   late String _country;
   late bool _quotaOn;
   bool _nameReady = false;
+
+  /// A new connection chosen with the Replace button, applied on save.
+  Server? _replacement;
 
   @override
   void initState() {
@@ -79,6 +86,18 @@ class _EditServerDialogState extends State<EditServerDialog> {
   void _save() {
     final l10n = AppLocalizations.of(context)!;
     final updated = widget.server.deepCopy();
+    final r = _replacement;
+    if (r != null) {
+      // Only the connection is swapped; the code, name, order and quota stay.
+      updated
+        ..protocol = r.protocol
+        ..address = r.address
+        ..port = r.port
+        ..uuid = r.uuid
+        ..flow = r.flow
+        ..reality = r.reality.deepCopy()
+        ..transport = r.transport;
+    }
     updated.countryCode = _country;
     updated.displayName = serverNameOrDefault(
       _name.text,
@@ -97,11 +116,24 @@ class _EditServerDialogState extends State<EditServerDialog> {
     Navigator.of(context).pop(updated);
   }
 
+  Future<void> _replace() async {
+    final outcome = await AddServerDialog.show(context, widget.others, replacing: widget.server);
+    if (outcome is! ServerAdded || !mounted) return;
+    setState(() {
+      _replacement = outcome.server;
+      // The country was guessed from the old address: follow the new one unless
+      // the user already picked another.
+      if (_country == widget.server.countryCode.toUpperCase() && outcome.server.countryCode.isNotEmpty) {
+        _country = outcome.server.countryCode.toUpperCase();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final colors = CharonColors.of(context);
-    final s = widget.server;
+    final s = _replacement ?? widget.server;
     final nameHint = _country.isEmpty ? s.address : countryName(l10n, _country);
     final pbk = s.reality.publicKey;
 
@@ -156,7 +188,12 @@ class _EditServerDialogState extends State<EditServerDialog> {
         ),
         DialogNotes([l10n.dlgEditNameNote]),
         DialogPanel(children: [
-          Text('> ${l10n.dlgEditConnTitle}', style: monoStyle(colors.text2, 10, bold: true, em: 0.08)),
+          Row(
+            children: [
+              Expanded(child: Text('> ${l10n.dlgEditConnTitle}', style: monoStyle(colors.text2, 10, bold: true, em: 0.08))),
+              _ReplaceButton(label: l10n.dlgEditReplaceBtn, onTap: _replace),
+            ],
+          ),
           DialogFacts([
             (l10n.dlgFieldAddress, '${s.address}:${s.port}'),
             (l10n.dlgFieldSni, s.reality.serverName.isEmpty ? s.address : s.reality.serverName),
@@ -165,7 +202,7 @@ class _EditServerDialogState extends State<EditServerDialog> {
             (l10n.dlgFieldShortId, s.reality.shortId),
             (l10n.dlgFieldUuid, l10n.dlgEditHidden(secretPrefix(s.uuid))),
           ]),
-          DialogNotes([l10n.dlgEditConnNote]),
+          DialogNotes([_replacement == null ? l10n.dlgEditConnNote : l10n.dlgReplaceChosen]),
         ]),
         DialogPanel(gap: 12, children: [
           Row(
@@ -328,6 +365,41 @@ class _CountryPicker extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// The pill of the Dialogs board that starts swapping the whole connection.
+class _ReplaceButton extends StatelessWidget {
+  const _ReplaceButton({required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
+    return Semantics(
+      button: true,
+      label: label,
+      excludeSemantics: true,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(999),
+        child: Container(
+          height: 28,
+          padding: const EdgeInsets.fromLTRB(9, 0, 12, 0),
+          decoration: BoxDecoration(border: Border.all(color: colors.controlBorder), borderRadius: BorderRadius.circular(999)),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.link, size: 14, color: colors.text),
+              const SizedBox(width: 6),
+              Text(label, style: monoStyle(colors.text, 10, bold: true)),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -4639,6 +4639,30 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get homeGreetNightPlain => '晚上好！';
+
+  @override
+  String get dlgEditReplaceBtn => '替换为新链接或配置';
+
+  @override
+  String dlgReplaceKicker(String code) {
+    return '服务器 · 替换 $code';
+  }
+
+  @override
+  String dlgReplaceTitle(String name) {
+    return '替换 $name 的连接';
+  }
+
+  @override
+  String get dlgReplaceBtn => '使用此连接';
+
+  @override
+  String dlgReplaceKeeps(String code) {
+    return '仍是 $code · 名称、故障转移顺序和流量设置保持不变';
+  }
+
+  @override
+  String get dlgReplaceChosen => '已选新连接 · 保存后生效';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -9275,4 +9299,28 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get homeGreetNightPlain => '晚上好！';
+
+  @override
+  String get dlgEditReplaceBtn => '替换为新链接或配置';
+
+  @override
+  String dlgReplaceKicker(String code) {
+    return '服务器 · 替换 $code';
+  }
+
+  @override
+  String dlgReplaceTitle(String name) {
+    return '替换 $name 的连接';
+  }
+
+  @override
+  String get dlgReplaceBtn => '使用此连接';
+
+  @override
+  String dlgReplaceKeeps(String code) {
+    return '仍是 $code · 名称、故障转移顺序和流量设置保持不变';
+  }
+
+  @override
+  String get dlgReplaceChosen => '已选新连接 · 保存后生效';
 }

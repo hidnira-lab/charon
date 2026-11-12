@@ -3497,5 +3497,32 @@
   "homeGreetEveningPlain": "Good evening!",
   "@homeGreetEveningPlain": { "description": "Home greeting in the evening when no name is set." },
   "homeGreetNightPlain": "Good night!",
-  "@homeGreetNightPlain": { "description": "Home greeting at night when no name is set." }
+  "@homeGreetNightPlain": { "description": "Home greeting at night when no name is set." },
+  "dlgEditReplaceBtn": "Replace with new link or config",
+  "@dlgEditReplaceBtn": { "description": "Edit server dialog: opens the import to swap the whole connection." },
+  "dlgReplaceKicker": "SERVERS · REPLACE {code}",
+  "@dlgReplaceKicker": {
+    "description": "Kicker of the import dialog when it replaces a connection. Not on the board.",
+    "placeholders": {
+      "code": { "type": "String" }
+    }
+  },
+  "dlgReplaceTitle": "Replace the connection of {name}",
+  "@dlgReplaceTitle": {
+    "description": "Title of the import dialog when it replaces a connection. Not on the board.",
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "dlgReplaceBtn": "Use this connection",
+  "@dlgReplaceBtn": { "description": "Button of the import dialog when it replaces a connection. Not on the board." },
+  "dlgReplaceKeeps": "stays {code} · name, failover order and quota stay as they are",
+  "@dlgReplaceKeeps": {
+    "description": "Note under the preview when replacing a connection. Not on the board.",
+    "placeholders": {
+      "code": { "type": "String" }
+    }
+  },
+  "dlgReplaceChosen": "new connection chosen · applies when you save",
+  "@dlgReplaceChosen": { "description": "Note in the edit dialog after a new connection was chosen. Not on the board." }
 }

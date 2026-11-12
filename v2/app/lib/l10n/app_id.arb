@@ -1422,5 +1422,11 @@
   "homeGreetMorningPlain": "Selamat pagi!",
   "homeGreetAfternoonPlain": "Selamat siang!",
   "homeGreetEveningPlain": "Selamat sore!",
-  "homeGreetNightPlain": "Selamat malam!"
+  "homeGreetNightPlain": "Selamat malam!",
+  "dlgEditReplaceBtn": "Ganti dengan link atau config baru",
+  "dlgReplaceKicker": "SERVER · GANTI {code}",
+  "dlgReplaceTitle": "Ganti koneksi {name}",
+  "dlgReplaceBtn": "Pakai koneksi ini",
+  "dlgReplaceKeeps": "tetap {code} · nama, urutan failover, dan kuota tidak berubah",
+  "dlgReplaceChosen": "koneksi baru dipilih · berlaku setelah disimpan"
 }

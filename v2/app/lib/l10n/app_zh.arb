@@ -1423,5 +1423,11 @@
   "homeGreetMorningPlain": "早上好！",
   "homeGreetAfternoonPlain": "下午好！",
   "homeGreetEveningPlain": "傍晚好！",
-  "homeGreetNightPlain": "晚上好！"
+  "homeGreetNightPlain": "晚上好！",
+  "dlgEditReplaceBtn": "替换为新链接或配置",
+  "dlgReplaceKicker": "服务器 · 替换 {code}",
+  "dlgReplaceTitle": "替换 {name} 的连接",
+  "dlgReplaceBtn": "使用此连接",
+  "dlgReplaceKeeps": "仍是 {code} · 名称、故障转移顺序和流量设置保持不变",
+  "dlgReplaceChosen": "已选新连接 · 保存后生效"
 }

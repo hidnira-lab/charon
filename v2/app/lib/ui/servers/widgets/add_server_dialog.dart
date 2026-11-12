@@ -31,14 +31,20 @@ final class EditRequested extends AddServerOutcome {
 /// Adds a VLESS + Reality server from a link or a pasted Xray config, as drawn
 /// on the Dialogs board. The text is only read into typed fields.
 class AddServerDialog extends StatefulWidget {
-  const AddServerDialog({super.key, required this.existingServers});
+  const AddServerDialog({super.key, required this.existingServers, this.replacing});
 
+  /// The saved servers a new one is checked against for duplicates. When
+  /// [replacing], the server being replaced is not in it.
   final List<Server> existingServers;
 
-  static Future<AddServerOutcome?> show(BuildContext context, List<Server> existingServers) {
+  /// Set when the text replaces the connection of this server (from the Edit
+  /// dialog). The result is a [ServerAdded] whose connection fields are used.
+  final Server? replacing;
+
+  static Future<AddServerOutcome?> show(BuildContext context, List<Server> existingServers, {Server? replacing}) {
     return showCharonDialog<AddServerOutcome>(
       context,
-      (_) => AddServerDialog(existingServers: existingServers),
+      (_) => AddServerDialog(existingServers: existingServers, replacing: replacing),
     );
   }
 
@@ -137,16 +143,17 @@ class _AddServerDialogState extends State<AddServerDialog> {
     final s = _read.server;
     final named = s != null && s.displayName != s.address;
     final (jsonStatus, jsonWarn) = _jsonStatus(l10n);
+    final replacing = widget.replacing;
 
     return CharonDialog(
-      kicker: l10n.dlgAddKicker,
-      title: l10n.dlgAddTitle,
+      kicker: replacing == null ? l10n.dlgAddKicker : l10n.dlgReplaceKicker(replacing.id),
+      title: replacing == null ? l10n.dlgAddTitle : l10n.dlgReplaceTitle(replacing.displayName),
       tile: Icons.add,
       width: 600,
       hint: l10n.dlgAddHint,
       actions: [
         DialogAction(l10n.dialogCancel, () => Navigator.of(context).pop()),
-        DialogAction(l10n.dlgAddSaveBtn, _read.canSave ? _save : null, primary: true, icon: Icons.add),
+        DialogAction(replacing == null ? l10n.dlgAddSaveBtn : l10n.dlgReplaceBtn, _read.canSave ? _save : null, primary: true, icon: replacing == null ? Icons.add : Icons.check),
       ],
       children: [
         _Tabs(
@@ -189,9 +196,12 @@ class _AddServerDialogState extends State<AddServerDialog> {
                 : (_json ? l10n.dlgAddReadConfig : l10n.dlgAddReadLink),
             fieldsOk: l10n.dlgAddFieldsOk(_read.fieldsOk.$1, _read.fieldsOk.$2),
             nameHint: s.countryCode.isEmpty ? s.address : countryName(l10n, s.countryCode),
-            becomes: s.countryCode.isEmpty
-                ? l10n.dlgAddBecomesNoCountry(s.id, widget.existingServers.length + 1)
-                : l10n.dlgAddBecomesGuessed(s.id, widget.existingServers.length + 1),
+            becomes: replacing != null
+                ? l10n.dlgReplaceKeeps(replacing.id)
+                : s.countryCode.isEmpty
+                    ? l10n.dlgAddBecomesNoCountry(s.id, widget.existingServers.length + 1)
+                    : l10n.dlgAddBecomesGuessed(s.id, widget.existingServers.length + 1),
+            showName: replacing == null,
             onNameChanged: (_) => _nameTouched = true,
           ),
         if (_read.isDuplicate)

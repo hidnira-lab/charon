@@ -447,6 +447,7 @@ class _ServersScreenState extends State<ServersScreen> {
       context,
       server,
       carryingTraffic: c.status.phase == Phase.PHASE_UP && c.activeServer?.id == server.id,
+      others: [for (final s in c.config?.servers ?? const <Server>[]) if (s.id != server.id) s],
     );
     if (updated != null) {
       await widget.controller.updateServer(updated);

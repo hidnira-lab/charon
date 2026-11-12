@@ -4881,4 +4881,29 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get homeGreetNightPlain => 'Selamat malam!';
+
+  @override
+  String get dlgEditReplaceBtn => 'Ganti dengan link atau config baru';
+
+  @override
+  String dlgReplaceKicker(String code) {
+    return 'SERVER · GANTI $code';
+  }
+
+  @override
+  String dlgReplaceTitle(String name) {
+    return 'Ganti koneksi $name';
+  }
+
+  @override
+  String get dlgReplaceBtn => 'Pakai koneksi ini';
+
+  @override
+  String dlgReplaceKeeps(String code) {
+    return 'tetap $code · nama, urutan failover, dan kuota tidak berubah';
+  }
+
+  @override
+  String get dlgReplaceChosen =>
+      'koneksi baru dipilih · berlaku setelah disimpan';
 }

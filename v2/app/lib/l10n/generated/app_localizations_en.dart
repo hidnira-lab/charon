@@ -4887,4 +4887,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeGreetNightPlain => 'Good night!';
+
+  @override
+  String get dlgEditReplaceBtn => 'Replace with new link or config';
+
+  @override
+  String dlgReplaceKicker(String code) {
+    return 'SERVERS · REPLACE $code';
+  }
+
+  @override
+  String dlgReplaceTitle(String name) {
+    return 'Replace the connection of $name';
+  }
+
+  @override
+  String get dlgReplaceBtn => 'Use this connection';
+
+  @override
+  String dlgReplaceKeeps(String code) {
+    return 'stays $code · name, failover order and quota stay as they are';
+  }
+
+  @override
+  String get dlgReplaceChosen =>
+      'new connection chosen · applies when you save';
 }

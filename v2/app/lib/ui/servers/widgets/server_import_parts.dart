@@ -18,9 +18,13 @@ class ServerPreview extends StatelessWidget {
     required this.nameHint,
     required this.becomes,
     this.onNameChanged,
+    this.showName = true,
   });
 
   final Server server;
+
+  /// False when the connection replaces another one: the name stays as it is.
+  final bool showName;
   final TextEditingController name;
 
   /// "READ FROM THE LINK · NO NAME IN IT" and its kin.
@@ -48,24 +52,25 @@ class ServerPreview extends StatelessWidget {
           Text(fieldsOk, style: monoStyle(colors.accentText, 10)),
         ],
       ),
-      Row(
-        children: [
-          DialogFlag(s.countryCode),
-          const SizedBox(width: 12),
-          Expanded(
-            child: DialogField(
-              controller: name,
-              semanticLabel: l10n.dlgFieldNameAria,
-              prompt: false,
-              prefix: l10n.dlgFieldName,
-              suffix: l10n.dlgFieldNameEmpty,
-              hint: nameHint,
-              height: 38,
-              onChanged: onNameChanged,
+      if (showName)
+        Row(
+          children: [
+            DialogFlag(s.countryCode),
+            const SizedBox(width: 12),
+            Expanded(
+              child: DialogField(
+                controller: name,
+                semanticLabel: l10n.dlgFieldNameAria,
+                prompt: false,
+                prefix: l10n.dlgFieldName,
+                suffix: l10n.dlgFieldNameEmpty,
+                hint: nameHint,
+                height: 38,
+                onChanged: onNameChanged,
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
       DialogFacts(
         [
           (l10n.dlgFieldAddress, '${s.address}:${s.port}'),

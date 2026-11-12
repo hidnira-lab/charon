@@ -8499,6 +8499,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Good night!'**
   String get homeGreetNightPlain;
+
+  /// Edit server dialog: opens the import to swap the whole connection.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace with new link or config'**
+  String get dlgEditReplaceBtn;
+
+  /// Kicker of the import dialog when it replaces a connection. Not on the board.
+  ///
+  /// In en, this message translates to:
+  /// **'SERVERS · REPLACE {code}'**
+  String dlgReplaceKicker(String code);
+
+  /// Title of the import dialog when it replaces a connection. Not on the board.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace the connection of {name}'**
+  String dlgReplaceTitle(String name);
+
+  /// Button of the import dialog when it replaces a connection. Not on the board.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this connection'**
+  String get dlgReplaceBtn;
+
+  /// Note under the preview when replacing a connection. Not on the board.
+  ///
+  /// In en, this message translates to:
+  /// **'stays {code} · name, failover order and quota stay as they are'**
+  String dlgReplaceKeeps(String code);
+
+  /// Note in the edit dialog after a new connection was chosen. Not on the board.
+  ///
+  /// In en, this message translates to:
+  /// **'new connection chosen · applies when you save'**
+  String get dlgReplaceChosen;
 }
 
 class _AppLocalizationsDelegate
