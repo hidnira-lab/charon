@@ -1,4 +1,6 @@
 import 'package:charon/theme/theme.dart';
+import 'package:charon/main.dart';
+import 'package:charon/state/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -111,33 +113,14 @@ void main() {
       expect(observedReduced, Duration.zero);
     });
 
-    testWidgets('CharonAnimatedTheme uses 420 ms normal and 0 ms with reduced motion', (tester) async {
-      await tester.pumpWidget(
-        MediaQuery(
-          data: const MediaQueryData(disableAnimations: false),
-          child: CharonAnimatedTheme(
-            data: CharonTheme.dark,
-            child: const SizedBox.shrink(),
-          ),
-        ),
-      );
-
-      final animatedThemeNormal = tester.widget<AnimatedTheme>(find.byType(AnimatedTheme));
-      expect(animatedThemeNormal.duration, const Duration(milliseconds: 420));
-      expect(animatedThemeNormal.curve, CharonCurves.entry);
-
-      await tester.pumpWidget(
-        MediaQuery(
-          data: const MediaQueryData(disableAnimations: true),
-          child: CharonAnimatedTheme(
-            data: CharonTheme.light,
-            child: const SizedBox.shrink(),
-          ),
-        ),
-      );
-
-      final animatedThemeReduced = tester.widget<AnimatedTheme>(find.byType(AnimatedTheme));
-      expect(animatedThemeReduced.duration, Duration.zero);
+    testWidgets('the app tweens the theme in 420 ms on the standard curve', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(CharonApp(controller: HomeController()));
+      final theme = tester.widget<AnimatedTheme>(find.byType(AnimatedTheme).first);
+      expect(theme.duration, const Duration(milliseconds: 420));
+      expect(theme.curve, CharonCurves.standard);
     });
   });
 

@@ -5,6 +5,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
 import '../../../theme/theme.dart';
 import '../../common/pixel_flag.dart';
+import '../../dialogs/dialog_shell.dart';
 
 /// The "Pick a server to try" dialog of the HomeDesktop board. Opened from the
 /// held banners: the server that failed is listed but cannot be picked, any
@@ -18,11 +19,7 @@ class ChooseServerSheet extends StatelessWidget {
   final HomeController controller;
 
   static Future<Server?> show(BuildContext context, HomeController controller) {
-    return showDialog<Server>(
-      context: context,
-      barrierColor: CharonColors.of(context).scrim,
-      builder: (ctx) => ChooseServerSheet(controller: controller),
-    );
+    return showCharonDialog<Server>(context, (ctx) => ChooseServerSheet(controller: controller));
   }
 
   @override

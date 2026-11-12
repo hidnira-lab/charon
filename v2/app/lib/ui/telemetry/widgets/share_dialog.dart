@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/theme.dart';
+import '../../dialogs/dialog_shell.dart';
 
 /// Share confirmation dialog adhering to the spec:
 /// "Share sends only the lines currently visible, not the whole buffer.
@@ -22,10 +23,9 @@ class ShareDialog extends StatelessWidget {
     required String visibleLinesText,
     required int lineCount,
   }) {
-    return showDialog<bool>(
-      context: context,
-      barrierColor: CharonColors.of(context).scrim,
-      builder: (context) => ShareDialog(
+    return showCharonDialog<bool>(
+      context,
+      (context) => ShareDialog(
         visibleLinesText: visibleLinesText,
         lineCount: lineCount,
       ),

@@ -126,6 +126,9 @@ class _CharonAppState extends State<CharonApp> {
           title: 'Charon',
           debugShowCheckedModeBanner: false,
           theme: activeTheme,
+          // Every color tweens to the other theme in 420 ms (board 01b Light mode).
+          themeAnimationDuration: CharonDurations.of(context, CharonDurations.theme),
+          themeAnimationCurve: CharonCurves.standard,
           locale: widget.locale ?? controller.locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,

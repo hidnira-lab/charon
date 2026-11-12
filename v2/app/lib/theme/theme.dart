@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'colors.dart';
-import 'tokens.dart';
 import 'typography.dart';
 
 export 'colors.dart';
@@ -68,32 +67,6 @@ abstract final class CharonTheme {
       extensions: const <ThemeExtension<dynamic>>[
         colors,
       ],
-    );
-  }
-}
-
-/// Applies [AnimatedTheme] with Charon's 420 ms crossfade duration and motion curve.
-/// Respects prefers-reduced-motion (swaps instantly when animations are disabled).
-class CharonAnimatedTheme extends StatelessWidget {
-  const CharonAnimatedTheme({
-    super.key,
-    required this.data,
-    required this.child,
-    this.curve = CharonCurves.entry,
-  });
-
-  final ThemeData data;
-  final Widget child;
-  final Curve curve;
-
-  @override
-  Widget build(BuildContext context) {
-    final duration = CharonDurations.of(context, CharonDurations.theme);
-    return AnimatedTheme(
-      data: data,
-      duration: duration,
-      curve: curve,
-      child: child,
     );
   }
 }

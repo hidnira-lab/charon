@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../l10n/generated/app_localizations.dart';
 import '../../theme/theme.dart';
+import 'dialog_shell.dart';
 
 enum VaultDialogMode {
   backup,
@@ -25,11 +26,7 @@ class VaultPassphraseDialog extends StatefulWidget {
     BuildContext context, {
     required VaultDialogMode mode,
   }) {
-    return showDialog<String>(
-      context: context,
-      barrierColor: CharonColors.of(context).scrim,
-      builder: (ctx) => VaultPassphraseDialog(mode: mode),
-    );
+    return showCharonDialog<String>(context, (ctx) => VaultPassphraseDialog(mode: mode));
   }
 
   @override

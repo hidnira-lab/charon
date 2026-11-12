@@ -3,15 +3,30 @@ import 'package:flutter/material.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../theme/theme.dart';
 import '../common/glass_card.dart';
+import '../common/motion.dart';
 import '../common/pixel_flag.dart';
 
-/// Opens a dialog with the scrim of the Dialogs board.
+/// Opens a dialog with the scrim and the motion of the Dialogs board: in
+/// 260 ms, out 160 ms (see [charonDialogTransition]).
 Future<T?> showCharonDialog<T>(BuildContext context, WidgetBuilder builder) {
-  return showDialog<T>(
-    context: context,
+  return Navigator.of(context).push(_CharonDialogRoute<T>(
+    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
     barrierColor: CharonColors.of(context).scrim,
-    builder: builder,
-  );
+    pageBuilder: (context, _, _) => builder(context),
+  ));
+}
+
+/// A dialog route whose exit is shorter than its entry, as the board asks.
+class _CharonDialogRoute<T> extends RawDialogRoute<T> {
+  _CharonDialogRoute({required super.pageBuilder, super.barrierLabel, super.barrierColor})
+      : super(
+          barrierDismissible: true,
+          transitionDuration: CharonDurations.dialogEnter,
+          transitionBuilder: charonDialogTransition,
+        );
+
+  @override
+  Duration get reverseTransitionDuration => CharonDurations.dialogExit;
 }
 
 /// A button of the dialog footer. [onTap] null draws it disabled. [icon] adds

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../l10n/generated/app_localizations.dart';
 import '../../theme/theme.dart';
+import 'dialog_shell.dart';
 
 /// Confirmation when releasing traffic that the kill switch holds, as on the
 /// HomeDesktop board: kicker, title, one sentence, Cancel and "Disconnect and
@@ -10,11 +11,7 @@ class ReleaseConfirmDialog extends StatelessWidget {
   const ReleaseConfirmDialog({super.key});
 
   static Future<bool?> show(BuildContext context) {
-    return showDialog<bool>(
-      context: context,
-      barrierColor: CharonColors.of(context).scrim,
-      builder: (context) => const ReleaseConfirmDialog(),
-    );
+    return showCharonDialog<bool>(context, (context) => const ReleaseConfirmDialog());
   }
 
   @override
