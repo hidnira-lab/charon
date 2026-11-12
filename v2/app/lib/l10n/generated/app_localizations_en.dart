@@ -840,12 +840,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String splitRulesGoDirectTally(int count) {
-    return '$count rules · go direct';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count rules · go direct',
+      one: '1 rule · go direct',
+    );
+    return '$_temp0';
   }
 
   @override
   String splitRulesUseTunnelTally(int count) {
-    return '$count rules · use the tunnel';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count rules · use the tunnel',
+      one: '1 rule · use the tunnel',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -944,12 +956,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String splitCountN(int count) {
-    return '$count RULES';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count RULES',
+      one: '1 RULE',
+    );
+    return '$_temp0';
   }
 
   @override
   String splitRulesN(int count) {
-    return '$count rules';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count rules',
+      one: '1 rule',
+    );
+    return '$_temp0';
   }
 
   @override

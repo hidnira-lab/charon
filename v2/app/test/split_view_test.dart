@@ -41,8 +41,8 @@ void main() {
 
     test('only listed, connected: the list uses the tunnel', () {
       final v = view(en, only: true, rules: ['*.example.net']);
-      expect(v.tally, '1 rules · use the tunnel');
-      expect(v.tunNote, '1 rules');
+      expect(v.tally, '1 rule · use the tunnel');
+      expect(v.tunNote, '1 rule');
       expect(texts(v.tunList), ['→ *.example.net']);
       expect(texts(v.dirList), ['× everything else']);
       expect(v.dirNote, 'the default');

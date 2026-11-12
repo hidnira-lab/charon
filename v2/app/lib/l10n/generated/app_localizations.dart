@@ -1556,13 +1556,13 @@ abstract class AppLocalizations {
   /// Tally for direct rules.
   ///
   /// In en, this message translates to:
-  /// **'{count} rules · go direct'**
+  /// **'{count, plural, =1{1 rule · go direct} other{{count} rules · go direct}}'**
   String splitRulesGoDirectTally(int count);
 
   /// Tally for tunnel rules.
   ///
   /// In en, this message translates to:
-  /// **'{count} rules · use the tunnel'**
+  /// **'{count, plural, =1{1 rule · use the tunnel} other{{count} rules · use the tunnel}}'**
   String splitRulesUseTunnelTally(int count);
 
   /// Badge for rule awaiting reconnect.
@@ -1736,13 +1736,13 @@ abstract class AppLocalizations {
   /// Header count and route map chip.
   ///
   /// In en, this message translates to:
-  /// **'{count} RULES'**
+  /// **'{count, plural, =1{1 RULE} other{{count} RULES}}'**
   String splitCountN(int count);
 
   /// Plain rule count.
   ///
   /// In en, this message translates to:
-  /// **'{count} rules'**
+  /// **'{count, plural, =1{1 rule} other{{count} rules}}'**
   String splitRulesN(int count);
 
   /// Route map note when the list is empty.

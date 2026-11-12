@@ -719,12 +719,12 @@
   "@splitDirectList": { "description": "Header for direct rules list." },
   "splitTunnelList": "TUNNEL LIST",
   "@splitTunnelList": { "description": "Header for tunnel rules list." },
-  "splitRulesGoDirectTally": "{count} rules · go direct",
+  "splitRulesGoDirectTally": "{count, plural, =1{1 rule · go direct} other{{count} rules · go direct}}",
   "@splitRulesGoDirectTally": {
     "description": "Tally for direct rules.",
     "placeholders": { "count": { "type": "int" } }
   },
-  "splitRulesUseTunnelTally": "{count} rules · use the tunnel",
+  "splitRulesUseTunnelTally": "{count, plural, =1{1 rule · use the tunnel} other{{count} rules · use the tunnel}}",
   "@splitRulesUseTunnelTally": {
     "description": "Tally for tunnel rules.",
     "placeholders": { "count": { "type": "int" } }
@@ -791,12 +791,12 @@
   "@splitHelperDomainExact": { "description": "Helper label for exact domain rule." },
   "splitCountNone": "NO RULES",
   "@splitCountNone": { "description": "Header count when the list is empty." },
-  "splitCountN": "{count} RULES",
+  "splitCountN": "{count, plural, =1{1 RULE} other{{count} RULES}}",
   "@splitCountN": {
     "description": "Header count and route map chip.",
     "placeholders": { "count": { "type": "int" } }
   },
-  "splitRulesN": "{count} rules",
+  "splitRulesN": "{count, plural, =1{1 rule} other{{count} rules}}",
   "@splitRulesN": {
     "description": "Plain rule count.",
     "placeholders": { "count": { "type": "int" } }
