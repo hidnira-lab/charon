@@ -1535,7 +1535,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String updFootSigInvalid(String version) {
-    return '没有安装任何东西 · $version 继续运行';
+    return '没有安装任何内容 · $version 继续运行';
   }
 
   @override
@@ -1544,7 +1544,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get updFootConfigFailed => '更新在替换前已停止 · 没有任何改动';
+  String get updFootConfigFailed => '更新在替换前停止了 · 没有任何改动';
 
   @override
   String get updFootDowngrade => 'Charon 绝不会自行安装更旧的核心';
@@ -1559,7 +1559,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get updFootAppReady => 'Windows 会请求管理员权限 · 更新服务会让隧道短暂暂停';
 
   @override
-  String get updFootAppSigInvalid => '没有安装任何东西 · 文件已删除';
+  String get updFootAppSigInvalid => '没有安装任何内容 · 文件已删除';
 
   @override
   String updProgressOf(String done, String total) {
@@ -6200,7 +6200,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String updFootSigInvalid(String version) {
-    return '没有安装任何东西 · $version 继续运行';
+    return '没有安装任何内容 · $version 继续运行';
   }
 
   @override
@@ -6209,7 +6209,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   }
 
   @override
-  String get updFootConfigFailed => '更新在替换前已停止 · 没有任何改动';
+  String get updFootConfigFailed => '更新在替换前停止了 · 没有任何改动';
 
   @override
   String get updFootDowngrade => 'Charon 绝不会自行安装更旧的核心';
@@ -6224,7 +6224,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get updFootAppReady => 'Windows 会请求管理员权限 · 更新服务会让隧道短暂暂停';
 
   @override
-  String get updFootAppSigInvalid => '没有安装任何东西 · 文件已删除';
+  String get updFootAppSigInvalid => '没有安装任何内容 · 文件已删除';
 
   @override
   String updProgressOf(String done, String total) {

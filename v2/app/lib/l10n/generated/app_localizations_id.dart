@@ -1617,7 +1617,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String updFootSigInvalid(String version) {
-    return 'tidak ada yang terpasang · $version tetap berjalan';
+    return 'tidak ada yang dipasang · $version tetap berjalan';
   }
 
   @override
@@ -1645,7 +1645,8 @@ class AppLocalizationsId extends AppLocalizations {
       'Windows minta hak admin · memperbarui service menjeda tunnel sebentar';
 
   @override
-  String get updFootAppSigInvalid => 'tidak ada yang terpasang · file dihapus';
+  String get updFootAppSigInvalid =>
+      'tidak ada yang dipasang · file sudah dihapus';
 
   @override
   String updProgressOf(String done, String total) {
