@@ -1,3 +1,5 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
@@ -24,14 +26,17 @@ class TitleBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
-    final light = Theme.of(context).brightness == Brightness.light;
 
-    return Container(
+    // Frosted over the window light: blur(24px), rgba(14,14,14,.5) or white .64.
+    return ClipRect(
+      child: BackdropFilter.grouped(
+        filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
+        child: Container(
       height: 36.0,
       decoration: BoxDecoration(
-        color: light ? const Color(0xA3FFFFFF) : const Color(0x800E0E0E),
+        color: Color.lerp(const Color(0x800E0E0E), const Color(0xA3FFFFFF), colors.lt),
         border: Border(
-          bottom: BorderSide(color: light ? const Color(0x0F000000) : const Color(0x0FFFFFFF), width: 1.0),
+          bottom: BorderSide(color: Color.lerp(const Color(0x0FFFFFFF), const Color(0x0F000000), colors.lt)!, width: 1.0),
         ),
       ),
       padding: const EdgeInsets.only(left: 12.0),
@@ -64,6 +69,8 @@ class TitleBar extends StatelessWidget {
             onPressed: onClose,
           ),
         ],
+      ),
+        ),
       ),
     );
   }

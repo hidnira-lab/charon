@@ -13,6 +13,8 @@ import 'widgets/server_profile_card.dart';
 import 'widgets/sync_card.dart';
 import '../common/motion.dart';
 import '../common/pixel_icon.dart';
+import '../common/dashed_box.dart';
+import '../common/glass_card.dart';
 
 /// Servers desktop screen (1024 x 768 px) matching ServersDesktop board.
 class ServersScreen extends StatefulWidget {
@@ -54,7 +56,6 @@ class _ServersScreenState extends State<ServersScreen> {
           height: 768,
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
-            color: colors.bg,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: colors.divider),
           ),
@@ -193,14 +194,10 @@ class _ServersScreenState extends State<ServersScreen> {
                             if (isConnected && activeServer != null) ...[
                               Enter.page(
                                 index: 1,
-                                child: Container(
+                                child: Glass(
                                 height: 40,
+                                radius: 12,
                                 padding: const EdgeInsets.symmetric(horizontal: 14),
-                                decoration: BoxDecoration(
-                                  color: colors.surface.withValues(alpha: 0.55),
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: colors.divider),
-                                ),
                                 child: Row(
                                   children: [
                                     PixelIcon(PixelIcons.lock, size: 18, color: colors.text2),
@@ -293,12 +290,11 @@ class _ServersScreenState extends State<ServersScreen> {
                                               }
                                               // Bottom limit or add card
                                               if (atLimit) {
-                                                return Container(
-                                                  decoration: BoxDecoration(
-                                                    color: colors.surface.withValues(alpha: 0.4),
-                                                    borderRadius: BorderRadius.circular(16),
-                                                    border: Border.all(color: colors.divider),
-                                                  ),
+                                                // At the limit: a quiet dashed card with an amber line.
+                                                return Opacity(
+                                                  opacity: 0.9,
+                                                  child: DashedBox(
+                                                  color: colors.divider,
                                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                                                   child: Row(
                                                     children: [
@@ -310,7 +306,7 @@ class _ServersScreenState extends State<ServersScreen> {
                                                           borderRadius: BorderRadius.circular(12),
                                                         ),
                                                         alignment: Alignment.center,
-                                                        child: SizedBox(width: 8, height: 8, child: ColoredBox(color: colors.transitionFill)),
+                                                        child: PixelIcon(PixelIcons.plus, size: 20, color: Color.lerp(const Color(0xFF5C5C5C), const Color(0xFF8A8A8A), colors.lt)!),
                                                       ),
                                                       const SizedBox(width: 14),
                                                       Expanded(
@@ -326,30 +322,35 @@ class _ServersScreenState extends State<ServersScreen> {
                                                               ),
                                                             ),
                                                             const SizedBox(height: 3),
-                                                            Text(
-                                                              l10n.serversLimitReached,
-                                                              style: TextStyle(
-                                                                fontSize: 12,
-                                                                color: colors.transitionText,
-                                                              ),
+                                                            Row(
+                                                              children: [
+                                                                SizedBox(width: 6, height: 6, child: ColoredBox(color: colors.transitionFill)),
+                                                                const SizedBox(width: 8),
+                                                                Expanded(
+                                                                  child: Text(
+                                                                    l10n.serversLimitReached,
+                                                                    style: TextStyle(fontSize: 12, height: 16 / 12, color: colors.transitionText),
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
                                                           ],
                                                         ),
                                                       ),
                                                     ],
                                                   ),
+                                                ),
                                                 );
                                               }
                                               // Add card
                                               return InkWell(
                                                 onTap: () => _openAddDialog(context, servers),
                                                 borderRadius: BorderRadius.circular(16),
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color: colors.bg,
-                                                    borderRadius: BorderRadius.circular(16),
-                                                    border: Border.all(color: colors.controlBorder, style: BorderStyle.solid),
-                                                  ),
+                                                // The dashed, dotted slot of the board; the words sit on the plain fill.
+                                                child: DashedBox(
+                                                  color: DashedBox.slot(colors).line,
+                                                  fill: DashedBox.slot(colors).fill,
+                                                  dots: DashedBox.slot(colors).dots,
                                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                                                   child: Row(
                                                     children: [
@@ -364,7 +365,7 @@ class _ServersScreenState extends State<ServersScreen> {
                                                       ),
                                                       const SizedBox(width: 14),
                                                       Expanded(
-                                                        child: Column(
+                                                        child: Container(color: DashedBox.slot(colors).fill, padding: const EdgeInsets.symmetric(vertical: 2), child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
                                                             Text(
@@ -385,7 +386,7 @@ class _ServersScreenState extends State<ServersScreen> {
                                                               ),
                                                             ),
                                                           ],
-                                                        ),
+                                                        )),
                                                       ),
                                                     ],
                                                   ),

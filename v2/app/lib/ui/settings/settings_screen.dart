@@ -43,7 +43,6 @@ class SettingsScreen extends StatelessWidget {
           height: 768,
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
-            color: colors.bg,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: colors.divider),
           ),

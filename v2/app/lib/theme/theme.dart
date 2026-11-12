@@ -15,7 +15,8 @@ abstract final class CharonTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: colors.bg,
+      // The pages sit on the window light of PageBackdrop.
+      scaffoldBackgroundColor: Colors.transparent,
       fontFamily: CharonFontFamilies.inter,
       colorScheme: ColorScheme(
         brightness: Brightness.dark,
@@ -46,7 +47,8 @@ abstract final class CharonTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      scaffoldBackgroundColor: colors.bg,
+      // The pages sit on the window light of PageBackdrop.
+      scaffoldBackgroundColor: Colors.transparent,
       fontFamily: CharonFontFamilies.inter,
       colorScheme: ColorScheme(
         brightness: Brightness.light,

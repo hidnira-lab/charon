@@ -31,6 +31,7 @@ class CharonColors extends ThemeExtension<CharonColors> {
     required this.raised,
     required this.scrim,
     required this.overlayShadow,
+    required this.lt,
   });
 
   final Color bg;
@@ -69,6 +70,10 @@ class CharonColors extends ThemeExtension<CharonColors> {
   /// The drop shadow of a dialog, 0 24 64.
   final Color overlayShadow;
 
+  /// How light the theme is, 0 on Dark and 1 on Light, tweened with the colours. The boards
+  /// mix their glass and ambient values with it (their --lt).
+  final double lt;
+
   static const CharonColors dark = CharonColors(
     bg: Color(0xFF121212),
     surface: Color(0xFF1E1E1E),
@@ -96,6 +101,7 @@ class CharonColors extends ThemeExtension<CharonColors> {
     raised: Color(0xFF1A1A1A),
     scrim: Color(0xBD080808),
     overlayShadow: Color(0x99000000),
+    lt: 0,
   );
 
   // The Light screen boards use the 01b Light Mode values where they differ from 01 Color.
@@ -126,6 +132,7 @@ class CharonColors extends ThemeExtension<CharonColors> {
     raised: Color(0xFFFAFAFA),
     scrim: Color(0x47141414),
     overlayShadow: Color(0x3D000000),
+    lt: 1,
   );
 
   static CharonColors of(BuildContext context) {
@@ -161,6 +168,7 @@ class CharonColors extends ThemeExtension<CharonColors> {
     Color? raised,
     Color? scrim,
     Color? overlayShadow,
+    double? lt,
   }) {
     return CharonColors(
       bg: bg ?? this.bg,
@@ -189,6 +197,7 @@ class CharonColors extends ThemeExtension<CharonColors> {
       raised: raised ?? this.raised,
       scrim: scrim ?? this.scrim,
       overlayShadow: overlayShadow ?? this.overlayShadow,
+      lt: lt ?? this.lt,
     );
   }
 
@@ -222,6 +231,7 @@ class CharonColors extends ThemeExtension<CharonColors> {
       raised: Color.lerp(raised, other.raised, t)!,
       scrim: Color.lerp(scrim, other.scrim, t)!,
       overlayShadow: Color.lerp(overlayShadow, other.overlayShadow, t)!,
+      lt: lt + (other.lt - lt) * t,
     );
   }
 }

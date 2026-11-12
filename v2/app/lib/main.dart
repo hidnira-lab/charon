@@ -10,6 +10,7 @@ import 'l10n/generated/app_localizations.dart';
 import 'state/home_controller.dart';
 import 'state/service_view.dart';
 import 'theme/theme.dart';
+import 'ui/common/ambient.dart';
 import 'ui/home/home_screen.dart';
 import 'ui/servers/servers_screen.dart';
 import 'ui/service/service_screen.dart';
@@ -132,6 +133,11 @@ class _CharonAppState extends State<CharonApp> {
           locale: widget.locale ?? controller.locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
+          // The window light behind every page, under the glass of the cards.
+          builder: (context, child) => PageBackdrop(
+            home: !controller.isFirstRun && controller.service.view == null && activeTab == 0,
+            child: child!,
+          ),
           // The splash goes inside the home, not around the app: it needs the Overlay of the
           // Navigator (the window buttons have tooltips). Keyed, so it keeps its clock when the
           // screen under it changes.

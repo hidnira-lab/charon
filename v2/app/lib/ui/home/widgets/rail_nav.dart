@@ -105,7 +105,7 @@ class _RailNavState extends State<RailNav> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final light = Theme.of(context).brightness == Brightness.light;
+    final colors = CharonColors.of(context);
     final labels = _labels(l10n);
     final ui = widget.uiState;
     // The logo answers a poke except while the tunnel is busy (board: pokable).
@@ -126,11 +126,15 @@ class _RailNavState extends State<RailNav> with SingleTickerProviderStateMixin {
         child: Semantics(
           container: true,
           label: l10n.railMain,
-          child: Container(
+          // Frosted over the window light: blur(24px), rgba(14,14,14,.45) or white .59.
+          child: ClipRect(
+           child: BackdropFilter.grouped(
+            filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
+            child: Container(
             width: 72.0,
             decoration: BoxDecoration(
-              color: light ? const Color(0x96FFFFFF) : const Color(0x730E0E0E),
-              border: Border(right: BorderSide(color: light ? const Color(0x0F000000) : const Color(0x0FFFFFFF))),
+              color: Color.lerp(const Color(0x730E0E0E), const Color(0x96FFFFFF), colors.lt),
+              border: Border(right: BorderSide(color: Color.lerp(const Color(0x0FFFFFFF), const Color(0x0F000000), colors.lt)!)),
             ),
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Column(
@@ -149,6 +153,8 @@ class _RailNavState extends State<RailNav> with SingleTickerProviderStateMixin {
                 _StatusChip(uiState: ui),
               ],
             ),
+          ),
+          ),
           ),
         ),
       ),

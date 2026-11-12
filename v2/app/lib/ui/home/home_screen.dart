@@ -37,7 +37,6 @@ class HomeScreen extends StatelessWidget {
       // Elapsed times and countdowns on this screen are computed from the
       // Status on every build, so one rebuild a second keeps them current.
       builder: (context, _) => EverySecond(builder: (context) {
-        final colors = CharonColors.of(context);
         // The rows count from the banner when there is one, as nth-child does on the board.
         final first = HomeView(
                   AppLocalizations.of(context)!,
@@ -49,7 +48,6 @@ class HomeScreen extends StatelessWidget {
             : 1;
 
         return Scaffold(
-          backgroundColor: colors.bg,
           body: Center(
             child: SizedBox(
               width: 1024.0,

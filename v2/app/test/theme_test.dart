@@ -161,17 +161,18 @@ void main() {
   });
 
   group('CharonTheme ThemeData', () {
-    test('ThemeData.dark installs CharonColors and scaffold bg', () {
+    // The pages are clear: PageBackdrop paints the bg and the window light under them.
+    test('ThemeData.dark installs CharonColors and a clear scaffold', () {
       final theme = CharonTheme.dark;
       expect(theme.brightness, Brightness.dark);
-      expect(theme.scaffoldBackgroundColor, const Color(0xFF121212));
+      expect(theme.scaffoldBackgroundColor, Colors.transparent);
       expect(theme.extension<CharonColors>(), CharonColors.dark);
     });
 
-    test('ThemeData.light installs CharonColors and scaffold bg', () {
+    test('ThemeData.light installs CharonColors and a clear scaffold', () {
       final theme = CharonTheme.light;
       expect(theme.brightness, Brightness.light);
-      expect(theme.scaffoldBackgroundColor, const Color(0xFFF5F5F5));
+      expect(theme.scaffoldBackgroundColor, Colors.transparent);
       expect(theme.extension<CharonColors>(), CharonColors.light);
     });
   });
