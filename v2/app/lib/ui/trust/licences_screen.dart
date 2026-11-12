@@ -7,6 +7,7 @@ import '../../theme/theme.dart';
 import '../common/glass_card.dart';
 import 'guide_links.dart';
 import 'widgets/trust_page.dart';
+import '../common/pixel_icon.dart';
 
 const _gplText = 'GNU GENERAL PUBLIC LICENSE\n'
     'Version 3, 29 June 2007\n\n'
@@ -169,7 +170,7 @@ class _LicencesScreenState extends State<LicencesScreen> {
                     ),
                     Transform.rotate(
                       angle: open ? -1.5708 : 1.5708,
-                      child: Icon(Icons.chevron_right, size: 16, color: colors.text3),
+                      child: PixelIcon(PixelIcons.chevRight, size: 16, color: colors.text3),
                     ),
                   ],
                 ),

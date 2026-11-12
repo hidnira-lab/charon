@@ -5,6 +5,7 @@ import '../../../state/home_controller.dart';
 import 'charon_switch.dart';
 import 'erase_confirm_dialog.dart';
 import '../../../theme/theme.dart';
+import '../../common/pixel_icon.dart';
 
 class AppCard extends StatelessWidget {
   const AppCard({
@@ -82,8 +83,8 @@ class AppCard extends StatelessWidget {
                   color: colors.surface2,
                   borderRadius: BorderRadius.circular(9),
                 ),
-                child: Icon(
-                  Icons.power_settings_new_rounded,
+                child: PixelIcon(
+                  PixelIcons.power,
                   size: 18,
                   color: boot ? colors.accentText : colors.text2,
                 ),
@@ -164,8 +165,8 @@ class AppCard extends StatelessWidget {
                   color: colors.surface2,
                   borderRadius: BorderRadius.circular(9),
                 ),
-                child: Icon(
-                  Icons.miscellaneous_services_outlined,
+                child: PixelIcon(
+                  PixelIcons.service,
                   size: 18,
                   color: svcRestart ? colors.transitionText : colors.accentText,
                 ),
@@ -275,7 +276,7 @@ class AppCard extends StatelessWidget {
                           Expanded(
                             child: _ThemeSegmentBtn(
                               label: l10n.settingsThemeSystem,
-                              icon: Icons.computer_rounded,
+                              icon: PixelIcons.monitor,
                               isSelected: thm == ThemeMode.system,
                               onTap: () => controller.setThemeMode(ThemeMode.system),
                             ),
@@ -283,7 +284,7 @@ class AppCard extends StatelessWidget {
                           Expanded(
                             child: _ThemeSegmentBtn(
                               label: l10n.settingsThemeDark,
-                              icon: Icons.dark_mode_outlined,
+                              icon: PixelIcons.moon,
                               isSelected: thm == ThemeMode.dark,
                               onTap: () => controller.setThemeMode(ThemeMode.dark),
                             ),
@@ -291,7 +292,7 @@ class AppCard extends StatelessWidget {
                           Expanded(
                             child: _ThemeSegmentBtn(
                               label: l10n.settingsThemeLight,
-                              icon: Icons.light_mode_outlined,
+                              icon: PixelIcons.sun,
                               isSelected: thm == ThemeMode.light,
                               onTap: () => controller.setThemeMode(ThemeMode.light),
                             ),
@@ -395,8 +396,8 @@ class AppCard extends StatelessWidget {
                                 color: colors.text,
                               ),
                             ),
-                            Icon(
-                              Icons.keyboard_arrow_down_rounded,
+                            PixelIcon(
+                              PixelIcons.chev,
                               size: 16,
                               color: colors.text2,
                             ),
@@ -444,7 +445,7 @@ class AppCard extends StatelessWidget {
                   color: colors.surface2,
                   borderRadius: BorderRadius.circular(9),
                 ),
-                child: Icon(Icons.delete_outline_rounded, size: 18, color: colors.text2),
+                child: PixelIcon(PixelIcons.trash, size: 18, color: colors.text2),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -535,7 +536,7 @@ class _ThemeSegmentBtn extends StatelessWidget {
   });
 
   final String label;
-  final IconData icon;
+  final String icon;
   final bool isSelected;
   final VoidCallback onTap;
 
@@ -554,7 +555,7 @@ class _ThemeSegmentBtn extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            PixelIcon(
               icon,
               size: 13,
               color: isSelected ? colors.bg : colors.text2,

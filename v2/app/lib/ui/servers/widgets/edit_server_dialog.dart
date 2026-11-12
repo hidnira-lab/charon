@@ -9,6 +9,7 @@ import '../../common/glass_card.dart';
 import '../../dialogs/dialog_shell.dart';
 import '../../settings/widgets/charon_switch.dart';
 import 'add_server_dialog.dart';
+import '../../common/pixel_icon.dart';
 
 /// Edits the name, the country and the monthly quota of a saved server, as
 /// drawn on the Dialogs board. The connection fields are shown read only:
@@ -146,12 +147,12 @@ class _EditServerDialogState extends State<EditServerDialog> {
     return CharonDialog(
       kicker: l10n.dlgEditKicker(s.id),
       title: l10n.dlgEditTitle(s.displayName),
-      tile: Icons.edit,
+      tile: PixelIcons.edit,
       width: 600,
       hint: l10n.dlgEditHint,
       actions: [
         DialogAction(l10n.dialogCancel, () => Navigator.of(context).pop()),
-        DialogAction(l10n.dlgEditSaveBtn, _canSave ? _save : null, primary: true, icon: Icons.check),
+        DialogAction(l10n.dlgEditSaveBtn, _canSave ? _save : null, primary: true, icon: PixelIcons.check),
       ],
       children: [
         Row(
@@ -358,7 +359,7 @@ class _CountryPicker extends StatelessWidget {
                       style: TextStyle(fontSize: 14, color: value.isEmpty ? colors.text3 : colors.text),
                     ),
                   ),
-                  Icon(Icons.expand_more, size: 18, color: colors.text2),
+                  PixelIcon(PixelIcons.chev, size: 18, color: colors.text2),
                 ],
               ),
             ),
@@ -393,7 +394,7 @@ class _ReplaceButton extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.link, size: 14, color: colors.text),
+              PixelIcon(PixelIcons.link, size: 14, color: colors.text),
               const SizedBox(width: 6),
               Text(label, style: monoStyle(colors.text, 10, bold: true)),
             ],

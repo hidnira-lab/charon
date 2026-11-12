@@ -5,6 +5,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/country.dart' as country_names;
 import '../../../theme/theme.dart';
 import '../../common/pixel_flag.dart';
+import '../../common/pixel_icon.dart';
 
 /// Card showing one server profile in the failover list.
 class ServerProfileCard extends StatelessWidget {
@@ -189,7 +190,7 @@ class ServerProfileCard extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.lock, size: 14, color: colors.text3),
+                        PixelIcon(PixelIcons.lock, size: 14, color: colors.text3),
                         const SizedBox(width: 6),
                         Text(
                           l10n.serversActionUse,
@@ -207,14 +208,14 @@ class ServerProfileCard extends StatelessWidget {
               const SizedBox(width: 4),
               // Edit button
               IconButton(
-                icon: Icon(Icons.edit_outlined, size: 18),
+                icon: PixelIcon(PixelIcons.edit, size: 18, color: colors.text2),
                 color: colors.text2,
                 splashRadius: 20,
                 onPressed: onEdit,
               ),
               // Delete button
               IconButton(
-                icon: Icon(Icons.delete_outline, size: 18),
+                icon: PixelIcon(PixelIcons.trash, size: 18, color: canDelete ? colors.text2 : colors.controlBorder),
                 color: canDelete ? colors.text2 : colors.controlBorder,
                 splashRadius: 20,
                 onPressed: canDelete ? onDelete : null,

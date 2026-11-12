@@ -2,6 +2,7 @@ import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/main.dart';
 import 'package:charon/state/home_controller.dart';
 import 'package:charon/ui/servers/servers_screen.dart';
+import 'package:charon/ui/common/pixel_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -96,7 +97,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('ACTIVE · CONNECTED'), findsOneWidget);
-      expect(find.byIcon(Icons.lock_outline), findsAtLeastNWidgets(1));
+      expect(find.byWidgetPredicate((w) => w is PixelIcon && w.data == PixelIcons.lock), findsAtLeastNWidgets(1));
       expect(find.text('Disconnect →'), findsOneWidget);
       // The board names the server by its code and the country by its name.
       expect(find.text('Switching and deleting are locked while connected to SRV-01. Editing is fine.'), findsOneWidget);
@@ -153,7 +154,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Find delete button on SRV-02
-      final deleteButtons = find.byIcon(Icons.delete_outline);
+      final deleteButtons = find.byWidgetPredicate((w) => w is PixelIcon && w.data == PixelIcons.trash);
       expect(deleteButtons, findsAtLeastNWidgets(1));
 
       await tester.tap(deleteButtons.last);

@@ -4,6 +4,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/updates_view.dart';
 import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
+import '../../common/pixel_icon.dart';
 
 /// (background, ink) of a status chip for a tone.
 (Color, Color) updateToneColors(CharonColors c, UpdateTone t) => switch (t) {
@@ -147,7 +148,7 @@ class UpdateCard extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 1),
-                    child: Icon(Icons.shield_outlined, size: 12, color: colors.accentText),
+                    child: PixelIcon(PixelIcons.shield, size: 12, color: colors.accentText),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
@@ -304,7 +305,7 @@ class _Steps extends StatelessWidget {
         color: m == StepMark.done ? c.accentText : Colors.transparent,
         border: Border.all(color: edge, width: 2),
       ),
-      child: m == StepMark.done ? Icon(Icons.check, size: 9, color: c.bg) : null,
+      child: m == StepMark.done ? PixelIcon(PixelIcons.check, size: 9, color: c.bg) : null,
     );
   }
 }

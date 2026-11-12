@@ -8,6 +8,7 @@ import '../../sync/sync_client.dart';
 import '../../theme/theme.dart';
 import '../common/glass_card.dart';
 import 'dialog_shell.dart';
+import '../common/pixel_icon.dart';
 
 /// What the user asked for on the last step: push or pull now, with the
 /// passphrase they just typed so the next dialog does not ask again.
@@ -194,19 +195,19 @@ class _PairDeviceDialogState extends State<PairDeviceDialog> {
     };
 
     final actions = switch (_step) {
-      1 when busy => [DialogAction(l10n.dlgPairBtnChecking, null, primary: true, icon: Icons.link)],
+      1 when busy => [DialogAction(l10n.dlgPairBtnChecking, null, primary: true, icon: PixelIcons.link)],
       1 => [
           DialogAction(l10n.dialogCancel, () => Navigator.of(context).pop()),
-          DialogAction(l10n.dlgPairBtnContinue, _continueFromStep1, primary: true, icon: Icons.arrow_forward),
+          DialogAction(l10n.dlgPairBtnContinue, _continueFromStep1, primary: true, icon: PixelIcons.arrow),
         ],
-      2 when busy => [DialogAction(l10n.dlgPairBtnChecking, null, primary: true, icon: Icons.link)],
+      2 when busy => [DialogAction(l10n.dlgPairBtnChecking, null, primary: true, icon: PixelIcons.link)],
       2 => [
           DialogAction(l10n.dialogCancel, () => Navigator.of(context).pop()),
           DialogAction(
             _vaultNew ? l10n.dlgPairBtnCreate : l10n.dlgPairBtnUnlock,
             (_vaultNew ? _newPassOk : _pass.text.isNotEmpty) ? _continueFromStep2 : null,
             primary: true,
-            icon: Icons.link,
+            icon: PixelIcons.link,
           ),
         ],
       _ => [
@@ -215,7 +216,7 @@ class _PairDeviceDialogState extends State<PairDeviceDialog> {
             _vaultNew ? l10n.dlgPairBtnPush : l10n.dlgPairBtnPull,
             () => _finish(push: _vaultNew),
             primary: true,
-            icon: _vaultNew ? Icons.upload : Icons.download,
+            icon: _vaultNew ? PixelIcons.upload : PixelIcons.download,
           ),
         ],
     };
@@ -223,7 +224,7 @@ class _PairDeviceDialogState extends State<PairDeviceDialog> {
     return CharonDialog(
       kicker: l10n.dlgPairKicker,
       title: title,
-      tile: Icons.link,
+      tile: PixelIcons.link,
       width: 540,
       hint: l10n.dlgPairStepOf(_step, 3),
       actions: actions,
@@ -434,7 +435,7 @@ class _PairDeviceDialogState extends State<PairDeviceDialog> {
               width: 72,
               height: 72,
               decoration: BoxDecoration(color: colors.connectedSoft, borderRadius: BorderRadius.circular(16)),
-              child: Icon(Icons.check, size: 36, color: colors.connectedText),
+              child: PixelIcon(PixelIcons.check, size: 36, color: colors.connectedText),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -536,7 +537,7 @@ class _Check extends StatelessWidget {
                 color: checked ? colors.accent : Colors.transparent,
                 border: Border.all(color: checked ? colors.accent : colors.controlBorder, width: 2),
               ),
-              child: checked ? Icon(Icons.check, size: 16, color: colors.bg) : null,
+              child: checked ? PixelIcon(PixelIcons.check, size: 16, color: colors.bg) : null,
             ),
             const SizedBox(width: 10),
             Expanded(child: Text(label, style: TextStyle(fontSize: 13, color: colors.text))),

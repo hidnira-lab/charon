@@ -1,3 +1,4 @@
+import 'package:charon/ui/common/pixel_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:charon/sync/sync_client.dart';
@@ -299,7 +300,7 @@ void main() {
       ));
       await tester.tap(find.text('Open'));
       await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.close));
+      await tester.tap(find.byWidgetPredicate((w) => w is PixelIcon && w.data == PixelIcons.close));
       await tester.pumpAndSettle();
       expect(choice, QuitChoice.cancel);
     });

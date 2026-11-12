@@ -5,6 +5,7 @@ import '../../theme/theme.dart';
 import '../common/glass_card.dart';
 import '../common/motion.dart';
 import '../common/pixel_flag.dart';
+import '../common/pixel_icon.dart';
 
 /// Opens a dialog with the scrim and the motion of the Dialogs board: in
 /// 260 ms, out 160 ms (see [charonDialogTransition]).
@@ -37,7 +38,7 @@ class DialogAction {
   final String label;
   final VoidCallback? onTap;
   final bool primary;
-  final IconData? icon;
+  final String? icon;
 
   /// Focus starts here (Cancel on the destructive dialogs).
   final bool autofocus;
@@ -61,7 +62,7 @@ class CharonDialog extends StatelessWidget {
 
   final String kicker;
   final String title;
-  final IconData? tile;
+  final String? tile;
   final double width;
   final List<Widget> children;
 
@@ -110,7 +111,7 @@ class CharonDialog extends StatelessWidget {
                             color: colors.surface2,
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: Icon(tile, size: 22, color: colors.text),
+                          child: PixelIcon(tile!, size: 22, color: colors.text),
                         ),
                         const SizedBox(width: 14),
                       ],
@@ -144,7 +145,7 @@ class CharonDialog extends StatelessWidget {
                           child: SizedBox(
                             width: 40,
                             height: 40,
-                            child: Icon(Icons.close, size: 20, color: colors.text2),
+                            child: PixelIcon(PixelIcons.close, size: 20, color: colors.text2),
                           ),
                         ),
                       ),
@@ -239,7 +240,7 @@ class PillButton extends StatelessWidget {
                     color: off ? colors.divider : colors.accent,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(a.icon, size: 16, color: colors.onAccent),
+                  child: PixelIcon(a.icon!, size: 16, color: colors.onAccent),
                 ),
               ],
             ],
@@ -332,7 +333,7 @@ class DialogOption extends StatelessWidget {
     this.autofocus = false,
   });
 
-  final IconData icon;
+  final String icon;
   final String title;
   final String desc;
   final String tag;
@@ -366,7 +367,7 @@ class DialogOption extends StatelessWidget {
               width: 36,
               height: 36,
               decoration: BoxDecoration(color: colors.surface2, borderRadius: BorderRadius.circular(10)),
-              child: Icon(icon, size: 20, color: colors.text),
+              child: PixelIcon(icon, size: 20, color: colors.text),
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -598,7 +599,7 @@ class DialogField extends StatelessWidget {
                 child: SizedBox(
                   width: 36,
                   height: 36,
-                  child: Icon(obscure ? Icons.visibility : Icons.visibility_off, size: 18, color: colors.text2),
+                  child: PixelIcon(obscure ? PixelIcons.eye : PixelIcons.eyeOff, size: 18, color: colors.text2),
                 ),
               ),
             ),

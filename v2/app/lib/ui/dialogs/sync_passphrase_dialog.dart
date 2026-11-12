@@ -6,6 +6,7 @@ import '../../sync/sync_client.dart';
 import '../../theme/theme.dart';
 import '../common/glass_card.dart';
 import 'dialog_shell.dart';
+import '../common/pixel_icon.dart';
 
 /// How a Push or Pull ended, for the Sync card that opened the dialog.
 enum SyncRunResult {
@@ -105,7 +106,7 @@ class _SyncPassphraseDialogState extends State<SyncPassphraseDialog> {
     final profiles = cfg?.servers.length ?? 0;
     final rules = cfg?.hasSplit() == true ? cfg!.split.allExceptListed.length + cfg.split.onlyListed.length : 0;
     final canRun = _field.text.isNotEmpty;
-    final icon = push ? Icons.upload : Icons.download;
+    final icon = push ? PixelIcons.upload : PixelIcons.download;
 
     List<DialogAction> actions() => switch (_phase) {
           _Phase.done => [
@@ -218,7 +219,7 @@ class _DoneRow extends StatelessWidget {
           width: 36,
           height: 36,
           decoration: BoxDecoration(color: colors.connectedSoft, borderRadius: BorderRadius.circular(10)),
-          child: Icon(Icons.check, size: 20, color: colors.connectedText),
+          child: PixelIcon(PixelIcons.check, size: 20, color: colors.connectedText),
         ),
         const SizedBox(width: 12),
         Expanded(

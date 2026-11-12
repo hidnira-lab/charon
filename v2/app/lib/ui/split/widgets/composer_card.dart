@@ -5,6 +5,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/theme.dart';
 import '../rule_validator.dart';
 import '../../common/glass_card.dart';
+import '../../common/pixel_icon.dart';
 
 class ComposerCard extends StatefulWidget {
   const ComposerCard({
@@ -122,7 +123,7 @@ class _ComposerCardState extends State<ComposerCard> {
                       _segment(
                         colors,
                         label: l10n.splitTypeDomain,
-                        icon: Icons.language,
+                        icon: PixelIcons.globe,
                         isSelected: _selectedKind == RuleKind.RULE_DOMAIN,
                         onTap: () => _pickKind(RuleKind.RULE_DOMAIN),
                       ),
@@ -130,7 +131,7 @@ class _ComposerCardState extends State<ComposerCard> {
                       _segment(
                         colors,
                         label: l10n.splitTypeIpCidr,
-                        icon: Icons.tag,
+                        icon: PixelIcons.hash,
                         isSelected: _selectedKind == RuleKind.RULE_CIDR,
                         onTap: () => _pickKind(RuleKind.RULE_CIDR),
                       ),
@@ -142,7 +143,7 @@ class _ComposerCardState extends State<ComposerCard> {
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Row(
                             children: [
-                              Icon(Icons.lock, size: 14, color: colors.text3.withValues(alpha: 0.6)),
+                              PixelIcon(PixelIcons.lock, size: 14, color: colors.text3.withValues(alpha: 0.6)),
                               const SizedBox(width: 6),
                               Text(
                                 l10n.splitTypeApp,
@@ -160,8 +161,8 @@ class _ComposerCardState extends State<ComposerCard> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
-                      widget.isOnlyListed ? Icons.alt_route : Icons.wifi,
+                    PixelIcon(
+                      widget.isOnlyListed ? PixelIcons.navSplit : PixelIcons.wifi,
                       size: 14,
                       color: colors.text3,
                     ),
@@ -244,7 +245,7 @@ class _ComposerCardState extends State<ComposerCard> {
                           width: 34,
                           height: 34,
                           decoration: BoxDecoration(color: colors.accent, shape: BoxShape.circle),
-                          child: Icon(Icons.add, size: 18, color: colors.onAccent),
+                          child: PixelIcon(PixelIcons.plus, size: 18, color: colors.onAccent),
                         ),
                       ],
                     ),
@@ -306,7 +307,7 @@ class _ComposerCardState extends State<ComposerCard> {
   Widget _segment(
     CharonColors colors, {
     required String label,
-    required IconData icon,
+    required String icon,
     required bool isSelected,
     required VoidCallback onTap,
   }) {
@@ -324,7 +325,7 @@ class _ComposerCardState extends State<ComposerCard> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 14, color: ink),
+            PixelIcon(icon, size: 14, color: ink),
             const SizedBox(width: 6),
             Text(label, style: monoStyle(ink, 11, bold: true, em: 0.06)),
           ],

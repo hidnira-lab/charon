@@ -9,6 +9,7 @@ import '../../common/dashed_box.dart';
 import '../../common/ghost.dart';
 import '../../common/pixel_sprite.dart';
 import '../../tray/tray_art.dart';
+import '../../common/pixel_icon.dart';
 
 class RulesListCard extends StatelessWidget {
   const RulesListCard({
@@ -64,8 +65,8 @@ class RulesListCard extends StatelessWidget {
                 color: colors.surface,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(
-                rule.kind == RuleKind.RULE_DOMAIN ? Icons.language : Icons.tag,
+              child: PixelIcon(
+                rule.kind == RuleKind.RULE_DOMAIN ? PixelIcons.globe : PixelIcons.hash,
                 size: 20,
                 color: colors.text,
               ),
@@ -117,7 +118,7 @@ class RulesListCard extends StatelessWidget {
               ),
             ),
             IconButton(
-              icon: const Icon(Icons.delete_outline, size: 18),
+              icon: PixelIcon(PixelIcons.trash, size: 18, color: colors.text2),
               color: colors.text2,
               onPressed: () => onRemoveRule(index),
               tooltip: l10n.splitRemoveRule(rule.value),

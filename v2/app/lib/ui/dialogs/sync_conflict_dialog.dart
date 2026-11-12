@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../sync/sync_client.dart';
 import 'dialog_shell.dart';
+import '../common/pixel_icon.dart';
 
 export '../../sync/sync_client.dart' show SyncConflictChoice;
 
@@ -23,7 +24,7 @@ class SyncConflictDialog extends StatelessWidget {
     return CharonDialog(
       kicker: l10n.dlgConflictKicker,
       title: l10n.dlgConflictHeading,
-      tile: Icons.upload,
+      tile: PixelIcons.upload,
       hint: l10n.dialogEscFoot,
       onClose: () => pick(SyncConflictChoice.cancel),
       actions: [
@@ -32,14 +33,14 @@ class SyncConflictDialog extends StatelessWidget {
       children: [
         DialogText(l10n.dlgConflictIntro),
         DialogOption(
-          icon: Icons.download,
+          icon: PixelIcons.download,
           title: l10n.dlgConflictPullTitle,
           desc: l10n.dlgConflictPullDesc,
           tag: l10n.dlgConflictPullTag,
           onTap: () => pick(SyncConflictChoice.pullFirst),
         ),
         DialogOption(
-          icon: Icons.upload,
+          icon: PixelIcons.upload,
           title: l10n.dlgConflictOverwriteTitle,
           desc: l10n.dlgConflictOverwriteDesc,
           tag: l10n.dlgConflictOverwriteTag,

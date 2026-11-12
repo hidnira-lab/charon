@@ -13,6 +13,7 @@ import '../../dialogs/sync_conflict_dialog.dart';
 import '../../dialogs/unpair_confirm_dialog.dart';
 import '../../dialogs/sync_passphrase_dialog.dart';
 import '../../dialogs/vault_passphrase_dialog.dart';
+import '../../common/pixel_icon.dart';
 
 // Rail tab of Settings, where the update screen lives.
 const int _tabSettings = 4;
@@ -163,7 +164,7 @@ class _SyncCardState extends State<SyncCard> {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(color: colors.surface2, borderRadius: BorderRadius.circular(10)),
-                    child: Icon(Icons.laptop, size: 22, color: colors.text),
+                    child: PixelIcon(PixelIcons.laptop, size: 22, color: colors.text),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -337,7 +338,7 @@ class _SyncCardState extends State<SyncCard> {
                         width: 34,
                         height: 34,
                         decoration: BoxDecoration(color: colors.accent, shape: BoxShape.circle),
-                        child: Icon(Icons.arrow_forward, size: 18, color: colors.bg),
+                        child: PixelIcon(PixelIcons.arrow, size: 18, color: colors.bg),
                       ),
                     ],
                   ),

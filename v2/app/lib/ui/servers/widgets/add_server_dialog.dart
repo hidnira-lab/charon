@@ -10,6 +10,7 @@ import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
 import '../../dialogs/dialog_shell.dart';
 import 'server_import_parts.dart';
+import '../../common/pixel_icon.dart';
 
 /// What the Add server dialog hands back.
 sealed class AddServerOutcome {
@@ -148,12 +149,12 @@ class _AddServerDialogState extends State<AddServerDialog> {
     return CharonDialog(
       kicker: replacing == null ? l10n.dlgAddKicker : l10n.dlgReplaceKicker(replacing.id),
       title: replacing == null ? l10n.dlgAddTitle : l10n.dlgReplaceTitle(replacing.displayName),
-      tile: Icons.add,
+      tile: PixelIcons.plus,
       width: 600,
       hint: l10n.dlgAddHint,
       actions: [
         DialogAction(l10n.dialogCancel, () => Navigator.of(context).pop()),
-        DialogAction(replacing == null ? l10n.dlgAddSaveBtn : l10n.dlgReplaceBtn, _read.canSave ? _save : null, primary: true, icon: replacing == null ? Icons.add : Icons.check),
+        DialogAction(replacing == null ? l10n.dlgAddSaveBtn : l10n.dlgReplaceBtn, _read.canSave ? _save : null, primary: true, icon: replacing == null ? PixelIcons.plus : PixelIcons.check),
       ],
       children: [
         _Tabs(
@@ -234,7 +235,7 @@ class _Tabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
-    Widget tab(bool isJson, IconData icon, String text) {
+    Widget tab(bool isJson, String icon, String text) {
       final on = json == isJson;
       return Expanded(
         child: Semantics(
@@ -256,7 +257,7 @@ class _Tabs extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(icon, size: 18, color: on ? colors.text : colors.text3),
+                  PixelIcon(icon, size: 18, color: on ? colors.text : colors.text3),
                   const SizedBox(width: 8),
                   Text(text, style: monoStyle(on ? colors.text : colors.text3, 12, bold: true)),
                 ],
@@ -275,9 +276,9 @@ class _Tabs extends StatelessWidget {
         decoration: BoxDecoration(color: colors.bg, borderRadius: BorderRadius.circular(14)),
         child: Row(
           children: [
-            tab(false, Icons.link, linkLabel),
+            tab(false, PixelIcons.link, linkLabel),
             const SizedBox(width: 4),
-            tab(true, Icons.content_paste, pasteLabel),
+            tab(true, PixelIcons.clipboard, pasteLabel),
           ],
         ),
       ),

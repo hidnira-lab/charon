@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../l10n/generated/app_localizations.dart';
 import 'dialog_shell.dart';
+import '../common/pixel_icon.dart';
 
 enum QuitChoice {
   hideToTray,
@@ -39,21 +40,21 @@ class QuitWhileConnectedDialog extends StatelessWidget {
       children: [
         DialogText(l10n.dialogQuitSubtitle),
         DialogOption(
-          icon: Icons.keyboard_arrow_down,
+          icon: PixelIcons.chev,
           title: l10n.dialogQuitHideToTray,
           desc: l10n.dlgQuitHideDesc,
           tag: l10n.dlgQuitTagOn,
           onTap: () => pick(QuitChoice.hideToTray),
         ),
         DialogOption(
-          icon: Icons.web_asset_off,
+          icon: PixelIcons.winq,
           title: l10n.dialogQuitWindowOnly,
           desc: l10n.dlgQuitWindowDesc,
           tag: l10n.dlgQuitTagOn,
           onTap: () => pick(QuitChoice.quitWindowOnly),
         ),
         DialogOption(
-          icon: Icons.power_settings_new,
+          icon: PixelIcons.power,
           title: l10n.dialogQuitDisconnect,
           desc: l10n.dlgQuitDisconnectDesc,
           tag: l10n.dlgQuitTagOff,

@@ -11,6 +11,7 @@ import '../../sync/sync_client.dart';
 import '../../theme/theme.dart';
 import '../common/glass_card.dart';
 import 'dialog_shell.dart';
+import '../common/pixel_icon.dart';
 
 /// Pairing code (Dialogs board, "pairing code"): asks the sync server for a code
 /// when it opens, shows it in two groups of four with the time it has left, and
@@ -116,7 +117,7 @@ class _PairingCodeDialogState extends State<PairingCodeDialog> {
     return CharonDialog(
       kicker: l10n.dlgCodeKicker,
       title: l10n.dlgCodeTitle,
-      tile: Icons.qr_code_2,
+      tile: PixelIcons.qr,
       width: 560,
       hint: l10n.dlgCodeHint,
       actions: [
@@ -172,7 +173,7 @@ class _PairingCodeDialogState extends State<PairingCodeDialog> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(_copied ? Icons.check : Icons.link, size: 14, color: colors.text),
+                      PixelIcon(_copied ? PixelIcons.check : PixelIcons.link, size: 14, color: colors.text),
                       const SizedBox(width: 6),
                       Text(
                         _copied ? l10n.dlgCodeCopied : l10n.dlgCodeCopyLink,

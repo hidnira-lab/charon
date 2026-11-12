@@ -5,6 +5,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/access_line.dart';
 import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
+import '../../common/pixel_icon.dart';
 
 enum LogFilterLevel { all, info, warn, error }
 
@@ -175,13 +176,13 @@ class _LogTerminalCardState extends State<LogTerminalCard> {
                     const SizedBox(width: 6),
                     _PillButton(
                       label: l10n.telemetryCopyBtn,
-                      icon: Icons.copy_rounded,
+                      icon: PixelIcons.copy,
                       onTap: logs.isEmpty ? null : widget.onCopy,
                     ),
                     const SizedBox(width: 6),
                     _PillButton(
                       label: l10n.telemetryShareBtn,
-                      icon: Icons.share_rounded,
+                      icon: PixelIcons.share,
                       onTap: logs.isEmpty ? null : widget.onShare,
                     ),
                   ],
@@ -250,7 +251,7 @@ class _LogTerminalCardState extends State<LogTerminalCard> {
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Icon(Icons.arrow_downward_rounded, size: 14, color: colors.onAccent),
+                                    PixelIcon(PixelIcons.arrowDown, size: 14, color: colors.onAccent),
                                     const SizedBox(width: 6),
                                     Text(
                                       l10n.telemetryNewLinesPill(_newLinesWhilePaused),
@@ -329,7 +330,7 @@ class _PillButton extends StatelessWidget {
   const _PillButton({required this.label, this.icon, this.pressed = false, required this.onTap});
 
   final String label;
-  final IconData? icon;
+  final String? icon;
   final bool pressed;
   final VoidCallback? onTap;
 
@@ -353,7 +354,7 @@ class _PillButton extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (icon != null) ...[Icon(icon, size: 13, color: ink), const SizedBox(width: 6)],
+              if (icon != null) ...[PixelIcon(icon!, size: 13, color: ink), const SizedBox(width: 6)],
               Text(label, style: monoStyle(ink, 10, bold: true, em: 0.06)),
             ],
           ),

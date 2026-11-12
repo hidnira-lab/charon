@@ -6,6 +6,7 @@ import '../../../state/country.dart' as country_names;
 import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
 import '../../dialogs/dialog_shell.dart';
+import '../../common/pixel_icon.dart';
 
 /// Confirmation for deleting a server profile (Dialogs board, "delete server"):
 /// what happens to failover, the quota count and the synced copy. Focus starts
@@ -50,7 +51,7 @@ class DeleteServerDialog extends StatelessWidget {
     return CharonDialog(
       kicker: l10n.dlgDeleteKicker,
       title: l10n.dlgDeleteTitle(name),
-      tile: Icons.delete_outline,
+      tile: PixelIcons.trash,
       width: 460,
       hint: l10n.dialogEscFoot,
       onClose: () => Navigator.of(context).pop(false),

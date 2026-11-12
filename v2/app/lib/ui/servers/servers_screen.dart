@@ -12,6 +12,7 @@ import 'widgets/edit_server_dialog.dart';
 import 'widgets/server_profile_card.dart';
 import 'widgets/sync_card.dart';
 import '../common/motion.dart';
+import '../common/pixel_icon.dart';
 
 /// Servers desktop screen (1024 x 768 px) matching ServersDesktop board.
 class ServersScreen extends StatefulWidget {
@@ -126,7 +127,7 @@ class _ServersScreenState extends State<ServersScreen> {
                                           onPressed: atLimit
                                               ? null
                                               : () => _openAddDialog(context, servers),
-                                          icon: Icon(Icons.link, size: 16),
+                                          icon: PixelIcon(PixelIcons.link, size: 16, color: colors.text),
                                           label: Text(
                                             l10n.serversActionImportLink,
                                             style: TextStyle(
@@ -176,7 +177,7 @@ class _ServersScreenState extends State<ServersScreen> {
                                                   color: colors.accent,
                                                   shape: BoxShape.circle,
                                                 ),
-                                                child: Icon(Icons.add, size: 18, color: colors.bg),
+                                                child: PixelIcon(PixelIcons.plus, size: 18, color: colors.bg),
                                               ),
                                             ],
                                           ),
@@ -202,7 +203,7 @@ class _ServersScreenState extends State<ServersScreen> {
                                 ),
                                 child: Row(
                                   children: [
-                                    Icon(Icons.lock_outline, size: 18, color: colors.text2),
+                                    PixelIcon(PixelIcons.lock, size: 18, color: colors.text2),
                                     const SizedBox(width: 10),
                                     Expanded(
                                       child: Text(
@@ -308,7 +309,8 @@ class _ServersScreenState extends State<ServersScreen> {
                                                           color: colors.surface,
                                                           borderRadius: BorderRadius.circular(12),
                                                         ),
-                                                        child: Icon(Icons.warning_amber_rounded, size: 20, color: colors.transitionText),
+                                                        alignment: Alignment.center,
+                                                        child: SizedBox(width: 8, height: 8, child: ColoredBox(color: colors.transitionFill)),
                                                       ),
                                                       const SizedBox(width: 14),
                                                       Expanded(
@@ -358,7 +360,7 @@ class _ServersScreenState extends State<ServersScreen> {
                                                           color: colors.surface2,
                                                           borderRadius: BorderRadius.circular(12),
                                                         ),
-                                                        child: Icon(Icons.add, size: 20, color: colors.text),
+                                                        child: PixelIcon(PixelIcons.plus, size: 20, color: colors.text),
                                                       ),
                                                       const SizedBox(width: 14),
                                                       Expanded(

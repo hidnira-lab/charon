@@ -5,6 +5,7 @@ import '../../../state/updates_view.dart';
 import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
 import 'update_card.dart';
+import '../../common/pixel_icon.dart';
 
 /// "Update from a file": one row with the state of the file and one button.
 class FileUpdateCard extends StatelessWidget {
@@ -35,7 +36,7 @@ class FileUpdateCard extends StatelessWidget {
                       color: colors.surface2,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Icon(Icons.insert_drive_file_outlined, size: 20, color: colors.text2),
+                    child: PixelIcon(PixelIcons.file, size: 20, color: colors.text2),
                   ),
                   const SizedBox(width: 12),
                   Expanded(

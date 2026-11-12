@@ -25,6 +25,7 @@ import '../servers/widgets/server_import_parts.dart';
 import '../settings/widgets/charon_switch.dart';
 import '../trust/guide_links.dart';
 import 'widgets/setup_scene.dart';
+import '../common/pixel_icon.dart';
 
 /// The first run setup of the Setup board: a welcome, the first server (a link,
 /// a pasted config or a restore from another device), the safety switches, a few
@@ -484,7 +485,7 @@ class _Aside extends StatelessWidget {
                     width: 32,
                     height: 32,
                     decoration: BoxDecoration(color: colors.surface2, borderRadius: BorderRadius.circular(9)),
-                    child: Icon(Icons.menu_book, size: 20, color: colors.accentText),
+                    child: PixelIcon(PixelIcons.book, size: 20, color: colors.accentText),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -497,7 +498,7 @@ class _Aside extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Icon(Icons.open_in_new, size: 14, color: colors.accentText),
+                  PixelIcon(PixelIcons.ext, size: 14, color: colors.accentText),
                 ],
               ),
             ),
@@ -550,7 +551,7 @@ class _StepperRow extends StatelessWidget {
                 color: done ? colors.accent : Colors.transparent,
                 border: Border.all(color: done ? colors.accent : cur ? colors.text : colors.divider, width: 2),
               ),
-              child: done ? Icon(Icons.check, size: 14, color: colors.onAccent) : null,
+              child: done ? PixelIcon(PixelIcons.check, size: 14, color: colors.onAccent) : null,
             ),
             const SizedBox(width: 12),
             Text(n, style: monoStyle(colors.controlBorder, 10, bold: true)),
@@ -657,7 +658,7 @@ class _Big extends StatelessWidget {
 
   final String label;
   final VoidCallback? onTap;
-  final IconData? icon;
+  final String? icon;
   final bool primary;
 
   @override
@@ -690,7 +691,7 @@ class _Big extends StatelessWidget {
                     width: 36,
                     height: 36,
                     decoration: BoxDecoration(color: colors.accent, shape: BoxShape.circle),
-                    child: Icon(icon, size: 18, color: colors.onAccent),
+                    child: PixelIcon(icon!, size: 18, color: colors.onAccent),
                   ),
                 ],
               ],
@@ -770,14 +771,14 @@ class _Welcome extends StatelessWidget {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(Icons.menu_book, size: 14, color: colors.connectedText),
+                                  PixelIcon(PixelIcons.book, size: 14, color: colors.connectedText),
                                   const SizedBox(width: 6),
                                   Text(l10n.stpIntroTag, style: monoStyle(colors.connectedText, 10, bold: true, em: 0.08)),
                                 ],
                               ),
                             ),
                             const Spacer(),
-                            Icon(Icons.open_in_new, size: 16, color: colors.accentText),
+                            PixelIcon(PixelIcons.ext, size: 16, color: colors.accentText),
                           ],
                         ),
                         const SizedBox(height: 10),
@@ -806,7 +807,7 @@ class _Welcome extends StatelessWidget {
                             children: [
                               Text(l10n.stpIntroButton, style: monoStyle(colors.text, 12, bold: true)),
                               const SizedBox(width: 8),
-                              Icon(Icons.open_in_new, size: 14, color: colors.accentText),
+                              PixelIcon(PixelIcons.ext, size: 14, color: colors.accentText),
                             ],
                           ),
                         ),
@@ -875,7 +876,7 @@ class _Welcome extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(Icons.shield_outlined, size: 16, color: colors.text3),
+              PixelIcon(PixelIcons.shield, size: 16, color: colors.text3),
               const SizedBox(width: 10),
               Expanded(
                 child: Text.rich(
@@ -891,7 +892,7 @@ class _Welcome extends StatelessWidget {
         ),
         const Spacer(),
         _Footer(children: [
-          _Big(l10n.stpGetStarted, () => state._go(SetupStep.server), icon: Icons.arrow_forward, primary: true),
+          _Big(l10n.stpGetStarted, () => state._go(SetupStep.server), icon: PixelIcons.arrow, primary: true),
           _Big(l10n.stpAlreadyUse, () => state._go(SetupStep.restore)),
         ]),
       ],
@@ -929,15 +930,15 @@ class _ServerStep extends StatelessWidget {
     final s = read.server;
     final paste = state._paste;
     final ways = [
-      (l10n.stpWayLink, l10n.stpWayLinkD, Icons.link, !paste, () => state._set(() {
+      (l10n.stpWayLink, l10n.stpWayLinkD, PixelIcons.link, !paste, () => state._set(() {
             state._paste = false;
             state._recompute();
           })),
-      (l10n.stpWayPaste, l10n.stpWayPasteD, Icons.content_paste, paste, () => state._set(() {
+      (l10n.stpWayPaste, l10n.stpWayPasteD, PixelIcons.clipboard, paste, () => state._set(() {
             state._paste = true;
             state._recompute();
           })),
-      (l10n.stpWayRestore, l10n.stpWayRestoreD, Icons.download, false, () => state._go(SetupStep.restore)),
+      (l10n.stpWayRestore, l10n.stpWayRestoreD, PixelIcons.download, false, () => state._go(SetupStep.restore)),
     ];
 
     return Column(
@@ -973,7 +974,7 @@ class _ServerStep extends StatelessWidget {
                                     width: 32,
                                     height: 32,
                                     decoration: BoxDecoration(color: colors.surface2, borderRadius: BorderRadius.circular(9)),
-                                    child: Icon(w.$3, size: 20, color: w.$4 ? colors.accentText : colors.text2),
+                                    child: PixelIcon(w.$3, size: 20, color: w.$4 ? colors.accentText : colors.text2),
                                   ),
                                   const SizedBox(height: 8),
                                   Text(w.$1, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: colors.text)),
@@ -1050,7 +1051,7 @@ class _ServerStep extends StatelessWidget {
                     state._go(SetupStep.safety);
                   }
                 : null,
-            icon: Icons.arrow_forward,
+            icon: PixelIcons.arrow,
             primary: true,
           ),
           const Spacer(),
@@ -1160,7 +1161,7 @@ class _RestoreStep extends StatelessWidget {
           _Big(
             l10n.stpRestorePull,
             busy ? null : state._restore,
-            icon: Icons.download,
+            icon: PixelIcons.download,
             primary: true,
           ),
         ]),
@@ -1183,9 +1184,9 @@ class _SafetyStep extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     final rows = [
-      (Icons.shield_outlined, l10n.stpKillSwitch, l10n.stpKillDesc, state._kill, l10n.stpKillOn, l10n.stpKillOff, (bool v) => state._set(() => state._kill = v)),
-      (Icons.sync, l10n.stpAutoReconnect, l10n.stpAutoDesc, state._auto, l10n.stpAutoOn, l10n.stpAutoOff, (bool v) => state._set(() => state._auto = v)),
-      (Icons.power_settings_new, l10n.stpLaunch, l10n.stpLaunchDesc, state._boot, l10n.stpLaunchOn, l10n.stpLaunchOff, (bool v) => state._set(() => state._boot = v)),
+      (PixelIcons.shield, l10n.stpKillSwitch, l10n.stpKillDesc, state._kill, l10n.stpKillOn, l10n.stpKillOff, (bool v) => state._set(() => state._kill = v)),
+      (PixelIcons.reload, l10n.stpAutoReconnect, l10n.stpAutoDesc, state._auto, l10n.stpAutoOn, l10n.stpAutoOff, (bool v) => state._set(() => state._auto = v)),
+      (PixelIcons.power, l10n.stpLaunch, l10n.stpLaunchDesc, state._boot, l10n.stpLaunchOn, l10n.stpLaunchOff, (bool v) => state._set(() => state._boot = v)),
     ];
     final chips = [
       (l10n.stpDrop, l10n.stpDropLost, colors.surface2, colors.text2, 1.0, true),
@@ -1221,7 +1222,7 @@ class _SafetyStep extends StatelessWidget {
                                   width: 32,
                                   height: 32,
                                   decoration: BoxDecoration(color: colors.surface2, borderRadius: BorderRadius.circular(9)),
-                                  child: Icon(r.$1, size: 20, color: r.$4 ? colors.accentText : colors.text2),
+                                  child: PixelIcon(r.$1, size: 20, color: r.$4 ? colors.accentText : colors.text2),
                                 ),
                                 const SizedBox(width: 14),
                                 Expanded(
@@ -1311,7 +1312,7 @@ class _SafetyStep extends StatelessWidget {
         const SizedBox(height: 12),
         _Footer(children: [
           _Big(l10n.stpBack, () => state._go(SetupStep.server)),
-          _Big(l10n.stpContinue, () => state._go(SetupStep.yours), icon: Icons.arrow_forward, primary: true),
+          _Big(l10n.stpContinue, () => state._go(SetupStep.yours), icon: PixelIcons.arrow, primary: true),
         ]),
       ],
     );
@@ -1341,7 +1342,7 @@ class _YoursStep extends StatelessWidget {
       DayPart.night => l10n.homeGreetNight(who),
     };
 
-    Widget themeButton(String label, IconData icon, bool on, bool dark) => InkWell(
+    Widget themeButton(String label, String icon, bool on, bool dark) => InkWell(
           onTap: () => state._set(() => state._dark = dark),
           borderRadius: BorderRadius.circular(7),
           child: Container(
@@ -1351,7 +1352,7 @@ class _YoursStep extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(icon, size: 14, color: on ? colors.bg : colors.text2),
+                PixelIcon(icon, size: 14, color: on ? colors.bg : colors.text2),
                 const SizedBox(width: 6),
                 Text(label, style: monoStyle(on ? colors.bg : colors.text2, 10, bold: true, em: 0.06)),
               ],
@@ -1403,9 +1404,9 @@ class _YoursStep extends StatelessWidget {
                         padding: const EdgeInsets.all(3),
                         decoration: BoxDecoration(color: colors.surface2, borderRadius: BorderRadius.circular(10)),
                         child: Row(children: [
-                          themeButton(l10n.stpThemeDark, Icons.dark_mode, state._dark, true),
+                          themeButton(l10n.stpThemeDark, PixelIcons.moon, state._dark, true),
                           const SizedBox(width: 2),
-                          themeButton(l10n.stpThemeLight, Icons.light_mode, !state._dark, false),
+                          themeButton(l10n.stpThemeLight, PixelIcons.sun, !state._dark, false),
                         ]),
                       ),
                     ],
@@ -1450,7 +1451,7 @@ class _YoursStep extends StatelessWidget {
         const SizedBox(height: 12),
         _Footer(children: [
           _Big(l10n.stpBack, () => state._go(SetupStep.safety)),
-          _Big(l10n.stpContinue, () => state._go(SetupStep.connect), icon: Icons.arrow_forward, primary: true),
+          _Big(l10n.stpContinue, () => state._go(SetupStep.connect), icon: PixelIcons.arrow, primary: true),
           const Spacer(),
           _Link(l10n.stpSkipStep, () => state._go(SetupStep.connect)),
         ]),
@@ -1524,10 +1525,10 @@ class _ConnectStep extends StatelessWidget {
         };
 
     final (cta, ctaIcon, ctaTap) = switch (phase) {
-      ConnectPhase.ready => (l10n.stpConnectVerify, Icons.power_settings_new, server == null ? null : state._connectAndVerify),
-      ConnectPhase.verifying => (l10n.stpCancel, Icons.close, state._cancelVerify),
-      ConnectPhase.connected => (l10n.stpOpenCharon, Icons.arrow_forward, () => state._finish(connected: true)),
-      ConnectPhase.unreachable => (l10n.stpRetryBtn, Icons.refresh, state._connectAndVerify),
+      ConnectPhase.ready => (l10n.stpConnectVerify, PixelIcons.power, server == null ? null : state._connectAndVerify),
+      ConnectPhase.verifying => (l10n.stpCancel, PixelIcons.close, state._cancelVerify),
+      ConnectPhase.connected => (l10n.stpOpenCharon, PixelIcons.arrow, () => state._finish(connected: true)),
+      ConnectPhase.unreachable => (l10n.stpRetryBtn, PixelIcons.reload, state._connectAndVerify),
     };
 
     return Column(

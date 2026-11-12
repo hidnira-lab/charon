@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
 import '../../../theme/theme.dart';
+import '../../common/pixel_icon.dart';
 
 class NetworkCard extends StatefulWidget {
   const NetworkCard({
@@ -103,7 +104,7 @@ class _NetworkCardState extends State<NetworkCard> {
                   color: colors.surface2,
                   borderRadius: BorderRadius.circular(9),
                 ),
-                child: Icon(Icons.dns_outlined, size: 18, color: colors.accentText),
+                child: PixelIcon(PixelIcons.dns, size: 18, color: colors.accentText),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -255,7 +256,7 @@ class _NetworkCardState extends State<NetworkCard> {
                   color: colors.surface2,
                   borderRadius: BorderRadius.circular(9),
                 ),
-                child: Icon(Icons.block_outlined, size: 18, color: colors.text2),
+                child: PixelIcon(PixelIcons.block, size: 18, color: colors.text2),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -342,7 +343,7 @@ class _NetworkCardState extends State<NetworkCard> {
                   color: colors.surface2,
                   borderRadius: BorderRadius.circular(9),
                 ),
-                child: Icon(Icons.swap_calls_rounded, size: 18, color: colors.accentText),
+                child: PixelIcon(PixelIcons.adapter, size: 18, color: colors.accentText),
               ),
               const SizedBox(width: 14),
               Expanded(

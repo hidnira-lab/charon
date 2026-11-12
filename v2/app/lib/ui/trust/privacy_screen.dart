@@ -6,6 +6,7 @@ import '../../theme/theme.dart';
 import '../common/glass_card.dart';
 import 'guide_links.dart';
 import 'widgets/trust_page.dart';
+import '../common/pixel_icon.dart';
 
 /// "Privacy and network": the three kinds of places Charon talks to, four plain
 /// facts, and the links to the threat model and SECURITY.md (Trust board).
@@ -111,7 +112,7 @@ class PrivacyScreen extends StatelessWidget {
                         width: 18,
                         height: 18,
                         color: colors.connectedSoft,
-                        child: Icon(Icons.check, size: 12, color: colors.connectedText),
+                        child: PixelIcon(PixelIcons.check, size: 12, color: colors.connectedText),
                       ),
                       const SizedBox(width: 10),
                       Expanded(

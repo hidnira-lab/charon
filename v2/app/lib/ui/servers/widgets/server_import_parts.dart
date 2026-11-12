@@ -5,6 +5,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
 import '../../dialogs/dialog_shell.dart';
+import '../../common/pixel_icon.dart';
 
 /// What was read from a pasted link or config: where it is, its name (editable)
 /// and the fields that were found. Shared by the Add server dialog and the setup.
@@ -152,7 +153,7 @@ class ServerJsonEditor extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.content_paste, size: 14, color: colors.text2),
+                        PixelIcon(PixelIcons.clipboard, size: 14, color: colors.text2),
                         const SizedBox(width: 6),
                         Text(pasteLabel, style: monoStyle(colors.text2, 10, bold: true)),
                       ],

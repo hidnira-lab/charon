@@ -12,6 +12,7 @@ import '../../trust/licences_screen.dart';
 import '../../trust/privacy_screen.dart';
 import '../../updates/updates_screen.dart';
 import '../../common/motion.dart';
+import '../../common/pixel_icon.dart';
 
 class AboutCard extends StatelessWidget {
   const AboutCard({
@@ -104,8 +105,8 @@ class AboutCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: colors.divider),
                 ),
-                child: Icon(
-                  Icons.shield_rounded,
+                child: PixelIcon(
+                  PixelIcons.shield,
                   size: 24,
                   color: colors.text,
                 ),
@@ -224,8 +225,8 @@ class AboutCard extends StatelessWidget {
                             ),
                             if (item.isExternal) ...[
                               const SizedBox(width: 4),
-                              Icon(
-                                Icons.open_in_new_rounded,
+                              PixelIcon(
+                                PixelIcons.ext,
                                 size: 12,
                                 color: colors.accentText,
                               ),

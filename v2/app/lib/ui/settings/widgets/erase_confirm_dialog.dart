@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../dialogs/dialog_shell.dart';
+import '../../common/pixel_icon.dart';
 
 /// Confirmation before erasing everything Charon keeps on this PC (Dialogs
 /// board, "erase all data"): what goes and what stays. Focus starts on Cancel.
@@ -17,7 +18,7 @@ class EraseConfirmDialog extends StatelessWidget {
     return CharonDialog(
       kicker: l10n.dlgEraseKicker,
       title: l10n.dlgEraseHeading,
-      tile: Icons.delete_outline,
+      tile: PixelIcons.trash,
       hint: l10n.dialogEscFoot,
       onClose: () => Navigator.of(context).pop(false),
       actions: [

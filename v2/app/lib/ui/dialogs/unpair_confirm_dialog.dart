@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../l10n/generated/app_localizations.dart';
 import 'dialog_shell.dart';
+import '../common/pixel_icon.dart';
 
 /// Confirmation before this device stops syncing (Dialogs board, "unpair
 /// device"). The encrypted copy stays on the sync server.
@@ -17,7 +18,7 @@ class UnpairConfirmDialog extends StatelessWidget {
     return CharonDialog(
       kicker: l10n.dlgUnpairKicker,
       title: l10n.dlgUnpairHeading,
-      tile: Icons.link,
+      tile: PixelIcons.link,
       width: 480,
       hint: l10n.dialogEscFoot,
       onClose: () => Navigator.of(context).pop(false),

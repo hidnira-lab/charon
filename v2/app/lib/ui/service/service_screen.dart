@@ -13,6 +13,7 @@ import '../common/glass_card.dart';
 import '../dialogs/dialog_shell.dart';
 import '../home/widgets/title_bar.dart';
 import '../trust/guide_links.dart';
+import '../common/pixel_icon.dart';
 
 /// The Service screen of the Service board: what the window shows when it cannot
 /// talk to the Charon service (stopped, starting, failed to start, needs an
@@ -195,21 +196,21 @@ class _Content extends StatelessWidget {
 
     final actions = switch (v.kind) {
       ServiceKind.stopped => [
-          PillButton(DialogAction(l10n.serviceStartAction, sup.start, primary: true, icon: Icons.power_settings_new)),
+          PillButton(DialogAction(l10n.serviceStartAction, sup.start, primary: true, icon: PixelIcons.power)),
           PillButton(DialogAction(l10n.serviceOpenGuide, () => _openGuide(context)), external: true),
         ],
       ServiceKind.startFailed => [
-          PillButton(DialogAction(l10n.serviceRepairInstaller, sup.repair, primary: true, icon: Icons.build)),
+          PillButton(DialogAction(l10n.serviceRepairInstaller, sup.repair, primary: true, icon: PixelIcons.wrench)),
           PillButton(DialogAction(l10n.serviceOpenGuide, () => _openGuide(context)), external: true),
         ],
       ServiceKind.needsUpdate => [
-          PillButton(DialogAction(l10n.serviceUpdateAction, sup.update, primary: true, icon: Icons.download)),
+          PillButton(DialogAction(l10n.serviceUpdateAction, sup.update, primary: true, icon: PixelIcons.download)),
           // Updating from a file waits for its place in the UI and for the
           // installer's signature check, so it is drawn but off.
           PillButton(DialogAction(l10n.serviceUpdateFromFile, null)),
         ],
       ServiceKind.running => [
-          PillButton(DialogAction(l10n.svcOpenCharon, sup.dismissRecovered, primary: true, icon: Icons.arrow_forward)),
+          PillButton(DialogAction(l10n.svcOpenCharon, sup.dismissRecovered, primary: true, icon: PixelIcons.arrow)),
         ],
       ServiceKind.starting || ServiceKind.installing => const <Widget>[],
     };

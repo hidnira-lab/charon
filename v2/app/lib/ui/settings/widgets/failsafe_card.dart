@@ -4,6 +4,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
 import 'charon_switch.dart';
 import '../../../theme/theme.dart';
+import '../../common/pixel_icon.dart';
 
 class FailsafeCard extends StatelessWidget {
   const FailsafeCard({
@@ -73,7 +74,7 @@ class FailsafeCard extends StatelessWidget {
 
           // Row 1: Kill switch
           _SwitchRow(
-            icon: Icons.shield_outlined,
+            icon: PixelIcons.shield,
             title: l10n.settingsKillSwitchTitle,
             tag: l10n.settingsKillSwitchTag,
             desc: l10n.settingsKillSwitchDesc,
@@ -85,7 +86,7 @@ class FailsafeCard extends StatelessWidget {
 
           // Row 2: Auto reconnect
           _SwitchRow(
-            icon: Icons.replay_rounded,
+            icon: PixelIcons.reload,
             title: l10n.settingsAutoReconnectTitle,
             desc: l10n.settingsAutoReconnectDesc,
             line: ar
@@ -98,7 +99,7 @@ class FailsafeCard extends StatelessWidget {
 
           // Row 3: Allow local network
           _SwitchRow(
-            icon: Icons.home_work_outlined,
+            icon: PixelIcons.house,
             title: l10n.settingsAllowLocalTitle,
             desc: l10n.settingsAllowLocalDesc,
             line: lan ? l10n.settingsAllowLocalArmed : l10n.settingsAllowLocalDisarmed,
@@ -165,7 +166,7 @@ class _SwitchRow extends StatelessWidget {
     required this.onChanged,
   });
 
-  final IconData icon;
+  final String icon;
   final String title;
   final String? tag;
   final String desc;
@@ -187,7 +188,7 @@ class _SwitchRow extends StatelessWidget {
             color: colors.surface2,
             borderRadius: BorderRadius.circular(9),
           ),
-          child: Icon(
+          child: PixelIcon(
             icon,
             size: 18,
             color: isOn ? colors.accentText : colors.text2,

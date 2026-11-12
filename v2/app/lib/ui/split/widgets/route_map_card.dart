@@ -6,6 +6,7 @@ import '../../../state/split_view.dart';
 import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
 import '../../common/pixel_flag.dart';
+import '../../common/pixel_icon.dart';
 
 class RouteMapCard extends StatelessWidget {
   const RouteMapCard({
@@ -73,7 +74,7 @@ class RouteMapCard extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.laptop_mac, size: 20, color: colors.text),
+                  PixelIcon(PixelIcons.laptop, size: 20, color: colors.text),
                   const SizedBox(width: 10),
                   Text(
                     l10n.splitLaptop,
@@ -126,7 +127,7 @@ class RouteMapCard extends StatelessWidget {
                       border: colors.divider,
                       head: Row(
                         children: [
-                          Icon(Icons.wifi, size: 14, color: colors.text2),
+                          PixelIcon(PixelIcons.wifi, size: 14, color: colors.text2),
                           const SizedBox(width: 6),
                           Text(l10n.splitDirectTag, style: monoStyle(colors.text2, 10, bold: true, em: 0.08)),
                         ],

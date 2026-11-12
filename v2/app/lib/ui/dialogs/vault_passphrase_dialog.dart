@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../theme/theme.dart';
 import 'dialog_shell.dart';
+import '../common/pixel_icon.dart';
 
 enum VaultDialogMode {
   backup,
@@ -167,13 +168,10 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // The board's warning mark: a square amber dot.
                     Padding(
-                      padding: const EdgeInsets.only(top: 2),
-                      child: Icon(
-                        Icons.warning_amber_rounded,
-                        size: 16,
-                        color: colors.transitionFill,
-                      ),
+                      padding: const EdgeInsets.only(top: 4),
+                      child: SizedBox(width: 8, height: 8, child: ColoredBox(color: colors.transitionFill)),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
@@ -228,8 +226,8 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
                     borderSide: BorderSide(color: colors.accentText),
                   ),
                   suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                    icon: PixelIcon(
+                      _obscureText ? PixelIcons.eye : PixelIcons.eyeOff,
                       size: 18,
                       color: textMuted,
                     ),

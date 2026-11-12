@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/theme.dart';
 import '../../dialogs/dialog_shell.dart';
+import '../../common/pixel_icon.dart';
 
 /// Share confirmation dialog adhering to the spec:
 /// "Share sends only the lines currently visible, not the whole buffer.
@@ -54,8 +55,8 @@ class ShareDialog extends StatelessWidget {
               // Header
               Row(
                 children: [
-                  Icon(
-                    Icons.share_rounded,
+                  PixelIcon(
+                    PixelIcons.share,
                     size: 20.0,
                     color: colors.accentText,
                   ),

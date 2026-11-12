@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
+import '../../common/pixel_icon.dart';
 
 class PendingBanner extends StatelessWidget {
   const PendingBanner({
@@ -44,7 +45,7 @@ class PendingBanner extends StatelessWidget {
               shape: const StadiumBorder(),
               foregroundColor: colors.text,
             ),
-            icon: const Icon(Icons.refresh, size: 14),
+            icon: PixelIcon(PixelIcons.reload, size: 14, color: colors.text),
             label: Text(l10n.splitReconnectNow, style: monoStyle(colors.text, 11, bold: true)),
           ),
         ],

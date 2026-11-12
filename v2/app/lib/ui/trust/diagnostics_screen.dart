@@ -11,6 +11,7 @@ import '../../theme/theme.dart';
 import '../common/glass_card.dart';
 import 'widgets/trust_page.dart';
 import '../common/motion.dart';
+import '../common/pixel_icon.dart';
 
 /// "Export diagnostics" (Trust board): pick what goes into a text for a bug
 /// report, read it in a live preview, then copy it. Nothing is uploaded and
@@ -277,7 +278,7 @@ class _Box extends StatelessWidget {
         color: on ? colors.accentText : Colors.transparent,
         border: Border.all(color: on ? colors.accentText : colors.controlBorder, width: 2),
       ),
-      child: on ? Icon(Icons.check, size: 14, color: colors.bg) : null,
+      child: on ? PixelIcon(PixelIcons.check, size: 14, color: colors.bg) : null,
     );
   }
 }
