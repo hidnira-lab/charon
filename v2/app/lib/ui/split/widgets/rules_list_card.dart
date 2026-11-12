@@ -5,6 +5,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/theme.dart';
 import '../rule_validator.dart';
 import '../../common/glass_card.dart';
+import '../../common/dashed_box.dart';
 import '../../common/ghost.dart';
 import '../../common/pixel_sprite.dart';
 import '../../tray/tray_art.dart';
@@ -38,8 +39,9 @@ class RulesListCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final colors = CharonColors.of(context);
     final listName = isOnlyListed ? l10n.splitTunnelList : l10n.splitDirectList;
-    final emptyText =
-        isOnlyListed ? l10n.splitEmptyTunnel(activeServerName) : l10n.splitEmptyDirect;
+    final emptyText = isOnlyListed
+        ? l10n.splitEmptyTunnel(activeServerName)
+        : l10n.splitEmptyDirect;
     final amberEdge = colors.transitionFill.withValues(alpha: 0.4);
 
     Widget row(int index) {
@@ -94,7 +96,12 @@ class RulesListCard extends StatelessWidget {
                           alignment: Alignment.center,
                           child: Text(
                             l10n.splitNextConnect,
-                            style: monoStyle(colors.transitionText, 9, bold: true, em: 0.08),
+                            style: monoStyle(
+                              colors.transitionText,
+                              9,
+                              bold: true,
+                              em: 0.08,
+                            ),
                           ),
                         ),
                       ],
@@ -133,7 +140,10 @@ class RulesListCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('> $listName', style: monoStyle(colors.text2, 10, bold: true, em: 0.08)),
+                  Text(
+                    '> $listName',
+                    style: monoStyle(colors.text2, 10, bold: true, em: 0.08),
+                  ),
                   Text(tally, style: monoStyle(colors.text3, 10)),
                 ],
               ),
@@ -146,39 +156,50 @@ class RulesListCard extends StatelessWidget {
                       separatorBuilder: (_, _) => const SizedBox(height: 6),
                       itemBuilder: (_, index) => row(index),
                     )
-                  : Container(
-                      decoration: BoxDecoration(
-                        color: colors.bg,
-                        border: Border.all(color: colors.controlBorder.withValues(alpha: 0.6)),
-                        borderRadius: BorderRadius.circular(12),
+                  : DashedBox(
+                      color: colors.controlBorder,
+                      radius: 12,
+                      fill: colors.bg,
+                      dots: colors.surface2,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 16,
                       ),
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          PixelSprite(
-                            rows: ghost16Rows(GhostEyes.focused),
-                            palette: logoColors,
-                            scale: 3,
-                            outline: Theme.of(context).brightness == Brightness.light ? const Color(0xFF2A2A2A) : null,
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            l10n.splitNoRulesTitle,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: colors.text,
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            PixelSprite(
+                              rows: ghost16Rows(GhostEyes.focused),
+                              palette: logoColors,
+                              scale: 3,
+                              outline:
+                                  Theme.of(context).brightness ==
+                                      Brightness.light
+                                  ? const Color(0xFF2A2A2A)
+                                  : null,
                             ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            emptyText,
-                            style: TextStyle(fontSize: 13, height: 1.45, color: colors.text2),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
+                            const SizedBox(height: 10),
+                            Text(
+                              l10n.splitNoRulesTitle,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: colors.text,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              emptyText,
+                              style: TextStyle(
+                                fontSize: 13,
+                                height: 1.45,
+                                color: colors.text2,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
             ),
@@ -197,7 +218,10 @@ class RulesListCard extends StatelessWidget {
                     l10n.splitNoteModeList,
                     l10n.splitNoteSync,
                   ])
-                    Text('> $note', style: monoStyle(colors.text3, 10).copyWith(height: 1.5)),
+                    Text(
+                      '> $note',
+                      style: monoStyle(colors.text3, 10).copyWith(height: 1.5),
+                    ),
                 ],
               ),
             ),
