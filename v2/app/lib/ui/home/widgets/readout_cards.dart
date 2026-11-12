@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
 import '../../../state/home_view.dart';
+import '../../../state/throughput_history.dart';
 import '../../../theme/theme.dart';
+import 'sparkline.dart';
 
 /// The 4 readout cards row matching HomeDesktop board (height 84 px).
 /// What each card says in each state comes from [HomeView.readouts].
@@ -16,7 +18,9 @@ class ReadoutCards extends StatelessWidget {
   final HomeController controller;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => ListenableBuilder(listenable: controller, builder: _build);
+
+  Widget _build(BuildContext context, Widget? _) {
     final colors = CharonColors.of(context);
     final view = HomeView(
       AppLocalizations.of(context)!,
@@ -33,7 +37,7 @@ class ReadoutCards extends StatelessWidget {
         children: [
           for (var i = 0; i < readouts.length; i++) ...[
             if (i > 0) const SizedBox(width: CharonSpacing.s3),
-            Expanded(child: _ReadoutCard(readout: readouts[i], keyColor: keys[i])),
+            Expanded(child: _ReadoutCard(readout: readouts[i], keyColor: keys[i], history: controller.throughputHistory)),
           ],
         ],
       ),
@@ -42,10 +46,11 @@ class ReadoutCards extends StatelessWidget {
 }
 
 class _ReadoutCard extends StatelessWidget {
-  const _ReadoutCard({required this.readout, required this.keyColor});
+  const _ReadoutCard({required this.readout, required this.keyColor, required this.history});
 
   final Readout readout;
   final Color keyColor;
+  final ThroughputHistory history;
 
   @override
   Widget build(BuildContext context) {
@@ -73,27 +78,41 @@ class _ReadoutCard extends StatelessWidget {
             ],
           ),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                readout.value,
-                style: CharonTypography.dataXL.copyWith(
-                  fontSize: 22.0,
-                  color: readout.dim ? colors.text3 : colors.text,
+              Flexible(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    Text(
+                      readout.value,
+                      style: CharonTypography.dataXL.copyWith(
+                        fontSize: 22.0,
+                        color: readout.dim ? colors.text3 : colors.text,
+                      ),
+                    ),
+                    if (readout.unit.isNotEmpty) ...[
+                      const SizedBox(width: 4.0),
+                      Text(
+                        readout.unit,
+                        style: CharonTypography.caption.copyWith(
+                          fontFamily: CharonFontFamilies.spaceMono,
+                          color: colors.text3,
+                          fontSize: 11.0,
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
               ),
-              if (readout.unit.isNotEmpty) ...[
-                const SizedBox(width: 4.0),
-                Text(
-                  readout.unit,
-                  style: CharonTypography.caption.copyWith(
-                    fontFamily: CharonFontFamilies.spaceMono,
-                    color: colors.text3,
-                    fontSize: 11.0,
-                  ),
+              if (readout.spark != null && history.length >= 2)
+                Sparkline(
+                  values: [for (final s in history.samples) readout.spark == SparkSeries.down ? s.down : s.up],
+                  max: history.yMax.toDouble(),
+                  color: readout.spark == SparkSeries.down ? colors.accent : colors.text,
                 ),
-              ],
             ],
           ),
           Text(

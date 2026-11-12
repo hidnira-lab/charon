@@ -18,7 +18,7 @@ import 'ui_state.dart';
 
 /// One of the four readout cards.
 class Readout {
-  const Readout(this.label, this.value, this.note, {this.unit = '', this.dim = false});
+  const Readout(this.label, this.value, this.note, {this.unit = '', this.dim = false, this.spark});
 
   final String label;
   final String value;
@@ -27,9 +27,15 @@ class Readout {
 
   /// True for words such as "off" and "wait", drawn in the quiet ink.
   final bool dim;
+
+  /// Which series the little line beside the number draws (DOWN or UP) while
+  /// the tunnel is up, null for the cards that have none.
+  final SparkSeries? spark;
 }
 
 enum ChipTone { quiet, on, hold, amber }
+
+enum SparkSeries { down, up }
 
 class StatusChip {
   const StatusChip(this.label, this.tone, {this.pulse = false});
@@ -192,9 +198,9 @@ class HomeView {
     Readout direct(String label) =>
         Readout(label, l10n.homeValueDirect, l10n.homeNoteNotThroughCharon, dim: true);
     Readout held(String label) => Readout(label, '0.0', l10n.homeNoteHeldByKillSwitch, unit: 'Mbps');
-    Readout speed(String label, int? bps) => bps == null
-        ? Readout(label, '—', l10n.homeNoteLast60)
-        : Readout(label, (bps / 1000000).toStringAsFixed(1), l10n.homeNoteLast60, unit: 'Mbps');
+    Readout speed(String label, int? bps, SparkSeries series) => bps == null
+        ? Readout(label, '—', l10n.homeNoteLast60, spark: series)
+        : Readout(label, (bps / 1000000).toStringAsFixed(1), l10n.homeNoteLast60, unit: 'Mbps', spark: series);
 
     final latLabel = l10n.homeReadLatency;
     final downLabel = l10n.homeReadDown;
@@ -217,8 +223,8 @@ class HomeView {
                   unit: 'ms',
                 )
               : Readout(latLabel, '—', onBackup ? l10n.homeNoteLatencyServer(code) : l10n.homeNoteLatencyLive),
-          speed(downLabel, tp?.downBps.toInt()),
-          speed(upLabel, tp?.upBps.toInt()),
+          speed(downLabel, tp?.downBps.toInt(), SparkSeries.down),
+          speed(upLabel, tp?.upBps.toInt(), SparkSeries.up),
           session(since == null
               ? ''
               : onBackup
