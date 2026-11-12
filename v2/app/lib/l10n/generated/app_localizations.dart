@@ -4403,18 +4403,6 @@ abstract class AppLocalizations {
   /// **'Open Charon'**
   String get trayOpenApp;
 
-  /// Tooltip explaining server list is locked while tunnel is active.
-  ///
-  /// In en, this message translates to:
-  /// **'Locked while connected'**
-  String get trayServersLocked;
-
-  /// Label indicating server list is unlocked to switch.
-  ///
-  /// In en, this message translates to:
-  /// **'Select alternate server'**
-  String get trayServersUnlocked;
-
   /// Action to skip remaining reconnect retries.
   ///
   /// In en, this message translates to:
@@ -4426,18 +4414,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Stop reconnecting'**
   String get trayStopReconnecting;
-
-  /// Quota usage in tray footer.
-  ///
-  /// In en, this message translates to:
-  /// **'{used} GB of {cap} GB'**
-  String trayQuotaFormat(String used, String cap);
-
-  /// Days remaining until quota resets.
-  ///
-  /// In en, this message translates to:
-  /// **'{days} days left'**
-  String trayQuotaDaysLeft(int days);
 
   /// Title for Windows service not running screen.
   ///
@@ -8013,6 +7989,492 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'TCP connect and ping both failed. This looks like a network or server problem, not a block. Check that the server is running, then retry.'**
   String get stpFailBody;
+
+  /// Tray flyout chip while the tunnel is being checked or retried.
+  ///
+  /// In en, this message translates to:
+  /// **'WAIT'**
+  String get trayChipWait;
+
+  /// Tray flyout chip while the kill switch holds traffic.
+  ///
+  /// In en, this message translates to:
+  /// **'HELD'**
+  String get trayChipHeld;
+
+  /// Tray flyout title when the tunnel is up.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected · {server}'**
+  String trayTitleConnected(String server);
+
+  /// Tray flyout title while a connect is verified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verifying · {server}'**
+  String trayTitleVerifying(String server);
+
+  /// Tray flyout title while the tunnel closes.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnecting · {server}'**
+  String trayTitleDisconnecting(String server);
+
+  /// Tray flyout title while retrying with the kill switch off.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnecting · {server}'**
+  String trayTitleReconnecting(String server);
+
+  /// Tray flyout title when every server failed and traffic is held.
+  ///
+  /// In en, this message translates to:
+  /// **'Traffic held · all servers failed'**
+  String get trayTitleHeldAll;
+
+  /// Tray flyout title while retrying with traffic held.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnecting · traffic held'**
+  String get trayTitleReconnectingHeld;
+
+  /// Tray flyout line while verifying.
+  ///
+  /// In en, this message translates to:
+  /// **'real Reality round trip · {clock}'**
+  String trayLineVerifying(String clock);
+
+  /// Tray flyout line while disconnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'closing the tunnel cleanly'**
+  String get trayLineDisconnecting;
+
+  /// Tray flyout line naming the server a connect would use.
+  ///
+  /// In en, this message translates to:
+  /// **'next: {text}'**
+  String trayLineNext(String text);
+
+  /// Tray flyout line when every server failed.
+  ///
+  /// In en, this message translates to:
+  /// **'no server answered · kill switch holding'**
+  String get trayLineHeldAll;
+
+  /// Tray flyout line while retrying, with the next server.
+  ///
+  /// In en, this message translates to:
+  /// **'try {attempt} of {max} · then {server}'**
+  String trayLineTry(int attempt, int max, String server);
+
+  /// Tray flyout line while retrying the last server.
+  ///
+  /// In en, this message translates to:
+  /// **'try {attempt} of {max}'**
+  String trayLineTryLast(int attempt, int max);
+
+  /// Tray flyout line while moving to the next server after retries ran out.
+  ///
+  /// In en, this message translates to:
+  /// **'{failed} failed {max} tries · checking {server}'**
+  String trayLineSwitching(String failed, int max, String server);
+
+  /// Tray flyout line while moving to a server the user picked. Not on the board.
+  ///
+  /// In en, this message translates to:
+  /// **'checking {server}'**
+  String trayLineChecking(String server);
+
+  /// Word that starts the tray flyout line while on a backup server.
+  ///
+  /// In en, this message translates to:
+  /// **'backup'**
+  String get trayLineBackup;
+
+  /// Tray flyout line when there is no server.
+  ///
+  /// In en, this message translates to:
+  /// **'add a server you control to connect'**
+  String get trayLineNoServer;
+
+  /// Tray flyout main button when disconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect to {server}'**
+  String trayBtnConnectTo(String server);
+
+  /// Tray flyout main button when there is no server.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a server'**
+  String get trayBtnAddServer;
+
+  /// Tray flyout second button that releases held traffic.
+  ///
+  /// In en, this message translates to:
+  /// **'Release'**
+  String get trayBtnRelease;
+
+  /// Tray flyout release button after the first tap.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap again to release'**
+  String get trayBtnReleaseAgain;
+
+  /// Tray flyout section label for the server list.
+  ///
+  /// In en, this message translates to:
+  /// **'SERVERS'**
+  String get trayServersTitle;
+
+  /// Tray flyout hint while the server list is locked.
+  ///
+  /// In en, this message translates to:
+  /// **'disconnect first to switch'**
+  String get trayLockLocked;
+
+  /// Tray flyout hint while the server list is open and disconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'pick one, then connect'**
+  String get trayLockConnect;
+
+  /// Tray flyout hint while the server list is open and traffic is held.
+  ///
+  /// In en, this message translates to:
+  /// **'pick one, then retry'**
+  String get trayLockRetry;
+
+  /// Tray flyout server row second line.
+  ///
+  /// In en, this message translates to:
+  /// **'#{n} failover · {address}'**
+  String trayServerMeta(int n, String address);
+
+  /// Tray flyout text under the empty server list.
+  ///
+  /// In en, this message translates to:
+  /// **'No servers yet. Add one in Charon; it shows up here.'**
+  String get trayNoServers;
+
+  /// Tray flyout kill switch line when on. Indonesian and Chinese are not on the board.
+  ///
+  /// In en, this message translates to:
+  /// **'holds traffic if xray stops'**
+  String get trayKillLineOn;
+
+  /// Tray flyout kill switch line while holding.
+  ///
+  /// In en, this message translates to:
+  /// **'holding · nothing leaves this PC'**
+  String get trayKillLineHeld;
+
+  /// Tray flyout switch line when off.
+  ///
+  /// In en, this message translates to:
+  /// **'off'**
+  String get trayLineOff;
+
+  /// Tray flyout auto reconnect line when on.
+  ///
+  /// In en, this message translates to:
+  /// **'{max} retries, then the next server'**
+  String trayAutoLineOn(int max);
+
+  /// Tray flyout footer with the quota used.
+  ///
+  /// In en, this message translates to:
+  /// **'{used} of {cap} GB this month'**
+  String trayFootMonth(String used, int cap);
+
+  /// Tray flyout footer when usage is amber.
+  ///
+  /// In en, this message translates to:
+  /// **'{used} of {cap} GB · {pct}%'**
+  String trayFootNear(String used, int cap, int pct);
+
+  /// Tray flyout footer when usage reached the cap.
+  ///
+  /// In en, this message translates to:
+  /// **'{server} hit its {cap} GB cap'**
+  String trayFootCap(String server, int cap);
+
+  /// Tray flyout button that quits Charon.
+  ///
+  /// In en, this message translates to:
+  /// **'Quit'**
+  String get trayQuit;
+
+  /// Tray flyout quit button while connected, because it asks first.
+  ///
+  /// In en, this message translates to:
+  /// **'Quit…'**
+  String get trayQuitAsk;
+
+  /// Tray tooltip and toast title when traffic is held.
+  ///
+  /// In en, this message translates to:
+  /// **'Traffic held · kill switch'**
+  String get trayTipHeld;
+
+  /// Tray tooltip while retrying with traffic held.
+  ///
+  /// In en, this message translates to:
+  /// **'Traffic held · retrying'**
+  String get trayTipHeldRetrying;
+
+  /// Tray tooltip and menu title while retrying.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnecting · try {attempt} of {max}'**
+  String trayTipReconnecting(int attempt, int max);
+
+  /// Tray tooltip and menu title on a backup server.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected · {server} (backup)'**
+  String trayTipBackup(String server);
+
+  /// Tray menu title while retrying with traffic held.
+  ///
+  /// In en, this message translates to:
+  /// **'Traffic held · retrying {attempt} of {max}'**
+  String trayMenuHeldRetry(int attempt, int max);
+
+  /// Tray menu submenu with the server list.
+  ///
+  /// In en, this message translates to:
+  /// **'Servers'**
+  String get trayMenuServers;
+
+  /// Tray menu submenu label when traffic is held.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose another server'**
+  String get trayMenuChooseAnother;
+
+  /// Tray menu note while the server list is locked.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnect first to switch'**
+  String get trayMenuDisconnectFirst;
+
+  /// Tray menu note while traffic is held.
+  ///
+  /// In en, this message translates to:
+  /// **'Retries start on your pick'**
+  String get trayMenuRetriesStart;
+
+  /// Tray menu item that copies the exit address.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy egress IP'**
+  String get trayMenuCopyEgress;
+
+  /// Tray menu note beside Copy egress IP when there is no tunnel.
+  ///
+  /// In en, this message translates to:
+  /// **'no tunnel'**
+  String get trayMenuNoTunnel;
+
+  /// Tray menu item that quits Charon.
+  ///
+  /// In en, this message translates to:
+  /// **'Quit Charon'**
+  String get trayMenuQuitCharon;
+
+  /// Tray menu note beside Quit while connected.
+  ///
+  /// In en, this message translates to:
+  /// **'asks first'**
+  String get trayMenuAsksFirst;
+
+  /// Tray menu note beside items that end with traffic going direct.
+  ///
+  /// In en, this message translates to:
+  /// **'goes direct'**
+  String get trayMenuGoesDirect;
+
+  /// Tray menu note beside a server that went down.
+  ///
+  /// In en, this message translates to:
+  /// **'down'**
+  String get trayMenuDown;
+
+  /// Tray menu note beside a server that failed.
+  ///
+  /// In en, this message translates to:
+  /// **'failed'**
+  String get trayMenuFailed;
+
+  /// Windows toast title while retrying.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnecting to {server}'**
+  String toastReconnectingTitle(String server);
+
+  /// Windows toast body while retrying.
+  ///
+  /// In en, this message translates to:
+  /// **'{server} stopped answering. Traffic goes direct while Charon retries.'**
+  String toastReconnectingBody(String server);
+
+  /// Windows toast progress label.
+  ///
+  /// In en, this message translates to:
+  /// **'Try {attempt} of {max}'**
+  String toastTryOf(int attempt, int max);
+
+  /// Windows toast progress value.
+  ///
+  /// In en, this message translates to:
+  /// **'next in {seconds} s'**
+  String toastNextIn(int seconds);
+
+  /// Windows toast button that skips the remaining tries.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to {server}'**
+  String toastSwitchTo(String server);
+
+  /// Windows toast button that stops reconnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get toastStop;
+
+  /// Windows toast title after a retry worked.
+  ///
+  /// In en, this message translates to:
+  /// **'Back on {server}'**
+  String toastBackTitle(String server);
+
+  /// Windows toast body after a retry worked.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnected after {tries} tries. The tunnel was down for {seconds} s.'**
+  String toastBackBody(int tries, int seconds);
+
+  /// Windows toast body when the number of tries and the downtime are not known. Not on the board.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnected. The tunnel is back.'**
+  String get toastBackBodyPlain;
+
+  /// Windows toast title after a move to the backup.
+  ///
+  /// In en, this message translates to:
+  /// **'Moved to {server}'**
+  String toastMovedTitle(String server);
+
+  /// Windows toast body after a move to the backup.
+  ///
+  /// In en, this message translates to:
+  /// **'{failed} failed {max} tries. Charon stays on the backup until you switch back.'**
+  String toastMovedBody(String failed, int max);
+
+  /// Windows toast button that goes back to the server that failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Try {server}'**
+  String toastTry(String server);
+
+  /// Windows toast body when traffic is held.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon could not reach any of your servers. Nothing leaves this PC until you retry or release it.'**
+  String get toastHeldBody;
+
+  /// Windows toast body when the tunnel stopped.
+  ///
+  /// In en, this message translates to:
+  /// **'The tunnel stopped and auto reconnect is off, so traffic goes direct.'**
+  String get toastLostBody;
+
+  /// Windows toast title at 80 percent of the cap.
+  ///
+  /// In en, this message translates to:
+  /// **'{server} is at {pct}% of its cap'**
+  String toastQuotaTitle(String server, int pct);
+
+  /// Windows toast body at 80 percent of the cap.
+  ///
+  /// In en, this message translates to:
+  /// **'Past {cap} GB your provider may slow, stop or bill extra traffic.'**
+  String toastQuotaBody(int cap);
+
+  /// Windows toast progress label for the quota.
+  ///
+  /// In en, this message translates to:
+  /// **'This month'**
+  String get toastThisMonth;
+
+  /// Windows toast progress value for the quota.
+  ///
+  /// In en, this message translates to:
+  /// **'{used} / {cap} GB'**
+  String toastUsage(String used, int cap);
+
+  /// Windows toast button that opens the usage.
+  ///
+  /// In en, this message translates to:
+  /// **'See usage'**
+  String get toastSeeUsage;
+
+  /// Windows toast button that closes the toast.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get toastDismiss;
+
+  /// Windows toast title at the cap.
+  ///
+  /// In en, this message translates to:
+  /// **'{server} reached its {cap} GB cap'**
+  String toastCapTitle(String server, int cap);
+
+  /// Windows toast body at the cap.
+  ///
+  /// In en, this message translates to:
+  /// **'The tunnel stays up, but your provider may slow, stop or bill extra from here.'**
+  String get toastCapBody;
+
+  /// Windows toast button that moves to the next server.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to {server}'**
+  String toastMoveTo(String server);
+
+  /// Lock screen version of the reconnecting toast.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnecting'**
+  String get toastPublicReconnecting;
+
+  /// Lock screen version of the connected toasts.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected'**
+  String get toastPublicConnected;
+
+  /// Lock screen version of the traffic held toast.
+  ///
+  /// In en, this message translates to:
+  /// **'Traffic held'**
+  String get toastPublicHeld;
+
+  /// Lock screen version of the tunnel lost toast.
+  ///
+  /// In en, this message translates to:
+  /// **'Tunnel lost'**
+  String get toastPublicLost;
+
+  /// Lock screen version of the quota toasts.
+  ///
+  /// In en, this message translates to:
+  /// **'Usage alert'**
+  String get toastPublicUsage;
 }
 
 class _AppLocalizationsDelegate

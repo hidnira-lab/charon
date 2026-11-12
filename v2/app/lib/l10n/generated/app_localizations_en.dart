@@ -2461,28 +2461,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trayOpenApp => 'Open Charon';
 
   @override
-  String get trayServersLocked => 'Locked while connected';
-
-  @override
-  String get trayServersUnlocked => 'Select alternate server';
-
-  @override
   String traySwitchNow(String server) {
     return 'Switch to $server now';
   }
 
   @override
   String get trayStopReconnecting => 'Stop reconnecting';
-
-  @override
-  String trayQuotaFormat(String used, String cap) {
-    return '$used GB of $cap GB';
-  }
-
-  @override
-  String trayQuotaDaysLeft(int days) {
-    return '$days days left';
-  }
 
   @override
   String get serviceNotRunningTitle => 'Charon service is not running';
@@ -4576,4 +4560,319 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get stpFailBody =>
       'TCP connect and ping both failed. This looks like a network or server problem, not a block. Check that the server is running, then retry.';
+
+  @override
+  String get trayChipWait => 'WAIT';
+
+  @override
+  String get trayChipHeld => 'HELD';
+
+  @override
+  String trayTitleConnected(String server) {
+    return 'Connected · $server';
+  }
+
+  @override
+  String trayTitleVerifying(String server) {
+    return 'Verifying · $server';
+  }
+
+  @override
+  String trayTitleDisconnecting(String server) {
+    return 'Disconnecting · $server';
+  }
+
+  @override
+  String trayTitleReconnecting(String server) {
+    return 'Reconnecting · $server';
+  }
+
+  @override
+  String get trayTitleHeldAll => 'Traffic held · all servers failed';
+
+  @override
+  String get trayTitleReconnectingHeld => 'Reconnecting · traffic held';
+
+  @override
+  String trayLineVerifying(String clock) {
+    return 'real Reality round trip · $clock';
+  }
+
+  @override
+  String get trayLineDisconnecting => 'closing the tunnel cleanly';
+
+  @override
+  String trayLineNext(String text) {
+    return 'next: $text';
+  }
+
+  @override
+  String get trayLineHeldAll => 'no server answered · kill switch holding';
+
+  @override
+  String trayLineTry(int attempt, int max, String server) {
+    return 'try $attempt of $max · then $server';
+  }
+
+  @override
+  String trayLineTryLast(int attempt, int max) {
+    return 'try $attempt of $max';
+  }
+
+  @override
+  String trayLineSwitching(String failed, int max, String server) {
+    return '$failed failed $max tries · checking $server';
+  }
+
+  @override
+  String trayLineChecking(String server) {
+    return 'checking $server';
+  }
+
+  @override
+  String get trayLineBackup => 'backup';
+
+  @override
+  String get trayLineNoServer => 'add a server you control to connect';
+
+  @override
+  String trayBtnConnectTo(String server) {
+    return 'Connect to $server';
+  }
+
+  @override
+  String get trayBtnAddServer => 'Add a server';
+
+  @override
+  String get trayBtnRelease => 'Release';
+
+  @override
+  String get trayBtnReleaseAgain => 'Tap again to release';
+
+  @override
+  String get trayServersTitle => 'SERVERS';
+
+  @override
+  String get trayLockLocked => 'disconnect first to switch';
+
+  @override
+  String get trayLockConnect => 'pick one, then connect';
+
+  @override
+  String get trayLockRetry => 'pick one, then retry';
+
+  @override
+  String trayServerMeta(int n, String address) {
+    return '#$n failover · $address';
+  }
+
+  @override
+  String get trayNoServers =>
+      'No servers yet. Add one in Charon; it shows up here.';
+
+  @override
+  String get trayKillLineOn => 'holds traffic if xray stops';
+
+  @override
+  String get trayKillLineHeld => 'holding · nothing leaves this PC';
+
+  @override
+  String get trayLineOff => 'off';
+
+  @override
+  String trayAutoLineOn(int max) {
+    return '$max retries, then the next server';
+  }
+
+  @override
+  String trayFootMonth(String used, int cap) {
+    return '$used of $cap GB this month';
+  }
+
+  @override
+  String trayFootNear(String used, int cap, int pct) {
+    return '$used of $cap GB · $pct%';
+  }
+
+  @override
+  String trayFootCap(String server, int cap) {
+    return '$server hit its $cap GB cap';
+  }
+
+  @override
+  String get trayQuit => 'Quit';
+
+  @override
+  String get trayQuitAsk => 'Quit…';
+
+  @override
+  String get trayTipHeld => 'Traffic held · kill switch';
+
+  @override
+  String get trayTipHeldRetrying => 'Traffic held · retrying';
+
+  @override
+  String trayTipReconnecting(int attempt, int max) {
+    return 'Reconnecting · try $attempt of $max';
+  }
+
+  @override
+  String trayTipBackup(String server) {
+    return 'Connected · $server (backup)';
+  }
+
+  @override
+  String trayMenuHeldRetry(int attempt, int max) {
+    return 'Traffic held · retrying $attempt of $max';
+  }
+
+  @override
+  String get trayMenuServers => 'Servers';
+
+  @override
+  String get trayMenuChooseAnother => 'Choose another server';
+
+  @override
+  String get trayMenuDisconnectFirst => 'Disconnect first to switch';
+
+  @override
+  String get trayMenuRetriesStart => 'Retries start on your pick';
+
+  @override
+  String get trayMenuCopyEgress => 'Copy egress IP';
+
+  @override
+  String get trayMenuNoTunnel => 'no tunnel';
+
+  @override
+  String get trayMenuQuitCharon => 'Quit Charon';
+
+  @override
+  String get trayMenuAsksFirst => 'asks first';
+
+  @override
+  String get trayMenuGoesDirect => 'goes direct';
+
+  @override
+  String get trayMenuDown => 'down';
+
+  @override
+  String get trayMenuFailed => 'failed';
+
+  @override
+  String toastReconnectingTitle(String server) {
+    return 'Reconnecting to $server';
+  }
+
+  @override
+  String toastReconnectingBody(String server) {
+    return '$server stopped answering. Traffic goes direct while Charon retries.';
+  }
+
+  @override
+  String toastTryOf(int attempt, int max) {
+    return 'Try $attempt of $max';
+  }
+
+  @override
+  String toastNextIn(int seconds) {
+    return 'next in $seconds s';
+  }
+
+  @override
+  String toastSwitchTo(String server) {
+    return 'Switch to $server';
+  }
+
+  @override
+  String get toastStop => 'Stop';
+
+  @override
+  String toastBackTitle(String server) {
+    return 'Back on $server';
+  }
+
+  @override
+  String toastBackBody(int tries, int seconds) {
+    return 'Reconnected after $tries tries. The tunnel was down for $seconds s.';
+  }
+
+  @override
+  String get toastBackBodyPlain => 'Reconnected. The tunnel is back.';
+
+  @override
+  String toastMovedTitle(String server) {
+    return 'Moved to $server';
+  }
+
+  @override
+  String toastMovedBody(String failed, int max) {
+    return '$failed failed $max tries. Charon stays on the backup until you switch back.';
+  }
+
+  @override
+  String toastTry(String server) {
+    return 'Try $server';
+  }
+
+  @override
+  String get toastHeldBody =>
+      'Charon could not reach any of your servers. Nothing leaves this PC until you retry or release it.';
+
+  @override
+  String get toastLostBody =>
+      'The tunnel stopped and auto reconnect is off, so traffic goes direct.';
+
+  @override
+  String toastQuotaTitle(String server, int pct) {
+    return '$server is at $pct% of its cap';
+  }
+
+  @override
+  String toastQuotaBody(int cap) {
+    return 'Past $cap GB your provider may slow, stop or bill extra traffic.';
+  }
+
+  @override
+  String get toastThisMonth => 'This month';
+
+  @override
+  String toastUsage(String used, int cap) {
+    return '$used / $cap GB';
+  }
+
+  @override
+  String get toastSeeUsage => 'See usage';
+
+  @override
+  String get toastDismiss => 'Dismiss';
+
+  @override
+  String toastCapTitle(String server, int cap) {
+    return '$server reached its $cap GB cap';
+  }
+
+  @override
+  String get toastCapBody =>
+      'The tunnel stays up, but your provider may slow, stop or bill extra from here.';
+
+  @override
+  String toastMoveTo(String server) {
+    return 'Move to $server';
+  }
+
+  @override
+  String get toastPublicReconnecting => 'Reconnecting';
+
+  @override
+  String get toastPublicConnected => 'Connected';
+
+  @override
+  String get toastPublicHeld => 'Traffic held';
+
+  @override
+  String get toastPublicLost => 'Tunnel lost';
+
+  @override
+  String get toastPublicUsage => 'Usage alert';
 }

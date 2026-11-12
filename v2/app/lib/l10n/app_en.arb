@@ -1813,10 +1813,6 @@
   "@dialogUnpairConfirm": { "description": "Unpair confirmation button." },
   "trayOpenApp": "Open Charon",
   "@trayOpenApp": { "description": "Action to restore and open the main Charon window." },
-  "trayServersLocked": "Locked while connected",
-  "@trayServersLocked": { "description": "Tooltip explaining server list is locked while tunnel is active." },
-  "trayServersUnlocked": "Select alternate server",
-  "@trayServersUnlocked": { "description": "Label indicating server list is unlocked to switch." },
   "traySwitchNow": "Switch to {server} now",
   "@traySwitchNow": {
     "description": "Action to skip remaining reconnect retries.",
@@ -1826,21 +1822,6 @@
   },
   "trayStopReconnecting": "Stop reconnecting",
   "@trayStopReconnecting": { "description": "Action to stop reconnecting retries." },
-  "trayQuotaFormat": "{used} GB of {cap} GB",
-  "@trayQuotaFormat": {
-    "description": "Quota usage in tray footer.",
-    "placeholders": {
-      "used": { "type": "String" },
-      "cap": { "type": "String" }
-    }
-  },
-  "trayQuotaDaysLeft": "{days} days left",
-  "@trayQuotaDaysLeft": {
-    "description": "Days remaining until quota resets.",
-    "placeholders": {
-      "days": { "type": "int" }
-    }
-  },
   "serviceNotRunningTitle": "Charon service is not running",
   "@serviceNotRunningTitle": { "description": "Title for Windows service not running screen." },
   "serviceNotRunningBody": "The service keeps your tunnel and kill switch alive even when this window is closed. It is not running right now.",
@@ -3158,5 +3139,355 @@
     "placeholders": { "server": { "type": "String" } }
   },
   "stpFailBody": "TCP connect and ping both failed. This looks like a network or server problem, not a block. Check that the server is running, then retry.",
-  "@stpFailBody": { "description": "Setup screen text." }
+  "@stpFailBody": { "description": "Setup screen text." },
+  "trayChipWait": "WAIT",
+  "@trayChipWait": { "description": "Tray flyout chip while the tunnel is being checked or retried." },
+  "trayChipHeld": "HELD",
+  "@trayChipHeld": { "description": "Tray flyout chip while the kill switch holds traffic." },
+  "trayTitleConnected": "Connected · {server}",
+  "@trayTitleConnected": {
+    "description": "Tray flyout title when the tunnel is up.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+  "trayTitleVerifying": "Verifying · {server}",
+  "@trayTitleVerifying": {
+    "description": "Tray flyout title while a connect is verified.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+  "trayTitleDisconnecting": "Disconnecting · {server}",
+  "@trayTitleDisconnecting": {
+    "description": "Tray flyout title while the tunnel closes.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+  "trayTitleReconnecting": "Reconnecting · {server}",
+  "@trayTitleReconnecting": {
+    "description": "Tray flyout title while retrying with the kill switch off.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+  "trayTitleHeldAll": "Traffic held · all servers failed",
+  "@trayTitleHeldAll": { "description": "Tray flyout title when every server failed and traffic is held." },
+  "trayTitleReconnectingHeld": "Reconnecting · traffic held",
+  "@trayTitleReconnectingHeld": { "description": "Tray flyout title while retrying with traffic held." },
+  "trayLineVerifying": "real Reality round trip · {clock}",
+  "@trayLineVerifying": {
+    "description": "Tray flyout line while verifying.",
+    "placeholders": {
+      "clock": { "type": "String" }
+    }
+  },
+  "trayLineDisconnecting": "closing the tunnel cleanly",
+  "@trayLineDisconnecting": { "description": "Tray flyout line while disconnecting." },
+  "trayLineNext": "next: {text}",
+  "@trayLineNext": {
+    "description": "Tray flyout line naming the server a connect would use.",
+    "placeholders": {
+      "text": { "type": "String" }
+    }
+  },
+  "trayLineHeldAll": "no server answered · kill switch holding",
+  "@trayLineHeldAll": { "description": "Tray flyout line when every server failed." },
+  "trayLineTry": "try {attempt} of {max} · then {server}",
+  "@trayLineTry": {
+    "description": "Tray flyout line while retrying, with the next server.",
+    "placeholders": {
+      "attempt": { "type": "int" },
+      "max": { "type": "int" },
+      "server": { "type": "String" }
+    }
+  },
+  "trayLineTryLast": "try {attempt} of {max}",
+  "@trayLineTryLast": {
+    "description": "Tray flyout line while retrying the last server.",
+    "placeholders": {
+      "attempt": { "type": "int" },
+      "max": { "type": "int" }
+    }
+  },
+  "trayLineSwitching": "{failed} failed {max} tries · checking {server}",
+  "@trayLineSwitching": {
+    "description": "Tray flyout line while moving to the next server after retries ran out.",
+    "placeholders": {
+      "failed": { "type": "String" },
+      "max": { "type": "int" },
+      "server": { "type": "String" }
+    }
+  },
+  "trayLineChecking": "checking {server}",
+  "@trayLineChecking": {
+    "description": "Tray flyout line while moving to a server the user picked. Not on the board.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+  "trayLineBackup": "backup",
+  "@trayLineBackup": { "description": "Word that starts the tray flyout line while on a backup server." },
+  "trayLineNoServer": "add a server you control to connect",
+  "@trayLineNoServer": { "description": "Tray flyout line when there is no server." },
+  "trayBtnConnectTo": "Connect to {server}",
+  "@trayBtnConnectTo": {
+    "description": "Tray flyout main button when disconnected.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+  "trayBtnAddServer": "Add a server",
+  "@trayBtnAddServer": { "description": "Tray flyout main button when there is no server." },
+  "trayBtnRelease": "Release",
+  "@trayBtnRelease": { "description": "Tray flyout second button that releases held traffic." },
+  "trayBtnReleaseAgain": "Tap again to release",
+  "@trayBtnReleaseAgain": { "description": "Tray flyout release button after the first tap." },
+  "trayServersTitle": "SERVERS",
+  "@trayServersTitle": { "description": "Tray flyout section label for the server list." },
+  "trayLockLocked": "disconnect first to switch",
+  "@trayLockLocked": { "description": "Tray flyout hint while the server list is locked." },
+  "trayLockConnect": "pick one, then connect",
+  "@trayLockConnect": { "description": "Tray flyout hint while the server list is open and disconnected." },
+  "trayLockRetry": "pick one, then retry",
+  "@trayLockRetry": { "description": "Tray flyout hint while the server list is open and traffic is held." },
+  "trayServerMeta": "#{n} failover · {address}",
+  "@trayServerMeta": {
+    "description": "Tray flyout server row second line.",
+    "placeholders": {
+      "n": { "type": "int" },
+      "address": { "type": "String" }
+    }
+  },
+  "trayNoServers": "No servers yet. Add one in Charon; it shows up here.",
+  "@trayNoServers": { "description": "Tray flyout text under the empty server list." },
+  "trayKillLineOn": "holds traffic if xray stops",
+  "@trayKillLineOn": { "description": "Tray flyout kill switch line when on. Indonesian and Chinese are not on the board." },
+  "trayKillLineHeld": "holding · nothing leaves this PC",
+  "@trayKillLineHeld": { "description": "Tray flyout kill switch line while holding." },
+  "trayLineOff": "off",
+  "@trayLineOff": { "description": "Tray flyout switch line when off." },
+  "trayAutoLineOn": "{max} retries, then the next server",
+  "@trayAutoLineOn": {
+    "description": "Tray flyout auto reconnect line when on.",
+    "placeholders": {
+      "max": { "type": "int" }
+    }
+  },
+  "trayFootMonth": "{used} of {cap} GB this month",
+  "@trayFootMonth": {
+    "description": "Tray flyout footer with the quota used.",
+    "placeholders": {
+      "used": { "type": "String" },
+      "cap": { "type": "int" }
+    }
+  },
+  "trayFootNear": "{used} of {cap} GB · {pct}%",
+  "@trayFootNear": {
+    "description": "Tray flyout footer when usage is amber.",
+    "placeholders": {
+      "used": { "type": "String" },
+      "cap": { "type": "int" },
+      "pct": { "type": "int" }
+    }
+  },
+  "trayFootCap": "{server} hit its {cap} GB cap",
+  "@trayFootCap": {
+    "description": "Tray flyout footer when usage reached the cap.",
+    "placeholders": {
+      "server": { "type": "String" },
+      "cap": { "type": "int" }
+    }
+  },
+  "trayQuit": "Quit",
+  "@trayQuit": { "description": "Tray flyout button that quits Charon." },
+  "trayQuitAsk": "Quit…",
+  "@trayQuitAsk": { "description": "Tray flyout quit button while connected, because it asks first." },
+  "trayTipHeld": "Traffic held · kill switch",
+  "@trayTipHeld": { "description": "Tray tooltip and toast title when traffic is held." },
+  "trayTipHeldRetrying": "Traffic held · retrying",
+  "@trayTipHeldRetrying": { "description": "Tray tooltip while retrying with traffic held." },
+  "trayTipReconnecting": "Reconnecting · try {attempt} of {max}",
+  "@trayTipReconnecting": {
+    "description": "Tray tooltip and menu title while retrying.",
+    "placeholders": {
+      "attempt": { "type": "int" },
+      "max": { "type": "int" }
+    }
+  },
+  "trayTipBackup": "Connected · {server} (backup)",
+  "@trayTipBackup": {
+    "description": "Tray tooltip and menu title on a backup server.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+  "trayMenuHeldRetry": "Traffic held · retrying {attempt} of {max}",
+  "@trayMenuHeldRetry": {
+    "description": "Tray menu title while retrying with traffic held.",
+    "placeholders": {
+      "attempt": { "type": "int" },
+      "max": { "type": "int" }
+    }
+  },
+  "trayMenuServers": "Servers",
+  "@trayMenuServers": { "description": "Tray menu submenu with the server list." },
+  "trayMenuChooseAnother": "Choose another server",
+  "@trayMenuChooseAnother": { "description": "Tray menu submenu label when traffic is held." },
+  "trayMenuDisconnectFirst": "Disconnect first to switch",
+  "@trayMenuDisconnectFirst": { "description": "Tray menu note while the server list is locked." },
+  "trayMenuRetriesStart": "Retries start on your pick",
+  "@trayMenuRetriesStart": { "description": "Tray menu note while traffic is held." },
+  "trayMenuCopyEgress": "Copy egress IP",
+  "@trayMenuCopyEgress": { "description": "Tray menu item that copies the exit address." },
+  "trayMenuNoTunnel": "no tunnel",
+  "@trayMenuNoTunnel": { "description": "Tray menu note beside Copy egress IP when there is no tunnel." },
+  "trayMenuQuitCharon": "Quit Charon",
+  "@trayMenuQuitCharon": { "description": "Tray menu item that quits Charon." },
+  "trayMenuAsksFirst": "asks first",
+  "@trayMenuAsksFirst": { "description": "Tray menu note beside Quit while connected." },
+  "trayMenuGoesDirect": "goes direct",
+  "@trayMenuGoesDirect": { "description": "Tray menu note beside items that end with traffic going direct." },
+  "trayMenuDown": "down",
+  "@trayMenuDown": { "description": "Tray menu note beside a server that went down." },
+  "trayMenuFailed": "failed",
+  "@trayMenuFailed": { "description": "Tray menu note beside a server that failed." },
+  "toastReconnectingTitle": "Reconnecting to {server}",
+  "@toastReconnectingTitle": {
+    "description": "Windows toast title while retrying.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+  "toastReconnectingBody": "{server} stopped answering. Traffic goes direct while Charon retries.",
+  "@toastReconnectingBody": {
+    "description": "Windows toast body while retrying.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+  "toastTryOf": "Try {attempt} of {max}",
+  "@toastTryOf": {
+    "description": "Windows toast progress label.",
+    "placeholders": {
+      "attempt": { "type": "int" },
+      "max": { "type": "int" }
+    }
+  },
+  "toastNextIn": "next in {seconds} s",
+  "@toastNextIn": {
+    "description": "Windows toast progress value.",
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "toastSwitchTo": "Switch to {server}",
+  "@toastSwitchTo": {
+    "description": "Windows toast button that skips the remaining tries.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+  "toastStop": "Stop",
+  "@toastStop": { "description": "Windows toast button that stops reconnecting." },
+  "toastBackTitle": "Back on {server}",
+  "@toastBackTitle": {
+    "description": "Windows toast title after a retry worked.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+  "toastBackBody": "Reconnected after {tries} tries. The tunnel was down for {seconds} s.",
+  "@toastBackBody": {
+    "description": "Windows toast body after a retry worked.",
+    "placeholders": {
+      "tries": { "type": "int" },
+      "seconds": { "type": "int" }
+    }
+  },
+  "toastBackBodyPlain": "Reconnected. The tunnel is back.",
+  "@toastBackBodyPlain": { "description": "Windows toast body when the number of tries and the downtime are not known. Not on the board." },
+  "toastMovedTitle": "Moved to {server}",
+  "@toastMovedTitle": {
+    "description": "Windows toast title after a move to the backup.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+  "toastMovedBody": "{failed} failed {max} tries. Charon stays on the backup until you switch back.",
+  "@toastMovedBody": {
+    "description": "Windows toast body after a move to the backup.",
+    "placeholders": {
+      "failed": { "type": "String" },
+      "max": { "type": "int" }
+    }
+  },
+  "toastTry": "Try {server}",
+  "@toastTry": {
+    "description": "Windows toast button that goes back to the server that failed.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+  "toastHeldBody": "Charon could not reach any of your servers. Nothing leaves this PC until you retry or release it.",
+  "@toastHeldBody": { "description": "Windows toast body when traffic is held." },
+  "toastLostBody": "The tunnel stopped and auto reconnect is off, so traffic goes direct.",
+  "@toastLostBody": { "description": "Windows toast body when the tunnel stopped." },
+  "toastQuotaTitle": "{server} is at {pct}% of its cap",
+  "@toastQuotaTitle": {
+    "description": "Windows toast title at 80 percent of the cap.",
+    "placeholders": {
+      "server": { "type": "String" },
+      "pct": { "type": "int" }
+    }
+  },
+  "toastQuotaBody": "Past {cap} GB your provider may slow, stop or bill extra traffic.",
+  "@toastQuotaBody": {
+    "description": "Windows toast body at 80 percent of the cap.",
+    "placeholders": {
+      "cap": { "type": "int" }
+    }
+  },
+  "toastThisMonth": "This month",
+  "@toastThisMonth": { "description": "Windows toast progress label for the quota." },
+  "toastUsage": "{used} / {cap} GB",
+  "@toastUsage": {
+    "description": "Windows toast progress value for the quota.",
+    "placeholders": {
+      "used": { "type": "String" },
+      "cap": { "type": "int" }
+    }
+  },
+  "toastSeeUsage": "See usage",
+  "@toastSeeUsage": { "description": "Windows toast button that opens the usage." },
+  "toastDismiss": "Dismiss",
+  "@toastDismiss": { "description": "Windows toast button that closes the toast." },
+  "toastCapTitle": "{server} reached its {cap} GB cap",
+  "@toastCapTitle": {
+    "description": "Windows toast title at the cap.",
+    "placeholders": {
+      "server": { "type": "String" },
+      "cap": { "type": "int" }
+    }
+  },
+  "toastCapBody": "The tunnel stays up, but your provider may slow, stop or bill extra from here.",
+  "@toastCapBody": { "description": "Windows toast body at the cap." },
+  "toastMoveTo": "Move to {server}",
+  "@toastMoveTo": {
+    "description": "Windows toast button that moves to the next server.",
+    "placeholders": {
+      "server": { "type": "String" }
+    }
+  },
+  "toastPublicReconnecting": "Reconnecting",
+  "@toastPublicReconnecting": { "description": "Lock screen version of the reconnecting toast." },
+  "toastPublicConnected": "Connected",
+  "@toastPublicConnected": { "description": "Lock screen version of the connected toasts." },
+  "toastPublicHeld": "Traffic held",
+  "@toastPublicHeld": { "description": "Lock screen version of the traffic held toast." },
+  "toastPublicLost": "Tunnel lost",
+  "@toastPublicLost": { "description": "Lock screen version of the tunnel lost toast." },
+  "toastPublicUsage": "Usage alert",
+  "@toastPublicUsage": { "description": "Lock screen version of the quota toasts." }
 }

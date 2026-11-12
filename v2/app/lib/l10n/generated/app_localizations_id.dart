@@ -2466,28 +2466,12 @@ class AppLocalizationsId extends AppLocalizations {
   String get trayOpenApp => 'Buka Charon';
 
   @override
-  String get trayServersLocked => 'Terkunci saat tersambung';
-
-  @override
-  String get trayServersUnlocked => 'Pilih server alternatif';
-
-  @override
   String traySwitchNow(String server) {
-    return 'Beralih ke $server sekarang';
+    return 'Pindah ke $server sekarang';
   }
 
   @override
-  String get trayStopReconnecting => 'Hentikan penyambungan ulang';
-
-  @override
-  String trayQuotaFormat(String used, String cap) {
-    return '$used GB dari $cap GB';
-  }
-
-  @override
-  String trayQuotaDaysLeft(int days) {
-    return 'Tersisa $days hari';
-  }
+  String get trayStopReconnecting => 'Stop sambung ulang';
 
   @override
   String get serviceNotRunningTitle => 'Service Charon tidak berjalan';
@@ -4570,4 +4554,319 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get stpFailBody =>
       'Koneksi TCP dan ping sama-sama gagal. Ini terlihat seperti masalah jaringan atau server, bukan blokir. Cek apakah server berjalan, lalu coba lagi.';
+
+  @override
+  String get trayChipWait => 'CEK';
+
+  @override
+  String get trayChipHeld => 'TAHAN';
+
+  @override
+  String trayTitleConnected(String server) {
+    return 'Terhubung · $server';
+  }
+
+  @override
+  String trayTitleVerifying(String server) {
+    return 'Memverifikasi · $server';
+  }
+
+  @override
+  String trayTitleDisconnecting(String server) {
+    return 'Memutuskan · $server';
+  }
+
+  @override
+  String trayTitleReconnecting(String server) {
+    return 'Menyambung ulang · $server';
+  }
+
+  @override
+  String get trayTitleHeldAll => 'Ditahan · semua server gagal';
+
+  @override
+  String get trayTitleReconnectingHeld => 'Sambung ulang · ditahan';
+
+  @override
+  String trayLineVerifying(String clock) {
+    return 'round trip Reality asli · $clock';
+  }
+
+  @override
+  String get trayLineDisconnecting => 'menutup tunnel dengan rapi';
+
+  @override
+  String trayLineNext(String text) {
+    return 'berikutnya: $text';
+  }
+
+  @override
+  String get trayLineHeldAll => 'server tak menjawab · trafik ditahan';
+
+  @override
+  String trayLineTry(int attempt, int max, String server) {
+    return 'coba $attempt dari $max · lalu $server';
+  }
+
+  @override
+  String trayLineTryLast(int attempt, int max) {
+    return 'coba $attempt dari $max';
+  }
+
+  @override
+  String trayLineSwitching(String failed, int max, String server) {
+    return '$failed gagal $max kali · mengecek $server';
+  }
+
+  @override
+  String trayLineChecking(String server) {
+    return 'mengecek $server';
+  }
+
+  @override
+  String get trayLineBackup => 'cadangan';
+
+  @override
+  String get trayLineNoServer => 'tambahkan server milikmu untuk terhubung';
+
+  @override
+  String trayBtnConnectTo(String server) {
+    return 'Hubungkan ke $server';
+  }
+
+  @override
+  String get trayBtnAddServer => 'Tambah server';
+
+  @override
+  String get trayBtnRelease => 'Lepas';
+
+  @override
+  String get trayBtnReleaseAgain => 'Ketuk lagi untuk melepas';
+
+  @override
+  String get trayServersTitle => 'SERVER';
+
+  @override
+  String get trayLockLocked => 'putuskan dulu untuk berpindah';
+
+  @override
+  String get trayLockConnect => 'pilih satu, lalu hubungkan';
+
+  @override
+  String get trayLockRetry => 'pilih satu, lalu coba lagi';
+
+  @override
+  String trayServerMeta(int n, String address) {
+    return '#$n failover · $address';
+  }
+
+  @override
+  String get trayNoServers =>
+      'Belum ada server. Tambahkan di Charon, nanti muncul di sini.';
+
+  @override
+  String get trayKillLineOn => 'menahan trafik kalau xray berhenti';
+
+  @override
+  String get trayKillLineHeld => 'menahan · tidak ada yang keluar dari PC ini';
+
+  @override
+  String get trayLineOff => 'mati';
+
+  @override
+  String trayAutoLineOn(int max) {
+    return '$max kali coba, lalu server berikutnya';
+  }
+
+  @override
+  String trayFootMonth(String used, int cap) {
+    return '$used dari $cap GB bulan ini';
+  }
+
+  @override
+  String trayFootNear(String used, int cap, int pct) {
+    return '$used dari $cap GB · $pct%';
+  }
+
+  @override
+  String trayFootCap(String server, int cap) {
+    return '$server mencapai batas $cap GB';
+  }
+
+  @override
+  String get trayQuit => 'Keluar';
+
+  @override
+  String get trayQuitAsk => 'Keluar…';
+
+  @override
+  String get trayTipHeld => 'Trafik ditahan · kill switch';
+
+  @override
+  String get trayTipHeldRetrying => 'Trafik ditahan · mencoba lagi';
+
+  @override
+  String trayTipReconnecting(int attempt, int max) {
+    return 'Sambung ulang · coba $attempt/$max';
+  }
+
+  @override
+  String trayTipBackup(String server) {
+    return 'Terhubung · $server (cadangan)';
+  }
+
+  @override
+  String trayMenuHeldRetry(int attempt, int max) {
+    return 'Ditahan · coba $attempt dari $max';
+  }
+
+  @override
+  String get trayMenuServers => 'Server';
+
+  @override
+  String get trayMenuChooseAnother => 'Pilih server lain';
+
+  @override
+  String get trayMenuDisconnectFirst => 'Putuskan dulu untuk pindah';
+
+  @override
+  String get trayMenuRetriesStart => 'Coba lagi di pilihanmu';
+
+  @override
+  String get trayMenuCopyEgress => 'Salin IP egress';
+
+  @override
+  String get trayMenuNoTunnel => 'tanpa tunnel';
+
+  @override
+  String get trayMenuQuitCharon => 'Keluar dari Charon';
+
+  @override
+  String get trayMenuAsksFirst => 'tanya dulu';
+
+  @override
+  String get trayMenuGoesDirect => 'langsung';
+
+  @override
+  String get trayMenuDown => 'mati';
+
+  @override
+  String get trayMenuFailed => 'gagal';
+
+  @override
+  String toastReconnectingTitle(String server) {
+    return 'Menyambung ulang ke $server';
+  }
+
+  @override
+  String toastReconnectingBody(String server) {
+    return '$server berhenti menjawab. Trafik lewat langsung selama Charon mencoba lagi.';
+  }
+
+  @override
+  String toastTryOf(int attempt, int max) {
+    return 'Coba $attempt dari $max';
+  }
+
+  @override
+  String toastNextIn(int seconds) {
+    return 'lagi dalam $seconds dtk';
+  }
+
+  @override
+  String toastSwitchTo(String server) {
+    return 'Pindah ke $server';
+  }
+
+  @override
+  String get toastStop => 'Hentikan';
+
+  @override
+  String toastBackTitle(String server) {
+    return 'Kembali ke $server';
+  }
+
+  @override
+  String toastBackBody(int tries, int seconds) {
+    return 'Tersambung lagi setelah $tries kali coba. Tunnel sempat mati $seconds dtk.';
+  }
+
+  @override
+  String get toastBackBodyPlain => 'Tersambung lagi. Tunnel kembali.';
+
+  @override
+  String toastMovedTitle(String server) {
+    return 'Pindah ke $server';
+  }
+
+  @override
+  String toastMovedBody(String failed, int max) {
+    return '$failed gagal $max kali. Charon tetap di cadangan sampai kamu pindah lagi.';
+  }
+
+  @override
+  String toastTry(String server) {
+    return 'Coba $server';
+  }
+
+  @override
+  String get toastHeldBody =>
+      'Charon tidak bisa menjangkau satu pun servermu. Tidak ada yang keluar dari PC ini sampai kamu mencoba lagi atau melepasnya.';
+
+  @override
+  String get toastLostBody =>
+      'Tunnel berhenti dan sambung ulang otomatis mati, jadi trafik lewat langsung.';
+
+  @override
+  String toastQuotaTitle(String server, int pct) {
+    return '$server sudah $pct% dari batasnya';
+  }
+
+  @override
+  String toastQuotaBody(int cap) {
+    return 'Lewat $cap GB, provider bisa memperlambat, menghentikan, atau menagih trafik tambahan.';
+  }
+
+  @override
+  String get toastThisMonth => 'Bulan ini';
+
+  @override
+  String toastUsage(String used, int cap) {
+    return '$used / $cap GB';
+  }
+
+  @override
+  String get toastSeeUsage => 'Lihat pemakaian';
+
+  @override
+  String get toastDismiss => 'Tutup';
+
+  @override
+  String toastCapTitle(String server, int cap) {
+    return '$server mencapai batas $cap GB';
+  }
+
+  @override
+  String get toastCapBody =>
+      'Tunnel tetap jalan, tapi mulai sekarang provider bisa memperlambat, menghentikan, atau menagih tambahan.';
+
+  @override
+  String toastMoveTo(String server) {
+    return 'Pindah ke $server';
+  }
+
+  @override
+  String get toastPublicReconnecting => 'Menyambung ulang';
+
+  @override
+  String get toastPublicConnected => 'Terhubung';
+
+  @override
+  String get toastPublicHeld => 'Trafik ditahan';
+
+  @override
+  String get toastPublicLost => 'Tunnel hilang';
+
+  @override
+  String get toastPublicUsage => 'Peringatan pemakaian';
 }

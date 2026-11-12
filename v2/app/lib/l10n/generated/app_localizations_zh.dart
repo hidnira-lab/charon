@@ -2322,28 +2322,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get trayOpenApp => '打开 Charon';
 
   @override
-  String get trayServersLocked => '连接时锁定';
-
-  @override
-  String get trayServersUnlocked => '选择备用服务器';
-
-  @override
   String traySwitchNow(String server) {
-    return '立即切换至 $server';
+    return '立即切换到 $server';
   }
 
   @override
-  String get trayStopReconnecting => '停止重试连接';
-
-  @override
-  String trayQuotaFormat(String used, String cap) {
-    return '$used GB / $cap GB';
-  }
-
-  @override
-  String trayQuotaDaysLeft(int days) {
-    return '剩余 $days 天';
-  }
+  String get trayStopReconnecting => '停止重连';
 
   @override
   String get serviceNotRunningTitle => 'Charon 服务未运行';
@@ -4332,6 +4316,317 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get stpFailBody =>
       'TCP 连接和 ping 都失败了。这像是网络或服务器问题，而不是被屏蔽。请确认服务器在运行，然后重试。';
+
+  @override
+  String get trayChipWait => '等待';
+
+  @override
+  String get trayChipHeld => '拦截';
+
+  @override
+  String trayTitleConnected(String server) {
+    return '已连接 · $server';
+  }
+
+  @override
+  String trayTitleVerifying(String server) {
+    return '正在验证 · $server';
+  }
+
+  @override
+  String trayTitleDisconnecting(String server) {
+    return '正在断开 · $server';
+  }
+
+  @override
+  String trayTitleReconnecting(String server) {
+    return '正在重连 · $server';
+  }
+
+  @override
+  String get trayTitleHeldAll => '流量已拦截 · 所有服务器均失败';
+
+  @override
+  String get trayTitleReconnectingHeld => '正在重连 · 流量已拦截';
+
+  @override
+  String trayLineVerifying(String clock) {
+    return '真实 Reality 往返 · $clock';
+  }
+
+  @override
+  String get trayLineDisconnecting => '正在干净地关闭隧道';
+
+  @override
+  String trayLineNext(String text) {
+    return '下一台：$text';
+  }
+
+  @override
+  String get trayLineHeldAll => '没有服务器响应 · 断网保护拦截中';
+
+  @override
+  String trayLineTry(int attempt, int max, String server) {
+    return '第 $attempt/$max 次 · 然后 $server';
+  }
+
+  @override
+  String trayLineTryLast(int attempt, int max) {
+    return '第 $attempt/$max 次';
+  }
+
+  @override
+  String trayLineSwitching(String failed, int max, String server) {
+    return '$failed 失败 $max 次 · 正在检查 $server';
+  }
+
+  @override
+  String trayLineChecking(String server) {
+    return '正在检查 $server';
+  }
+
+  @override
+  String get trayLineBackup => '备用';
+
+  @override
+  String get trayLineNoServer => '添加一台你自己的服务器即可连接';
+
+  @override
+  String trayBtnConnectTo(String server) {
+    return '连接到 $server';
+  }
+
+  @override
+  String get trayBtnAddServer => '添加服务器';
+
+  @override
+  String get trayBtnRelease => '放行';
+
+  @override
+  String get trayBtnReleaseAgain => '再点一次以放行';
+
+  @override
+  String get trayServersTitle => '服务器';
+
+  @override
+  String get trayLockLocked => '请先断开再切换';
+
+  @override
+  String get trayLockConnect => '选一台，然后连接';
+
+  @override
+  String get trayLockRetry => '选一台，然后重试';
+
+  @override
+  String trayServerMeta(int n, String address) {
+    return '故障转移 #$n · $address';
+  }
+
+  @override
+  String get trayNoServers => '还没有服务器。在 Charon 中添加后会显示在这里。';
+
+  @override
+  String get trayKillLineOn => 'xray 停止时拦截流量';
+
+  @override
+  String get trayKillLineHeld => '拦截中 · 没有流量离开这台电脑';
+
+  @override
+  String get trayLineOff => '关闭';
+
+  @override
+  String trayAutoLineOn(int max) {
+    return '重试 $max 次，然后切换下一台服务器';
+  }
+
+  @override
+  String trayFootMonth(String used, int cap) {
+    return '本月 $used / $cap GB';
+  }
+
+  @override
+  String trayFootNear(String used, int cap, int pct) {
+    return '$used / $cap GB · $pct%';
+  }
+
+  @override
+  String trayFootCap(String server, int cap) {
+    return '$server 已达 $cap GB 上限';
+  }
+
+  @override
+  String get trayQuit => '退出';
+
+  @override
+  String get trayQuitAsk => '退出…';
+
+  @override
+  String get trayTipHeld => '流量已拦截 · 断网保护';
+
+  @override
+  String get trayTipHeldRetrying => '流量已拦截 · 正在重试';
+
+  @override
+  String trayTipReconnecting(int attempt, int max) {
+    return '正在重连 · 第 $attempt/$max 次';
+  }
+
+  @override
+  String trayTipBackup(String server) {
+    return '已连接 · $server（备用）';
+  }
+
+  @override
+  String trayMenuHeldRetry(int attempt, int max) {
+    return '流量已拦截 · 第 $attempt/$max 次重试';
+  }
+
+  @override
+  String get trayMenuServers => '服务器';
+
+  @override
+  String get trayMenuChooseAnother => '换一台服务器';
+
+  @override
+  String get trayMenuDisconnectFirst => '请先断开再切换';
+
+  @override
+  String get trayMenuRetriesStart => '从你选的服务器重试';
+
+  @override
+  String get trayMenuCopyEgress => '复制出口 IP';
+
+  @override
+  String get trayMenuNoTunnel => '无隧道';
+
+  @override
+  String get trayMenuQuitCharon => '退出 Charon';
+
+  @override
+  String get trayMenuAsksFirst => '会先确认';
+
+  @override
+  String get trayMenuGoesDirect => '直连';
+
+  @override
+  String get trayMenuDown => '断开';
+
+  @override
+  String get trayMenuFailed => '失败';
+
+  @override
+  String toastReconnectingTitle(String server) {
+    return '正在重连 $server';
+  }
+
+  @override
+  String toastReconnectingBody(String server) {
+    return '$server 停止响应。Charon 重试期间流量直连。';
+  }
+
+  @override
+  String toastTryOf(int attempt, int max) {
+    return '第 $attempt/$max 次';
+  }
+
+  @override
+  String toastNextIn(int seconds) {
+    return '$seconds 秒后再试';
+  }
+
+  @override
+  String toastSwitchTo(String server) {
+    return '切换到 $server';
+  }
+
+  @override
+  String get toastStop => '停止';
+
+  @override
+  String toastBackTitle(String server) {
+    return '已回到 $server';
+  }
+
+  @override
+  String toastBackBody(int tries, int seconds) {
+    return '重试 $tries 次后已重连。隧道中断了 $seconds 秒。';
+  }
+
+  @override
+  String get toastBackBodyPlain => '已重连，隧道已恢复。';
+
+  @override
+  String toastMovedTitle(String server) {
+    return '已切换到 $server';
+  }
+
+  @override
+  String toastMovedBody(String failed, int max) {
+    return '$failed 失败 $max 次。Charon 会留在备用服务器，直到你切回。';
+  }
+
+  @override
+  String toastTry(String server) {
+    return '重试 $server';
+  }
+
+  @override
+  String get toastHeldBody => 'Charon 连不上你的任何一台服务器。在你重试或放行之前，没有流量会离开这台电脑。';
+
+  @override
+  String get toastLostBody => '隧道已停止且自动重连已关闭，流量正在直连。';
+
+  @override
+  String toastQuotaTitle(String server, int pct) {
+    return '$server 已用到上限的 $pct%';
+  }
+
+  @override
+  String toastQuotaBody(int cap) {
+    return '超过 $cap GB 后，服务商可能限速、停止或额外计费。';
+  }
+
+  @override
+  String get toastThisMonth => '本月';
+
+  @override
+  String toastUsage(String used, int cap) {
+    return '$used / $cap GB';
+  }
+
+  @override
+  String get toastSeeUsage => '查看用量';
+
+  @override
+  String get toastDismiss => '关闭';
+
+  @override
+  String toastCapTitle(String server, int cap) {
+    return '$server 已达 $cap GB 上限';
+  }
+
+  @override
+  String get toastCapBody => '隧道保持连接，但此后服务商可能限速、停止或额外计费。';
+
+  @override
+  String toastMoveTo(String server) {
+    return '切换到 $server';
+  }
+
+  @override
+  String get toastPublicReconnecting => '正在重连';
+
+  @override
+  String get toastPublicConnected => '已连接';
+
+  @override
+  String get toastPublicHeld => '流量已拦截';
+
+  @override
+  String get toastPublicLost => '隧道丢失';
+
+  @override
+  String get toastPublicUsage => '用量提醒';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -6651,28 +6946,12 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get trayOpenApp => '打开 Charon';
 
   @override
-  String get trayServersLocked => '连接时锁定';
-
-  @override
-  String get trayServersUnlocked => '选择备用服务器';
-
-  @override
   String traySwitchNow(String server) {
-    return '立即切换至 $server';
+    return '立即切换到 $server';
   }
 
   @override
-  String get trayStopReconnecting => '停止重试连接';
-
-  @override
-  String trayQuotaFormat(String used, String cap) {
-    return '$used GB / $cap GB';
-  }
-
-  @override
-  String trayQuotaDaysLeft(int days) {
-    return '剩余 $days 天';
-  }
+  String get trayStopReconnecting => '停止重连';
 
   @override
   String get serviceNotRunningTitle => 'Charon 服务未运行';
@@ -8661,4 +8940,315 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   @override
   String get stpFailBody =>
       'TCP 连接和 ping 都失败了。这像是网络或服务器问题，而不是被屏蔽。请确认服务器在运行，然后重试。';
+
+  @override
+  String get trayChipWait => '等待';
+
+  @override
+  String get trayChipHeld => '拦截';
+
+  @override
+  String trayTitleConnected(String server) {
+    return '已连接 · $server';
+  }
+
+  @override
+  String trayTitleVerifying(String server) {
+    return '正在验证 · $server';
+  }
+
+  @override
+  String trayTitleDisconnecting(String server) {
+    return '正在断开 · $server';
+  }
+
+  @override
+  String trayTitleReconnecting(String server) {
+    return '正在重连 · $server';
+  }
+
+  @override
+  String get trayTitleHeldAll => '流量已拦截 · 所有服务器均失败';
+
+  @override
+  String get trayTitleReconnectingHeld => '正在重连 · 流量已拦截';
+
+  @override
+  String trayLineVerifying(String clock) {
+    return '真实 Reality 往返 · $clock';
+  }
+
+  @override
+  String get trayLineDisconnecting => '正在干净地关闭隧道';
+
+  @override
+  String trayLineNext(String text) {
+    return '下一台：$text';
+  }
+
+  @override
+  String get trayLineHeldAll => '没有服务器响应 · 断网保护拦截中';
+
+  @override
+  String trayLineTry(int attempt, int max, String server) {
+    return '第 $attempt/$max 次 · 然后 $server';
+  }
+
+  @override
+  String trayLineTryLast(int attempt, int max) {
+    return '第 $attempt/$max 次';
+  }
+
+  @override
+  String trayLineSwitching(String failed, int max, String server) {
+    return '$failed 失败 $max 次 · 正在检查 $server';
+  }
+
+  @override
+  String trayLineChecking(String server) {
+    return '正在检查 $server';
+  }
+
+  @override
+  String get trayLineBackup => '备用';
+
+  @override
+  String get trayLineNoServer => '添加一台你自己的服务器即可连接';
+
+  @override
+  String trayBtnConnectTo(String server) {
+    return '连接到 $server';
+  }
+
+  @override
+  String get trayBtnAddServer => '添加服务器';
+
+  @override
+  String get trayBtnRelease => '放行';
+
+  @override
+  String get trayBtnReleaseAgain => '再点一次以放行';
+
+  @override
+  String get trayServersTitle => '服务器';
+
+  @override
+  String get trayLockLocked => '请先断开再切换';
+
+  @override
+  String get trayLockConnect => '选一台，然后连接';
+
+  @override
+  String get trayLockRetry => '选一台，然后重试';
+
+  @override
+  String trayServerMeta(int n, String address) {
+    return '故障转移 #$n · $address';
+  }
+
+  @override
+  String get trayNoServers => '还没有服务器。在 Charon 中添加后会显示在这里。';
+
+  @override
+  String get trayKillLineOn => 'xray 停止时拦截流量';
+
+  @override
+  String get trayKillLineHeld => '拦截中 · 没有流量离开这台电脑';
+
+  @override
+  String get trayLineOff => '关闭';
+
+  @override
+  String trayAutoLineOn(int max) {
+    return '重试 $max 次，然后切换下一台服务器';
+  }
+
+  @override
+  String trayFootMonth(String used, int cap) {
+    return '本月 $used / $cap GB';
+  }
+
+  @override
+  String trayFootNear(String used, int cap, int pct) {
+    return '$used / $cap GB · $pct%';
+  }
+
+  @override
+  String trayFootCap(String server, int cap) {
+    return '$server 已达 $cap GB 上限';
+  }
+
+  @override
+  String get trayQuit => '退出';
+
+  @override
+  String get trayQuitAsk => '退出…';
+
+  @override
+  String get trayTipHeld => '流量已拦截 · 断网保护';
+
+  @override
+  String get trayTipHeldRetrying => '流量已拦截 · 正在重试';
+
+  @override
+  String trayTipReconnecting(int attempt, int max) {
+    return '正在重连 · 第 $attempt/$max 次';
+  }
+
+  @override
+  String trayTipBackup(String server) {
+    return '已连接 · $server（备用）';
+  }
+
+  @override
+  String trayMenuHeldRetry(int attempt, int max) {
+    return '流量已拦截 · 第 $attempt/$max 次重试';
+  }
+
+  @override
+  String get trayMenuServers => '服务器';
+
+  @override
+  String get trayMenuChooseAnother => '换一台服务器';
+
+  @override
+  String get trayMenuDisconnectFirst => '请先断开再切换';
+
+  @override
+  String get trayMenuRetriesStart => '从你选的服务器重试';
+
+  @override
+  String get trayMenuCopyEgress => '复制出口 IP';
+
+  @override
+  String get trayMenuNoTunnel => '无隧道';
+
+  @override
+  String get trayMenuQuitCharon => '退出 Charon';
+
+  @override
+  String get trayMenuAsksFirst => '会先确认';
+
+  @override
+  String get trayMenuGoesDirect => '直连';
+
+  @override
+  String get trayMenuDown => '断开';
+
+  @override
+  String get trayMenuFailed => '失败';
+
+  @override
+  String toastReconnectingTitle(String server) {
+    return '正在重连 $server';
+  }
+
+  @override
+  String toastReconnectingBody(String server) {
+    return '$server 停止响应。Charon 重试期间流量直连。';
+  }
+
+  @override
+  String toastTryOf(int attempt, int max) {
+    return '第 $attempt/$max 次';
+  }
+
+  @override
+  String toastNextIn(int seconds) {
+    return '$seconds 秒后再试';
+  }
+
+  @override
+  String toastSwitchTo(String server) {
+    return '切换到 $server';
+  }
+
+  @override
+  String get toastStop => '停止';
+
+  @override
+  String toastBackTitle(String server) {
+    return '已回到 $server';
+  }
+
+  @override
+  String toastBackBody(int tries, int seconds) {
+    return '重试 $tries 次后已重连。隧道中断了 $seconds 秒。';
+  }
+
+  @override
+  String get toastBackBodyPlain => '已重连，隧道已恢复。';
+
+  @override
+  String toastMovedTitle(String server) {
+    return '已切换到 $server';
+  }
+
+  @override
+  String toastMovedBody(String failed, int max) {
+    return '$failed 失败 $max 次。Charon 会留在备用服务器，直到你切回。';
+  }
+
+  @override
+  String toastTry(String server) {
+    return '重试 $server';
+  }
+
+  @override
+  String get toastHeldBody => 'Charon 连不上你的任何一台服务器。在你重试或放行之前，没有流量会离开这台电脑。';
+
+  @override
+  String get toastLostBody => '隧道已停止且自动重连已关闭，流量正在直连。';
+
+  @override
+  String toastQuotaTitle(String server, int pct) {
+    return '$server 已用到上限的 $pct%';
+  }
+
+  @override
+  String toastQuotaBody(int cap) {
+    return '超过 $cap GB 后，服务商可能限速、停止或额外计费。';
+  }
+
+  @override
+  String get toastThisMonth => '本月';
+
+  @override
+  String toastUsage(String used, int cap) {
+    return '$used / $cap GB';
+  }
+
+  @override
+  String get toastSeeUsage => '查看用量';
+
+  @override
+  String get toastDismiss => '关闭';
+
+  @override
+  String toastCapTitle(String server, int cap) {
+    return '$server 已达 $cap GB 上限';
+  }
+
+  @override
+  String get toastCapBody => '隧道保持连接，但此后服务商可能限速、停止或额外计费。';
+
+  @override
+  String toastMoveTo(String server) {
+    return '切换到 $server';
+  }
+
+  @override
+  String get toastPublicReconnecting => '正在重连';
+
+  @override
+  String get toastPublicConnected => '已连接';
+
+  @override
+  String get toastPublicHeld => '流量已拦截';
+
+  @override
+  String get toastPublicLost => '隧道丢失';
+
+  @override
+  String get toastPublicUsage => '用量提醒';
 }
