@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/theme.dart';
 import '../../common/dashed_box.dart';
+import '../../common/ghost.dart';
 import '../../common/glass_card.dart';
+import '../../common/pixel_sprite.dart';
+import '../../tray/tray_art.dart';
 
 /// History card of the Telemetry board: a dashed "not tracked yet" card with a
 /// LATER chip, the sleeping mascot and two rows of dots. Charon keeps no
@@ -99,33 +102,20 @@ class HistoryCard extends StatelessWidget {
   }
 }
 
-/// Stand in for the sleeping ghost of the board (pixel art is still to do).
+/// The sleeping ghost of the board: the 16 pixel mascot with its eyes shut,
+/// drawn at 3 pixels a cell (48 x 48).
 class _SleepingMascot extends StatelessWidget {
   const _SleepingMascot();
 
   @override
   Widget build(BuildContext context) {
-    final colors = CharonColors.of(context);
-    Widget eye() => Container(width: 7, height: 2, color: colors.accentText);
-    return Container(
-      width: 48,
-      height: 48,
-      decoration: BoxDecoration(
-        color: colors.surface,
-        shape: BoxShape.circle,
-        border: Border.all(color: colors.controlBorder, width: 1.5),
-      ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Row(mainAxisSize: MainAxisSize.min, children: [eye(), const SizedBox(width: 6), eye()]),
-          Positioned(
-            right: 8,
-            top: 6,
-            child: Text('z', style: monoStyle(colors.accentText.withValues(alpha: 0.7), 9, bold: true)),
-          ),
-        ],
-      ),
+    final light = Theme.of(context).brightness == Brightness.light;
+    return PixelSprite(
+      rows: ghost16Rows(GhostEyes.sleep),
+      palette: logoColors,
+      scale: 3,
+      outline: light ? const Color(0xFF2A2A2A) : null,
+      shadow: !light,
     );
   }
 }

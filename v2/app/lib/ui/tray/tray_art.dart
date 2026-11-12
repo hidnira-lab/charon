@@ -27,9 +27,11 @@ const _faces = {
   GhostEyes.happy: ['......WWWW......', '.....WWWWWW.....', '....WEWWWEWW....'],
   GhostEyes.focused: ['......WWWW......', '.....WEWWEW.....', '....WWEWWEWW....'],
   GhostEyes.worried: ['......WEWE......', '.....WWEWEW.....', '....WWWWWWWW....'],
+  // Asleep: two lines for eyes, as the Telemetry board draws it.
+  GhostEyes.sleep: ['......WWWW......', '.....WWWWWW.....', '....WEEWWEEW....'],
 };
 
-/// The 16 x 16 ghost with the face of [mood] (happy, focused or worried).
+/// The 16 x 16 ghost with the face of [mood] (happy, focused, worried or sleep).
 List<String> ghost16Rows(GhostEyes mood) {
   final face = _faces[mood]!;
   return [for (final (y, r) in _body16.indexed) y >= 5 && y <= 7 ? face[y - 5] : r];

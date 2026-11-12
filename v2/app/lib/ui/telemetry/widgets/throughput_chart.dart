@@ -7,7 +7,10 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/telemetry_view.dart';
 import '../../../state/throughput_history.dart';
 import '../../../theme/theme.dart';
+import '../../common/ghost.dart';
 import '../../common/glass_card.dart';
+import '../../common/pixel_sprite.dart';
+import '../../tray/tray_art.dart';
 
 /// The Throughput chart of the Telemetry board: a rolling five minute window,
 /// two step lines on one Mbps axis (2 px, snapped to a 2 px grid), a halftone
@@ -80,7 +83,7 @@ class _ThroughputChartState extends State<ThroughputChart> {
                         },
                         child: _plot(l10n, colors, plotW, xOf, yOf, first),
                       )
-                    : _empty(l10n, colors, plotW),
+                    : _empty(context, l10n, colors, plotW),
               ),
               // X labels, minutes ago, newest on the right.
               for (final t in const [('5m', 0), ('4m', 60), ('3m', 120), ('2m', 180), ('1m', 240), ('now', 299)])
@@ -187,7 +190,7 @@ class _ThroughputChartState extends State<ThroughputChart> {
     );
   }
 
-  Widget _empty(AppLocalizations l10n, CharonColors colors, double plotW) {
+  Widget _empty(BuildContext context, AppLocalizations l10n, CharonColors colors, double plotW) {
     return Stack(
       children: [
         Positioned.fill(child: CustomPaint(painter: _DotsPainter(colors.surface2))),
@@ -196,7 +199,12 @@ class _ThroughputChartState extends State<ThroughputChart> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.show_chart, size: 28, color: colors.controlBorder),
+              PixelSprite(
+                rows: ghost16Rows(GhostEyes.worried),
+                palette: logoColors,
+                scale: 2,
+                outline: Theme.of(context).brightness == Brightness.light ? const Color(0xFF2A2A2A) : null,
+              ),
               const SizedBox(height: 8),
               Container(
                 color: colors.surface,
