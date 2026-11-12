@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -14,6 +13,7 @@ import '../common/ghost.dart';
 import '../common/glass_card.dart';
 import '../common/pixel_sprite.dart';
 import '../home/widgets/title_bar.dart';
+import '../common/ambient.dart';
 
 /// The splash of the Splash board: the ghost arrives, slides left and the
 /// letters of "Charon" appear, while the window reaches the service. If the
@@ -215,54 +215,19 @@ class _Ambient extends StatelessWidget {
     (820.0, 560.0, 852.0, 676.0),
   ];
 
+  // The four glows of the Home board, breathing (amb).
   @override
   Widget build(BuildContext context) {
-    return IgnorePointer(child: CustomPaint(painter: _AmbientPainter(palette)));
+    return IgnorePointer(
+      child: AmbientLayer(
+        lights: [
+          for (final (i, (w, h, x, y)) in _at.indexed)
+            (w: w.round(), h: h.round(), x: x.round(), y: y.round(), color: palette.glows[i].$1.withValues(alpha: palette.glows[i].$2 * 0.3)),
+        ],
+        child: const SizedBox.expand(),
+      ),
+    );
   }
-}
-
-class _AmbientPainter extends CustomPainter {
-  _AmbientPainter(this.palette);
-
-  final SplashPalette palette;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    for (final (i, (w, h, x, y)) in _Ambient._at.indexed) {
-      final (color, alpha) = palette.glows[i];
-      final paint = Paint()
-        ..shader = ui.Gradient.radial(
-          Offset.zero,
-          1,
-          [color.withValues(alpha: alpha * 0.3), color.withValues(alpha: 0)],
-          [0, 0.72],
-          TileMode.clamp,
-          // A unit circle at the origin, stretched to the ellipse and moved to its place.
-          Float64List.fromList([
-            w,
-            0,
-            0,
-            0,
-            0,
-            h,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            x,
-            y,
-            0,
-            1,
-          ]),
-        );
-      canvas.drawRect(Offset.zero & size, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(_AmbientPainter old) => old.palette != palette;
 }
 
 /// The living logo: the ghost sliding in and the letters after it.

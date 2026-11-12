@@ -14,6 +14,8 @@ import '../dialogs/dialog_shell.dart';
 import '../home/widgets/title_bar.dart';
 import '../trust/guide_links.dart';
 import '../common/pixel_icon.dart';
+import '../common/ambient.dart';
+import '../common/motion.dart';
 
 /// The Service screen of the Service board: what the window shows when it cannot
 /// talk to the Charon service (stopped, starting, failed to start, needs an
@@ -79,29 +81,17 @@ class ServiceScreen extends StatelessWidget {
 class _Ambient extends StatelessWidget {
   const _Ambient();
 
+  // Two faint glows, amber at the top left and blue at the bottom right, that breathe (amb).
   @override
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
     return IgnorePointer(
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: RadialGradient(
-            center: const Alignment(-0.31, -0.41),
-            radius: 0.8,
-            colors: [colors.transitionFill.withValues(alpha: 0.05), Colors.transparent],
-            stops: const [0, 0.72],
-          ),
-        ),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: RadialGradient(
-              center: const Alignment(0.52, 0.72),
-              radius: 0.75,
-              colors: [colors.accent.withValues(alpha: 0.05), Colors.transparent],
-              stops: const [0, 0.72],
-            ),
-          ),
-        ),
+      child: AmbientLayer(
+        lights: [
+          (w: 820, h: 560, x: 352, y: 226, color: colors.transitionFill.withValues(alpha: 0.05)),
+          (w: 760, h: 520, x: 780, y: 660, color: colors.accent.withValues(alpha: 0.05)),
+        ],
+        child: const SizedBox.expand(),
       ),
     );
   }
@@ -221,7 +211,11 @@ class _Content extends StatelessWidget {
         return Center(
           child: Padding(
             padding: const EdgeInsets.only(bottom: 12),
-            child: SizedBox(
+            // A new state rises 6 px into place in 240 ms (xA).
+            child: RiseOnChange(
+              value: v.kind,
+              duration: const Duration(milliseconds: 240),
+              child: SizedBox(
               width: 600,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -281,6 +275,7 @@ class _Content extends StatelessWidget {
                   ],
                 ],
               ),
+            ),
             ),
           ),
         );
@@ -458,34 +453,28 @@ class _Progress extends StatelessWidget {
   final int ms;
   final String label;
 
+  /// The bar fills in 2.4 s each time a state with work starts (grow).
   @override
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
-    final still = ms == 0;
-    final t = (ms % 1600) / 1600;
+    final reduce = MediaQuery.maybeDisableAnimationsOf(context) ?? false;
     return Semantics(
       label: label,
       child: Container(
         width: 360,
         height: 8,
         color: colors.surface2,
-        child: LayoutBuilder(
-          builder: (context, box) {
-            final block = box.maxWidth * 0.35;
-            final left = still ? 0.0 : -block + (box.maxWidth + block) * Curves.easeInOut.transform(t);
-            return Stack(
-              clipBehavior: Clip.hardEdge,
-              children: [
-                Positioned(
-                  left: still ? 0 : left,
-                  width: still ? box.maxWidth : block,
-                  top: 0,
-                  bottom: 0,
-                  child: ColoredBox(color: colors.transitionFill),
-                ),
-              ],
-            );
-          },
+        alignment: Alignment.centerLeft,
+        child: TweenAnimationBuilder<double>(
+          key: ValueKey(label),
+          tween: Tween(begin: reduce ? 1 : 0, end: 1),
+          duration: const Duration(milliseconds: 2400),
+          curve: CharonCurves.standard,
+          builder: (context, t, _) => FractionallySizedBox(
+            widthFactor: t,
+            heightFactor: 1,
+            child: ColoredBox(color: colors.transitionFill),
+          ),
         ),
       ),
     );
