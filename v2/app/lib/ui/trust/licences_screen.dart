@@ -8,6 +8,7 @@ import '../common/glass_card.dart';
 import 'guide_links.dart';
 import 'widgets/trust_page.dart';
 import '../common/pixel_icon.dart';
+import '../common/motion.dart';
 
 const _gplText = 'GNU GENERAL PUBLIC LICENSE\n'
     'Version 3, 29 June 2007\n\n'
@@ -177,8 +178,12 @@ class _LicencesScreenState extends State<LicencesScreen> {
               ),
             ),
           ),
+          // The text drops in 4 px as it opens (tpIn).
           if (open)
-            Container(
+            Enter(
+              offset: const Offset(0, -4),
+              duration: const Duration(milliseconds: 200),
+              child: Container(
               margin: const EdgeInsets.only(bottom: 12),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               decoration: BoxDecoration(color: colors.bg, borderRadius: BorderRadius.circular(10)),
@@ -196,6 +201,7 @@ class _LicencesScreenState extends State<LicencesScreen> {
                   ),
                 ],
               ),
+            ),
             ),
         ],
       ),

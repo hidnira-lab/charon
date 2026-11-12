@@ -6,6 +6,7 @@ import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
 import 'update_card.dart';
 import '../../common/pixel_icon.dart';
+import '../../common/motion.dart';
 
 /// "Update from a file": one row with the state of the file and one button.
 class FileUpdateCard extends StatelessWidget {
@@ -22,7 +23,10 @@ class FileUpdateCard extends StatelessWidget {
     return Semantics(
       label: l10n.updatesFileCardTitle,
       container: true,
-      child: GlassCard(
+      // A new stage rises 6 px into place (upInA).
+      child: RiseOnChange(
+        value: (v.chip, v.text),
+        child: GlassCard(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
           children: [
@@ -51,7 +55,7 @@ class FileUpdateCard extends StatelessWidget {
                             ),
                             if (v.chip != null) ...[
                               const SizedBox(width: 8),
-                              UpdateChip(label: v.chip!, tone: v.tone, height: 20),
+                              UpdateChip(label: v.chip!, tone: v.tone, height: 20, pulse: v.pulse),
                             ],
                           ],
                         ),
@@ -80,7 +84,7 @@ class FileUpdateCard extends StatelessWidget {
             ],
           ],
         ),
-      ),
+      )),
     );
   }
 }

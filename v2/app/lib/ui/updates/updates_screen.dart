@@ -149,7 +149,7 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
                           Row(
                             children: [
                               if (checkedLine != null) ...[
-                                Text(checkedLine, style: monoStyle(colors.text3, 11)),
+                                Throb(child: Text(checkedLine, style: monoStyle(colors.text3, 11))),
                                 const SizedBox(width: 12),
                               ],
                               Opacity(

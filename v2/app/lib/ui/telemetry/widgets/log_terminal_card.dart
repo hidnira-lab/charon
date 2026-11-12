@@ -59,9 +59,6 @@ class LogTerminalCard extends StatefulWidget {
 
 class _LogTerminalCardState extends State<LogTerminalCard> {
   final ScrollController _scrollController = ScrollController();
-
-  /// Set once the source changes: from then on the log box rises in on each change (tlA).
-  bool _switched = false;
   bool _isFollowing = true;
   int _newLinesWhilePaused = 0;
   int _lastRenderedCount = 0;
@@ -73,21 +70,9 @@ class _LogTerminalCardState extends State<LogTerminalCard> {
     _lastRenderedCount = widget.visibleLogs.length;
   }
 
-  /// After a source change the box rises 4 px and fades in, 220 ms after 60 ms.
-  Widget _rise(Widget box) => _switched
-      ? Enter(
-          key: ValueKey(widget.activeSource),
-          offset: const Offset(0, 4),
-          duration: const Duration(milliseconds: 220),
-          delay: const Duration(milliseconds: 60),
-          child: box,
-        )
-      : box;
-
   @override
   void didUpdateWidget(covariant LogTerminalCard oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.activeSource != widget.activeSource) _switched = true;
     final currentCount = widget.visibleLogs.length;
     if (_isFollowing) {
       if (currentCount != _lastRenderedCount) _scrollToBottom();
@@ -231,7 +216,13 @@ class _LogTerminalCardState extends State<LogTerminalCard> {
               ),
             const SizedBox(height: 8),
             Expanded(
-              child: _rise(Semantics(
+              // A new source rises 4 px into the box, 220 ms after 60 ms (tlA).
+              child: RiseOnChange(
+                value: widget.activeSource,
+                offset: const Offset(0, 4),
+                duration: const Duration(milliseconds: 220),
+                delay: const Duration(milliseconds: 60),
+                child: Semantics(
                 label: isAccessTab ? l10n.telemetryXrayLog : l10n.telemetryCoreLog,
                 child: Container(
                   decoration: BoxDecoration(color: colors.bg, borderRadius: BorderRadius.circular(10)),

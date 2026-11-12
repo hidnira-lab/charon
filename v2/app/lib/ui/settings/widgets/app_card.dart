@@ -8,6 +8,7 @@ import '../../../theme/theme.dart';
 import '../../common/pixel_icon.dart';
 import '../../common/glass_card.dart';
 import '../../common/sliding_pills.dart';
+import 'language_picker.dart';
 
 class AppCard extends StatelessWidget {
   const AppCard({
@@ -26,15 +27,6 @@ class AppCard extends StatelessWidget {
     final svcRestart = controller.isServiceRestarting;
     final thm = controller.themeMode;
     final loc = controller.locale;
-
-    String curLangName = 'System';
-    if (loc?.languageCode == 'en') {
-      curLangName = 'English';
-    } else if (loc?.languageCode == 'id') {
-      curLangName = 'Bahasa Indonesia';
-    } else if (loc?.languageCode == 'zh') {
-      curLangName = '简体中文';
-    }
 
     return Glass(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
@@ -333,76 +325,8 @@ class AppCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    // Language Dropdown button
-                    PopupMenuButton<Locale?>(
-                      initialValue: loc,
-                      onSelected: (newLoc) => controller.setLocale(newLoc),
-                      color: colors.surface2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(color: colors.divider),
-                      ),
-                      itemBuilder: (context) => [
-                        PopupMenuItem(
-                          value: null,
-                          child: _LanguageMenuItem(
-                            label: l10n.settingsLanguageSystem,
-                            sub: 'WINDOWS',
-                            isSelected: loc == null,
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: const Locale('en'),
-                          child: _LanguageMenuItem(
-                            label: 'English',
-                            sub: 'EN',
-                            isSelected: loc?.languageCode == 'en',
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: const Locale('id'),
-                          child: _LanguageMenuItem(
-                            label: 'Bahasa Indonesia',
-                            sub: 'ID',
-                            isSelected: loc?.languageCode == 'id',
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
-                          child: _LanguageMenuItem(
-                            label: '简体中文',
-                            sub: 'ZH',
-                            isSelected: loc?.languageCode == 'zh',
-                          ),
-                        ),
-                      ],
-                      child: Container(
-                        height: 36,
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        decoration: BoxDecoration(
-                          color: colors.surface2,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              curLangName,
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: colors.text,
-                              ),
-                            ),
-                            PixelIcon(
-                              PixelIcons.chev,
-                              size: 16,
-                              color: colors.text2,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    // The board's own picker: a frosted list under the field.
+                    LanguagePicker(locale: loc, onPick: controller.setLocale),
                     const SizedBox(height: 6),
                     Text(
                       loc == null
@@ -419,16 +343,6 @@ class AppCard extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-          const SizedBox(height: 6),
-          // Language note
-          Text(
-            '> ${l10n.settingsLanguageNote}',
-            style: TextStyle(
-              fontFamily: CharonTokens.fontMono,
-              fontSize: 10,
-              color: colors.controlBorder,
-            ),
           ),
           Divider(color: colors.divider, height: 20),
 
@@ -521,55 +435,6 @@ class AppCard extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _LanguageMenuItem extends StatelessWidget {
-  const _LanguageMenuItem({
-    required this.label,
-    required this.sub,
-    required this.isSelected,
-  });
-
-  final String label;
-  final String sub;
-  final bool isSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = CharonColors.of(context);
-    return Row(
-      children: [
-        Container(
-          width: 6,
-          height: 6,
-          decoration: BoxDecoration(
-            color: isSelected ? colors.accentText : colors.controlBorder,
-            shape: BoxShape.circle,
-          ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
-              color: colors.text,
-            ),
-          ),
-        ),
-        Text(
-          sub,
-          style: TextStyle(
-            fontFamily: CharonTokens.fontMono,
-            fontSize: 10,
-            fontWeight: FontWeight.w700,
-            color: isSelected ? colors.accentText : colors.controlBorder,
-          ),
-        ),
-      ],
     );
   }
 }

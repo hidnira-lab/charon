@@ -5,6 +5,7 @@ import '../../../state/updates_view.dart';
 import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
 import '../../common/pixel_icon.dart';
+import '../../common/motion.dart';
 
 /// (background, ink) of a status chip for a tone.
 (Color, Color) updateToneColors(CharonColors c, UpdateTone t) => switch (t) {
@@ -15,11 +16,14 @@ import '../../common/pixel_icon.dart';
 
 /// The small square status chip ("READY", "SIGNATURE INVALID").
 class UpdateChip extends StatelessWidget {
-  const UpdateChip({super.key, required this.label, required this.tone, this.height = 22});
+  const UpdateChip({super.key, required this.label, required this.tone, this.height = 22, this.pulse = false});
 
   final String label;
   final UpdateTone tone;
   final double height;
+
+  /// The dot throbs while the stage is working (upPulse).
+  final bool pulse;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +36,7 @@ class UpdateChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(width: 6, height: 6, color: fg),
+          Throb(on: pulse, child: Container(width: 6, height: 6, color: fg)),
           const SizedBox(width: 6),
           Text(label, style: monoStyle(fg, 10, bold: true, em: 0.06)),
         ],
@@ -98,7 +102,10 @@ class UpdateCard extends StatelessWidget {
     return Semantics(
       label: v.tag,
       container: true,
-      child: GlassCard(
+      // A new stage rises 6 px into place (upInA).
+      child: RiseOnChange(
+        value: v.chip,
+        child: GlassCard(
         padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -114,7 +121,7 @@ class UpdateCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                UpdateChip(label: v.chip, tone: v.tone),
+                UpdateChip(label: v.chip, tone: v.tone, pulse: v.pulse),
               ],
             ),
             const SizedBox(height: 8),
@@ -181,7 +188,7 @@ class UpdateCard extends StatelessWidget {
             ],
           ],
         ),
-      ),
+      )),
     );
   }
 }
@@ -205,9 +212,16 @@ class UpdateProgressBar extends StatelessWidget {
         child: Stack(
           children: [
             Positioned.fill(child: ColoredBox(color: colors.surface2)),
+            // Amber with white stripes that walk 4 px every 150 ms (stripe).
             FractionallySizedBox(
               widthFactor: progress.percent / 100,
-              child: ColoredBox(color: colors.transitionFill),
+              child: StepLoop(
+                tracks: const [(period: 600, delay: 0, at: [0.25, 0.5, 0.75, 1])],
+                builder: (context, ms) => CustomPaint(
+                  painter: _Stripes(colors.transitionFill, (ms % 600) ~/ 150 * 4.0),
+                  child: const SizedBox.expand(),
+                ),
+              ),
             ),
           ],
         ),
@@ -240,6 +254,25 @@ class UpdateProgressBar extends StatelessWidget {
   }
 }
 
+class _Stripes extends CustomPainter {
+  _Stripes(this.fill, this.shift);
+
+  final Color fill;
+  final double shift;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.drawRect(Offset.zero & size, Paint()..color = fill);
+    final stripe = Paint()..color = const Color(0x2EFFFFFF);
+    for (var x = shift - 8; x < size.width; x += 8) {
+      canvas.drawRect(Rect.fromLTWH(x, 0, 4, size.height), stripe);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_Stripes old) => old.fill != fill || old.shift != shift;
+}
+
 class _Steps extends StatelessWidget {
   const _Steps({required this.steps});
 
@@ -257,7 +290,8 @@ class _Steps extends StatelessWidget {
             if (i > 0) const SizedBox(height: 6),
             Row(
               children: [
-                _box(colors, s.mark),
+                // The working step throbs (upPulse).
+                Throb(on: s.mark == StepMark.act, child: _box(colors, s.mark)),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Row(

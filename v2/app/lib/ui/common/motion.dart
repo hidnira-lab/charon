@@ -407,3 +407,78 @@ class Blink extends StatelessWidget {
         builder: (context, ms) => Opacity(opacity: ms % period < period / 2 ? 1 : low, child: child),
       );
 }
+
+/// A soft throb, 1 to 0.35 and back in 1.2 s (upPulse), sampled every 120 ms
+/// through a [StepLoop] so tests still settle. For a working step or chip dot.
+class Throb extends StatelessWidget {
+  const Throb({super.key, required this.child, this.on = true});
+
+  final Widget child;
+  final bool on;
+
+  static const _curve = Cubic(0.4, 0, 0.6, 1);
+
+  @override
+  Widget build(BuildContext context) {
+    if (!on) return child;
+    return StepLoop(
+      tracks: [(period: 1200, delay: 0, at: [for (var k = 1; k <= 10; k++) k / 10])],
+      builder: (context, ms) {
+        final p = (ms % 1200) / 600;
+        final k = _curve.transform(p <= 1 ? p : 2 - p);
+        return Opacity(opacity: 1 - 0.65 * k, child: child);
+      },
+    );
+  }
+}
+
+/// Rises [offset] and fades in whenever [value] changes, not on the first build
+/// (upInA: a card that shows a new stage; tlA: a log box with a new source).
+class RiseOnChange extends StatefulWidget {
+  const RiseOnChange({
+    super.key,
+    required this.value,
+    required this.child,
+    this.offset = const Offset(0, 6),
+    this.duration = const Duration(milliseconds: 260),
+    this.delay = Duration.zero,
+  });
+
+  final Object? value;
+  final Widget child;
+  final Offset offset;
+  final Duration duration;
+  final Duration delay;
+
+  @override
+  State<RiseOnChange> createState() => _RiseOnChangeState();
+}
+
+class _RiseOnChangeState extends State<RiseOnChange> with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(vsync: this, duration: widget.delay + widget.duration, value: 1);
+
+  @override
+  void didUpdateWidget(RiseOnChange old) {
+    super.didUpdateWidget(old);
+    if (old.value != widget.value && !(MediaQuery.maybeDisableAnimationsOf(context) ?? false)) _c.forward(from: 0);
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+        animation: _c,
+        child: widget.child,
+        builder: (context, child) {
+          final total = (widget.delay + widget.duration).inMicroseconds;
+          final start = widget.delay.inMicroseconds / total;
+          final t = CharonCurves.entry.transform(((_c.value - start) / (1 - start)).clamp(0.0, 1.0));
+          if (t == 1) return child!;
+          return Opacity(opacity: t, child: Transform.translate(offset: widget.offset * (1 - t), child: child));
+        },
+      );
+}
