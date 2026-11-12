@@ -14,7 +14,6 @@ class Rig {
         ran.add('$exe ${args.join(' ')}'.trim());
         return exits[exe] ?? 0;
       },
-      launch: (exe, args) async => launched.add(exe),
     );
     sup.setConnector(() async {
       connects++;
@@ -29,7 +28,6 @@ class Rig {
   final bool windows;
   late final ServiceSupervisor sup;
   final ran = <String>[];
-  final launched = <String>[];
   final exits = <String, int>{};
 
   /// What the pipe does on each try, in order: 'down', 'mismatch', or answers.
@@ -224,11 +222,16 @@ void main() {
     expect(seen, [true, false]);
   });
 
-  test('the release tool is launched, not waited for', () async {
+  test('the release tool runs as an administrator (it removes WFP filters)', () async {
     final r = Rig();
     await r.sup.openReleaseTool();
-    expect(r.launched, ['charon-release.exe']);
-    expect(r.ran, isEmpty);
+    expect(r.ran, ['charon-release.exe']);
+  });
+
+  test('restart stops the service as an administrator and starts it again', () async {
+    final r = Rig();
+    await r.sup.restart();
+    expect(r.ran, ['sc.exe stop charon', 'sc.exe start charon']);
   });
 }
 

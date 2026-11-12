@@ -20,7 +20,6 @@ import 'support/fonts.dart';
 /// programs it starts answer, with a gate to hold one of them open.
 class FakeService {
   final ran = <String>[];
-  final launched = <String>[];
   final exits = <String, int>{};
   final pipe = <String>[]; // 'down' or 'mismatch' per try, then it answers
   Completer<void>? hold; // while set, a program waits for it
@@ -35,7 +34,6 @@ class FakeService {
         await hold?.future;
         return exits[exe] ?? 0;
       },
-      launch: (exe, args) async => launched.add(exe),
     )..setConnector(() async {
         tries++;
         final next = pipe.isEmpty ? null : pipe.removeAt(0);
@@ -119,12 +117,12 @@ void main() {
       expect(opened.single.toString(), 'https://github.com/hidnira-lab/charon/blob/main/v2/guides/id/b10-troubleshooting.md');
     });
 
-    testWidgets('Open release tool launches the separate tool', (tester) async {
+    testWidgets('Open release tool runs the separate tool as an administrator', (tester) async {
       final s = FakeService()..controller.service.setStatus(ServiceStatus.notRunning);
       await _show(tester, s);
       await tester.tap(find.text('Open release tool'));
       await tester.pump();
-      expect(s.launched, ['charon-release.exe']);
+      expect(s.ran, ['charon-release.exe']);
     });
   });
 

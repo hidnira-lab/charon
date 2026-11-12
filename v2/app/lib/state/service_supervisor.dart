@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 
 import '../core/core_client.dart';
+import '../core/elevated.dart';
 
 /// Whether the window can talk to the Charon service.
 enum ServiceStatus { running, notRunning, needsUpdate }
@@ -24,14 +25,7 @@ enum Recovery {
 /// Runs a program and waits for it. Returns the exit code.
 typedef ProcessRunner = Future<int> Function(String exe, List<String> args);
 
-/// Starts a program and does not wait (the release tool is a window of its own).
-typedef ProcessLauncher = Future<void> Function(String exe, List<String> args);
-
 Future<int> _defaultRun(String exe, List<String> args) async => (await Process.run(exe, args)).exitCode;
-
-Future<void> _defaultLaunch(String exe, List<String> args) async {
-  await Process.start(exe, args, mode: ProcessStartMode.detached);
-}
 
 /// `sc.exe` answers 1056 when the service is already running. For a window that
 /// only wants it running, that is a success.
@@ -44,15 +38,18 @@ const _errorServiceAlreadyRunning = 1056;
 class ServiceSupervisor extends ChangeNotifier {
   ServiceSupervisor({
     ProcessRunner? run,
-    ProcessLauncher? launch,
+    ProcessRunner? runAdmin,
     this.retryEvery = const Duration(seconds: 5),
     bool? windows,
   })  : _run = run ?? _defaultRun,
-        _launch = launch ?? _defaultLaunch,
+        // What needs administrator rights (the installer, stopping the service,
+        // the release tool) raises the UAC prompt. A test that gives only [run]
+        // gets the same recorder for both.
+        _runAdmin = runAdmin ?? run ?? runElevated,
         _windows = windows ?? Platform.isWindows;
 
   final ProcessRunner _run;
-  final ProcessLauncher _launch;
+  final ProcessRunner _runAdmin;
   final bool _windows;
   /// How long to wait before asking the pipe again. Null never asks again by itself.
   final Duration? retryEvery;
@@ -180,7 +177,7 @@ class ServiceSupervisor extends ChangeNotifier {
     notifyListeners();
     var ok = false;
     try {
-      ok = await _run('charon-installer.exe', args) == 0 && await reconnect();
+      ok = await _runAdmin('charon-installer.exe', args) == 0 && await reconnect();
     } catch (_) {
       ok = false;
     }
@@ -204,7 +201,8 @@ class ServiceSupervisor extends ChangeNotifier {
   Future<void> openReleaseTool() async {
     if (!_windows) return;
     try {
-      await _launch('charon-release.exe', const []);
+      // It removes WFP filters, which only an administrator may do.
+      await _runAdmin('charon-release.exe', const []);
     } catch (_) {
       // The tool is a last resort with its own console window; if it cannot
       // start there is nothing more this screen can do.
@@ -218,7 +216,9 @@ class ServiceSupervisor extends ChangeNotifier {
     notifyListeners();
     try {
       if (_windows) {
-        await _run('sc.exe', ['stop', 'charon']);
+        // The installing user may start the service but not stop it (service
+        // SDDL), so stopping asks for administrator rights; starting does not.
+        await _runAdmin('sc.exe', ['stop', 'charon']);
         await _run('sc.exe', ['start', 'charon']);
       }
     } catch (_) {
