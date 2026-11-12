@@ -4921,4 +4921,81 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get railChipOff => 'OFF';
+
+  @override
+  String get railExpand => 'Perluas sidebar';
+
+  @override
+  String get railCollapse => 'Ciutkan sidebar';
+
+  @override
+  String get railMain => 'Utama';
+
+  @override
+  String get railMainExpanded => 'Utama, diperluas';
+
+  @override
+  String get railServersSub => 'profil · sync';
+
+  @override
+  String get railSettingsSub => 'pengaman · aplikasi';
+
+  @override
+  String get railThisUnit => 'PERANGKAT INI · WINDOWS';
+
+  @override
+  String get railShortConnected => 'TERHUBUNG';
+
+  @override
+  String get railShortVerifying => 'MEMVERIFIKASI';
+
+  @override
+  String get railShortDisconnected => 'TERPUTUS';
+
+  @override
+  String get railShortBlocked => 'DIBLOKIR';
+
+  @override
+  String get railShortNoServer => 'TANPA SERVER';
+
+  @override
+  String get railShortReconnecting => 'MENYAMBUNG ULANG';
+
+  @override
+  String get railShortSwitching => 'BERPINDAH';
+
+  @override
+  String get railMetaReady => 'siap';
+
+  @override
+  String get railMetaHeld => 'ditahan';
+
+  @override
+  String get railMetaNone => 'belum ada';
+
+  @override
+  String get railMetaLost => 'hilang';
+
+  @override
+  String get railMetaFailed => 'gagal';
+
+  @override
+  String get railMetaWaking => 'bangun';
+
+  @override
+  String get railMetaVerifying => 'memverifikasi';
+
+  @override
+  String railMetaTry(int attempt, int max) {
+    return 'coba $attempt / $max';
+  }
+
+  @override
+  String get logoPokeHi => 'hi!';
+
+  @override
+  String get logoPokeHmm => 'hmm?';
+
+  @override
+  String get logoPokeAngry => 'hey! i\'m working here';
 }

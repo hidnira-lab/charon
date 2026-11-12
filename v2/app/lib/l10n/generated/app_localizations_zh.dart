@@ -4680,6 +4680,83 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get railChipOff => '关';
+
+  @override
+  String get railExpand => '展开侧边栏';
+
+  @override
+  String get railCollapse => '收起侧边栏';
+
+  @override
+  String get railMain => '主导航';
+
+  @override
+  String get railMainExpanded => '主导航，已展开';
+
+  @override
+  String get railServersSub => '配置 · 同步';
+
+  @override
+  String get railSettingsSub => '故障保护 · 应用';
+
+  @override
+  String get railThisUnit => '本机 · WINDOWS';
+
+  @override
+  String get railShortConnected => '已连接';
+
+  @override
+  String get railShortVerifying => '验证中';
+
+  @override
+  String get railShortDisconnected => '未连接';
+
+  @override
+  String get railShortBlocked => '已拦截';
+
+  @override
+  String get railShortNoServer => '无服务器';
+
+  @override
+  String get railShortReconnecting => '正在重连';
+
+  @override
+  String get railShortSwitching => '正在切换';
+
+  @override
+  String get railMetaReady => '就绪';
+
+  @override
+  String get railMetaHeld => '已拦截';
+
+  @override
+  String get railMetaNone => '无';
+
+  @override
+  String get railMetaLost => '丢失';
+
+  @override
+  String get railMetaFailed => '失败';
+
+  @override
+  String get railMetaWaking => '唤醒中';
+
+  @override
+  String get railMetaVerifying => '正在验证';
+
+  @override
+  String railMetaTry(int attempt, int max) {
+    return '第 $attempt/$max 次';
+  }
+
+  @override
+  String get logoPokeHi => 'hi!';
+
+  @override
+  String get logoPokeHmm => 'hmm?';
+
+  @override
+  String get logoPokeAngry => 'hey! i\'m working here';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -9357,4 +9434,81 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get railChipOff => '关';
+
+  @override
+  String get railExpand => '展开侧边栏';
+
+  @override
+  String get railCollapse => '收起侧边栏';
+
+  @override
+  String get railMain => '主导航';
+
+  @override
+  String get railMainExpanded => '主导航，已展开';
+
+  @override
+  String get railServersSub => '配置 · 同步';
+
+  @override
+  String get railSettingsSub => '故障保护 · 应用';
+
+  @override
+  String get railThisUnit => '本机 · WINDOWS';
+
+  @override
+  String get railShortConnected => '已连接';
+
+  @override
+  String get railShortVerifying => '验证中';
+
+  @override
+  String get railShortDisconnected => '未连接';
+
+  @override
+  String get railShortBlocked => '已拦截';
+
+  @override
+  String get railShortNoServer => '无服务器';
+
+  @override
+  String get railShortReconnecting => '正在重连';
+
+  @override
+  String get railShortSwitching => '正在切换';
+
+  @override
+  String get railMetaReady => '就绪';
+
+  @override
+  String get railMetaHeld => '已拦截';
+
+  @override
+  String get railMetaNone => '无';
+
+  @override
+  String get railMetaLost => '丢失';
+
+  @override
+  String get railMetaFailed => '失败';
+
+  @override
+  String get railMetaWaking => '唤醒中';
+
+  @override
+  String get railMetaVerifying => '正在验证';
+
+  @override
+  String railMetaTry(int attempt, int max) {
+    return '第 $attempt/$max 次';
+  }
+
+  @override
+  String get logoPokeHi => 'hi!';
+
+  @override
+  String get logoPokeHmm => 'hmm?';
+
+  @override
+  String get logoPokeAngry => 'hey! i\'m working here';
 }

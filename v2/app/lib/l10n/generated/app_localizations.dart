@@ -8571,6 +8571,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'OFF'**
   String get railChipOff;
+
+  /// Rail button that opens the sidebar (HomeDesktop board).
+  ///
+  /// In en, this message translates to:
+  /// **'Expand sidebar'**
+  String get railExpand;
+
+  /// Sidebar button that closes it (HomeDesktop board).
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse sidebar'**
+  String get railCollapse;
+
+  /// Screen reader name of the rail.
+  ///
+  /// In en, this message translates to:
+  /// **'Main'**
+  String get railMain;
+
+  /// Screen reader name of the open sidebar.
+  ///
+  /// In en, this message translates to:
+  /// **'Main, expanded'**
+  String get railMainExpanded;
+
+  /// Second line under Servers in the open sidebar.
+  ///
+  /// In en, this message translates to:
+  /// **'profiles · sync'**
+  String get railServersSub;
+
+  /// Second line under Settings in the open sidebar.
+  ///
+  /// In en, this message translates to:
+  /// **'failsafe · app'**
+  String get railSettingsSub;
+
+  /// Last line of the device card in the open sidebar.
+  ///
+  /// In en, this message translates to:
+  /// **'THIS UNIT · WINDOWS'**
+  String get railThisUnit;
+
+  /// State word on the sidebar device card.
+  ///
+  /// In en, this message translates to:
+  /// **'CONNECTED'**
+  String get railShortConnected;
+
+  /// State word on the sidebar device card.
+  ///
+  /// In en, this message translates to:
+  /// **'VERIFYING'**
+  String get railShortVerifying;
+
+  /// State word on the sidebar device card.
+  ///
+  /// In en, this message translates to:
+  /// **'DISCONNECTED'**
+  String get railShortDisconnected;
+
+  /// State word on the sidebar device card.
+  ///
+  /// In en, this message translates to:
+  /// **'BLOCKED'**
+  String get railShortBlocked;
+
+  /// State word on the sidebar device card.
+  ///
+  /// In en, this message translates to:
+  /// **'NO SERVER'**
+  String get railShortNoServer;
+
+  /// State word on the sidebar device card.
+  ///
+  /// In en, this message translates to:
+  /// **'RECONNECTING'**
+  String get railShortReconnecting;
+
+  /// State word on the sidebar device card.
+  ///
+  /// In en, this message translates to:
+  /// **'SWITCHING'**
+  String get railShortSwitching;
+
+  /// Device card: disconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'ready'**
+  String get railMetaReady;
+
+  /// Device card: traffic held.
+  ///
+  /// In en, this message translates to:
+  /// **'held'**
+  String get railMetaHeld;
+
+  /// Device card: no server. ID and ZH are not on the board.
+  ///
+  /// In en, this message translates to:
+  /// **'none'**
+  String get railMetaNone;
+
+  /// Device card: tunnel lost.
+  ///
+  /// In en, this message translates to:
+  /// **'lost'**
+  String get railMetaLost;
+
+  /// Device card: could not reach.
+  ///
+  /// In en, this message translates to:
+  /// **'failed'**
+  String get railMetaFailed;
+
+  /// Device card: waking up. ID and ZH are not on the board.
+  ///
+  /// In en, this message translates to:
+  /// **'waking'**
+  String get railMetaWaking;
+
+  /// Device card: switching servers.
+  ///
+  /// In en, this message translates to:
+  /// **'verifying'**
+  String get railMetaVerifying;
+
+  /// Device card: retrying.
+  ///
+  /// In en, this message translates to:
+  /// **'try {attempt} / {max}'**
+  String railMetaTry(int attempt, int max);
+
+  /// The logo's bubble after one poke. The board keeps it in English in every language.
+  ///
+  /// In en, this message translates to:
+  /// **'hi!'**
+  String get logoPokeHi;
+
+  /// The logo's bubble after two or three quick pokes.
+  ///
+  /// In en, this message translates to:
+  /// **'hmm?'**
+  String get logoPokeHmm;
+
+  /// The logo's bubble after four quick pokes.
+  ///
+  /// In en, this message translates to:
+  /// **'hey! i\'m working here'**
+  String get logoPokeAngry;
 }
 
 class _AppLocalizationsDelegate

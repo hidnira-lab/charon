@@ -4954,4 +4954,81 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get railChipOff => 'OFF';
+
+  @override
+  String get railExpand => 'Expand sidebar';
+
+  @override
+  String get railCollapse => 'Collapse sidebar';
+
+  @override
+  String get railMain => 'Main';
+
+  @override
+  String get railMainExpanded => 'Main, expanded';
+
+  @override
+  String get railServersSub => 'profiles · sync';
+
+  @override
+  String get railSettingsSub => 'failsafe · app';
+
+  @override
+  String get railThisUnit => 'THIS UNIT · WINDOWS';
+
+  @override
+  String get railShortConnected => 'CONNECTED';
+
+  @override
+  String get railShortVerifying => 'VERIFYING';
+
+  @override
+  String get railShortDisconnected => 'DISCONNECTED';
+
+  @override
+  String get railShortBlocked => 'BLOCKED';
+
+  @override
+  String get railShortNoServer => 'NO SERVER';
+
+  @override
+  String get railShortReconnecting => 'RECONNECTING';
+
+  @override
+  String get railShortSwitching => 'SWITCHING';
+
+  @override
+  String get railMetaReady => 'ready';
+
+  @override
+  String get railMetaHeld => 'held';
+
+  @override
+  String get railMetaNone => 'none';
+
+  @override
+  String get railMetaLost => 'lost';
+
+  @override
+  String get railMetaFailed => 'failed';
+
+  @override
+  String get railMetaWaking => 'waking';
+
+  @override
+  String get railMetaVerifying => 'verifying';
+
+  @override
+  String railMetaTry(int attempt, int max) {
+    return 'try $attempt / $max';
+  }
+
+  @override
+  String get logoPokeHi => 'hi!';
+
+  @override
+  String get logoPokeHmm => 'hmm?';
+
+  @override
+  String get logoPokeAngry => 'hey! i\'m working here';
 }

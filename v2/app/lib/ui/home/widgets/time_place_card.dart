@@ -11,6 +11,7 @@ import '../../../theme/theme.dart';
 import '../../common/notch_box.dart';
 import '../../common/pixel_flag.dart';
 import 'home_scene.dart';
+import '../../common/line_icons.dart';
 
 /// Time & Place Card matching HomeDesktop board (558 x 364 px).
 class TimePlaceCard extends StatelessWidget {
@@ -102,13 +103,10 @@ class TimePlaceCard extends StatelessWidget {
                             const SizedBox(height: CharonSpacing.s2),
                             Row(
                               children: [
-                                Icon(
-                                  Icons.location_on_rounded,
-                                  size: 16.0,
-                                  color: colors.accentText,
-                                ),
+                                LineIcon(LineIcons.pin, size: 16.0, color: colors.accentText),
                                 const SizedBox(width: CharonSpacing.s2),
-                                Expanded(
+                                // The flag sits right after the city, as on the board.
+                                Flexible(
                                   child: Text(
                                     l10n.homeLocation(controller.city),
                                     style: CharonTypography.body.copyWith(

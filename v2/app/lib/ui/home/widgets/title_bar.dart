@@ -4,6 +4,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/theme.dart';
 import '../../common/ghost.dart';
 import '../../common/glass_card.dart';
+import '../../common/line_icons.dart';
 
 /// Desktop window title bar matching HomeDesktop board (36 px high).
 class TitleBar extends StatelessWidget {
@@ -23,13 +24,14 @@ class TitleBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
+    final light = Theme.of(context).brightness == Brightness.light;
 
     return Container(
       height: 36.0,
       decoration: BoxDecoration(
-        color: colors.surface.withValues(alpha: 0.5),
+        color: light ? const Color(0xA3FFFFFF) : const Color(0x800E0E0E),
         border: Border(
-          bottom: BorderSide(color: colors.divider, width: 1.0),
+          bottom: BorderSide(color: light ? const Color(0x0F000000) : const Color(0x0FFFFFFF), width: 1.0),
         ),
       ),
       padding: const EdgeInsets.only(left: 12.0),
@@ -40,6 +42,7 @@ class TitleBar extends StatelessWidget {
           Text(
             'Charon',
             style: CharonTypography.body.copyWith(
+              fontSize: 16.0,
               fontWeight: FontWeight.w600,
               color: colors.text,
             ),
@@ -51,12 +54,12 @@ class TitleBar extends StatelessWidget {
           const Spacer(),
           // Window action buttons
           _WindowButton(
-            icon: Icons.remove,
+            icon: LineIcons.minimize,
             tooltip: AppLocalizations.of(context)!.dialogQuitHideToTray,
             onPressed: onMinimize,
           ),
           _WindowButton(
-            icon: Icons.close,
+            icon: LineIcons.close,
             tooltip: AppLocalizations.of(context)!.trayMenuQuitCharon,
             onPressed: onClose,
           ),
@@ -73,7 +76,7 @@ class _WindowButton extends StatefulWidget {
     this.onPressed,
   });
 
-  final IconData icon;
+  final LineIcons icon;
   final String tooltip;
   final VoidCallback? onPressed;
 
@@ -99,7 +102,8 @@ class _WindowButtonState extends State<_WindowButton> {
             width: 46.0,
             height: 36.0,
             color: _hovered ? colors.surface2 : Colors.transparent,
-            child: Icon(
+            alignment: Alignment.center,
+            child: LineIcon(
               widget.icon,
               size: 14.0,
               color: _hovered ? colors.text : colors.text2,

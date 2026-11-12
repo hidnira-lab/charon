@@ -193,7 +193,10 @@ const _mark16 = [
 /// The small ghost at the left of the title bar. On a light surface it gets the
 /// dark one pixel outline.
 class LogoMark extends StatelessWidget {
-  const LogoMark({super.key});
+  const LogoMark({super.key, this.scale = 1});
+
+  /// Pixels per cell: 1 in the title bar, 2 on the sidebar's device card.
+  final double scale;
 
   @override
   Widget build(BuildContext context) {
@@ -201,6 +204,7 @@ class LogoMark extends StatelessWidget {
     return PixelSprite(
       rows: _mark16,
       palette: logoColors,
+      scale: scale,
       outline: light ? const Color(0xFF2A2A2A) : null,
     );
   }
