@@ -89,6 +89,14 @@ void main() {
     controller.attachClient(client, initialStatus: ack.status);
     expect(controller.serviceStatus, ServiceStatus.running);
 
+    // Nobody calls subscribeLogs here: attaching must be enough for the log
+    // and throughput feeds to start, or the Telemetry log stays empty.
+    bool hasListeningLine() => controller.coreLogs.any((l) => l.text.contains('charon-service listening'));
+    for (var i = 0; i < 50 && !hasListeningLine(); i++) {
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    }
+    expect(hasListeningLine(), isTrue, reason: 'the controller never received the service core log');
+
     // Add a server with a secret UUID and Reality key, plus enable Kill Switch.
     const secretUuid = '00000000-0000-0000-0000-000000000001';
     const secretPubKey = 'TEST_REALITY_PUBLIC_KEY_DO_NOT_LEAK_0001';

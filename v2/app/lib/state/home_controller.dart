@@ -778,6 +778,29 @@ class HomeController extends ChangeNotifier {
       }
     }));
     unawaited(_refreshConfig());
+    unawaited(_subscribeToFeeds(activeClient));
+  }
+
+  /// The service only pushes throughput and log lines to a client that asked
+  /// for them, and nothing else asks. A service restart gives a new client, so
+  /// this runs on every attach. Lines already in the service's buffers arrive
+  /// right away, which is how the log shows what happened before the window
+  /// opened. The Xray access log is a separate ring, so it needs its own call.
+  Future<void> _subscribeToFeeds(CoreClient client) async {
+    try {
+      await client.subscribe(Subscription(
+        topics: [Topic.TOPIC_THROUGHPUT, Topic.TOPIC_LOGS],
+        logSource: LogSource.LOG_SOURCE_CHARON_CORE,
+        minLevel: LogLevel.LOG_LEVEL_INFO,
+      ));
+      await client.subscribe(Subscription(
+        topics: [Topic.TOPIC_LOGS],
+        logSource: LogSource.LOG_SOURCE_XRAY_ACCESS,
+        minLevel: LogLevel.LOG_LEVEL_INFO,
+      ));
+    } catch (e) {
+      _logError(e);
+    }
   }
 
   Future<List<int>?> requestDiagnosticsBytes() async {
