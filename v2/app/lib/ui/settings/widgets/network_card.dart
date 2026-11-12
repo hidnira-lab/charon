@@ -5,6 +5,7 @@ import '../../../state/home_controller.dart';
 import '../../../theme/theme.dart';
 import '../../common/pixel_icon.dart';
 import '../../common/glass_card.dart';
+import '../../common/sliding_pills.dart';
 
 class NetworkCard extends StatefulWidget {
   const NetworkCard({
@@ -213,28 +214,27 @@ class _NetworkCardState extends State<NetworkCard> {
                 ),
               ),
               const SizedBox(width: 12),
-              // Segmented DEFAULT / CUSTOM
-              Container(
-                height: 30,
-                padding: const EdgeInsets.all(2),
-                decoration: BoxDecoration(
-                  color: colors.surface2,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _SegmentBtn(
-                      label: l10n.settingsDnsDefault,
-                      isSelected: !isCustomDns,
-                      onTap: () => widget.controller.setDnsMode(DnsMode.tunnelDefault),
+              // Segmented DEFAULT / CUSTOM: switched at once, as the board's seg2.
+              SlidingPills(
+                count: 2,
+                slide: false,
+                selected: isCustomDns ? 1 : 0,
+                semanticLabels: [l10n.settingsDnsDefault, l10n.settingsDnsCustom],
+                onSelect: (i) => i == 0 ? widget.controller.setDnsMode(DnsMode.tunnelDefault) : widget.controller.setDnsMode(DnsMode.custom),
+                itemBuilder: (context, i, on, ink) => Container(
+                  height: 30,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  alignment: Alignment.center,
+                  child: Text(
+                    i == 0 ? l10n.settingsDnsDefault : l10n.settingsDnsCustom,
+                    style: TextStyle(
+                      fontFamily: CharonTokens.fontMono,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.6,
+                      color: ink,
                     ),
-                    _SegmentBtn(
-                      label: l10n.settingsDnsCustom,
-                      isSelected: isCustomDns,
-                      onTap: () => widget.controller.setDnsMode(DnsMode.custom),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ],
@@ -391,72 +391,32 @@ class _NetworkCardState extends State<NetworkCard> {
                 ),
               ),
               const SizedBox(width: 12),
-              // Segmented TUN / SYSTEM PROXY
-              Container(
-                height: 30,
-                padding: const EdgeInsets.all(2),
-                decoration: BoxDecoration(
-                  color: colors.surface2,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _SegmentBtn(
-                      label: l10n.settingsConnModeTun,
-                      isSelected: isTun,
-                      onTap: () => widget.controller.setConnectionMode(ConnectionMode.tun),
+              // Segmented TUN / SYSTEM PROXY: switched at once, as the board's seg2.
+              SlidingPills(
+                count: 2,
+                slide: false,
+                selected: isTun ? 0 : 1,
+                semanticLabels: [l10n.settingsConnModeTun, l10n.settingsConnModeProxy],
+                onSelect: (i) => i == 0 ? widget.controller.setConnectionMode(ConnectionMode.tun) : widget.controller.setConnectionMode(ConnectionMode.systemProxy),
+                itemBuilder: (context, i, on, ink) => Container(
+                  height: 30,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  alignment: Alignment.center,
+                  child: Text(
+                    i == 0 ? l10n.settingsConnModeTun : l10n.settingsConnModeProxy,
+                    style: TextStyle(
+                      fontFamily: CharonTokens.fontMono,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.6,
+                      color: ink,
                     ),
-                    _SegmentBtn(
-                      label: l10n.settingsConnModeProxy,
-                      isSelected: !isTun,
-                      onTap: () => widget.controller.setConnectionMode(ConnectionMode.systemProxy),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ],
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _SegmentBtn extends StatelessWidget {
-  const _SegmentBtn({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = CharonColors.of(context);
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: isSelected ? colors.text : Colors.transparent,
-          borderRadius: BorderRadius.circular(6),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontFamily: CharonTokens.fontMono,
-            fontSize: 10,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.06,
-            color: isSelected ? colors.bg : colors.text2,
-          ),
-        ),
       ),
     );
   }

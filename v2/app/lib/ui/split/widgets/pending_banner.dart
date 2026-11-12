@@ -4,6 +4,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
 import '../../common/pixel_icon.dart';
+import '../../common/motion.dart';
 
 class PendingBanner extends StatelessWidget {
   const PendingBanner({
@@ -26,7 +27,8 @@ class PendingBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(width: 8, height: 8, color: colors.transitionFill),
+          // Blinks every 1.2 s while the change waits for the next connect.
+          Blink(period: 1200, child: Container(width: 8, height: 8, color: colors.transitionFill)),
           const SizedBox(width: 10),
           Expanded(
             child: Text(

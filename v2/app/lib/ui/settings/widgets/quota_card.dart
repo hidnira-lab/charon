@@ -5,6 +5,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
 import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
+import '../../common/sliding_pills.dart';
 
 class QuotaCard extends StatefulWidget {
   const QuotaCard({
@@ -115,173 +116,28 @@ class _QuotaCardState extends State<QuotaCard> {
                       ),
                     ),
                     const SizedBox(height: 6),
-                    Container(
-                      height: 38,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: colors.bg,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: colors.controlBorder),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            '>',
-                            style: TextStyle(
-                              fontFamily: CharonTokens.fontMono,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                              color: colors.accentText,
-                            ),
+                    // Out only / in and out: the pill slides (segA), half and half.
+                    SlidingPills(
+                      count: 2,
+                      stretch: true,
+                      selected: isOutOnly ? 0 : 1,
+                      semanticLabels: [l10n.settingsQuotaOutOnly, l10n.settingsQuotaInAndOut],
+                      onSelect: (i) => _saveQuota(i == 0 ? CountsMode.COUNTS_OUT_ONLY : CountsMode.COUNTS_IN_AND_OUT),
+                      itemBuilder: (context, i, on, ink) => Container(
+                        height: 30,
+                        alignment: Alignment.center,
+                        child: Text(
+                          i == 0 ? l10n.settingsQuotaOutOnly : l10n.settingsQuotaInAndOut,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontFamily: CharonTokens.fontMono,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.6,
+                            color: ink,
                           ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: TextField(
-                              controller: _capCtrl,
-                              keyboardType: TextInputType.number,
-                              onChanged: (_) => _saveQuota(counts),
-                              style: TextStyle(
-                                fontFamily: CharonTokens.fontMono,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w700,
-                                color: colors.text,
-                              ),
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                isDense: true,
-                                contentPadding: EdgeInsets.zero,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            'GB',
-                            style: TextStyle(
-                              fontFamily: CharonTokens.fontMono,
-                              fontSize: 11,
-                              color: colors.text3,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 10),
-
-              // Billing Day
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.settingsQuotaBillingDay,
-                      style: TextStyle(
-                        fontFamily: CharonTokens.fontMono,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.08,
-                        color: colors.text2,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Container(
-                      height: 38,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: colors.bg,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: colors.controlBorder),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            '>',
-                            style: TextStyle(
-                              fontFamily: CharonTokens.fontMono,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                              color: colors.accentText,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: TextField(
-                              controller: _dayCtrl,
-                              keyboardType: TextInputType.number,
-                              onChanged: (_) => _saveQuota(counts),
-                              style: TextStyle(
-                                fontFamily: CharonTokens.fontMono,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w700,
-                                color: colors.text,
-                              ),
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                isDense: true,
-                                contentPadding: EdgeInsets.zero,
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            child: Text(
-                              l10n.settingsQuotaEachMonth,
-                              style: TextStyle(
-                                fontFamily: CharonTokens.fontMono,
-                                fontSize: 10,
-                                color: colors.text3,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 10),
-
-              // Counts
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.settingsQuotaCounts,
-                      style: TextStyle(
-                        fontFamily: CharonTokens.fontMono,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.08,
-                        color: colors.text2,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Container(
-                      height: 38,
-                      padding: const EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                        color: colors.surface2,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: _QuotaSegmentBtn(
-                              label: l10n.settingsQuotaOutOnly,
-                              isSelected: isOutOnly,
-                              onTap: () => _saveQuota(CountsMode.COUNTS_OUT_ONLY),
-                            ),
-                          ),
-                          Expanded(
-                            child: _QuotaSegmentBtn(
-                              label: l10n.settingsQuotaInAndOut,
-                              isSelected: !isOutOnly,
-                              onTap: () => _saveQuota(CountsMode.COUNTS_IN_AND_OUT),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ],
@@ -395,44 +251,6 @@ class _QuotaCardState extends State<QuotaCard> {
             ],
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _QuotaSegmentBtn extends StatelessWidget {
-  const _QuotaSegmentBtn({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = CharonColors.of(context);
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: isSelected ? colors.text : Colors.transparent,
-          borderRadius: BorderRadius.circular(6),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontFamily: CharonTokens.fontMono,
-            fontSize: 9,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.06,
-            color: isSelected ? colors.bg : colors.text2,
-          ),
-        ),
       ),
     );
   }

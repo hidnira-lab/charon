@@ -6,6 +6,7 @@ import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
 import 'throughput_chart.dart';
 import '../../common/motion.dart';
+import '../../common/sliding_pills.dart';
 
 /// Throughput card of the Telemetry board: live pill, Chart/Table tabs, the
 /// three readouts, the chart or the last 60 samples, and the legend.
@@ -56,7 +57,7 @@ class _ThroughputCardState extends State<ThroughputCard> {
                       ),
                       child: Row(
                         children: [
-                          Container(width: 6, height: 6, color: live ? colors.connectedFill : colors.idleFill),
+                          Blink(on: live, child: Container(width: 6, height: 6, color: live ? colors.connectedFill : colors.idleFill)),
                           const SizedBox(width: 6),
                           Text(
                             view.liveChip,
@@ -69,15 +70,22 @@ class _ThroughputCardState extends State<ThroughputCard> {
                 ),
                 Semantics(
                   label: l10n.telemetryViewLabel,
-                  child: Container(
-                    padding: const EdgeInsets.all(3),
-                    decoration: BoxDecoration(color: colors.surface2, borderRadius: BorderRadius.circular(10)),
-                    child: Row(
-                      children: [
-                        _tab(colors, l10n.telemetryViewChart, !_table, () => setState(() => _table = false)),
-                        const SizedBox(width: 2),
-                        _tab(colors, l10n.telemetryViewTable, _table, () => setState(() => _table = true)),
-                      ],
+                  // Chart and Table: the dark pill slides across (tsA) and the words tween (tcA).
+                  child: SlidingPills(
+                    count: 2,
+                    selected: _table ? 1 : 0,
+                    pill: colors.text,
+                    ink: colors.bg,
+                    semanticLabels: [l10n.telemetryViewChart, l10n.telemetryViewTable],
+                    onSelect: (i) => setState(() => _table = i == 1),
+                    itemBuilder: (context, i, on, ink) => Container(
+                      width: 60,
+                      height: 28,
+                      alignment: Alignment.center,
+                      child: Text(
+                        i == 0 ? l10n.telemetryViewChart : l10n.telemetryViewTable,
+                        style: monoStyle(ink, 10, bold: true, em: 0.06),
+                      ),
                     ),
                   ),
                 ),
@@ -134,26 +142,6 @@ class _ThroughputCardState extends State<ThroughputCard> {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _tab(CharonColors colors, String label, bool selected, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(7),
-      child: Container(
-        width: 60,
-        height: 28,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: selected ? colors.text : Colors.transparent,
-          borderRadius: BorderRadius.circular(7),
-        ),
-        child: Text(
-          label,
-          style: monoStyle(selected ? colors.bg : colors.text2, 10, bold: true, em: 0.06),
         ),
       ),
     );

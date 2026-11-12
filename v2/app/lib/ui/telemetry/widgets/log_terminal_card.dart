@@ -6,6 +6,8 @@ import '../../../state/access_line.dart';
 import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
 import '../../common/pixel_icon.dart';
+import '../../common/sliding_pills.dart';
+import '../../common/motion.dart';
 
 enum LogFilterLevel { all, info, warn, error }
 
@@ -57,6 +59,9 @@ class LogTerminalCard extends StatefulWidget {
 
 class _LogTerminalCardState extends State<LogTerminalCard> {
   final ScrollController _scrollController = ScrollController();
+
+  /// Set once the source changes: from then on the log box rises in on each change (tlA).
+  bool _switched = false;
   bool _isFollowing = true;
   int _newLinesWhilePaused = 0;
   int _lastRenderedCount = 0;
@@ -68,9 +73,21 @@ class _LogTerminalCardState extends State<LogTerminalCard> {
     _lastRenderedCount = widget.visibleLogs.length;
   }
 
+  /// After a source change the box rises 4 px and fades in, 220 ms after 60 ms.
+  Widget _rise(Widget box) => _switched
+      ? Enter(
+          key: ValueKey(widget.activeSource),
+          offset: const Offset(0, 4),
+          duration: const Duration(milliseconds: 220),
+          delay: const Duration(milliseconds: 60),
+          child: box,
+        )
+      : box;
+
   @override
   void didUpdateWidget(covariant LogTerminalCard oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (oldWidget.activeSource != widget.activeSource) _switched = true;
     final currentCount = widget.visibleLogs.length;
     if (_isFollowing) {
       if (currentCount != _lastRenderedCount) _scrollToBottom();
@@ -144,23 +161,25 @@ class _LogTerminalCardState extends State<LogTerminalCard> {
                     const SizedBox(width: 10),
                     Semantics(
                       label: l10n.telemetryLogSource,
-                      child: Container(
-                        padding: const EdgeInsets.all(3),
-                        decoration: BoxDecoration(color: colors.surface2, borderRadius: BorderRadius.circular(9)),
-                        child: Row(
-                          children: [
-                            _SourceTab(
-                              title: l10n.telemetryTabAccess,
-                              selected: isAccessTab,
-                              onTap: () => widget.onSourceChanged(LogSource.LOG_SOURCE_XRAY_ACCESS),
-                            ),
-                            const SizedBox(width: 2),
-                            _SourceTab(
-                              title: l10n.telemetryTabCore,
-                              selected: !isAccessTab,
-                              onTap: () => widget.onSourceChanged(LogSource.LOG_SOURCE_CHARON_CORE),
-                            ),
-                          ],
+                      // The source pill slides (pSA) and the words tween (pCA).
+                      child: SlidingPills(
+                        count: 2,
+                        selected: isAccessTab ? 0 : 1,
+                        trackRadius: 9,
+                        pillRadius: 6,
+                        pill: colors.text,
+                        ink: colors.bg,
+                        semanticLabels: [l10n.telemetryTabAccess, l10n.telemetryTabCore],
+                        onSelect: (i) => widget.onSourceChanged(
+                            i == 0 ? LogSource.LOG_SOURCE_XRAY_ACCESS : LogSource.LOG_SOURCE_CHARON_CORE),
+                        itemBuilder: (context, i, on, ink) => Container(
+                          height: 24,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          alignment: Alignment.center,
+                          child: Text(
+                            i == 0 ? l10n.telemetryTabAccess : l10n.telemetryTabCore,
+                            style: monoStyle(ink, 9, bold: true, em: 0.06),
+                          ),
                         ),
                       ),
                     ),
@@ -212,7 +231,7 @@ class _LogTerminalCardState extends State<LogTerminalCard> {
               ),
             const SizedBox(height: 8),
             Expanded(
-              child: Semantics(
+              child: _rise(Semantics(
                 label: isAccessTab ? l10n.telemetryXrayLog : l10n.telemetryCoreLog,
                 child: Container(
                   decoration: BoxDecoration(color: colors.bg, borderRadius: BorderRadius.circular(10)),
@@ -227,7 +246,10 @@ class _LogTerminalCardState extends State<LogTerminalCard> {
                           if (hasSkipped && index == 0) return _SkippedPill(count: widget.droppedCount);
                           final i = index - (hasSkipped ? 1 : 0);
                           if (i == logs.length) {
-                            return Text('▌', style: monoStyle(colors.accentText, 11).copyWith(height: 16 / 11));
+                            return Align(
+                              alignment: Alignment.centerLeft,
+                              child: Blink(child: Text('▌', style: monoStyle(colors.accentText, 11).copyWith(height: 16 / 11))),
+                            );
                           }
                           final line = logs[i];
                           if (widget.rawMode) return _RawRow(line: line, access: isAccessTab);
@@ -266,7 +288,7 @@ class _LogTerminalCardState extends State<LogTerminalCard> {
                     ],
                   ),
                 ),
-              ),
+              )),
             ),
             const SizedBox(height: 8),
             Row(
@@ -293,33 +315,6 @@ class _LogTerminalCardState extends State<LogTerminalCard> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _SourceTab extends StatelessWidget {
-  const _SourceTab({required this.title, required this.selected, required this.onTap});
-
-  final String title;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = CharonColors.of(context);
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(6),
-      child: Container(
-        height: 24,
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: selected ? colors.text : Colors.transparent,
-          borderRadius: BorderRadius.circular(6),
-        ),
-        child: Text(title, style: monoStyle(selected ? colors.bg : colors.text2, 9, bold: true, em: 0.06)),
       ),
     );
   }

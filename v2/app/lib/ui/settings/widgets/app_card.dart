@@ -7,6 +7,7 @@ import 'erase_confirm_dialog.dart';
 import '../../../theme/theme.dart';
 import '../../common/pixel_icon.dart';
 import '../../common/glass_card.dart';
+import '../../common/sliding_pills.dart';
 
 class AppCard extends StatelessWidget {
   const AppCard({
@@ -260,42 +261,43 @@ class AppCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Container(
-                      height: 32,
-                      padding: const EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                        color: colors.surface2,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: _ThemeSegmentBtn(
-                              label: l10n.settingsThemeSystem,
-                              icon: PixelIcons.monitor,
-                              isSelected: thm == ThemeMode.system,
-                              onTap: () => controller.setThemeMode(ThemeMode.system),
-                            ),
+                    Builder(builder: (context) {
+                      const modes = [ThemeMode.system, ThemeMode.dark, ThemeMode.light];
+                      final labels = [l10n.settingsThemeSystem, l10n.settingsThemeDark, l10n.settingsThemeLight];
+                      const icons = [PixelIcons.monitor, PixelIcons.moon, PixelIcons.sun];
+                      // The pill slides to the picked theme (segA) while the colours tween.
+                      return SlidingPills(
+                        count: 3,
+                        selected: modes.indexOf(thm),
+                        stretch: true,
+                        semanticLabels: labels,
+                        onSelect: (i) => controller.setThemeMode(modes[i]),
+                        itemBuilder: (context, i, on, ink) => SizedBox(
+                          height: 30,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              PixelIcon(icons[i], size: 14, color: ink),
+                              const SizedBox(width: 6),
+                              Flexible(
+                                child: Text(
+                                  labels[i],
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontFamily: CharonTokens.fontMono,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 0.6,
+                                    color: ink,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          Expanded(
-                            child: _ThemeSegmentBtn(
-                              label: l10n.settingsThemeDark,
-                              icon: PixelIcons.moon,
-                              isSelected: thm == ThemeMode.dark,
-                              onTap: () => controller.setThemeMode(ThemeMode.dark),
-                            ),
-                          ),
-                          Expanded(
-                            child: _ThemeSegmentBtn(
-                              label: l10n.settingsThemeLight,
-                              icon: PixelIcons.sun,
-                              isSelected: thm == ThemeMode.light,
-                              onTap: () => controller.setThemeMode(ThemeMode.light),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                        ),
+                      );
+                    }),
                     const SizedBox(height: 6),
                     Text(
                       thm == ThemeMode.system
@@ -518,57 +520,6 @@ class AppCard extends StatelessWidget {
             ],
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _ThemeSegmentBtn extends StatelessWidget {
-  const _ThemeSegmentBtn({
-    required this.label,
-    required this.icon,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final String label;
-  final String icon;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = CharonColors.of(context);
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: isSelected ? colors.text : Colors.transparent,
-          borderRadius: BorderRadius.circular(6),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            PixelIcon(
-              icon,
-              size: 13,
-              color: isSelected ? colors.bg : colors.text2,
-            ),
-            const SizedBox(width: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontFamily: CharonTokens.fontMono,
-                fontSize: 9,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.06,
-                color: isSelected ? colors.bg : colors.text2,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
