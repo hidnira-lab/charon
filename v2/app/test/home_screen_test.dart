@@ -259,7 +259,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Terhubung'), findsOneWidget);
-      expect(find.text('Putus'), findsOneWidget);
+      expect(find.text('Putuskan'), findsOneWidget);
     });
   });
 }

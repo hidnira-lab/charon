@@ -8535,6 +8535,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'new connection chosen · applies when you save'**
   String get dlgReplaceChosen;
+
+  /// Rail tooltip for the Home screen (board dictionary).
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get navHome;
+
+  /// Language menu: follow the system language (board dictionary).
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get settingsLanguageSystem;
 }
 
 class _AppLocalizationsDelegate

@@ -16,7 +16,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get actionConnect => '连接';
 
   @override
-  String get actionDisconnect => '断开连接';
+  String get actionDisconnect => '断开';
 
   @override
   String get actionCancel => '取消';
@@ -25,7 +25,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get actionRetryNow => '立即重试';
 
   @override
-  String get actionRelease => '释放流量';
+  String get actionRelease => '放行';
 
   @override
   String get actionAddServer => '添加服务器';
@@ -41,18 +41,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String stateConnectedLine2(String ip) {
-    return '出口 $ip · 与服务器匹配';
+    return '出口 $ip · 与服务器一致';
   }
 
   @override
-  String get stateVerifyingTitle => '验证握手';
+  String get stateVerifyingTitle => '正在验证握手';
 
   @override
-  String get stateVerifyingBadge => '正在验证';
+  String get stateVerifyingBadge => '验证中';
 
   @override
   String stateVerifyingLine2(String duration) {
-    return '正在测试真实 Reality 往返 · $duration';
+    return '正在测试真实的 Reality 往返 · $duration';
   }
 
   @override
@@ -62,32 +62,32 @@ class AppLocalizationsZh extends AppLocalizations {
   String get stateDisconnectedBadge => '未连接';
 
   @override
-  String get stateDisconnectedLine2 => '流量直接发出，不经过 Charon';
+  String get stateDisconnectedLine2 => '流量直连，不经过 Charon';
 
   @override
   String get stateBlockedTitle => '流量已拦截';
 
   @override
-  String get stateBlockedBadge => '拦截 · 所有服务器均失败';
+  String get stateBlockedBadge => '已拦截 · 所有服务器均失败';
 
   @override
-  String get stateBlockedLine2 => '无服务器响应 · 断网保护拦截中';
+  String get stateBlockedLine2 => '没有服务器响应 · 断网保护拦截中';
 
   @override
-  String get stateNoServerTitle => '暂无服务器';
+  String get stateNoServerTitle => '尚无服务器';
 
   @override
   String get stateNoServerBadge => '无服务器';
 
   @override
-  String get stateNoServerLine2 => '请添加自建服务器以连接';
+  String get stateNoServerLine2 => '添加一台你自己的服务器即可连接';
 
   @override
-  String get stateReconnectingTitle => '正在重新连接';
+  String get stateReconnectingTitle => '正在重连';
 
   @override
   String stateReconnectingBadge(int attempt, int maxAttempts) {
-    return '重新连接 · 尝试 $attempt / $maxAttempts';
+    return '正在重连 · 第 $attempt/$maxAttempts 次';
   }
 
   @override
@@ -96,29 +96,29 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get stateReconnectingHeldTitle => '正在重新连接';
+  String get stateReconnectingHeldTitle => '正在重连';
 
   @override
   String stateReconnectingHeldBadge(int attempt, int maxAttempts) {
-    return '拦截 · 尝试 $attempt / $maxAttempts';
+    return '已拦截 · 第 $attempt/$maxAttempts 次';
   }
 
   @override
   String stateReconnectingHeldLine2(int attempt, int maxAttempts, int seconds) {
-    return '第 $attempt/$maxAttempts 次 · $seconds 秒后重试 · 流量已拦截';
+    return '第 $attempt/$maxAttempts 次 · $seconds 秒后再试 · 流量已拦截';
   }
 
   @override
   String stateSwitchingTitle(String server) {
-    return '正在切换至 $server';
+    return '正在切换到 $server';
   }
 
   @override
-  String get stateSwitchingBadge => '正在切换 · 正在验证';
+  String get stateSwitchingBadge => '正在切换 · 验证中';
 
   @override
   String stateSwitchingLine2(String previousServer, String server) {
-    return '$previousServer 尝试 5 次失败 · 正在检查 $server';
+    return '$previousServer 失败 5 次 · 正在检查 $server';
   }
 
   @override
@@ -127,14 +127,14 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get stateOnBackupTitle => '已连接至备用节点';
+  String get stateOnBackupTitle => '已连接备用服务器';
 
   @override
-  String get stateOnBackupBadge => '已连接 · 备用节点';
+  String get stateOnBackupBadge => '已连接 · 备用';
 
   @override
   String stateOnBackupLine2(String ip, String server) {
-    return '出口 $ip · 与 $server 匹配';
+    return '出口 $ip · 与 $server 一致';
   }
 
   @override
@@ -146,13 +146,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get stateCouldNotReachBadge => '无法连接';
 
   @override
-  String get stateTunnelLostTitle => '隧道中断';
+  String get stateTunnelLostTitle => '隧道丢失';
 
   @override
-  String get stateTunnelLostBadge => '隧道中断';
+  String get stateTunnelLostBadge => '隧道丢失';
 
   @override
-  String get stateTunnelLostLine2 => '流量直接发出 · 自动重连已关闭';
+  String get stateTunnelLostLine2 => '流量直连 · 自动重连已关闭';
 
   @override
   String get stateWakingUpTitle => '正在唤醒';
@@ -162,17 +162,17 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String stateWakingUpLine2(String server) {
-    return '休眠唤醒后正在检查 $server';
+    return '休眠后正在检查 $server';
   }
 
   @override
   String get stateCheckingNetworkTitle => '已连接';
 
   @override
-  String get stateCheckingNetworkBadge => '已连接 · 正在检查';
+  String get stateCheckingNetworkBadge => '已连接 · 检查中';
 
   @override
-  String get stateCheckingNetworkLine2 => '网络已变更 · 正在检查连接';
+  String get stateCheckingNetworkLine2 => '网络已变化 · 正在检查连接';
 
   @override
   String get stateDisconnectingTitle => '正在断开';
@@ -190,19 +190,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get reasonHandshakeFailed => 'Reality 握手失败';
 
   @override
-  String get reasonEgressMismatch => '出口地址与服务器不匹配';
+  String get reasonEgressMismatch => '出口与服务器不一致';
 
   @override
   String get reasonDnsNotTunnelled => 'DNS 检查失败';
 
   @override
-  String get reasonAdapterFailed => '网络适配器启动失败';
+  String get reasonAdapterFailed => '网卡启动失败';
 
   @override
-  String get reasonPortInUse => '本地端口已被占用';
+  String get reasonPortInUse => '本地端口被占用';
 
   @override
-  String get reasonConfigRejected => '内核更新后配置被拒绝';
+  String get reasonConfigRejected => '核心更新后配置被拒绝';
 
   @override
   String get reasonXrayExited => '内核在启动时停止';
@@ -212,10 +212,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get blockedBannerBody =>
-      'Charon 无法连接至您的任何服务器。在您重试、选择服务器或断开之前，任何流量都不会离开此设备。';
+      'Charon 连不上你的任何一台服务器。在你重试、选择服务器或放行之前，没有流量会离开这台电脑。';
 
   @override
-  String get blockedActionChooseServer => '选择其他服务器';
+  String get blockedActionChooseServer => '换一台服务器';
 
   @override
   String reasonTcpTimeoutDesc(String server) {
@@ -231,10 +231,10 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get reasonAdapterDesc => 'Charon 无法创建网络适配器。';
+  String get reasonAdapterDesc => 'Charon 无法创建自己的网卡。';
 
   @override
-  String get reasonPortInUseDesc => '其他程序占用了 Charon 所需的网络端口。';
+  String get reasonPortInUseDesc => '另一个程序正在占用 Charon 需要的端口。';
 
   @override
   String get reasonDnsDesc => 'DNS 查询未通过隧道发送，因此 Charon 不会判定为已连接。';
@@ -248,7 +248,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get reasonTunnelLostDesc => '隧道已终止且自动重连已关闭，网络流量正直接出网。';
+  String get reasonTunnelLostDesc => '隧道已停止，自动重连也已关闭，所以你的流量正在直连。';
 
   @override
   String get metricsLatency => '延迟';
@@ -1392,10 +1392,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get updOfflineText => '没有隧道时，这里访问 GitHub 常常很慢或被拦截。';
 
   @override
-  String get updTagCore => 'XRAY-CORE · THE ENGINE';
+  String get updTagCore => 'XRAY-CORE · 引擎';
 
   @override
-  String get updTagApp => 'CHARON · THIS APP';
+  String get updTagApp => 'CHARON · 本应用';
 
   @override
   String get updStepsLabel => '更新步骤';
@@ -1439,7 +1439,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String updMetaViaServer(String server) {
-    return '经由 $server，从这里直连 GitHub 很慢';
+    return '经由 $server，这里直连 GitHub 很慢';
   }
 
   @override
@@ -1509,11 +1509,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get updFootDownloading => '你可以继续使用 Charon';
 
   @override
-  String get updFootReadyOnline =>
-      '应用会重启 xray：隧道约断开 2 秒，若 kill switch 关闭，这段时间流量直连';
+  String get updFootReadyOnline => '应用时会重启 xray：隧道中断约 2 秒，断网保护关闭时这段时间会直连';
 
   @override
-  String get updFootReadyOffline => '当前未连接，应用更新不会打断任何东西';
+  String get updFootReadyOffline => '未连接，应用时不会打断任何连接';
 
   @override
   String get updFootQueued => '在无人使用隧道时进行替换';
@@ -1532,7 +1531,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get updFootUnreachable => '没有隧道时这里常常打不开 GitHub · 先连接，或在下方用文件更新';
+  String get updFootUnreachable => '没有隧道时这里常常打不开 GitHub · 先连接，或用下方的文件更新';
 
   @override
   String updFootSigInvalid(String version) {
@@ -1607,7 +1606,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get updLogCopied => '已复制核心日志';
 
   @override
-  String get updFileIdle => '适用于 GitHub 被拦截、隧道也断开的时候。选一个 Charon 发布文件，服务会先检查它。';
+  String get updFileIdle => '适用于 GitHub 被拦截、隧道也断开的时候。选择一个 Charon 版本文件，服务会先校验它。';
 
   @override
   String get updFileSending => '正在发送给服务';
@@ -1693,7 +1692,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get privacyDestinationsTitle => '网络连接目标';
 
   @override
-  String get privacyDestYourServers => '您的服务器';
+  String get privacyDestYourServers => '你的服务器';
 
   @override
   String get privacyDestYourServersDesc =>
@@ -2012,25 +2011,25 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get dlgUnpairKicker => '同步 · 取消配对';
+  String get dlgUnpairKicker => '同步 · 解除配对';
 
   @override
-  String get dlgUnpairHeading => '取消此设备的配对？';
+  String get dlgUnpairHeading => '解除这台设备的配对？';
 
   @override
-  String get dlgUnpairIntro => '此设备将停止同步。加密副本仍保留在同步服务器上，你的其他设备照常工作。';
+  String get dlgUnpairIntro => '这台设备将停止同步。加密副本会留在同步服务器上，你的其他设备照常工作。';
 
   @override
-  String get dlgUnpairNote1 => '此设备上的服务器、规则和设置保持不变';
+  String get dlgUnpairNote1 => '本机上的服务器、规则和设置保持不变';
 
   @override
-  String get dlgUnpairNote2 => 'Charon 暂时无法列出你其他已配对的设备';
+  String get dlgUnpairNote2 => 'Charon 暂时无法列出你的其他已配对设备';
 
   @override
-  String get dlgUnpairNote3 => '随时可用另一台设备的配对码重新配对';
+  String get dlgUnpairNote3 => '随时可以用另一台设备上的配对码重新配对';
 
   @override
-  String get dlgUnpairBtn => '取消配对';
+  String get dlgUnpairBtn => '解除配对';
 
   @override
   String get dlgEraseKicker => '设置 · 清除';
@@ -2042,13 +2041,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dlgEraseIntro => 'Charon 会先断开连接、关闭断网保护，然后删除它在这台电脑上保存的所有内容。';
 
   @override
-  String get dlgEraseRemovedTag => '将删除';
+  String get dlgEraseRemovedTag => '删除';
 
   @override
   String get dlgEraseRemovedWhat => '服务器、规则、设置';
 
   @override
-  String get dlgEraseRemovedSub => '流量计数、设备令牌';
+  String get dlgEraseRemovedSub => '配额计数、设备令牌';
 
   @override
   String get dlgEraseStaysTag => '保留';
@@ -2063,7 +2062,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dlgEraseNote1 => '此操作无法撤销';
 
   @override
-  String get dlgEraseNote2 => '重新配对或从文件恢复，即可找回你的服务器';
+  String get dlgEraseNote2 => '重新配对或从文件恢复即可找回你的服务器';
 
   @override
   String get dlgEraseNote3 => '要移除服务，请卸载 Charon';
@@ -2081,7 +2080,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dlgQuitHideDesc => '窗口关闭 · 托盘图标保留';
 
   @override
-  String get dlgQuitWindowDesc => '重新打开 Charon 之前没有托盘图标';
+  String get dlgQuitWindowDesc => '再次打开 Charon 前没有托盘图标';
 
   @override
   String get dlgQuitDisconnectDesc => '你的应用回到普通网络连接';
@@ -2108,13 +2107,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dlgConflictHeading => '服务器上的副本更新';
 
   @override
-  String get dlgConflictIntro => '另一台设备在本机上次同步之后推送过。现在推送会覆盖那份更新的副本。';
+  String get dlgConflictIntro => '在本机上次同步之后，另一台设备推送过。现在推送会覆盖那份更新的副本。';
 
   @override
   String get dlgConflictPullTitle => '先拉取';
 
   @override
-  String get dlgConflictPullDesc => '会替换本机内容，之后可以再次推送';
+  String get dlgConflictPullDesc => '替换本机内容，之后可以再推送';
 
   @override
   String get dlgConflictPullTag => '安全';
@@ -2126,7 +2125,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dlgConflictOverwriteDesc => '所有已配对设备都会得到本机的副本';
 
   @override
-  String get dlgConflictOverwriteTag => '会覆盖';
+  String get dlgConflictOverwriteTag => '覆盖';
 
   @override
   String get dlgSyncPushKicker => '同步 · 推送';
@@ -2168,10 +2167,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dlgSyncDone => '完成';
 
   @override
-  String get dlgSyncWhatUp => '将上传的内容';
+  String get dlgSyncWhatUp => '上传内容';
 
   @override
-  String get dlgSyncWhatPull => '将替换本机上的内容';
+  String get dlgSyncWhatPull => '将替换本机上的';
 
   @override
   String dlgSyncListProfiles(int count) {
@@ -2193,7 +2192,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dlgSyncListAllRules => '分流规则';
 
   @override
-  String get dlgSyncPushNote1 => '会替换同步服务器上的副本';
+  String get dlgSyncPushNote1 => '替换同步服务器上的副本';
 
   @override
   String get dlgSyncPushNote2 => '上传前在本机加密';
@@ -2202,7 +2201,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dlgSyncPushNote3 => '服务器只会看到密文';
 
   @override
-  String get dlgSyncPullNote1 => '你这里现有的列表会被覆盖';
+  String get dlgSyncPullNote1 => '这里的当前列表会被覆盖';
 
   @override
   String get dlgSyncPullNote2 => '本机的流量统计会保留';
@@ -2250,7 +2249,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dialogQuitTitle => '关闭 Charon';
 
   @override
-  String get dialogQuitSubtitle => '您的隧道运行在 Charon 系统服务中，无需保持窗口开启。';
+  String get dialogQuitSubtitle => '你的隧道运行在 Charon 的服务里，所以没有窗口也能保持开启。';
 
   @override
   String get dialogQuitHideToTray => '隐藏到托盘';
@@ -2259,13 +2258,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dialogQuitHideToTrayDesc => '窗口关闭，UI 在后台继续运行，托盘图标保持常驻。';
 
   @override
-  String get dialogQuitWindowOnly => '仅关闭窗口';
+  String get dialogQuitWindowOnly => '仅退出窗口';
 
   @override
   String get dialogQuitWindowOnlyDesc => '隧道继续保持开启。在重新打开 Charon 前无托盘图标。';
 
   @override
-  String get dialogQuitDisconnect => '断开连接并退出';
+  String get dialogQuitDisconnect => '断开并退出';
 
   @override
   String get dialogQuitDisconnectDesc => '断开当前隧道并完全退出应用程序。';
@@ -2286,7 +2285,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dialogReleaseConfirm => '断开并放行';
 
   @override
-  String get dialogConflictTitle => '服务器副本更新';
+  String get dialogConflictTitle => '服务器上的副本更新';
 
   @override
   String get dialogConflictSubtitle => '自本机上次同步后，其他设备已提交了新的更改。';
@@ -2298,7 +2297,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dialogConflictPullDesc => '下载较新的远程配置并替换本地配置文件和分流规则。';
 
   @override
-  String get dialogConflictOverwrite => '覆盖服务器副本';
+  String get dialogConflictOverwrite => '覆盖服务器上的副本';
 
   @override
   String get dialogConflictOverwriteDesc => '强制上传本地设置并覆盖远程服务器存储。';
@@ -2307,7 +2306,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dialogConflictCancel => '取消';
 
   @override
-  String get dialogUnpairTitle => '解除此设备配对？';
+  String get dialogUnpairTitle => '解除这台设备的配对？';
 
   @override
   String get dialogUnpairSubtitle => '此设备将停止与同步服务器同步数据。';
@@ -2376,23 +2375,23 @@ class AppLocalizationsZh extends AppLocalizations {
   String get androidNotificationDeniedNotice => 'Charon 无法显示流量阻断通知。';
 
   @override
-  String get androidVpnRevokedNotice => 'Android 移除了 Charon 的 VPN 权限。流量正直接出网。';
+  String get androidVpnRevokedNotice => 'Android 移除了 Charon 的 VPN 权限。流量正在直连。';
 
   @override
-  String get androidActionAllowAgain => '重新授权';
+  String get androidActionAllowAgain => '重新允许';
 
   @override
-  String get androidAnotherVpnNotice => '其他 VPN 已接管网络。流量正直接出网。';
+  String get androidAnotherVpnNotice => '另一个 VPN 已接管。流量正在直连。';
 
   @override
-  String get androidStoppedNotice => 'Android 终止了 Charon。在此期间流量可能已直接出网。';
+  String get androidStoppedNotice => 'Android 停止了 Charon。在此期间流量可能已直连。';
 
   @override
   String get androidAlwaysOnVpnTitle => '始终开启的 VPN';
 
   @override
   String get androidAlwaysOnVpnDesc =>
-      '如果 Android 终止 Charon，网络流量可能会直接出网。为获得完整保护，请在系统设置中启用“始终开启的 VPN”并“阻止未使用 VPN 的连接”。';
+      '如果 Android 停止了 Charon，流量可能会直连。要获得完整保护，请在 Android 设置中开启“始终开启的 VPN”和“屏蔽未使用 VPN 的连接”。';
 
   @override
   String get androidOpenVpnSettings => '打开 VPN 设置';
@@ -2407,7 +2406,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dialogVaultPassphraseLabel => '密码短语';
 
   @override
-  String get dialogVaultPassphraseWarning => '如果您丢失了此密码短语，任何人（包括您自己）都无法恢复您的数据。';
+  String get dialogVaultPassphraseWarning => '如果丢失这个密码短语，没有人能恢复你的数据，包括你自己。';
 
   @override
   String get dialogVaultSavedCheckbox => '我已将此密码短语保存在安全的地方';
@@ -2441,7 +2440,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get syncServerKeyLabel => '服务器密钥';
 
   @override
-  String get syncServerKeyHelper => '首次启动同步服务器时显示一次。';
+  String get syncServerKeyHelper => '首次启动同步服务器时只显示一次。';
 
   @override
   String get homeReadLatency => '延迟';
@@ -2815,12 +2814,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String homeBannerHeldTag(int attempt, int max) {
-    return 'Charon 重试期间流量已拦截 · 第 $attempt/$max 次';
+    return '重试期间流量已拦截 · 第 $attempt/$max 次';
   }
 
   @override
   String homeBannerHeldText(String server, String next) {
-    return '$server 不再响应。Charon 每 5 秒重试一次，期间拦截你的流量，然后切换到 $next。';
+    return '$server 停止响应。Charon 每 5 秒重试一次，期间拦截你的流量，之后切换到 $next。';
   }
 
   @override
@@ -2850,7 +2849,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String homeBannerReconnectText(String server, String next) {
-    return '$server 不再响应。Charon 每 5 秒重试一次，然后切换到 $next。断网保护已关闭，期间流量直连。';
+    return '$server 停止响应。Charon 每 5 秒重试一次，之后切换到 $next。断网保护已关闭，期间流量会直连。';
   }
 
   @override
@@ -2860,7 +2859,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String homeBannerFailoverTag(String server) {
-    return '故障转移 · $server 已断开';
+    return '故障转移 · $server 离线';
   }
 
   @override
@@ -2870,7 +2869,7 @@ class AppLocalizationsZh extends AppLocalizations {
     int seconds,
     String next,
   ) {
-    return '$server 在 $seconds 秒内失败 $tries 次。Charon 会用真实往返检查 $next，通过后才显示已连接。';
+    return '$server 在 $seconds 秒内失败 $tries 次。Charon 会先用真实往返检查 $next，再显示已连接。';
   }
 
   @override
@@ -2898,7 +2897,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String homeBannerBackupText(String primary, String time, String server) {
-    return '$primary 于 $time 停止响应。Charon 会保持在 $server，不会自行切回。';
+    return '$primary 于 $time 停止响应。Charon 会留在 $server，不会自动切回。';
   }
 
   @override
@@ -2931,25 +2930,25 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String homeCauseNoAnswer(String server) {
-    return '$server 没有应答。';
+    return '$server 没有响应。';
   }
 
   @override
   String get homeTodoNoAnswer => '请确认服务器正在运行，然后重试。';
 
   @override
-  String get homeCauseHandshake => '服务器有应答，但 Reality 握手失败。';
+  String get homeCauseHandshake => '服务器有响应，但 Reality 握手失败了。';
 
   @override
   String get homeTodoHandshake => '公钥或 SNI 可能不匹配。请检查服务器，然后在这里编辑。';
 
   @override
   String homeCauseEgress(String server) {
-    return '流量没有从 $server 出口。';
+    return '流量从 $server 以外的地方出去了。';
   }
 
   @override
-  String get homeTodoEgress => '出口与服务器匹配之前，Charon 不会显示已连接。';
+  String get homeTodoEgress => '在出口与服务器一致之前，Charon 不会显示已连接。';
 
   @override
   String get homeCauseDns => 'DNS 没有经过隧道。';
@@ -2958,16 +2957,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeTodoDns => 'Charon 不会显示已连接。请检查 DNS 设置，然后重试。';
 
   @override
-  String get homeCauseAdapter => 'Charon 无法创建网络适配器。';
+  String get homeCauseAdapter => 'Charon 无法创建自己的网卡。';
 
   @override
   String get homeTodoAdapter => '请重启 Charon 服务，或用安装程序修复，然后重试。';
 
   @override
-  String get homeCausePort => '另一个程序占用了 Charon 需要的端口。';
+  String get homeCausePort => '另一个程序正在占用 Charon 需要的端口。';
 
   @override
-  String get homeTodoPort => '请关闭该程序或重启电脑，然后重试。';
+  String get homeTodoPort => '请关闭那个程序或重启电脑，然后重试。';
 
   @override
   String homeCauseConfig(String server) {
@@ -2975,7 +2974,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get homeTodoConfig => '请在之前的核心上重试，或编辑服务器。';
+  String get homeTodoConfig => '用之前的核心重试，或编辑服务器。';
 
   @override
   String get androidAnotherVpnTitle => '另一个 VPN 已接管';
@@ -3053,7 +3052,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get syncTagPushing => '推送中';
 
   @override
-  String get syncTextPushing => '先在本机加密再上传。你可以继续使用 Charon。';
+  String get syncTextPushing => '先在本机加密，再上传。你可以继续使用 Charon。';
 
   @override
   String get syncTagPulling => '拉取中';
@@ -3065,7 +3064,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get syncTagConflict => '服务器上的副本更新';
 
   @override
-  String get syncTextConflict => '另一台设备在这台上次同步之后推送过。';
+  String get syncTextConflict => '在本机上次同步之后，另一台设备推送过。';
 
   @override
   String get syncTagUnreachable => '无法连接同步服务器';
@@ -3076,10 +3075,10 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get syncTagCertificate => '证书未通过验证';
+  String get syncTagCertificate => '证书无法验证';
 
   @override
-  String get syncTextCertificate => '无法验证同步服务器的证书。Charon 在发送任何内容之前就已停止。';
+  String get syncTextCertificate => '无法验证同步服务器的证书。Charon 在发送任何内容之前就停止了。';
 
   @override
   String get syncTagWrongPassphrase => '密码短语错误';
@@ -3091,19 +3090,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get syncTagNewerFormat => '格式更新';
 
   @override
-  String get syncTextNewerFormat => '这份副本由更新版本的 Charon 生成。请更新应用后再读取。';
+  String get syncTextNewerFormat => '这个副本由更新版本的 Charon 创建。请更新应用后再读取。';
 
   @override
   String get syncTagWeak => '低于安全下限';
 
   @override
-  String get syncTextWeak => '这份副本使用的密钥参数低于安全下限。请在装有当前版本应用的设备上重新推送。';
+  String get syncTextWeak => '这个副本的密钥参数低于安全下限。请用装有最新版应用的设备重新推送。';
 
   @override
-  String get syncTagOlder => '比预期的旧';
+  String get syncTagOlder => '比预期更旧';
 
   @override
-  String get syncTextOlder => '服务器上的副本比这台设备见过的更旧。Charon 没有拉取它。';
+  String get syncTextOlder => '服务器上的副本比本机见过的还旧。Charon 没有拉取它。';
 
   @override
   String get syncTagFailed => '同步失败';
@@ -4160,7 +4159,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get stpYourCity => '城市 · 可选';
 
   @override
-  String get stpYourHint => '由你输入 · 设备定位以后可在设置中开启，目前保持关闭';
+  String get stpYourHint => '由你输入 · 设备检测可以以后在设置中开启，目前保持关闭';
 
   @override
   String get stpTheme => '主题';
@@ -4176,7 +4175,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String stpCityNow(String city) {
-    return '你现在在 $city';
+    return '你现在在$city';
   }
 
   @override
@@ -4218,7 +4217,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String stpConnLineDone(String place, String ip) {
-    return '你的流量经由 $place 传输 · 出口 $ip 与服务器一致';
+    return '你的流量渡往$place · 出口 $ip 与服务器一致';
   }
 
   @override
@@ -4256,7 +4255,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String stpCheck1Ok(int ms) {
-    return 'tcp 连接 · $ms ms';
+    return 'TCP 连接 · $ms ms';
   }
 
   @override
@@ -4287,7 +4286,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String stpCheck4Ok(String code) {
-    return '查询经由 $code 解析';
+    return '解析经由 $code 应答';
   }
 
   @override
@@ -4663,6 +4662,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get dlgReplaceChosen => '已选新连接 · 保存后生效';
+
+  @override
+  String get navHome => '首页';
+
+  @override
+  String get settingsLanguageSystem => '跟随系统';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -4676,7 +4681,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get actionConnect => '连接';
 
   @override
-  String get actionDisconnect => '断开连接';
+  String get actionDisconnect => '断开';
 
   @override
   String get actionCancel => '取消';
@@ -4685,7 +4690,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get actionRetryNow => '立即重试';
 
   @override
-  String get actionRelease => '释放流量';
+  String get actionRelease => '放行';
 
   @override
   String get actionAddServer => '添加服务器';
@@ -4701,18 +4706,18 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String stateConnectedLine2(String ip) {
-    return '出口 $ip · 与服务器匹配';
+    return '出口 $ip · 与服务器一致';
   }
 
   @override
-  String get stateVerifyingTitle => '验证握手';
+  String get stateVerifyingTitle => '正在验证握手';
 
   @override
-  String get stateVerifyingBadge => '正在验证';
+  String get stateVerifyingBadge => '验证中';
 
   @override
   String stateVerifyingLine2(String duration) {
-    return '正在测试真实 Reality 往返 · $duration';
+    return '正在测试真实的 Reality 往返 · $duration';
   }
 
   @override
@@ -4722,32 +4727,32 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get stateDisconnectedBadge => '未连接';
 
   @override
-  String get stateDisconnectedLine2 => '流量直接发出，不经过 Charon';
+  String get stateDisconnectedLine2 => '流量直连，不经过 Charon';
 
   @override
   String get stateBlockedTitle => '流量已拦截';
 
   @override
-  String get stateBlockedBadge => '拦截 · 所有服务器均失败';
+  String get stateBlockedBadge => '已拦截 · 所有服务器均失败';
 
   @override
-  String get stateBlockedLine2 => '无服务器响应 · 断网保护拦截中';
+  String get stateBlockedLine2 => '没有服务器响应 · 断网保护拦截中';
 
   @override
-  String get stateNoServerTitle => '暂无服务器';
+  String get stateNoServerTitle => '尚无服务器';
 
   @override
   String get stateNoServerBadge => '无服务器';
 
   @override
-  String get stateNoServerLine2 => '请添加自建服务器以连接';
+  String get stateNoServerLine2 => '添加一台你自己的服务器即可连接';
 
   @override
-  String get stateReconnectingTitle => '正在重新连接';
+  String get stateReconnectingTitle => '正在重连';
 
   @override
   String stateReconnectingBadge(int attempt, int maxAttempts) {
-    return '重新连接 · 尝试 $attempt / $maxAttempts';
+    return '正在重连 · 第 $attempt/$maxAttempts 次';
   }
 
   @override
@@ -4756,29 +4761,29 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   }
 
   @override
-  String get stateReconnectingHeldTitle => '正在重新连接';
+  String get stateReconnectingHeldTitle => '正在重连';
 
   @override
   String stateReconnectingHeldBadge(int attempt, int maxAttempts) {
-    return '拦截 · 尝试 $attempt / $maxAttempts';
+    return '已拦截 · 第 $attempt/$maxAttempts 次';
   }
 
   @override
   String stateReconnectingHeldLine2(int attempt, int maxAttempts, int seconds) {
-    return '第 $attempt/$maxAttempts 次 · $seconds 秒后重试 · 流量已拦截';
+    return '第 $attempt/$maxAttempts 次 · $seconds 秒后再试 · 流量已拦截';
   }
 
   @override
   String stateSwitchingTitle(String server) {
-    return '正在切换至 $server';
+    return '正在切换到 $server';
   }
 
   @override
-  String get stateSwitchingBadge => '正在切换 · 正在验证';
+  String get stateSwitchingBadge => '正在切换 · 验证中';
 
   @override
   String stateSwitchingLine2(String previousServer, String server) {
-    return '$previousServer 尝试 5 次失败 · 正在检查 $server';
+    return '$previousServer 失败 5 次 · 正在检查 $server';
   }
 
   @override
@@ -4787,14 +4792,14 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   }
 
   @override
-  String get stateOnBackupTitle => '已连接至备用节点';
+  String get stateOnBackupTitle => '已连接备用服务器';
 
   @override
-  String get stateOnBackupBadge => '已连接 · 备用节点';
+  String get stateOnBackupBadge => '已连接 · 备用';
 
   @override
   String stateOnBackupLine2(String ip, String server) {
-    return '出口 $ip · 与 $server 匹配';
+    return '出口 $ip · 与 $server 一致';
   }
 
   @override
@@ -4806,13 +4811,13 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get stateCouldNotReachBadge => '无法连接';
 
   @override
-  String get stateTunnelLostTitle => '隧道中断';
+  String get stateTunnelLostTitle => '隧道丢失';
 
   @override
-  String get stateTunnelLostBadge => '隧道中断';
+  String get stateTunnelLostBadge => '隧道丢失';
 
   @override
-  String get stateTunnelLostLine2 => '流量直接发出 · 自动重连已关闭';
+  String get stateTunnelLostLine2 => '流量直连 · 自动重连已关闭';
 
   @override
   String get stateWakingUpTitle => '正在唤醒';
@@ -4822,17 +4827,17 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String stateWakingUpLine2(String server) {
-    return '休眠唤醒后正在检查 $server';
+    return '休眠后正在检查 $server';
   }
 
   @override
   String get stateCheckingNetworkTitle => '已连接';
 
   @override
-  String get stateCheckingNetworkBadge => '已连接 · 正在检查';
+  String get stateCheckingNetworkBadge => '已连接 · 检查中';
 
   @override
-  String get stateCheckingNetworkLine2 => '网络已变更 · 正在检查连接';
+  String get stateCheckingNetworkLine2 => '网络已变化 · 正在检查连接';
 
   @override
   String get stateDisconnectingTitle => '正在断开';
@@ -4850,19 +4855,19 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get reasonHandshakeFailed => 'Reality 握手失败';
 
   @override
-  String get reasonEgressMismatch => '出口地址与服务器不匹配';
+  String get reasonEgressMismatch => '出口与服务器不一致';
 
   @override
   String get reasonDnsNotTunnelled => 'DNS 检查失败';
 
   @override
-  String get reasonAdapterFailed => '网络适配器启动失败';
+  String get reasonAdapterFailed => '网卡启动失败';
 
   @override
-  String get reasonPortInUse => '本地端口已被占用';
+  String get reasonPortInUse => '本地端口被占用';
 
   @override
-  String get reasonConfigRejected => '内核更新后配置被拒绝';
+  String get reasonConfigRejected => '核心更新后配置被拒绝';
 
   @override
   String get reasonXrayExited => '内核在启动时停止';
@@ -4872,10 +4877,10 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get blockedBannerBody =>
-      'Charon 无法连接至您的任何服务器。在您重试、选择服务器或断开之前，任何流量都不会离开此设备。';
+      'Charon 连不上你的任何一台服务器。在你重试、选择服务器或放行之前，没有流量会离开这台电脑。';
 
   @override
-  String get blockedActionChooseServer => '选择其他服务器';
+  String get blockedActionChooseServer => '换一台服务器';
 
   @override
   String reasonTcpTimeoutDesc(String server) {
@@ -4891,10 +4896,10 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   }
 
   @override
-  String get reasonAdapterDesc => 'Charon 无法创建网络适配器。';
+  String get reasonAdapterDesc => 'Charon 无法创建自己的网卡。';
 
   @override
-  String get reasonPortInUseDesc => '其他程序占用了 Charon 所需的网络端口。';
+  String get reasonPortInUseDesc => '另一个程序正在占用 Charon 需要的端口。';
 
   @override
   String get reasonDnsDesc => 'DNS 查询未通过隧道发送，因此 Charon 不会判定为已连接。';
@@ -4908,7 +4913,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   }
 
   @override
-  String get reasonTunnelLostDesc => '隧道已终止且自动重连已关闭，网络流量正直接出网。';
+  String get reasonTunnelLostDesc => '隧道已停止，自动重连也已关闭，所以你的流量正在直连。';
 
   @override
   String get metricsLatency => '延迟';
@@ -6052,10 +6057,10 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get updOfflineText => '没有隧道时，这里访问 GitHub 常常很慢或被拦截。';
 
   @override
-  String get updTagCore => 'XRAY-CORE · THE ENGINE';
+  String get updTagCore => 'XRAY-CORE · 引擎';
 
   @override
-  String get updTagApp => 'CHARON · THIS APP';
+  String get updTagApp => 'CHARON · 本应用';
 
   @override
   String get updStepsLabel => '更新步骤';
@@ -6099,7 +6104,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String updMetaViaServer(String server) {
-    return '经由 $server，从这里直连 GitHub 很慢';
+    return '经由 $server，这里直连 GitHub 很慢';
   }
 
   @override
@@ -6169,11 +6174,10 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get updFootDownloading => '你可以继续使用 Charon';
 
   @override
-  String get updFootReadyOnline =>
-      '应用会重启 xray：隧道约断开 2 秒，若 kill switch 关闭，这段时间流量直连';
+  String get updFootReadyOnline => '应用时会重启 xray：隧道中断约 2 秒，断网保护关闭时这段时间会直连';
 
   @override
-  String get updFootReadyOffline => '当前未连接，应用更新不会打断任何东西';
+  String get updFootReadyOffline => '未连接，应用时不会打断任何连接';
 
   @override
   String get updFootQueued => '在无人使用隧道时进行替换';
@@ -6192,7 +6196,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   }
 
   @override
-  String get updFootUnreachable => '没有隧道时这里常常打不开 GitHub · 先连接，或在下方用文件更新';
+  String get updFootUnreachable => '没有隧道时这里常常打不开 GitHub · 先连接，或用下方的文件更新';
 
   @override
   String updFootSigInvalid(String version) {
@@ -6267,7 +6271,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get updLogCopied => '已复制核心日志';
 
   @override
-  String get updFileIdle => '适用于 GitHub 被拦截、隧道也断开的时候。选一个 Charon 发布文件，服务会先检查它。';
+  String get updFileIdle => '适用于 GitHub 被拦截、隧道也断开的时候。选择一个 Charon 版本文件，服务会先校验它。';
 
   @override
   String get updFileSending => '正在发送给服务';
@@ -6353,7 +6357,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get privacyDestinationsTitle => '网络连接目标';
 
   @override
-  String get privacyDestYourServers => '您的服务器';
+  String get privacyDestYourServers => '你的服务器';
 
   @override
   String get privacyDestYourServersDesc =>
@@ -6672,25 +6676,25 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   }
 
   @override
-  String get dlgUnpairKicker => '同步 · 取消配对';
+  String get dlgUnpairKicker => '同步 · 解除配对';
 
   @override
-  String get dlgUnpairHeading => '取消此设备的配对？';
+  String get dlgUnpairHeading => '解除这台设备的配对？';
 
   @override
-  String get dlgUnpairIntro => '此设备将停止同步。加密副本仍保留在同步服务器上，你的其他设备照常工作。';
+  String get dlgUnpairIntro => '这台设备将停止同步。加密副本会留在同步服务器上，你的其他设备照常工作。';
 
   @override
-  String get dlgUnpairNote1 => '此设备上的服务器、规则和设置保持不变';
+  String get dlgUnpairNote1 => '本机上的服务器、规则和设置保持不变';
 
   @override
-  String get dlgUnpairNote2 => 'Charon 暂时无法列出你其他已配对的设备';
+  String get dlgUnpairNote2 => 'Charon 暂时无法列出你的其他已配对设备';
 
   @override
-  String get dlgUnpairNote3 => '随时可用另一台设备的配对码重新配对';
+  String get dlgUnpairNote3 => '随时可以用另一台设备上的配对码重新配对';
 
   @override
-  String get dlgUnpairBtn => '取消配对';
+  String get dlgUnpairBtn => '解除配对';
 
   @override
   String get dlgEraseKicker => '设置 · 清除';
@@ -6702,13 +6706,13 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get dlgEraseIntro => 'Charon 会先断开连接、关闭断网保护，然后删除它在这台电脑上保存的所有内容。';
 
   @override
-  String get dlgEraseRemovedTag => '将删除';
+  String get dlgEraseRemovedTag => '删除';
 
   @override
   String get dlgEraseRemovedWhat => '服务器、规则、设置';
 
   @override
-  String get dlgEraseRemovedSub => '流量计数、设备令牌';
+  String get dlgEraseRemovedSub => '配额计数、设备令牌';
 
   @override
   String get dlgEraseStaysTag => '保留';
@@ -6723,7 +6727,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get dlgEraseNote1 => '此操作无法撤销';
 
   @override
-  String get dlgEraseNote2 => '重新配对或从文件恢复，即可找回你的服务器';
+  String get dlgEraseNote2 => '重新配对或从文件恢复即可找回你的服务器';
 
   @override
   String get dlgEraseNote3 => '要移除服务，请卸载 Charon';
@@ -6741,7 +6745,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get dlgQuitHideDesc => '窗口关闭 · 托盘图标保留';
 
   @override
-  String get dlgQuitWindowDesc => '重新打开 Charon 之前没有托盘图标';
+  String get dlgQuitWindowDesc => '再次打开 Charon 前没有托盘图标';
 
   @override
   String get dlgQuitDisconnectDesc => '你的应用回到普通网络连接';
@@ -6768,13 +6772,13 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get dlgConflictHeading => '服务器上的副本更新';
 
   @override
-  String get dlgConflictIntro => '另一台设备在本机上次同步之后推送过。现在推送会覆盖那份更新的副本。';
+  String get dlgConflictIntro => '在本机上次同步之后，另一台设备推送过。现在推送会覆盖那份更新的副本。';
 
   @override
   String get dlgConflictPullTitle => '先拉取';
 
   @override
-  String get dlgConflictPullDesc => '会替换本机内容，之后可以再次推送';
+  String get dlgConflictPullDesc => '替换本机内容，之后可以再推送';
 
   @override
   String get dlgConflictPullTag => '安全';
@@ -6786,7 +6790,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get dlgConflictOverwriteDesc => '所有已配对设备都会得到本机的副本';
 
   @override
-  String get dlgConflictOverwriteTag => '会覆盖';
+  String get dlgConflictOverwriteTag => '覆盖';
 
   @override
   String get dlgSyncPushKicker => '同步 · 推送';
@@ -6828,10 +6832,10 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get dlgSyncDone => '完成';
 
   @override
-  String get dlgSyncWhatUp => '将上传的内容';
+  String get dlgSyncWhatUp => '上传内容';
 
   @override
-  String get dlgSyncWhatPull => '将替换本机上的内容';
+  String get dlgSyncWhatPull => '将替换本机上的';
 
   @override
   String dlgSyncListProfiles(int count) {
@@ -6853,7 +6857,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get dlgSyncListAllRules => '分流规则';
 
   @override
-  String get dlgSyncPushNote1 => '会替换同步服务器上的副本';
+  String get dlgSyncPushNote1 => '替换同步服务器上的副本';
 
   @override
   String get dlgSyncPushNote2 => '上传前在本机加密';
@@ -6862,7 +6866,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get dlgSyncPushNote3 => '服务器只会看到密文';
 
   @override
-  String get dlgSyncPullNote1 => '你这里现有的列表会被覆盖';
+  String get dlgSyncPullNote1 => '这里的当前列表会被覆盖';
 
   @override
   String get dlgSyncPullNote2 => '本机的流量统计会保留';
@@ -6910,7 +6914,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get dialogQuitTitle => '关闭 Charon';
 
   @override
-  String get dialogQuitSubtitle => '您的隧道运行在 Charon 系统服务中，无需保持窗口开启。';
+  String get dialogQuitSubtitle => '你的隧道运行在 Charon 的服务里，所以没有窗口也能保持开启。';
 
   @override
   String get dialogQuitHideToTray => '隐藏到托盘';
@@ -6919,13 +6923,13 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get dialogQuitHideToTrayDesc => '窗口关闭，UI 在后台继续运行，托盘图标保持常驻。';
 
   @override
-  String get dialogQuitWindowOnly => '仅关闭窗口';
+  String get dialogQuitWindowOnly => '仅退出窗口';
 
   @override
   String get dialogQuitWindowOnlyDesc => '隧道继续保持开启。在重新打开 Charon 前无托盘图标。';
 
   @override
-  String get dialogQuitDisconnect => '断开连接并退出';
+  String get dialogQuitDisconnect => '断开并退出';
 
   @override
   String get dialogQuitDisconnectDesc => '断开当前隧道并完全退出应用程序。';
@@ -6946,7 +6950,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get dialogReleaseConfirm => '断开并放行';
 
   @override
-  String get dialogConflictTitle => '服务器副本更新';
+  String get dialogConflictTitle => '服务器上的副本更新';
 
   @override
   String get dialogConflictSubtitle => '自本机上次同步后，其他设备已提交了新的更改。';
@@ -6958,7 +6962,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get dialogConflictPullDesc => '下载较新的远程配置并替换本地配置文件和分流规则。';
 
   @override
-  String get dialogConflictOverwrite => '覆盖服务器副本';
+  String get dialogConflictOverwrite => '覆盖服务器上的副本';
 
   @override
   String get dialogConflictOverwriteDesc => '强制上传本地设置并覆盖远程服务器存储。';
@@ -6967,7 +6971,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get dialogConflictCancel => '取消';
 
   @override
-  String get dialogUnpairTitle => '解除此设备配对？';
+  String get dialogUnpairTitle => '解除这台设备的配对？';
 
   @override
   String get dialogUnpairSubtitle => '此设备将停止与同步服务器同步数据。';
@@ -7036,23 +7040,23 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get androidNotificationDeniedNotice => 'Charon 无法显示流量阻断通知。';
 
   @override
-  String get androidVpnRevokedNotice => 'Android 移除了 Charon 的 VPN 权限。流量正直接出网。';
+  String get androidVpnRevokedNotice => 'Android 移除了 Charon 的 VPN 权限。流量正在直连。';
 
   @override
-  String get androidActionAllowAgain => '重新授权';
+  String get androidActionAllowAgain => '重新允许';
 
   @override
-  String get androidAnotherVpnNotice => '其他 VPN 已接管网络。流量正直接出网。';
+  String get androidAnotherVpnNotice => '另一个 VPN 已接管。流量正在直连。';
 
   @override
-  String get androidStoppedNotice => 'Android 终止了 Charon。在此期间流量可能已直接出网。';
+  String get androidStoppedNotice => 'Android 停止了 Charon。在此期间流量可能已直连。';
 
   @override
   String get androidAlwaysOnVpnTitle => '始终开启的 VPN';
 
   @override
   String get androidAlwaysOnVpnDesc =>
-      '如果 Android 终止 Charon，网络流量可能会直接出网。为获得完整保护，请在系统设置中启用“始终开启的 VPN”并“阻止未使用 VPN 的连接”。';
+      '如果 Android 停止了 Charon，流量可能会直连。要获得完整保护，请在 Android 设置中开启“始终开启的 VPN”和“屏蔽未使用 VPN 的连接”。';
 
   @override
   String get androidOpenVpnSettings => '打开 VPN 设置';
@@ -7067,7 +7071,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get dialogVaultPassphraseLabel => '密码短语';
 
   @override
-  String get dialogVaultPassphraseWarning => '如果您丢失了此密码短语，任何人（包括您自己）都无法恢复您的数据。';
+  String get dialogVaultPassphraseWarning => '如果丢失这个密码短语，没有人能恢复你的数据，包括你自己。';
 
   @override
   String get dialogVaultSavedCheckbox => '我已将此密码短语保存在安全的地方';
@@ -7101,7 +7105,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get syncServerKeyLabel => '服务器密钥';
 
   @override
-  String get syncServerKeyHelper => '首次启动同步服务器时显示一次。';
+  String get syncServerKeyHelper => '首次启动同步服务器时只显示一次。';
 
   @override
   String get homeReadLatency => '延迟';
@@ -7475,12 +7479,12 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String homeBannerHeldTag(int attempt, int max) {
-    return 'Charon 重试期间流量已拦截 · 第 $attempt/$max 次';
+    return '重试期间流量已拦截 · 第 $attempt/$max 次';
   }
 
   @override
   String homeBannerHeldText(String server, String next) {
-    return '$server 不再响应。Charon 每 5 秒重试一次，期间拦截你的流量，然后切换到 $next。';
+    return '$server 停止响应。Charon 每 5 秒重试一次，期间拦截你的流量，之后切换到 $next。';
   }
 
   @override
@@ -7510,7 +7514,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String homeBannerReconnectText(String server, String next) {
-    return '$server 不再响应。Charon 每 5 秒重试一次，然后切换到 $next。断网保护已关闭，期间流量直连。';
+    return '$server 停止响应。Charon 每 5 秒重试一次，之后切换到 $next。断网保护已关闭，期间流量会直连。';
   }
 
   @override
@@ -7520,7 +7524,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String homeBannerFailoverTag(String server) {
-    return '故障转移 · $server 已断开';
+    return '故障转移 · $server 离线';
   }
 
   @override
@@ -7530,7 +7534,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
     int seconds,
     String next,
   ) {
-    return '$server 在 $seconds 秒内失败 $tries 次。Charon 会用真实往返检查 $next，通过后才显示已连接。';
+    return '$server 在 $seconds 秒内失败 $tries 次。Charon 会先用真实往返检查 $next，再显示已连接。';
   }
 
   @override
@@ -7558,7 +7562,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String homeBannerBackupText(String primary, String time, String server) {
-    return '$primary 于 $time 停止响应。Charon 会保持在 $server，不会自行切回。';
+    return '$primary 于 $time 停止响应。Charon 会留在 $server，不会自动切回。';
   }
 
   @override
@@ -7591,25 +7595,25 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String homeCauseNoAnswer(String server) {
-    return '$server 没有应答。';
+    return '$server 没有响应。';
   }
 
   @override
   String get homeTodoNoAnswer => '请确认服务器正在运行，然后重试。';
 
   @override
-  String get homeCauseHandshake => '服务器有应答，但 Reality 握手失败。';
+  String get homeCauseHandshake => '服务器有响应，但 Reality 握手失败了。';
 
   @override
   String get homeTodoHandshake => '公钥或 SNI 可能不匹配。请检查服务器，然后在这里编辑。';
 
   @override
   String homeCauseEgress(String server) {
-    return '流量没有从 $server 出口。';
+    return '流量从 $server 以外的地方出去了。';
   }
 
   @override
-  String get homeTodoEgress => '出口与服务器匹配之前，Charon 不会显示已连接。';
+  String get homeTodoEgress => '在出口与服务器一致之前，Charon 不会显示已连接。';
 
   @override
   String get homeCauseDns => 'DNS 没有经过隧道。';
@@ -7618,16 +7622,16 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get homeTodoDns => 'Charon 不会显示已连接。请检查 DNS 设置，然后重试。';
 
   @override
-  String get homeCauseAdapter => 'Charon 无法创建网络适配器。';
+  String get homeCauseAdapter => 'Charon 无法创建自己的网卡。';
 
   @override
   String get homeTodoAdapter => '请重启 Charon 服务，或用安装程序修复，然后重试。';
 
   @override
-  String get homeCausePort => '另一个程序占用了 Charon 需要的端口。';
+  String get homeCausePort => '另一个程序正在占用 Charon 需要的端口。';
 
   @override
-  String get homeTodoPort => '请关闭该程序或重启电脑，然后重试。';
+  String get homeTodoPort => '请关闭那个程序或重启电脑，然后重试。';
 
   @override
   String homeCauseConfig(String server) {
@@ -7635,7 +7639,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   }
 
   @override
-  String get homeTodoConfig => '请在之前的核心上重试，或编辑服务器。';
+  String get homeTodoConfig => '用之前的核心重试，或编辑服务器。';
 
   @override
   String get androidAnotherVpnTitle => '另一个 VPN 已接管';
@@ -7713,7 +7717,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get syncTagPushing => '推送中';
 
   @override
-  String get syncTextPushing => '先在本机加密再上传。你可以继续使用 Charon。';
+  String get syncTextPushing => '先在本机加密，再上传。你可以继续使用 Charon。';
 
   @override
   String get syncTagPulling => '拉取中';
@@ -7725,7 +7729,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get syncTagConflict => '服务器上的副本更新';
 
   @override
-  String get syncTextConflict => '另一台设备在这台上次同步之后推送过。';
+  String get syncTextConflict => '在本机上次同步之后，另一台设备推送过。';
 
   @override
   String get syncTagUnreachable => '无法连接同步服务器';
@@ -7736,10 +7740,10 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   }
 
   @override
-  String get syncTagCertificate => '证书未通过验证';
+  String get syncTagCertificate => '证书无法验证';
 
   @override
-  String get syncTextCertificate => '无法验证同步服务器的证书。Charon 在发送任何内容之前就已停止。';
+  String get syncTextCertificate => '无法验证同步服务器的证书。Charon 在发送任何内容之前就停止了。';
 
   @override
   String get syncTagWrongPassphrase => '密码短语错误';
@@ -7751,19 +7755,19 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get syncTagNewerFormat => '格式更新';
 
   @override
-  String get syncTextNewerFormat => '这份副本由更新版本的 Charon 生成。请更新应用后再读取。';
+  String get syncTextNewerFormat => '这个副本由更新版本的 Charon 创建。请更新应用后再读取。';
 
   @override
   String get syncTagWeak => '低于安全下限';
 
   @override
-  String get syncTextWeak => '这份副本使用的密钥参数低于安全下限。请在装有当前版本应用的设备上重新推送。';
+  String get syncTextWeak => '这个副本的密钥参数低于安全下限。请用装有最新版应用的设备重新推送。';
 
   @override
-  String get syncTagOlder => '比预期的旧';
+  String get syncTagOlder => '比预期更旧';
 
   @override
-  String get syncTextOlder => '服务器上的副本比这台设备见过的更旧。Charon 没有拉取它。';
+  String get syncTextOlder => '服务器上的副本比本机见过的还旧。Charon 没有拉取它。';
 
   @override
   String get syncTagFailed => '同步失败';
@@ -8820,7 +8824,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get stpYourCity => '城市 · 可选';
 
   @override
-  String get stpYourHint => '由你输入 · 设备定位以后可在设置中开启，目前保持关闭';
+  String get stpYourHint => '由你输入 · 设备检测可以以后在设置中开启，目前保持关闭';
 
   @override
   String get stpTheme => '主题';
@@ -8836,7 +8840,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String stpCityNow(String city) {
-    return '你现在在 $city';
+    return '你现在在$city';
   }
 
   @override
@@ -8878,7 +8882,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String stpConnLineDone(String place, String ip) {
-    return '你的流量经由 $place 传输 · 出口 $ip 与服务器一致';
+    return '你的流量渡往$place · 出口 $ip 与服务器一致';
   }
 
   @override
@@ -8916,7 +8920,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String stpCheck1Ok(int ms) {
-    return 'tcp 连接 · $ms ms';
+    return 'TCP 连接 · $ms ms';
   }
 
   @override
@@ -8947,7 +8951,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String stpCheck4Ok(String code) {
-    return '查询经由 $code 解析';
+    return '解析经由 $code 应答';
   }
 
   @override
@@ -9323,4 +9327,10 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get dlgReplaceChosen => '已选新连接 · 保存后生效';
+
+  @override
+  String get navHome => '首页';
+
+  @override
+  String get settingsLanguageSystem => '跟随系统';
 }

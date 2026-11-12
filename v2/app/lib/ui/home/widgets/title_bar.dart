@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/theme.dart';
 import '../../common/ghost.dart';
 import '../../common/glass_card.dart';
@@ -51,12 +52,12 @@ class TitleBar extends StatelessWidget {
           // Window action buttons
           _WindowButton(
             icon: Icons.remove,
-            tooltip: 'Hide to tray',
+            tooltip: AppLocalizations.of(context)!.dialogQuitHideToTray,
             onPressed: onMinimize,
           ),
           _WindowButton(
             icon: Icons.close,
-            tooltip: 'Quit Charon',
+            tooltip: AppLocalizations.of(context)!.trayMenuQuitCharon,
             onPressed: onClose,
           ),
         ],

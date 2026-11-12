@@ -4936,4 +4936,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get dlgReplaceChosen =>
       'new connection chosen · applies when you save';
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get settingsLanguageSystem => 'System';
 }

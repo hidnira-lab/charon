@@ -57,47 +57,47 @@ void main() {
       expect(l10n.stateTunnelLostTitle, 'Tunnel lost');
     });
 
-    test('Indonesian translations use casual tone and keep tech terms', () async {
+    test('Indonesian translations follow the Design artifact dictionary', () async {
       final l10n = await AppLocalizations.delegate.load(const Locale('id'));
 
       expect(l10n.appTitle, 'Charon');
-      expect(l10n.actionConnect, 'Sambung');
-      expect(l10n.actionDisconnect, 'Putus');
+      expect(l10n.actionConnect, 'Hubungkan');
+      expect(l10n.actionDisconnect, 'Putuskan');
       expect(l10n.actionCancel, 'Batal');
       expect(l10n.actionRetryNow, 'Coba lagi');
       expect(l10n.actionRelease, 'Lepas');
 
       expect(l10n.stateConnectedTitle, 'Terhubung');
       expect(l10n.stateConnectedBadge, 'TERHUBUNG · TERVERIFIKASI');
-      expect(l10n.stateConnectedLine2('203.0.113.1'), 'egress 203.0.113.1 · cocok dengan server');
+      expect(l10n.stateConnectedLine2('203.0.113.1'), 'egress 203.0.113.1 · sesuai server');
 
-      expect(l10n.stateBlockedTitle, 'Traffic ditahan');
-      expect(l10n.stateBlockedBadge, 'TAHAN · SEMUA SERVER GAGAL');
+      expect(l10n.stateBlockedTitle, 'Trafik ditahan');
+      expect(l10n.stateBlockedBadge, 'DITAHAN · SEMUA SERVER GAGAL');
 
-      expect(l10n.stateTunnelLostTitle, 'Tunnel terputus');
+      expect(l10n.stateTunnelLostTitle, 'Tunnel hilang');
     });
 
-    test('Chinese translations follow spec terminology and full width punctuation', () async {
+    test('Chinese translations follow the Design artifact dictionary', () async {
       final l10n = await AppLocalizations.delegate.load(
         const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
       );
 
       expect(l10n.appTitle, 'Charon');
       expect(l10n.actionConnect, '连接');
-      expect(l10n.actionDisconnect, '断开连接');
+      expect(l10n.actionDisconnect, '断开');
       expect(l10n.actionCancel, '取消');
       expect(l10n.actionRetryNow, '立即重试');
-      expect(l10n.actionRelease, '释放流量');
+      expect(l10n.actionRelease, '放行');
 
       expect(l10n.stateConnectedTitle, '已连接');
       expect(l10n.stateConnectedBadge, '已连接 · 已验证');
-      expect(l10n.stateConnectedLine2('203.0.113.1'), '出口 203.0.113.1 · 与服务器匹配');
+      expect(l10n.stateConnectedLine2('203.0.113.1'), '出口 203.0.113.1 · 与服务器一致');
 
       expect(l10n.stateBlockedTitle, '流量已拦截');
-      expect(l10n.stateBlockedBadge, '拦截 · 所有服务器均失败');
+      expect(l10n.stateBlockedBadge, '已拦截 · 所有服务器均失败');
 
       expect(l10n.stateReconnectingLine2('SRV-01', 3), 'SRV-01 无响应 · 3 秒后重试');
-      expect(l10n.stateTunnelLostTitle, '隧道中断');
+      expect(l10n.stateTunnelLostTitle, '隧道丢失');
     });
   });
 }

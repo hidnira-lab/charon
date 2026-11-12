@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
 import '../../../state/ui_state.dart';
 import '../../../theme/theme.dart';
@@ -34,6 +35,7 @@ class RailNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final active = controller != null ? controller!.activeTabIndex : selectedIndex;
 
     return Container(
@@ -71,7 +73,7 @@ class RailNav extends StatelessWidget {
           // Nav Items
           _RailItem(
             icon: Icons.home_rounded,
-            tooltip: 'Home',
+            tooltip: l10n.navHome,
             isActive: active == 0,
             onTap: onTabSelected != null
                 ? () => onTabSelected!(0)
@@ -80,7 +82,7 @@ class RailNav extends StatelessWidget {
           const SizedBox(height: CharonSpacing.s2),
           _RailItem(
             icon: Icons.dns_rounded,
-            tooltip: 'Servers',
+            tooltip: l10n.serversTitle,
             isActive: active == 1,
             onTap: onTabSelected != null
                 ? () => onTabSelected!(1)
@@ -89,7 +91,7 @@ class RailNav extends StatelessWidget {
           const SizedBox(height: CharonSpacing.s2),
           _RailItem(
             icon: Icons.alt_route_rounded,
-            tooltip: 'Split tunnel',
+            tooltip: l10n.splitTitle,
             isActive: active == 2,
             onTap: onTabSelected != null
                 ? () => onTabSelected!(2)
@@ -98,7 +100,7 @@ class RailNav extends StatelessWidget {
           const SizedBox(height: CharonSpacing.s2),
           _RailItem(
             icon: Icons.query_stats_rounded,
-            tooltip: 'Telemetry',
+            tooltip: l10n.telemetryTitle,
             isActive: active == 3,
             onTap: onTabSelected != null
                 ? () => onTabSelected!(3)
@@ -107,7 +109,7 @@ class RailNav extends StatelessWidget {
           const Spacer(),
           _RailItem(
             icon: Icons.settings_rounded,
-            tooltip: 'Settings',
+            tooltip: l10n.settingsTitle,
             isActive: active == 4,
             onTap: onTabSelected != null
                 ? () => onTabSelected!(4)

@@ -13,10 +13,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get appTitle => 'Charon';
 
   @override
-  String get actionConnect => 'Sambung';
+  String get actionConnect => 'Hubungkan';
 
   @override
-  String get actionDisconnect => 'Putus';
+  String get actionDisconnect => 'Putuskan';
 
   @override
   String get actionCancel => 'Batal';
@@ -31,7 +31,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get actionAddServer => 'Tambah server';
 
   @override
-  String get actionSwitchNow => 'Ganti sekarang';
+  String get actionSwitchNow => 'Pindah sekarang';
 
   @override
   String get stateConnectedTitle => 'Terhubung';
@@ -41,18 +41,18 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String stateConnectedLine2(String ip) {
-    return 'egress $ip · cocok dengan server';
+    return 'egress $ip · sesuai server';
   }
 
   @override
-  String get stateVerifyingTitle => 'Verifikasi handshake';
+  String get stateVerifyingTitle => 'Memverifikasi handshake';
 
   @override
-  String get stateVerifyingBadge => 'VERIFIKASI';
+  String get stateVerifyingBadge => 'MEMVERIFIKASI';
 
   @override
   String stateVerifyingLine2(String duration) {
-    return 'menguji round trip Reality nyata · $duration';
+    return 'menguji round trip Reality asli · $duration';
   }
 
   @override
@@ -63,39 +63,37 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get stateDisconnectedLine2 =>
-      'traffic langsung keluar, tidak lewat Charon';
+      'trafik lewat langsung, tidak lewat Charon';
 
   @override
-  String get stateBlockedTitle => 'Traffic ditahan';
+  String get stateBlockedTitle => 'Trafik ditahan';
 
   @override
-  String get stateBlockedBadge => 'TAHAN · SEMUA SERVER GAGAL';
+  String get stateBlockedBadge => 'DITAHAN · SEMUA SERVER GAGAL';
 
   @override
-  String get stateBlockedLine2 =>
-      'tidak ada server merespons · kill switch menahan';
+  String get stateBlockedLine2 => 'server tak menjawab · trafik ditahan';
 
   @override
   String get stateNoServerTitle => 'Belum ada server';
 
   @override
-  String get stateNoServerBadge => 'BELUM ADA SERVER';
+  String get stateNoServerBadge => 'TANPA SERVER';
 
   @override
-  String get stateNoServerLine2 =>
-      'tambah server yang kamu kelola untuk menyambung';
+  String get stateNoServerLine2 => 'tambahkan server milikmu untuk terhubung';
 
   @override
   String get stateReconnectingTitle => 'Menyambung ulang';
 
   @override
   String stateReconnectingBadge(int attempt, int maxAttempts) {
-    return 'SAMBUNG ULANG · PERCOBAAN $attempt / $maxAttempts';
+    return 'MENYAMBUNG ULANG · COBA $attempt / $maxAttempts';
   }
 
   @override
   String stateReconnectingLine2(String server, int seconds) {
-    return '$server tidak merespons · coba lagi dalam $seconds dtk';
+    return '$server tak menjawab · coba lagi $seconds dtk';
   }
 
   @override
@@ -103,12 +101,12 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String stateReconnectingHeldBadge(int attempt, int maxAttempts) {
-    return 'TAHAN · PERCOBAAN $attempt / $maxAttempts';
+    return 'DITAHAN · COBA $attempt / $maxAttempts';
   }
 
   @override
   String stateReconnectingHeldLine2(int attempt, int maxAttempts, int seconds) {
-    return 'percobaan $attempt dari $maxAttempts · berikutnya dalam $seconds dtk · traffic ditahan';
+    return 'coba $attempt/$maxAttempts · lagi $seconds dtk · ditahan';
   }
 
   @override
@@ -117,11 +115,11 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get stateSwitchingBadge => 'PINDAH · VERIFIKASI';
+  String get stateSwitchingBadge => 'BERPINDAH · MEMVERIFIKASI';
 
   @override
   String stateSwitchingLine2(String previousServer, String server) {
-    return '$previousServer gagal 5 kali · memeriksa $server';
+    return '$previousServer gagal 5 kali · mengecek $server';
   }
 
   @override
@@ -130,57 +128,56 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get stateOnBackupTitle => 'Terhubung ke backup';
+  String get stateOnBackupTitle => 'Terhubung ke cadangan';
 
   @override
-  String get stateOnBackupBadge => 'TERHUBUNG · BACKUP';
+  String get stateOnBackupBadge => 'TERHUBUNG · CADANGAN';
 
   @override
   String stateOnBackupLine2(String ip, String server) {
-    return 'egress $ip · cocok dengan $server';
+    return 'egress $ip · sesuai $server';
   }
 
   @override
   String stateCouldNotReachTitle(String server) {
-    return 'Tidak dapat menjangkau $server';
+    return 'Tidak bisa menjangkau $server';
   }
 
   @override
   String get stateCouldNotReachBadge => 'TIDAK TERJANGKAU';
 
   @override
-  String get stateTunnelLostTitle => 'Tunnel terputus';
+  String get stateTunnelLostTitle => 'Tunnel hilang';
 
   @override
-  String get stateTunnelLostBadge => 'TUNNEL TERPUTUS';
+  String get stateTunnelLostBadge => 'TUNNEL HILANG';
 
   @override
   String get stateTunnelLostLine2 =>
-      'traffic langsung keluar · sambung ulang otomatis mati';
+      'trafik lewat langsung · sambung ulang otomatis mati';
 
   @override
-  String get stateWakingUpTitle => 'Bangun dari tidur';
+  String get stateWakingUpTitle => 'Bangun dari sleep';
 
   @override
-  String get stateWakingUpBadge => 'BANGUN';
+  String get stateWakingUpBadge => 'BANGUN DARI SLEEP';
 
   @override
   String stateWakingUpLine2(String server) {
-    return 'memeriksa $server setelah perangkat bangun';
+    return 'cek $server usai sleep';
   }
 
   @override
   String get stateCheckingNetworkTitle => 'Terhubung';
 
   @override
-  String get stateCheckingNetworkBadge => 'TERHUBUNG · MEMERIKSA';
+  String get stateCheckingNetworkBadge => 'TERHUBUNG · MENGECEK';
 
   @override
-  String get stateCheckingNetworkLine2 =>
-      'jaringan berubah · memeriksa koneksi';
+  String get stateCheckingNetworkLine2 => 'jaringan berubah · mengecek koneksi';
 
   @override
-  String get stateDisconnectingTitle => 'Memutus koneksi';
+  String get stateDisconnectingTitle => 'Memutuskan';
 
   @override
   String get stateDisconnectingBadge => 'MEMUTUS';
@@ -190,26 +187,25 @@ class AppLocalizationsId extends AppLocalizations {
       'menghentikan tunnel dan melepas traffic';
 
   @override
-  String get reasonNoAnswer => 'koneksi tcp timed out';
+  String get reasonNoAnswer => 'koneksi tcp timeout';
 
   @override
   String get reasonHandshakeFailed => 'handshake Reality gagal';
 
   @override
-  String get reasonEgressMismatch => 'egress tidak cocok dengan server';
+  String get reasonEgressMismatch => 'egress tidak sesuai server';
 
   @override
-  String get reasonDnsNotTunnelled => 'pemeriksaan DNS gagal';
+  String get reasonDnsNotTunnelled => 'cek DNS gagal';
 
   @override
-  String get reasonAdapterFailed => 'adapter jaringan gagal dimulai';
+  String get reasonAdapterFailed => 'adaptor jaringan gagal mulai';
 
   @override
-  String get reasonPortInUse => 'port lokal sedang digunakan';
+  String get reasonPortInUse => 'port lokal sedang dipakai';
 
   @override
-  String get reasonConfigRejected =>
-      'konfigurasi ditolak setelah pembaruan core';
+  String get reasonConfigRejected => 'config ditolak setelah pembaruan core';
 
   @override
   String get reasonXrayExited => 'core berhenti saat memulai';
@@ -219,7 +215,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get blockedBannerBody =>
-      'Charon tidak dapat menjangkau server Anda. Tidak ada lalu lintas yang keluar dari perangkat ini sampai Anda mencoba lagi, memilih server, atau melepas.';
+      'Charon tidak bisa menjangkau satu pun servermu. Tidak ada yang keluar dari PC ini sampai kamu mencoba lagi, memilih server, atau melepas.';
 
   @override
   String get blockedActionChooseServer => 'Pilih server lain';
@@ -240,11 +236,11 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get reasonAdapterDesc =>
-      'Charon tidak dapat membuat adaptor jaringan.';
+      'Charon tidak bisa membuat adaptor jaringannya.';
 
   @override
   String get reasonPortInUseDesc =>
-      'Program lain sedang menggunakan port yang dibutuhkan Charon.';
+      'Program lain sedang memakai port yang dibutuhkan Charon.';
 
   @override
   String get reasonDnsDesc =>
@@ -260,7 +256,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get reasonTunnelLostDesc =>
-      'Terowongan terputus, dan sambung ulang otomatis mati, sehingga lalu lintas berjalan langsung.';
+      'Tunnel berhenti, dan sambung ulang otomatis mati, jadi trafikmu lewat langsung.';
 
   @override
   String get metricsLatency => 'Latensi';
@@ -1471,10 +1467,10 @@ class AppLocalizationsId extends AppLocalizations {
       'GitHub sering lambat atau diblokir dari sini tanpa tunnel.';
 
   @override
-  String get updTagCore => 'XRAY-CORE · THE ENGINE';
+  String get updTagCore => 'XRAY-CORE · MESINNYA';
 
   @override
-  String get updTagApp => 'CHARON · THIS APP';
+  String get updTagApp => 'CHARON · APLIKASI INI';
 
   @override
   String get updStepsLabel => 'Langkah pembaruan';
@@ -1591,11 +1587,11 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get updFootReadyOnline =>
-      'menerapkan me-restart xray: tunnel putus sekitar 2 dtk, dan kalau kill switch mati, momen itu lewat langsung';
+      'menerapkan akan me-restart xray: tunnel putus sekitar 2 dtk, dan dengan kill switch mati, momen itu lewat langsung';
 
   @override
   String get updFootReadyOffline =>
-      'tidak terhubung, jadi menerapkan tidak memutus apa pun';
+      'tidak terhubung, jadi menerapkan tidak mengganggu apa pun';
 
   @override
   String get updFootQueued =>
@@ -1788,7 +1784,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get privacyDestinationsTitle => 'TUJUAN JARINGAN';
 
   @override
-  String get privacyDestYourServers => 'SERVER ANDA';
+  String get privacyDestYourServers => 'SERVERMU';
 
   @override
   String get privacyDestYourServersDesc =>
@@ -2013,7 +2009,7 @@ class AppLocalizationsId extends AppLocalizations {
       'Teks untuk dilampirkan ke laporan bug. Pilih isinya dan baca dulu sebelum menyalin.';
 
   @override
-  String get trustDiagWhatGoesIn => 'Isi laporan';
+  String get trustDiagWhatGoesIn => 'Isi file';
 
   @override
   String get trustDiagPreviewLabel => 'Pratinjau';
@@ -2136,22 +2132,22 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get dlgUnpairIntro =>
-      'Perangkat ini berhenti sinkron. Salinan terenkripsi tetap ada di server sync, dan perangkat lainmu tetap jalan.';
+      'Perangkat ini berhenti sync. Salinan terenkripsi tetap di server sync, dan perangkat lainmu tetap bekerja.';
 
   @override
   String get dlgUnpairNote1 =>
-      'server, aturan, dan pengaturan di perangkat ini tetap seperti semula';
+      'server, aturan, dan pengaturan di perangkat ini tetap seperti sekarang';
 
   @override
   String get dlgUnpairNote2 =>
-      'Charon belum bisa menampilkan daftar perangkat lain yang terpasang';
+      'Charon belum bisa menampilkan perangkat lain yang terpasang';
 
   @override
   String get dlgUnpairNote3 =>
       'pasangkan lagi kapan saja dengan kode dari perangkat lain';
 
   @override
-  String get dlgUnpairBtn => 'Lepas pasangan';
+  String get dlgUnpairBtn => 'Lepas';
 
   @override
   String get dlgEraseKicker => 'PENGATURAN · HAPUS';
@@ -2189,8 +2185,7 @@ class AppLocalizationsId extends AppLocalizations {
       'pasangkan lagi atau pulihkan dari file untuk mengembalikan servermu';
 
   @override
-  String get dlgEraseNote3 =>
-      'untuk menghapus service, copot pemasangan Charon';
+  String get dlgEraseNote3 => 'untuk menghapus service, uninstall Charon';
 
   @override
   String get dlgEraseBtn => 'Hapus semuanya';
@@ -2202,11 +2197,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get dlgQuitHeading => 'Tutup Charon?';
 
   @override
-  String get dlgQuitHideDesc => 'jendela menutup · ikon tray tetap ada';
+  String get dlgQuitHideDesc => 'jendela tertutup · ikon tray tetap ada';
 
   @override
-  String get dlgQuitWindowDesc =>
-      'tanpa ikon tray sampai kamu membuka Charon lagi';
+  String get dlgQuitWindowDesc => 'tanpa ikon tray sampai Charon dibuka lagi';
 
   @override
   String get dlgQuitDisconnectDesc => 'aplikasimu kembali ke koneksi biasa';
@@ -2236,7 +2230,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get dlgConflictIntro =>
-      'Perangkat lain mengirim setelah perangkat ini terakhir sinkron. Mengirim sekarang akan menimpa salinan yang lebih baru itu.';
+      'Perangkat lain mengirim setelah perangkat ini terakhir sync. Kalau kirim sekarang, salinan yang lebih baru itu tertimpa.';
 
   @override
   String get dlgConflictPullTitle => 'Tarik dulu';
@@ -2298,7 +2292,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get dlgSyncDone => 'Selesai';
 
   @override
-  String get dlgSyncWhatUp => 'YANG DIKIRIM';
+  String get dlgSyncWhatUp => 'YANG DIUNGGAH';
 
   @override
   String get dlgSyncWhatPull => 'MENGGANTI DI PERANGKAT INI';
@@ -2326,16 +2320,17 @@ class AppLocalizationsId extends AppLocalizations {
   String get dlgSyncPushNote1 => 'menggantikan salinan di server sync';
 
   @override
-  String get dlgSyncPushNote2 => 'dienkripsi di perangkat ini sebelum diunggah';
+  String get dlgSyncPushNote2 => 'dienkripsi di sini sebelum diunggah';
 
   @override
   String get dlgSyncPushNote3 => 'server hanya pernah melihat ciphertext';
 
   @override
-  String get dlgSyncPullNote1 => 'daftarmu di sini akan ditimpa';
+  String get dlgSyncPullNote1 => 'daftarmu saat ini di sini ditimpa';
 
   @override
-  String get dlgSyncPullNote2 => 'hitungan kuota di perangkat ini tetap';
+  String get dlgSyncPullNote2 =>
+      'hitungan kuota di perangkat ini tetap disimpan';
 
   @override
   String get dlgSyncBusyDerive =>
@@ -2385,17 +2380,17 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get dialogQuitSubtitle =>
-      'Terowongan Anda berjalan di layanan Charon, sehingga dapat tetap aktif tanpa jendela terbuka.';
+      'Tunnel-mu berjalan di service Charon, jadi bisa tetap nyala tanpa jendela.';
 
   @override
-  String get dialogQuitHideToTray => 'Sembunyikan ke baki sistem';
+  String get dialogQuitHideToTray => 'Sembunyikan ke tray';
 
   @override
   String get dialogQuitHideToTrayDesc =>
       'Jendela tertutup, antarmuka tetap berjalan di latar belakang, dan ikon baki tetap aktif.';
 
   @override
-  String get dialogQuitWindowOnly => 'Tutup jendela saja';
+  String get dialogQuitWindowOnly => 'Keluar jendela saja';
 
   @override
   String get dialogQuitWindowOnlyDesc =>
@@ -2425,7 +2420,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get dialogReleaseConfirm => 'Putuskan dan lepas';
 
   @override
-  String get dialogConflictTitle => 'Salinan server lebih baru';
+  String get dialogConflictTitle => 'Salinan di server lebih baru';
 
   @override
   String get dialogConflictSubtitle =>
@@ -2439,7 +2434,7 @@ class AppLocalizationsId extends AppLocalizations {
       'Mengunduh konfigurasi server yang lebih baru dan menggantikan profil serta aturan lokal.';
 
   @override
-  String get dialogConflictOverwrite => 'Timpa salinan server';
+  String get dialogConflictOverwrite => 'Timpa salinan di server';
 
   @override
   String get dialogConflictOverwriteDesc =>
@@ -2449,7 +2444,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get dialogConflictCancel => 'Batal';
 
   @override
-  String get dialogUnpairTitle => 'Putuskan tautan perangkat ini?';
+  String get dialogUnpairTitle => 'Lepas pasangan perangkat ini?';
 
   @override
   String get dialogUnpairSubtitle =>
@@ -2525,25 +2520,25 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get androidVpnRevokedNotice =>
-      'Android mencabut izin VPN Charon. Lalu lintas berjalan langsung.';
+      'Android mencabut izin VPN Charon. Trafik sedang lewat langsung.';
 
   @override
   String get androidActionAllowAgain => 'Izinkan lagi';
 
   @override
   String get androidAnotherVpnNotice =>
-      'VPN lain mengambil alih. Lalu lintas berjalan langsung.';
+      'VPN lain mengambil alih. Trafik sedang lewat langsung.';
 
   @override
   String get androidStoppedNotice =>
-      'Android menghentikan Charon. Lalu lintas mungkin sempat berjalan langsung.';
+      'Android menghentikan Charon. Selama itu trafik mungkin lewat langsung.';
 
   @override
-  String get androidAlwaysOnVpnTitle => 'VPN Selalu Aktif';
+  String get androidAlwaysOnVpnTitle => 'VPN selalu aktif';
 
   @override
   String get androidAlwaysOnVpnDesc =>
-      'Jika Android menghentikan Charon, lalu lintas bisa langsung keluar. Untuk perlindungan penuh, aktifkan VPN Selalu Aktif dan Blokir koneksi tanpa VPN di pengaturan Android.';
+      'Kalau Android menghentikan Charon, trafik bisa lewat langsung. Untuk perlindungan penuh, nyalakan VPN selalu aktif dan Blokir koneksi tanpa VPN di pengaturan Android.';
 
   @override
   String get androidOpenVpnSettings => 'Buka pengaturan VPN';
@@ -2559,7 +2554,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get dialogVaultPassphraseWarning =>
-      'Jika Anda kehilangan frasa sandi ini, tidak ada yang dapat memulihkan data Anda, termasuk Anda sendiri.';
+      'Kalau passphrase ini hilang, tidak ada yang bisa memulihkan datamu, termasuk kamu.';
 
   @override
   String get dialogVaultSavedCheckbox =>
@@ -2595,7 +2590,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get syncServerKeyHelper =>
-      'Ditampilkan sekali saat Anda memulai server sinkronisasi untuk pertama kali.';
+      'Ditampilkan sekali saat kamu pertama kali menjalankan server sync.';
 
   @override
   String get homeReadLatency => 'LATENSI';
@@ -2721,7 +2716,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get homeNodeSwitchCancel => 'untuk ganti node, batalkan dulu';
 
   @override
-  String get homeNodeTapConnect => 'ketuk Sambung untuk memakai node ini';
+  String get homeNodeTapConnect => 'ketuk Hubungkan untuk memakai node ini';
 
   @override
   String get homeNodeNothingSent => 'tidak ada yang dikirim lewat tunnel';
@@ -2974,12 +2969,12 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String homeBannerHeldTag(int attempt, int max) {
-    return 'TRAFIK DITAHAN SELAMA CHARON MENCOBA LAGI · COBA $attempt DARI $max';
+    return 'TRAFIK DITAHAN SELAMA CHARON MENCOBA · COBA $attempt DARI $max';
   }
 
   @override
   String homeBannerHeldText(String server, String next) {
-    return '$server berhenti merespons. Charon mencoba lagi tiap 5 dtk dan menahan trafikmu selama itu, lalu pindah ke $next.';
+    return '$server berhenti menjawab. Charon mencoba lagi tiap 5 dtk dan menahan trafikmu selama itu, lalu pindah ke $next.';
   }
 
   @override
@@ -3009,7 +3004,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String homeBannerReconnectText(String server, String next) {
-    return '$server berhenti merespons. Charon mencoba lagi tiap 5 dtk, lalu pindah ke $next. Kill switch mati, jadi trafik lewat langsung selama itu.';
+    return '$server berhenti menjawab. Charon mencoba lagi tiap 5 dtk, lalu pindah ke $next. Kill switch mati, jadi trafik lewat langsung selama itu.';
   }
 
   @override
@@ -3029,11 +3024,12 @@ class AppLocalizationsId extends AppLocalizations {
     int seconds,
     String next,
   ) {
-    return '$server gagal $tries percobaan dalam $seconds dtk. Charon memeriksa $next dengan round trip nyata sebelum bilang terhubung.';
+    return '$server gagal $tries kali dalam $seconds dtk. Charon mengecek $next dengan round trip asli sebelum menyatakan terhubung.';
   }
 
   @override
-  String get homeBannerTunnelLostTag => 'TUNNEL HILANG · SAMBUNG ULANG MATI';
+  String get homeBannerTunnelLostTag =>
+      'TUNNEL HILANG · SAMBUNG ULANG OTOMATIS MATI';
 
   @override
   String homeBannerQuotaTag(int percent, String server) {
@@ -3057,7 +3053,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String homeBannerBackupText(String primary, String time, String server) {
-    return '$primary berhenti merespons pukul $time. Charon tetap di $server dan tidak pindah balik sendiri.';
+    return '$primary berhenti menjawab pukul $time. Charon tetap di $server dan tidak akan pindah balik sendiri.';
   }
 
   @override
@@ -3094,7 +3090,7 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get homeTodoNoAnswer => 'Pastikan servernya menyala, lalu coba lagi.';
+  String get homeTodoNoAnswer => 'Cek apakah server berjalan, lalu coba lagi.';
 
   @override
   String get homeCauseHandshake =>
@@ -3102,7 +3098,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get homeTodoHandshake =>
-      'Public key atau SNI mungkin tidak cocok. Periksa servernya, lalu edit di sini.';
+      'Kunci publik atau SNI mungkin tidak cocok. Cek servernya, lalu edit di sini.';
 
   @override
   String homeCauseEgress(String server) {
@@ -3111,26 +3107,26 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get homeTodoEgress =>
-      'Charon tidak akan bilang terhubung sebelum pintu keluarnya cocok dengan server.';
+      'Charon tidak akan bilang terhubung sampai jalur keluarnya sesuai server.';
 
   @override
   String get homeCauseDns => 'DNS tidak lewat tunnel.';
 
   @override
   String get homeTodoDns =>
-      'Charon tidak akan bilang terhubung. Periksa pengaturan DNS, lalu coba lagi.';
+      'Charon tidak akan bilang terhubung. Cek pengaturan DNS, lalu coba lagi.';
 
   @override
   String get homeCauseAdapter =>
-      'Charon tidak bisa membuat adapter jaringannya.';
+      'Charon tidak bisa membuat adaptor jaringannya.';
 
   @override
   String get homeTodoAdapter =>
-      'Mulai ulang layanan Charon, atau perbaiki lewat installer, lalu coba lagi.';
+      'Restart service Charon, atau perbaiki lewat installer, lalu coba lagi.';
 
   @override
   String get homeCausePort =>
-      'Program lain memakai port yang dibutuhkan Charon.';
+      'Program lain sedang memakai port yang dibutuhkan Charon.';
 
   @override
   String get homeTodoPort =>
@@ -3143,7 +3139,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get homeTodoConfig =>
-      'Coba lagi di core sebelumnya, atau edit servernya.';
+      'Coba lagi dengan core sebelumnya, atau edit servernya.';
 
   @override
   String get androidAnotherVpnTitle => 'VPN lain mengambil alih';
@@ -3213,17 +3209,17 @@ class AppLocalizationsId extends AppLocalizations {
   String get syncLinePulling => 'menarik';
 
   @override
-  String get syncLineConflict => 'dipasangkan · perlu keputusan';
+  String get syncLineConflict => 'terpasang · perlu keputusan';
 
   @override
-  String get syncLineFailed => 'dipasangkan · sync terakhir gagal';
+  String get syncLineFailed => 'terpasang · sync terakhir gagal';
 
   @override
   String get syncTagPushing => 'MENGIRIM';
 
   @override
   String get syncTextPushing =>
-      'Mengenkripsi di sini, lalu mengunggah. Kamu tetap bisa memakai Charon.';
+      'Dienkripsi di sini, lalu diunggah. Kamu bisa tetap memakai Charon.';
 
   @override
   String get syncTagPulling => 'MENARIK';
@@ -3237,14 +3233,14 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get syncTextConflict =>
-      'Perangkat lain mengirim setelah perangkat ini terakhir sinkron.';
+      'Perangkat lain mengirim setelah perangkat ini terakhir sync.';
 
   @override
-  String get syncTagUnreachable => 'SERVER SYNC TIDAK TERJANGKAU';
+  String get syncTagUnreachable => 'SERVER SYNC TAK TERJANGKAU';
 
   @override
   String syncTextUnreachable(String server) {
-    return 'Tidak bisa menjangkau $server. Tidak ada yang diubah.';
+    return 'Tidak bisa menjangkau $server. Tidak ada yang berubah.';
   }
 
   @override
@@ -3259,7 +3255,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get syncTextWrongPassphrase =>
-      'Tidak bisa mendekripsi dengan passphrase itu. Tidak ada yang diubah.';
+      'Tidak bisa mendekripsi dengan passphrase itu. Tidak ada yang berubah.';
 
   @override
   String get syncTagNewerFormat => 'FORMAT LEBIH BARU';
@@ -3276,7 +3272,7 @@ class AppLocalizationsId extends AppLocalizations {
       'Salinan ini memakai pengaturan kunci di bawah batas aman. Kirim ulang dari perangkat dengan aplikasi terbaru.';
 
   @override
-  String get syncTagOlder => 'LEBIH LAMA DARI YANG DIHARAPKAN';
+  String get syncTagOlder => 'LEBIH LAMA DARI SEHARUSNYA';
 
   @override
   String get syncTextOlder =>
@@ -4411,7 +4407,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String stpCityNow(String city) {
-    return 'Sekarang kamu di $city';
+    return 'Kamu sedang di $city';
   }
 
   @override
@@ -4455,7 +4451,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String stpConnLineDone(String place, String ip) {
-    return 'trafikmu menyeberang ke $place · egress $ip cocok dengan server';
+    return 'trafikmu menyeberang ke $place · egress $ip sesuai server';
   }
 
   @override
@@ -4494,7 +4490,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String stpCheck1Ok(int ms) {
-    return 'tcp connect · $ms ms';
+    return 'koneksi tcp · $ms ms';
   }
 
   @override
@@ -4906,4 +4902,10 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get dlgReplaceChosen =>
       'koneksi baru dipilih · berlaku setelah disimpan';
+
+  @override
+  String get navHome => 'Beranda';
+
+  @override
+  String get settingsLanguageSystem => 'Sistem';
 }

@@ -217,12 +217,6 @@ class _VaultPassphraseDialogState extends State<VaultPassphraseDialog> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: colors.bg,
-                  hintText: 'Enter passphrase...',
-                  hintStyle: TextStyle(
-                    fontFamily: CharonTokens.fontMono,
-                    fontSize: 12,
-                    color: textMuted.withValues(alpha: 0.6),
-                  ),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),

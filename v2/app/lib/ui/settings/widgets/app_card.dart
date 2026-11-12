@@ -347,7 +347,7 @@ class AppCard extends StatelessWidget {
                         PopupMenuItem(
                           value: null,
                           child: _LanguageMenuItem(
-                            label: 'System',
+                            label: l10n.settingsLanguageSystem,
                             sub: 'WINDOWS',
                             isSelected: loc == null,
                           ),

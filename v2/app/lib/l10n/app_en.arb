@@ -3524,5 +3524,9 @@
     }
   },
   "dlgReplaceChosen": "new connection chosen · applies when you save",
-  "@dlgReplaceChosen": { "description": "Note in the edit dialog after a new connection was chosen. Not on the board." }
+  "@dlgReplaceChosen": { "description": "Note in the edit dialog after a new connection was chosen. Not on the board." },
+  "navHome": "Home",
+  "@navHome": { "description": "Rail tooltip for the Home screen (board dictionary)." },
+  "settingsLanguageSystem": "System",
+  "@settingsLanguageSystem": { "description": "Language menu: follow the system language (board dictionary)." }
 }
