@@ -35,15 +35,16 @@ class NotchBox extends StatelessWidget {
     return CustomPaint(
       painter: _NotchPainter(color, borderColor, notch),
       child: ClipPath(
-        clipper: _NotchClipper(notch),
+        clipper: NotchClipper(notch),
         child: Padding(padding: padding, child: child),
       ),
     );
   }
 }
 
-class _NotchClipper extends CustomClipper<Path> {
-  _NotchClipper(this.notch);
+/// Clips a child to the stepped outline of [notchPath].
+class NotchClipper extends CustomClipper<Path> {
+  NotchClipper(this.notch);
 
   final double notch;
 
@@ -51,7 +52,7 @@ class _NotchClipper extends CustomClipper<Path> {
   Path getClip(Size size) => notchPath(size, notch);
 
   @override
-  bool shouldReclip(_NotchClipper old) => old.notch != notch;
+  bool shouldReclip(NotchClipper old) => old.notch != notch;
 }
 
 class _NotchPainter extends CustomPainter {
