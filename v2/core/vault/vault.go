@@ -1,3 +1,5 @@
+// Package vault implements the Charon encrypted sync vault format (.charonvault,
+// format version 1) as specified in docs/charon_sync_design.md section 3.
 package vault
 
 import (
