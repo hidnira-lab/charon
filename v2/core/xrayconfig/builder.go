@@ -143,6 +143,10 @@ func Build(server *charonv1.Server, cfg *charonv1.Config, opts Options) ([]byte,
 	if a, ok := ResolverAddr(cfg.GetSettings().GetCustomDns()); ok {
 		dnsServer = a.String()
 	}
+	routes := []string{"0.0.0.0/0"}
+	if a, err := netip.ParseAddr(dnsServer); isIPv6Address(server.GetAddress()) || (err == nil && a.Is6()) {
+		routes = append(routes, "::/0")
+	}
 	tunName := strings.TrimSpace(opts.TUNName)
 	if tunName == "" {
 		tunName = DefaultTUNName
@@ -162,10 +166,15 @@ func Build(server *charonv1.Server, cfg *charonv1.Config, opts Options) ([]byte,
 				// 4 to 31 seconds of no traffic. The range is the benchmark block
 				// (RFC 2544), which no LAN uses; the IPv6 one is a unique local prefix.
 				"gateway": []string{DefaultTUNGatewayV4, DefaultTUNGatewayV6},
-				// Route everything into the TUN. IPv6 goes in as well so it
-				// cannot leave beside the tunnel; the routing rules below
-				// drop it when the server is reached over IPv4.
-				"autoSystemRoutingTable": []string{"0.0.0.0/0", "::/0"},
+				// Route everything into the TUN. IPv6 goes in only when the server
+				// or the DNS resolver is IPv6. Otherwise it stays out of the table on
+				// purpose: "misconfigtun" below then makes Xray's own filters refuse
+				// every IPv6 connect at once, with no leak, and apps fall back to
+				// IPv4. Routed into the TUN and dropped by the blackhole rule instead,
+				// the TUN accepts the IPv6 connection first and Xray cuts it after, an
+				// app sees a reset and does not fall back (a real test: every name
+				// with an AAAA record failed). This holds whatever the kill switch is.
+				"autoSystemRoutingTable": routes,
 				// Loop protection: Xray binds its own connections to the
 				// interface of the default route. Never left to the user.
 				"autoOutboundsInterface": "auto",

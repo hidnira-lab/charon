@@ -11,8 +11,7 @@
       "settings": {
         "autoOutboundsInterface": "auto",
         "autoSystemRoutingTable": [
-          "0.0.0.0/0",
-          "::/0"
+          "0.0.0.0/0"
         ],
         "autoSystemWfpBlockLeak": [
           "dns",

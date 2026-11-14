@@ -12,7 +12,9 @@
 param(
     [string]$App = (Join-Path $PSScriptRoot '..\app'),
     [string]$Flutter = 'C:\flutter\bin\flutter.bat',
-    [string]$Name = 'www.cloudflare.com'
+    [string]$Name = 'www.cloudflare.com',
+    # on (the default) or off: the safety switch for the run. It is always put back to on.
+    [ValidateSet('on', 'off')][string]$KillSwitch = 'on'
 )
 $ErrorActionPreference = 'Continue'
 $App = (Resolve-Path $App).Path
@@ -41,6 +43,8 @@ try {
         Write-Host 'The v1 app is running. Quit it first.' -ForegroundColor Yellow
         return
     }
+    Write-Host "=== kill switch $KillSwitch"
+    [void](Probe "killswitch $KillSwitch")
     Write-Host '=== connect'
     $c = Probe 'connect'
     $up = @($c | Where-Object { $_ -match 'phase=PHASE_UP' }).Count -gt 0
@@ -66,6 +70,7 @@ try {
 finally {
     Write-Host '=== disconnect (always)'
     [void](Probe 'disconnect' 60)
+    [void](Probe 'killswitch on' 60)
     $left = & "D:\charon-m2-test\charon-wfpcheck.exe" list 2>&1 | Select-Object -First 1
     Write-Host "    $left"
     Write-Host 'You can start the v1 app again.' -ForegroundColor Cyan

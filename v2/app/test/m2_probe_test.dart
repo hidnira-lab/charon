@@ -3,7 +3,7 @@
 // without CHARON_PROBE it is skipped, so the normal suite never touches a service.
 //
 //   $env:CHARON_PROBE = 'hello'; flutter test test/m2_probe_test.dart
-//   CHARON_PROBE values: hello | dns 9.9.9.9 | dns none | rule check off (check,
+//   CHARON_PROBE values: hello | killswitch on | killswitch off | dns 9.9.9.9 | dns none | rule check off (check,
 //   download, keep; on or off) | connect (waits for Up, or says why not) |
 //   disconnect | watch 20 (prints changes for 20 s)
 //
@@ -68,6 +68,13 @@ Future<void> run(List<String> args) async {
       final value = args.length > 1 && args[1] != 'none' ? args[1] : '';
       final cfg = await _getConfig(client);
       cfg.ensureSettings().customDns = value;
+      cfg.version += Int64(1);
+      await _setConfig(client, cfg);
+      stdout.writeln(_config(await _getConfig(client)));
+    case 'killswitch':
+      // killswitch on | off. The safety switches apply at once.
+      final cfg = await _getConfig(client);
+      cfg.ensureSettings().killSwitch = args.length > 1 && args[1] == 'on';
       cfg.version += Int64(1);
       await _setConfig(client, cfg);
       stdout.writeln(_config(await _getConfig(client)));

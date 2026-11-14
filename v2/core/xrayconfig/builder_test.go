@@ -217,13 +217,57 @@ func TestTUNInboundRoutesEverythingAndKeepsXrayOut(t *testing.T) {
 	if tun.Protocol != "tun" {
 		t.Fatalf("first inbound is %q, want tun", tun.Protocol)
 	}
-	if !slices.Equal(tun.Settings.Routes, []string{"0.0.0.0/0", "::/0"}) {
-		t.Errorf("routes = %v, want all IPv4 and all IPv6 through the TUN", tun.Settings.Routes)
+	// An IPv4 server: IPv6 stays out of the table on purpose, so the "misconfigtun"
+	// filters of Xray refuse it at once (see the comment in the builder).
+	if !slices.Equal(tun.Settings.Routes, []string{"0.0.0.0/0"}) {
+		t.Errorf("routes = %v, want all IPv4 only for an IPv4 server", tun.Settings.Routes)
 	}
 	if tun.Settings.Outbound != "auto" {
 		t.Errorf("autoOutboundsInterface = %q, want auto (loop protection)", tun.Settings.Outbound)
 	}
 	if len(tun.Settings.DNS) == 0 {
 		t.Error("the TUN needs DNS servers")
+	}
+}
+
+// IPv6 goes into the TUN only when something needs it: an IPv6 server, or an IPv6
+// resolver (Xray refuses to start when a DNS server is not covered by a route).
+// Without it, the "misconfigtun" filters of Xray are what keeps IPv6 from leaking.
+func TestTUNRoutesIPv6OnlyWhenNeeded(t *testing.T) {
+	for _, tc := range []struct {
+		name, server, dns string
+		want              []string
+	}{
+		{"IPv4 server, default resolver", "192.0.2.10", "", []string{"0.0.0.0/0"}},
+		{"IPv4 server, IPv4 resolver", "192.0.2.10", "9.9.9.9", []string{"0.0.0.0/0"}},
+		{"IPv4 server, IPv6 resolver", "192.0.2.10", "2620:fe::fe", []string{"0.0.0.0/0", "::/0"}},
+		{"IPv6 server", "2001:db8::10", "", []string{"0.0.0.0/0", "::/0"}},
+		{"a name as the server", "vpn.example.com", "", []string{"0.0.0.0/0"}},
+	} {
+		cfg := sampleConfig()
+		cfg.Servers[0].Address = tc.server
+		cfg.Settings.CustomDns = tc.dns
+		raw, err := Build(cfg.GetServers()[0], cfg, Options{})
+		if err != nil {
+			t.Fatalf("%s: %v", tc.name, err)
+		}
+		var root struct {
+			Inbounds []struct {
+				Settings struct {
+					Routes []string `json:"autoSystemRoutingTable"`
+					Leak   []string `json:"autoSystemWfpBlockLeak"`
+				} `json:"settings"`
+			} `json:"inbounds"`
+		}
+		if err := json.Unmarshal(raw, &root); err != nil {
+			t.Fatalf("%s: %v", tc.name, err)
+		}
+		got := root.Inbounds[0].Settings
+		if !slices.Equal(got.Routes, tc.want) {
+			t.Errorf("%s: routes = %v, want %v", tc.name, got.Routes, tc.want)
+		}
+		if !slices.Contains(got.Leak, "misconfigtun") {
+			t.Errorf("%s: misconfigtun must stay on, it is what blocks the IP version without a route", tc.name)
+		}
 	}
 }
