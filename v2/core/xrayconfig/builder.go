@@ -16,6 +16,9 @@ const (
 	DefaultTransport   = "tcp"
 	DefaultTUNName     = "charon0"
 	DefaultTUNMTU      = 1500
+
+	DefaultTUNGatewayV4 = "198.18.0.1/16"
+	DefaultTUNGatewayV6 = "fdfe:dcba:9876::1/64"
 )
 
 // OutboundBuilder builds the Xray outbound object for one server protocol.
@@ -152,6 +155,13 @@ func Build(server *charonv1.Server, cfg *charonv1.Config, opts Options) ([]byte,
 			"settings": map[string]any{
 				"name": tunName,
 				"mtu":  DefaultTUNMTU,
+				// Addresses of the adapter itself. Without them Windows gives it a
+				// link local IPv4 address (169.254.x.x) only "after a few seconds"
+				// (the Xray docs), and until then everything routed into the TUN is
+				// unreachable while the phase already says Up. A real test showed
+				// 4 to 31 seconds of no traffic. The range is the benchmark block
+				// (RFC 2544), which no LAN uses; the IPv6 one is a unique local prefix.
+				"gateway": []string{DefaultTUNGatewayV4, DefaultTUNGatewayV6},
 				// Route everything into the TUN. IPv6 goes in as well so it
 				// cannot leave beside the tunnel; the routing rules below
 				// drop it when the server is reached over IPv4.
