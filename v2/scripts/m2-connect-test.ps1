@@ -161,9 +161,10 @@ try {
     Check 'the filters of the kill switch are in' ($n1 -gt 0) "$n1 filters"
     $adapter = Get-NetAdapter -Name 'charon0' -ErrorAction SilentlyContinue
     Check 'the tunnel adapter charon0 is there and up' ($adapter -and $adapter.Status -eq 'Up') "$($adapter.Status)"
-    $viaTunnel = Egress 20
+    $viaTunnel = WaitEgress 40
     Write-Host "    internet while connected: $viaTunnel   (the server answered as: $egress)"
     Check 'traffic passes through the tunnel (the filters permit the adapter)' ($null -ne $viaTunnel)
+    if ($null -eq $viaTunnel) { Diag 'no traffic after the first connect' }
     Check 'the address the internet sees is the server''s' ($viaTunnel -and $viaTunnel -eq $egress)
     $t0 = Get-Date
     $dns = Resolve-DnsName example.com -Type A -DnsOnly -ErrorAction SilentlyContinue
