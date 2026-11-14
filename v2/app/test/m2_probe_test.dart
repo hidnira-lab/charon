@@ -24,7 +24,7 @@ const _pipe = String.fromEnvironment('CHARON_PIPE', defaultValue: r'\\.\pipe\cha
 
 String _status(Status s) => 'phase=${s.phase.name} gate=${s.gate.name} active=${s.activeServerId.isEmpty ? '-' : s.activeServerId} '
     'chosen=${s.chosenServerId.isEmpty ? '-' : s.chosenServerId} attempt=${s.attempt}/${s.maxAttempts} '
-    'egress=${s.egressAddress.isEmpty ? '-' : s.egressAddress}';
+    'egress=${s.egressAddress.isEmpty ? '-' : s.egressAddress} lastFailure=${s.lastFailure.name} lastEnd=${s.lastEnd.name}';
 
 String _config(Config c) {
   final s = c.settings;
@@ -111,6 +111,25 @@ Future<void> run(List<String> args) async {
       await client.disconnect();
       await Future<void>.delayed(const Duration(seconds: 3));
       stdout.writeln('after: ${_status((await client.hello(appVersion: '0.1.0')).status)}');
+    case 'logs':
+      // What the service wrote in its own log (it keeps the last lines in memory), so a
+      // connect that failed can say why. The core log never holds a destination.
+      final lines = <LogLine>[];
+      final sub = client.events.listen((e) {
+        if (e.hasLogs() && e.logs.source == LogSource.LOG_SOURCE_CHARON_CORE) lines.addAll(e.logs.lines);
+      });
+      await client.subscribe(Subscription(
+        topics: [Topic.TOPIC_LOGS],
+        logSource: LogSource.LOG_SOURCE_CHARON_CORE,
+        minLevel: LogLevel.LOG_LEVEL_INFO,
+      ));
+      await Future<void>.delayed(const Duration(seconds: 3));
+      await sub.cancel();
+      final n = args.length > 1 ? int.parse(args[1]) : 60;
+      for (final l in lines.skip(lines.length > n ? lines.length - n : 0)) {
+        stdout.writeln('${DateTime.fromMillisecondsSinceEpoch(l.atMs.toInt()).toIso8601String().substring(11, 19)} ${l.level.name.replaceFirst('LOG_LEVEL_', '')} ${l.text}');
+      }
+      stdout.writeln('(${lines.length} lines in the buffer)');
     case 'watch':
       final secs = args.length > 1 ? int.parse(args[1]) : 15;
       final sub = client.events.listen((e) {
