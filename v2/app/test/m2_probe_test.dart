@@ -3,7 +3,7 @@
 // without CHARON_PROBE it is skipped, so the normal suite never touches a service.
 //
 //   $env:CHARON_PROBE = 'hello'; flutter test test/m2_probe_test.dart
-//   CHARON_PROBE values: hello | killswitch on | killswitch off | dns 9.9.9.9 | dns none | rule check off (check,
+//   CHARON_PROBE values: hello | elevate C:\path\program.exe | killswitch on | killswitch off | dns 9.9.9.9 | dns none | rule check off (check,
 //   download, keep; on or off) | connect (waits for Up, or says why not) |
 //   disconnect | watch 20 (prints changes for 20 s)
 //
@@ -16,6 +16,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:charon/core/core_client.dart';
+import 'package:charon/core/elevated.dart';
 import 'package:charon/core/transport.dart';
 import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:fixnum/fixnum.dart';
@@ -71,6 +72,13 @@ Future<void> run(List<String> args) async {
       cfg.version += Int64(1);
       await _setConfig(client, cfg);
       stdout.writeln(_config(await _getConfig(client)));
+    case 'elevate':
+      // elevate <full path of a program>: runs it the way the window runs the installer,
+      // with the UAC prompt. Prints the exit code; 1223 is "the person said No". Run it
+      // from a normal PowerShell, in an elevated one no prompt appears. The path may have
+      // spaces (the value is split on spaces, so it is joined again), and takes no arguments.
+      final code = await runElevated(args.sublist(1).join(' '), const []);
+      stdout.writeln('elevated exit code: $code${code == elevationDeclined ? ' (the prompt was declined)' : ''}');
     case 'killswitch':
       // killswitch on | off. The safety switches apply at once.
       final cfg = await _getConfig(client);
