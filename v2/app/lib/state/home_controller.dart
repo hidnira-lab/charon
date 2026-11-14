@@ -13,6 +13,7 @@ import '../sync/sync_client.dart';
 import 'location_status.dart';
 import 'service_supervisor.dart';
 import 'toast.dart';
+import 'ui_prefs.dart';
 import 'throughput_history.dart';
 import 'ui_state.dart';
 
@@ -39,12 +40,14 @@ class HomeController extends ChangeNotifier {
     SyncController? syncController,
     ServiceSupervisor? serviceSupervisor,
     int Function()? clock,
+    UiPrefsStore? uiPrefs,
   })  : _clock = clock ?? (() => DateTime.now().millisecondsSinceEpoch),
         _status = initialStatus ?? Status(),
         _config = initialConfig,
         _hasServers = hasServers ?? (initialConfig?.servers.isNotEmpty ?? true),
         _sync = syncController ?? SyncController(),
-        service = serviceSupervisor ?? ServiceSupervisor() {
+        service = serviceSupervisor ?? ServiceSupervisor(),
+        _uiStore = uiPrefs {
     _platformTransport = platformTransport;
     _lastPhase = _status.phase;
     _syncAndroidAnomaly(_status);
@@ -572,6 +575,7 @@ class HomeController extends ChangeNotifier {
     if (_themeMode != mode) {
       _themeMode = mode;
       notifyListeners();
+      _persistUi();
     }
   }
 
@@ -579,6 +583,58 @@ class HomeController extends ChangeNotifier {
     if (_locale != loc) {
       _locale = loc;
       notifyListeners();
+      _persistUi();
+    }
+  }
+
+  // ---- what the window remembers (ui_prefs.dart) ----
+
+  final UiPrefsStore? _uiStore;
+  Timer? _uiSaveTimer;
+
+  /// The city and country the user typed or kept. [_city] and [_countryCode]
+  /// are what is shown, which is the position of the device while it is
+  /// detected. Only the typed ones are saved, so no place found by the device
+  /// is ever written to disk.
+  String _typedCity = '';
+  String _typedCountry = '';
+
+  /// Reads the saved looks and greeting before the first screen is drawn. A
+  /// missing or unreadable file leaves the defaults.
+  Future<void> loadUiPrefs() async {
+    final store = _uiStore;
+    if (store == null) return;
+    final p = await store.load();
+    _themeMode = ThemeMode.values.firstWhere((m) => m.name == p.theme, orElse: () => ThemeMode.system);
+    _locale = syncLanguageToLocale(p.language);
+    _greetingName = p.greetingName;
+    _detectCity = p.detectCity;
+    _typedCity = p.city;
+    _typedCountry = p.countryCode;
+    _city = _typedCity;
+    _countryCode = _typedCountry;
+    notifyListeners();
+  }
+
+  UiPrefs get _uiPrefsNow => UiPrefs(
+        theme: _themeMode.name,
+        language: localeToSyncLanguage(_locale),
+        greetingName: _greetingName,
+        detectCity: _detectCity,
+        city: _typedCity,
+        countryCode: _typedCountry,
+      );
+
+  /// Saves the prefs. Typing waits a moment ([soon]) so a name is written once,
+  /// not once per letter.
+  void _persistUi({bool soon = false}) {
+    final store = _uiStore;
+    if (store == null) return;
+    _uiSaveTimer?.cancel();
+    if (soon) {
+      _uiSaveTimer = Timer(const Duration(milliseconds: 500), () => unawaited(store.save(_uiPrefsNow)));
+    } else {
+      unawaited(store.save(_uiPrefsNow));
     }
   }
 
@@ -614,6 +670,7 @@ class HomeController extends ChangeNotifier {
     if (_greetingName != name) {
       _greetingName = name;
       notifyListeners();
+      _persistUi(soon: true);
     }
   }
 
@@ -640,6 +697,7 @@ class HomeController extends ChangeNotifier {
     final reader = _locationReader;
     final table = CityTable.instance;
     if (reader == null || table == null) {
+      _showTyped();
       _locationStatus = LocationStatus.unavailable;
       notifyListeners();
       return;
@@ -656,16 +714,29 @@ class HomeController extends ChangeNotifier {
       _countryCode = city.country;
       _locationStatus = LocationStatus.found;
     } else {
+      _showTyped();
       _locationStatus = result.outcome == LocationOutcome.denied ? LocationStatus.denied : LocationStatus.unavailable;
     }
     notifyListeners();
+  }
+
+  /// Back to the city the user typed, when the device cannot say.
+  void _showTyped() {
+    _city = _typedCity;
+    _countryCode = _typedCountry;
   }
 
   void setDetectCity(bool value) {
     if (_detectCity != value) {
       _detectCity = value;
       _locationRun++; // any try still running is stale now
+      // Turning it off keeps what the field shows: from here on it is the user's.
+      if (!value) {
+        _typedCity = _city;
+        _typedCountry = _countryCode;
+      }
       notifyListeners();
+      _persistUi();
       if (value) unawaited(detectLocation());
     }
   }
@@ -673,14 +744,18 @@ class HomeController extends ChangeNotifier {
   void setCity(String value) {
     if (_city != value) {
       _city = value;
+      _typedCity = value;
       notifyListeners();
+      _persistUi(soon: true);
     }
   }
 
   void setCountryCode(String code) {
     if (_countryCode != code) {
       _countryCode = code;
+      _typedCountry = code;
       notifyListeners();
+      _persistUi();
     }
   }
 
@@ -787,6 +862,15 @@ class HomeController extends ChangeNotifier {
     _dnsMode = DnsMode.tunnelDefault;
     _customDns = '198.51.100.53';
     _connectionMode = ConnectionMode.tun;
+    // The window starts fresh too: looks, greeting and the file that remembers them.
+    _uiSaveTimer?.cancel();
+    _themeMode = ThemeMode.system;
+    _locale = null;
+    _greetingName = '';
+    _detectCity = true;
+    _city = _countryCode = _typedCity = _typedCountry = '';
+    _locationRun++;
+    await _uiStore?.erase();
     if (_client != null) {
       try {
         await _client!.setConfig(_config!);
@@ -1194,6 +1278,7 @@ class HomeController extends ChangeNotifier {
     if (payload.hasUi()) {
       _themeMode = syncThemeToThemeMode(payload.ui.theme);
       _locale = syncLanguageToLocale(payload.ui.language);
+      _persistUi();
     }
 
     if (_client != null) {
@@ -1311,6 +1396,11 @@ class HomeController extends ChangeNotifier {
     service.removeListener(_onSyncChanged);
     service.dispose();
     _eventSub?.cancel();
+    // A name typed a moment ago is still waiting to be written: write it now.
+    if (_uiSaveTimer?.isActive ?? false) {
+      _uiSaveTimer!.cancel();
+      unawaited(_uiStore?.save(_uiPrefsNow));
+    }
     super.dispose();
   }
 }

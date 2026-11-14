@@ -11,6 +11,7 @@ import 'core/transport.dart';
 import 'l10n/generated/app_localizations.dart';
 import 'state/home_controller.dart';
 import 'state/service_view.dart';
+import 'state/ui_prefs.dart';
 import 'theme/theme.dart';
 import 'ui/common/ambient.dart';
 import 'ui/common/toast_host.dart';
@@ -23,10 +24,12 @@ import 'ui/setup/setup_screen.dart';
 import 'ui/split/split_screen.dart';
 import 'ui/telemetry/telemetry_screen.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   unawaited(GeoIp.load()); // only needed once the user adds a server
-  final controller = HomeController();
+  final controller = HomeController(uiPrefs: FileUiPrefsStore.windowsDefault());
+  // The saved theme and language are in place before the first frame.
+  await controller.loadUiPrefs();
   if (Platform.isWindows) {
     // "Detect city": the position is read once, matched offline and dropped.
     unawaited(CityTable.load().then((_) => controller.useLocationReader(readWindowsLocation)));
