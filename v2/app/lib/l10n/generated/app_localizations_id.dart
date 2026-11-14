@@ -731,7 +731,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get settingsAboutTitle => 'Tentang';
 
   @override
-  String get settingsAboutBy => 'oleh the owner · xray v25.9.11';
+  String settingsAboutBy(String xray) {
+    return 'oleh @hidnira · xray v$xray';
+  }
 
   @override
   String get settingsAboutUpdates => 'Pembaruan';
@@ -4182,7 +4184,8 @@ class AppLocalizationsId extends AppLocalizations {
   String get stpIntroButton => 'Baca intro';
 
   @override
-  String get stpIntroNote => 'membuka halaman Charon di browser-mu';
+  String get stpIntroNote =>
+      'membuka halaman Charon di situs @hidnira lewat browser';
 
   @override
   String get stpNeedsTitle => 'SEBELUM MULAI';

@@ -2,6 +2,9 @@
 /// text and the About card do not each carry their own copy.
 const appVersion = '0.1.0';
 
+/// The xray-core release this build pins. A test checks it against the service.
+const xrayPinnedVersion = '26.10.31';
+
 /// SHA-256 of the 32 byte primary Ed25519 release key embedded in
 /// `core/update/manifest.go`. A test recomputes it from that file, so the two
 /// cannot drift apart. It is the key that signs Charon releases, shown on the

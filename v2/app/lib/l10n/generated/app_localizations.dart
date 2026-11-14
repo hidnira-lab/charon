@@ -1355,11 +1355,11 @@ abstract class AppLocalizations {
   /// **'About'**
   String get settingsAboutTitle;
 
-  /// About author info.
+  /// About author info. The handle of the author, then the xray version this build pins.
   ///
   /// In en, this message translates to:
-  /// **'by the owner · xray v25.9.11'**
-  String get settingsAboutBy;
+  /// **'by @hidnira · xray v{xray}'**
+  String settingsAboutBy(String xray);
 
   /// Updates row title.
   ///
@@ -7321,7 +7321,7 @@ abstract class AppLocalizations {
   /// Setup screen text.
   ///
   /// In en, this message translates to:
-  /// **'opens Charon\'s page in your browser'**
+  /// **'opens Charon\'s page on @hidnira\'s site in your browser'**
   String get stpIntroNote;
 
   /// Setup screen text.

@@ -686,7 +686,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsAboutTitle => '关于';
 
   @override
-  String get settingsAboutBy => '作者 the owner · xray v25.9.11';
+  String settingsAboutBy(String xray) {
+    return '作者 @hidnira · xray v$xray';
+  }
 
   @override
   String get settingsAboutUpdates => '更新';
@@ -3959,7 +3961,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get stpIntroButton => '阅读介绍';
 
   @override
-  String get stpIntroNote => '在浏览器中打开 Charon 的页面';
+  String get stpIntroNote => '在浏览器中打开 @hidnira 网站上的 Charon 页面';
 
   @override
   String get stpNeedsTitle => '开始之前';
@@ -5464,7 +5466,9 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get settingsAboutTitle => '关于';
 
   @override
-  String get settingsAboutBy => '作者 the owner · xray v25.9.11';
+  String settingsAboutBy(String xray) {
+    return '作者 @hidnira · xray v$xray';
+  }
 
   @override
   String get settingsAboutUpdates => '更新';
@@ -8737,7 +8741,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get stpIntroButton => '阅读介绍';
 
   @override
-  String get stpIntroNote => '在浏览器中打开 Charon 的页面';
+  String get stpIntroNote => '在浏览器中打开 @hidnira 网站上的 Charon 页面';
 
   @override
   String get stpNeedsTitle => '开始之前';

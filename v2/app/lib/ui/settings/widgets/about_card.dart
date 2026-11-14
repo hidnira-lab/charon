@@ -145,7 +145,7 @@ class AboutCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 1),
                     Text(
-                      l10n.settingsAboutBy,
+                      l10n.settingsAboutBy(xrayPinnedVersion),
                       style: TextStyle(
                         fontFamily: CharonTokens.fontMono,
                         fontSize: 10,

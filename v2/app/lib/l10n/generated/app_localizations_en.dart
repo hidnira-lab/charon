@@ -729,7 +729,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsAboutTitle => 'About';
 
   @override
-  String get settingsAboutBy => 'by the owner · xray v25.9.11';
+  String settingsAboutBy(String xray) {
+    return 'by @hidnira · xray v$xray';
+  }
 
   @override
   String get settingsAboutUpdates => 'Updates';
@@ -4215,7 +4217,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get stpIntroButton => 'Read the intro';
 
   @override
-  String get stpIntroNote => 'opens Charon\'s page in your browser';
+  String get stpIntroNote =>
+      'opens Charon\'s page on @hidnira\'s site in your browser';
 
   @override
   String get stpNeedsTitle => 'BEFORE YOU START';
