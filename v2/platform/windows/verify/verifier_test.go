@@ -9,6 +9,8 @@ import (
 	"net/http/httptest"
 	"net/netip"
 	"strconv"
+	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -61,8 +63,13 @@ func startFakeSOCKS5(t *testing.T) string {
 		t.Fatal(err)
 	}
 	t.Cleanup(func() { _ = ln.Close() })
+	go serveSOCKS5(ln)
+	return ln.Addr().String()
+}
 
-	go func() {
+// serveSOCKS5 answers CONNECT requests on ln until it is closed.
+func serveSOCKS5(ln net.Listener) {
+	func() {
 		for {
 			c, err := ln.Accept()
 			if err != nil {
@@ -108,7 +115,6 @@ func startFakeSOCKS5(t *testing.T) string {
 			}(c)
 		}
 	}()
-	return ln.Addr().String()
 }
 
 func TestVerifier_AllFourChecks(t *testing.T) {
@@ -186,10 +192,11 @@ func TestVerifier_AllFourChecks(t *testing.T) {
 
 	// 4. Check 2 fails (Reality round trip / SOCKS down).
 	vBadSocks := New(Options{
-		SocksAddr:  "127.0.0.1:1",
-		EgressURL:  httpSrv.URL,
-		DNSServer:  goodDNS,
-		LookupHost: lookupExpected,
+		SocksAddr:      "127.0.0.1:1",
+		SocksReadyWait: 200 * time.Millisecond,
+		EgressURL:      httpSrv.URL,
+		DNSServer:      goodDNS,
+		LookupHost:     lookupExpected,
 	})
 	if _, _, r := vBadSocks.Verify(ctx, server, nil); r != charonv1.FailureReason_FAILURE_REALITY_HANDSHAKE {
 		t.Fatalf("expected FAILURE_REALITY_HANDSHAKE, got %v", r)
@@ -216,5 +223,126 @@ func TestParseEgress(t *testing.T) {
 	}
 	if _, err := parseEgress("h=1.1.1.1\nts=1\n"); err == nil {
 		t.Error("a body without an address must be rejected")
+	}
+}
+
+// A healthy start: Xray is "started" 150 ms after it is launched but listens
+// later. The first dial of check 2 is refused, and the verification must wait for
+// the port instead of failing the whole session.
+func TestVerifier_WaitsForXrayToListen(t *testing.T) {
+	srvLn, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer srvLn.Close()
+	go func() {
+		for {
+			c, err := srvLn.Accept()
+			if err != nil {
+				return
+			}
+			_ = c.Close()
+		}
+	}()
+	_, portStr, _ := net.SplitHostPort(srvLn.Addr().String())
+	srvPort, _ := strconv.Atoi(portStr)
+
+	httpSrv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		_, _ = w.Write([]byte("192.0.2.10"))
+	}))
+	defer httpSrv.Close()
+
+	// The address of a SOCKS server that is not listening yet.
+	free, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	laterAddr := free.Addr().String()
+	_ = free.Close()
+
+	var logged []string
+	var mu sync.Mutex
+	v := New(Options{
+		SocksAddr:      laterAddr,
+		SocksReadyWait: 5 * time.Second,
+		EgressURL:      httpSrv.URL,
+		DNSServer:      startFakeDNSServer(t, 0, 1),
+		LookupHost: func(context.Context, string) ([]netip.Addr, error) {
+			return []netip.Addr{netip.MustParseAddr("192.0.2.10")}, nil
+		},
+		Log: func(m string) {
+			mu.Lock()
+			logged = append(logged, m)
+			mu.Unlock()
+		},
+	})
+
+	// Xray starts listening 600 ms after the verification began.
+	go func() {
+		time.Sleep(600 * time.Millisecond)
+		ln, err := net.Listen("tcp", laterAddr)
+		if err != nil {
+			t.Errorf("late listen: %v", err)
+			return
+		}
+		t.Cleanup(func() { _ = ln.Close() })
+		serveSOCKS5(ln)
+	}()
+
+	ctx, cancel := context.WithTimeout(context.Background(), 8*time.Second)
+	defer cancel()
+	start := time.Now()
+	_, _, reason := v.Verify(ctx, &charonv1.Server{Id: "SRV-01", Address: "127.0.0.1", Port: uint32(srvPort)}, nil)
+	if reason != charonv1.FailureReason_FAILURE_UNSPECIFIED {
+		mu.Lock()
+		defer mu.Unlock()
+		t.Fatalf("a start that is only slow was taken for a failure: %v, log %v", reason, logged)
+	}
+	if waited := time.Since(start); waited < 500*time.Millisecond {
+		t.Fatalf("it did not wait for the port: passed after %v", waited)
+	}
+}
+
+// If Xray never listens, the verification fails with the reason of check 2, once the wait is over,
+// and the log says which check and why, with no address in it.
+func TestVerifier_GivesUpWhenXrayNeverListens(t *testing.T) {
+	srvLn, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer srvLn.Close()
+	go func() {
+		for {
+			c, err := srvLn.Accept()
+			if err != nil {
+				return
+			}
+			_ = c.Close()
+		}
+	}()
+	_, portStr, _ := net.SplitHostPort(srvLn.Addr().String())
+	srvPort, _ := strconv.Atoi(portStr)
+
+	var logged []string
+	v := New(Options{
+		SocksAddr:      "127.0.0.1:1",
+		SocksReadyWait: 400 * time.Millisecond,
+		LookupHost: func(context.Context, string) ([]netip.Addr, error) {
+			return []netip.Addr{netip.MustParseAddr("192.0.2.10")}, nil
+		},
+		Log: func(m string) { logged = append(logged, m) },
+	})
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	start := time.Now()
+	_, _, reason := v.Verify(ctx, &charonv1.Server{Id: "SRV-01", Address: "127.0.0.1", Port: uint32(srvPort)}, nil)
+	if reason != charonv1.FailureReason_FAILURE_REALITY_HANDSHAKE {
+		t.Fatalf("want FAILURE_REALITY_HANDSHAKE, got %v", reason)
+	}
+	if time.Since(start) < 350*time.Millisecond {
+		t.Fatalf("it gave up at once instead of waiting: %v", time.Since(start))
+	}
+	if len(logged) != 1 || !strings.Contains(logged[0], "check 2") || strings.Contains(logged[0], "127.0.0.1") {
+		t.Fatalf("the log should name check 2 and no address: %v", logged)
 	}
 }

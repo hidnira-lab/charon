@@ -9,6 +9,7 @@ package verify
 import (
 	"context"
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"io"
 	"net"
@@ -28,6 +29,17 @@ type Options struct {
 	DNSServer  string // DNS server IP:port queried through the tunnel, defaults to "1.1.1.1:53"
 	QueryHost  string // domain queried in check 4, defaults to "example.com"
 	LookupHost func(ctx context.Context, host string) ([]netip.Addr, error)
+
+	// SocksReadyWait is how long check 2 waits for the SOCKS inbound of Xray to
+	// accept connections. Xray is "started" 150 ms after it is launched, but it
+	// makes the adapter and the routes before it listens, which takes longer, so
+	// the first dial is refused on a healthy start. Defaults to 14 s, inside the
+	// 15 s that a verification may take.
+	SocksReadyWait time.Duration
+
+	// Log gets one line per failed check, with the kind of failure and never an
+	// address or a destination (the core log holds none). Nil is silent.
+	Log func(string)
 }
 
 // Verifier implements driver.Verifier.
@@ -44,6 +56,9 @@ func New(opts Options) *Verifier {
 	}
 	if opts.QueryHost == "" {
 		opts.QueryHost = "example.com"
+	}
+	if opts.SocksReadyWait <= 0 {
+		opts.SocksReadyWait = 14 * time.Second
 	}
 	if opts.LookupHost == nil {
 		opts.LookupHost = defaultLookupHost
@@ -78,6 +93,7 @@ func (v *Verifier) Verify(ctx context.Context, server *charonv1.Server, cfg *cha
 	// Resolve expected server IPs.
 	expectedIPs, err := v.opts.LookupHost(ctx, strings.TrimSpace(server.GetAddress()))
 	if err != nil || len(expectedIPs) == 0 {
+		v.failed("1 (the server address did not resolve)", err)
 		return "", 0, charonv1.FailureReason_FAILURE_TCP_TIMEOUT
 	}
 
@@ -86,14 +102,23 @@ func (v *Verifier) Verify(ctx context.Context, server *charonv1.Server, cfg *cha
 	var d net.Dialer
 	tcpConn, err := d.DialContext(ctx, "tcp", serverEndpoint)
 	if err != nil {
+		v.failed("1 (the server does not accept a connection)", err)
 		return "", 0, charonv1.FailureReason_FAILURE_TCP_TIMEOUT
 	}
 	_ = tcpConn.Close()
+
+	// Xray needs a moment after it started before it listens: wait for it, so a
+	// healthy start is not taken for a failed one.
+	if err := v.waitForSocks(ctx); err != nil {
+		v.failed("2 (the local proxy of Xray never came up)", err)
+		return "", 0, charonv1.FailureReason_FAILURE_REALITY_HANDSHAKE
+	}
 
 	// Step 2: Reality round-trip through the tunnel and latency measurement.
 	t0 := time.Now()
 	egressStr, err := v.fetchEgressThroughTunnel(ctx)
 	if err != nil {
+		v.failed("2 (the round trip through the tunnel failed)", err)
 		return "", 0, charonv1.FailureReason_FAILURE_REALITY_HANDSHAKE
 	}
 	latencyMs := uint32(time.Since(t0).Milliseconds())
@@ -104,6 +129,7 @@ func (v *Verifier) Verify(ctx context.Context, server *charonv1.Server, cfg *cha
 	// Step 3: Egress IP match against the server's expected IP(s).
 	observedIP, err := parseEgress(egressStr)
 	if err != nil {
+		v.failed("3 (the reply did not hold an address)", err)
 		return "", 0, charonv1.FailureReason_FAILURE_EGRESS_MISMATCH
 	}
 	matched := false
@@ -114,15 +140,62 @@ func (v *Verifier) Verify(ctx context.Context, server *charonv1.Server, cfg *cha
 		}
 	}
 	if !matched {
+		v.failed("3 (the address seen is not the server's)", nil)
 		return "", 0, charonv1.FailureReason_FAILURE_EGRESS_MISMATCH
 	}
 
 	// Step 4: DNS lookup through the tunnel to confirm DNS is tunnelled (P1).
 	if err := v.checkDNSThroughTunnel(ctx, v.resolverFor(cfg)); err != nil {
+		v.failed("4 (DNS through the tunnel)", err)
 		return "", 0, charonv1.FailureReason_FAILURE_DNS_NOT_TUNNELLED
 	}
 
 	return observedIP.String(), latencyMs, charonv1.FailureReason_FAILURE_UNSPECIFIED
+}
+
+// waitForSocks waits until the SOCKS inbound of Xray accepts a connection, for
+// at most SocksReadyWait or until ctx ends.
+func (v *Verifier) waitForSocks(ctx context.Context) error {
+	if v.opts.SocksAddr == "" {
+		return nil
+	}
+	ctx, cancel := context.WithTimeout(ctx, v.opts.SocksReadyWait)
+	defer cancel()
+	for {
+		var d net.Dialer
+		dctx, stop := context.WithTimeout(ctx, 500*time.Millisecond)
+		conn, err := d.DialContext(dctx, "tcp", v.opts.SocksAddr)
+		stop()
+		if err == nil {
+			_ = conn.Close()
+			return nil
+		}
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-time.After(100 * time.Millisecond):
+		}
+	}
+}
+
+// failed writes one line about a failed check: which check and what kind of
+// failure, never the text of the error, which can name an address.
+func (v *Verifier) failed(check string, err error) {
+	if v.opts.Log == nil {
+		return
+	}
+	kind := "failed"
+	switch {
+	case err == nil:
+		kind = "did not match"
+	case errors.Is(err, context.DeadlineExceeded):
+		kind = "timed out"
+	case errors.Is(err, context.Canceled):
+		kind = "was cancelled"
+	case strings.Contains(strings.ToLower(err.Error()), "refused"):
+		kind = "was refused"
+	}
+	v.opts.Log("verify: check " + check + " " + kind)
 }
 
 // parseEgress reads the caller address from the egress endpoint's reply. It

@@ -129,6 +129,9 @@ func NewRuntime(opts Options) (*Runtime, error) {
 	ver := verify.New(verify.Options{
 		SocksAddr: fmt.Sprintf("127.0.0.1:%d", opts.SocksPort),
 		EgressURL: opts.EgressURL,
+		Log: func(msg string) {
+			coreLogs.Append(charonv1.LogLevel_LOG_LEVEL_WARN, msg, clock.NowMs())
+		},
 	})
 
 	rt := &Runtime{

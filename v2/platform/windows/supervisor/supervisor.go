@@ -149,6 +149,10 @@ func (s *Supervisor) Start(server *charonv1.Server, userCfg *charonv1.Config) er
 		logMu.Unlock()
 
 		reason := classifyFailure(combined, waitErr)
+		if s.cfg.CoreLogs != nil {
+			s.cfg.CoreLogs.Append(charonv1.LogLevel_LOG_LEVEL_WARN,
+				fmt.Sprintf("supervisor: xray exited on its own (%v), counted as %v", waitErr, reason), s.cfg.NowMs())
+		}
 		s.emit(machine.Event{
 			Type:   machine.XrayExited,
 			Reason: reason,
