@@ -87,6 +87,18 @@ function Egress([int]$timeout = 15) {
     return $null
 }
 
+# The number of filters in the whole WFP (every provider). Xray's own leak filters have
+# another provider than Charon's, so they only show here. -1 when it cannot be read.
+function WfpTotal {
+    $f = Join-Path $env:TEMP 'charon-wfp-dump.xml'
+    Remove-Item $f -ErrorAction SilentlyContinue
+    & netsh.exe wfp show filters file=$f 2>&1 | Out-Null
+    if (-not (Test-Path $f)) { return -1 }
+    $n = ([regex]::Matches((Get-Content $f -Raw -ErrorAction SilentlyContinue), '<filterKey>')).Count
+    Remove-Item $f -ErrorAction SilentlyContinue
+    return $n
+}
+
 # What the network looks like right now, for a check that failed. It tells apart a DNS
 # problem (the address works, the name does not), a route problem and a filter problem.
 function Diag([string]$why) {
@@ -146,6 +158,9 @@ try {
     $direct0 = Egress 8
     Write-Host "    direct internet before: $(if ($direct0) { $direct0 } else { 'no answer (normal behind the firewall)' })"
 
+    $wfpBefore = WfpTotal
+    Write-Host "    filters in the whole WFP before: $wfpBefore"
+
     Step '2  connect'
     $c = Probe 'connect' 120
     $st = LastStatus $c
@@ -159,6 +174,14 @@ try {
     $f1 = Filters
     $n1 = FilterCount $f1
     Check 'the filters of the kill switch are in' ($n1 -gt 0) "$n1 filters"
+    $wfpDuring = WfpTotal
+    if ($wfpBefore -ge 0 -and $wfpDuring -ge 0) {
+        $xrayFilters = $wfpDuring - $wfpBefore - $n1
+        Write-Host "    filters in the whole WFP: $wfpBefore before, $wfpDuring now, Charon's $n1, so Xray's: $xrayFilters"
+        Check 'Xray added its own leak filters (autoSystemWfpBlockLeak)' ($xrayFilters -gt 0) "$xrayFilters filters"
+    } else {
+        Write-Host '    the whole WFP could not be read, the check of Xray''s leak filters is skipped' -ForegroundColor Yellow
+    }
     $adapter = Get-NetAdapter -Name 'charon0' -ErrorAction SilentlyContinue
     Check 'the tunnel adapter charon0 is there and up' ($adapter -and $adapter.Status -eq 'Up') "$($adapter.Status)"
     $viaTunnel = WaitEgress 40
@@ -240,6 +263,10 @@ try {
     Check 'every filter is gone' ((FilterCount $f2) -eq 0)
     $adapterAfter = Get-NetAdapter -Name 'charon0' -ErrorAction SilentlyContinue
     Check 'the tunnel adapter is gone' ($null -eq $adapterAfter)
+    $wfpAfter = WfpTotal
+    if ($wfpBefore -ge 0 -and $wfpAfter -ge 0) {
+        Check 'the whole WFP is back to what it was (Xray''s filters are gone too)' ($wfpAfter -eq $wfpBefore) "$wfpBefore before, $wfpAfter now"
+    }
 }
 catch {
     Write-Host "STOPPED: $_" -ForegroundColor Red

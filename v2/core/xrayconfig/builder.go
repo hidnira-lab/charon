@@ -169,6 +169,16 @@ func Build(server *charonv1.Server, cfg *charonv1.Config, opts Options) ([]byte,
 				// Loop protection: Xray binds its own connections to the
 				// interface of the default route. Never left to the user.
 				"autoOutboundsInterface": "auto",
+				// Windows only. Xray's own WFP filters (gone when Xray exits, also on a
+				// crash, while the persistent set of the Gate holds the line then) let
+				// the traffic of other programs leave only through the TUN. "dns" keeps
+				// port 53, 853 and the Windows DNS client off every other interface,
+				// which closes the leak to a resolver on the local network that the
+				// Gate permits with "allow local network" (competitive review P1:
+				// nothing is resolved outside the tunnel). "misconfigtun" blocks an IP
+				// version that has no route into the TUN. If the filters cannot be
+				// added Xray does not start, so this fails closed.
+				"autoSystemWfpBlockLeak": []string{"dns", "misconfigtun"},
 				"dns":                    []string{dnsServer},
 			},
 			"sniffing": map[string]any{
