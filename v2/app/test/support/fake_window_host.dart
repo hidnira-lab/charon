@@ -37,9 +37,13 @@ class FakeWindowHost implements WindowHost {
   /// The sizes the flyout was asked for, in order.
   final flyoutSizes = <(int, int)>[];
 
+  /// The [open] flag of each of those calls.
+  final flyoutOpens = <bool>[];
+
   @override
-  Future<void> showFlyout({required int width, required int height, required int notch}) async {
+  Future<void> showFlyout({required int width, required int height, required int notch, required bool open}) async {
     flyoutSizes.add((width, height));
+    flyoutOpens.add(open);
     calls.add('showFlyout');
   }
 

@@ -117,7 +117,7 @@ void NativeShell::OnCall(
   } else if (name == "showFlyout") {
     if (const auto* args = std::get_if<EncodableMap>(call.arguments())) {
       ShowFlyout(Number(*args, "width"), Number(*args, "height"),
-                 Number(*args, "notch"));
+                 Number(*args, "notch"), Flag(*args, "open"));
     }
   } else if (name == "hideFlyout") {
     LeaveFlyout();
@@ -163,8 +163,12 @@ POINT NativeShell::TrayAnchor() {
   return click_;
 }
 
-void NativeShell::ShowFlyout(int width, int height, int notch) {
+void NativeShell::ShowFlyout(int width, int height, int notch, bool open) {
   if (width <= 0 || height <= 0) return;
+  // A new height for a flyout that is not there any more is a late message, not a
+  // request: the flyout was closed while Dart was still laying itself out.
+  if (!flyout_ && !open) return;
+  if (leaving_) return;
   flyout_width_ = width;
   flyout_height_ = height;
   flyout_notch_ = notch > 0 ? notch : 12;
@@ -227,6 +231,7 @@ void NativeShell::PlaceFlyout() {
 void NativeShell::LeaveFlyout() {
   if (!flyout_) return;
   flyout_ = false;
+  leaving_ = true;
   ShowWindow(window_, SW_HIDE);
   SetWindowRgn(window_, nullptr, TRUE);
   const LONG_PTR ex = GetWindowLongPtr(window_, GWL_EXSTYLE);
@@ -239,6 +244,7 @@ void NativeShell::LeaveFlyout() {
                  main_rect_.right - main_rect_.left,
                  main_rect_.bottom - main_rect_.top, SWP_NOACTIVATE);
   }
+  leaving_ = false;
 }
 
 void NativeShell::DismissFlyout() {

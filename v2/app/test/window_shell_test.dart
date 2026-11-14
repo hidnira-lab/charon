@@ -391,5 +391,40 @@ void main() {
       expect(host.flyoutSizes.length, greaterThanOrEqualTo(before));
       expect(host.flyoutSizes.every((e) => e.$1 == 360), isTrue);
     });
+
+    testWidgets('the first size opens the flyout and the next ones only change its height', (t) async {
+      final c = _idle();
+      final host = await app(t, c);
+      host.emit(const TrayLeftClick());
+      await tick(t);
+      expect(host.flyoutOpens, [true]);
+
+      c.updateStatus(Status(phase: Phase.PHASE_UP, chosenServerId: 'SRV-01', activeServerId: 'SRV-01', egressAddress: '203.0.113.1'));
+      await tick(t);
+      expect(host.flyoutOpens.skip(1).every((o) => !o), isTrue, reason: 'only the first call opens');
+    });
+
+    testWidgets('a size that is still on its way when the flyout closes is not sent', (t) async {
+      final host = await app(t, _idle());
+      host.emit(const TrayLeftClick());
+      await tick(t);
+      final sent = host.flyoutSizes.length;
+      // The system closed it. A layout of the flyout that is still under way
+      // reports its size after that, and must not open the flyout again.
+      host.emit(const FlyoutDismissed());
+      await tick(t);
+      expect(host.flyoutSizes.length, sent);
+    });
+
+    testWidgets('opened again after it was closed, the first size opens it again', (t) async {
+      final host = await app(t, _idle());
+      host.emit(const TrayLeftClick());
+      await tick(t);
+      host.emit(const FlyoutDismissed());
+      await tick(t);
+      host.emit(const TrayLeftClick());
+      await tick(t);
+      expect(host.flyoutOpens.where((o) => o).length, 2);
+    });
   });
 }

@@ -57,9 +57,11 @@ abstract interface class WindowHost {
   Future<void> startDrag();
 
   /// Turns the window into the tray flyout: [width] by [height] logical pixels
-  /// with stepped corners of [notch], above the tray icon. Called again with a
-  /// new height when the content grows or shrinks.
-  Future<void> showFlyout({required int width, required int height, required int notch});
+  /// with stepped corners of [notch], above the tray icon. [open] is true for
+  /// the call that opens it. It is called again with a new height and [open]
+  /// false when the content grows or shrinks, which the host ignores once the
+  /// flyout is closed.
+  Future<void> showFlyout({required int width, required int height, required int notch, required bool open});
 
   /// Closes the flyout and puts the window back as it was, hidden.
   Future<void> hideFlyout();
@@ -98,7 +100,7 @@ class NoWindowHost implements WindowHost {
   Future<void> startDrag() async {}
 
   @override
-  Future<void> showFlyout({required int width, required int height, required int notch}) async {}
+  Future<void> showFlyout({required int width, required int height, required int notch, required bool open}) async {}
 
   @override
   Future<void> hideFlyout() async {}
@@ -168,8 +170,8 @@ class NativeWindowHost implements WindowHost {
   Future<void> startDrag() => _call('startDrag');
 
   @override
-  Future<void> showFlyout({required int width, required int height, required int notch}) =>
-      _call('showFlyout', {'width': width, 'height': height, 'notch': notch});
+  Future<void> showFlyout({required int width, required int height, required int notch, required bool open}) =>
+      _call('showFlyout', {'width': width, 'height': height, 'notch': notch, 'open': open});
 
   @override
   Future<void> hideFlyout() => _call('hideFlyout');

@@ -26,7 +26,8 @@ constexpr UINT kTrayMessage = WM_APP + 1;
 // tray icon. It goes back to the main window's place when it closes.
 //
 // Dart to native: ready, hide, show, quit, startDrag, setTray, removeTray,
-// showFlyout (width, height, notch in logical pixels), hideFlyout.
+// showFlyout (width, height, notch in logical pixels, and open: true for the
+// call that opens it, false for the ones that only change its height), hideFlyout.
 // Native to Dart: closeRequested, trayLeftClick (with whether the window is
 // showing), trayDoubleClick, menuCommand (the id of the picked item),
 // flyoutDismissed (the window lost the focus).
@@ -57,7 +58,7 @@ class NativeShell {
   void ApplyTray();
   void RemoveTray();
   void ShowWindowAndFocus();
-  void ShowFlyout(int width, int height, int notch);
+  void ShowFlyout(int width, int height, int notch, bool open);
   void PlaceFlyout();
   // Back to the main window's shape. It hides the window first, which a
   // change of style needs.
@@ -82,6 +83,9 @@ class NativeShell {
   UINT taskbar_created_;
 
   bool flyout_ = false;
+  // Changing the size of the window makes Flutter lay itself out and the main
+  // loop run, so a message can arrive in the middle of leaving the flyout.
+  bool leaving_ = false;
   RECT main_rect_ = {};  // where the main window was, in pixels
   POINT anchor_ = {};    // the tray icon, in pixels
   POINT click_ = {};     // the cursor at the last tray click

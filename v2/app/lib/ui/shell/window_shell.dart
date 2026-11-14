@@ -17,7 +17,12 @@ import '../tray/tray_flyout.dart';
 /// What the buttons of the window and the tray menu do. One place, so the X of
 /// every screen, Alt+F4 and "Quit Charon" in the tray mean the same.
 class WindowActions {
-  WindowActions({required this.host, required this.controller, required this.navigatorKey});
+  WindowActions({required this.host, required this.controller, required this.navigatorKey}) {
+    // A flyout that closes is announced again the next time it opens.
+    flyoutOpen.addListener(() {
+      if (!flyoutOpen.value) _announced = false;
+    });
+  }
 
   final WindowHost host;
   final HomeController controller;
@@ -67,11 +72,21 @@ class WindowActions {
 
   Future<void> hideToTrayFromFlyout() => closeFlyout();
 
-  Future<void> flyoutMeasured(Size size) => host.showFlyout(
-        width: size.width.ceil(),
-        height: size.height.ceil(),
-        notch: TrayFlyout.notch.toInt(),
-      );
+  var _announced = false;
+
+  /// The flyout was laid out: the first size opens it, later ones change its height.
+  /// Nothing is sent once it is closed, which a layout still on its way can reach.
+  Future<void> flyoutMeasured(Size size) async {
+    if (!flyoutOpen.value) return;
+    final open = !_announced;
+    _announced = true;
+    await host.showFlyout(
+      width: size.width.ceil(),
+      height: size.height.ceil(),
+      notch: TrayFlyout.notch.toInt(),
+      open: open,
+    );
+  }
 
   bool get _sessionRuns {
     final s = controller.uiState;
