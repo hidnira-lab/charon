@@ -35,6 +35,7 @@ class LogTerminalCard extends StatefulWidget {
     required this.onRawModeChanged,
     required this.onCopy,
     required this.onShare,
+    this.showShare = true,
     required this.onExportDiagnostics,
   });
 
@@ -51,6 +52,9 @@ class LogTerminalCard extends StatefulWidget {
   final ValueChanged<bool> onRawModeChanged;
   final VoidCallback onCopy;
   final VoidCallback onShare;
+
+  /// The Windows boards have no Share button, only Copy. Mobile does.
+  final bool showShare;
   final VoidCallback onExportDiagnostics;
 
   @override
@@ -183,12 +187,14 @@ class _LogTerminalCardState extends State<LogTerminalCard> {
                       icon: PixelIcons.copy,
                       onTap: logs.isEmpty ? null : widget.onCopy,
                     ),
-                    const SizedBox(width: 6),
-                    _PillButton(
-                      label: l10n.telemetryShareBtn,
-                      icon: PixelIcons.share,
-                      onTap: logs.isEmpty ? null : widget.onShare,
-                    ),
+                    if (widget.showShare) ...[
+                      const SizedBox(width: 6),
+                      _PillButton(
+                        label: l10n.telemetryShareBtn,
+                        icon: PixelIcons.share,
+                        onTap: logs.isEmpty ? null : widget.onShare,
+                      ),
+                    ],
                   ],
                 ),
               ],

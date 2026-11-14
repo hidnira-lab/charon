@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -8,6 +10,7 @@ import '../../state/telemetry_view.dart';
 import '../../theme/theme.dart';
 import '../common/glass_card.dart';
 import '../home/widgets/rail_nav.dart';
+import '../home/widgets/title_bar.dart';
 import '../trust/diagnostics_screen.dart';
 import 'widgets/history_card.dart';
 import 'widgets/log_terminal_card.dart';
@@ -94,7 +97,7 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
         final server = controller.activeServer;
 
         return Scaffold(
-          body: Row(
+          body: TitleBarPage(child: Row(
             children: [
               RailNav(
                 controller: controller,
@@ -165,6 +168,7 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
                                       onRawModeChanged: (raw) => setState(() => _rawMode = raw),
                                       onCopy: () => _handleCopy(visibleLogs),
                                       onShare: () => _handleShare(visibleLogs),
+                                      showShare: !Platform.isWindows,
                                       onExportDiagnostics: () =>
                                           DiagnosticsScreen.show(context, controller),
                                     ),
@@ -198,7 +202,7 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
                 ),
               ),
             ],
-          ),
+          )),
         );
       },
     );

@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -5,6 +7,7 @@ import 'support/fonts.dart';
 import 'package:fixnum/fixnum.dart';
 
 import 'package:charon/gen/charon/v1/charon.pb.dart';
+import 'package:charon/l10n/generated/app_localizations.dart';
 import 'package:charon/main.dart';
 import 'package:charon/state/home_controller.dart';
 import 'package:charon/ui/telemetry/telemetry_screen.dart';
@@ -89,7 +92,8 @@ void main() {
       expect(find.text('CHARON CORE'), findsOneWidget);
       expect(find.text('RAW'), findsOneWidget);
       expect(find.text('Copy'), findsOneWidget);
-      expect(find.text('Share'), findsOneWidget);
+      // Share is for Mobile: the Windows boards have Copy only.
+      expect(find.text('Share'), Platform.isWindows ? findsNothing : findsOneWidget);
       expect(find.text('> no access lines, xray is not running'), findsOneWidget);
 
       // The level chips are not on the board, so they are hidden
@@ -235,27 +239,24 @@ void main() {
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() => tester.view.resetPhysicalSize());
 
-      final controller = HomeController();
-      // Share needs something to share: the viewer starts empty until the core sends lines.
-      for (final source in [LogSource.LOG_SOURCE_CHARON_CORE, LogSource.LOG_SOURCE_XRAY_ACCESS]) {
-        controller.addLogBatch(LogBatch(
-          source: source,
-          lines: [LogLine(seq: Int64(1), atMs: Int64(1000), level: LogLevel.LOG_LEVEL_INFO, text: 'fixture line')],
-        ));
-      }
-      await tester.pumpWidget(CharonApp(controller: controller));
-      controller.setTab(3);
-      await tester.pumpAndSettle();
-
-      // Tap Share
-      await tester.tap(find.text('Share'));
+      // The Windows screen has no Share button, so open the dialog the way
+      // the Android screen does.
+      late BuildContext ctx;
+      await tester.pumpWidget(MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Builder(builder: (c) {
+          ctx = c;
+          return const SizedBox();
+        }),
+      ));
+      ShareDialog.show(ctx, visibleLinesText: 'fixture line', lineCount: 1);
       await tester.pumpAndSettle();
 
       expect(find.byType(ShareDialog), findsOneWidget);
       expect(find.text('Share visible lines?'), findsOneWidget);
       expect(find.textContaining('Shares only the visible lines'), findsOneWidget);
 
-      // Tap Cancel
       await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
 
@@ -297,7 +298,7 @@ void main() {
 
       expect(find.text('> TELEMETRI · TANPA SESI'), findsOneWidget);
       expect(find.text('Salin'), findsOneWidget);
-      expect(find.text('Bagikan'), findsOneWidget);
+      expect(find.text('Bagikan'), Platform.isWindows ? findsNothing : findsOneWidget);
       expect(find.text('MENTAH'), findsOneWidget);
       expect(find.text('XRAY · AKSES'), findsOneWidget);
       expect(find.text('> tidak ada baris akses, xray tidak berjalan'), findsOneWidget);
