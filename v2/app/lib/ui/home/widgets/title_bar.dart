@@ -8,6 +8,16 @@ import '../../common/ghost.dart';
 import '../../common/glass_card.dart';
 import '../../common/line_icons.dart';
 
+/// A page under the window title bar, which the boards draw on every screen.
+class TitleBarPage extends StatelessWidget {
+  const TitleBarPage({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => Column(children: [const TitleBar(), Expanded(child: child)]);
+}
+
 /// Desktop window title bar matching HomeDesktop board (36 px high).
 class TitleBar extends StatelessWidget {
   const TitleBar({

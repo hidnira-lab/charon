@@ -41,7 +41,9 @@ void main() {
       expect(find.text('Charon v$appVersion'), findsOneWidget);
       expect(find.text('Charon is free software. These are the licences of everything it ships with.'), findsOneWidget);
 
-      for (final name in ['Charon', 'Xray core', 'wintun', 'Go modules', 'Flutter packages', 'Fonts']) {
+      // "Charon" is also the name in the window title bar, so it counts twice.
+      expect(find.text('Charon'), findsNWidgets(2));
+      for (final name in ['Xray core', 'wintun', 'Go modules', 'Flutter packages', 'Fonts']) {
         expect(find.text(name), findsOneWidget, reason: name);
       }
       for (final chip in ['GPL 3.0', 'MPL 2.0', 'TO CONFIRM', 'OFL 1.1']) {

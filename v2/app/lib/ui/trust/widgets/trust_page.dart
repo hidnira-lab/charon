@@ -6,6 +6,7 @@ import '../../../state/home_controller.dart';
 import '../../../theme/theme.dart';
 import '../../common/glass_card.dart';
 import '../../home/widgets/rail_nav.dart';
+import '../../home/widgets/title_bar.dart';
 import '../../common/motion.dart';
 
 /// The frame of the three Trust pages (Licences, Privacy and network, Export
@@ -44,7 +45,7 @@ class TrustPage extends StatelessWidget {
     final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      body: Row(
+      body: TitleBarPage(child: Row(
         children: [
           RailNav(controller: controller, selectedIndex: 4, onTabSelected: controller.setTab),
           Expanded(
@@ -95,7 +96,7 @@ class TrustPage extends StatelessWidget {
             ),
           ),
         ],
-      ),
+      )),
     );
   }
 }

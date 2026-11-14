@@ -6,6 +6,7 @@ import '../../state/home_controller.dart';
 import '../../state/split_view.dart';
 import '../../theme/theme.dart';
 import '../home/widgets/rail_nav.dart';
+import '../home/widgets/title_bar.dart';
 import 'widgets/composer_card.dart';
 import 'widgets/pending_banner.dart';
 import 'widgets/route_map_card.dart';
@@ -65,7 +66,7 @@ class _SplitScreenState extends State<SplitScreen> {
             isOnlyListed ? l10n.splitSubtitleOnlyListed : l10n.splitSubtitleAllExcept;
 
         return Scaffold(
-          body: Row(
+          body: TitleBarPage(child: Row(
             children: [
               RailNav(
                 controller: controller,
@@ -179,7 +180,7 @@ class _SplitScreenState extends State<SplitScreen> {
                 ),
               ),
             ],
-          ),
+          )),
         );
       },
     );

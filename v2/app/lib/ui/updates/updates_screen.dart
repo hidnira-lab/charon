@@ -10,6 +10,7 @@ import '../../state/updates_view.dart';
 import '../../theme/theme.dart';
 import '../common/glass_card.dart';
 import '../home/widgets/rail_nav.dart';
+import '../home/widgets/title_bar.dart';
 import 'widgets/file_update_card.dart';
 import 'widgets/offline_banner.dart';
 import 'widgets/update_card.dart';
@@ -105,7 +106,7 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
         final checkedLine = view.checkedLine;
 
         return Scaffold(
-          body: Row(
+          body: TitleBarPage(child: Row(
             children: [
               RailNav(
                 controller: widget.controller,
@@ -216,7 +217,7 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
                 ),
               ),
             ],
-          ),
+          )),
         );
       },
     );
