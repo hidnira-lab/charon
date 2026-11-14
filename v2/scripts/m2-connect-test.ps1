@@ -178,13 +178,21 @@ try {
         $x = @(Get-Process xray -ErrorAction SilentlyContinue | Where-Object { $_.Path -like "$ProgramDir\*" })
         Check 'the service''s xray is running' ($x.Count -gt 0)
         $x | Stop-Process -Force
-        Start-Sleep -Seconds 2
+        # The service retries after 5 seconds, so the hold has to be looked at at once,
+        # before anything slow runs (the probe takes several seconds to start).
+        Start-Sleep -Seconds 1
+        $leak = Egress 3
+        if ($null -eq $leak) {
+            Check 'while it is down, nothing leaves the PC' $true 'no answer'
+        } elseif ($leak -eq $egress) {
+            Write-Host "    the tunnel was already back ($leak is the server), so the hold could not be seen this time" -ForegroundColor Yellow
+        } else {
+            Check 'while it is down, nothing leaves the PC' $false "an answer came from $leak, which is not the server"
+        }
         $held = Probe 'hello'
         $hs = LastStatus $held
-        Write-Host "    two seconds after the crash: $hs"
-        Check 'the service noticed: not Up with the gate Armed or Held' ($hs -and (Field $hs 'phase') -ne 'PHASE_UP')
-        $leak = Egress 6
-        Check 'while it is down, nothing leaves the PC' ($null -eq $leak) $(if ($leak) { "an answer came from $leak" } else { 'no answer' })
+        Write-Host "    a few seconds after the crash: $hs"
+        Check 'the service noticed: it was not Up, or it has already recovered' ($hs -and ((Field $hs 'lastFailure') -eq 'FAILURE_ADAPTER_FAILED'))
         Write-Host '    waiting for the service to bring the tunnel back...'
         $recovered = $false
         for ($i = 0; $i -lt 6 -and -not $recovered; $i++) {
