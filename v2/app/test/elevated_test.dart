@@ -25,7 +25,17 @@ void main() {
     test('a quote in a path or an argument cannot end the string and run code', () {
       final s = elevatedScript("C:\\it's\\a.exe", const ["x'; Remove-Item C:\\ -Recurse; '"]);
       expect(s, contains("-FilePath 'C:\\it''s\\a.exe'"));
-      expect(s, contains("@('x''; Remove-Item C:\\ -Recurse; ''')"));
+      // The argument has spaces, so it also gets the double quotes of a command line.
+      expect(s, contains("@('\"x''; Remove-Item C:\\ -Recurse; ''\"')"));
+    });
+
+    test('an argument with spaces gets the double quotes Start-Process does not add', () {
+      expect(windowsArg('stop'), 'stop');
+      expect(windowsArg(r'C:\Program Files\Charon\install.ps1'), r'"C:\Program Files\Charon\install.ps1"');
+      expect(windowsArg(''), '""');
+      expect(windowsArg(r'a "b" c'), r'"a \"b\" c"');
+      expect(windowsArg(r'C:\dir with space\'), r'"C:\dir with space\\"'); // a backslash before the closing quote is doubled
+      expect(argumentList(['-File', r'C:\Program Files\x.ps1']), r'''@('-File','"C:\Program Files\x.ps1"')''');
     });
 
     test('the script keeps the catch that tells a refusal from a failure', () {
@@ -56,6 +66,24 @@ void main() {
 
     test('a bare Win32Exception with 1223 is 1223', () async {
       expect(await answerTo('throw $win32'), 1223);
+    });
+
+    // The bug of the first Repair: the script path has spaces (Program Files), and
+    // Start-Process does not quote the items of -ArgumentList. Same call as the script
+    // of the window, without -Verb RunAs (a test cannot answer a prompt).
+    test('a script in a folder with spaces is found, and gets its switch', () async {
+      final dir = await Directory.systemTemp.createTemp('charon elevated test ');
+      addTearDown(() => dir.delete(recursive: true));
+      final script = File('${dir.path}${Platform.pathSeparator}install copy.ps1');
+      await script.writeAsString('param([switch]\$Repair)\r\nif (\$Repair) { exit 7 } else { exit 3 }\r\n');
+      final args = argumentList(['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', script.path, '-Repair']);
+      final r = await Process.run('powershell.exe', [
+        '-NoProfile',
+        '-NonInteractive',
+        '-Command',
+        'try { \$p = Start-Process -FilePath powershell.exe -ArgumentList $args -Wait -PassThru; exit \$p.ExitCode } catch { exit 99 }',
+      ]);
+      expect(r.exitCode, 7, reason: '${r.stdout}${r.stderr}');
     });
 
     test('the words of Windows alone are enough, when the exception has another shape', () async {

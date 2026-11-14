@@ -14,12 +14,32 @@ const elevationDeclined = 1223;
 /// Every value is a single quoted PowerShell string, so nothing in a path or an
 /// argument is read as code.
 String elevatedScript(String exe, List<String> args) {
-  String q(String s) => "'${s.replaceAll("'", "''")}'";
-  final argList = args.isEmpty ? '' : ' -ArgumentList @(${args.map(q).join(',')})';
+  final argList = args.isEmpty ? '' : ' -ArgumentList ${argumentList(args)}';
   return r'$ErrorActionPreference = "Stop"; '
-      'try { \$p = Start-Process -FilePath ${q(exe)}$argList -Verb RunAs -Wait -PassThru; exit \$p.ExitCode } '
+      'try { \$p = Start-Process -FilePath ${_q(exe)}$argList -Verb RunAs -Wait -PassThru; exit \$p.ExitCode } '
       'catch { $elevationCatch }';
 }
+
+String _q(String s) => "'${s.replaceAll("'", "''")}'";
+
+/// One argument as a Windows command line wants it. `Start-Process -ArgumentList`
+/// joins the items with spaces and adds NO quotes, so a path like
+/// `C:\Program Files\Charon\install.ps1` fell apart into `C:\Program` and the rest, and
+/// a real Repair answered 1 because PowerShell found no script. An argument with a space
+/// or a quote gets double quotes (the rules of CommandLineToArgvW: backslashes in front
+/// of a quote, and at the end, are doubled).
+@visibleForTesting
+String windowsArg(String a) {
+  if (a.isNotEmpty && !a.contains(RegExp(r'[\s"]'))) return a;
+  var s = a.replaceAllMapped(RegExp(r'(\\*)"'), (m) => '${m[1]}${m[1]}\\"');
+  s = s.replaceAllMapped(RegExp(r'(\\+)$'), (m) => '${m[1]}${m[1]}');
+  return '"$s"';
+}
+
+/// The `-ArgumentList` value: a PowerShell array of single quoted items, each already
+/// quoted for the command line of Windows.
+@visibleForTesting
+String argumentList(List<String> args) => '@(${args.map((a) => _q(windowsArg(a))).join(',')})';
 
 /// What the `catch` of [elevatedScript] does with the error of `Start-Process`.
 /// Windows PowerShell wraps the Win32 error of a refused prompt in another
