@@ -104,6 +104,12 @@ class HomeController extends ChangeNotifier {
   bool _isFirstRun;
   int _activeTabIndex = 0;
   StreamSubscription<Event>? _eventSub;
+
+  final _notices = StreamController<Notice>.broadcast();
+
+  /// What the service tells without being asked (a reconnect, a move to the
+  /// backup, held traffic, a quota level). The window shows these as toasts.
+  Stream<Notice> get notices => _notices.stream;
   bool _isDisposed = false;
 
   void _onSyncChanged() {
@@ -1015,8 +1021,16 @@ class HomeController extends ChangeNotifier {
     }
   }
 
+  /// For tests: an event as if it came from the core.
+  @visibleForTesting
+  void handleEvent(Event event) => _handleEvent(event);
+
   void _handleEvent(Event event) {
     if (_isDisposed) return;
+    if (event.hasNotice()) {
+      _notices.add(event.notice);
+      return;
+    }
     if (event.hasStatusChanged()) {
       _status = event.statusChanged;
       _syncAndroidAnomaly(_status);
@@ -1430,6 +1444,7 @@ class HomeController extends ChangeNotifier {
     service.removeListener(_onSyncChanged);
     service.dispose();
     _eventSub?.cancel();
+    unawaited(_notices.close());
     // A name typed a moment ago is still waiting to be written: write it now.
     if (_uiSaveTimer?.isActive ?? false) {
       _uiSaveTimer!.cancel();

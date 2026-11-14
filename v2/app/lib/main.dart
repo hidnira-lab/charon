@@ -9,8 +9,10 @@ import 'core/device_location.dart';
 import 'core/geoip.dart';
 import 'core/transport.dart';
 import 'core/window_host.dart';
+import 'core/windows_toast.dart';
 import 'l10n/generated/app_localizations.dart';
 import 'state/home_controller.dart';
+import 'state/os_toasts.dart';
 import 'state/service_view.dart';
 import 'state/ui_prefs.dart';
 import 'theme/theme.dart';
@@ -42,6 +44,7 @@ Future<void> main() async {
     showSplash: Platform.isWindows,
     // The frameless window and the tray are the Windows runner's.
     windowHost: Platform.isWindows ? NativeWindowHost() : null,
+    osToasts: Platform.isWindows ? OsToasts(toaster: WindowsToaster()) : null,
   ));
 
   // The supervisor opens the pipe now, and again every few seconds while the
@@ -90,6 +93,7 @@ class CharonApp extends StatefulWidget {
     this.themeData,
     this.showSplash = false,
     this.windowHost,
+    this.osToasts,
   });
 
   final HomeController controller;
@@ -102,6 +106,9 @@ class CharonApp extends StatefulWidget {
   /// The frameless window and the tray. Without one, the title bar buttons and
   /// the tray do nothing (Android, tests).
   final WindowHost? windowHost;
+
+  /// The toasts of Windows (see [OsToasts]).
+  final OsToasts? osToasts;
 
   @override
   State<CharonApp> createState() => _CharonAppState();
@@ -162,6 +169,7 @@ class _CharonAppState extends State<CharonApp> {
             host: widget.windowHost ?? const NoWindowHost(),
             controller: controller,
             navigatorKey: _navigatorKey,
+            toasts: widget.osToasts,
             child: PageBackdrop(
               home: !controller.isFirstRun && controller.service.view == null && activeTab == 0,
               // The toast sits above every screen and dialog, in the one window.

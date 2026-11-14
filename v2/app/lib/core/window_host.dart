@@ -24,6 +24,22 @@ class TrayDoubleClick extends WindowEvent {
   const TrayDoubleClick();
 }
 
+/// A button of a toast was pressed while the app runs: the `charon://` link it
+/// carries (see ToastActivation, which decides whether to obey it).
+class ActivationLink extends WindowEvent {
+  const ActivationLink(this.link);
+
+  final String link;
+}
+
+/// The Windows session was locked or unlocked. The lock screen shows the public
+/// version of a toast.
+class SessionLock extends WindowEvent {
+  const SessionLock(this.locked);
+
+  final bool locked;
+}
+
 /// The flyout lost the focus (a click elsewhere) and the host closed it.
 class FlyoutDismissed extends WindowEvent {
   const FlyoutDismissed();
@@ -137,6 +153,11 @@ class NativeWindowHost implements WindowHost {
         _events.add(TrayLeftClick(windowShowing: call.arguments == true));
       case 'flyoutDismissed':
         _events.add(const FlyoutDismissed());
+      case 'activation':
+        final link = call.arguments;
+        if (link is String) _events.add(ActivationLink(link));
+      case 'sessionLock':
+        _events.add(SessionLock(call.arguments == true));
       case 'trayDoubleClick':
         _events.add(const TrayDoubleClick());
       case 'menuCommand':

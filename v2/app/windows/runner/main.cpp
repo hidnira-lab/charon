@@ -2,7 +2,12 @@
 #include <flutter/flutter_view_controller.h>
 #include <windows.h>
 
+#include <shellapi.h>
+
+#include <string>
+
 #include "flutter_window.h"
+#include "native_shell.h"
 #include "utils.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
@@ -19,8 +24,27 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   [[maybe_unused]] ::HANDLE single = ::CreateMutexW(nullptr, TRUE, L"Local\\Charon.v2.Window");
   if (::GetLastError() == ERROR_ALREADY_EXISTS) {
     if (HWND other = ::FindWindowW(L"FLUTTER_RUNNER_WIN32_WINDOW", L"Charon")) {
-      ::ShowWindow(other, ::IsIconic(other) ? SW_RESTORE : SW_SHOW);
-      ::SetForegroundWindow(other);
+      // A button of a toast starts the program with a link. Hand it to the window
+      // that is there, which decides what it means, and let it take the focus
+      // (this process was started by the user's click, which gives that right).
+      int argc = 0;
+      wchar_t** argv = ::CommandLineToArgvW(::GetCommandLineW(), &argc);
+      std::wstring link;
+      if (argv && argc > 1 && std::wstring(argv[1]).rfind(L"charon://", 0) == 0) {
+        link = argv[1];
+      }
+      if (argv) ::LocalFree(argv);
+      if (!link.empty()) {
+        ::AllowSetForegroundWindow(ASFW_ANY);
+        COPYDATASTRUCT data = {};
+        data.dwData = kActivationData;
+        data.cbData = static_cast<DWORD>((link.size() + 1) * sizeof(wchar_t));
+        data.lpData = const_cast<wchar_t*>(link.c_str());
+        ::SendMessageW(other, WM_COPYDATA, 0, reinterpret_cast<LPARAM>(&data));
+      } else {
+        ::ShowWindow(other, ::IsIconic(other) ? SW_RESTORE : SW_SHOW);
+        ::SetForegroundWindow(other);
+      }
     }
     return EXIT_SUCCESS;
   }

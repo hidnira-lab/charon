@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -6,7 +7,11 @@ import 'package:flutter/services.dart';
 
 import '../../core/window_host.dart';
 import '../../l10n/generated/app_localizations.dart';
+import '../../gen/charon/v1/charon.pb.dart' show Notice;
 import '../../state/home_controller.dart';
+import '../../state/os_toasts.dart';
+import '../../state/toast_activation.dart';
+import '../../state/tray_toast.dart';
 import '../../state/service_view.dart';
 import '../../state/tray_host.dart';
 import '../../state/tray_view.dart';
@@ -134,6 +139,39 @@ class WindowActions {
     }
   }
 
+  /// A button of a toast, in a link the app obeys only with its token. A link that
+  /// does not fit (an old toast, a page that tried) only opens the window.
+  Future<void> runToastLink(String link, {required String token}) async {
+    final a = ToastActivation.parse(link, token: token);
+    if (a == null) {
+      await openWindow();
+      return;
+    }
+    final c = controller;
+    switch (a.action) {
+      case ToastAction.switchNow:
+        await c.switchNow();
+      case ToastAction.stop:
+        await c.disconnect();
+      case ToastAction.trySrv || ToastAction.moveToNext:
+        final id = a.serverId;
+        if (id != null) await c.trySrv(id);
+      case ToastAction.retryNow:
+        await c.retryNow();
+      case ToastAction.release:
+        await c.release();
+      case ToastAction.connect:
+        await c.connect();
+      case ToastAction.openWindow:
+        await openWindow();
+      case ToastAction.seeUsage:
+        c.setTab(3); // Telemetry
+        await openWindow();
+      case ToastAction.dismiss:
+        break;
+    }
+  }
+
   /// A picked item of the tray menu.
   Future<void> runTray(TrayMenuItem item) async {
     final c = controller;
@@ -192,12 +230,16 @@ class WindowShell extends StatefulWidget {
     required this.controller,
     required this.navigatorKey,
     required this.child,
+    this.toasts,
   });
 
   final WindowHost host;
   final HomeController controller;
   final GlobalKey<NavigatorState> navigatorKey;
   final Widget child;
+
+  /// The toasts of Windows. Without it there are none (Android, tests).
+  final OsToasts? toasts;
 
   @override
   State<WindowShell> createState() => _WindowShellState();
@@ -206,6 +248,8 @@ class WindowShell extends StatefulWidget {
 class _WindowShellState extends State<WindowShell> {
   late WindowActions _actions = _newActions();
   StreamSubscription<WindowEvent>? _sub;
+  StreamSubscription<Notice>? _noticeSub;
+  var _reconnectToastShown = false;
   EncodedTrayMenu? _menu;
   String? _pushed;
 
@@ -217,7 +261,11 @@ class _WindowShellState extends State<WindowShell> {
     super.initState();
     _sub = widget.host.events.listen(_onEvent);
     widget.controller.addListener(_pushTray);
+    widget.controller.addListener(_followReconnect);
+    _noticeSub = widget.controller.notices.listen(_onNotice);
     unawaited(widget.host.ready());
+    final toasts = widget.toasts;
+    if (toasts != null) unawaited(toasts.register(Platform.resolvedExecutable));
   }
 
   @override
@@ -225,7 +273,11 @@ class _WindowShellState extends State<WindowShell> {
     super.didUpdateWidget(old);
     if (old.host != widget.host || old.controller != widget.controller || old.navigatorKey != widget.navigatorKey) {
       old.controller.removeListener(_pushTray);
+      old.controller.removeListener(_followReconnect);
       widget.controller.addListener(_pushTray);
+      widget.controller.addListener(_followReconnect);
+      _noticeSub?.cancel();
+      _noticeSub = widget.controller.notices.listen(_onNotice);
       _sub?.cancel();
       _sub = widget.host.events.listen(_onEvent);
       _actions = _newActions();
@@ -242,7 +294,9 @@ class _WindowShellState extends State<WindowShell> {
   @override
   void dispose() {
     widget.controller.removeListener(_pushTray);
+    widget.controller.removeListener(_followReconnect);
     _sub?.cancel();
+    _noticeSub?.cancel();
     unawaited(widget.host.removeTray());
     super.dispose();
   }
@@ -257,9 +311,46 @@ class _WindowShellState extends State<WindowShell> {
         unawaited(_actions.openWindow());
       case FlyoutDismissed():
         _actions.flyoutDismissed();
+      case ActivationLink(:final link):
+        final toasts = widget.toasts;
+        if (toasts != null) unawaited(_actions.runToastLink(link, token: toasts.token));
+      case SessionLock(:final locked):
+        widget.toasts?.locked = locked;
       case MenuCommand(:final id):
         final item = _menu?.byId[id];
         if (item != null) unawaited(_actions.runTray(item));
+    }
+  }
+
+  // The user is looking at the window: a toast would say what the screen says.
+  bool get _windowInFront => WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed;
+
+  TrayToasts? _builder() {
+    if (!mounted) return null;
+    final l10n = AppLocalizations.of(context);
+    if (l10n == null) return null;
+    return TrayToasts(l10n, widget.controller, localeTag: Localizations.localeOf(context).toLanguageTag());
+  }
+
+  void _onNotice(Notice notice) {
+    final toasts = widget.toasts;
+    if (toasts == null || _windowInFront) return;
+    final spec = _builder()?.forNotice(notice);
+    if (spec != null) unawaited(toasts.show(spec));
+  }
+
+  // The toast of a retry lasts as long as the retry: it comes with it and goes
+  // when it ends.
+  void _followReconnect() {
+    final toasts = widget.toasts;
+    if (toasts == null) return;
+    final spec = _builder()?.forState();
+    if (spec != null && !_reconnectToastShown && !_windowInFront) {
+      _reconnectToastShown = true;
+      unawaited(toasts.show(spec));
+    } else if (spec == null && _reconnectToastShown) {
+      _reconnectToastShown = false;
+      unawaited(toasts.remove(ToastKind.reconnecting));
     }
   }
 

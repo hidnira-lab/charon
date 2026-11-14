@@ -3,6 +3,7 @@
 #include <dwmapi.h>
 #include <flutter/standard_method_codec.h>
 #include <shellapi.h>
+#include <wtsapi32.h>
 
 #include <flutter_windows.h>
 
@@ -87,6 +88,9 @@ NativeShell::NativeShell(HWND window, flutter::BinaryMessenger* messenger)
 
   // A window without a frame keeps its rounded corners and its shadow.
   SetCorners(window_, 2 /* DWMWCP_ROUND */);
+  // Tells when the session is locked, for the toasts of the lock screen.
+  WTSRegisterSessionNotification(window_, NOTIFY_FOR_THIS_SESSION);
+
   const MARGINS margins = {0, 0, 1, 0};
   DwmExtendFrameIntoClientArea(window_, &margins);
   // The frame was first calculated while the window was being made, before it
@@ -98,6 +102,7 @@ NativeShell::NativeShell(HWND window, flutter::BinaryMessenger* messenger)
 }
 
 NativeShell::~NativeShell() {
+  WTSUnRegisterSessionNotification(window_);
   RemoveTray();
   channel_ = nullptr;
 }
@@ -450,6 +455,30 @@ std::optional<LRESULT> NativeShell::HandleMessage(HWND, UINT message,
         ShowMenu();
         break;
     }
+    return 0;
+  }
+  if (message == WM_COPYDATA) {
+    // A link from a second launch. It is only a string: the app decides what it means.
+    const auto* data = reinterpret_cast<const COPYDATASTRUCT*>(lparam);
+    if (data && data->dwData == kActivationData && data->cbData >= sizeof(wchar_t) &&
+        data->cbData <= 4096 * sizeof(wchar_t) && data->lpData) {
+      const wchar_t* text = static_cast<const wchar_t*>(data->lpData);
+      std::wstring link(text, data->cbData / sizeof(wchar_t));
+      while (!link.empty() && link.back() == L'\0') link.pop_back();
+      const int n = WideCharToMultiByte(CP_UTF8, 0, link.data(),
+                                        static_cast<int>(link.size()), nullptr, 0,
+                                        nullptr, nullptr);
+      std::string utf8(n, '\0');
+      WideCharToMultiByte(CP_UTF8, 0, link.data(), static_cast<int>(link.size()),
+                          utf8.data(), n, nullptr, nullptr);
+      Event("activation", Value(utf8));
+      return TRUE;
+    }
+    return std::nullopt;
+  }
+  if (message == WM_WTSSESSION_CHANGE) {
+    if (wparam == WTS_SESSION_LOCK) Event("sessionLock", Value(true));
+    if (wparam == WTS_SESSION_UNLOCK) Event("sessionLock", Value(false));
     return 0;
   }
   if (message == WM_ACTIVATE && flyout_ && LOWORD(wparam) == WA_INACTIVE) {

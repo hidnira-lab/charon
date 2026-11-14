@@ -15,6 +15,11 @@
 // The tray icon sends this to the window.
 constexpr UINT kTrayMessage = WM_APP + 1;
 
+// Marks a WM_COPYDATA that carries a link from a second launch of Charon: a
+// button of a toast starts the program with `charon://...`, and that start hands
+// the link to the window that is already there and ends. 'CHAR'.
+constexpr ULONG_PTR kActivationData = 0x43484152;
+
 // What only Windows can do for the Charon window, behind one method channel
 // ("charon/window"): the frameless window (move, hide, show, quit),
 // the tray icon with its tooltip and its native right click menu, and the
