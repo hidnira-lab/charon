@@ -114,7 +114,9 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(controller.dnsMode, DnsMode.custom);
-      expect(find.text('> custom · used from the next connect'), findsOneWidget);
+      // Nothing typed yet, so nothing is saved: the default stays.
+      expect(find.text('> not saved · Charon keeps the default until this is fixed'), findsOneWidget);
+      expect(controller.config!.settings.customDns, '');
 
       // Input invalid DNS
       final dnsInput = find.byType(TextField).first;
@@ -131,6 +133,7 @@ void main() {
       expect(find.text('Type one IPv4 or IPv6 address, like 198.51.100.53.'), findsNothing);
       expect(find.text('> custom · used from the next connect'), findsOneWidget);
       expect(controller.customDns, '198.51.100.53');
+      expect(controller.config!.settings.customDns, '198.51.100.53', reason: 'saved in the Config the service gets');
     });
 
     testWidgets('theme mode and greeting name can be updated', (tester) async {

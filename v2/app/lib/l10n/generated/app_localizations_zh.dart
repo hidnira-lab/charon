@@ -4866,6 +4866,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get trustLicSubCities => '问候语的城市数据 · 离线可用';
+
+  @override
+  String get settingsConnModeProxySoon => '系统代理，将在 v1.1 提供';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -9729,4 +9732,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get trustLicSubCities => '问候语的城市数据 · 离线可用';
+
+  @override
+  String get settingsConnModeProxySoon => '系统代理，将在 v1.1 提供';
 }

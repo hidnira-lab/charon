@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../state/dns_input.dart';
 import '../../../state/home_controller.dart';
 import '../../../theme/theme.dart';
 import '../../common/pixel_icon.dart';
@@ -37,15 +38,9 @@ class _NetworkCardState extends State<NetworkCard> {
   }
 
   void _validateDns(String val) {
-    // Valid IPv4 regex or basic IPv6 check
-    final ipV4Regex = RegExp(r'^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$');
-    final valid = ipV4Regex.hasMatch(val.trim()) || val.trim().contains(':');
-    setState(() {
-      _isDnsValid = valid;
-    });
-    if (valid) {
-      widget.controller.setCustomDns(val.trim());
-    }
+    // The same rule as the service, so a value that looks good is not refused on save.
+    setState(() => _isDnsValid = resolverFrom(val) != null);
+    widget.controller.setCustomDns(val.trim());
   }
 
   @override
@@ -54,8 +49,6 @@ class _NetworkCardState extends State<NetworkCard> {
     final l10n = AppLocalizations.of(context)!;
     final dnsMode = widget.controller.dnsMode;
     final isCustomDns = dnsMode == DnsMode.custom;
-    final connMode = widget.controller.connectionMode;
-    final isTun = connMode == ConnectionMode.tun;
 
     return Glass(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
@@ -369,18 +362,16 @@ class _NetworkCardState extends State<NetworkCard> {
                         Container(
                           width: 6,
                           height: 6,
-                          color: isTun ? colors.accentText : colors.transitionText,
+                          color: colors.accentText,
                         ),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            isTun
-                                ? '> ${l10n.settingsConnModeLineTun}'
-                                : '> ${l10n.settingsConnModeLineProxy}',
+                            '> ${l10n.settingsConnModeLineTun}',
                             style: TextStyle(
                               fontFamily: CharonTokens.fontMono,
                               fontSize: 11,
-                              color: isTun ? colors.accentText : colors.transitionText,
+                              color: colors.accentText,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -391,27 +382,52 @@ class _NetworkCardState extends State<NetworkCard> {
                 ),
               ),
               const SizedBox(width: 12),
-              // Segmented TUN / SYSTEM PROXY: switched at once, as the board's seg2.
+              // TUN / SYSTEM PROXY. The system proxy fallback is planned for v1.1, so the
+              // second segment is drawn dimmed, says so, and cannot be picked.
               SlidingPills(
                 count: 2,
                 slide: false,
-                selected: isTun ? 0 : 1,
-                semanticLabels: [l10n.settingsConnModeTun, l10n.settingsConnModeProxy],
-                onSelect: (i) => i == 0 ? widget.controller.setConnectionMode(ConnectionMode.tun) : widget.controller.setConnectionMode(ConnectionMode.systemProxy),
+                selected: 0,
+                semanticLabels: [l10n.settingsConnModeTun, l10n.settingsConnModeProxySoon],
+                onSelect: (_) {},
                 itemBuilder: (context, i, on, ink) => Container(
                   height: 30,
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   alignment: Alignment.center,
-                  child: Text(
-                    i == 0 ? l10n.settingsConnModeTun : l10n.settingsConnModeProxy,
-                    style: TextStyle(
-                      fontFamily: CharonTokens.fontMono,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.6,
-                      color: ink,
-                    ),
-                  ),
+                  child: i == 0
+                      ? Text(
+                          l10n.settingsConnModeTun,
+                          style: TextStyle(
+                            fontFamily: CharonTokens.fontMono,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.6,
+                            color: ink,
+                          ),
+                        )
+                      : Opacity(
+                          opacity: 0.45,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                l10n.settingsConnModeProxy,
+                                style: TextStyle(
+                                  fontFamily: CharonTokens.fontMono,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.6,
+                                  color: colors.text2,
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                'v1.1',
+                                style: TextStyle(fontFamily: CharonTokens.fontMono, fontSize: 9, color: colors.text2),
+                              ),
+                            ],
+                          ),
+                        ),
                 ),
               ),
             ],

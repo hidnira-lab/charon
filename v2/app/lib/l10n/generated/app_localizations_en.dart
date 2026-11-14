@@ -5146,4 +5146,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trustLicSubCities => 'city data for the greeting · works offline';
+
+  @override
+  String get settingsConnModeProxySoon => 'System proxy, coming in v1.1';
 }

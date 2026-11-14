@@ -8907,6 +8907,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'city data for the greeting · works offline'**
   String get trustLicSubCities;
+
+  /// Accessibility label of the System proxy segment, which is not available yet. Not on the board.
+  ///
+  /// In en, this message translates to:
+  /// **'System proxy, coming in v1.1'**
+  String get settingsConnModeProxySoon;
 }
 
 class _AppLocalizationsDelegate

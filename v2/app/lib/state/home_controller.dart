@@ -10,6 +10,7 @@ import '../core/device_location.dart';
 import '../core/transport.dart';
 import '../gen/charon/v1/charon.pb.dart';
 import '../sync/sync_client.dart';
+import 'dns_input.dart';
 import 'location_status.dart';
 import 'service_supervisor.dart';
 import 'toast.dart';
@@ -23,7 +24,6 @@ export 'service_supervisor.dart' show InstallMode, Recovery, ServiceStatus;
 typedef StateChange = ({int atMs, Phase from, Phase to});
 
 enum DnsMode { tunnelDefault, custom }
-enum ConnectionMode { tun, systemProxy }
 
 /// State controller for the Home screen, connecting to [CoreClient] events
 /// and projecting the active state with [projectState].
@@ -49,6 +49,7 @@ class HomeController extends ChangeNotifier {
         service = serviceSupervisor ?? ServiceSupervisor(),
         _uiStore = uiPrefs {
     _platformTransport = platformTransport;
+    _dnsFromConfig();
     _lastPhase = _status.phase;
     _syncAndroidAnomaly(_status);
     _sync.addListener(_onSyncChanged);
@@ -137,8 +138,7 @@ class HomeController extends ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.system;
   Locale? _locale;
   DnsMode _dnsMode = DnsMode.tunnelDefault;
-  String _customDns = '198.51.100.53';
-  ConnectionMode _connectionMode = ConnectionMode.tun;
+  String _customDns = '';
   bool _launchAtStartup = false;
 
   // Android specific states (N09 & N10)
@@ -353,7 +353,6 @@ class HomeController extends ChangeNotifier {
   Locale? get locale => _locale;
   DnsMode get dnsMode => _dnsMode;
   String get customDns => _customDns;
-  ConnectionMode get connectionMode => _connectionMode;
   bool get launchAtStartup => _launchAtStartup;
   ServiceStatus get serviceStatus => service.status;
   bool get isServiceRestarting => service.isRestarting;
@@ -642,6 +641,7 @@ class HomeController extends ChangeNotifier {
     if (_dnsMode != mode) {
       _dnsMode = mode;
       notifyListeners();
+      unawaited(_saveDns());
     }
   }
 
@@ -649,14 +649,37 @@ class HomeController extends ChangeNotifier {
     if (_customDns != dns) {
       _customDns = dns;
       notifyListeners();
+      unawaited(_saveDns());
     }
   }
 
-  void setConnectionMode(ConnectionMode mode) {
-    if (_connectionMode != mode) {
-      _connectionMode = mode;
-      notifyListeners();
+  /// Sends the resolver to the service. Only a CUSTOM choice with a usable
+  /// address is saved; anything else saves the default (empty), which is the
+  /// board's "not saved, Charon keeps the default until this is fixed". The
+  /// service uses it from the next connect.
+  Future<void> _saveDns() async {
+    final want = _dnsMode == DnsMode.custom ? (resolverFrom(_customDns) ?? '') : '';
+    if (want == (_config?.settings.customDns ?? '')) return;
+    _config ??= Config();
+    _config!.ensureSettings().customDns = want;
+    _bumpConfigVersion();
+    if (_client != null) {
+      try {
+        await _client!.setConfig(_config!);
+      } catch (e) {
+        _logError(e);
+      }
     }
+    notifyListeners();
+  }
+
+  /// Takes the saved resolver of a Config that came from the service into the
+  /// DNS row, so it shows what the tunnel will use.
+  void _dnsFromConfig() {
+    final saved = resolverFrom(_config?.settings.customDns ?? '');
+    if (saved == null) return;
+    _dnsMode = DnsMode.custom;
+    _customDns = saved;
   }
 
   void setLaunchAtStartup(bool value) {
@@ -860,8 +883,7 @@ class HomeController extends ChangeNotifier {
     );
     _hasServers = false;
     _dnsMode = DnsMode.tunnelDefault;
-    _customDns = '198.51.100.53';
-    _connectionMode = ConnectionMode.tun;
+    _customDns = '';
     // The window starts fresh too: looks, greeting and the file that remembers them.
     _uiSaveTimer?.cancel();
     _themeMode = ThemeMode.system;
@@ -984,6 +1006,7 @@ class HomeController extends ChangeNotifier {
         if (_config == null || res.config.version > currentVer) {
           _config = res.config;
           _hasServers = res.config.servers.isNotEmpty;
+          _dnsFromConfig();
           notifyListeners();
         }
       }
@@ -1075,6 +1098,7 @@ class HomeController extends ChangeNotifier {
   void updateConfig(Config config) {
     _config = config;
     _hasServers = config.servers.isNotEmpty;
+    _dnsFromConfig();
     notifyListeners();
   }
 
@@ -1272,6 +1296,16 @@ class HomeController extends ChangeNotifier {
 
     final nextCfg = payload.hasConfig() ? payload.config.deepCopy() : Config();
     nextCfg.version = baseVer + Int64(1);
+    // Only the three safety switches sync (SYNC6). The update rules and the
+    // resolver are this device's own, so a pull must not reset them.
+    final mine = _config?.settings;
+    if (mine != null) {
+      nextCfg.ensureSettings()
+        ..updateCheckOff = mine.updateCheckOff
+        ..backgroundDownloadOff = mine.backgroundDownloadOff
+        ..previousCoreOff = mine.previousCoreOff
+        ..customDns = mine.customDns;
+    }
     _config = nextCfg;
     _hasServers = nextCfg.servers.isNotEmpty;
 

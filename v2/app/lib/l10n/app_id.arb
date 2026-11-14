@@ -1491,5 +1491,6 @@
   "settingsGreetingNoteManual": "diketik olehmu · kosongkan untuk menyembunyikan baris ini",
   "settingsCountryLabel": "Negara, {name}",
   "settingsGreetingPreviewIn": "· di {city}",
-  "trustLicSubCities": "data kota untuk sapaan · bekerja offline"
+  "trustLicSubCities": "data kota untuk sapaan · bekerja offline",
+  "settingsConnModeProxySoon": "System proxy, hadir di v1.1"
 }

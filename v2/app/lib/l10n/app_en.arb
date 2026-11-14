@@ -3650,5 +3650,7 @@
   "settingsGreetingPreviewIn": "· in {city}",
   "@settingsGreetingPreviewIn": { "description": "Greeting card preview, the grey part after the greeting.", "placeholders": { "city": { "type": "String" } } },
   "trustLicSubCities": "city data for the greeting · works offline",
-  "@trustLicSubCities": { "description": "Trust screens text." }
+  "@trustLicSubCities": { "description": "Trust screens text." },
+  "settingsConnModeProxySoon": "System proxy, coming in v1.1",
+  "@settingsConnModeProxySoon": { "description": "Accessibility label of the System proxy segment, which is not available yet. Not on the board." }
 }

@@ -5114,4 +5114,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get trustLicSubCities => 'data kota untuk sapaan · bekerja offline';
+
+  @override
+  String get settingsConnModeProxySoon => 'System proxy, hadir di v1.1';
 }

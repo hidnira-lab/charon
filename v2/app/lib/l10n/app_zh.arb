@@ -1492,5 +1492,6 @@
   "settingsGreetingNoteManual": "由你输入 · 留空则隐藏这一行",
   "settingsCountryLabel": "国家，{name}",
   "settingsGreetingPreviewIn": "· 在{city}",
-  "trustLicSubCities": "问候语的城市数据 · 离线可用"
+  "trustLicSubCities": "问候语的城市数据 · 离线可用",
+  "settingsConnModeProxySoon": "系统代理，将在 v1.1 提供"
 }
