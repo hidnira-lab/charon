@@ -182,6 +182,13 @@ func (g *Gate) RefreshTUN() error {
 	return g.applyArmedLocked()
 }
 
+// serverIsIPv6 is the same rule the config builder uses to decide whether IPv6
+// is blocked: only an IPv6 literal counts.
+func serverIsIPv6(s *charonv1.Server) bool {
+	ip, err := netip.ParseAddr(strings.TrimSpace(s.GetAddress()))
+	return err == nil && ip.Is6()
+}
+
 func (g *Gate) lookupTUNLocked() (uint64, bool) {
 	if g.tunLookup == nil {
 		return 0, false
@@ -199,7 +206,18 @@ func (g *Gate) applyArmedLocked() error {
 	if ok {
 		// Traffic that Windows routes into the TUN is what Xray carries to the
 		// server. It is the whole point of the tunnel, so permit it.
-		for _, layer := range []Layer{LayerConnectV4, LayerConnectV6} {
+		//
+		// IPv6 is permitted only when the server itself is IPv6. Otherwise the
+		// config sends IPv6 to a blackhole inside Xray, and the TUN still accepts
+		// such a connection before Xray cuts it, so an app sees "connected" and then
+		// a reset, and does not fall back to IPv4 (a real test: every name with an
+		// AAAA record failed). Left without the permit, the IPv6 connect is refused
+		// at once and the app moves to IPv4 by itself.
+		layers := []Layer{LayerConnectV4}
+		if serverIsIPv6(g.server) {
+			layers = append(layers, LayerConnectV6)
+		}
+		for _, layer := range layers {
 			specs = append(specs, FilterSpec{
 				Name:               fmt.Sprintf("Charon Permit TUN Adapter IPv%d", layer),
 				Kind:               RuleTUNInterface,

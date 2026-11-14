@@ -2,6 +2,7 @@ package wfp
 
 import (
 	"errors"
+	"net/netip"
 	"testing"
 
 	charonv1 "github.com/hidnira-lab/charon/core/gen/charonv1"
@@ -154,14 +155,15 @@ func TestGate_ArmedPermitsTUNOnceItAppears(t *testing.T) {
 		t.Fatalf("no adapter yet, want no tun permit, got %d", len(got))
 	}
 
-	// Adapter appears: refresh adds one permit per IP family, with its LUID.
+	// Adapter appears: refresh adds the IPv4 permit, with its LUID. The server is
+	// IPv4, so IPv6 gets no permit (see TestGate_TUNPermitIPv6OnlyForAnIPv6Server).
 	luid, lookupErr = 0x1234, nil
 	if err := gate.RefreshTUN(); err != nil {
 		t.Fatal(err)
 	}
 	got := tunFilters(mem)
-	if len(got) != 2 {
-		t.Fatalf("want 2 tun permits (v4+v6), got %d", len(got))
+	if len(got) != 1 || got[0].Layer != LayerConnectV4 {
+		t.Fatalf("want one IPv4 tun permit, got %+v", got)
 	}
 	for _, f := range got {
 		if f.Action != ActionPermit || f.LocalInterfaceLUID != 0x1234 || !f.Persistent {
@@ -184,7 +186,7 @@ func TestGate_ArmedPermitsTUNOnceItAppears(t *testing.T) {
 	if err := gate.RefreshTUN(); err != nil {
 		t.Fatal(err)
 	}
-	if got := tunFilters(mem); len(got) != 2 || got[0].LocalInterfaceLUID != 0x9999 {
+	if got := tunFilters(mem); len(got) != 1 || got[0].LocalInterfaceLUID != 0x9999 {
 		t.Fatalf("permit did not follow the new adapter: %+v", got)
 	}
 
@@ -228,13 +230,49 @@ func TestGate_ArmDropsTUNPermitWhenAdapterIsGone(t *testing.T) {
 	})
 	cfg := fixtureConfig(false)
 	_ = gate.Arm(cfg, cfg.Servers[0])
-	if len(tunFilters(mem)) != 2 {
+	if len(tunFilters(mem)) != 1 {
 		t.Fatal("adapter present at Arm: want the permit right away")
 	}
 	present = false
 	_ = gate.Arm(cfg, cfg.Servers[0])
 	if len(tunFilters(mem)) != 0 {
 		t.Fatal("adapter gone: want no tun permit")
+	}
+}
+
+// IPv6 into the TUN is blocked inside Xray when the server is IPv4. If the filter
+// permitted it, the TUN would accept an IPv6 connection and Xray would cut it
+// after, and apps do not fall back to IPv4 after a connect that succeeded. So the
+// connect itself must be refused: no IPv6 permit, unless the server is IPv6.
+func TestGate_TUNPermitIPv6OnlyForAnIPv6Server(t *testing.T) {
+	for _, tc := range []struct {
+		address  string
+		wantV6   bool
+		wantFlts int
+	}{
+		{"192.0.2.10", false, 1},
+		{"vpn.example.com", false, 1}, // a name is treated as IPv4, as the config builder does
+		{"2001:db8::10", true, 2},
+	} {
+		mem := NewMemoryEngine()
+		gate := NewGate(mem, "")
+		gate.SetTUNLookup("charon0", func(string) (uint64, error) { return 7, nil })
+		cfg := fixtureConfig(false)
+		cfg.Servers[0].Address = tc.address
+		gate.lookupIP = func(string) ([]netip.Addr, error) { return []netip.Addr{netip.MustParseAddr("192.0.2.10")}, nil }
+		if err := gate.Arm(cfg, cfg.Servers[0]); err != nil {
+			t.Fatalf("%s: %v", tc.address, err)
+		}
+		got := tunFilters(mem)
+		hasV6 := false
+		for _, f := range got {
+			if f.Layer == LayerConnectV6 {
+				hasV6 = true
+			}
+		}
+		if len(got) != tc.wantFlts || hasV6 != tc.wantV6 {
+			t.Fatalf("%s: want %d permits (IPv6 %v), got %+v", tc.address, tc.wantFlts, tc.wantV6, got)
+		}
 	}
 }
 
