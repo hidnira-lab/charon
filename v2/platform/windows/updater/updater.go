@@ -34,14 +34,18 @@ const (
 
 // Config configures the Windows service update Agent.
 type Config struct {
-	DataDir               string
-	CurrentAppVersion     string
-	CurrentCoreVersion    string
-	InitialSequence       uint64
-	TrustedPublicKeys     []ed25519.PublicKey
-	ManifestBaseURL       string
-	HTTPClient            *http.Client
-	IsTunnelIdle          func() bool
+	DataDir            string
+	CurrentAppVersion  string
+	CurrentCoreVersion string
+	InitialSequence    uint64
+	TrustedPublicKeys  []ed25519.PublicKey
+	ManifestBaseURL    string
+	HTTPClient         *http.Client
+	IsTunnelIdle       func() bool
+	IsTunnelUp         func() bool // background downloads wait for this
+	// Settings returns the live Settings of the saved Config, for the update
+	// rules. Nil means every rule at its default (all on).
+	Settings              func() *charonv1.Settings
 	ValidateCoreOnConfigs func(candidateXrayPath string) error
 	OnUpdateState         func(*charonv1.UpdateState)
 }
@@ -77,6 +81,8 @@ type Agent struct {
 	coreState *charonv1.UpdateState
 	appState  *charonv1.UpdateState
 	uploads   map[charonv1.UpdateKind]*uploadSession
+
+	nextCheck time.Time // only the Run loop touches it, see schedule.go
 }
 
 // New creates a new update Agent and ensures the staging and bin directories exist.
@@ -302,6 +308,15 @@ func (a *Agent) HandleFileChunk(chunk *charonv1.UpdateFileChunk) (*charonv1.Upda
 		}
 	}
 
+	return a.stageLocked(kind, m, artifactBytes)
+}
+
+// stageLocked finds the artifact the verified manifest names for kind, checks
+// its exact size and SHA-256 digest, and stages it in the protected folder.
+// Both a manual file and a background download end here.
+func (a *Agent) stageLocked(kind charonv1.UpdateKind, m *update.Manifest, artifactBytes []byte) (*charonv1.UpdateState, *charonv1.Error) {
+	targetState := a.stateForKindLocked(kind)
+
 	// Step 3: Find matching artifact and verify exact size and SHA-256 digest.
 	artKind := "core"
 	if kind == charonv1.UpdateKind_UPDATE_KIND_APP {
@@ -461,7 +476,8 @@ func (a *Agent) applyCoreNowLocked() (*charonv1.UpdateState, *charonv1.Error) {
 
 	activePath := filepath.Join(a.binDir, "xray.exe")
 	prevPath := filepath.Join(a.binDir, "xray.prev.exe")
-	if existing, err := os.ReadFile(activePath); err == nil {
+	keepPrev := !a.settings().GetPreviousCoreOff()
+	if existing, err := os.ReadFile(activePath); err == nil && keepPrev {
 		_ = writeFileAtomic(prevPath, existing, 0o700)
 	}
 
@@ -472,7 +488,9 @@ func (a *Agent) applyCoreNowLocked() (*charonv1.UpdateState, *charonv1.Error) {
 		}
 	}
 
-	a.prevCoreVer = a.curCoreVer
+	if keepPrev {
+		a.prevCoreVer = a.curCoreVer
+	}
 	a.curCoreVer = a.stagedCoreVer
 	a.saveSequenceLocked(a.stagedCoreSeq)
 
@@ -574,11 +592,15 @@ func (a *Agent) failCheckLocked(vErr error) (*charonv1.UpdateState, *charonv1.Er
 }
 
 func (a *Agent) fetchBytes(ctx context.Context, url string, maxBytes int64) ([]byte, error) {
+	return fetch(ctx, a.cfg.HTTPClient, url, maxBytes)
+}
+
+func fetch(ctx context.Context, client *http.Client, url string, maxBytes int64) ([]byte, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, err
 	}
-	resp, err := a.cfg.HTTPClient.Do(req)
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}

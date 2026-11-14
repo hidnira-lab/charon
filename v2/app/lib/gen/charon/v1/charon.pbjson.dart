@@ -1402,6 +1402,15 @@ const Settings$json = {
       '5': 8,
       '10': 'allowLocalNetwork'
     },
+    {'1': 'update_check_off', '3': 4, '4': 1, '5': 8, '10': 'updateCheckOff'},
+    {
+      '1': 'background_download_off',
+      '3': 5,
+      '4': 1,
+      '5': 8,
+      '10': 'backgroundDownloadOff'
+    },
+    {'1': 'previous_core_off', '3': 6, '4': 1, '5': 8, '10': 'previousCoreOff'},
   ],
 };
 
@@ -1409,7 +1418,9 @@ const Settings$json = {
 final $typed_data.Uint8List settingsDescriptor = $convert.base64Decode(
     'CghTZXR0aW5ncxIfCgtraWxsX3N3aXRjaBgBIAEoCFIKa2lsbFN3aXRjaBIlCg5hdXRvX3JlY2'
     '9ubmVjdBgCIAEoCFINYXV0b1JlY29ubmVjdBIuChNhbGxvd19sb2NhbF9uZXR3b3JrGAMgASgI'
-    'UhFhbGxvd0xvY2FsTmV0d29yaw==');
+    'UhFhbGxvd0xvY2FsTmV0d29yaxIoChB1cGRhdGVfY2hlY2tfb2ZmGAQgASgIUg51cGRhdGVDaG'
+    'Vja09mZhI2ChdiYWNrZ3JvdW5kX2Rvd25sb2FkX29mZhgFIAEoCFIVYmFja2dyb3VuZERvd25s'
+    'b2FkT2ZmEioKEXByZXZpb3VzX2NvcmVfb2ZmGAYgASgIUg9wcmV2aW91c0NvcmVPZmY=');
 
 @$core.Deprecated('Use splitTunnelDescriptor instead')
 const SplitTunnel$json = {

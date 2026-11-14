@@ -61,6 +61,7 @@ type Runtime struct {
 	accessLogs *logbuf.Ring
 	pipeSrv    *pipe.Server
 	drv        *driver.Driver
+	upd        *updater.Agent
 }
 
 // NewRuntime constructs and wires the service Runtime from opts.
@@ -194,10 +195,15 @@ func NewRuntime(opts Options) (*Runtime, error) {
 		IsTunnelIdle: func() bool {
 			return drv.Status().GetPhase() == charonv1.Phase_PHASE_IDLE
 		},
+		IsTunnelUp: func() bool {
+			return drv.Status().GetPhase() == charonv1.Phase_PHASE_UP
+		},
+		Settings:      func() *charonv1.Settings { return drv.Config().GetSettings() },
 		OnUpdateState: pipeSrv.BroadcastUpdateState,
 	})
 	if err == nil {
 		pipeSrv.SetUpdater(upAgent)
+		rt.upd = upAgent
 	}
 
 	return rt, nil
@@ -245,6 +251,9 @@ func (r *Runtime) Run(ctx context.Context) error {
 	go func() { _ = r.pipeSrv.Serve(ln) }()
 	go r.statsLoop(ctx)
 	go r.watchNetworkLoop(ctx)
+	if r.upd != nil {
+		go r.upd.Run(ctx)
+	}
 
 	<-ctx.Done()
 	r.clock.StopAll()

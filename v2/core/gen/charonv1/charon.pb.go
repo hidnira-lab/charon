@@ -3470,8 +3470,14 @@ type Settings struct {
 	KillSwitch        bool                   `protobuf:"varint,1,opt,name=kill_switch,json=killSwitch,proto3" json:"kill_switch,omitempty"`
 	AutoReconnect     bool                   `protobuf:"varint,2,opt,name=auto_reconnect,json=autoReconnect,proto3" json:"auto_reconnect,omitempty"`
 	AllowLocalNetwork bool                   `protobuf:"varint,3,opt,name=allow_local_network,json=allowLocalNetwork,proto3" json:"allow_local_network,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// Update rules (Updates screen). All three rules are ON by default, so the
+	// fields are named for the OFF state: a Config saved before they existed
+	// (every field absent, so false) keeps the default without a migration.
+	UpdateCheckOff        bool `protobuf:"varint,4,opt,name=update_check_off,json=updateCheckOff,proto3" json:"update_check_off,omitempty"`                      // ON: check when the service starts, then once a day
+	BackgroundDownloadOff bool `protobuf:"varint,5,opt,name=background_download_off,json=backgroundDownloadOff,proto3" json:"background_download_off,omitempty"` // ON: download only while the tunnel is Up
+	PreviousCoreOff       bool `protobuf:"varint,6,opt,name=previous_core_off,json=previousCoreOff,proto3" json:"previous_core_off,omitempty"`                   // ON: keep xray.prev.exe for one tap roll back
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
 }
 
 func (x *Settings) Reset() {
@@ -3521,6 +3527,27 @@ func (x *Settings) GetAutoReconnect() bool {
 func (x *Settings) GetAllowLocalNetwork() bool {
 	if x != nil {
 		return x.AllowLocalNetwork
+	}
+	return false
+}
+
+func (x *Settings) GetUpdateCheckOff() bool {
+	if x != nil {
+		return x.UpdateCheckOff
+	}
+	return false
+}
+
+func (x *Settings) GetBackgroundDownloadOff() bool {
+	if x != nil {
+		return x.BackgroundDownloadOff
+	}
+	return false
+}
+
+func (x *Settings) GetPreviousCoreOff() bool {
+	if x != nil {
+		return x.PreviousCoreOff
 	}
 	return false
 }
@@ -3983,12 +4010,15 @@ const file_charon_v1_charon_proto_rawDesc = "" +
 	"\x06cap_gb\x18\x01 \x01(\rR\x05capGb\x12\x1f\n" +
 	"\vbilling_day\x18\x02 \x01(\rR\n" +
 	"billingDay\x12-\n" +
-	"\x06counts\x18\x03 \x01(\x0e2\x15.charon.v1.CountsModeR\x06counts\"\x82\x01\n" +
+	"\x06counts\x18\x03 \x01(\x0e2\x15.charon.v1.CountsModeR\x06counts\"\x90\x02\n" +
 	"\bSettings\x12\x1f\n" +
 	"\vkill_switch\x18\x01 \x01(\bR\n" +
 	"killSwitch\x12%\n" +
 	"\x0eauto_reconnect\x18\x02 \x01(\bR\rautoReconnect\x12.\n" +
-	"\x13allow_local_network\x18\x03 \x01(\bR\x11allowLocalNetwork\"\xa6\x01\n" +
+	"\x13allow_local_network\x18\x03 \x01(\bR\x11allowLocalNetwork\x12(\n" +
+	"\x10update_check_off\x18\x04 \x01(\bR\x0eupdateCheckOff\x126\n" +
+	"\x17background_download_off\x18\x05 \x01(\bR\x15backgroundDownloadOff\x12*\n" +
+	"\x11previous_core_off\x18\x06 \x01(\bR\x0fpreviousCoreOff\"\xa6\x01\n" +
 	"\vSplitTunnel\x12(\n" +
 	"\x04mode\x18\x01 \x01(\x0e2\x14.charon.v1.SplitModeR\x04mode\x12;\n" +
 	"\x11all_except_listed\x18\x02 \x03(\v2\x0f.charon.v1.RuleR\x0fallExceptListed\x120\n" +

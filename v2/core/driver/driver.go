@@ -535,6 +535,12 @@ func diffConfig(oldCfg, newCfg *charonv1.Config) (now []string, nextConnect []st
 	if os.GetAllowLocalNetwork() != ns.GetAllowLocalNetwork() {
 		now = append(now, "allow_local_network")
 	}
+	// The update agent reads the live Settings, so the rules apply at once.
+	if os.GetUpdateCheckOff() != ns.GetUpdateCheckOff() ||
+		os.GetBackgroundDownloadOff() != ns.GetBackgroundDownloadOff() ||
+		os.GetPreviousCoreOff() != ns.GetPreviousCoreOff() {
+		now = append(now, "update_rules")
+	}
 	if oldCfg.GetChosenServerId() != newCfg.GetChosenServerId() || !sameServerSlice(oldCfg.GetServers(), newCfg.GetServers()) {
 		nextConnect = append(nextConnect, "servers")
 	}

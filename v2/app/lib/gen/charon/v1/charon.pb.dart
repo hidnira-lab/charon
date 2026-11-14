@@ -3110,11 +3110,18 @@ class Settings extends $pb.GeneratedMessage {
     $core.bool? killSwitch,
     $core.bool? autoReconnect,
     $core.bool? allowLocalNetwork,
+    $core.bool? updateCheckOff,
+    $core.bool? backgroundDownloadOff,
+    $core.bool? previousCoreOff,
   }) {
     final result = Settings._();
     if (killSwitch != null) result.killSwitch = killSwitch;
     if (autoReconnect != null) result.autoReconnect = autoReconnect;
     if (allowLocalNetwork != null) result.allowLocalNetwork = allowLocalNetwork;
+    if (updateCheckOff != null) result.updateCheckOff = updateCheckOff;
+    if (backgroundDownloadOff != null)
+      result.backgroundDownloadOff = backgroundDownloadOff;
+    if (previousCoreOff != null) result.previousCoreOff = previousCoreOff;
     return result;
   }
 
@@ -3134,6 +3141,9 @@ class Settings extends $pb.GeneratedMessage {
     ..aOB(1, _omitFieldNames ? '' : 'killSwitch')
     ..aOB(2, _omitFieldNames ? '' : 'autoReconnect')
     ..aOB(3, _omitFieldNames ? '' : 'allowLocalNetwork')
+    ..aOB(4, _omitFieldNames ? '' : 'updateCheckOff')
+    ..aOB(5, _omitFieldNames ? '' : 'backgroundDownloadOff')
+    ..aOB(6, _omitFieldNames ? '' : 'previousCoreOff')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -3182,6 +3192,36 @@ class Settings extends $pb.GeneratedMessage {
   $core.bool hasAllowLocalNetwork() => $_has(2);
   @$pb.TagNumber(3)
   void clearAllowLocalNetwork() => $_clearField(3);
+
+  /// Update rules (Updates screen). All three rules are ON by default, so the
+  /// fields are named for the OFF state: a Config saved before they existed
+  /// (every field absent, so false) keeps the default without a migration.
+  @$pb.TagNumber(4)
+  $core.bool get updateCheckOff => $_getBF(3);
+  @$pb.TagNumber(4)
+  set updateCheckOff($core.bool value) => $_setBool(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasUpdateCheckOff() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearUpdateCheckOff() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.bool get backgroundDownloadOff => $_getBF(4);
+  @$pb.TagNumber(5)
+  set backgroundDownloadOff($core.bool value) => $_setBool(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasBackgroundDownloadOff() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearBackgroundDownloadOff() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.bool get previousCoreOff => $_getBF(5);
+  @$pb.TagNumber(6)
+  set previousCoreOff($core.bool value) => $_setBool(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasPreviousCoreOff() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearPreviousCoreOff() => $_clearField(6);
 }
 
 class SplitTunnel extends $pb.GeneratedMessage {

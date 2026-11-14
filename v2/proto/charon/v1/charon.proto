@@ -245,6 +245,12 @@ message Settings {
   bool kill_switch = 1;
   bool auto_reconnect = 2;
   bool allow_local_network = 3;
+  // Update rules (Updates screen). All three rules are ON by default, so the
+  // fields are named for the OFF state: a Config saved before they existed
+  // (every field absent, so false) keeps the default without a migration.
+  bool update_check_off = 4;        // ON: check when the service starts, then once a day
+  bool background_download_off = 5; // ON: download only while the tunnel is Up
+  bool previous_core_off = 6;       // ON: keep xray.prev.exe for one tap roll back
 }
 
 message SplitTunnel {
