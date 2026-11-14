@@ -87,6 +87,37 @@ function Egress([int]$timeout = 15) {
     return $null
 }
 
+# What the network looks like right now, for a check that failed. It tells apart a DNS
+# problem (the address works, the name does not), a route problem and a filter problem.
+function Diag([string]$why) {
+    Write-Host "    --- diagnostics: $why" -ForegroundColor Yellow
+    $byIp = & curl.exe -s -m 8 --ssl-no-revoke -o NUL -w 'by address 1.1.1.1: code=%{http_code} connect=%{time_connect}s total=%{time_total}s' https://1.1.1.1/cdn-cgi/trace 2>&1
+    Write-Host "    $byIp"
+    $byName = & curl.exe -s -m 8 --ssl-no-revoke -o NUL -w 'by name: code=%{http_code} dns=%{time_namelookup}s connect=%{time_connect}s total=%{time_total}s' https://www.cloudflare.com/cdn-cgi/trace 2>&1
+    Write-Host "    $byName"
+    $a = Get-NetAdapter -Name 'charon0' -ErrorAction SilentlyContinue
+    if ($a) {
+        Write-Host "    charon0: ifIndex=$($a.ifIndex) status=$($a.Status) luid=$($a.InterfaceLuid) guid=$($a.InterfaceGuid)"
+        Get-NetIPAddress -InterfaceIndex $a.ifIndex -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "    addr $($_.IPAddress)/$($_.PrefixLength)" }
+        Get-NetRoute -InterfaceIndex $a.ifIndex -AddressFamily IPv4 -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "    route $($_.DestinationPrefix) metric=$($_.RouteMetric)" }
+        Write-Host "    DNS of charon0: $((Get-DnsClientServerAddress -InterfaceIndex $a.ifIndex -AddressFamily IPv4 -ErrorAction SilentlyContinue).ServerAddresses -join ', ')"
+    } else { Write-Host '    charon0 is not there' }
+    Get-NetRoute -DestinationPrefix '0.0.0.0/0' -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "    default route via ifIndex $($_.ifIndex) metric=$($_.RouteMetric)" }
+    $f = Filters
+    Write-Host "    filter with the TUN permit present: $(@($f | Where-Object { $_ -match 'TUN Adapter' }).Count -gt 0)"
+}
+
+# Polls the internet for up to $seconds and says how long the first answer took.
+function WaitEgress([int]$seconds = 40) {
+    $t0 = Get-Date
+    while (((Get-Date) - $t0).TotalSeconds -lt $seconds) {
+        $ip = Egress 6
+        if ($ip) { Write-Host ("    first answer after {0:N0} s: {1}" -f ((Get-Date) - $t0).TotalSeconds, $ip); return $ip }
+        Start-Sleep -Seconds 1
+    }
+    return $null
+}
+
 function LastStatus($lines) { return ($lines | Where-Object { $_ -match 'phase=' } | Select-Object -Last 1) }
 function Field($status, $name) {
     if ($status -match "$name=(\S+)") { return $Matches[1] }
@@ -163,8 +194,9 @@ try {
         }
         Check 'the service reconnected on its own (auto reconnect)' $recovered
         if ($recovered) {
-            $back = Egress 20
+            $back = WaitEgress 40
             Check 'traffic passes again after the recovery' ($null -ne $back)
+            if ($null -eq $back) { Diag 'no traffic after the recovery' }
         }
     }
 
@@ -177,9 +209,14 @@ try {
         $up2 = $st2 -and (Field $st2 'phase') -eq 'PHASE_UP'
         Check 'connected with the custom resolver (its DNS check passed through the tunnel)' $up2 $st2
         if ($up2) {
-            Start-Sleep -Seconds 3
-            $r = Resolve-DnsName example.com -Type A -DnsOnly -Server $CustomDns -ErrorAction SilentlyContinue
-            Check "$CustomDns answers a lookup while connected" ($null -ne $r)
+            Start-Sleep -Seconds 4
+            $r = Resolve-DnsName example.com -Type A -DnsOnly -Server $CustomDns -ErrorAction SilentlyContinue -ErrorVariable dnsErr
+            Check "$CustomDns answers a lookup while connected" ($null -ne $r) $(if ($dnsErr) { "$($dnsErr[0].Exception.Message)" })
+            if ($null -eq $r) {
+                $viaSystem = Resolve-DnsName example.com -Type A -DnsOnly -ErrorAction SilentlyContinue
+                Write-Host "    the system resolver answers: $($null -ne $viaSystem)"
+                Diag "no answer from $CustomDns"
+            }
             $res2 = (Get-DnsClientServerAddress -InterfaceAlias 'charon0' -AddressFamily IPv4 -ErrorAction SilentlyContinue).ServerAddresses
             Write-Host "    DNS servers of charon0: $($res2 -join ', ')"
         }

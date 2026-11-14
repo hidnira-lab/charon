@@ -108,9 +108,17 @@ Future<void> run(List<String> args) async {
       }
       await sub.cancel();
     case 'disconnect':
-      await client.disconnect();
+      // A second Hello on the same connection is a protocol violation (the service closes
+      // the pipe), so the status after the command comes from the events instead.
+      var last = _status(ack.status);
+      final sub = client.events.listen((e) {
+        if (e.hasStatusChanged()) last = _status(e.statusChanged);
+      });
+      final r = await client.disconnect();
+      if (r.hasError()) stdout.writeln('disconnect REFUSED: ${r.error.code.name}');
       await Future<void>.delayed(const Duration(seconds: 3));
-      stdout.writeln('after: ${_status((await client.hello(appVersion: '0.1.0')).status)}');
+      await sub.cancel();
+      stdout.writeln('after: $last');
     case 'logs':
       // What the service wrote in its own log (it keeps the last lines in memory), so a
       // connect that failed can say why. The core log never holds a destination.
