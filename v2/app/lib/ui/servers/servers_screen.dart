@@ -52,14 +52,11 @@ class _ServersScreenState extends State<ServersScreen> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Center(
-        child: Container(
+        // The window is the frame: no border or corners of its own, or this screen
+        // would sit a pixel apart from the others.
+        child: SizedBox(
           width: 1024,
           height: 768,
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: colors.divider),
-          ),
           child: Column(
             children: [
               // Title bar
