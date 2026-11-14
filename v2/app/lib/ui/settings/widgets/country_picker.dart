@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/country.dart';
 import '../../../theme/theme.dart';
+import '../../common/pixel_field.dart';
 import '../../common/pixel_flag.dart';
 import '../../common/pixel_icon.dart';
 
@@ -74,14 +75,10 @@ class _CountryPickerState extends State<CountryPicker> with SingleTickerProvider
             onTap: locked ? null : (_open ? _close : _show),
             child: MouseRegion(
               cursor: locked ? SystemMouseCursors.basic : SystemMouseCursors.click,
-              child: Container(
-                height: 40,
+              child: PixelField(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                  color: locked ? colors.surface : colors.bg,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: locked ? colors.divider : colors.controlBorder),
-                ),
+                fill: locked ? colors.surface : colors.bg,
+                frame: locked ? colors.divider : colors.controlBorder,
                 child: Row(
                   children: [
                     if (code.isNotEmpty) ...[

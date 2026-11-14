@@ -5,6 +5,7 @@ import '../../theme/theme.dart';
 import '../common/glass_card.dart';
 import '../common/motion.dart';
 import '../common/pixel_flag.dart';
+import '../common/pixel_field.dart';
 import '../common/pixel_icon.dart';
 
 /// Opens a dialog with the scrim and the motion of the Dialogs board: in
@@ -543,14 +544,11 @@ class DialogField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
-    final box = Container(
+    final box = PixelField(
       height: height,
       padding: EdgeInsets.only(left: 12, right: onEye != null ? 4 : 12),
-      decoration: BoxDecoration(
-        color: colors.bg,
-        border: Border.all(color: warn ? colors.transitionFill : colors.controlBorder),
-        borderRadius: BorderRadius.circular(8),
-      ),
+      fill: colors.bg,
+      frame: warn ? colors.transitionFill : colors.controlBorder,
       child: Row(
         children: [
           if (prompt) ...[

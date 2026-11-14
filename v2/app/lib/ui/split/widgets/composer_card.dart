@@ -5,6 +5,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/theme.dart';
 import '../rule_validator.dart';
 import '../../common/glass_card.dart';
+import '../../common/pixel_field.dart';
 import '../../common/pixel_icon.dart';
 
 class ComposerCard extends StatefulWidget {
@@ -183,16 +184,10 @@ class _ComposerCardState extends State<ComposerCard> {
           Row(
             children: [
               Expanded(
-                child: Container(
+                child: PixelField(
                   height: 44,
-                  decoration: BoxDecoration(
-                    color: colors.bg,
-                    border: Border.all(
-                      color: hasConflict ? colors.transitionFill : colors.controlBorder,
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  fill: colors.bg,
+                  frame: hasConflict ? colors.transitionFill : colors.controlBorder,
                   child: Row(
                     children: [
                       Text('>', style: monoStyle(colors.accentText, 14, bold: true)),

@@ -25,6 +25,7 @@ import '../servers/widgets/server_import_parts.dart';
 import '../settings/widgets/charon_switch.dart';
 import '../trust/guide_links.dart';
 import 'widgets/setup_scene.dart';
+import '../common/notch_box.dart';
 import '../common/pixel_icon.dart';
 import '../common/dashed_box.dart';
 import '../common/ambient.dart';
@@ -424,9 +425,11 @@ class _Aside extends StatelessWidget {
             child: RiseOnChange(
               value: text,
               offset: const Offset(0, 4),
-              child: Container(
+              // The bubble has the stepped corners of the board (clip8).
+              child: NotchBox(
+              color: colors.text,
+              notch: 8,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              decoration: BoxDecoration(color: colors.text, borderRadius: BorderRadius.circular(8)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -443,8 +446,8 @@ class _Aside extends StatelessWidget {
             image: true,
             label: l10n.stpSceneLabel(pct),
             child: ExcludeSemantics(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
+              child: ClipPath(
+                clipper: NotchClipper(8),
                 child: SizedBox(
                   width: 260,
                   height: 190,

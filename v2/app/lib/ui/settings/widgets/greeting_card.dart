@@ -5,6 +5,7 @@ import '../../../state/greeting.dart';
 import '../../../state/home_controller.dart';
 import '../../../state/location_status.dart';
 import '../../common/dither_strip.dart';
+import '../../common/pixel_field.dart';
 import 'country_picker.dart';
 import 'charon_switch.dart';
 import '../../../theme/theme.dart';
@@ -91,14 +92,8 @@ class _GreetingCardState extends State<GreetingCard> {
             ),
           ),
           const SizedBox(height: 6),
-          Container(
-            height: 38,
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-              color: colors.bg,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: colors.controlBorder),
-            ),
+          PixelField(
+            fill: colors.bg,
             child: Row(
               children: [
                 Text(
@@ -238,16 +233,9 @@ class _GreetingCardState extends State<GreetingCard> {
                       ],
                     ),
                     const SizedBox(height: 6),
-                    Container(
-                      height: 38,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: found ? colors.surface : colors.bg,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: found ? colors.divider : colors.controlBorder,
-                        ),
-                      ),
+                    PixelField(
+                      fill: found ? colors.surface : colors.bg,
+                      frame: found ? colors.divider : colors.controlBorder,
                       child: Row(
                         children: [
                           Text(

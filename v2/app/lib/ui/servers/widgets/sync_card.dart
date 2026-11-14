@@ -16,6 +16,7 @@ import '../../dialogs/sync_passphrase_dialog.dart';
 import '../../dialogs/vault_passphrase_dialog.dart';
 import '../../common/pixel_icon.dart';
 import '../../common/glass_card.dart';
+import '../../common/pixel_field.dart';
 
 // Rail tab of Settings, where the update screen lives.
 const int _tabSettings = 4;
@@ -295,14 +296,9 @@ class _SyncCardState extends State<SyncCard> {
               const SizedBox(height: 12),
               Text(l10n.syncDeviceNameLabel, style: mono(10, weight: FontWeight.w700, spacing: 0.8, color: colors.text2)),
               const SizedBox(height: 6),
-              Container(
+              PixelField(
                 height: 44,
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  color: colors.surface,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: colors.controlBorder),
-                ),
+                fill: colors.surface,
                 child: Row(
                   children: [
                     Text('>', style: mono(14, weight: FontWeight.w700, color: colors.accentText)),

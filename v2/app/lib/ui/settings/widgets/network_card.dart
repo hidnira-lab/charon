@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/dns_input.dart';
+import '../../common/pixel_field.dart';
 import '../../../state/home_controller.dart';
 import '../../../theme/theme.dart';
 import '../../common/pixel_icon.dart';
@@ -150,17 +151,10 @@ class _NetworkCardState extends State<NetworkCard> {
                     ),
                     if (isCustomDns) ...[
                       const SizedBox(height: 8),
-                      Container(
-                        height: 36,
-                        constraints: const BoxConstraints(maxWidth: 320),
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        decoration: BoxDecoration(
-                          color: colors.bg,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: _isDnsValid ? colors.controlBorder : colors.transitionText,
-                          ),
-                        ),
+                      PixelField(
+                        maxWidth: 320,
+                        fill: colors.bg,
+                        frame: _isDnsValid ? colors.controlBorder : colors.transitionText,
                         child: Row(
                           children: [
                             Text(
