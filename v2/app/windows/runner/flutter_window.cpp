@@ -25,6 +25,8 @@ bool FlutterWindow::OnCreate() {
     return false;
   }
   RegisterPlugins(flutter_controller_->engine());
+  shell_ = std::make_unique<NativeShell>(
+      GetHandle(), flutter_controller_->engine()->messenger());
   SetChildContent(flutter_controller_->view()->GetNativeWindow());
 
   flutter_controller_->engine()->SetNextFrameCallback([&]() {
@@ -40,6 +42,7 @@ bool FlutterWindow::OnCreate() {
 }
 
 void FlutterWindow::OnDestroy() {
+  shell_ = nullptr;
   if (flutter_controller_) {
     flutter_controller_ = nullptr;
   }
@@ -51,6 +54,23 @@ LRESULT
 FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
                               WPARAM const wparam,
                               LPARAM const lparam) noexcept {
+  switch (message) {
+    case WM_NCCALCSIZE:
+      // No frame and no caption: the client area is the whole window, and the
+      // title bar is the one Flutter draws.
+      if (wparam) return 0;
+      break;
+    case WM_CLOSE:
+      // Dart decides what closing means (hide to tray, quit, ask first).
+      if (shell_ && shell_->RequestClose()) return 0;
+      break;
+  }
+  if (shell_) {
+    if (auto result = shell_->HandleMessage(hwnd, message, wparam, lparam)) {
+      return *result;
+    }
+  }
+
   // Give Flutter, including plugins, an opportunity to handle window messages.
   if (flutter_controller_) {
     std::optional<LRESULT> result =

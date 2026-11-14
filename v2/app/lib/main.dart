@@ -8,6 +8,7 @@ import 'core/core_client.dart';
 import 'core/device_location.dart';
 import 'core/geoip.dart';
 import 'core/transport.dart';
+import 'core/window_host.dart';
 import 'l10n/generated/app_localizations.dart';
 import 'state/home_controller.dart';
 import 'state/service_view.dart';
@@ -15,6 +16,7 @@ import 'state/ui_prefs.dart';
 import 'theme/theme.dart';
 import 'ui/common/ambient.dart';
 import 'ui/common/toast_host.dart';
+import 'ui/shell/window_shell.dart';
 import 'ui/home/home_screen.dart';
 import 'ui/servers/servers_screen.dart';
 import 'ui/service/service_screen.dart';
@@ -35,7 +37,12 @@ Future<void> main() async {
     unawaited(CityTable.load().then((_) => controller.useLocationReader(readWindowsLocation)));
   }
   // The splash is the Windows window's. Android has its system splash.
-  runApp(CharonApp(controller: controller, showSplash: Platform.isWindows));
+  runApp(CharonApp(
+    controller: controller,
+    showSplash: Platform.isWindows,
+    // The frameless window and the tray are the Windows runner's.
+    windowHost: Platform.isWindows ? NativeWindowHost() : null,
+  ));
 
   // The supervisor opens the pipe now, and again every few seconds while the
   // service is away, so the window comes back by itself when the service does.
@@ -82,6 +89,7 @@ class CharonApp extends StatefulWidget {
     this.locale,
     this.themeData,
     this.showSplash = false,
+    this.windowHost,
   });
 
   final HomeController controller;
@@ -91,6 +99,10 @@ class CharonApp extends StatefulWidget {
   /// Draws the splash over the first screen until the service has been tried.
   final bool showSplash;
 
+  /// The frameless window and the tray. Without one, the title bar buttons and
+  /// the tray do nothing (Android, tests).
+  final WindowHost? windowHost;
+
   @override
   State<CharonApp> createState() => _CharonAppState();
 }
@@ -98,6 +110,7 @@ class CharonApp extends StatefulWidget {
 class _CharonAppState extends State<CharonApp> {
   var _splashDone = false;
   final _splashKey = GlobalKey();
+  final _navigatorKey = GlobalKey<NavigatorState>();
 
   HomeController get controller => widget.controller;
 
@@ -144,10 +157,16 @@ class _CharonAppState extends State<CharonApp> {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           // The window light behind every page, under the glass of the cards.
-          builder: (context, child) => PageBackdrop(
-            home: !controller.isFirstRun && controller.service.view == null && activeTab == 0,
-            // The toast sits above every screen and dialog, in the one window.
-            child: Stack(children: [child!, ToastHost(controller: controller)]),
+          navigatorKey: _navigatorKey,
+          builder: (context, child) => WindowShell(
+            host: widget.windowHost ?? const NoWindowHost(),
+            controller: controller,
+            navigatorKey: _navigatorKey,
+            child: PageBackdrop(
+              home: !controller.isFirstRun && controller.service.view == null && activeTab == 0,
+              // The toast sits above every screen and dialog, in the one window.
+              child: Stack(children: [child!, ToastHost(controller: controller)]),
+            ),
           ),
           // The splash goes inside the home, not around the app: it needs the Overlay of the
           // Navigator (the window buttons have tooltips). Keyed, so it keeps its clock when the

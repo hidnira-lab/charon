@@ -7,6 +7,7 @@ import '../../../theme/theme.dart';
 import '../../common/ghost.dart';
 import '../../common/glass_card.dart';
 import '../../common/line_icons.dart';
+import '../../shell/window_shell.dart';
 
 /// A page under the window title bar, which the boards draw on every screen.
 class TitleBarPage extends StatelessWidget {
@@ -36,12 +37,21 @@ class TitleBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
+    // What the buttons do comes from the window the app runs in, unless the
+    // screen says otherwise.
+    final window = WindowScope.maybeOf(context);
+    final minimize = onMinimize ?? window?.minimize;
+    final close = onClose ?? window?.requestClose;
 
     // Frosted over the window light: blur(24px), rgba(14,14,14,.5) or white .64.
     return ClipRect(
       child: BackdropFilter.grouped(
         filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
-        child: Container(
+        // The title bar is drawn here, so pressing on it moves the window.
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onPanStart: window == null ? null : (_) => window.startDrag(),
+          child: Container(
       height: 36.0,
       decoration: BoxDecoration(
         color: Color.lerp(const Color(0x800E0E0E), const Color(0xA3FFFFFF), colors.lt),
@@ -71,15 +81,16 @@ class TitleBar extends StatelessWidget {
           _WindowButton(
             icon: LineIcons.minimize,
             tooltip: AppLocalizations.of(context)!.dialogQuitHideToTray,
-            onPressed: onMinimize,
+            onPressed: minimize,
           ),
           _WindowButton(
             icon: LineIcons.close,
             tooltip: AppLocalizations.of(context)!.trayMenuQuitCharon,
-            onPressed: onClose,
+            onPressed: close,
           ),
         ],
       ),
+        ),
         ),
       ),
     );

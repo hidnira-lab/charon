@@ -136,10 +136,13 @@ bool Win32Window::Create(const std::wstring& title,
 
   // Charon's window is fixed: |size| is the client area (1024 by 768 in the
   // design), and the window can be neither resized nor maximized.
+  // The frame is removed again in WM_NCCALCSIZE (see FlutterWindow), so the
+  // client area is the whole window and no AdjustWindowRect is needed. The
+  // caption style stays: it is what gives minimize from the taskbar, the shadow
+  // and the rounded corners.
   const DWORD style = WS_OVERLAPPEDWINDOW & ~(WS_THICKFRAME | WS_MAXIMIZEBOX);
   RECT frame = {0, 0, Scale(size.width, scale_factor),
                 Scale(size.height, scale_factor)};
-  AdjustWindowRectExForDpi(&frame, style, FALSE, 0, dpi);
 
   HWND window = CreateWindow(
       window_class, title.c_str(), style,
