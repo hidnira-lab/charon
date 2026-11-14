@@ -125,11 +125,16 @@ void main() {
       expect(host.calls, isNot(contains('show')));
     });
 
-    testWidgets('the minimize button minimizes', (t) async {
-      final (host, _) = await app(t, _idle());
-      await t.tap(find.byTooltip('Hide to tray'));
-      await t.pump();
-      expect(host.calls, contains('minimize'));
+    testWidgets('the minus button is "Hide to tray": it hides the window, also while connected, with no question', (t) async {
+      for (final c in [_idle(), _up()]) {
+        final (host, _) = await app(t, c);
+        await t.tap(find.byTooltip('Hide to tray'));
+        await t.pumpAndSettle();
+        expect(host.calls, contains('hide'));
+        expect(host.calls, isNot(contains('quit')));
+        expect(find.text('Cancel'), findsNothing, reason: 'no dialog: the tunnel and the window are not at risk');
+        await t.pumpWidget(const SizedBox());
+      }
     });
 
     testWidgets('connected: the X asks first, with the window shown, and Cancel does nothing', (t) async {

@@ -23,12 +23,13 @@ class TitleBarPage extends StatelessWidget {
 class TitleBar extends StatelessWidget {
   const TitleBar({
     super.key,
-    this.onMinimize,
+    this.onHideToTray,
     this.onClose,
     this.tag,
   });
 
-  final VoidCallback? onMinimize;
+  /// The minus button, "Hide to tray" on the boards.
+  final VoidCallback? onHideToTray;
   final VoidCallback? onClose;
 
   /// A small mono word after the name, "SETUP" on the setup screen.
@@ -40,7 +41,7 @@ class TitleBar extends StatelessWidget {
     // What the buttons do comes from the window the app runs in, unless the
     // screen says otherwise.
     final window = WindowScope.maybeOf(context);
-    final minimize = onMinimize ?? window?.minimize;
+    final hide = onHideToTray ?? window?.hideToTray;
     final close = onClose ?? window?.requestClose;
 
     // Frosted over the window light: blur(24px), rgba(14,14,14,.5) or white .64.
@@ -81,7 +82,7 @@ class TitleBar extends StatelessWidget {
           _WindowButton(
             icon: LineIcons.minimize,
             tooltip: AppLocalizations.of(context)!.dialogQuitHideToTray,
-            onPressed: minimize,
+            onPressed: hide,
           ),
           _WindowButton(
             icon: LineIcons.close,

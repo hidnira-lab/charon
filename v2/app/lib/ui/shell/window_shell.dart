@@ -22,7 +22,9 @@ class WindowActions {
   /// Where the dialogs open (the shell sits above the Navigator).
   final GlobalKey<NavigatorState> navigatorKey;
 
-  Future<void> minimize() => host.minimize();
+  /// The minus of the title bar. On the boards it is labelled "Hide to tray", so
+  /// it takes the window off the screen and the taskbar and leaves the tray icon.
+  Future<void> hideToTray() => host.hide();
 
   Future<void> startDrag() => host.startDrag();
 

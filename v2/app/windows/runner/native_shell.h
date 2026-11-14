@@ -16,12 +16,12 @@
 constexpr UINT kTrayMessage = WM_APP + 1;
 
 // What only Windows can do for the Charon window, behind one method channel
-// ("charon/window"): the frameless window (move, minimize, hide, show, quit),
+// ("charon/window"): the frameless window (move, hide, show, quit),
 // the tray icon with its tooltip and its native right click menu, and the
 // events the Dart side acts on. Charon has no plugin for any of it, so this is
 // all of it.
 //
-// Dart to native: ready, minimize, hide, show, quit, startDrag, setTray,
+// Dart to native: ready, hide, show, quit, startDrag, setTray,
 // removeTray. Native to Dart: closeRequested, trayLeftClick, trayDoubleClick,
 // menuCommand (the id of the picked item).
 class NativeShell {

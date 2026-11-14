@@ -37,8 +37,6 @@ abstract interface class WindowHost {
   /// The app listens now. Until then a close request closes the window as usual.
   Future<void> ready();
 
-  Future<void> minimize();
-
   /// Hides the window and its taskbar button. The tray icon stays.
   Future<void> hide();
 
@@ -70,9 +68,6 @@ class NoWindowHost implements WindowHost {
 
   @override
   Future<void> ready() async {}
-
-  @override
-  Future<void> minimize() async {}
 
   @override
   Future<void> hide() async {}
@@ -135,9 +130,6 @@ class NativeWindowHost implements WindowHost {
 
   @override
   Future<void> ready() => _call('ready');
-
-  @override
-  Future<void> minimize() => _call('minimize');
 
   @override
   Future<void> hide() => _call('hide');

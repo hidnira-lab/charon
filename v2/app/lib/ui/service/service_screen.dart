@@ -22,10 +22,10 @@ import '../common/motion.dart';
 /// update, being repaired or updated), and the confirmation that it is back.
 /// Which state it is comes from [serviceView]; with none, nothing is drawn.
 class ServiceScreen extends StatelessWidget {
-  const ServiceScreen({super.key, required this.controller, this.onMinimize, this.onClose});
+  const ServiceScreen({super.key, required this.controller, this.onHideToTray, this.onClose});
 
   final HomeController controller;
-  final VoidCallback? onMinimize;
+  final VoidCallback? onHideToTray;
   final VoidCallback? onClose;
 
   @override
@@ -46,7 +46,7 @@ class ServiceScreen extends StatelessWidget {
                   const Positioned.fill(child: _Ambient()),
                   Column(
                     children: [
-                      TitleBar(onMinimize: onMinimize, onClose: onClose),
+                      TitleBar(onHideToTray: onHideToTray, onClose: onClose),
                       Expanded(
                         child: view == null
                             ? const SizedBox.shrink()

@@ -20,12 +20,12 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({
     super.key,
     required this.controller,
-    this.onMinimize,
+    this.onHideToTray,
     this.onClose,
   });
 
   final HomeController controller;
-  final VoidCallback? onMinimize;
+  final VoidCallback? onHideToTray;
   final VoidCallback? onClose;
 
   @override
@@ -53,7 +53,7 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 children: [
                   TitleBar(
-                    onMinimize: onMinimize,
+                    onHideToTray: onHideToTray,
                     onClose: onClose,
                   ),
                   Expanded(

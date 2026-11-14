@@ -23,9 +23,6 @@ class FakeWindowHost implements WindowHost {
   Future<void> ready() async => calls.add('ready');
 
   @override
-  Future<void> minimize() async => calls.add('minimize');
-
-  @override
   Future<void> hide() async => calls.add('hide');
 
   @override

@@ -88,8 +88,6 @@ void NativeShell::OnCall(
   const std::string& name = call.method_name();
   if (name == "ready") {
     ready_ = true;
-  } else if (name == "minimize") {
-    ShowWindow(window_, SW_MINIMIZE);
   } else if (name == "hide") {
     ShowWindow(window_, SW_HIDE);
   } else if (name == "show") {
