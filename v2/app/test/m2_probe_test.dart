@@ -3,7 +3,7 @@
 // without CHARON_PROBE it is skipped, so the normal suite never touches a service.
 //
 //   $env:CHARON_PROBE = 'hello'; flutter test test/m2_probe_test.dart
-//   CHARON_PROBE values: hello | elevate C:\path\program.exe | killswitch on | killswitch off | dns 9.9.9.9 | dns none | rule check off (check,
+//   CHARON_PROBE values: hello | repair | elevate C:\path\program.exe [-- args] | killswitch on | killswitch off | dns 9.9.9.9 | dns none | rule check off (check,
 //   download, keep; on or off) | connect (waits for Up, or says why not) |
 //   disconnect | watch 20 (prints changes for 20 s)
 //
@@ -18,6 +18,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:charon/core/core_client.dart';
 import 'package:charon/core/elevated.dart';
 import 'package:charon/core/transport.dart';
+import 'package:charon/state/service_supervisor.dart';
 import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:fixnum/fixnum.dart';
 
@@ -49,7 +50,45 @@ Future<void> _setConfig(CoreClient c, Config next) async {
   }
 }
 
+/// The commands that must work while the service is NOT running, so they run before the
+/// pipe is opened. True when [args] was one of them.
+Future<bool> _withoutService(List<String> args) async {
+  switch (args.first) {
+    case 'elevate':
+      // elevate <full path of a program> [-- arguments]: runs it the way the window runs
+      // the installer, with the UAC prompt. Prints the exit code; 1223 is "the person said
+      // No". Run it from a normal PowerShell, in an elevated one no prompt appears. The value
+      // is split on spaces, so a path with spaces is joined again up to the "--".
+      final cut = args.indexOf('--');
+      final exe = args.sublist(1, cut < 0 ? args.length : cut).join(' ');
+      final rest = cut < 0 ? <String>[] : args.sublist(cut + 1);
+      final code = await runElevated(exe, rest);
+      stdout.writeln('elevated exit code: $code${code == elevationDeclined ? ' (the prompt was declined)' : ''}');
+      return true;
+    case 'repair':
+      // The real "Repair" of the window: the ServiceSupervisor with its real defaults, so
+      // the install script of the program folder runs as an administrator (UAC prompt).
+      final sup = ServiceSupervisor(retryEvery: null);
+      sup.setConnector(() async {
+        final c = CoreClient(await IpcTransport.connect(_pipe));
+        try {
+          await c.hello(appVersion: '0.1.0');
+        } finally {
+          await c.close();
+        }
+      });
+      await sup.reconnect();
+      stdout.writeln('before: ${sup.status.name}');
+      await sup.repair();
+      stdout.writeln('after: ${sup.status.name}, startFailed=${sup.startFailed}, recovered=${sup.recovered?.name}, installing=${sup.installing?.name}');
+      sup.dispose();
+      return true;
+  }
+  return false;
+}
+
 Future<void> run(List<String> args) async {
+  if (await _withoutService(args)) return;
   final CoreClient client;
   try {
     client = CoreClient(await IpcTransport.connect(_pipe));
@@ -72,13 +111,6 @@ Future<void> run(List<String> args) async {
       cfg.version += Int64(1);
       await _setConfig(client, cfg);
       stdout.writeln(_config(await _getConfig(client)));
-    case 'elevate':
-      // elevate <full path of a program>: runs it the way the window runs the installer,
-      // with the UAC prompt. Prints the exit code; 1223 is "the person said No". Run it
-      // from a normal PowerShell, in an elevated one no prompt appears. The path may have
-      // spaces (the value is split on spaces, so it is joined again), and takes no arguments.
-      final code = await runElevated(args.sublist(1).join(' '), const []);
-      stdout.writeln('elevated exit code: $code${code == elevationDeclined ? ' (the prompt was declined)' : ''}');
     case 'killswitch':
       // killswitch on | off. The safety switches apply at once.
       final cfg = await _getConfig(client);

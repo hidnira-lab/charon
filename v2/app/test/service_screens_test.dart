@@ -28,6 +28,9 @@ class FakeService {
   late final HomeController controller = HomeController(
     serviceSupervisor: ServiceSupervisor(
       windows: true,
+      repairScript: 'install.ps1',
+      powershellExe: 'ps.exe',
+      scriptExists: (_) => true,
       retryEvery: null, // the screens do not wait on the clock, the supervisor's own tests cover the retry
       run: (exe, args) async {
         ran.add('$exe ${args.join(' ')}'.trim());
@@ -185,7 +188,7 @@ void main() {
       s.hold!.complete();
       await tester.pump();
       await tester.pump();
-      expect(s.ran, ['sc.exe start charon-service', 'charon-installer.exe']);
+      expect(s.ran, ['sc.exe start charon-service', 'ps.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File install.ps1 -Repair']);
       expect(find.text('The service is running'), findsOneWidget);
     });
   });

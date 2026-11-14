@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:charon/core/core_client.dart';
+import 'package:charon/core/elevated.dart';
 import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/state/service_supervisor.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,6 +12,9 @@ class Rig {
   Rig({this.windows = true}) {
     sup = ServiceSupervisor(
       windows: windows,
+      repairScript: repairScript,
+      powershellExe: 'ps.exe',
+      scriptExists: (p) => scriptThere,
       retryEvery: const Duration(milliseconds: 20),
       run: (exe, args) async {
         ran.add('$exe ${args.join(' ')}'.trim());
@@ -26,6 +32,8 @@ class Rig {
   }
 
   final bool windows;
+  static const repairScript = r'C:\Program Files\Charon\install.ps1';
+  var scriptThere = true;
   late final ServiceSupervisor sup;
   final ran = <String>[];
   final exits = <String, int>{};
@@ -162,26 +170,51 @@ void main() {
   });
 
   group('repair and update', () {
-    test('repair runs the installer, then confirms that Charon is back', () async {
+    test('repair runs the install script of the program folder in place, then confirms that Charon is back', () async {
       final r = Rig();
       r.sup.setStatus(ServiceStatus.notRunning);
       final modes = <InstallMode?>[];
       r.sup.addListener(() => modes.add(r.sup.installing));
       await r.sup.repair();
-      expect(r.ran, ['charon-installer.exe']);
+      expect(r.ran, [r'ps.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File C:\Program Files\Charon\install.ps1 -Repair']);
       expect(modes.first, InstallMode.repair);
       expect(r.sup.installing, isNull);
       expect(r.sup.recovered, Recovery.back);
     });
 
     test('a repair that fails puts the failure back on the screen', () async {
-      final r = Rig()..exits['charon-installer.exe'] = 1;
+      final r = Rig()..exits['ps.exe'] = 1;
       r.sup.setStatus(ServiceStatus.notRunning);
       await r.sup.repair();
       expect(r.sup.startFailed, isTrue);
       expect(r.sup.installing, isNull);
       expect(r.sup.recovered, isNull);
     });
+
+    test('saying No to the prompt is an answer, not a failure: no error on the screen', () async {
+      final r = Rig()..exits['ps.exe'] = elevationDeclined;
+      r.sup.setStatus(ServiceStatus.notRunning);
+      await r.sup.repair();
+      expect(r.sup.startFailed, isFalse);
+      expect(r.sup.installing, isNull);
+      expect(r.sup.recovered, isNull);
+      expect(r.sup.status, ServiceStatus.notRunning);
+    });
+
+    test('without the install script nothing is run, so no prompt is raised, and it fails', () async {
+      final r = Rig()..scriptThere = false;
+      r.sup.setStatus(ServiceStatus.notRunning);
+      await r.sup.repair();
+      expect(r.ran, isEmpty);
+      expect(r.sup.startFailed, isTrue);
+    });
+
+    test('the script comes from the program folder of Windows, not from next to the window', () {
+      // A folder the user can write to must never be the source of what runs as admin.
+      final pf = Platform.environment['ProgramFiles'] ?? r'C:\Program Files';
+      expect(defaultRepairScript, pf + r'\Charon\install.ps1');
+      expect(defaultRepairScript.toLowerCase(), isNot(contains('flutter')));
+    }, skip: Platform.isWindows ? false : 'Windows paths');
 
     test('update runs the installer quietly and confirms the shared version', () async {
       final r = Rig()..script.add('mismatch');

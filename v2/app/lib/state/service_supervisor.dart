@@ -27,6 +27,16 @@ typedef ProcessRunner = Future<int> Function(String exe, List<String> args);
 
 Future<int> _defaultRun(String exe, List<String> args) async => (await Process.run(exe, args)).exitCode;
 
+/// The repair script is looked for in the program folder of Windows, never next to
+/// the window: that folder is one only administrators can write to, and what runs
+/// with full rights must not come from a folder an ordinary user can change (the
+/// window may be a portable copy or a debug build).
+@visibleForTesting
+String get defaultRepairScript => (Platform.environment['ProgramFiles'] ?? r'C:\Program Files') + r'\Charon\install.ps1';
+
+/// Windows PowerShell by its full path, so that nothing is taken from the PATH.
+String get _defaultPowershell => (Platform.environment['SystemRoot'] ?? r'C:\Windows') + r'\System32\WindowsPowerShell\v1.0\powershell.exe';
+
 /// `sc.exe` answers 1056 when the service is already running. For a window that
 /// only wants it running, that is a success.
 const _errorServiceAlreadyRunning = 1056;
@@ -45,7 +55,13 @@ class ServiceSupervisor extends ChangeNotifier {
     ProcessRunner? runAdmin,
     this.retryEvery = const Duration(seconds: 5),
     bool? windows,
-  })  : _run = run ?? _defaultRun,
+    String? repairScript,
+    String? powershellExe,
+    bool Function(String path)? scriptExists,
+  })  : _repairScript = repairScript ?? defaultRepairScript,
+        _powershell = powershellExe ?? _defaultPowershell,
+        _exists = scriptExists ?? ((p) => File(p).existsSync()),
+        _run = run ?? _defaultRun,
         // What needs administrator rights (the installer, stopping the service,
         // the release tool) raises the UAC prompt. A test that gives only [run]
         // gets the same recorder for both.
@@ -55,6 +71,9 @@ class ServiceSupervisor extends ChangeNotifier {
   final ProcessRunner _run;
   final ProcessRunner _runAdmin;
   final bool _windows;
+  final String _repairScript;
+  final String _powershell;
+  final bool Function(String) _exists;
   /// How long to wait before asking the pipe again. Null never asks again by itself.
   final Duration? retryEvery;
 
@@ -168,27 +187,48 @@ class ServiceSupervisor extends ChangeNotifier {
     if (!_disposed) notifyListeners();
   }
 
-  /// Puts the service back with the installer.
-  Future<void> repair() => _install(InstallMode.repair, const [], Recovery.back);
+  /// Puts the service back: the install script of the program folder runs as an
+  /// administrator, in place (`-Repair` keeps the owner of the pipe and does not copy
+  /// the files onto themselves). Without that script there is nothing to run, and no
+  /// prompt is raised for it.
+  Future<void> repair() {
+    final script = _repairScript;
+    return _install(
+      InstallMode.repair,
+      _powershell,
+      ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-WindowStyle', 'Hidden', '-File', script, '-Repair'],
+      Recovery.back,
+      needs: script,
+    );
+  }
 
-  /// Updates the service with the installer.
-  Future<void> update() => _install(InstallMode.update, const ['/SILENT'], Recovery.updated);
+  /// Updates the service with the installer. TODO(M6): the installer that the
+  /// service downloads and verifies (`staged_installer` of the IPC contract) is not
+  /// built yet, so this still asks for a `charon-installer.exe` that nothing makes.
+  Future<void> update() => _install(InstallMode.update, 'charon-installer.exe', const ['/SILENT'], Recovery.updated);
 
-  Future<void> _install(InstallMode mode, List<String> args, Recovery after) async {
+  Future<void> _install(InstallMode mode, String exe, List<String> args, Recovery after, {String? needs}) async {
     if (_installing != null || !_windows) return;
     _installing = mode;
     _startFailed = false;
     notifyListeners();
     var ok = false;
+    var declined = false;
     try {
-      ok = await _runAdmin('charon-installer.exe', args) == 0 && await reconnect();
+      if (needs == null || _exists(needs)) {
+        final code = await _runAdmin(exe, args);
+        // The person said No to the prompt: that is an answer, not a failure, so the
+        // screen goes back to what it showed, with no error on it.
+        declined = code == elevationDeclined;
+        ok = code == 0 && await reconnect();
+      }
     } catch (_) {
       ok = false;
     }
     _installing = null;
     if (ok) {
       _recovered = after;
-    } else if (mode == InstallMode.repair) {
+    } else if (mode == InstallMode.repair && !declined) {
       _startFailed = true;
     }
     if (!_disposed) notifyListeners();

@@ -15,14 +15,24 @@ param(
     [string]$DataDir = "$env:ProgramData\Charon",
 
     [Parameter(Mandatory = $false)]
-    [string]$InstallingUserSID = ""
+    [string]$InstallingUserSID = "",
+
+    # The window runs this from the program folder to put the service back ("Repair").
+    # The files are already where they belong, and the owner of the pipe is the user
+    # recorded at the first install, not whoever types the admin password now.
+    [switch]$Repair
 )
 
 $ErrorActionPreference = "Stop"
 $ServiceName = "charon-service"
 
 if ([string]::IsNullOrWhiteSpace($InstallingUserSID)) {
-    $InstallingUserSID = [System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value
+    $ownerFile = Join-Path $DataDir "owner.sid"
+    if ($Repair -and (Test-Path $ownerFile)) {
+        $InstallingUserSID = (Get-Content -Path $ownerFile -Raw).Trim()
+    } else {
+        $InstallingUserSID = [System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value
+    }
 }
 
 # A running service keeps charon-service.exe locked, so stop it before the copy
@@ -46,10 +56,17 @@ New-Item -ItemType Directory -Force -Path $DataDir | Out-Null
 # Record the installing user's SID so the pipe server limits access to this user.
 Set-Content -Path (Join-Path $DataDir "owner.sid") -Value $InstallingUserSID -Encoding ASCII -NoNewline
 
-foreach ($file in @("charon.exe", "charon-service.exe", "charon-release.exe", "xray.exe", "wintun.dll")) {
-    $src = Join-Path $SourceDir $file
-    if (Test-Path $src) {
-        Copy-Item -Path $src -Destination (Join-Path $ProgramDir $file) -Force
+# install.ps1 and uninstall.ps1 go along, so that the window can find the script of
+# "Repair" in the program folder, which only administrators can write to.
+# When the files are already in the program folder (a repair), copying a file onto
+# itself is an error, so nothing is copied.
+$sameFolder = (Resolve-Path -Path $SourceDir).Path.TrimEnd('\') -ieq (Resolve-Path -Path $ProgramDir).Path.TrimEnd('\')
+if (-not $sameFolder) {
+    foreach ($file in @("charon.exe", "charon-service.exe", "charon-release.exe", "xray.exe", "wintun.dll", "install.ps1", "uninstall.ps1")) {
+        $src = Join-Path $SourceDir $file
+        if (Test-Path $src) {
+            Copy-Item -Path $src -Destination (Join-Path $ProgramDir $file) -Force
+        }
     }
 }
 
