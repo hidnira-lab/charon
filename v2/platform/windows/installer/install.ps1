@@ -5,8 +5,11 @@
     Matches the steps on the InstallerWindows board.
 #>
 param(
+    # The default is set below, not here: in Windows PowerShell 5.1 a parameter with the
+    # [Parameter()] attribute gets an EMPTY $PSScriptRoot as its default when the script
+    # runs with -File (which is how the window starts it).
     [Parameter(Mandatory = $false)]
-    [string]$SourceDir = $PSScriptRoot,
+    [string]$SourceDir = "",
 
     [Parameter(Mandatory = $false)]
     [string]$ProgramDir = "$env:ProgramFiles\Charon",
@@ -25,6 +28,10 @@ param(
 
 $ErrorActionPreference = "Stop"
 $ServiceName = "charon-service"
+
+if ([string]::IsNullOrWhiteSpace($SourceDir)) {
+    $SourceDir = $PSScriptRoot
+}
 
 # The window runs a repair with a hidden window and only sees the exit code, so the
 # record of what happened goes to a file that the same user can read afterwards.
