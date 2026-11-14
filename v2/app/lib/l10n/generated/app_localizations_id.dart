@@ -5075,4 +5075,43 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get toastUndo => 'Urungkan';
+
+  @override
+  String settingsLocFound(String city, String country) {
+    return '$city, $country · diperbarui saat Charon dibuka';
+  }
+
+  @override
+  String get settingsLocOff => 'mati · memakai kota yang kamu ketik';
+
+  @override
+  String get settingsLocDenied => 'tanpa izin · memakai kota yang kamu ketik';
+
+  @override
+  String get settingsLocLooking => 'mencari kotamu';
+
+  @override
+  String get settingsLocUnavailable =>
+      'posisi tidak tersedia · memakai kota yang kamu ketik';
+
+  @override
+  String get settingsLocBanner =>
+      'Lokasi untuk Charon mati. Izinkan di Pengaturan Windows, atau ketik kotamu di bawah.';
+
+  @override
+  String get settingsGreetingNoteManual =>
+      'diketik olehmu · kosongkan untuk menyembunyikan baris ini';
+
+  @override
+  String settingsCountryLabel(String name) {
+    return 'Negara, $name';
+  }
+
+  @override
+  String settingsGreetingPreviewIn(String city) {
+    return '· di $city';
+  }
+
+  @override
+  String get trustLicSubCities => 'data kota untuk sapaan · bekerja offline';
 }

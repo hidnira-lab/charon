@@ -61,3 +61,10 @@ Charon is licensed under the GNU General Public License v3.0 (`LICENSE`). It shi
 * **License**: Creative Commons Attribution 4.0 International (CC BY 4.0), https://creativecommons.org/licenses/by/4.0/
 * **Attribution**: This product includes the IP to Country Lite database by DB-IP, available from https://db-ip.com.
 * **Usage**: The IPv4 part of the November 2026 release is packed by `app/tool/build_geoip.dart` into `app/assets/geo/ipv4_country.bin.gz` (neighbouring ranges of one country merged, IPv6 left out). The Add server dialog uses it offline to suggest the country of a server given as an IP address. The address is never sent anywhere. The data is changed only by that packing. To refresh it, download a newer CSV from DB-IP and run the tool.
+
+### GeoNames cities (GeoNames)
+
+* **Provider**: GeoNames, https://www.geonames.org
+* **License**: Creative Commons Attribution 4.0 International (CC BY 4.0), https://creativecommons.org/licenses/by/4.0/
+* **Attribution**: This product includes the GeoNames geographical database, available from https://www.geonames.org.
+* **Usage**: The `cities15000` dump (cities with 15,000 people or more, downloaded 14 November 2026 from https://download.geonames.org/export/dump/) is packed by `app/tool/build_cities.dart` into `app/assets/geo/cities.bin.gz`. Only the ASCII name, the position (rounded to 0.01 degree), the country and the population are kept. The Settings greeting uses it offline to turn the position the PC reports into a city name. The position is used once and is never stored or sent anywhere. The data is changed only by that packing. To refresh it, download a newer dump and run the tool.

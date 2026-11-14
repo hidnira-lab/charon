@@ -1481,5 +1481,15 @@
   "toastErased": "Terhapus · Charon mulai dari awal",
   "toastUnpaired": "Pasangan dilepas · salinan server tetap ada",
   "toastUndo": "Urungkan",
-  "toastDismiss": "Tutup"
+  "toastDismiss": "Tutup",
+  "settingsLocFound": "{city}, {country} · diperbarui saat Charon dibuka",
+  "settingsLocOff": "mati · memakai kota yang kamu ketik",
+  "settingsLocDenied": "tanpa izin · memakai kota yang kamu ketik",
+  "settingsLocLooking": "mencari kotamu",
+  "settingsLocUnavailable": "posisi tidak tersedia · memakai kota yang kamu ketik",
+  "settingsLocBanner": "Lokasi untuk Charon mati. Izinkan di Pengaturan Windows, atau ketik kotamu di bawah.",
+  "settingsGreetingNoteManual": "diketik olehmu · kosongkan untuk menyembunyikan baris ini",
+  "settingsCountryLabel": "Negara, {name}",
+  "settingsGreetingPreviewIn": "· di {city}",
+  "trustLicSubCities": "data kota untuk sapaan · bekerja offline"
 }

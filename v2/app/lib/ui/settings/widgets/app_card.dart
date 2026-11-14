@@ -126,7 +126,6 @@ class AppCard extends StatelessWidget {
                                   ? colors.accentText
                                   : (ks ? colors.transitionText : colors.text3),
                             ),
-                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
@@ -202,7 +201,6 @@ class AppCard extends StatelessWidget {
                               fontSize: 11,
                               color: svcRestart ? colors.transitionText : colors.text3,
                             ),
-                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],

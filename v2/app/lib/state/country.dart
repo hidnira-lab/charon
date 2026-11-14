@@ -1,5 +1,8 @@
 import '../l10n/generated/app_localizations.dart';
 
+/// The countries the app has a pixel flag for, in the order of the Design artifact.
+const supportedCountryCodes = ['SG', 'JP', 'KR', 'FI', 'ID', 'CN', 'HK', 'TW', 'MY', 'IN', 'US', 'CA', 'DE', 'NL', 'GB', 'FR', 'RU', 'AU'];
+
 /// The name of a country in the app's language, for the countries the Design
 /// artifact has a flag for. Any other code is shown as it is, in capitals.
 String countryName(AppLocalizations l10n, String code) => switch (code.toUpperCase()) {

@@ -75,6 +75,21 @@ void main() {
       expect(find.textContaining('Mozilla Public License Version 2.0'), findsNothing);
     });
 
+    testWidgets('GeoNames is listed with its CC BY chip and the attribution it asks for', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+
+      await tester.pumpWidget(_buildTestTrustApp(home: LicencesScreen(controller: HomeController())));
+      await tester.pumpAndSettle();
+      expect(find.text('city data for the greeting · works offline'), findsOneWidget);
+      await tester.ensureVisible(find.text('GeoNames'));
+      await tester.tap(find.text('GeoNames'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('This product includes the GeoNames geographical database'), findsOneWidget);
+      expect(find.textContaining('available from https://www.geonames.org'), findsOneWidget);
+    });
+
     testWidgets('DB-IP is listed with its CC BY chip and the attribution it asks for', (tester) async {
       tester.view.physicalSize = const Size(1024, 768);
       tester.view.devicePixelRatio = 1.0;
@@ -82,7 +97,7 @@ void main() {
 
       await tester.pumpWidget(_buildTestTrustApp(home: LicencesScreen(controller: HomeController())));
       await tester.pumpAndSettle();
-      expect(find.text('CC BY 4.0'), findsOneWidget);
+      expect(find.text('CC BY 4.0'), findsNWidgets(2)); // DB-IP and GeoNames
       expect(find.text('country data for server addresses · works offline'), findsOneWidget);
       await tester.ensureVisible(find.text('DB-IP'));
       await tester.tap(find.text('DB-IP'));

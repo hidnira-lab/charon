@@ -8847,6 +8847,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Undo'**
   String get toastUndo;
+
+  /// Greeting card, line under the detect switch when a city was found.
+  ///
+  /// In en, this message translates to:
+  /// **'{city}, {country} · refreshes when Charon opens'**
+  String settingsLocFound(String city, String country);
+
+  /// Greeting card, line under the detect switch when it is off.
+  ///
+  /// In en, this message translates to:
+  /// **'off · using the city you typed'**
+  String get settingsLocOff;
+
+  /// Greeting card, line when Windows location is off for Charon.
+  ///
+  /// In en, this message translates to:
+  /// **'no permission · using the city you typed'**
+  String get settingsLocDenied;
+
+  /// Greeting card, line while the device is asked. Not on the board.
+  ///
+  /// In en, this message translates to:
+  /// **'looking for your city'**
+  String get settingsLocLooking;
+
+  /// Greeting card, line when no position could be had. Not on the board.
+  ///
+  /// In en, this message translates to:
+  /// **'no position available · using the city you typed'**
+  String get settingsLocUnavailable;
+
+  /// Greeting card, the note under the switch when permission is missing.
+  ///
+  /// In en, this message translates to:
+  /// **'Location is off for Charon. Allow it in Windows Settings, or type your city below.'**
+  String get settingsLocBanner;
+
+  /// Greeting card, the note at the bottom when the city is typed.
+  ///
+  /// In en, this message translates to:
+  /// **'typed by you · leave empty to hide the line'**
+  String get settingsGreetingNoteManual;
+
+  /// Accessibility label of the country button.
+  ///
+  /// In en, this message translates to:
+  /// **'Country, {name}'**
+  String settingsCountryLabel(String name);
+
+  /// Greeting card preview, the grey part after the greeting.
+  ///
+  /// In en, this message translates to:
+  /// **'· in {city}'**
+  String settingsGreetingPreviewIn(String city);
+
+  /// Trust screens text.
+  ///
+  /// In en, this message translates to:
+  /// **'city data for the greeting · works offline'**
+  String get trustLicSubCities;
 }
 
 class _AppLocalizationsDelegate

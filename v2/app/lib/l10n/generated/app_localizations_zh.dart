@@ -4830,6 +4830,42 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get toastUndo => '撤销';
+
+  @override
+  String settingsLocFound(String city, String country) {
+    return '$city, $country · 打开 Charon 时刷新';
+  }
+
+  @override
+  String get settingsLocOff => '关闭 · 使用你输入的城市';
+
+  @override
+  String get settingsLocDenied => '无权限 · 使用你输入的城市';
+
+  @override
+  String get settingsLocLooking => '正在查找你所在的城市';
+
+  @override
+  String get settingsLocUnavailable => '无法获取位置 · 使用你输入的城市';
+
+  @override
+  String get settingsLocBanner => 'Charon 的定位已关闭。请在 Windows 设置中允许，或在下方输入城市。';
+
+  @override
+  String get settingsGreetingNoteManual => '由你输入 · 留空则隐藏这一行';
+
+  @override
+  String settingsCountryLabel(String name) {
+    return '国家，$name';
+  }
+
+  @override
+  String settingsGreetingPreviewIn(String city) {
+    return '· 在$city';
+  }
+
+  @override
+  String get trustLicSubCities => '问候语的城市数据 · 离线可用';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -9657,4 +9693,40 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get toastUndo => '撤销';
+
+  @override
+  String settingsLocFound(String city, String country) {
+    return '$city, $country · 打开 Charon 时刷新';
+  }
+
+  @override
+  String get settingsLocOff => '关闭 · 使用你输入的城市';
+
+  @override
+  String get settingsLocDenied => '无权限 · 使用你输入的城市';
+
+  @override
+  String get settingsLocLooking => '正在查找你所在的城市';
+
+  @override
+  String get settingsLocUnavailable => '无法获取位置 · 使用你输入的城市';
+
+  @override
+  String get settingsLocBanner => 'Charon 的定位已关闭。请在 Windows 设置中允许，或在下方输入城市。';
+
+  @override
+  String get settingsGreetingNoteManual => '由你输入 · 留空则隐藏这一行';
+
+  @override
+  String settingsCountryLabel(String name) {
+    return '国家，$name';
+  }
+
+  @override
+  String settingsGreetingPreviewIn(String city) {
+    return '· 在$city';
+  }
+
+  @override
+  String get trustLicSubCities => '问候语的城市数据 · 离线可用';
 }

@@ -4,10 +4,13 @@ import 'dart:io';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 
+import '../core/cities.dart';
 import '../core/core_client.dart';
+import '../core/device_location.dart';
 import '../core/transport.dart';
 import '../gen/charon/v1/charon.pb.dart';
 import '../sync/sync_client.dart';
+import 'location_status.dart';
 import 'service_supervisor.dart';
 import 'toast.dart';
 import 'throughput_history.dart';
@@ -614,10 +617,56 @@ class HomeController extends ChangeNotifier {
     }
   }
 
+  LocationReader? _locationReader;
+  LocationStatus _locationStatus = LocationStatus.unavailable;
+  int _locationRun = 0;
+
+  /// Where the "Detect city from this device" switch stands: off, or what the
+  /// last try came to.
+  LocationStatus get locationStatus => _detectCity ? _locationStatus : LocationStatus.off;
+
+  /// Gives the controller a way to ask the device where it is, and asks now. Only
+  /// the real app does this, so a test never starts a process.
+  void useLocationReader(LocationReader reader) {
+    _locationReader = reader;
+    unawaited(detectLocation());
+  }
+
+  /// Asks the device for its position and turns it into a city and a country with
+  /// the offline table. The position is dropped at once. When it cannot be had
+  /// the city stays what the user typed, and the status says why.
+  Future<void> detectLocation() async {
+    if (!_detectCity) return;
+    final reader = _locationReader;
+    final table = CityTable.instance;
+    if (reader == null || table == null) {
+      _locationStatus = LocationStatus.unavailable;
+      notifyListeners();
+      return;
+    }
+    final run = ++_locationRun;
+    _locationStatus = LocationStatus.looking;
+    notifyListeners();
+    final result = await reader();
+    // A newer try, or the switch turned off meanwhile, makes this answer stale.
+    if (_isDisposed || run != _locationRun || !_detectCity) return;
+    final city = result.outcome == LocationOutcome.found ? table.nearest(result.lat, result.lon) : null;
+    if (city != null) {
+      _city = city.name;
+      _countryCode = city.country;
+      _locationStatus = LocationStatus.found;
+    } else {
+      _locationStatus = result.outcome == LocationOutcome.denied ? LocationStatus.denied : LocationStatus.unavailable;
+    }
+    notifyListeners();
+  }
+
   void setDetectCity(bool value) {
     if (_detectCity != value) {
       _detectCity = value;
+      _locationRun++; // any try still running is stale now
       notifyListeners();
+      if (value) unawaited(detectLocation());
     }
   }
 

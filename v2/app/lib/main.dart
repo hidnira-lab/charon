@@ -3,7 +3,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import 'core/cities.dart';
 import 'core/core_client.dart';
+import 'core/device_location.dart';
 import 'core/geoip.dart';
 import 'core/transport.dart';
 import 'l10n/generated/app_localizations.dart';
@@ -25,6 +27,10 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   unawaited(GeoIp.load()); // only needed once the user adds a server
   final controller = HomeController();
+  if (Platform.isWindows) {
+    // "Detect city": the position is read once, matched offline and dropped.
+    unawaited(CityTable.load().then((_) => controller.useLocationReader(readWindowsLocation)));
+  }
   // The splash is the Windows window's. Android has its system splash.
   runApp(CharonApp(controller: controller, showSplash: Platform.isWindows));
 

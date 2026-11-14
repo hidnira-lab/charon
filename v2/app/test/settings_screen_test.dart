@@ -171,7 +171,7 @@ void main() {
 
       expect(controller.greetingName, 'Alex');
       // The preview line follows the hour; a name is in it whatever the hour.
-      expect(find.byWidgetPredicate((w) => w is Text && (w.data ?? '').contains('Alex')), findsOneWidget);
+      expect(find.byWidgetPredicate((w) => w is Text && (w.textSpan?.toPlainText() ?? '').contains('Alex')), findsOneWidget);
     });
 
     testWidgets('erase all data triggers modal and cleans state', (tester) async {

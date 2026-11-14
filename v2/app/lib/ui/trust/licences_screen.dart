@@ -26,6 +26,12 @@ const _geoText = 'This product includes the IP to Country Lite database by DB-IP
     'available from https://db-ip.com.\n\n'
     'Licence: Creative Commons Attribution 4.0 International (CC BY 4.0).';
 
+/// The attribution GeoNames asks for. Legal text, so it is not translated.
+const _citiesText = 'This product includes the GeoNames geographical database, '
+    'available from https://www.geonames.org.\n\n'
+    'Licence: Creative Commons Attribution 4.0 International (CC BY 4.0). '
+    'The data was only packed: cities of 15,000 people or more, ASCII names, positions rounded to 0.01 degree.';
+
 const _oflText = 'SIL OPEN FONT LICENSE Version 1.1\n\n'
     'The fonts can be bundled, embedded and redistributed with any software.';
 
@@ -83,6 +89,8 @@ class _LicencesScreenState extends State<LicencesScreen> {
       _Lic('DB-IP', 'CC BY 4.0', l10n.trustLicSubGeo, _geoText, l10n.trustLinkGeo,
           textUrl: 'https://creativecommons.org/licenses/by/4.0/',
           linkUrl: 'https://db-ip.com/db/download/ip-to-country-lite'),
+      _Lic('GeoNames', 'CC BY 4.0', l10n.trustLicSubCities, _citiesText, l10n.trustLinkGeo,
+          textUrl: 'https://creativecommons.org/licenses/by/4.0/', linkUrl: 'https://www.geonames.org'),
       _Lic('Fonts', 'OFL 1.1', l10n.trustLicSubFonts, _oflText, l10n.trustLinkFonts,
           textUrl: 'https://openfontlicense.org/', linkUrl: 'https://github.com/rsms/inter'),
     ];

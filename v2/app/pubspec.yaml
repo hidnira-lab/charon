@@ -31,6 +31,7 @@ flutter:
 
   assets:
     - assets/geo/ipv4_country.bin.gz
+    - assets/geo/cities.bin.gz
 
   fonts:
     - family: Inter

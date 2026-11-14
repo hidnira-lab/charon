@@ -1482,5 +1482,15 @@
   "toastErased": "已清除 · Charon 重新开始",
   "toastUnpaired": "已解除配对 · 服务器副本保留",
   "toastUndo": "撤销",
-  "toastDismiss": "关闭"
+  "toastDismiss": "关闭",
+  "settingsLocFound": "{city}, {country} · 打开 Charon 时刷新",
+  "settingsLocOff": "关闭 · 使用你输入的城市",
+  "settingsLocDenied": "无权限 · 使用你输入的城市",
+  "settingsLocLooking": "正在查找你所在的城市",
+  "settingsLocUnavailable": "无法获取位置 · 使用你输入的城市",
+  "settingsLocBanner": "Charon 的定位已关闭。请在 Windows 设置中允许，或在下方输入城市。",
+  "settingsGreetingNoteManual": "由你输入 · 留空则隐藏这一行",
+  "settingsCountryLabel": "国家，{name}",
+  "settingsGreetingPreviewIn": "· 在{city}",
+  "trustLicSubCities": "问候语的城市数据 · 离线可用"
 }

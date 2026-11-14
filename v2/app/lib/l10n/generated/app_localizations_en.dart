@@ -5107,4 +5107,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get toastUndo => 'Undo';
+
+  @override
+  String settingsLocFound(String city, String country) {
+    return '$city, $country · refreshes when Charon opens';
+  }
+
+  @override
+  String get settingsLocOff => 'off · using the city you typed';
+
+  @override
+  String get settingsLocDenied => 'no permission · using the city you typed';
+
+  @override
+  String get settingsLocLooking => 'looking for your city';
+
+  @override
+  String get settingsLocUnavailable =>
+      'no position available · using the city you typed';
+
+  @override
+  String get settingsLocBanner =>
+      'Location is off for Charon. Allow it in Windows Settings, or type your city below.';
+
+  @override
+  String get settingsGreetingNoteManual =>
+      'typed by you · leave empty to hide the line';
+
+  @override
+  String settingsCountryLabel(String name) {
+    return 'Country, $name';
+  }
+
+  @override
+  String settingsGreetingPreviewIn(String city) {
+    return '· in $city';
+  }
+
+  @override
+  String get trustLicSubCities => 'city data for the greeting · works offline';
 }
