@@ -5078,4 +5078,33 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get splFailedFoot =>
       'Charon keeps no log files, the log lives in memory';
+
+  @override
+  String toastServerAdded(String label, int order) {
+    return '$label added as #$order in failover order';
+  }
+
+  @override
+  String toastServerSaved(String code) {
+    return 'Saved $code';
+  }
+
+  @override
+  String toastServerSavedActive(String code) {
+    return 'Saved · $code picks it up on the next connect';
+  }
+
+  @override
+  String toastServerDeleted(String label) {
+    return '$label deleted';
+  }
+
+  @override
+  String get toastErased => 'Erased · Charon starts fresh';
+
+  @override
+  String get toastUnpaired => 'Unpaired · the server copy stays';
+
+  @override
+  String get toastUndo => 'Undo';
 }

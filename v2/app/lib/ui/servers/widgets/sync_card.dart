@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
+import '../../../state/toast.dart';
 import '../../../state/sync_view.dart';
 import '../../../sync/sync_client.dart';
 import '../../../theme/theme.dart';
@@ -70,7 +71,10 @@ class _SyncCardState extends State<SyncCard> {
 
   Future<void> _unpair() async {
     final ok = await UnpairConfirmDialog.show(context);
-    if (ok == true) await _c.unpairSyncDevice();
+    if (ok == true) {
+      await _c.unpairSyncDevice();
+      _c.showToast(const ToastMessage(ToastKind.unpaired));
+    }
   }
 
   void _onNoteAction(SyncNoteAction action) {

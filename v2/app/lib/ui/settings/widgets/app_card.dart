@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
+import '../../../state/toast.dart';
 import 'charon_switch.dart';
 import 'erase_confirm_dialog.dart';
 import '../../../theme/theme.dart';
@@ -412,6 +413,7 @@ class AppCard extends StatelessWidget {
                   final confirmed = await EraseConfirmDialog.show(context);
                   if (confirmed == true) {
                     await controller.eraseAllData();
+                    controller.showToast(const ToastMessage(ToastKind.erased));
                   }
                 },
                 style: OutlinedButton.styleFrom(

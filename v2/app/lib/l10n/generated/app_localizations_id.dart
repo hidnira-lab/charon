@@ -5046,4 +5046,33 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get splFailedFoot =>
       'Charon tidak menyimpan file log, lognya ada di memori';
+
+  @override
+  String toastServerAdded(String label, int order) {
+    return '$label ditambahkan sebagai #$order di urutan failover';
+  }
+
+  @override
+  String toastServerSaved(String code) {
+    return 'Tersimpan $code';
+  }
+
+  @override
+  String toastServerSavedActive(String code) {
+    return 'Tersimpan · $code memakainya di koneksi berikutnya';
+  }
+
+  @override
+  String toastServerDeleted(String label) {
+    return '$label dihapus';
+  }
+
+  @override
+  String get toastErased => 'Terhapus · Charon mulai dari awal';
+
+  @override
+  String get toastUnpaired => 'Pasangan dilepas · salinan server tetap ada';
+
+  @override
+  String get toastUndo => 'Urungkan';
 }

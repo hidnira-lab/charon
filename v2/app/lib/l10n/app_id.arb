@@ -1473,5 +1473,13 @@
   "splFailedDesc": "Service Charon tidak menjawab tepat waktu. Peluncuran ini tidak mengubah apa pun di PC ini.",
   "splRetry": "Coba lagi",
   "splOpenDataFolder": "Buka folder data",
-  "splFailedFoot": "Charon tidak menyimpan file log, lognya ada di memori"
+  "splFailedFoot": "Charon tidak menyimpan file log, lognya ada di memori",
+  "toastServerAdded": "{label} ditambahkan sebagai #{order} di urutan failover",
+  "toastServerSaved": "Tersimpan {code}",
+  "toastServerSavedActive": "Tersimpan · {code} memakainya di koneksi berikutnya",
+  "toastServerDeleted": "{label} dihapus",
+  "toastErased": "Terhapus · Charon mulai dari awal",
+  "toastUnpaired": "Pasangan dilepas · salinan server tetap ada",
+  "toastUndo": "Urungkan",
+  "toastDismiss": "Tutup"
 }

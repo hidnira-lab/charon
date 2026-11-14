@@ -8422,7 +8422,7 @@ abstract class AppLocalizations {
   /// **'See usage'**
   String get toastSeeUsage;
 
-  /// Windows toast button that closes the toast.
+  /// Accessibility label of the toast close button.
   ///
   /// In en, this message translates to:
   /// **'Dismiss'**
@@ -8805,6 +8805,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Charon keeps no log files, the log lives in memory'**
   String get splFailedFoot;
+
+  /// Toast after a server was added.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} added as #{order} in failover order'**
+  String toastServerAdded(String label, int order);
+
+  /// Toast after a server was edited.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved {code}'**
+  String toastServerSaved(String code);
+
+  /// Toast after the server that carries traffic was edited.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved · {code} picks it up on the next connect'**
+  String toastServerSavedActive(String code);
+
+  /// Toast after a server was deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} deleted'**
+  String toastServerDeleted(String label);
+
+  /// Toast after Erase all data.
+  ///
+  /// In en, this message translates to:
+  /// **'Erased · Charon starts fresh'**
+  String get toastErased;
+
+  /// Toast after this device was unpaired.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpaired · the server copy stays'**
+  String get toastUnpaired;
+
+  /// Toast button that puts a deleted server back.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get toastUndo;
 }
 
 class _AppLocalizationsDelegate

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../gen/charon/v1/charon.pb.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../state/home_controller.dart';
+import '../../state/toast.dart';
 import '../../theme/theme.dart';
 import '../home/widgets/rail_nav.dart';
 import '../home/widgets/title_bar.dart';
@@ -437,12 +438,22 @@ class _ServersScreenState extends State<ServersScreen> {
     );
   }
 
+  /// "SRV-02 · Backup VPS", or the code alone when the server has no name.
+  static String _label(Server s) => s.displayName.isEmpty ? s.id : '${s.id} · ${s.displayName}';
+
   Future<void> _openAddDialog(BuildContext context, List<Server> existing) async {
     final outcome = await AddServerDialog.show(context, existing);
     if (!context.mounted) return;
     switch (outcome) {
       case ServerAdded(:final server):
-        await widget.controller.addServer(server);
+        final c = widget.controller;
+        if (await c.addServer(server)) {
+          c.showToast(ToastMessage(
+            ToastKind.serverAdded,
+            label: _label(server),
+            order: c.config?.servers.length ?? 1,
+          ));
+        }
       case EditRequested(:final id):
         final target = existing.where((s) => s.id == id).firstOrNull;
         if (target != null) await _openEditDialog(context, target);
@@ -460,7 +471,9 @@ class _ServersScreenState extends State<ServersScreen> {
       others: [for (final s in c.config?.servers ?? const <Server>[]) if (s.id != server.id) s],
     );
     if (updated != null) {
-      await widget.controller.updateServer(updated);
+      await c.updateServer(updated);
+      final carrying = c.status.phase == Phase.PHASE_UP && c.activeServer?.id == server.id;
+      c.showToast(ToastMessage(carrying ? ToastKind.serverSavedActive : ToastKind.serverSaved, code: server.id));
     }
   }
 
@@ -473,7 +486,16 @@ class _ServersScreenState extends State<ServersScreen> {
       otherServerIds: [for (final s in servers) if (s.id != server.id) s.id],
     );
     if (confirm == true) {
-      await widget.controller.deleteServer(server.id);
+      final c = widget.controller;
+      final index = servers.indexWhere((s) => s.id == server.id);
+      final wasChosen = c.config?.chosenServerId == server.id;
+      if (await c.deleteServer(server.id)) {
+        c.showToast(ToastMessage(
+          ToastKind.serverDeleted,
+          label: _label(server),
+          undo: () => c.restoreServer(server, index, wasChosen: wasChosen),
+        ));
+      }
     }
   }
 }

@@ -9,6 +9,7 @@ import '../core/transport.dart';
 import '../gen/charon/v1/charon.pb.dart';
 import '../sync/sync_client.dart';
 import 'service_supervisor.dart';
+import 'toast.dart';
 import 'throughput_history.dart';
 import 'ui_state.dart';
 
@@ -1069,6 +1070,47 @@ class HomeController extends ChangeNotifier {
     }
     notifyListeners();
     return true;
+  }
+
+  /// Puts a deleted server back at its place in the failover order. [wasChosen]
+  /// makes it the chosen server again, as it was before the delete. A server
+  /// that is there already, or no room left, is left alone.
+  Future<bool> restoreServer(Server server, int index, {bool wasChosen = false}) async {
+    if (_config == null || _config!.servers.length >= 32) return false;
+    if (_config!.servers.any((s) => s.id == server.id)) return false;
+    _config!.servers.insert(index.clamp(0, _config!.servers.length), server);
+    _hasServers = true;
+    if (wasChosen) _config!.chosenServerId = server.id;
+    _bumpConfigVersion();
+    if (_client != null) {
+      try {
+        await _client!.setConfig(_config!);
+      } catch (e) {
+        _logError(e);
+      }
+    }
+    notifyListeners();
+    return true;
+  }
+
+  ToastMessage? _toast;
+
+  /// The toast at the bottom of the window, null when none is showing.
+  ToastMessage? get toast => _toast;
+
+  /// Shows [message] in place of any toast that is showing. The toast bar hides
+  /// it again after its lifetime, so no timer outlives the window.
+  void showToast(ToastMessage message) {
+    _toast = message;
+    notifyListeners();
+  }
+
+  /// Hides [only] when it is still the one showing (a newer toast stays), or
+  /// whatever is showing when [only] is null.
+  void dismissToast([ToastMessage? only]) {
+    if (_toast == null || (only != null && !identical(_toast, only))) return;
+    _toast = null;
+    notifyListeners();
   }
 
   Future<void> selectServer(String serverId) async {

@@ -3614,5 +3614,21 @@
   "splOpenDataFolder": "Open data folder",
   "@splOpenDataFolder": { "description": "Splash, button that opens the Charon data folder. The board says Open log folder, but Charon keeps no log files." },
   "splFailedFoot": "Charon keeps no log files, the log lives in memory",
-  "@splFailedFoot": { "description": "Splash, the small line under the failed start buttons. Replaces the board's line about charon-core.log." }
+  "@splFailedFoot": { "description": "Splash, the small line under the failed start buttons. Replaces the board's line about charon-core.log." },
+  "toastServerAdded": "{label} added as #{order} in failover order",
+  "@toastServerAdded": { "description": "Toast after a server was added.", "placeholders": { "label": { "type": "String" }, "order": { "type": "int" } } },
+  "toastServerSaved": "Saved {code}",
+  "@toastServerSaved": { "description": "Toast after a server was edited.", "placeholders": { "code": { "type": "String" } } },
+  "toastServerSavedActive": "Saved · {code} picks it up on the next connect",
+  "@toastServerSavedActive": { "description": "Toast after the server that carries traffic was edited.", "placeholders": { "code": { "type": "String" } } },
+  "toastServerDeleted": "{label} deleted",
+  "@toastServerDeleted": { "description": "Toast after a server was deleted.", "placeholders": { "label": { "type": "String" } } },
+  "toastErased": "Erased · Charon starts fresh",
+  "@toastErased": { "description": "Toast after Erase all data." },
+  "toastUnpaired": "Unpaired · the server copy stays",
+  "@toastUnpaired": { "description": "Toast after this device was unpaired." },
+  "toastUndo": "Undo",
+  "@toastUndo": { "description": "Toast button that puts a deleted server back." },
+  "toastDismiss": "Dismiss",
+  "@toastDismiss": { "description": "Accessibility label of the toast close button." }
 }

@@ -1474,5 +1474,13 @@
   "splFailedDesc": "Charon 服务未能及时响应。本次启动没有改动这台电脑上的任何内容。",
   "splRetry": "重试",
   "splOpenDataFolder": "打开数据文件夹",
-  "splFailedFoot": "Charon 不保存日志文件，日志只存在内存中"
+  "splFailedFoot": "Charon 不保存日志文件，日志只存在内存中",
+  "toastServerAdded": "{label} 已添加，故障转移顺序第 {order}",
+  "toastServerSaved": "已保存 {code}",
+  "toastServerSavedActive": "已保存 · {code} 在下次连接时生效",
+  "toastServerDeleted": "{label} 已删除",
+  "toastErased": "已清除 · Charon 重新开始",
+  "toastUnpaired": "已解除配对 · 服务器副本保留",
+  "toastUndo": "撤销",
+  "toastDismiss": "关闭"
 }

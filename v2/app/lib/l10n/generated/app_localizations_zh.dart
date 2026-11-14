@@ -4801,6 +4801,35 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get splFailedFoot => 'Charon 不保存日志文件，日志只存在内存中';
+
+  @override
+  String toastServerAdded(String label, int order) {
+    return '$label 已添加，故障转移顺序第 $order';
+  }
+
+  @override
+  String toastServerSaved(String code) {
+    return '已保存 $code';
+  }
+
+  @override
+  String toastServerSavedActive(String code) {
+    return '已保存 · $code 在下次连接时生效';
+  }
+
+  @override
+  String toastServerDeleted(String label) {
+    return '$label 已删除';
+  }
+
+  @override
+  String get toastErased => '已清除 · Charon 重新开始';
+
+  @override
+  String get toastUnpaired => '已解除配对 · 服务器副本保留';
+
+  @override
+  String get toastUndo => '撤销';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -9599,4 +9628,33 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get splFailedFoot => 'Charon 不保存日志文件，日志只存在内存中';
+
+  @override
+  String toastServerAdded(String label, int order) {
+    return '$label 已添加，故障转移顺序第 $order';
+  }
+
+  @override
+  String toastServerSaved(String code) {
+    return '已保存 $code';
+  }
+
+  @override
+  String toastServerSavedActive(String code) {
+    return '已保存 · $code 在下次连接时生效';
+  }
+
+  @override
+  String toastServerDeleted(String label) {
+    return '$label 已删除';
+  }
+
+  @override
+  String get toastErased => '已清除 · Charon 重新开始';
+
+  @override
+  String get toastUnpaired => '已解除配对 · 服务器副本保留';
+
+  @override
+  String get toastUndo => '撤销';
 }
