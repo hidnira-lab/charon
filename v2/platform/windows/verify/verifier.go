@@ -18,6 +18,7 @@ import (
 	"time"
 
 	charonv1 "github.com/hidnira-lab/charon/core/gen/charonv1"
+	"github.com/hidnira-lab/charon/core/xrayconfig"
 )
 
 // Options configures the endpoints used by Verifier.
@@ -69,7 +70,7 @@ func defaultLookupHost(ctx context.Context, host string) ([]netip.Addr, error) {
 
 // Verify runs the four verification checks in order and returns the observed
 // egress address, round-trip latency in milliseconds, or the first FailureReason.
-func (v *Verifier) Verify(ctx context.Context, server *charonv1.Server, _ *charonv1.Config) (string, uint32, charonv1.FailureReason) {
+func (v *Verifier) Verify(ctx context.Context, server *charonv1.Server, cfg *charonv1.Config) (string, uint32, charonv1.FailureReason) {
 	if server == nil {
 		return "", 0, charonv1.FailureReason_FAILURE_CONFIG_REJECTED
 	}
@@ -117,7 +118,7 @@ func (v *Verifier) Verify(ctx context.Context, server *charonv1.Server, _ *charo
 	}
 
 	// Step 4: DNS lookup through the tunnel to confirm DNS is tunnelled (P1).
-	if err := v.checkDNSThroughTunnel(ctx); err != nil {
+	if err := v.checkDNSThroughTunnel(ctx, v.resolverFor(cfg)); err != nil {
 		return "", 0, charonv1.FailureReason_FAILURE_DNS_NOT_TUNNELLED
 	}
 
@@ -171,10 +172,20 @@ func (v *Verifier) fetchEgressThroughTunnel(ctx context.Context) (string, error)
 	return strings.TrimSpace(string(body)), nil
 }
 
+// resolverFor is the resolver check 4 asks: the one the user chose in the
+// Config, which the tunnel uses too, else the default of the Options. The
+// custom one is asked on port 53.
+func (v *Verifier) resolverFor(cfg *charonv1.Config) string {
+	if a, ok := xrayconfig.ResolverAddr(cfg.GetSettings().GetCustomDns()); ok {
+		return net.JoinHostPort(a.String(), "53")
+	}
+	return v.opts.DNSServer
+}
+
 // checkDNSThroughTunnel sends a minimal RFC 1035 DNS A query over TCP through
 // the tunnel and verifies a valid DNS response header with ANCOUNT >= 1.
-func (v *Verifier) checkDNSThroughTunnel(ctx context.Context) error {
-	conn, err := v.dialThroughTunnel(ctx, "tcp", v.opts.DNSServer)
+func (v *Verifier) checkDNSThroughTunnel(ctx context.Context, resolver string) error {
+	conn, err := v.dialThroughTunnel(ctx, "tcp", resolver)
 	if err != nil {
 		return err
 	}

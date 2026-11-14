@@ -547,6 +547,10 @@ func diffConfig(oldCfg, newCfg *charonv1.Config) (now []string, nextConnect []st
 	if !proto.Equal(oldCfg.GetSplit(), newCfg.GetSplit()) {
 		nextConnect = append(nextConnect, "split_tunnel")
 	}
+	// The resolver goes into the Xray config, which is built on connect.
+	if os.GetCustomDns() != ns.GetCustomDns() {
+		nextConnect = append(nextConnect, "dns")
+	}
 	return now, nextConnect
 }
 

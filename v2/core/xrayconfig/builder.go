@@ -136,6 +136,10 @@ func Build(server *charonv1.Server, cfg *charonv1.Config, opts Options) ([]byte,
 	if dnsServer == "" {
 		dnsServer = DefaultDNSResolver
 	}
+	// The resolver the user chose wins, when it is a usable address.
+	if a, ok := ResolverAddr(cfg.GetSettings().GetCustomDns()); ok {
+		dnsServer = a.String()
+	}
 	tunName := strings.TrimSpace(opts.TUNName)
 	if tunName == "" {
 		tunName = DefaultTUNName

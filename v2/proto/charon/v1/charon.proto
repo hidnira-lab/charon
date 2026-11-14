@@ -251,6 +251,9 @@ message Settings {
   bool update_check_off = 4;        // ON: check when the service starts, then once a day
   bool background_download_off = 5; // ON: download only while the tunnel is Up
   bool previous_core_off = 6;       // ON: keep xray.prev.exe for one tap roll back
+  // The DNS resolver the tunnel uses, one IPv4 or IPv6 address. Empty means the
+  // default public resolver. A value that is not a usable address is refused.
+  string custom_dns = 7;
 }
 
 message SplitTunnel {

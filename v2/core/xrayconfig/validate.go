@@ -33,6 +33,15 @@ func ValidateConfig(cfg *charonv1.Config, allowAppRules bool) []*charonv1.FieldE
 	}
 	var errs []*charonv1.FieldError
 
+	if dns := strings.TrimSpace(cfg.GetSettings().GetCustomDns()); dns != "" {
+		if _, ok := ResolverAddr(dns); !ok {
+			errs = append(errs, &charonv1.FieldError{
+				Path:       "settings.custom_dns",
+				MessageKey: "error.settings.dns_invalid",
+			})
+		}
+	}
+
 	servers := cfg.GetServers()
 	if len(servers) > MaxServers {
 		errs = append(errs, &charonv1.FieldError{
@@ -312,4 +321,22 @@ func validDomain(s string) bool {
 		return false
 	}
 	return hostRe.MatchString(s) && strings.Contains(s, ".")
+}
+
+// ResolverAddr reads a DNS resolver that the user typed: one IPv4 or IPv6
+// address, with no port, no name and no zone. Addresses that cannot be a
+// resolver the tunnel can reach (unspecified, loopback, multicast, link local,
+// broadcast) are refused, because the product rule is DNS through the tunnel.
+// The returned address is in its canonical text form.
+func ResolverAddr(s string) (netip.Addr, bool) {
+	a, err := netip.ParseAddr(strings.TrimSpace(s))
+	if err != nil || a.Zone() != "" {
+		return netip.Addr{}, false
+	}
+	a = a.Unmap()
+	if a.IsUnspecified() || a.IsLoopback() || a.IsMulticast() || a.IsLinkLocalUnicast() ||
+		a == netip.AddrFrom4([4]byte{255, 255, 255, 255}) {
+		return netip.Addr{}, false
+	}
+	return a, true
 }

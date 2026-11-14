@@ -1411,6 +1411,7 @@ const Settings$json = {
       '10': 'backgroundDownloadOff'
     },
     {'1': 'previous_core_off', '3': 6, '4': 1, '5': 8, '10': 'previousCoreOff'},
+    {'1': 'custom_dns', '3': 7, '4': 1, '5': 9, '10': 'customDns'},
   ],
 };
 
@@ -1420,7 +1421,8 @@ final $typed_data.Uint8List settingsDescriptor = $convert.base64Decode(
     '9ubmVjdBgCIAEoCFINYXV0b1JlY29ubmVjdBIuChNhbGxvd19sb2NhbF9uZXR3b3JrGAMgASgI'
     'UhFhbGxvd0xvY2FsTmV0d29yaxIoChB1cGRhdGVfY2hlY2tfb2ZmGAQgASgIUg51cGRhdGVDaG'
     'Vja09mZhI2ChdiYWNrZ3JvdW5kX2Rvd25sb2FkX29mZhgFIAEoCFIVYmFja2dyb3VuZERvd25s'
-    'b2FkT2ZmEioKEXByZXZpb3VzX2NvcmVfb2ZmGAYgASgIUg9wcmV2aW91c0NvcmVPZmY=');
+    'b2FkT2ZmEioKEXByZXZpb3VzX2NvcmVfb2ZmGAYgASgIUg9wcmV2aW91c0NvcmVPZmYSHQoKY3'
+    'VzdG9tX2RucxgHIAEoCVIJY3VzdG9tRG5z');
 
 @$core.Deprecated('Use splitTunnelDescriptor instead')
 const SplitTunnel$json = {

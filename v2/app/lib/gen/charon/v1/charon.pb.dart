@@ -3113,6 +3113,7 @@ class Settings extends $pb.GeneratedMessage {
     $core.bool? updateCheckOff,
     $core.bool? backgroundDownloadOff,
     $core.bool? previousCoreOff,
+    $core.String? customDns,
   }) {
     final result = Settings._();
     if (killSwitch != null) result.killSwitch = killSwitch;
@@ -3122,6 +3123,7 @@ class Settings extends $pb.GeneratedMessage {
     if (backgroundDownloadOff != null)
       result.backgroundDownloadOff = backgroundDownloadOff;
     if (previousCoreOff != null) result.previousCoreOff = previousCoreOff;
+    if (customDns != null) result.customDns = customDns;
     return result;
   }
 
@@ -3144,6 +3146,7 @@ class Settings extends $pb.GeneratedMessage {
     ..aOB(4, _omitFieldNames ? '' : 'updateCheckOff')
     ..aOB(5, _omitFieldNames ? '' : 'backgroundDownloadOff')
     ..aOB(6, _omitFieldNames ? '' : 'previousCoreOff')
+    ..aOS(7, _omitFieldNames ? '' : 'customDns')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -3222,6 +3225,17 @@ class Settings extends $pb.GeneratedMessage {
   $core.bool hasPreviousCoreOff() => $_has(5);
   @$pb.TagNumber(6)
   void clearPreviousCoreOff() => $_clearField(6);
+
+  /// The DNS resolver the tunnel uses, one IPv4 or IPv6 address. Empty means the
+  /// default public resolver. A value that is not a usable address is refused.
+  @$pb.TagNumber(7)
+  $core.String get customDns => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set customDns($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasCustomDns() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearCustomDns() => $_clearField(7);
 }
 
 class SplitTunnel extends $pb.GeneratedMessage {
