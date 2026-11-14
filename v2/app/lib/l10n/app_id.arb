@@ -1459,5 +1459,13 @@
   "railMetaTry": "coba {attempt} / {max}",
   "logoPokeHi": "hi!",
   "logoPokeHmm": "hmm?",
-  "logoPokeAngry": "hey! i'm working here"
+  "logoPokeAngry": "hey! i'm working here",
+  "updRulesTitle": "ATURAN PEMBARUAN",
+  "updRulesLabel": "Aturan pembaruan",
+  "updRuleCheck": "Cek pembaruan",
+  "updRuleCheckLine": "saat Charon mulai, lalu sekali sehari",
+  "updRuleDownload": "Unduh di latar belakang",
+  "updRuleDownloadLine": "hanya saat terhubung, lewat tunnel",
+  "updRuleKeepCore": "Simpan core sebelumnya",
+  "updRuleKeepCoreLine": "roll back sekali ketuk kalau yang baru bermasalah"
 }

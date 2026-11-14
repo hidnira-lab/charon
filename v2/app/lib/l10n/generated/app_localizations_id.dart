@@ -4998,4 +4998,29 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get logoPokeAngry => 'hey! i\'m working here';
+
+  @override
+  String get updRulesTitle => 'ATURAN PEMBARUAN';
+
+  @override
+  String get updRulesLabel => 'Aturan pembaruan';
+
+  @override
+  String get updRuleCheck => 'Cek pembaruan';
+
+  @override
+  String get updRuleCheckLine => 'saat Charon mulai, lalu sekali sehari';
+
+  @override
+  String get updRuleDownload => 'Unduh di latar belakang';
+
+  @override
+  String get updRuleDownloadLine => 'hanya saat terhubung, lewat tunnel';
+
+  @override
+  String get updRuleKeepCore => 'Simpan core sebelumnya';
+
+  @override
+  String get updRuleKeepCoreLine =>
+      'roll back sekali ketuk kalau yang baru bermasalah';
 }

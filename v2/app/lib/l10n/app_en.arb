@@ -3586,5 +3586,21 @@
   "logoPokeHmm": "hmm?",
   "@logoPokeHmm": { "description": "The logo's bubble after two or three quick pokes." },
   "logoPokeAngry": "hey! i'm working here",
-  "@logoPokeAngry": { "description": "The logo's bubble after four quick pokes." }
+  "@logoPokeAngry": { "description": "The logo's bubble after four quick pokes." },
+  "updRulesTitle": "UPDATE RULES",
+  "@updRulesTitle": { "description": "Heading of the update rules card." },
+  "updRulesLabel": "Update rules",
+  "@updRulesLabel": { "description": "Accessibility label of the update rules card." },
+  "updRuleCheck": "Check for updates",
+  "@updRuleCheck": { "description": "Update rule: checks on a schedule." },
+  "updRuleCheckLine": "when Charon starts, then once a day",
+  "@updRuleCheckLine": { "description": "Line under the check rule." },
+  "updRuleDownload": "Download in the background",
+  "@updRuleDownload": { "description": "Update rule: downloads on its own." },
+  "updRuleDownloadLine": "only while connected, through the tunnel",
+  "@updRuleDownloadLine": { "description": "Line under the background download rule." },
+  "updRuleKeepCore": "Keep the previous core",
+  "@updRuleKeepCore": { "description": "Update rule: keeps the old xray-core for a roll back." },
+  "updRuleKeepCoreLine": "one tap roll back if the new one acts up",
+  "@updRuleKeepCoreLine": { "description": "Line under the keep previous core rule." }
 }

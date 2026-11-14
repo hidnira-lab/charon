@@ -8721,6 +8721,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'hey! i\'m working here'**
   String get logoPokeAngry;
+
+  /// Heading of the update rules card.
+  ///
+  /// In en, this message translates to:
+  /// **'UPDATE RULES'**
+  String get updRulesTitle;
+
+  /// Accessibility label of the update rules card.
+  ///
+  /// In en, this message translates to:
+  /// **'Update rules'**
+  String get updRulesLabel;
+
+  /// Update rule: checks on a schedule.
+  ///
+  /// In en, this message translates to:
+  /// **'Check for updates'**
+  String get updRuleCheck;
+
+  /// Line under the check rule.
+  ///
+  /// In en, this message translates to:
+  /// **'when Charon starts, then once a day'**
+  String get updRuleCheckLine;
+
+  /// Update rule: downloads on its own.
+  ///
+  /// In en, this message translates to:
+  /// **'Download in the background'**
+  String get updRuleDownload;
+
+  /// Line under the background download rule.
+  ///
+  /// In en, this message translates to:
+  /// **'only while connected, through the tunnel'**
+  String get updRuleDownloadLine;
+
+  /// Update rule: keeps the old xray-core for a roll back.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep the previous core'**
+  String get updRuleKeepCore;
+
+  /// Line under the keep previous core rule.
+  ///
+  /// In en, this message translates to:
+  /// **'one tap roll back if the new one acts up'**
+  String get updRuleKeepCoreLine;
 }
 
 class _AppLocalizationsDelegate

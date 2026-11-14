@@ -13,6 +13,7 @@ import '../home/widgets/rail_nav.dart';
 import 'widgets/file_update_card.dart';
 import 'widgets/offline_banner.dart';
 import 'widgets/update_card.dart';
+import 'widgets/update_rules_card.dart';
 import '../common/motion.dart';
 
 class UpdatesScreen extends StatefulWidget {
@@ -200,6 +201,11 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
                               KeyedSubtree(
                                 key: _fileCardKey,
                                 child: Enter.page(index: view.online ? 2 : 3, child: FileUpdateCard(view: view.file, onAction: _act)),
+                              ),
+                              const SizedBox(height: 14),
+                              Enter.page(
+                                index: view.online ? 3 : 4,
+                                child: UpdateRulesCard(controller: widget.controller),
                               ),
                             ],
                           ),

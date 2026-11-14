@@ -4757,6 +4757,30 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get logoPokeAngry => 'hey! i\'m working here';
+
+  @override
+  String get updRulesTitle => '更新规则';
+
+  @override
+  String get updRulesLabel => '更新规则';
+
+  @override
+  String get updRuleCheck => '检查更新';
+
+  @override
+  String get updRuleCheckLine => 'Charon 启动时，之后每天一次';
+
+  @override
+  String get updRuleDownload => '后台下载';
+
+  @override
+  String get updRuleDownloadLine => '仅在连接时经由隧道';
+
+  @override
+  String get updRuleKeepCore => '保留旧版核心';
+
+  @override
+  String get updRuleKeepCoreLine => '新版有问题时一键回滚';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -9511,4 +9535,28 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get logoPokeAngry => 'hey! i\'m working here';
+
+  @override
+  String get updRulesTitle => '更新规则';
+
+  @override
+  String get updRulesLabel => '更新规则';
+
+  @override
+  String get updRuleCheck => '检查更新';
+
+  @override
+  String get updRuleCheckLine => 'Charon 启动时，之后每天一次';
+
+  @override
+  String get updRuleDownload => '后台下载';
+
+  @override
+  String get updRuleDownloadLine => '仅在连接时经由隧道';
+
+  @override
+  String get updRuleKeepCore => '保留旧版核心';
+
+  @override
+  String get updRuleKeepCoreLine => '新版有问题时一键回滚';
 }

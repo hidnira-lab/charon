@@ -5031,4 +5031,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get logoPokeAngry => 'hey! i\'m working here';
+
+  @override
+  String get updRulesTitle => 'UPDATE RULES';
+
+  @override
+  String get updRulesLabel => 'Update rules';
+
+  @override
+  String get updRuleCheck => 'Check for updates';
+
+  @override
+  String get updRuleCheckLine => 'when Charon starts, then once a day';
+
+  @override
+  String get updRuleDownload => 'Download in the background';
+
+  @override
+  String get updRuleDownloadLine => 'only while connected, through the tunnel';
+
+  @override
+  String get updRuleKeepCore => 'Keep the previous core';
+
+  @override
+  String get updRuleKeepCoreLine => 'one tap roll back if the new one acts up';
 }

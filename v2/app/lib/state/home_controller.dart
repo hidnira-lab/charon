@@ -558,6 +558,12 @@ class HomeController extends ChangeNotifier {
   bool get autoReconnect => _config?.hasSettings() == true ? _config!.settings.autoReconnect : true;
   bool get allowLocalNetwork => _config?.hasSettings() == true ? _config!.settings.allowLocalNetwork : true;
 
+  // Update rules. The proto stores the OFF state, so a Config saved before the
+  // fields existed keeps all three rules on.
+  bool get updateCheckRule => !(_config?.settings.updateCheckOff ?? false);
+  bool get backgroundDownloadRule => !(_config?.settings.backgroundDownloadOff ?? false);
+  bool get keepPreviousCoreRule => !(_config?.settings.previousCoreOff ?? false);
+
   void setThemeMode(ThemeMode mode) {
     if (_themeMode != mode) {
       _themeMode = mode;
@@ -659,6 +665,25 @@ class HomeController extends ChangeNotifier {
   Future<void> setAllowLocalNetwork(bool value) async {
     _config ??= Config();
     _config!.ensureSettings().allowLocalNetwork = value;
+    _bumpConfigVersion();
+    if (_client != null) {
+      try {
+        await _client!.setConfig(_config!);
+      } catch (e) {
+        _logError(e);
+      }
+    }
+    notifyListeners();
+  }
+
+  Future<void> setUpdateCheckRule(bool on) => _setUpdateRule((st) => st.updateCheckOff = !on);
+  Future<void> setBackgroundDownloadRule(bool on) => _setUpdateRule((st) => st.backgroundDownloadOff = !on);
+  Future<void> setKeepPreviousCoreRule(bool on) => _setUpdateRule((st) => st.previousCoreOff = !on);
+
+  /// The rules act at once in the service, so they go out like the safety switches.
+  Future<void> _setUpdateRule(void Function(Settings) change) async {
+    _config ??= Config();
+    change(_config!.ensureSettings());
     _bumpConfigVersion();
     if (_client != null) {
       try {
