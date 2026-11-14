@@ -62,6 +62,18 @@ try {
     Fetch 'forced IPv4 (-4)' @('-4')
     Fetch 'forced IPv6 (-6)' @('-6')
     Fetch 'system choice again' @()
+    # A leak probe: an IPv6 address, no name, so DNS cannot be the reason. It must NOT
+    # answer. If the PC has no IPv6 at all it fails for that reason and proves nothing.
+    $hasV6 = @(Get-NetRoute -AddressFamily IPv6 -DestinationPrefix '::/0' -ErrorAction SilentlyContinue).Count -gt 0
+    Write-Host "    this PC has an IPv6 default route: $hasV6"
+    $probe = & curl.exe -sS -6 -m 8 --ssl-no-revoke -o NUL -w '%{http_code}' 'https://[2606:4700:4700::1111]/cdn-cgi/trace' 2>&1 | ForEach-Object { "$_" }
+    if (($probe -join '') -match '^200') {
+        Write-Host '    IPv6 LEAK: an IPv6 address answered while connected' -ForegroundColor Red
+    } elseif ($hasV6) {
+        Write-Host "    no leak: the IPv6 literal did not answer ($($probe -join ' | '))" -ForegroundColor Green
+    } else {
+        Write-Host "    the IPv6 literal did not answer, but this PC has no IPv6, so that proves nothing ($($probe -join ' | '))" -ForegroundColor Yellow
+    }
     Write-Host '    verbose, system choice:'
     & curl.exe -sS -v -m 12 --ssl-no-revoke -o NUL "https://$Name/cdn-cgi/trace" 2>&1 |
         ForEach-Object { "$_" } | Where-Object { $_ -match 'Trying|Connected to|reset|error|SSL|refused|unreachable|denied' } |
