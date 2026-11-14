@@ -26,6 +26,22 @@ param(
 $ErrorActionPreference = "Stop"
 $ServiceName = "charon-service"
 
+# The window runs a repair with a hidden window and only sees the exit code, so the
+# record of what happened goes to a file that the same user can read afterwards.
+$RepairLog = Join-Path $env:TEMP "charon-repair.log"
+if ($Repair) {
+    Start-Transcript -Path $RepairLog -Force | Out-Null
+}
+
+# sc.exe does not throw, and the old script did not look at its exit code: a failed
+# "create" went by unnoticed and the service was missing at "Start-Service".
+function Invoke-Sc {
+    $out = & sc.exe @args 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        throw "sc.exe $($args[0]) failed with $LASTEXITCODE : $out"
+    }
+}
+
 if ([string]::IsNullOrWhiteSpace($InstallingUserSID)) {
     $ownerFile = Join-Path $DataDir "owner.sid"
     if ($Repair -and (Test-Path $ownerFile)) {
@@ -71,22 +87,27 @@ if (-not $sameFolder) {
 }
 
 Write-Host "[2/4] Installing the Charon service..."
-if ($null -ne $existing) {
-    & sc.exe delete $ServiceName | Out-Null
-    Start-Sleep -Seconds 1
-}
-
 $serviceBin = Join-Path $ProgramDir "charon-service.exe"
-& sc.exe create $ServiceName binPath= "`"$serviceBin`"" start= auto obj= LocalSystem depend= Tcpip/Nsi DisplayName= "Charon Service" | Out-Null
-& sc.exe description $ServiceName "Charon VPN tunnel supervisor and persistent WFP kill switch service." | Out-Null
-& sc.exe failure $ServiceName reset= 86400 actions= restart/5000/restart/5000/restart/5000 | Out-Null
-& sc.exe failureflag $ServiceName 1 | Out-Null
+if ($null -ne $existing) {
+    # The service is there (an upgrade or a repair): set it right where it stands.
+    # Deleting it and creating it again fails with "marked for deletion" as long as any
+    # program still holds a handle to it, and it loses nothing that "config" keeps.
+    Invoke-Sc config $ServiceName binPath= "`"$serviceBin`"" start= auto obj= LocalSystem depend= Tcpip/Nsi DisplayName= "Charon Service"
+} else {
+    Invoke-Sc create $ServiceName binPath= "`"$serviceBin`"" start= auto obj= LocalSystem depend= Tcpip/Nsi DisplayName= "Charon Service"
+}
+Invoke-Sc description $ServiceName "Charon VPN tunnel supervisor and persistent WFP kill switch service."
+Invoke-Sc failure $ServiceName reset= 86400 actions= restart/5000/restart/5000/restart/5000
+Invoke-Sc failureflag $ServiceName 1
 
 # Allow the installing user to query and start the service without UAC, while stopping requires admin.
 $sddl = "D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCRPRC;;;$InstallingUserSID)"
-& sc.exe sdset $ServiceName $sddl | Out-Null
+Invoke-Sc sdset $ServiceName $sddl
 
 Write-Host "[3/4] Adding wintun and registering protection filters..."
 Start-Service -Name $ServiceName
 
 Write-Host "[4/4] Charon is installed. The service is running."
+if ($Repair) {
+    Stop-Transcript | Out-Null
+}

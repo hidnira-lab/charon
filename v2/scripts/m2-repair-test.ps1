@@ -19,7 +19,9 @@
 param(
     [string]$App = (Join-Path $PSScriptRoot '..\app'),
     [string]$Flutter = 'C:\flutter\bin\flutter.bat',
-    [string]$ProgramDir = "$env:ProgramFiles\Charon"
+    [string]$ProgramDir = "$env:ProgramFiles\Charon",
+    # Only the part with the answer YES (two prompts, instead of four).
+    [switch]$OnlyYes
 )
 $ErrorActionPreference = 'Continue'
 $Svc = 'charon-service'
@@ -87,14 +89,16 @@ try {
     Check 'the window reports the service back' ($a -match 'running' -and $a -match 'startFailed=false' -and $a -match 'recovered=back') $a
     Check 'the service is running again' ("$(State)" -eq 'Running') "$(State)"
 
-    Write-Host ''
-    Write-Host '=== B  Repair, and the answer is NO' -ForegroundColor Cyan
-    Check 'the service was stopped again' (StopThroughPrompt) "$(State)"
-    Write-Host '    A prompt will appear for the REPAIR. Click NO (or close it).' -ForegroundColor Cyan
-    $r2 = Probe 'repair'
-    $b = After $r2
-    Check 'a No shows no error and no confirmation' ($b -match 'startFailed=false' -and $b -match 'recovered=null' -and $b -match 'installing=null') $b
-    Check 'the service is still stopped (nothing was run)' ("$(State)" -eq 'Stopped') "$(State)"
+    if (-not $OnlyYes) {
+        Write-Host ''
+        Write-Host '=== B  Repair, and the answer is NO' -ForegroundColor Cyan
+        Check 'the service was stopped again' (StopThroughPrompt) "$(State)"
+        Write-Host '    A prompt will appear for the REPAIR. Click NO (or close it).' -ForegroundColor Cyan
+        $r2 = Probe 'repair'
+        $b = After $r2
+        Check 'a No shows no error and no confirmation' ($b -match 'startFailed=false' -and $b -match 'recovered=null' -and $b -match 'installing=null') $b
+        Check 'the service is still stopped (nothing was run)' ("$(State)" -eq 'Stopped') "$(State)"
+    }
 }
 finally {
     Write-Host ''

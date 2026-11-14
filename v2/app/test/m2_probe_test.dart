@@ -79,8 +79,20 @@ Future<bool> _withoutService(List<String> args) async {
       });
       await sup.reconnect();
       stdout.writeln('before: ${sup.status.name}');
+      // What install.ps1 -Repair wrote about itself (its window is hidden).
+      final log = File('${Platform.environment['TEMP']}${Platform.pathSeparator}charon-repair.log');
+      if (log.existsSync()) log.deleteSync();
       await sup.repair();
       stdout.writeln('after: ${sup.status.name}, startFailed=${sup.startFailed}, recovered=${sup.recovered?.name}, installing=${sup.installing?.name}');
+      if (log.existsSync()) {
+        final lines = log.readAsLinesSync();
+        stdout.writeln('repair log (${lines.length} lines):');
+        for (final l in lines.skip(lines.length > 40 ? lines.length - 40 : 0)) {
+          stdout.writeln('  | $l');
+        }
+      } else {
+        stdout.writeln('repair log: none, so install.ps1 did not start (or the prompt was declined)');
+      }
       sup.dispose();
       return true;
   }
