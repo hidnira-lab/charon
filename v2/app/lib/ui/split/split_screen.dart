@@ -52,9 +52,8 @@ class _SplitScreenState extends State<SplitScreen> {
             controller.status.phase == Phase.PHASE_VERIFYING;
 
         final server = controller.activeServer;
-        final activeServerName = server?.displayName.isNotEmpty == true
-            ? server!.displayName
-            : (server?.id.isNotEmpty == true ? server!.id : 'SRV-01');
+        // The boards name the server by its code (SRV-01), never by the label the user gave it.
+        final activeServerName = server?.id.isNotEmpty == true ? server!.id : 'SRV-01';
 
         final view = SplitView.of(
           l10n,

@@ -152,7 +152,7 @@ void main() {
       expect(find.text('Your network'), findsOneWidget);
 
       // Windows info note
-      expect(find.text('> INFO · WINDOWS'), findsOneWidget);
+      expect(find.text('INFO · WINDOWS'), findsOneWidget);
       expect(find.text('App rules work on Android only'), findsOneWidget);
     });
 
@@ -448,5 +448,25 @@ void main() {
       expect(find.text('Jaringanmu'), findsOneWidget);
       expect(find.text('Aturan aplikasi hanya jalan di Android'), findsOneWidget);
     });
+  });
+
+  testWidgets('the tunnel box and the consequence line name the server by its code, as the board does', (tester) async {
+    tester.view.physicalSize = const Size(1024, 768);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+
+    final controller = HomeController(
+      initialStatus: Status(phase: Phase.PHASE_IDLE),
+      initialConfig: Config(
+        chosenServerId: 'SRV-01',
+        servers: [Server(id: 'SRV-01', displayName: 'Main SG')],
+      ),
+    );
+    await tester.pumpWidget(CharonApp(controller: controller));
+    controller.setTab(2);
+    await tester.pumpAndSettle();
+
+    expect(find.text('SRV-01'), findsWidgets);
+    expect(find.textContaining('Main SG'), findsNothing);
   });
 }
