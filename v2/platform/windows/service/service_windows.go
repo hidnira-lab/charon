@@ -194,7 +194,7 @@ func NewRuntime(opts Options) (*Runtime, error) {
 		DataDir:            opts.DataDir,
 		CurrentAppVersion:  opts.ServiceVersion,
 		CurrentCoreVersion: opts.XrayVersion,
-		ManifestBaseURL:    os.Getenv("CHARON_MANIFEST_BASE_URL"),
+		ManifestBaseURL:    updater.ManifestBaseURL(os.Getenv("CHARON_MANIFEST_BASE_URL")),
 		IsTunnelIdle: func() bool {
 			return drv.Status().GetPhase() == charonv1.Phase_PHASE_IDLE
 		},

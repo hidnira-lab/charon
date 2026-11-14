@@ -12,6 +12,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	charonv1 "github.com/hidnira-lab/charon/core/gen/charonv1"
@@ -214,5 +215,23 @@ func TestCheckUpdateChunkUploadApplyQueueAndRollback(t *testing.T) {
 	})
 	if replayErr == nil || replayErr.GetCode() != charonv1.ErrorCode_ERROR_UPDATE_SIGNATURE_INVALID {
 		t.Fatalf("expected replay/rollback rejection for sequence 2, got %v", replayErr)
+	}
+}
+
+func TestManifestBaseURL(t *testing.T) {
+	for _, tc := range []struct{ in, want string }{
+		{"", updater.DefaultManifestBaseURL},
+		{"   ", updater.DefaultManifestBaseURL},
+		{"https://mirror.example.com/charon/", "https://mirror.example.com/charon"},
+		{" https://mirror.example.com/charon ", "https://mirror.example.com/charon"},
+	} {
+		if got := updater.ManifestBaseURL(tc.in); got != tc.want {
+			t.Errorf("ManifestBaseURL(%q) = %q, want %q", tc.in, got, tc.want)
+		}
+	}
+	// The files are looked for as <base>/manifest.json, so the default has no
+	// trailing slash, and it is https: a manifest is never fetched in the clear.
+	if !strings.HasPrefix(updater.DefaultManifestBaseURL, "https://") || strings.HasSuffix(updater.DefaultManifestBaseURL, "/") {
+		t.Fatalf("bad default %q", updater.DefaultManifestBaseURL)
 	}
 }

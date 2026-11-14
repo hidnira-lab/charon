@@ -30,7 +30,23 @@ const (
 	// MaxUploadSize caps manual update uploads over UpdateFileChunk at 128 MiB.
 	MaxUploadSize = 128 << 20
 	PlatformID    = "windows-amd64"
+
+	// DefaultManifestBaseURL is where the signed manifest and the artifacts of the
+	// latest release are: assets of the releases of the public repository, which
+	// GitHub serves from /releases/latest/download/<file name>. Nothing fetched from
+	// there is trusted before the signature of the manifest is checked.
+	DefaultManifestBaseURL = "https://github.com/hidnira-lab/charon/releases/latest/download"
 )
+
+// ManifestBaseURL is the address updates are looked for: what an administrator put in
+// CHARON_MANIFEST_BASE_URL (for the environment of the service), or the default. An
+// address like that only says where to look, the signature still decides what is accepted.
+func ManifestBaseURL(fromEnv string) string {
+	if u := strings.TrimRight(strings.TrimSpace(fromEnv), "/"); u != "" {
+		return u
+	}
+	return DefaultManifestBaseURL
+}
 
 // Config configures the Windows service update Agent.
 type Config struct {
