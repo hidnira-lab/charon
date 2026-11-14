@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'support/fonts.dart';
 
+import 'package:charon/core/external_link.dart';
 import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/l10n/generated/app_localizations.dart';
 import 'package:charon/main.dart';
@@ -157,6 +158,29 @@ void main() {
       await tester.pumpAndSettle();
       expect(controller.fileVerificationResult, isNull);
       expect(find.text('VERIFIED'), findsNothing);
+    });
+
+    testWidgets('All releases opens the page of the releases', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+      final opened = <String>[];
+      final before = ExternalLinks.opener;
+      ExternalLinks.opener = (u) async {
+        opened.add(u.toString());
+        return true;
+      };
+      addTearDown(() => ExternalLinks.opener = before);
+
+      final controller = HomeController(initialStatus: Status(phase: Phase.PHASE_UP));
+      await tester.pumpWidget(_buildTestUpdatesApp(controller: controller));
+      await tester.pumpAndSettle();
+
+      final button = find.textContaining('All releases');
+      expect(button, findsWidgets);
+      await tester.tap(button.first);
+      await tester.pumpAndSettle();
+      expect(opened, ['https://github.com/hidnira-lab/charon/releases']);
     });
 
     testWidgets('Apply now sends the apply command and moves the card to APPLYING', (tester) async {

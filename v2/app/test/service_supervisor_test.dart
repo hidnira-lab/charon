@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:charon/core/core_client.dart';
 import 'package:charon/core/elevated.dart';
+import 'package:charon/core/external_link.dart';
 import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/state/service_supervisor.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -216,23 +217,20 @@ void main() {
       expect(defaultRepairScript.toLowerCase(), isNot(contains('flutter')));
     }, skip: Platform.isWindows ? false : 'Windows paths');
 
-    test('update runs the installer quietly and confirms the shared version', () async {
+    test('update opens the page of the releases and runs no program', () async {
       final r = Rig()..script.add('mismatch');
       await r.sup.reconnect();
+      final opened = <String>[];
+      final before = ExternalLinks.opener;
+      ExternalLinks.opener = (u) async {
+        opened.add(u.toString());
+        return true;
+      };
+      addTearDown(() => ExternalLinks.opener = before);
       await r.sup.update();
-      expect(r.ran, ['charon-installer.exe /SILENT']);
-      expect(r.sup.recovered, Recovery.updated);
-      expect(r.sup.status, ServiceStatus.running);
-    });
-
-    test('an update that fails leaves the update screen, without claiming a failed start', () async {
-      final r = Rig()
-        ..script.add('mismatch')
-        ..exits['charon-installer.exe'] = 1;
-      await r.sup.reconnect();
-      await r.sup.update();
-      expect(r.sup.status, ServiceStatus.needsUpdate);
-      expect(r.sup.startFailed, isFalse);
+      expect(opened, ['https://github.com/hidnira-lab/charon/releases']);
+      expect(r.ran, isEmpty); // nothing runs with full rights from here
+      expect(r.sup.status, ServiceStatus.needsUpdate); // the screen stays until the service is updated
       expect(r.sup.installing, isNull);
     });
   });

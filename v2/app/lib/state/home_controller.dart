@@ -7,12 +7,14 @@ import 'package:flutter/material.dart';
 import '../core/cities.dart';
 import '../core/core_client.dart';
 import '../core/device_location.dart';
+import '../core/elevated.dart';
 import '../core/transport.dart';
 import '../gen/charon/v1/charon.pb.dart';
 import '../sync/sync_client.dart';
 import 'dns_input.dart';
 import 'location_status.dart';
 import 'service_supervisor.dart';
+import 'staged_installer.dart';
 import 'toast.dart';
 import 'ui_prefs.dart';
 import 'throughput_history.dart';
@@ -41,7 +43,11 @@ class HomeController extends ChangeNotifier {
     ServiceSupervisor? serviceSupervisor,
     int Function()? clock,
     UiPrefsStore? uiPrefs,
-  })  : _clock = clock ?? (() => DateTime.now().millisecondsSinceEpoch),
+    ProcessRunner? runAdmin,
+    String? stagingDir,
+  })  : _runAdmin = runAdmin ?? runElevated,
+        _stagingDir = stagingDir ?? defaultStagingDir,
+        _clock = clock ?? (() => DateTime.now().millisecondsSinceEpoch),
         _status = initialStatus ?? Status(),
         _config = initialConfig,
         _hasServers = hasServers ?? (initialConfig?.servers.isNotEmpty ?? true),
@@ -228,6 +234,11 @@ class HomeController extends ChangeNotifier {
 
   bool _isCheckingUpdates = false;
 
+  /// Starts a program with administrator rights (the UAC prompt) and returns its exit code.
+  final ProcessRunner _runAdmin;
+  final String _stagingDir;
+  bool _installingApp = false;
+
   /// True while a "Check now" is waiting for the service to answer.
   bool get isCheckingUpdates => _isCheckingUpdates;
 
@@ -245,16 +256,56 @@ class HomeController extends ChangeNotifier {
     }
   }
 
-  /// Installs the staged Charon app update (the service asks Windows for admin
-  /// rights). A file update that was verified ends up here too.
+  /// Installs the staged Charon app update. The service verified the installer and
+  /// staged it; it cannot show a UAC prompt (it runs as LocalSystem), so the window
+  /// starts the installer itself, with the prompt, and only what the service answered
+  /// to this command: a path that is not directly inside the staging folder is never
+  /// started. The window cannot hand the service a path to run, it only receives one.
+  /// A file update that was verified ends up here too.
   Future<void> applyAppUpdate() async {
+    final client = _client;
+    if (client == null || _installingApp) return;
+    _installingApp = true;
     try {
-      if (_client != null) {
-        await _client!.applyUpdate(UpdateKind.UPDATE_KIND_APP, ApplyWhen.APPLY_NOW);
+      final r = await client.applyUpdate(UpdateKind.UPDATE_KIND_APP, ApplyWhen.APPLY_NOW);
+      if (r.hasError()) {
+        _logError('applyUpdate refused: ${r.error.code.name}');
+        return;
       }
+      final st = r.hasUpdateState() ? r.updateState : _appUpdateState;
+      if (st.stage != UpdateStage.UPDATE_APPLYING || st.stagedInstaller.isEmpty) return;
+      await _startInstaller(st);
     } catch (e) {
       _logError(e);
+    } finally {
+      _installingApp = false;
     }
+  }
+
+  Future<void> _startInstaller(UpdateState st) async {
+    final path = st.stagedInstaller;
+    if (!isStagedInstaller(path, _stagingDir)) {
+      _logError('the staged installer is not in the staging folder, not started');
+      _setAppStage(st, UpdateStage.UPDATE_CANNOT_CHECK, failureKey: 'error.update.failed');
+      return;
+    }
+    // /SILENT: the installer shows its progress and asks nothing but the UAC prompt.
+    final code = await _runAdmin(path, const ['/SILENT']);
+    if (code == elevationDeclined) {
+      // The person said No: back to "ready", so Install is there again, with no error.
+      _setAppStage(st, UpdateStage.UPDATE_READY);
+    } else if (code == 0) {
+      _setAppStage(st, UpdateStage.UPDATE_UPDATED);
+    } else {
+      _setAppStage(st, UpdateStage.UPDATE_CANNOT_CHECK, failureKey: 'error.update.failed');
+    }
+  }
+
+  void _setAppStage(UpdateState from, UpdateStage stage, {String failureKey = ''}) {
+    _appUpdateState = from.deepCopy()
+      ..stage = stage
+      ..failureKey = failureKey;
+    notifyListeners();
   }
 
   Future<void> applyCoreUpdate({required ApplyWhen when}) async {

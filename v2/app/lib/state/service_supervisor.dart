@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 
 import '../core/core_client.dart';
 import '../core/elevated.dart';
+import '../core/external_link.dart';
 
 /// Whether the window can talk to the Charon service.
 enum ServiceStatus { running, notRunning, needsUpdate }
@@ -202,10 +203,15 @@ class ServiceSupervisor extends ChangeNotifier {
     );
   }
 
-  /// Updates the service with the installer. TODO(M6): the installer that the
-  /// service downloads and verifies (`staged_installer` of the IPC contract) is not
-  /// built yet, so this still asks for a `charon-installer.exe` that nothing makes.
-  Future<void> update() => _install(InstallMode.update, 'charon-installer.exe', const ['/SILENT'], Recovery.updated);
+  /// "Update" on the screen that says the service and the window speak different
+  /// versions. The service cannot say where its staged installer is, because the two
+  /// cannot talk (that is what the screen is about), and a program that runs with full
+  /// rights must not come from anywhere that was not verified. So this opens the page of
+  /// the releases, where the installer is, and nothing runs here. An update that the
+  /// service has staged is started by the Updates screen (`applyAppUpdate`).
+  Future<void> update() async {
+    await ExternalLinks.open(ExternalLinks.releasesPage);
+  }
 
   Future<void> _install(InstallMode mode, String exe, List<String> args, Recovery after, {String? needs}) async {
     if (_installing != null || !_windows) return;

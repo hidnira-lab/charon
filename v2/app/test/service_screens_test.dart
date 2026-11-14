@@ -218,31 +218,21 @@ void main() {
       expect(tester.widget<InkWell>(_btn('Update from a file')).onTap, isNull);
     });
 
-    testWidgets('Update runs the installer, says it is updating, then confirms the shared version', (tester) async {
+    testWidgets('Update opens the page of the releases, runs no program and keeps the screen', (tester) async {
       final s = await mismatch(tester);
-      s.hold = Completer<void>();
+      final opened = <String>[];
+      final before = ExternalLinks.opener;
+      ExternalLinks.opener = (u) async {
+        opened.add(u.toString());
+        return true;
+      };
+      addTearDown(() => ExternalLinks.opener = before);
       await tester.tap(find.text('Update'));
       await tester.pump();
-      expect(find.text('UPDATING'), findsOneWidget);
-      expect(find.text('Updating the service'), findsOneWidget);
-      expect(find.text('The tunnel pauses for a moment, then Charon reconnects.'), findsOneWidget);
-
-      s.hold!.complete();
-      await tester.pump();
-      await tester.pump();
-      expect(s.ran, ['charon-installer.exe /SILENT']);
-      expect(find.text('SERVICE RUNNING'), findsOneWidget);
-      expect(find.text('Both sides speak the same version again.'), findsOneWidget);
-    });
-
-    testWidgets('an update that fails goes back to the update screen', (tester) async {
-      final s = await mismatch(tester);
-      s.exits['charon-installer.exe'] = 1;
-      await tester.tap(find.text('Update'));
-      await tester.pump();
-      await tester.pump();
+      expect(opened, ['https://github.com/hidnira-lab/charon/releases']);
+      expect(s.ran, isEmpty);
       expect(find.text('Charon service needs an update'), findsOneWidget);
-      expect(find.text('Update'), findsOneWidget);
+      expect(find.text('UPDATING'), findsNothing);
     });
 
     testWidgets('a service that does not say its version leaves the window version alone', (tester) async {

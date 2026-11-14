@@ -8,6 +8,9 @@ import 'package:url_launcher/url_launcher.dart';
 class ExternalLinks {
   const ExternalLinks._();
 
+  /// The page of the releases of Charon, where an installer can be downloaded by hand.
+  static const releasesPage = 'https://github.com/hidnira-lab/charon/releases';
+
   static Future<bool> Function(Uri url) opener = _launch;
 
   static Future<bool> _launch(Uri url) => launchUrl(url, mode: LaunchMode.externalApplication);

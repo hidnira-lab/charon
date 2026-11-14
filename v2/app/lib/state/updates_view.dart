@@ -45,7 +45,6 @@ class UpdateButton {
   bool get enabled => switch (action) {
         UpdateAction.download ||
         UpdateAction.releaseNotes ||
-        UpdateAction.allReleases ||
         UpdateAction.cancel ||
         UpdateAction.chooseFile =>
           false,

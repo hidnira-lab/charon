@@ -1,6 +1,7 @@
 import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
+import '../../core/external_link.dart';
 import 'package:flutter/services.dart';
 
 import '../../gen/charon/v1/charon.pb.dart';
@@ -80,9 +81,10 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
         c.setTab(1);
       case UpdateAction.installApp:
         c.applyAppUpdate();
+      case UpdateAction.allReleases:
+        ExternalLinks.open(ExternalLinks.releasesPage);
       case UpdateAction.download ||
             UpdateAction.releaseNotes ||
-            UpdateAction.allReleases ||
             UpdateAction.cancel ||
             UpdateAction.chooseFile:
         break;
