@@ -104,17 +104,20 @@ const _ghostColors = {'W': Color(0xFFFFFFFF), 'G': Color(0xFFE1E1E1), 'E': Color
 /// The big ghost of the Service and Splash boards (32 x 32, drawn at [scale]).
 /// On a light surface it gets the dark outline, on a dark one a soft shadow.
 class GhostSprite extends StatelessWidget {
-  const GhostSprite({super.key, this.eyes = GhostEyes.sleep, this.scale = 3, this.semanticLabel});
+  const GhostSprite({super.key, this.eyes = GhostEyes.sleep, this.scale = 3, this.blink = false, this.semanticLabel});
 
   final GhostEyes eyes;
   final double scale;
+
+  /// The eyes shut for a moment.
+  final bool blink;
   final String? semanticLabel;
 
   @override
   Widget build(BuildContext context) {
     final light = Theme.of(context).brightness == Brightness.light;
     return PixelSprite(
-      rows: ghostRows(eyes),
+      rows: ghostRows(eyes, blink: blink),
       palette: _ghostColors,
       scale: scale,
       outline: light ? const Color(0xFF2A2A2A) : null,

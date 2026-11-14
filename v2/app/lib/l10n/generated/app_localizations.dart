@@ -8769,6 +8769,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'one tap roll back if the new one acts up'**
   String get updRuleKeepCoreLine;
+
+  /// Splash, the chip of the failed start.
+  ///
+  /// In en, this message translates to:
+  /// **'COULDN\'T START'**
+  String get splFailedChip;
+
+  /// Splash, the title of the failed start.
+  ///
+  /// In en, this message translates to:
+  /// **'charon-core didn\'t start'**
+  String get splFailedTitle;
+
+  /// Splash, the text of the failed start. Not on the board: the board blames the network adapter, which the window cannot know.
+  ///
+  /// In en, this message translates to:
+  /// **'The Charon service did not answer in time. This launch changed nothing on this PC.'**
+  String get splFailedDesc;
+
+  /// Splash, button that waits for the service again.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get splRetry;
+
+  /// Splash, button that opens the Charon data folder. The board says Open log folder, but Charon keeps no log files.
+  ///
+  /// In en, this message translates to:
+  /// **'Open data folder'**
+  String get splOpenDataFolder;
+
+  /// Splash, the small line under the failed start buttons. Replaces the board's line about charon-core.log.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon keeps no log files, the log lives in memory'**
+  String get splFailedFoot;
 }
 
 class _AppLocalizationsDelegate

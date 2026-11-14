@@ -1467,5 +1467,11 @@
   "updRuleDownload": "Unduh di latar belakang",
   "updRuleDownloadLine": "hanya saat terhubung, lewat tunnel",
   "updRuleKeepCore": "Simpan core sebelumnya",
-  "updRuleKeepCoreLine": "roll back sekali ketuk kalau yang baru bermasalah"
+  "updRuleKeepCoreLine": "roll back sekali ketuk kalau yang baru bermasalah",
+  "splFailedChip": "GAGAL MEMULAI",
+  "splFailedTitle": "charon-core tidak berjalan",
+  "splFailedDesc": "Service Charon tidak menjawab tepat waktu. Peluncuran ini tidak mengubah apa pun di PC ini.",
+  "splRetry": "Coba lagi",
+  "splOpenDataFolder": "Buka folder data",
+  "splFailedFoot": "Charon tidak menyimpan file log, lognya ada di memori"
 }

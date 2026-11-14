@@ -11,12 +11,13 @@ void main() {
       expect(splashStep(elapsed: ms(1900), settled: true), SplashStep.done);
     });
 
-    test('a service that has not answered keeps the splash on "starting", then "slow"', () {
+    test('a service that has not answered keeps the splash on "starting", then "slow", then gives up', () {
       expect(splashStep(elapsed: ms(1000), settled: false), SplashStep.intro);
       expect(splashStep(elapsed: ms(1900), settled: false), SplashStep.starting);
       expect(splashStep(elapsed: ms(4999), settled: false), SplashStep.starting);
       expect(splashStep(elapsed: ms(5000), settled: false), SplashStep.slow);
-      expect(splashStep(elapsed: ms(60000), settled: false), SplashStep.slow);
+      expect(splashStep(elapsed: ms(14999), settled: false), SplashStep.slow);
+      expect(splashStep(elapsed: ms(60000), settled: false), SplashStep.failed); // gives up at 15 s
     });
 
     test('an answer that comes late ends the wait at once', () {

@@ -5058,4 +5058,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updRuleKeepCoreLine => 'one tap roll back if the new one acts up';
+
+  @override
+  String get splFailedChip => 'COULDN\'T START';
+
+  @override
+  String get splFailedTitle => 'charon-core didn\'t start';
+
+  @override
+  String get splFailedDesc =>
+      'The Charon service did not answer in time. This launch changed nothing on this PC.';
+
+  @override
+  String get splRetry => 'Retry';
+
+  @override
+  String get splOpenDataFolder => 'Open data folder';
+
+  @override
+  String get splFailedFoot =>
+      'Charon keeps no log files, the log lives in memory';
 }

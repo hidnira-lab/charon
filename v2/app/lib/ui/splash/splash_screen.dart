@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io' show Platform, Process;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import '../../state/splash_view.dart';
 import '../../theme/theme.dart';
 import '../common/ghost.dart';
 import '../common/glass_card.dart';
+import '../common/pixel_icon.dart';
 import '../common/pixel_sprite.dart';
 import '../home/widgets/title_bar.dart';
 import '../common/ambient.dart';
@@ -30,6 +32,7 @@ class SplashScreen extends StatefulWidget {
     required this.controller,
     required this.onDone,
     this.onQuit,
+    this.onOpenDataFolder,
     this.now,
   });
 
@@ -38,6 +41,9 @@ class SplashScreen extends StatefulWidget {
 
   /// "Quit" of the slow start. Without it the button is not drawn.
   final VoidCallback? onQuit;
+
+  /// "Open data folder" of the failed start. Opens the Charon folder in Explorer by default.
+  final VoidCallback? onOpenDataFolder;
 
   /// The time now, for the colour of the day. Tests give their own.
   final DateTime Function()? now;
@@ -51,6 +57,8 @@ class _SplashScreenState extends State<SplashScreen>
   late final Ticker _ticker;
   var _elapsed = Duration.zero;
   var _skipped = false;
+  // When Retry was last pressed: the waiting is counted from there.
+  var _retryAt = Duration.zero;
   var _handed = false;
   var _fading = false;
   final _timers = <Timer>[];
@@ -78,6 +86,12 @@ class _SplashScreenState extends State<SplashScreen>
     super.dispose();
   }
 
+  /// Retry: ask for the pipe again and count the waiting from now.
+  void _retry() {
+    setState(() => _retryAt = _elapsed);
+    unawaited(_service.reconnect());
+  }
+
   bool get _reduce => MediaQuery.maybeDisableAnimationsOf(context) ?? false;
 
   Duration get _intro =>
@@ -88,6 +102,7 @@ class _SplashScreenState extends State<SplashScreen>
       elapsed: _elapsed,
       settled: _service.hasSettled,
       intro: _intro,
+      retryAt: _retryAt,
     );
     // A tap past the logo goes straight to the hand over, once the service was tried.
     if (_skipped && _service.hasSettled) return SplashStep.done;
@@ -155,10 +170,21 @@ class _SplashScreenState extends State<SplashScreen>
                                 : const Duration(milliseconds: 160),
                             child: Stack(
                               children: [
-                                _Logo(ms: ms, label: l10n.svcMascot),
+                                if (step == SplashStep.failed)
+                                  Positioned(
+                                    left: 463,
+                                    top: 120,
+                                    child: GhostSprite(
+                                      eyes: GhostEyes.open,
+                                      blink: blinkAt(ms),
+                                      semanticLabel: l10n.svcMascot,
+                                    ),
+                                  )
+                                else
+                                  _Logo(ms: ms, label: l10n.svcMascot),
                                 Positioned(
                                   left: 211,
-                                  top: 432,
+                                  top: step == SplashStep.failed ? 236 : 432,
                                   width: 600,
                                   child: switch (step) {
                                     SplashStep.starting => _Starting(
@@ -168,6 +194,11 @@ class _SplashScreenState extends State<SplashScreen>
                                       controller: widget.controller,
                                       palette: palette,
                                       ms: _elapsed.inMilliseconds,
+                                      onQuit: widget.onQuit,
+                                    ),
+                                    SplashStep.failed => _Failed(
+                                      onRetry: _retry,
+                                      onOpenFolder: widget.onOpenDataFolder ?? _openCharonDataFolder,
                                       onQuit: widget.onQuit,
                                     ),
                                     _ => const SizedBox.shrink(),
@@ -544,6 +575,104 @@ class _Skeleton extends StatelessWidget {
             },
           ),
       ],
+    );
+  }
+}
+
+/// Opens `%ProgramData%\Charon`, a fixed folder, in Explorer.
+void _openCharonDataFolder() {
+  if (!Platform.isWindows) return;
+  final root = Platform.environment['ProgramData'] ?? r'C:\ProgramData';
+  unawaited(Process.start('explorer.exe', ['$root\\Charon']).then<void>((_) {}, onError: (_) {}));
+}
+
+/// After fifteen seconds without an answer ("COULDN'T START" of the board).
+class _Failed extends StatelessWidget {
+  const _Failed({required this.onRetry, required this.onOpenFolder, required this.onQuit});
+
+  final VoidCallback onRetry;
+  final VoidCallback onOpenFolder;
+  final VoidCallback? onQuit;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final colors = CharonColors.of(context);
+
+    Widget pill({required Widget child, required VoidCallback onTap, Color? fill, Color? edge, double pad = 18}) => Material(
+          color: fill ?? Colors.transparent,
+          shape: StadiumBorder(side: edge == null ? BorderSide.none : BorderSide(color: edge)),
+          child: InkWell(
+            onTap: onTap,
+            customBorder: const StadiumBorder(),
+            child: Container(height: 40, padding: EdgeInsets.symmetric(horizontal: pad), alignment: Alignment.center, child: child),
+          ),
+        );
+
+    return Semantics(
+      liveRegion: true,
+      child: Column(
+        children: [
+          Container(
+            height: 24,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(color: colors.transitionSoft, borderRadius: BorderRadius.circular(6)),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(width: 8, height: 8, color: colors.transitionFill),
+                const SizedBox(width: 8),
+                Text(l10n.splFailedChip, style: monoStyle(colors.transitionText, 11, bold: true, em: 0.06)),
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
+          Text(l10n.splFailedTitle, style: TextStyle(fontSize: 22, height: 28 / 22, fontWeight: FontWeight.w600, color: colors.text)),
+          const SizedBox(height: 14),
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 440),
+            child: Text(
+              l10n.splFailedDesc,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14, height: 21 / 14, color: colors.text2),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              pill(
+                fill: colors.text,
+                onTap: onRetry,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    PixelIcon(PixelIcons.reload, size: 16, color: colors.bg),
+                    const SizedBox(width: 8),
+                    Text(l10n.splRetry, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: colors.bg)),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              pill(
+                edge: colors.controlBorder,
+                onTap: onOpenFolder,
+                child: Text(l10n.splOpenDataFolder, style: TextStyle(fontSize: 14, color: colors.text)),
+              ),
+              if (onQuit != null) ...[
+                const SizedBox(width: 8),
+                pill(
+                  pad: 14,
+                  onTap: onQuit!,
+                  child: Text(l10n.splQuit, style: TextStyle(fontSize: 14, color: colors.text2)),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 14),
+          Text('> ${l10n.splFailedFoot}', style: monoStyle(colors.text3, 10)),
+        ],
+      ),
     );
   }
 }

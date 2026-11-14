@@ -3602,5 +3602,17 @@
   "updRuleKeepCore": "Keep the previous core",
   "@updRuleKeepCore": { "description": "Update rule: keeps the old xray-core for a roll back." },
   "updRuleKeepCoreLine": "one tap roll back if the new one acts up",
-  "@updRuleKeepCoreLine": { "description": "Line under the keep previous core rule." }
+  "@updRuleKeepCoreLine": { "description": "Line under the keep previous core rule." },
+  "splFailedChip": "COULDN'T START",
+  "@splFailedChip": { "description": "Splash, the chip of the failed start." },
+  "splFailedTitle": "charon-core didn't start",
+  "@splFailedTitle": { "description": "Splash, the title of the failed start." },
+  "splFailedDesc": "The Charon service did not answer in time. This launch changed nothing on this PC.",
+  "@splFailedDesc": { "description": "Splash, the text of the failed start. Not on the board: the board blames the network adapter, which the window cannot know." },
+  "splRetry": "Retry",
+  "@splRetry": { "description": "Splash, button that waits for the service again." },
+  "splOpenDataFolder": "Open data folder",
+  "@splOpenDataFolder": { "description": "Splash, button that opens the Charon data folder. The board says Open log folder, but Charon keeps no log files." },
+  "splFailedFoot": "Charon keeps no log files, the log lives in memory",
+  "@splFailedFoot": { "description": "Splash, the small line under the failed start buttons. Replaces the board's line about charon-core.log." }
 }

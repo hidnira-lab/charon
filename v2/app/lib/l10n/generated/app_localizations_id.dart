@@ -5026,4 +5026,24 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get updRuleKeepCoreLine =>
       'roll back sekali ketuk kalau yang baru bermasalah';
+
+  @override
+  String get splFailedChip => 'GAGAL MEMULAI';
+
+  @override
+  String get splFailedTitle => 'charon-core tidak berjalan';
+
+  @override
+  String get splFailedDesc =>
+      'Service Charon tidak menjawab tepat waktu. Peluncuran ini tidak mengubah apa pun di PC ini.';
+
+  @override
+  String get splRetry => 'Coba lagi';
+
+  @override
+  String get splOpenDataFolder => 'Buka folder data';
+
+  @override
+  String get splFailedFoot =>
+      'Charon tidak menyimpan file log, lognya ada di memori';
 }

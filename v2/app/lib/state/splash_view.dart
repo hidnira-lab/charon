@@ -8,6 +8,10 @@ const splashIntro = Duration(milliseconds: 1900);
 /// is waiting for.
 const splashSlowAfter = Duration(seconds: 5);
 
+/// After this long without an answer the splash gives up waiting and says so
+/// (the "COULDN'T START" board). Retry starts the count again.
+const splashFailedAfter = Duration(seconds: 15);
+
 /// The moments of the splash.
 enum SplashStep {
   /// The logo arrives and the letters appear.
@@ -19,6 +23,9 @@ enum SplashStep {
   /// Still waiting after [splashSlowAfter]: what has answered and what has not.
   slow,
 
+  /// Still nothing after [splashFailedAfter]: the sad end, with Retry and Quit.
+  failed,
+
   /// Done: the splash fades out into the real screen.
   done,
 }
@@ -26,11 +33,19 @@ enum SplashStep {
 /// The moment of the splash after [elapsed]. [settled] is true once the first
 /// try to reach the service is over, whether it answered or not (the Service
 /// screen takes over from a service that did not). [intro] is how long the
-/// logo takes, shorter when the user asked for less motion.
-SplashStep splashStep({required Duration elapsed, required bool settled, Duration intro = splashIntro}) {
+/// logo takes, shorter when the user asked for less motion. [retryAt] is when
+/// the user last pressed Retry, from which the waiting is counted again.
+SplashStep splashStep({
+  required Duration elapsed,
+  required bool settled,
+  Duration intro = splashIntro,
+  Duration retryAt = Duration.zero,
+}) {
   if (elapsed < intro) return SplashStep.intro;
   if (settled) return SplashStep.done;
-  return elapsed < splashSlowAfter ? SplashStep.starting : SplashStep.slow;
+  final waited = elapsed - retryAt;
+  if (waited >= splashFailedAfter) return SplashStep.failed;
+  return waited < splashSlowAfter ? SplashStep.starting : SplashStep.slow;
 }
 
 /// Part of the day, for the colour of the glow behind the splash.

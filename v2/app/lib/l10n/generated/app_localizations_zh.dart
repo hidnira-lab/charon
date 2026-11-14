@@ -4783,6 +4783,24 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get updRuleKeepCoreLine => '新版有问题时一键回滚';
+
+  @override
+  String get splFailedChip => '无法启动';
+
+  @override
+  String get splFailedTitle => 'charon-core 未启动';
+
+  @override
+  String get splFailedDesc => 'Charon 服务未能及时响应。本次启动没有改动这台电脑上的任何内容。';
+
+  @override
+  String get splRetry => '重试';
+
+  @override
+  String get splOpenDataFolder => '打开数据文件夹';
+
+  @override
+  String get splFailedFoot => 'Charon 不保存日志文件，日志只存在内存中';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -9563,4 +9581,22 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get updRuleKeepCoreLine => '新版有问题时一键回滚';
+
+  @override
+  String get splFailedChip => '无法启动';
+
+  @override
+  String get splFailedTitle => 'charon-core 未启动';
+
+  @override
+  String get splFailedDesc => 'Charon 服务未能及时响应。本次启动没有改动这台电脑上的任何内容。';
+
+  @override
+  String get splRetry => '重试';
+
+  @override
+  String get splOpenDataFolder => '打开数据文件夹';
+
+  @override
+  String get splFailedFoot => 'Charon 不保存日志文件，日志只存在内存中';
 }

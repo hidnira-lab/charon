@@ -1468,5 +1468,11 @@
   "updRuleDownload": "后台下载",
   "updRuleDownloadLine": "仅在连接时经由隧道",
   "updRuleKeepCore": "保留旧版核心",
-  "updRuleKeepCoreLine": "新版有问题时一键回滚"
+  "updRuleKeepCoreLine": "新版有问题时一键回滚",
+  "splFailedChip": "无法启动",
+  "splFailedTitle": "charon-core 未启动",
+  "splFailedDesc": "Charon 服务未能及时响应。本次启动没有改动这台电脑上的任何内容。",
+  "splRetry": "重试",
+  "splOpenDataFolder": "打开数据文件夹",
+  "splFailedFoot": "Charon 不保存日志文件，日志只存在内存中"
 }
