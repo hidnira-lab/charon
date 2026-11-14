@@ -21,9 +21,15 @@ constexpr UINT kTrayMessage = WM_APP + 1;
 // events the Dart side acts on. Charon has no plugin for any of it, so this is
 // all of it.
 //
-// Dart to native: ready, hide, show, quit, startDrag, setTray,
-// removeTray. Native to Dart: closeRequested, trayLeftClick, trayDoubleClick,
-// menuCommand (the id of the picked item).
+// The tray flyout is this same window, changed in shape: smaller, without a
+// taskbar button, on top, with the stepped corners of the board, and above the
+// tray icon. It goes back to the main window's place when it closes.
+//
+// Dart to native: ready, hide, show, quit, startDrag, setTray, removeTray,
+// showFlyout (width, height, notch in logical pixels), hideFlyout.
+// Native to Dart: closeRequested, trayLeftClick (with whether the window is
+// showing), trayDoubleClick, menuCommand (the id of the picked item),
+// flyoutDismissed (the window lost the focus).
 class NativeShell {
  public:
   NativeShell(HWND window, flutter::BinaryMessenger* messenger);
@@ -38,6 +44,10 @@ class NativeShell {
   // closes as usual.
   bool RequestClose();
 
+  // The window is on the flyout's size and place (Win32Window asks this after
+  // a change of DPI, which would otherwise resize it as the main window).
+  void AfterDpiChanged();
+
  private:
   using Value = flutter::EncodableValue;
 
@@ -47,6 +57,13 @@ class NativeShell {
   void ApplyTray();
   void RemoveTray();
   void ShowWindowAndFocus();
+  void ShowFlyout(int width, int height, int notch);
+  void PlaceFlyout();
+  // Back to the main window's shape. It hides the window first, which a
+  // change of style needs.
+  void LeaveFlyout();
+  void DismissFlyout();
+  POINT TrayAnchor();
   HICON MakeIcon();
   void ShowMenu();
   HMENU BuildMenu(const flutter::EncodableList& items);
@@ -63,6 +80,13 @@ class NativeShell {
   std::map<int, std::vector<uint8_t>> icons_;
   flutter::EncodableList menu_;
   UINT taskbar_created_;
+
+  bool flyout_ = false;
+  RECT main_rect_ = {};  // where the main window was, in pixels
+  POINT anchor_ = {};    // the tray icon, in pixels
+  POINT click_ = {};     // the cursor at the last tray click
+  int flyout_width_ = 0, flyout_height_ = 0, flyout_notch_ = 12;  // logical
+  ULONGLONG dismissed_at_ = 0;
 };
 
 #endif  // RUNNER_NATIVE_SHELL_H_

@@ -24,6 +24,10 @@ import 'tray_art.dart';
 /// The window itself (anchoring above the tray, closing on Esc or a click
 /// outside) belongs to the Windows shell. This widget is its content, 360 wide.
 class TrayFlyout extends StatefulWidget {
+  /// The depth of one step of its corners (`clip(12)` on the board), which the
+  /// window is cut to as well.
+  static const notch = 12.0;
+
   const TrayFlyout({
     super.key,
     required this.controller,
@@ -107,7 +111,7 @@ class _TrayFlyoutState extends State<TrayFlyout> {
               child: NotchBox(
                 color: p.bg,
                 borderColor: p.edge,
-                notch: 12,
+                notch: TrayFlyout.notch,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,

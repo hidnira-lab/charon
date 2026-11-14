@@ -34,6 +34,18 @@ class FakeWindowHost implements WindowHost {
   @override
   Future<void> startDrag() async => calls.add('startDrag');
 
+  /// The sizes the flyout was asked for, in order.
+  final flyoutSizes = <(int, int)>[];
+
+  @override
+  Future<void> showFlyout({required int width, required int height, required int notch}) async {
+    flyoutSizes.add((width, height));
+    calls.add('showFlyout');
+  }
+
+  @override
+  Future<void> hideFlyout() async => calls.add('hideFlyout');
+
   @override
   Future<void> setTray({
     required String tooltip,

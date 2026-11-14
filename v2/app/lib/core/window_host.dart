@@ -12,13 +12,21 @@ class CloseRequested extends WindowEvent {
   const CloseRequested();
 }
 
-/// A left click on the tray icon.
+/// A left click on the tray icon. [windowShowing] is true when the main window
+/// is on screen, which then needs no flyout.
 class TrayLeftClick extends WindowEvent {
-  const TrayLeftClick();
+  const TrayLeftClick({this.windowShowing = false});
+
+  final bool windowShowing;
 }
 
 class TrayDoubleClick extends WindowEvent {
   const TrayDoubleClick();
+}
+
+/// The flyout lost the focus (a click elsewhere) and the host closed it.
+class FlyoutDismissed extends WindowEvent {
+  const FlyoutDismissed();
 }
 
 /// An item of the tray menu was picked: the id it was sent with.
@@ -47,6 +55,14 @@ abstract interface class WindowHost {
 
   /// A press on the title bar: the system moves the window with the mouse.
   Future<void> startDrag();
+
+  /// Turns the window into the tray flyout: [width] by [height] logical pixels
+  /// with stepped corners of [notch], above the tray icon. Called again with a
+  /// new height when the content grows or shrinks.
+  Future<void> showFlyout({required int width, required int height, required int notch});
+
+  /// Closes the flyout and puts the window back as it was, hidden.
+  Future<void> hideFlyout();
 
   /// Puts the tray icon, its tooltip and its menu (see [encodeTrayMenu]). [icons]
   /// are BGRA pixels by edge length; the system takes the size that fits the screen.
@@ -82,6 +98,12 @@ class NoWindowHost implements WindowHost {
   Future<void> startDrag() async {}
 
   @override
+  Future<void> showFlyout({required int width, required int height, required int notch}) async {}
+
+  @override
+  Future<void> hideFlyout() async {}
+
+  @override
   Future<void> setTray({
     required String tooltip,
     required Map<int, Uint8List> icons,
@@ -110,7 +132,9 @@ class NativeWindowHost implements WindowHost {
       case 'closeRequested':
         _events.add(const CloseRequested());
       case 'trayLeftClick':
-        _events.add(const TrayLeftClick());
+        _events.add(TrayLeftClick(windowShowing: call.arguments == true));
+      case 'flyoutDismissed':
+        _events.add(const FlyoutDismissed());
       case 'trayDoubleClick':
         _events.add(const TrayDoubleClick());
       case 'menuCommand':
@@ -142,6 +166,13 @@ class NativeWindowHost implements WindowHost {
 
   @override
   Future<void> startDrag() => _call('startDrag');
+
+  @override
+  Future<void> showFlyout({required int width, required int height, required int notch}) =>
+      _call('showFlyout', {'width': width, 'height': height, 'notch': notch});
+
+  @override
+  Future<void> hideFlyout() => _call('hideFlyout');
 
   @override
   Future<void> setTray({

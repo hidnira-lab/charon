@@ -1,15 +1,18 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 import '../../core/window_host.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../state/home_controller.dart';
+import '../../state/service_view.dart';
 import '../../state/tray_host.dart';
 import '../../state/tray_view.dart';
 import '../../state/ui_state.dart';
 import '../dialogs/quit_while_connected_dialog.dart';
+import '../tray/tray_flyout.dart';
 
 /// What the buttons of the window and the tray menu do. One place, so the X of
 /// every screen, Alt+F4 and "Quit Charon" in the tray mean the same.
@@ -24,9 +27,51 @@ class WindowActions {
 
   /// The minus of the title bar. On the boards it is labelled "Hide to tray", so
   /// it takes the window off the screen and the taskbar and leaves the tray icon.
-  Future<void> hideToTray() => host.hide();
+  Future<void> hideToTray() {
+    flyoutOpen.value = false;
+    return host.hide();
+  }
 
   Future<void> startDrag() => host.startDrag();
+
+  /// Whether the tray flyout is what the window shows.
+  final flyoutOpen = ValueNotifier<bool>(false);
+
+  /// Opens the flyout when it can be one: a window that is on screen is not
+  /// turned into it, and before the first run is over or while the service is
+  /// away there is nothing for it to show, so the window opens instead.
+  void toggleFlyout({required bool windowShowing}) {
+    if (flyoutOpen.value) {
+      unawaited(closeFlyout());
+    } else if (windowShowing || controller.isFirstRun || controller.service.view != null) {
+      unawaited(openWindow());
+    } else {
+      flyoutOpen.value = true; // the size is told once it has been laid out
+    }
+  }
+
+  Future<void> closeFlyout() async {
+    if (!flyoutOpen.value) return;
+    flyoutOpen.value = false;
+    await host.hideFlyout();
+  }
+
+  /// The system closed the flyout itself (a click elsewhere).
+  void flyoutDismissed() => flyoutOpen.value = false;
+
+  /// The window, in its own size and place, in front.
+  Future<void> openWindow() async {
+    flyoutOpen.value = false;
+    await host.show();
+  }
+
+  Future<void> hideToTrayFromFlyout() => closeFlyout();
+
+  Future<void> flyoutMeasured(Size size) => host.showFlyout(
+        width: size.width.ceil(),
+        height: size.height.ceil(),
+        notch: TrayFlyout.notch.toInt(),
+      );
 
   bool get _sessionRuns {
     final s = controller.uiState;
@@ -50,7 +95,7 @@ class WindowActions {
     _asking = true;
     try {
       // The dialog needs a window to be seen in, also when this came from the tray.
-      await host.show();
+      await openWindow();
       final context = navigatorKey.currentContext;
       if (context == null) {
         // No place to ask: the safe answer is to keep the tunnel and hide.
@@ -91,7 +136,7 @@ class WindowActions {
       case TrayCommand.release:
         await c.release();
       case TrayCommand.openWindow:
-        await host.show();
+        await openWindow();
       case TrayCommand.copyEgress:
         await Clipboard.setData(ClipboardData(text: c.status.egressAddress));
       case TrayCommand.selectServer:
@@ -191,9 +236,12 @@ class _WindowShellState extends State<WindowShell> {
     switch (e) {
       case CloseRequested():
         unawaited(_actions.requestClose());
-      // The left click is the flyout on the board; until that exists it opens the window.
-      case TrayLeftClick() || TrayDoubleClick():
-        unawaited(widget.host.show());
+      case TrayLeftClick(:final windowShowing):
+        _actions.toggleFlyout(windowShowing: windowShowing);
+      case TrayDoubleClick():
+        unawaited(_actions.openWindow());
+      case FlyoutDismissed():
+        _actions.flyoutDismissed();
       case MenuCommand(:final id):
         final item = _menu?.byId[id];
         if (item != null) unawaited(_actions.runTray(item));
@@ -218,6 +266,113 @@ class _WindowShellState extends State<WindowShell> {
     unawaited(widget.host.setTray(tooltip: view.tooltip, icons: trayIconPixels(tone), menu: encoded.items));
   }
 
+  // Keeps the app alive, with its screens and dialogs, while the flyout is on.
+  final _mainKey = GlobalKey();
+
   @override
-  Widget build(BuildContext context) => WindowScope(actions: _actions, child: widget.child);
+  Widget build(BuildContext context) {
+    final main = KeyedSubtree(key: _mainKey, child: widget.child);
+    return WindowScope(
+      actions: _actions,
+      child: ValueListenableBuilder<bool>(
+        valueListenable: _actions.flyoutOpen,
+        builder: (context, open, _) {
+          if (!open) return main;
+          return Stack(
+            children: [
+              // The window is as small as the flyout, but the app is laid out at its
+              // own size behind it, so it never overflows and nothing is lost.
+              Offstage(
+                child: TickerMode(
+                  enabled: false,
+                  child: OverflowBox(
+                    minWidth: 1024,
+                    maxWidth: 1024,
+                    minHeight: 768,
+                    maxHeight: 768,
+                    alignment: Alignment.topLeft,
+                    child: main,
+                  ),
+                ),
+              ),
+              _FlyoutRoot(controller: widget.controller, actions: _actions),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+/// The content of the flyout window: the [TrayFlyout] at the top left, which
+/// tells the host how big it is. It has the Material and the Overlay the app's
+/// own screens get from the Navigator, because it sits above it.
+class _FlyoutRoot extends StatelessWidget {
+  const _FlyoutRoot({required this.controller, required this.actions});
+
+  final HomeController controller;
+  final WindowActions actions;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      type: MaterialType.transparency,
+      child: Overlay(
+        initialEntries: [
+          OverlayEntry(
+            // Its own focus scope: the focus is still in the app behind it, and a plain
+            // autofocus would leave it there, where Esc would never be heard.
+            builder: (context) => FocusScope(
+              autofocus: true,
+              child: CallbackShortcuts(
+                bindings: {const SingleActivator(LogicalKeyboardKey.escape): actions.closeFlyout},
+                child: Focus(
+                  autofocus: true,
+                  child: Align(
+                  alignment: Alignment.topLeft,
+                  child: _MeasureSize(
+                    onSize: (size) => unawaited(actions.flyoutMeasured(size)),
+                    child: TrayFlyout(
+                      controller: controller,
+                      onOpenWindow: actions.openWindow,
+                      onQuit: actions.requestClose,
+                    ),
+                  ),
+                ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Reports its child's size after each layout in which it changed.
+class _MeasureSize extends SingleChildRenderObjectWidget {
+  const _MeasureSize({required this.onSize, required super.child});
+
+  final ValueChanged<Size> onSize;
+
+  @override
+  RenderObject createRenderObject(BuildContext context) => _RenderMeasureSize(onSize);
+
+  @override
+  void updateRenderObject(BuildContext context, _RenderMeasureSize renderObject) => renderObject.onSize = onSize;
+}
+
+class _RenderMeasureSize extends RenderProxyBox {
+  _RenderMeasureSize(this.onSize);
+
+  ValueChanged<Size> onSize;
+  Size? _last;
+
+  @override
+  void performLayout() {
+    super.performLayout();
+    if (size == _last) return;
+    _last = size;
+    WidgetsBinding.instance.addPostFrameCallback((_) => onSize(size));
+  }
 }

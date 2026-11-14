@@ -12,6 +12,7 @@ import 'package:charon/state/home_controller.dart';
 import 'package:charon/state/tray_host.dart';
 import 'package:charon/state/tray_view.dart';
 import 'package:charon/ui/tray/tray_art.dart';
+import 'package:charon/ui/tray/tray_flyout.dart';
 
 HomeController _idle() => HomeController(
       initialStatus: Status(phase: Phase.PHASE_IDLE),
@@ -229,15 +230,14 @@ void main() {
       expect(host.calls, contains('quit')); // idle: quits, as the X does
     });
 
-    testWidgets('a left click and a double click on the icon show the window', (t) async {
+    testWidgets('a double click on the icon shows the window', (t) async {
       window(t);
       final host = FakeWindowHost();
       await t.pumpWidget(CharonApp(controller: _idle(), windowHost: host));
       await t.pumpAndSettle();
-      host.emit(const TrayLeftClick());
       host.emit(const TrayDoubleClick());
       await t.pump();
-      expect(host.calls.where((x) => x == 'show').length, 2);
+      expect(host.calls, contains('show'));
     });
 
     testWidgets('a picked menu item runs its command', (t) async {
@@ -262,6 +262,134 @@ void main() {
       host.emit(MenuCommand(copy['id']! as int));
       await t.pump();
       expect(copied, '203.0.113.1');
+    });
+  });
+
+  group('the tray flyout', () {
+    // An event comes in by a stream, so it takes a frame to arrive and one to draw.
+    Future<void> tick(WidgetTester t) async {
+      await t.pump();
+      await t.pump();
+    }
+
+    Future<FakeWindowHost> app(WidgetTester t, HomeController c) async {
+      t.view.physicalSize = const Size(1024, 768);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      final host = FakeWindowHost();
+      await t.pumpWidget(CharonApp(controller: c, windowHost: host));
+      await t.pumpAndSettle();
+      return host;
+    }
+
+    testWidgets('a left click while the window is hidden opens it, and the host is told its size', (t) async {
+      final host = await app(t, _idle());
+      host.emit(const TrayLeftClick(windowShowing: false));
+      await tick(t);
+      await t.pump();
+      expect(find.byType(TrayFlyout), findsOneWidget);
+      expect(host.flyoutSizes, isNotEmpty);
+      final (w, h) = host.flyoutSizes.last;
+      expect(w, 360, reason: 'the board draws it 360 wide');
+      expect(h, greaterThan(200));
+      expect(host.calls, isNot(contains('show')), reason: 'the window itself stays hidden');
+    });
+
+    testWidgets('a left click while the window is on screen only brings the window forward', (t) async {
+      final host = await app(t, _idle());
+      host.emit(const TrayLeftClick(windowShowing: true));
+      await tick(t);
+      expect(find.byType(TrayFlyout), findsNothing);
+      expect(host.calls, contains('show'));
+      expect(host.flyoutSizes, isEmpty);
+    });
+
+    testWidgets('the first run and an away service have no flyout to show, the window opens instead', (t) async {
+      final setup = FakeWindowHost();
+      t.view.physicalSize = const Size(1024, 768);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      await t.pumpWidget(CharonApp(controller: HomeController(isFirstRun: true), windowHost: setup));
+      await t.pump();
+      setup.emit(const TrayLeftClick());
+      await tick(t);
+      expect(find.byType(TrayFlyout), findsNothing);
+      expect(setup.calls, contains('show'));
+    });
+
+    testWidgets('a second click closes it, and Esc does too', (t) async {
+      final host = await app(t, _idle());
+      host.emit(const TrayLeftClick());
+      await tick(t);
+      expect(find.byType(TrayFlyout), findsOneWidget);
+      host.emit(const TrayLeftClick());
+      await tick(t);
+      expect(find.byType(TrayFlyout), findsNothing);
+      expect(host.calls, contains('hideFlyout'));
+
+      host.calls.clear();
+      host.emit(const TrayLeftClick());
+      await tick(t);
+      await t.sendKeyEvent(LogicalKeyboardKey.escape);
+      await t.pump();
+      expect(find.byType(TrayFlyout), findsNothing);
+      expect(host.calls, contains('hideFlyout'));
+    });
+
+    testWidgets('when the system closes it (a click elsewhere) the app only follows, with no call back', (t) async {
+      final host = await app(t, _idle());
+      host.emit(const TrayLeftClick());
+      await tick(t);
+      host.calls.clear();
+      host.emit(const FlyoutDismissed());
+      await tick(t);
+      expect(find.byType(TrayFlyout), findsNothing);
+      expect(host.calls, isNot(contains('hideFlyout')));
+    });
+
+    testWidgets('Open Charon in the flyout shows the window and closes the flyout', (t) async {
+      final host = await app(t, _idle());
+      host.emit(const TrayLeftClick());
+      await tick(t);
+      await t.tap(find.text('Open Charon'));
+      await t.pump();
+      expect(host.calls, contains('show'));
+      expect(find.byType(TrayFlyout), findsNothing);
+    });
+
+    testWidgets('the screen the user was on is still there when the flyout closes', (t) async {
+      final c = _idle();
+      final host = await app(t, c);
+      c.setTab(4); // Settings
+      await t.pumpAndSettle();
+      expect(find.text('Detect city from this device'), findsOneWidget);
+
+      host.emit(const TrayLeftClick());
+      await tick(t);
+      host.emit(const FlyoutDismissed());
+      await t.pumpAndSettle();
+      expect(find.byType(TrayFlyout), findsNothing);
+      expect(find.text('Detect city from this device'), findsOneWidget);
+      expect(c.activeTabIndex, 4);
+    });
+
+    testWidgets('a change of state that makes it taller tells the host the new size', (t) async {
+      final c = _idle();
+      final host = await app(t, c);
+      host.emit(const TrayLeftClick());
+      await tick(t);
+      await t.pump();
+      final before = host.flyoutSizes.length;
+      c.updateStatus(Status(
+        phase: Phase.PHASE_UP,
+        chosenServerId: 'SRV-01',
+        activeServerId: 'SRV-01',
+        egressAddress: '203.0.113.1',
+      ));
+      await t.pump();
+      await t.pump();
+      expect(host.flyoutSizes.length, greaterThanOrEqualTo(before));
+      expect(host.flyoutSizes.every((e) => e.$1 == 360), isTrue);
     });
   });
 }

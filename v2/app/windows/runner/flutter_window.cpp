@@ -87,5 +87,9 @@ FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
       break;
   }
 
-  return Win32Window::MessageHandler(hwnd, message, wparam, lparam);
+  const LRESULT result = Win32Window::MessageHandler(hwnd, message, wparam, lparam);
+  // The main window is resized by the system when the scale changes. The
+  // flyout has a size of its own.
+  if (message == WM_DPICHANGED && shell_) shell_->AfterDpiChanged();
+  return result;
 }
