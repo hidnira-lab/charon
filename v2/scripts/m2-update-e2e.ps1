@@ -34,8 +34,8 @@ param(
     [string]$Dir = (Join-Path $PSScriptRoot '..\dist-e2e'),
     [string]$App = (Join-Path $PSScriptRoot '..\app'),
     [string]$Flutter = 'C:\flutter\bin\flutter.bat',
-    [string]$LogDir = 'D:\charon-m2-test\logs',
-    [string]$WfpCheck = 'D:\charon-m2-test\charon-wfpcheck.exe',
+    [string]$LogDir = ([IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..\..\charon-essential\charon-m2-test\logs'))),
+    [string]$WfpCheck = ([IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..\..\charon-essential\charon-m2-test\charon-wfpcheck.exe'))),
     [string]$ProgramDir = "$env:ProgramFiles\Charon",
     [string]$DataDir = "$env:ProgramData\Charon",
     [int]$Port = 8765

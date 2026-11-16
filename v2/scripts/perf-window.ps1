@@ -27,7 +27,7 @@
 param(
     [string]$App = (Join-Path $PSScriptRoot '..\app'),
     [string]$Flutter = 'C:\flutter\bin\flutter.bat',
-    [string]$Stage = 'D:\charon-m2-test',
+    [string]$Stage = ([IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..\..\charon-essential\charon-m2-test'))),
     [string]$Exe,
     [switch]$Build,
     [switch]$Unfocused,

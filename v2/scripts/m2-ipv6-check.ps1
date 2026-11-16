@@ -83,7 +83,7 @@ finally {
     Write-Host '=== disconnect (always)'
     [void](Probe 'disconnect' 60)
     [void](Probe 'killswitch on' 60)
-    $left = & "D:\charon-m2-test\charon-wfpcheck.exe" list 2>&1 | Select-Object -First 1
+    $left = & ([IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..\..\charon-essential\charon-m2-test\charon-wfpcheck.exe'))) list 2>&1 | Select-Object -First 1
     Write-Host "    $left"
     Write-Host 'You can start the v1 app again.' -ForegroundColor Cyan
 }

@@ -23,7 +23,7 @@
     Writes no secret: the probe lists servers by code only.
 #>
 param(
-    [string]$Stage = 'D:\charon-m2-test',
+    [string]$Stage = ([IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..\..\charon-essential\charon-m2-test'))),
     [string]$App = (Join-Path $PSScriptRoot '..\app'),
     [string]$Flutter = 'C:\flutter\bin\flutter.bat',
     [string]$ProgramDir = "$env:ProgramFiles\Charon",

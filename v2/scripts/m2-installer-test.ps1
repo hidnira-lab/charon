@@ -25,10 +25,10 @@ param(
     [string]$Xray = (Join-Path $PSScriptRoot '..\dist\xray-windows-amd64.exe'),
     [string]$App = (Join-Path $PSScriptRoot '..\app'),
     [string]$Flutter = 'C:\flutter\bin\flutter.bat',
-    [string]$LogDir = 'D:\charon-m2-test\logs',
-    [string]$WfpCheck = 'D:\charon-m2-test\charon-wfpcheck.exe',
+    [string]$LogDir = ([IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..\..\charon-essential\charon-m2-test\logs'))),
+    [string]$WfpCheck = ([IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..\..\charon-essential\charon-m2-test\charon-wfpcheck.exe'))),
     # What is put back when the test breaks before the last install: the stage of the M2 tests.
-    [string]$Restore = 'D:\charon-m2-test\stage',
+    [string]$Restore = ([IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..\..\charon-essential\charon-m2-test\stage'))),
     [string]$ProgramDir = "$env:ProgramFiles\Charon",
     [string]$DataDir = "$env:ProgramData\Charon",
     # Which of the four steps run, for example '34' to repeat only the uninstall and the install after it.
