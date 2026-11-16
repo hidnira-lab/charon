@@ -1,8 +1,15 @@
 ; Inno Setup script for Charon on Windows.
 ; Words and step order follow the InstallerWindows board in the design artifact.
 
+; package-release.ps1 passes the real values: /DMyAppVersion=... /DSourceDir=<staged files> /O<output>.
+#ifndef MyAppVersion
+  #define MyAppVersion "0.1.0"
+#endif
+#ifndef SourceDir
+  #define SourceDir "dist"
+#endif
+
 #define MyAppName "Charon"
-#define MyAppVersion "0.1.0"
 #define MyAppPublisher "hidnira-lab"
 #define MyAppURL "https://github.com/hidnira-lab/charon"
 #define MyAppExeName "charon.exe"
@@ -34,7 +41,7 @@ FinishedHeadingLabel=Charon is installed
 FinishedLabel=The service is running. Open Charon to add your first server.
 
 [Files]
-Source: "dist\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "install.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "uninstall.ps1"; DestDir: "{app}"; Flags: ignoreversion
 
@@ -44,6 +51,18 @@ Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 [Run]
 Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -File ""{app}\install.ps1"" -SourceDir ""{app}"" -ProgramDir ""{app}"""; StatusMsg: "Installing the Charon service and protection filters..."; Flags: runhidden waituntilterminated
 Filename: "{app}\{#MyAppExeName}"; Description: "Open Charon now"; Flags: nowait postinstall skipifsilent runasoriginaluser
+
+[Code]
+// An update runs over a live install. The running service keeps charon-service.exe locked,
+// so it is stopped first ("net stop" waits until it is down; it fails harmlessly when the
+// service is not there yet). The WFP filters are persistent and stay where they are.
+function PrepareToInstall(var NeedsRestart: Boolean): String;
+var
+  ResultCode: Integer;
+begin
+  Exec(ExpandConstant('{sys}\net.exe'), 'stop charon-service', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  Result := '';
+end;
 
 [UninstallRun]
 Filename: "{app}\charon-release.exe"; Flags: runhidden waituntilterminated skipifdoesntexist; RunOnceId: "ReleaseWFPFilters"
