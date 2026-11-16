@@ -67,6 +67,8 @@ You need Go, Flutter and [Inno Setup 6](https://jrsoftware.org/isinfo.php) (`win
 powershell -NoProfile -File v2/scripts/package-release.ps1 -Version "0.1.0" -Sequence 1
 ```
 
+The release number is the `-Version` argument (in CI it comes from the tag). The script stamps it into the service (`-X` link flag), the window (`--build-name` and `--dart-define=CHARON_VERSION`) and the installer, so one number names the whole release. A build made without the script gets the default number instead, which is written in `app/pubspec.yaml`, `app/lib/state/app_info.dart` and `platform/windows/cmd/charon-service/main.go`; a test keeps the three equal, so change all three when a new number starts.
+
 The script downloads the pinned Xray core and wintun and checks their SHA-256 digests, builds the service, the window and the installer, and writes everything to `v2/dist/`: `Charon-Setup-<version>.exe`, `xray-windows-amd64.exe`, the sync server binaries and an unsigned `manifest.json`. Add `-SkipFlutter` to test the packaging without building the window.
 
 ## Offline Release Signing Flow

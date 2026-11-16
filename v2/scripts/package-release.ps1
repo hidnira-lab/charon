@@ -115,7 +115,9 @@ if (-not $SkipFlutter) {
     Write-Host "==> Building Flutter Windows release..."
     Push-Location (Join-Path $v2Root "app")
     try {
-        flutter build windows --release
+        # The window says its version in Hello, the About card and the diagnostics, and the
+        # .exe carries it as its file version: all of them from the release version here.
+        flutter build windows --release --build-name=$Version --dart-define=CHARON_VERSION=$Version
         Assert-Ok "flutter build windows"
         $flutterReleaseDir = Join-Path $v2Root "app\build\windows\x64\runner\Release"
         Copy-Item -Path (Join-Path $flutterReleaseDir "*") -Destination $stageWin -Recurse -Force
