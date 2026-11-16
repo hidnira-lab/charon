@@ -557,7 +557,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsServiceDesc => '关闭这个窗口后，隧道和断网保护仍会继续运行。停止服务需要管理员权限，指南里有说明。';
 
   @override
-  String get settingsServiceLineRunning => '运行中 · v0.1.0 · 随 Windows 启动';
+  String settingsServiceLineRunning(String version) {
+    return '运行中 · v$version · 随 Windows 启动';
+  }
 
   @override
   String get settingsServiceLineRestarting => '重启中 · 隧道会短暂暂停';
@@ -5423,7 +5425,9 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get settingsServiceDesc => '关闭这个窗口后，隧道和断网保护仍会继续运行。停止服务需要管理员权限，指南里有说明。';
 
   @override
-  String get settingsServiceLineRunning => '运行中 · v0.1.0 · 随 Windows 启动';
+  String settingsServiceLineRunning(String version) {
+    return '运行中 · v$version · 随 Windows 启动';
+  }
 
   @override
   String get settingsServiceLineRestarting => '重启中 · 隧道会短暂暂停';

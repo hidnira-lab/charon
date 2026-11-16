@@ -195,7 +195,7 @@ class AppCard extends StatelessWidget {
                           child: Text(
                             svcRestart
                                 ? '> ${l10n.settingsServiceLineRestarting}'
-                                : '> ${l10n.settingsServiceLineRunning}',
+                                : '> ${l10n.settingsServiceLineRunning(controller.serviceVersion)}',
                             style: TextStyle(
                               fontFamily: CharonTokens.fontMono,
                               fontSize: 11,

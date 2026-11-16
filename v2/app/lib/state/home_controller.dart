@@ -11,6 +11,7 @@ import '../core/elevated.dart';
 import '../core/transport.dart';
 import '../gen/charon/v1/charon.pb.dart';
 import '../sync/sync_client.dart';
+import 'app_info.dart';
 import 'dns_input.dart';
 import 'location_status.dart';
 import 'service_supervisor.dart';
@@ -45,8 +46,10 @@ class HomeController extends ChangeNotifier {
     UiPrefsStore? uiPrefs,
     ProcessRunner? runAdmin,
     String? stagingDir,
+    String? serviceVersion,
   })  : _runAdmin = runAdmin ?? runElevated,
         _stagingDir = stagingDir ?? defaultStagingDir,
+        _serviceVersion = serviceVersion ?? '',
         _clock = clock ?? (() => DateTime.now().millisecondsSinceEpoch),
         _status = initialStatus ?? Status(),
         _config = initialConfig,
@@ -983,14 +986,21 @@ class HomeController extends ChangeNotifier {
     );
   }
 
+  /// The version the service said in Hello, which is not the window's own while an update is
+  /// half done. Until the service has said it, the window's version stands in.
+  String get serviceVersion => _serviceVersion.isEmpty ? appVersion : _serviceVersion;
+  String _serviceVersion;
+
   void attachClient(
     CoreClient newClient, {
     Status? initialStatus,
+    String? serviceVersion,
     PlatformChannelTransport? platformTransport,
   }) {
     if (_isDisposed) return;
     _eventSub?.cancel();
     _client = newClient;
+    if (serviceVersion != null) _serviceVersion = serviceVersion;
     if (platformTransport != null) {
       _platformTransport = platformTransport;
     }

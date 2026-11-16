@@ -13,6 +13,24 @@ void main() {
     expect(RegExp(r'xrayVersion\s*=\s*"([^"]+)"').firstMatch(go)!.group(1), xrayPinnedVersion);
   });
 
+  // A release number is set once, by `package-release.ps1 -Version`, which stamps the
+  // service, the window and the installer. These are the numbers a build gets without it
+  // (a developer's run, the tests), and they must not drift apart.
+  test('the default version of the window, the service and the pubspec is one number', () {
+    final pub = RegExp(r'^version:\s*(\d+\.\d+\.\d+)', multiLine: true)
+        .firstMatch(File('pubspec.yaml').readAsStringSync())!
+        .group(1);
+    expect(appVersion, pub);
+    final go = File('../platform/windows/cmd/charon-service/main.go').readAsStringSync();
+    expect(RegExp(r'serviceVersion\s*=\s*"([^"]+)"').firstMatch(go)!.group(1), pub);
+  });
+
+  test('the service line names the version the service reported, in all three languages', () {
+    expect(AppLocalizationsEn().settingsServiceLineRunning('0.2.0'), 'running · v0.2.0 · started with Windows');
+    expect(AppLocalizationsId().settingsServiceLineRunning('0.2.0'), 'berjalan · v0.2.0 · mulai bersama Windows');
+    expect(AppLocalizationsZh().settingsServiceLineRunning('0.2.0'), '运行中 · v0.2.0 · 随 Windows 启动');
+  });
+
   test('About names the handle and the pinned xray in all three languages, as the board does', () {
     expect(AppLocalizationsEn().settingsAboutBy(xrayPinnedVersion), 'by @hidnira · xray v26.10.31');
     expect(AppLocalizationsId().settingsAboutBy(xrayPinnedVersion), 'oleh @hidnira · xray v26.10.31');

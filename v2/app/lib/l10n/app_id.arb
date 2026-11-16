@@ -185,7 +185,7 @@
   "settingsStartupLineKs": "disarankan, supaya kamu melihat pemberitahuan kalau trafik ditahan",
   "settingsServiceTitle": "Service Charon",
   "settingsServiceDesc": "Menjaga tunnel dan kill switch tetap jalan saat jendela ini ditutup. Menghentikannya butuh hak admin, panduannya menjelaskan caranya.",
-  "settingsServiceLineRunning": "berjalan · v0.1.0 · mulai bersama Windows",
+  "settingsServiceLineRunning": "berjalan · v{version} · mulai bersama Windows",
   "settingsServiceLineRestarting": "memulai ulang · tunnel berhenti sebentar",
   "settingsServiceRestartBtn": "Restart service",
   "settingsThemeTitle": "TEMA",

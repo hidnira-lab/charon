@@ -11,6 +11,7 @@ import 'core/transport.dart';
 import 'core/window_host.dart';
 import 'core/windows_toast.dart';
 import 'l10n/generated/app_localizations.dart';
+import 'state/app_info.dart';
 import 'state/home_controller.dart';
 import 'state/os_toasts.dart';
 import 'state/service_view.dart';
@@ -66,8 +67,8 @@ Future<void> _connectWindows(HomeController controller) async {
   final transport = await IpcTransport.connect(pipe);
   final client = CoreClient(transport);
   try {
-    final ack = await client.hello(appVersion: '0.1.0');
-    controller.attachClient(client, initialStatus: ack.status);
+    final ack = await client.hello(appVersion: appVersion);
+    controller.attachClient(client, initialStatus: ack.status, serviceVersion: ack.serviceVersion);
   } catch (_) {
     unawaited(transport.close());
     rethrow;
@@ -77,10 +78,11 @@ Future<void> _connectWindows(HomeController controller) async {
 Future<void> _connectAndroid(HomeController controller) async {
   final transport = PlatformChannelTransport();
   final client = CoreClient(transport);
-  final ack = await client.hello(appVersion: '0.1.0');
+  final ack = await client.hello(appVersion: appVersion);
   controller.attachClient(
     client,
     initialStatus: ack.status,
+    serviceVersion: ack.serviceVersion,
     platformTransport: transport,
   );
 }

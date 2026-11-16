@@ -55,6 +55,25 @@ void main() {
       expect(find.text('v0.1.0'), findsOneWidget);
     });
 
+    // The line is about the service, so it must say the version the service reported in
+    // Hello, which differs from the window's own while an update is half done.
+    testWidgets('the service line shows the version the service reported', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+
+      final controller = HomeController(
+        initialStatus: Status(phase: Phase.PHASE_IDLE),
+        initialConfig: Config(chosenServerId: 'SRV-01', servers: [Server(id: 'SRV-01', displayName: 'Main SG', address: '198.51.100.1')]),
+        serviceVersion: '9.9.9',
+      );
+      await tester.pumpWidget(CharonApp(controller: controller));
+      controller.setTab(4);
+      await tester.pumpAndSettle();
+
+      expect(find.text('> running · v9.9.9 · started with Windows'), findsOneWidget);
+    });
+
     testWidgets('toggling safety switches updates controller state', (tester) async {
       tester.view.physicalSize = const Size(1024, 768);
       tester.view.devicePixelRatio = 1.0;

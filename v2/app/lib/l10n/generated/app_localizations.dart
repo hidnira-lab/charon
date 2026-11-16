@@ -1103,11 +1103,11 @@ abstract class AppLocalizations {
   /// **'Keeps the tunnel and kill switch running when this window is closed. Stopping it needs admin rights, the guide shows how.'**
   String get settingsServiceDesc;
 
-  /// Service running note.
+  /// Service running note. The version is the one the service reported in Hello.
   ///
   /// In en, this message translates to:
-  /// **'running · v0.1.0 · started with Windows'**
-  String get settingsServiceLineRunning;
+  /// **'running · v{version} · started with Windows'**
+  String settingsServiceLineRunning(String version);
 
   /// Service restarting note.
   ///

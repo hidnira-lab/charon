@@ -594,8 +594,9 @@ class AppLocalizationsId extends AppLocalizations {
       'Menjaga tunnel dan kill switch tetap jalan saat jendela ini ditutup. Menghentikannya butuh hak admin, panduannya menjelaskan caranya.';
 
   @override
-  String get settingsServiceLineRunning =>
-      'berjalan · v0.1.0 · mulai bersama Windows';
+  String settingsServiceLineRunning(String version) {
+    return 'berjalan · v$version · mulai bersama Windows';
+  }
 
   @override
   String get settingsServiceLineRestarting =>

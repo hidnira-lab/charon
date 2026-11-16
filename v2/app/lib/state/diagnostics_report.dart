@@ -1,4 +1,5 @@
 import '../gen/charon/v1/charon.pb.dart';
+import 'app_info.dart';
 import 'home_controller.dart';
 
 /// What goes into the diagnostics text (Trust board, "Export diagnostics").
@@ -53,8 +54,6 @@ class DiagnosticsLine {
 /// destinations. Only the access log, when chosen, does.
 class DiagnosticsReport {
   const DiagnosticsReport._();
-
-  static const appVersion = '0.1.0';
 
   static List<DiagnosticsLine> build(
     HomeController c,

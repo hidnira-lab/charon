@@ -1,6 +1,9 @@
 /// The version of this build. One place, so the licences page, the diagnostics
-/// text and the About card do not each carry their own copy.
-const appVersion = '0.1.0';
+/// text, the About card and the Hello to the service do not each carry their own copy.
+/// A release build gets it from `package-release.ps1 -Version` (`--dart-define`), the
+/// default is for a developer's run and the tests, and a test keeps it equal to the
+/// pubspec and to the default of the service.
+const appVersion = String.fromEnvironment('CHARON_VERSION', defaultValue: '0.1.0');
 
 /// The xray-core release this build pins. A test checks it against the service.
 const xrayPinnedVersion = '26.10.31';

@@ -591,8 +591,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Keeps the tunnel and kill switch running when this window is closed. Stopping it needs admin rights, the guide shows how.';
 
   @override
-  String get settingsServiceLineRunning =>
-      'running · v0.1.0 · started with Windows';
+  String settingsServiceLineRunning(String version) {
+    return 'running · v$version · started with Windows';
+  }
 
   @override
   String get settingsServiceLineRestarting =>
