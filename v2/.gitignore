@@ -1,2 +1,4 @@
 # Output of scripts/package-release.ps1: installer, binaries, manifest. Never commit it.
 /dist/
+# What scripts/m2-update-e2e-prepare.ps1 builds (test installers, fake cores, test manifests).
+/dist-e2e/
