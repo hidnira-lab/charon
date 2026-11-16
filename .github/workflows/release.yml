@@ -30,25 +30,35 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: '1.26.x'
+          cache-dependency-path: |
+            v2/core/go.sum
+            v2/platform/windows/go.sum
+            v2/server/charonsync/go.sum
 
+      # The version the release is tested with locally. A newer "stable" would put a window
+      # in the release that nobody ran.
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: '3.47.4'
           channel: 'stable'
           cache: true
 
+      # In PowerShell a failing native program does not fail the step: only the exit code of
+      # the last one counts. So every module is run, and the step fails by hand if any did.
       - name: Verify Go modules (core, windows service, charonsync)
         shell: pwsh
         run: |
-          Push-Location v2/core
-          go test -race ./...
-          Pop-Location
-          Push-Location v2/platform/windows
-          go test -race ./...
-          Pop-Location
-          Push-Location v2/server/charonsync
-          go test -race ./...
-          Pop-Location
+          $failed = @()
+          foreach ($m in 'v2/core', 'v2/platform/windows', 'v2/server/charonsync') {
+            Push-Location $m
+            go vet ./...
+            if ($LASTEXITCODE -ne 0) { $failed += "$m (vet)" }
+            go test -race ./...
+            if ($LASTEXITCODE -ne 0) { $failed += "$m (test)" }
+            Pop-Location
+          }
+          if ($failed) { throw "failed: $($failed -join ', ')" }
 
       - name: Install Inno Setup when the runner image does not have it
         shell: pwsh
@@ -69,6 +79,14 @@ jobs:
             $seq = "1"
           }
           ./v2/scripts/package-release.ps1 -Version $ver -Sequence ([uint64]$seq)
+
+      # What was built, with the digests, so the owner can check them against manifest.json
+      # before signing it (the manifest is only as good as that check).
+      - name: List the built files with their SHA-256
+        shell: pwsh
+        run: |
+          Get-ChildItem v2/dist -File | Get-FileHash -Algorithm SHA256 |
+            ForEach-Object { '{0}  {1}' -f $_.Hash.ToLower(), (Split-Path $_.Path -Leaf) }
 
       - name: Create Draft GitHub Release (awaiting offline Ed25519 manifest signature)
         if: startsWith(github.ref, 'refs/tags/v')
