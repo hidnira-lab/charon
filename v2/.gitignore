@@ -1,0 +1,2 @@
+# Output of scripts/package-release.ps1: installer, binaries, manifest. Never commit it.
+/dist/
