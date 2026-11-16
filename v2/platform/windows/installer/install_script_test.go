@@ -47,6 +47,11 @@ func TestInstallScript_SourceDirDefaultsToItsOwnFolder(t *testing.T) {
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		t.Fatal(err)
 	}
+	// The TEMP of a GitHub runner is a short (8.3) name, C:\Users\RUNNER~1, and PowerShell
+	// reports the long one for $PSScriptRoot: compare the long form.
+	if long, err := filepath.EvalSymlinks(dir); err == nil {
+		dir = long
+	}
 	path := filepath.Join(dir, "install copy.ps1")
 	if err := os.WriteFile(path, []byte(script), 0o644); err != nil {
 		t.Fatal(err)
