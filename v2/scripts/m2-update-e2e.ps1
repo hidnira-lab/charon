@@ -243,6 +243,9 @@ finally {
         if (-not $p.WaitForExit(300000)) { Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue; Info 'the installer did not finish in 5 minutes' }
         else { Info "installer exit code: $($p.ExitCode)" }
         if ("$(State)" -ne 'Running') { StartSvc }
+        # The installer does not touch xray.prev.exe, so the core the test swapped out would
+        # stay as a "previous core" that was never run here, and the rollback would offer it.
+        Remove-Item "$ProgramDir\xray.prev.exe" -Force -ErrorAction SilentlyContinue
         $v = Versions
         Check 'restore: the service is 0.1.0 with the pinned core again' ($v.service -eq '0.1.0' -and $v.xray -eq '26.10.31') "service $($v.service), xray $($v.xray)"
         Check 'restore: xray.exe is the pinned core' ((Sha "$ProgramDir\xray.exe") -eq $pinned)
