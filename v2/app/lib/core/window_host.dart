@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart' show ValueNotifier;
 import 'package:flutter/services.dart';
 
 /// What the window host tells the app.
@@ -132,6 +133,11 @@ class NoWindowHost implements WindowHost {
   Future<void> removeTray() async {}
 }
 
+/// Whether the window is shown, not minimized and has the focus. The runner tells
+/// (the engine's own lifecycle never reports a lost focus or a minimize here), and
+/// the loops of the window stand still while it is false. True until told.
+final ValueNotifier<bool> windowFront = ValueNotifier<bool>(true);
+
 /// The Windows host: the C++ of `windows/runner/native_shell.cpp`, over one
 /// method channel.
 class NativeWindowHost implements WindowHost {
@@ -158,6 +164,8 @@ class NativeWindowHost implements WindowHost {
         if (link is String) _events.add(ActivationLink(link));
       case 'sessionLock':
         _events.add(SessionLock(call.arguments == true));
+      case 'windowFront':
+        windowFront.value = call.arguments != false;
       case 'trayDoubleClick':
         _events.add(const TrayDoubleClick());
       case 'menuCommand':

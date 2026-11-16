@@ -434,9 +434,35 @@ bool NativeShell::RequestClose() {
   return true;
 }
 
+void NativeShell::UpdateFront() {
+  const bool front = active_ && shown_ && !minimized_;
+  if (front == front_) return;
+  front_ = front;
+  Event("windowFront", Value(front));
+}
+
 std::optional<LRESULT> NativeShell::HandleMessage(HWND, UINT message,
                                                   WPARAM wparam,
                                                   LPARAM lparam) {
+  // Only listens: every one of these still goes on to the window.
+  switch (message) {
+    case WM_ACTIVATE:
+      active_ = LOWORD(wparam) != WA_INACTIVE && HIWORD(wparam) == 0;
+      minimized_ = HIWORD(wparam) != 0;
+      UpdateFront();
+      break;
+    case WM_SIZE:
+      if (wparam == SIZE_MINIMIZED) minimized_ = true;
+      else if (wparam == SIZE_RESTORED || wparam == SIZE_MAXIMIZED) minimized_ = false;
+      UpdateFront();
+      break;
+    case WM_SHOWWINDOW:
+      if (lparam == 0) {  // the window itself, not an owner or a minimize
+        shown_ = wparam != 0;
+        UpdateFront();
+      }
+      break;
+  }
   if (message == kTrayMessage && wparam == kTrayId) {
     switch (LOWORD(lparam)) {
       case WM_LBUTTONUP:

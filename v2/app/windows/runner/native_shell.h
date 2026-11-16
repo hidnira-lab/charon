@@ -74,10 +74,14 @@ class NativeShell {
   void ShowMenu();
   HMENU BuildMenu(const flutter::EncodableList& items);
   void Event(const std::string& name, Value argument = Value());
+  // Tells Dart when the window is in front (shown, not minimized, has the focus), so
+  // its loops can stand still when it is not. See docs/performance_plan.md, WP2.
+  void UpdateFront();
 
   HWND window_;
   std::unique_ptr<flutter::MethodChannel<Value>> channel_;
   bool ready_ = false;
+  bool active_ = true, shown_ = true, minimized_ = false, front_ = true;
 
   bool tray_added_ = false;
   HICON icon_ = nullptr;

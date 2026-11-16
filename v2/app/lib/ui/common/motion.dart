@@ -3,12 +3,18 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../core/window_host.dart' show windowFront;
 import '../../theme/theme.dart';
 
 // The shared motion of the boards ("motion v0.3", board 03 Motion). Every piece
 // stands still when the platform asks for less motion.
 
 bool _reduce(BuildContext context) => MediaQuery.maybeDisableAnimationsOf(context) ?? false;
+
+// A minimized window, one hidden in the tray or one the user is not working in has
+// nothing to animate for, so every loop below listens to [windowFront] and stands
+// still while it is false, then goes on from where it stopped. Before the runner
+// says anything, and in tests, the window counts as in front.
 
 /// Plays once when it is first built: the child fades in while it slides from
 /// [offset] to its place. The page motion (mPg) is [Enter.page]: cards rise
@@ -256,6 +262,12 @@ class _PulseState extends State<Pulse> with SingleTickerProviderStateMixin {
   late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 1600));
 
   @override
+  void initState() {
+    super.initState();
+    windowFront.addListener(_sync);
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _sync();
@@ -269,7 +281,12 @@ class _PulseState extends State<Pulse> with SingleTickerProviderStateMixin {
 
   void _sync() {
     if (widget.on && !_reduce(context)) {
-      if (!_c.isAnimating) _c.repeat();
+      // Out of sight the ring stops where it is and goes on when the window is back.
+      if (!windowFront.value) {
+        _c.stop();
+      } else if (!_c.isAnimating) {
+        _c.repeat();
+      }
     } else {
       _c.stop();
       _c.value = 0;
@@ -278,6 +295,7 @@ class _PulseState extends State<Pulse> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
+    windowFront.removeListener(_sync);
     _c.dispose();
     super.dispose();
   }
@@ -285,7 +303,8 @@ class _PulseState extends State<Pulse> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     if (!widget.on) return widget.child;
-    return AnimatedBuilder(
+    // Its own layer: the ring moves without the page behind it being painted again.
+    return RepaintBoundary(child: AnimatedBuilder(
       animation: _c,
       child: widget.child,
       builder: (_, child) {
@@ -300,7 +319,7 @@ class _PulseState extends State<Pulse> with SingleTickerProviderStateMixin {
           child: child,
         );
       },
-    );
+    ));
   }
 }
 
@@ -331,7 +350,9 @@ int nextStep(int ms, List<StepTrack> tracks) {
 /// Rebuilds at the moments the stepped [tracks] change, with the milliseconds
 /// since it appeared. A timer waits for the next change, so nothing runs
 /// between steps and tests can still settle. Still at 0 under reduced motion
-/// or when not [on].
+/// or when not [on]. It stands still while the window is not in front ([windowFront])
+/// (no timer at all), and goes on from where it stopped. Its own layer, so a
+/// step paints this and nothing around it.
 class StepLoop extends StatefulWidget {
   const StepLoop({super.key, required this.tracks, required this.builder, this.on = true});
 
@@ -348,6 +369,19 @@ class _StepLoopState extends State<StepLoop> {
   Timer? _timer;
 
   bool get _running => widget.on && !(MediaQuery.maybeDisableAnimationsOf(context) ?? false);
+
+  @override
+  void initState() {
+    super.initState();
+    windowFront.addListener(_frontChanged);
+  }
+
+  void _frontChanged() {
+    if (!mounted) return;
+    _timer?.cancel();
+    _timer = null;
+    if (_running && windowFront.value) _schedule();
+  }
 
   @override
   void didChangeDependencies() {
@@ -368,7 +402,7 @@ class _StepLoopState extends State<StepLoop> {
       _ms = 0;
       return;
     }
-    _schedule();
+    if (windowFront.value) _schedule();
   }
 
   void _schedule() {
@@ -382,12 +416,13 @@ class _StepLoopState extends State<StepLoop> {
 
   @override
   void dispose() {
+    windowFront.removeListener(_frontChanged);
     _timer?.cancel();
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) => widget.builder(context, _ms);
+  Widget build(BuildContext context) => RepaintBoundary(child: widget.builder(context, _ms));
 }
 
 /// The boards' blink: full for the first half of [period], then [low] (live

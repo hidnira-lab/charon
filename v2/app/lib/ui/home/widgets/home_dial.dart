@@ -6,6 +6,7 @@ import '../../../state/ui_state.dart';
 import '../../../theme/colors.dart';
 import '../../common/ghost.dart';
 import '../../common/living_logo.dart' show logoBlinkAt, logoGlanceAt;
+import '../../../core/window_host.dart' show windowFront;
 import '../../common/motion.dart';
 import '../../common/pixel_sprite.dart';
 import 'home_scene.dart' show SceneAnim, sceneLook, sceneTracks;
@@ -102,6 +103,12 @@ class _HomeDialState extends State<HomeDial> with SingleTickerProviderStateMixin
   late final AnimationController _c = AnimationController(vsync: this, duration: _chase);
 
   @override
+  void initState() {
+    super.initState();
+    windowFront.addListener(_sync);
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _sync();
@@ -116,7 +123,11 @@ class _HomeDialState extends State<HomeDial> with SingleTickerProviderStateMixin
   void _sync() {
     final reduce = MediaQuery.maybeDisableAnimationsOf(context) ?? false;
     if (DialLook.of(widget.state).ring == DialRing.chase && !reduce) {
-      if (!_c.isAnimating) _c.repeat();
+      if (!windowFront.value) {
+        _c.stop();
+      } else if (!_c.isAnimating) {
+        _c.repeat();
+      }
     } else {
       _c.stop();
     }
@@ -124,6 +135,7 @@ class _HomeDialState extends State<HomeDial> with SingleTickerProviderStateMixin
 
   @override
   void dispose() {
+    windowFront.removeListener(_sync);
     _c.dispose();
     super.dispose();
   }

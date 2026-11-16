@@ -1,3 +1,4 @@
+import 'package:charon/core/window_host.dart' show windowFront;
 import 'package:charon/l10n/generated/app_localizations.dart';
 import 'package:charon/theme/theme.dart';
 import 'package:charon/ui/common/motion.dart';
@@ -21,6 +22,51 @@ void main() {
     final o = t.widgetList<Opacity>(find.ancestor(of: find.text(text), matching: find.byType(Opacity)));
     return o.fold(1.0, (v, e) => v * e.opacity);
   }
+
+  // The loops only run for a window that is shown and has the focus: a minimized
+  // window or one in the tray must cost nothing (docs/performance_plan.md, WP2).
+  group('out of sight', () {
+    // The runner tells the app when the window leaves the front (minimized, in the
+    // tray, or another window has the focus).
+    Future<void> front(WidgetTester t, bool inFront) async {
+      windowFront.value = inFront;
+      await t.pump();
+    }
+
+    tearDown(() => windowFront.value = true);
+
+    testWidgets('a StepLoop stops its timer when the window is hidden and goes on when it is back', (t) async {
+      final seen = <int>[];
+      await t.pumpWidget(host(StepLoop(
+        tracks: [(period: 1000, delay: 0, at: const [0.5, 1])],
+        builder: (context, ms) {
+          seen.add(ms);
+          return Text('$ms');
+        },
+      )));
+      await t.pump(const Duration(milliseconds: 500));
+      expect(seen.last, 500);
+      await front(t, false);
+      seen.clear();
+      await t.pump(const Duration(seconds: 10));
+      expect(seen, isEmpty, reason: 'no step, no rebuild, no timer while hidden');
+      expect(t.binding.hasScheduledFrame, isFalse);
+      await front(t, true);
+      await t.pump(const Duration(milliseconds: 500));
+      expect(seen.last, 1000, reason: 'it goes on from where it stopped');
+    });
+
+    testWidgets('a Pulse stops its ticker when the window is hidden', (t) async {
+      await t.pumpWidget(host(const Pulse(on: true, child: SizedBox(width: 20, height: 20))));
+      await t.pump(const Duration(milliseconds: 100));
+      expect(t.binding.transientCallbackCount, 1, reason: 'the ring is moving');
+      await front(t, false);
+      expect(t.binding.transientCallbackCount, 0, reason: 'no ticker out of sight');
+      await front(t, true);
+      await t.pump(const Duration(milliseconds: 100));
+      expect(t.binding.transientCallbackCount, 1);
+    });
+  });
 
   testWidgets('a page card rises after its stagger: 40 ms per place, 420 ms long', (t) async {
     await t.pumpWidget(host(Enter.page(index: 2, child: const Text('card'))));
