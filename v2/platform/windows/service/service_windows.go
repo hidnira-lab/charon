@@ -64,6 +64,19 @@ type Runtime struct {
 	upd        *updater.Agent
 }
 
+// serverToTry is the chosen server, else the first saved one, nil when none is saved.
+func serverToTry(cfg *charonv1.Config) *charonv1.Server {
+	for _, sv := range cfg.GetServers() {
+		if sv.GetId() == cfg.GetChosenServerId() {
+			return sv
+		}
+	}
+	if all := cfg.GetServers(); len(all) > 0 {
+		return all[0]
+	}
+	return nil
+}
+
 // NewRuntime constructs and wires the service Runtime from opts.
 func NewRuntime(opts Options) (*Runtime, error) {
 	if opts.DataDir == "" {
@@ -108,6 +121,11 @@ func NewRuntime(opts Options) (*Runtime, error) {
 	}
 
 	xrayPath := filepath.Join(opts.ProgramDir, "xray.exe")
+	// A core update changes xray.exe while the service lives and across restarts, so the
+	// version is what the binary says. The compiled in one is only the fallback.
+	if v := supervisor.XrayVersion(xrayPath); v != "" {
+		opts.XrayVersion = v
+	}
 	gate := wfp.NewGate(opts.WFPEngine, xrayPath)
 	gate.SetTUNLookup(xrayconfig.DefaultTUNName, wfp.LuidByName)
 	reconcileErr := gate.ReconcileOnBoot(saved.Connected)
@@ -191,10 +209,47 @@ func NewRuntime(opts Options) (*Runtime, error) {
 	rt.drv = drv
 
 	upAgent, err := updater.New(updater.Config{
-		DataDir:            opts.DataDir,
+		DataDir: opts.DataDir,
+		// The core that runs is the xray.exe of the program folder, so that is the one to swap.
+		BinDir:             opts.ProgramDir,
 		CurrentAppVersion:  opts.ServiceVersion,
 		CurrentCoreVersion: opts.XrayVersion,
-		ManifestBaseURL:    updater.ManifestBaseURL(os.Getenv("CHARON_MANIFEST_BASE_URL")),
+		CoreVersionOf:      supervisor.XrayVersion,
+		OnCoreVersion:      pipeSrv.SetXrayVersion,
+		// A new core is accepted only when it takes every saved config (xray run -test),
+		// and, once swapped in, only when it passes the handshake against the chosen server.
+		ValidateCoreOnConfigs: func(candidate string) error {
+			cfg := drv.Config()
+			err := supervisor.TestSavedConfigs(candidate, cfg, xrayconfig.Options{SocksPort: opts.SocksPort})
+			if err == nil {
+				coreLogs.Append(charonv1.LogLevel_LOG_LEVEL_INFO,
+					fmt.Sprintf("update: the new core takes all %d saved configs", len(cfg.GetServers())), clock.NowMs())
+			}
+			return err
+		},
+		ProbeCoreHandshake: func(candidate string) error {
+			cfg := drv.Config()
+			sv := serverToTry(cfg)
+			if sv == nil {
+				coreLogs.Append(charonv1.LogLevel_LOG_LEVEL_INFO, "update: no saved server, so the handshake of the new core was not tried", clock.NowMs())
+				return nil
+			}
+			ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+			defer cancel()
+			err := supervisor.ProbeHandshake(ctx, candidate, sv, cfg, verify.Options{
+				EgressURL: opts.EgressURL,
+				Log: func(msg string) {
+					coreLogs.Append(charonv1.LogLevel_LOG_LEVEL_WARN, msg, clock.NowMs())
+				},
+			})
+			if err != nil {
+				coreLogs.Append(charonv1.LogLevel_LOG_LEVEL_WARN, "update: the new core failed the handshake, the old one is put back ("+err.Error()+")", clock.NowMs())
+			} else {
+				coreLogs.Append(charonv1.LogLevel_LOG_LEVEL_INFO, "update: the new core passed the handshake", clock.NowMs())
+			}
+			return err
+		},
+		ManifestBaseURL: updater.ManifestBaseURL(os.Getenv("CHARON_MANIFEST_BASE_URL")),
 		IsTunnelIdle: func() bool {
 			return drv.Status().GetPhase() == charonv1.Phase_PHASE_IDLE
 		},
