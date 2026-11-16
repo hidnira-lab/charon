@@ -165,6 +165,37 @@ func TestServer_OversizedFrameMaxClientsAndCommands(t *testing.T) {
 	}
 }
 
+// The version of the core can change while the service runs (a core update), and Hello
+// must say the one that runs now, not the one the service started with.
+func TestServer_HelloReportsTheCoreVersionAfterASwap(t *testing.T) {
+	mySID, err := CurrentProcessUserSID()
+	if err != nil {
+		t.Fatal(err)
+	}
+	pipeName := fmt.Sprintf(`\\.\pipe\charon-test-core-%d`, time.Now().UnixNano())
+	ln, err := ListenNamedPipe(pipeName, mySID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer ln.Close()
+
+	srv := NewServer(Config{ServiceVersion: "0.1.0", XrayVersion: "26.3.27", PingEvery: 10 * time.Second})
+	defer srv.Close()
+	go func() { _ = srv.Serve(ln) }()
+
+	c1 := dialPipe(t, pipeName)
+	defer c1.Close()
+	if v := doHandshake(t, c1).GetXrayVersion(); v != "26.3.27" {
+		t.Fatalf("Hello says core %q, want 26.3.27", v)
+	}
+	srv.SetXrayVersion("26.4.0")
+	c2 := dialPipe(t, pipeName)
+	defer c2.Close()
+	if v := doHandshake(t, c2).GetXrayVersion(); v != "26.4.0" {
+		t.Fatalf("Hello says core %q after the swap, want 26.4.0", v)
+	}
+}
+
 func TestServer_NoCommonProtocolNamesItsOwnVersionAndCloses(t *testing.T) {
 	mySID, err := CurrentProcessUserSID()
 	if err != nil {

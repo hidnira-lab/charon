@@ -64,6 +64,8 @@ type Server struct {
 	mu      sync.Mutex
 	clients map[*clientSession]struct{}
 	closed  bool
+
+	verMu sync.Mutex // guards cfg.XrayVersion, which a core update changes while the service runs
 }
 
 type clientSession struct {
@@ -111,6 +113,20 @@ func (s *Server) SetDriver(drv *driver.Driver) {
 	s.cmdMu.Lock()
 	s.cfg.Driver = drv
 	s.cmdMu.Unlock()
+}
+
+// SetXrayVersion sets the core version that Hello and the diagnostics report, after a
+// core update or a rollback.
+func (s *Server) SetXrayVersion(v string) {
+	s.verMu.Lock()
+	s.cfg.XrayVersion = v
+	s.verMu.Unlock()
+}
+
+func (s *Server) xrayVersion() string {
+	s.verMu.Lock()
+	defer s.verMu.Unlock()
+	return s.cfg.XrayVersion
 }
 
 // SetUpdater binds the UpdateHandler to the Server.
@@ -222,7 +238,7 @@ func (s *Server) handleConn(conn net.Conn) {
 		Payload: &charonv1.Envelope_HelloAck{HelloAck: &charonv1.HelloAck{
 			ProtocolVersion: chosen,
 			ServiceVersion:  s.cfg.ServiceVersion,
-			XrayVersion:     s.cfg.XrayVersion,
+			XrayVersion:     s.xrayVersion(),
 			ConfigVersion:   cfgVer,
 			Status:          status,
 		}},
@@ -315,7 +331,7 @@ func (s *Server) executeCommand(c *clientSession, cmd *charonv1.Command) *charon
 		}
 		raw, err := diag.Build(diag.Input{
 			ServiceVersion: s.cfg.ServiceVersion,
-			XrayVersion:    s.cfg.XrayVersion,
+			XrayVersion:    s.xrayVersion(),
 			NowMs:          s.cfg.NowMs(),
 			Status:         st,
 			Config:         cfg,
