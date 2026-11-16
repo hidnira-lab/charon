@@ -9,6 +9,7 @@
 
       .\perf-window.ps1 -Build      build the release first (a few minutes), then measure
       .\perf-window.ps1             measure the build that is there
+      .\perf-window.ps1 -Exe X.exe  measure another build (a copy of the Release folder)
       .\perf-window.ps1 -Runs 3     three runs, the table shows each, the verdict uses the median
       .\perf-window.ps1 -Unfocused the visible sample is taken with another window (a bare form) in
                                     front, to see what the loops cost when they should be still
@@ -27,6 +28,7 @@ param(
     [string]$App = (Join-Path $PSScriptRoot '..\app'),
     [string]$Flutter = 'C:\flutter\bin\flutter.bat',
     [string]$Stage = 'D:\charon-m2-test',
+    [string]$Exe,
     [switch]$Build,
     [switch]$Unfocused,
     [int]$Runs = 1,
@@ -64,7 +66,7 @@ if ($Build) {
     try { & $Flutter build windows --release 2>&1 | Select-String -Pattern 'Built|error' | Select-Object -Last 3 }
     finally { Pop-Location }
 }
-$exe = Join-Path $App 'build\windows\x64\runner\Release\charon.exe'
+$exe = if ($Exe) { $Exe } else { Join-Path $App 'build\windows\x64\runner\Release\charon.exe' }
 if (-not (Test-Path $exe)) { throw "No release build at $exe. Run with -Build." }
 if (Get-Process -Name charon -ErrorAction SilentlyContinue) { throw 'A Charon window is already running. Quit it first (the second launch would only hand over to it).' }
 
