@@ -65,7 +65,11 @@ try {
 Write-Host "==> Building Windows service and emergency release tool..."
 Push-Location (Join-Path $v2Root "platform\windows")
 try {
-    go build -trimpath -ldflags "-s -w" -o (Join-Path $stageWin "charon-service.exe") ./cmd/charon-service
+    # The service says its own version in Hello and compares it with the manifest, so the
+    # release version goes into the binary, or an installed 0.2.0 would still say 0.1.0 and
+    # be offered the same update again. The Xray version is only the fallback when xray.exe
+    # cannot be asked.
+    go build -trimpath -ldflags "-s -w -X main.serviceVersion=$Version -X main.xrayVersion=$XrayVersion" -o (Join-Path $stageWin "charon-service.exe") ./cmd/charon-service
     Assert-Ok "go build charon-service"
     go build -trimpath -ldflags "-s -w" -o (Join-Path $stageWin "charon-release.exe") ./cmd/charon-release
     Assert-Ok "go build charon-release"
