@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:ui' as ui;
 
 import 'package:flutter/widgets.dart';
 
@@ -302,45 +303,128 @@ List<SceneRect> sceneRects(SceneTime time) {
 }
 
 /// The scene of the Home card, 558 x 366 pixels (93 x 61 cells of 6), with its
-/// stepped loops running.
+/// stepped loops running. About 1400 rects make it and about 30 move. A draw call
+/// costs a lot on an integrated GPU (the whole scene took 34 ms of every frame), so
+/// each run of rects that stand still, in the order the scene draws them, is one
+/// layer the engine keeps as a texture, and a step draws only the moving rects.
 class HomeScene extends StatelessWidget {
   const HomeScene({super.key, required this.time});
 
   final SceneTime time;
 
+  static const _size = Size(sceneWidth * sceneCell, sceneHeight * sceneCell);
+
   @override
-  Widget build(BuildContext context) => ExcludeSemantics(
-        child: StepLoop(
-          tracks: sceneTracks,
-          builder: (context, ms) => CustomPaint(
-            size: const Size(sceneWidth * sceneCell, sceneHeight * sceneCell),
-            painter: _ScenePainter(time, ms),
-          ),
+  Widget build(BuildContext context) {
+    final parts = _sceneParts(time);
+    return ExcludeSemantics(
+      child: StepLoop(
+        tracks: sceneTracks,
+        builder: (context, ms) => Stack(
+          children: [
+            for (final part in parts)
+              if (part is ui.Picture)
+                RepaintBoundary(child: CustomPaint(size: _size, isComplex: true, painter: _StillPainter(part)))
+              else
+                CustomPaint(size: _size, painter: _MovingPainter(part as List<SceneRect>, ms)),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }
 
-class _ScenePainter extends CustomPainter {
-  _ScenePainter(this.time, this.ms) : rects = _cache[time] ??= sceneRects(time);
+/// The painter of one frame of the scene [ms] into its loops, for tests.
+@visibleForTesting
+CustomPainter sceneFramePainter(SceneTime time, int ms) => _FramePainter(_sceneParts(time), ms);
 
-  static final _cache = <SceneTime, List<SceneRect>>{};
+Rect _box(SceneRect r, double dx) =>
+    Rect.fromLTWH(r.x * sceneCell + dx, r.y * sceneCell, r.w * sceneCell, r.h * sceneCell + (r.w >= 6 ? 1 : 0));
 
-  final SceneTime time;
+final _partsCache = <SceneTime, List<Object>>{};
+
+/// The scene in drawing order: a run of rects that never move is one recorded
+/// [ui.Picture], a run of moving rects is a list. Runs keep the order of the rects,
+/// so what is drawn over what does not change.
+List<Object> _sceneParts(SceneTime time) => _partsCache[time] ??= _split(sceneRects(time));
+
+List<Object> _split(List<SceneRect> rects) {
+  final parts = <Object>[];
+  var i = 0;
+  while (i < rects.length) {
+    final still = rects[i].anim == SceneAnim.none;
+    var j = i;
+    while (j < rects.length && (rects[j].anim == SceneAnim.none) == still) {
+      j++;
+    }
+    final run = rects.sublist(i, j);
+    if (still) {
+      final recorder = ui.PictureRecorder();
+      final canvas = Canvas(recorder);
+      final paint = Paint()..isAntiAlias = false;
+      for (final r in run) {
+        canvas.drawRect(_box(r, 0), paint..color = r.color);
+      }
+      parts.add(recorder.endRecording());
+    } else {
+      parts.add(run);
+    }
+    i = j;
+  }
+  return parts;
+}
+
+void _paintMoving(Canvas canvas, List<SceneRect> run, int ms) {
+  final paint = Paint()..isAntiAlias = false;
+  for (final r in run) {
+    final (dx, opacity) = sceneLook(r.anim, ms);
+    canvas.drawRect(_box(r, dx), paint..color = opacity == 1 ? r.color : r.color.withValues(alpha: opacity));
+  }
+}
+
+class _StillPainter extends CustomPainter {
+  _StillPainter(this.picture);
+
+  final ui.Picture picture;
+
+  @override
+  void paint(Canvas canvas, Size size) => canvas.drawPicture(picture);
+
+  @override
+  bool shouldRepaint(_StillPainter old) => old.picture != picture;
+}
+
+class _MovingPainter extends CustomPainter {
+  _MovingPainter(this.run, this.ms);
+
+  final List<SceneRect> run;
   final int ms;
-  final List<SceneRect> rects;
+
+  @override
+  void paint(Canvas canvas, Size size) => _paintMoving(canvas, run, ms);
+
+  @override
+  bool shouldRepaint(_MovingPainter old) => old.run != run || old.ms != ms;
+}
+
+/// Every part in order on one canvas, the picture of the scene at [ms].
+class _FramePainter extends CustomPainter {
+  _FramePainter(this.parts, this.ms);
+
+  final List<Object> parts;
+  final int ms;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..isAntiAlias = false;
-    for (final r in rects) {
-      final (dx, opacity) = sceneLook(r.anim, ms);
-      canvas.drawRect(
-        Rect.fromLTWH(r.x * sceneCell + dx, r.y * sceneCell, r.w * sceneCell, r.h * sceneCell + (r.w >= 6 ? 1 : 0)),
-        paint..color = opacity == 1 ? r.color : r.color.withValues(alpha: opacity),
-      );
+    for (final part in parts) {
+      if (part is ui.Picture) {
+        canvas.drawPicture(part);
+      } else {
+        _paintMoving(canvas, part as List<SceneRect>, ms);
+      }
     }
   }
 
   @override
-  bool shouldRepaint(_ScenePainter old) => old.time != time || old.ms != ms;
+  bool shouldRepaint(_FramePainter old) => old.parts != parts || old.ms != ms;
 }

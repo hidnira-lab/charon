@@ -67,7 +67,7 @@ class PageBackdrop extends StatelessWidget {
 typedef AmbientLight = ({int w, int h, int x, int y, Color color});
 
 /// The window colour and [lights] under [child]. The light breathes (amb): 11 s
-/// each way, in quarter second steps so the glass above is not blurred again on
+/// each way, in steps of a second so the glass above is not blurred again on
 /// every frame, growing around [origin] (fractions of the window). Under reduced
 /// motion it rests at full strength, as the board's does.
 class AmbientLayer extends StatelessWidget {
@@ -96,8 +96,11 @@ class AmbientLayer extends StatelessWidget {
   }
 }
 
-/// The stepped clock of the breathing light: a 22 s loop, a step every 250 ms.
-final StepTrack ambientBreath = (period: 22000, delay: 0, at: [for (var k = 1; k <= 88; k++) k / 88]);
+/// The stepped clock of the breathing light: a 22 s loop, a step every second. Each
+/// step is a frame, and on an integrated GPU a frame is dear, so the steps are as few
+/// as the eye cannot tell: between two of them the light changes by at most three of
+/// 255 levels at any pixel (two to three with a step every 250 ms, measured).
+final StepTrack ambientBreath = (period: 22000, delay: 0, at: [for (var k = 1; k <= 22; k++) k / 22]);
 
 /// How far the light has breathed in at [ms], 0 to 1: 11 s in, 11 s out, eased.
 double ambientBreathAt(int ms) {
