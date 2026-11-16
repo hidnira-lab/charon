@@ -96,6 +96,7 @@ type Options struct {
 	DNSServer     string // defaults to DefaultDNSResolver ("1.1.1.1")
 	TUNName       string // defaults to DefaultTUNName ("charon0")
 	SocksPort     uint16 // optional local loopback SOCKS5 port for tunnel verification
+	NoTUN         bool   // leave the TUN inbound out (needs SocksPort): a core that is only tried, nothing of the machine changes
 	StatsPort     uint16 // optional local loopback API port for StatsService byte counters
 	AllowAppRules bool   // true on Android where VpnService handles per-application rules
 	OutboundBy    map[charonv1.Protocol]OutboundBuilder
@@ -115,6 +116,9 @@ func Build(server *charonv1.Server, cfg *charonv1.Config, opts Options) ([]byte,
 	}
 	if cfg == nil {
 		return nil, fmt.Errorf("config is nil")
+	}
+	if opts.NoTUN && opts.SocksPort == 0 {
+		return nil, fmt.Errorf("NoTUN needs a SOCKS port, or Xray has no inbound")
 	}
 	if errs := ValidateConfig(cfg, opts.AllowAppRules); len(errs) > 0 {
 		return nil, fmt.Errorf("invalid config at %s: %s", errs[0].GetPath(), errs[0].GetMessageKey())
@@ -196,6 +200,10 @@ func Build(server *charonv1.Server, cfg *charonv1.Config, opts Options) ([]byte,
 				"routeOnly":    true,
 			},
 		},
+	}
+
+	if opts.NoTUN {
+		inbounds = nil
 	}
 
 	if opts.SocksPort > 0 {

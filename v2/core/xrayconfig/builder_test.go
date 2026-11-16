@@ -230,6 +230,31 @@ func TestTUNInboundRoutesEverythingAndKeepsXrayOut(t *testing.T) {
 	}
 }
 
+// A core that is tried before it is kept runs with the SOCKS inbound only: no adapter,
+// no routes, no WFP filters, so nothing of the machine changes while it is tried.
+func TestNoTUNLeavesOnlyTheSocksInbound(t *testing.T) {
+	cfg := sampleConfig()
+	raw, err := Build(cfg.GetServers()[0], cfg, Options{NoTUN: true, SocksPort: 19090})
+	if err != nil {
+		t.Fatal(err)
+	}
+	var root struct {
+		Inbounds []struct {
+			Protocol string `json:"protocol"`
+			Port     int    `json:"port"`
+		} `json:"inbounds"`
+	}
+	if err := json.Unmarshal(raw, &root); err != nil {
+		t.Fatal(err)
+	}
+	if len(root.Inbounds) != 1 || root.Inbounds[0].Protocol != "socks" || root.Inbounds[0].Port != 19090 {
+		t.Fatalf("inbounds = %+v, want only socks on 19090", root.Inbounds)
+	}
+	if _, err := Build(cfg.GetServers()[0], cfg, Options{NoTUN: true}); err == nil {
+		t.Fatal("NoTUN without a SOCKS port leaves Xray with no inbound, want an error")
+	}
+}
+
 // IPv6 goes into the TUN only when something needs it: an IPv6 server, or an IPv6
 // resolver (Xray refuses to start when a DNS server is not covered by a route).
 // Without it, the "misconfigtun" filters of Xray are what keeps IPv6 from leaking.
