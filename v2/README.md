@@ -61,22 +61,26 @@ flutter test
 
 ### 3. Packaging a Release Locally
 
+You need Go, Flutter and [Inno Setup 6](https://jrsoftware.org/isinfo.php) (`winget install JRSoftware.InnoSetup`).
+
 ```powershell
-pwsh -NoProfile -File v2/scripts/package-release.ps1 -Version "0.1.0" -Sequence 1
+powershell -NoProfile -File v2/scripts/package-release.ps1 -Version "0.1.0" -Sequence 1
 ```
+
+The script downloads the pinned Xray core and wintun and checks their SHA-256 digests, builds the service, the window and the installer, and writes everything to `v2/dist/`: `Charon-Setup-<version>.exe`, `xray-windows-amd64.exe`, the sync server binaries and an unsigned `manifest.json`. Add `-SkipFlutter` to test the packaging without building the window.
 
 ## Offline Release Signing Flow
 
 Charon never stores its Ed25519 release signing key in CI secrets:
 
-1. Push a version tag (`v0.1.0`) to trigger `.github/workflows/release.yml`, which builds the artifacts and creates a **draft** GitHub Release containing an unsigned `manifest.json` and `.charonup` manual update bundles.
-2. Download `manifest.json` from the draft release, verify the artifact SHA-256 digests locally, and sign it with your offline key:
+1. Push a version tag (`v0.1.0`) to trigger `.github/workflows/release.yml`, which builds the artifacts and creates a **draft** GitHub Release containing the installer, the Xray core, the sync server binaries and an unsigned `manifest.json`.
+2. Download `manifest.json` from the draft release, check its SHA-256 digests against the files of the release, and sign it with your offline key (run it from `v2/core`):
    ```powershell
-   go run ./core/cmd/charon-sign sign -key charon-release.sec -manifest dist/v0.1.0/manifest.json
+   go run ./cmd/charon-sign sign -key charon-release.key -in manifest.json
    ```
-3. Verify the signature with the embedded public key, upload `manifest.json.sig` to the draft release, and publish:
+3. Verify the signature, upload the resulting `manifest.json.sig` to the draft release, and publish:
    ```powershell
-   go run ./core/cmd/charon-sign verify -manifest dist/v0.1.0/manifest.json -sig dist/v0.1.0/manifest.json.sig
+   go run ./cmd/charon-sign verify -in manifest.json -sig manifest.json.sig
    ```
 
 ## Note on Windows SmartScreen
