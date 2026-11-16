@@ -55,6 +55,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
 
   flutter::DartProject project(L"data");
 
+  // Skia, not Impeller. On Windows Impeller draws through OpenGL ES, and on an
+  // integrated GPU that holds about 1.5 GB of memory for an idle window (310 MB
+  // with Skia, measured on a release build; docs/performance_plan.md, T1). The
+  // environment switch does not work in a release build, this call does. A Flutter
+  // upgrade must measure this again, the opt out may go away.
+  project.set_impeller_switch(flutter::ImpellerSwitch::Disabled);
+
   std::vector<std::string> command_line_arguments =
       GetCommandLineArguments();
 
