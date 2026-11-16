@@ -50,6 +50,13 @@ jobs:
           go test -race ./...
           Pop-Location
 
+      - name: Install Inno Setup when the runner image does not have it
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe") -and -not (Get-Command iscc -ErrorAction SilentlyContinue)) {
+            choco install innosetup --no-progress -y
+          }
+
       - name: Package release artifacts and unsigned manifest.json
         shell: pwsh
         run: |
@@ -70,7 +77,8 @@ jobs:
           draft: true
           generate_release_notes: true
           files: |
-            v2/dist/charon-windows-amd64.zip
+            v2/dist/Charon-Setup-*.exe
+            v2/dist/xray-windows-amd64.exe
             v2/dist/charonsync-windows-amd64.exe
             v2/dist/charonsync-linux-amd64
             v2/dist/manifest.json
