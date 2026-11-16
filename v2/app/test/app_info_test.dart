@@ -31,6 +31,16 @@ void main() {
     expect(AppLocalizationsZh().settingsServiceLineRunning('0.2.0'), '运行中 · v0.2.0 · 随 Windows 启动');
   });
 
+  // The License row of the app opens v2/LICENSE on GitHub. That file was once a cut down copy
+  // of the GPLv3 (10 KB of 35 KB), so the page the person was sent to was not the licence.
+  test('the LICENSE the app links to holds the whole GPLv3, as the one at the root does', () {
+    String read(String path) => File(path).readAsStringSync().replaceAll('\r\n', '\n');
+    final root = read('../../LICENSE');
+    expect(root, contains('END OF TERMS AND CONDITIONS'));
+    expect(root, contains('How to Apply These Terms to Your New Programs'));
+    expect(read('../LICENSE').startsWith(root.trimRight()), isTrue);
+  });
+
   test('About names the handle and the pinned xray in all three languages, as the board does', () {
     expect(AppLocalizationsEn().settingsAboutBy(xrayPinnedVersion), 'by @hidnira · xray v26.10.31');
     expect(AppLocalizationsId().settingsAboutBy(xrayPinnedVersion), 'oleh @hidnira · xray v26.10.31');
