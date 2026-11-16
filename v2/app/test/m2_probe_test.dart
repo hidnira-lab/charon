@@ -5,7 +5,8 @@
 //   $env:CHARON_PROBE = 'hello'; flutter test test/m2_probe_test.dart
 //   CHARON_PROBE values: hello | repair | elevate C:\path\program.exe [-- args] | killswitch on | killswitch off | dns 9.9.9.9 | dns none | rule check off (check,
 //   download, keep; on or off) | connect (waits for Up, or says why not) |
-//   disconnect | watch 20 (prints changes for 20 s)
+//   disconnect | watch 20 (prints changes for 20 s) | updatecheck | rollbackcore |
+//   updatecore | updateapp (whole update paths in one process, for m2-update-e2e.ps1)
 //
 // It speaks to the pipe as the installing user, like the app does, so it needs no
 // administrator. It prints what the service says and never prints a secret: the
@@ -19,6 +20,7 @@ import 'package:charon/core/core_client.dart';
 import 'package:charon/core/elevated.dart';
 import 'package:charon/core/transport.dart';
 import 'package:charon/state/service_supervisor.dart';
+import 'package:charon/state/staged_installer.dart';
 import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:fixnum/fixnum.dart';
 
@@ -34,6 +36,48 @@ String _config(Config c) {
       '  killSwitch=${s.killSwitch} autoReconnect=${s.autoReconnect} allowLocalNetwork=${s.allowLocalNetwork}\n'
       '  customDns=${s.customDns.isEmpty ? '(default)' : s.customDns}\n'
       '  updateRules: check=${!s.updateCheckOff} backgroundDownload=${!s.backgroundDownloadOff} keepPreviousCore=${!s.previousCoreOff}';
+}
+
+String _upd(UpdateState s) =>
+    '${s.kind.name.replaceFirst('UPDATE_KIND_', '')} stage=${s.stage.name} failure=${s.failureKey.isEmpty ? '-' : s.failureKey} '
+    'current=${s.currentVersion.isEmpty ? '-' : s.currentVersion} new=${s.newVersion.isEmpty ? '-' : s.newVersion}';
+
+/// Connects and waits for Up (true), or for Blocked or 60 s (false).
+Future<bool> _connectAndWaitUp(CoreClient client) async {
+  final up = Completer<bool>();
+  final sub = client.events.listen((e) {
+    if (!e.hasStatusChanged() || up.isCompleted) return;
+    final p = e.statusChanged.phase;
+    if (p == Phase.PHASE_UP) up.complete(true);
+    if (p == Phase.PHASE_BLOCKED) up.complete(false);
+  });
+  await client.connect();
+  final ok = await up.future.timeout(const Duration(seconds: 60), onTimeout: () => false);
+  await sub.cancel();
+  return ok;
+}
+
+/// Disconnects and waits for the phase to be Idle again (at most 20 s), the moment the
+/// service starts a queued update.
+Future<void> _disconnectAndWaitIdle(CoreClient client) async {
+  final idle = Completer<void>();
+  final sub = client.events.listen((e) {
+    if (e.hasStatusChanged() && e.statusChanged.phase == Phase.PHASE_IDLE && !idle.isCompleted) idle.complete();
+  });
+  await client.disconnect();
+  await idle.future.timeout(const Duration(seconds: 20), onTimeout: () {});
+  await sub.cancel();
+}
+
+/// The state of [kind] once its stage is one of [want], or null after [seconds].
+Future<UpdateState?> _waitStage(Map<UpdateKind, UpdateState> stages, UpdateKind kind, Set<UpdateStage> want, int seconds) async {
+  final end = DateTime.now().add(Duration(seconds: seconds));
+  while (DateTime.now().isBefore(end)) {
+    final s = stages[kind];
+    if (s != null && want.contains(s.stage)) return s;
+    await Future<void>.delayed(const Duration(milliseconds: 500));
+  }
+  return null;
 }
 
 Future<Config> _getConfig(CoreClient c) async {
@@ -178,6 +222,91 @@ Future<void> run(List<String> args) async {
       await Future<void>.delayed(const Duration(seconds: 3));
       await sub.cancel();
       stdout.writeln('after: $last');
+    case 'updatecheck':
+      // "Check now": prints what the service says about the core and the app.
+      final seenU = <UpdateKind, UpdateState>{};
+      final subU = client.events.listen((e) {
+        if (e.hasUpdateState()) seenU[e.updateState.kind] = e.updateState;
+      });
+      final chk = await client.checkUpdate();
+      await Future<void>.delayed(const Duration(seconds: 2));
+      await subU.cancel();
+      if (chk.hasError()) stdout.writeln('E2E check ERROR ${chk.error.code.name} ${chk.error.messageKey}');
+      for (final s in seenU.values) {
+        stdout.writeln('E2E check ${_upd(s)}');
+      }
+    case 'updatecore':
+      // The whole path of a core update in ONE process, so no event is missed between two
+      // runs: connect, check, wait for the background download (it only runs while the
+      // tunnel is up), Apply now (the tunnel is up, so the swap must be queued), disconnect,
+      // and wait for the end of the swap. Prints "E2E ..." lines for the test script.
+      final stages = <UpdateKind, UpdateState>{};
+      final subC = client.events.listen((e) {
+        if (!e.hasUpdateState()) return;
+        stages[e.updateState.kind] = e.updateState;
+        stdout.writeln('  ${DateTime.now().toIso8601String().substring(11, 19)}  update ${_upd(e.updateState)}');
+      });
+      final upC = await _connectAndWaitUp(client);
+      stdout.writeln('E2E up=$upC');
+      if (upC) {
+        final r = await client.checkUpdate();
+        stdout.writeln('E2E check ${r.hasError() ? r.error.messageKey : _upd(r.updateState)}');
+        final ready = await _waitStage(stages, UpdateKind.UPDATE_KIND_CORE,
+            {UpdateStage.UPDATE_READY, UpdateStage.UPDATE_CANNOT_CHECK, UpdateStage.UPDATE_UP_TO_DATE}, 150);
+        stdout.writeln('E2E core-before-apply ${ready == null ? 'NO RESULT IN 150 s' : _upd(ready)}');
+        if (ready?.stage == UpdateStage.UPDATE_READY) {
+          final ap = await client.applyUpdate(UpdateKind.UPDATE_KIND_CORE, ApplyWhen.APPLY_NOW);
+          stdout.writeln('E2E apply-while-up ${ap.hasError() ? ap.error.messageKey : _upd(ap.updateState)}');
+        }
+      }
+      // Idle again whatever happened above, so a queued swap runs.
+      await _disconnectAndWaitIdle(client);
+      if (upC) {
+        final end = await _waitStage(stages, UpdateKind.UPDATE_KIND_CORE,
+            {UpdateStage.UPDATE_UPDATED, UpdateStage.UPDATE_ROLLED_BACK, UpdateStage.UPDATE_CANNOT_CHECK}, 120);
+        stdout.writeln('E2E core-end ${end == null ? 'NO RESULT IN 120 s' : _upd(end)}');
+      }
+      await subC.cancel();
+    case 'updateapp':
+      // The path of the Install button of the window, in one process: connect, check, wait
+      // for the background download of the installer, disconnect, Apply now, and then what the
+      // window does with the answer: only an installer directly inside the staging folder is
+      // started, with runElevated (in an administrator shell there is no prompt).
+      final stagesA = <UpdateKind, UpdateState>{};
+      final subA = client.events.listen((e) {
+        if (!e.hasUpdateState()) return;
+        stagesA[e.updateState.kind] = e.updateState;
+        stdout.writeln('  ${DateTime.now().toIso8601String().substring(11, 19)}  update ${_upd(e.updateState)}');
+      });
+      final upA = await _connectAndWaitUp(client);
+      stdout.writeln('E2E up=$upA');
+      if (upA) {
+        final r = await client.checkUpdate();
+        stdout.writeln('E2E check ${r.hasError() ? r.error.messageKey : _upd(r.updateState)}');
+        final ready = await _waitStage(stagesA, UpdateKind.UPDATE_KIND_APP,
+            {UpdateStage.UPDATE_READY, UpdateStage.UPDATE_CANNOT_CHECK, UpdateStage.UPDATE_UP_TO_DATE}, 150);
+        stdout.writeln('E2E app-before-apply ${ready == null ? 'NO RESULT IN 150 s' : _upd(ready)}');
+        await _disconnectAndWaitIdle(client);
+        if (ready?.stage == UpdateStage.UPDATE_READY) {
+          final ap = await client.applyUpdate(UpdateKind.UPDATE_KIND_APP, ApplyWhen.APPLY_NOW);
+          final st = ap.hasUpdateState() ? ap.updateState : null;
+          stdout.writeln('E2E apply-app ${ap.hasError() ? ap.error.messageKey : _upd(st!)}');
+          if (st != null && st.stage == UpdateStage.UPDATE_APPLYING && st.stagedInstaller.isNotEmpty) {
+            final inside = isStagedInstaller(st.stagedInstaller, defaultStagingDir);
+            stdout.writeln('E2E installer-in-staging=$inside');
+            if (inside) {
+              final code = await runElevated(st.stagedInstaller, const ['/SILENT']);
+              stdout.writeln('E2E installer exit=$code');
+            }
+          }
+        }
+      } else {
+        await _disconnectAndWaitIdle(client);
+      }
+      await subA.cancel();
+    case 'rollbackcore':
+      final rb = await client.rollbackCore();
+      stdout.writeln('E2E rollback ${rb.hasError() ? rb.error.messageKey : _upd(rb.updateState)}');
     case 'logs':
       // What the service wrote in its own log (it keeps the last lines in memory), so a
       // connect that failed can say why. The core log never holds a destination.
@@ -208,12 +337,15 @@ Future<void> run(List<String> args) async {
     default:
       stdout.writeln('unknown command $cmd');
   }
-  await client.close();
+  // After an app update the service was restarted, so the pipe may be gone already.
+  try {
+    await client.close();
+  } catch (_) {}
 }
 
 void main() {
   final probe = Platform.environment['CHARON_PROBE'];
   test('M2 probe: ${probe ?? '(not set)'}', () async {
     await run(probe!.trim().split(RegExp(r'\s+')));
-  }, skip: probe == null || probe.trim().isEmpty ? 'set CHARON_PROBE to run it against the service' : false, timeout: const Timeout(Duration(minutes: 3)));
+  }, skip: probe == null || probe.trim().isEmpty ? 'set CHARON_PROBE to run it against the service' : false, timeout: const Timeout(Duration(minutes: 8)));
 }
