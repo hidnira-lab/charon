@@ -8,6 +8,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/hidnira-lab/charon/core/xrayconfig"
 	"github.com/hidnira-lab/charon/platform/windows/verify"
 )
 
@@ -36,6 +37,21 @@ func TestXrayVersionOfRealBinary(t *testing.T) {
 	}
 	if got := XrayVersion(path); got == "" {
 		t.Fatalf("XrayVersion(%s) is empty, the output of `xray version` was not understood", path)
+	}
+}
+
+// The config the service really runs (with the TUN inbound) must be taken by the core: this
+// is the test a core update makes on every saved server. Run it against a core before
+// pinning it or before using it as the start of an update test.
+func TestSavedConfigsAreAcceptedByTheRealCore(t *testing.T) {
+	path := os.Getenv("CHARON_TEST_XRAY")
+	if path == "" {
+		t.Skip("set CHARON_TEST_XRAY to the path of an xray.exe")
+	}
+	cfg := sampleCfg()
+	cfg.GetServers()[0].Reality.PublicKey = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+	if err := TestSavedConfigs(path, cfg, xrayconfig.Options{SocksPort: 10808}); err != nil {
+		t.Fatal(err)
 	}
 }
 
