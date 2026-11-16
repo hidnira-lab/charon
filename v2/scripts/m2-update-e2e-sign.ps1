@@ -13,10 +13,17 @@
 param(
     [Parameter(Mandatory = $true)]
     [string]$KeyPath,
-    [string]$Dir = (Join-Path $PSScriptRoot '..\dist-e2e')
+    # The default is set below, not here: in Windows PowerShell 5.1 a script with a
+    # [Parameter()] attribute gets an EMPTY $PSScriptRoot in a default value when it runs
+    # with -File.
+    [string]$Dir = ''
 )
 
-$ErrorActionPreference = 'Stop'
+# Not 'Stop': in Windows PowerShell 5.1 the stderr of a native program that fails (a wrong
+# key makes charon-sign verify write to it) would end the script at once with a raw error,
+# instead of the FAIL line below. The exit codes are checked by hand.
+$ErrorActionPreference = 'Continue'
+if (-not $Dir) { $Dir = Join-Path $PSScriptRoot '..\dist-e2e' }
 $Dir = (Resolve-Path $Dir).Path
 $sign = Join-Path $Dir 'charon-sign.exe'
 if (-not (Test-Path $KeyPath)) { throw "No key file at $KeyPath" }
