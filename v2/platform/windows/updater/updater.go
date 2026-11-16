@@ -50,7 +50,11 @@ func ManifestBaseURL(fromEnv string) string {
 
 // Config configures the Windows service update Agent.
 type Config struct {
-	DataDir            string
+	DataDir string
+	// BinDir is the folder the service runs xray.exe from (the program folder, next to
+	// wintun.dll), where a core update swaps the file and keeps xray.prev.exe. Empty
+	// means DataDir\bin, for tests.
+	BinDir             string
 	CurrentAppVersion  string
 	CurrentCoreVersion string
 	InitialSequence    uint64
@@ -63,7 +67,15 @@ type Config struct {
 	// rules. Nil means every rule at its default (all on).
 	Settings              func() *charonv1.Settings
 	ValidateCoreOnConfigs func(candidateXrayPath string) error
-	OnUpdateState         func(*charonv1.UpdateState)
+	// ProbeCoreHandshake runs after the swap, with the core that is now in place. When it
+	// fails the old core is put back. Nil skips it (nothing to test, or a test run).
+	ProbeCoreHandshake func(xrayPath string) error
+	// CoreVersionOf reads the version of a core file, "" when it cannot. It gives the
+	// version of xray.prev.exe at start, so a rollback after a restart knows it.
+	CoreVersionOf func(path string) string
+	// OnCoreVersion is told the version of the core that runs after a swap or a rollback.
+	OnCoreVersion func(version string)
+	OnUpdateState func(*charonv1.UpdateState)
 }
 
 type uploadSession struct {
@@ -117,7 +129,10 @@ func New(cfg Config) (*Agent, error) {
 	}
 
 	stagingDir := filepath.Join(cfg.DataDir, "staging")
-	binDir := filepath.Join(cfg.DataDir, "bin")
+	binDir := cfg.BinDir
+	if binDir == "" {
+		binDir = filepath.Join(cfg.DataDir, "bin")
+	}
 	if err := os.MkdirAll(stagingDir, 0o700); err != nil {
 		return nil, err
 	}
@@ -152,6 +167,11 @@ func New(cfg Config) (*Agent, error) {
 		uploads: make(map[charonv1.UpdateKind]*uploadSession),
 	}
 	a.coreState.CurrentVersion = cfg.CurrentCoreVersion
+	if cfg.CoreVersionOf != nil {
+		if prev := filepath.Join(binDir, "xray.prev.exe"); fileExists(prev) {
+			a.prevCoreVer = cfg.CoreVersionOf(prev)
+		}
+	}
 	return a, nil
 }
 
@@ -415,8 +435,9 @@ func (a *Agent) ApplyUpdate(req *charonv1.ApplyUpdate) (*charonv1.UpdateState, *
 				MessageKey: "error.update.not_staged",
 			}
 		}
-		if req.GetWhen() == charonv1.ApplyWhen_APPLY_WHEN_DISCONNECTED &&
-			a.cfg.IsTunnelIdle != nil && !a.cfg.IsTunnelIdle() {
+		// Windows locks an xray.exe that runs, so with the tunnel up the swap waits for
+		// idle whatever the user asked for ("now" included).
+		if a.cfg.IsTunnelIdle != nil && !a.cfg.IsTunnelIdle() {
 			targetState.Stage = charonv1.UpdateStage_UPDATE_QUEUED
 			a.emitLocked(targetState)
 			return proto.Clone(targetState).(*charonv1.UpdateState), nil
@@ -493,7 +514,8 @@ func (a *Agent) applyCoreNowLocked() (*charonv1.UpdateState, *charonv1.Error) {
 	activePath := filepath.Join(a.binDir, "xray.exe")
 	prevPath := filepath.Join(a.binDir, "xray.prev.exe")
 	keepPrev := !a.settings().GetPreviousCoreOff()
-	if existing, err := os.ReadFile(activePath); err == nil && keepPrev {
+	existing, _ := os.ReadFile(activePath)
+	if existing != nil && keepPrev {
 		_ = writeFileAtomic(prevPath, existing, 0o700)
 	}
 
@@ -501,6 +523,25 @@ func (a *Agent) applyCoreNowLocked() (*charonv1.UpdateState, *charonv1.Error) {
 		return nil, &charonv1.Error{
 			Code:       charonv1.ErrorCode_ERROR_UPDATE_FAILED,
 			MessageKey: "error.update.swap_failed",
+		}
+	}
+
+	// The handshake is checked with the core that is now in place. A core that fails it is
+	// taken out again at once, without the user, and the sequence number is not used up, so
+	// the same release can be tried again. This runs under the lock of the agent, for the
+	// 15 seconds a verification may take at most.
+	if probe := a.cfg.ProbeCoreHandshake; probe != nil {
+		if err := probe(activePath); err != nil {
+			a.coreState.CurrentVersion = a.curCoreVer
+			if existing != nil && writeFileAtomic(activePath, existing, 0o700) != nil {
+				a.coreState.Stage = charonv1.UpdateStage_UPDATE_CANNOT_CHECK
+				a.coreState.FailureKey = "error.update.swap_failed"
+			} else {
+				a.coreState.Stage = charonv1.UpdateStage_UPDATE_ROLLED_BACK
+				a.coreState.FailureKey = "error.update.handshake_failed"
+			}
+			a.emitLocked(a.coreState)
+			return proto.Clone(a.coreState).(*charonv1.UpdateState), nil
 		}
 	}
 
@@ -514,7 +555,19 @@ func (a *Agent) applyCoreNowLocked() (*charonv1.UpdateState, *charonv1.Error) {
 	a.coreState.CurrentVersion = a.curCoreVer
 	a.coreState.FailureKey = ""
 	a.emitLocked(a.coreState)
+	a.coreVersionChangedLocked()
 	return proto.Clone(a.coreState).(*charonv1.UpdateState), nil
+}
+
+func (a *Agent) coreVersionChangedLocked() {
+	if a.cfg.OnCoreVersion != nil {
+		a.cfg.OnCoreVersion(a.curCoreVer)
+	}
+}
+
+func fileExists(path string) bool {
+	_, err := os.Stat(path)
+	return err == nil
 }
 
 // RollbackCore restores xray.prev.exe to xray.exe (local rollback, section 4).
@@ -546,6 +599,7 @@ func (a *Agent) RollbackCore() (*charonv1.UpdateState, *charonv1.Error) {
 	a.coreState.CurrentVersion = a.curCoreVer
 	a.coreState.FailureKey = ""
 	a.emitLocked(a.coreState)
+	a.coreVersionChangedLocked()
 	return proto.Clone(a.coreState).(*charonv1.UpdateState), nil
 }
 
