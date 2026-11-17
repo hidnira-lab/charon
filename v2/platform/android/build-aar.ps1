@@ -17,6 +17,11 @@ if (-not (Test-Path $OutDir)) {
     New-Item -ItemType Directory -Path $OutDir -Force | Out-Null
 }
 
+if (-not $env:ANDROID_NDK_HOME -and $env:ANDROID_HOME) {
+    $ndk = Get-ChildItem (Join-Path $env:ANDROID_HOME "ndk") -Directory -ErrorAction SilentlyContinue | Sort-Object Name | Select-Object -First 1
+    if ($ndk) { $env:ANDROID_NDK_HOME = $ndk.FullName }
+}
+
 if (-not (Get-Command gomobile -ErrorAction SilentlyContinue)) {
     Write-Host "==> Installing gomobile & gobind..."
     go install golang.org/x/mobile/cmd/gomobile@latest
@@ -27,7 +32,12 @@ if (-not (Get-Command gomobile -ErrorAction SilentlyContinue)) {
 Push-Location $AndroidRoot
 try {
     Write-Host "==> Building charoncore.aar for $Target (API $AndroidApi)..."
-    & gomobile bind -v -target=$Target -androidapi $AndroidApi -javapkg=app.charon.bridge -o $OutFile ./bridge
+    # -checklinkname=0: github.com/wlynxg/anet (a quic-go dependency pulled in by Xray) reaches into
+    # net.zoneCache with go:linkname, which the Go linker refuses since Go 1.23. Only that check is off.
+    # gomobile logs progress on stderr, which Windows PowerShell 5.1 turns into a terminating error
+    # under "Stop". The exit code below is the real result.
+    $ErrorActionPreference = "Continue"
+    & gomobile bind -v "-target=$Target" -androidapi $AndroidApi "-javapkg=app.charon.bridge" "-ldflags=-checklinkname=0 -s -w" -trimpath -o $OutFile ./bridge
     if ($LASTEXITCODE -ne 0) {
         throw "gomobile bind failed with exit code $LASTEXITCODE"
     }
