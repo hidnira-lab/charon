@@ -571,10 +571,11 @@ func (b *CoreBridge) sampleStatsAndLogs() {
 	if st.GetPhase() != charonv1.Phase_PHASE_UP || st.GetActiveServerId() == "" {
 		return
 	}
-	inB, outB, err := b.backend.ReadStats(st.GetActiveServerId())
+	tb, err := b.backend.ReadStats(st.GetActiveServerId())
 	if err != nil {
 		return
 	}
+	inB, outB := tb.In, tb.Out
 	uIn, uOut := uint64(0), uint64(0)
 	if inB > 0 {
 		uIn = uint64(inB)
@@ -777,6 +778,7 @@ func (r *androidTunnelRunner) Start(server *charonv1.Server, cfg *charonv1.Confi
 		TUNName:       "charon0",
 		SocksPort:     defaultSocksPort,
 		AllowAppRules: true,
+		Android:       true,
 	})
 	if err != nil {
 		r.bridge.coreLogs.Append(charonv1.LogLevel_LOG_LEVEL_ERROR, "Failed to build Xray config: "+err.Error(), time.Now().UnixMilli())
@@ -835,10 +837,11 @@ type androidStatsReader struct {
 }
 
 func (s *androidStatsReader) ReadServerBytes(serverID string) (uint64, uint64, error) {
-	inB, outB, err := s.bridge.backend.ReadStats(serverID)
+	tb, err := s.bridge.backend.ReadStats(serverID)
 	if err != nil {
 		return 0, 0, err
 	}
+	inB, outB := tb.In, tb.Out
 	var uIn, uOut uint64
 	if inB > 0 {
 		uIn = uint64(inB)

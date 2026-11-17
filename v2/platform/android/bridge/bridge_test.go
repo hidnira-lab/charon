@@ -196,10 +196,11 @@ func TestXrayTunAndTun2SocksBackends(t *testing.T) {
 	if len(host.protectedFDs) != 1 || host.protectedFDs[0] != 77 {
 		t.Fatalf("protectedFDs = %v, want [77]", host.protectedFDs)
 	}
-	rx, tx, err := xb.ReadStats("SRV-01")
+	got, err := xb.ReadStats("SRV-01")
 	if err != nil {
 		t.Fatalf("ReadStats: %v", err)
 	}
+	rx, tx := got.In, got.Out
 	if rx != 123456 || tx != 654321 {
 		t.Fatalf("ReadStats = (%d, %d), want (123456, 654321)", rx, tx)
 	}

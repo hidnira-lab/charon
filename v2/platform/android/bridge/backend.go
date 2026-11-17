@@ -20,6 +20,13 @@ type SocketProtector interface {
 	ProtectSocket(fd int) bool
 }
 
+// TrafficBytes is what a backend reports for the tunnel. A struct, because gomobile
+// allows only one value plus an error across an exported interface.
+type TrafficBytes struct {
+	In  int64
+	Out int64
+}
+
 // TunnelBackend abstracts the Android packet tunnel implementation (CORE2).
 // The default implementation is XrayTunBackend (feeding the VpnService TUN
 // file descriptor to Xray's TUN inbound via XRAY_TUN_FD / xray.tun.fd), and
@@ -28,8 +35,12 @@ type TunnelBackend interface {
 	Name() string
 	Start(tunFD int, xrayConfigJSON []byte, socksPort int, protector SocketProtector) error
 	Stop() error
-	ReadStats(serverID string) (bytesIn int64, bytesOut int64, err error)
+	ReadStats(serverID string) (*TrafficBytes, error)
 }
+
+// defaultRunner is set by the Android only file that embeds Xray. It stays nil on
+// desktop builds, so the unit tests never start a real TUN.
+var defaultRunner EmbeddedRunnerFunc
 
 // EmbeddedRunnerFunc is an optional hook for starting an embedded Xray or
 // tun2socks engine in-process. It returns a stop callback.
@@ -52,6 +63,7 @@ type XrayTunBackend struct {
 func NewXrayTunBackend() *XrayTunBackend {
 	return &XrayTunBackend{
 		ProcNetDevPath: "/proc/net/dev",
+		Runner:         defaultRunner,
 	}
 }
 
@@ -103,12 +115,12 @@ func (b *XrayTunBackend) Stop() error {
 	return nil
 }
 
-func (b *XrayTunBackend) ReadStats(_ string) (int64, int64, error) {
+func (b *XrayTunBackend) ReadStats(_ string) (*TrafficBytes, error) {
 	path := b.ProcNetDevPath
 	if path == "" {
 		path = "/proc/net/dev"
 	}
-	return readTunStatsFromProc(path)
+	return trafficFromProc(path)
 }
 
 // Tun2SocksBackend is the prepared fallback Android TunnelBackend (CORE2) that
@@ -176,12 +188,20 @@ func (b *Tun2SocksBackend) Stop() error {
 	return nil
 }
 
-func (b *Tun2SocksBackend) ReadStats(_ string) (int64, int64, error) {
+func (b *Tun2SocksBackend) ReadStats(_ string) (*TrafficBytes, error) {
 	path := b.ProcNetDevPath
 	if path == "" {
 		path = "/proc/net/dev"
 	}
-	return readTunStatsFromProc(path)
+	return trafficFromProc(path)
+}
+
+func trafficFromProc(path string) (*TrafficBytes, error) {
+	rx, tx, err := readTunStatsFromProc(path)
+	if err != nil {
+		return nil, err
+	}
+	return &TrafficBytes{In: rx, Out: tx}, nil
 }
 
 // readTunStatsFromProc parses /proc/net/dev and returns (rxBytes, txBytes) for
