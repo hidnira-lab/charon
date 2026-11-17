@@ -99,6 +99,7 @@ type Options struct {
 	NoTUN         bool   // leave the TUN inbound out (needs SocksPort): a core that is only tried, nothing of the machine changes
 	StatsPort     uint16 // optional local loopback API port for StatsService byte counters
 	AllowAppRules bool   // true on Android where VpnService handles per-application rules
+	Android       bool   // TUN settings without the desktop only keys: the VpnService owns routes, DNS and the fd
 	OutboundBy    map[charonv1.Protocol]OutboundBuilder
 }
 
@@ -200,6 +201,16 @@ func Build(server *charonv1.Server, cfg *charonv1.Config, opts Options) ([]byte,
 				"routeOnly":    true,
 			},
 		},
+	}
+
+	if opts.Android {
+		// Xray reads the fd from the environment and does not touch routes there. Left in,
+		// "autoOutboundsInterface" makes it bind its own sockets to a named interface it
+		// cannot discover on Android. Those sockets go through VpnService.protect instead.
+		s := inbounds[0].(map[string]any)["settings"].(map[string]any)
+		for _, k := range []string{"gateway", "autoSystemRoutingTable", "autoOutboundsInterface", "autoSystemWfpBlockLeak"} {
+			delete(s, k)
+		}
 	}
 
 	if opts.NoTUN {

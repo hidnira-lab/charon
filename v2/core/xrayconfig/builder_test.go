@@ -230,6 +230,41 @@ func TestTUNInboundRoutesEverythingAndKeepsXrayOut(t *testing.T) {
 	}
 }
 
+// On Android the VpnService owns addresses, routes and DNS takeover, and Xray's own
+// sockets are protected by a dialer controller. The desktop only keys must not be sent:
+// Xray reads "autoOutboundsInterface" and then binds every socket to a named interface,
+// which it cannot find by itself on Android.
+func TestAndroidTUNInboundLeavesRoutingToTheVpnService(t *testing.T) {
+	cfg := sampleConfig()
+	raw, err := Build(cfg.GetServers()[0], cfg, Options{Android: true, AllowAppRules: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	var root struct {
+		Inbounds []struct {
+			Protocol string         `json:"protocol"`
+			Settings map[string]any `json:"settings"`
+		} `json:"inbounds"`
+	}
+	if err := json.Unmarshal(raw, &root); err != nil {
+		t.Fatal(err)
+	}
+	tun := root.Inbounds[0]
+	if tun.Protocol != "tun" {
+		t.Fatalf("first inbound is %q, want tun", tun.Protocol)
+	}
+	for _, key := range []string{"autoSystemRoutingTable", "autoOutboundsInterface", "autoSystemWfpBlockLeak", "gateway"} {
+		if _, ok := tun.Settings[key]; ok {
+			t.Errorf("Android TUN settings carry the desktop only key %q", key)
+		}
+	}
+	for _, key := range []string{"name", "mtu", "dns"} {
+		if _, ok := tun.Settings[key]; !ok {
+			t.Errorf("Android TUN settings lost %q", key)
+		}
+	}
+}
+
 // A core that is tried before it is kept runs with the SOCKS inbound only: no adapter,
 // no routes, no WFP filters, so nothing of the machine changes while it is tried.
 func TestNoTUNLeavesOnlyTheSocksInbound(t *testing.T) {
