@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/hidnira-lab/charon/core/xrayconfig"
-	"github.com/hidnira-lab/charon/platform/windows/verify"
+	"github.com/hidnira-lab/charon/core/verify"
 )
 
 // The line is what the pinned core prints (copied from a real run of 26.10.31).

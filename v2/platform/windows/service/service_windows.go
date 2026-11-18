@@ -22,7 +22,7 @@ import (
 	"github.com/hidnira-lab/charon/platform/windows/store"
 	"github.com/hidnira-lab/charon/platform/windows/supervisor"
 	"github.com/hidnira-lab/charon/platform/windows/updater"
-	"github.com/hidnira-lab/charon/platform/windows/verify"
+	"github.com/hidnira-lab/charon/core/verify"
 	"github.com/hidnira-lab/charon/platform/windows/wfp"
 	"golang.org/x/sys/windows/svc"
 )

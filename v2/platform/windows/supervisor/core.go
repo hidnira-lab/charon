@@ -13,7 +13,7 @@ import (
 
 	charonv1 "github.com/hidnira-lab/charon/core/gen/charonv1"
 	"github.com/hidnira-lab/charon/core/xrayconfig"
-	"github.com/hidnira-lab/charon/platform/windows/verify"
+	"github.com/hidnira-lab/charon/core/verify"
 	"google.golang.org/protobuf/proto"
 )
 
