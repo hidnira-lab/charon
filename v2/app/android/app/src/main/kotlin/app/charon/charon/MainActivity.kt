@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.net.VpnService
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -69,6 +71,7 @@ class MainActivity : FlutterActivity() {
                         val respBytes = bridge.send(reqBytes)
                         result.success(respBytes)
                     } catch (t: Throwable) {
+                        android.util.Log.e("CharonCore", "send failed", t)
                         result.error("CORE_SEND_FAILED", t.message ?: "send failed", null)
                     }
                 }
@@ -77,7 +80,7 @@ class MainActivity : FlutterActivity() {
                     val prepIntent = VpnService.prepare(this)
                     if (prepIntent == null) {
                         startVpnServiceIfNeeded()
-                        result.success(true)
+                        whenServiceUp { result.success(true) }
                     } else {
                         pendingVpnResult = result
                         @Suppress("DEPRECATION")
@@ -114,14 +117,29 @@ class MainActivity : FlutterActivity() {
             val granted = resultCode == Activity.RESULT_OK
             if (granted) {
                 startVpnServiceIfNeeded()
+                whenServiceUp { res?.success(true) }
             } else {
                 CharonVpnService.ensureBridge(this).onVpnRevoked()
+                res?.success(false)
             }
-            res?.success(granted)
             return
         }
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    /**
+     * startForegroundService is asynchronous, and Go asks for the TUN as soon as it
+     * gets Connect. So the permission call only answers once the service object
+     * exists (at most 3 seconds), otherwise the first Connect fails with
+     * "could not create its network adapter".
+     */
+    private fun whenServiceUp(triesLeft: Int = 60, done: () -> Unit) {
+        if (CharonVpnService.activeInstance != null || triesLeft <= 0) {
+            done()
+            return
+        }
+        Handler(Looper.getMainLooper()).postDelayed({ whenServiceUp(triesLeft - 1, done) }, 50)
     }
 
     private fun startVpnServiceIfNeeded() {
