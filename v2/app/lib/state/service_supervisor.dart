@@ -140,7 +140,9 @@ class ServiceSupervisor extends ChangeNotifier {
       _serviceProtocol = e.serviceProtocol;
       _markTried();
       setStatus(ServiceStatus.needsUpdate);
-    } catch (_) {
+    } catch (e) {
+      // The type and message of a failed connect only, never the request.
+      debugPrint('charon: service connect failed: ${e.runtimeType}: $e');
       _markTried();
       setStatus(ServiceStatus.notRunning);
     }
