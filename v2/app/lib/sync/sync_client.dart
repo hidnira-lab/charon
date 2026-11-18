@@ -33,6 +33,9 @@ enum SyncErrorReason {
   rateLimited,
   unauthorized,
   vaultTooLarge,
+
+  /// The backup file could not be written or read (permission, disk, file in use).
+  fileFailed,
 }
 
 enum SyncConflictChoice {
@@ -67,6 +70,8 @@ String syncErrorAmberMessage(SyncErrorReason reason) {
       return 'This device is no longer paired with the sync server.';
     case SyncErrorReason.vaultTooLarge:
       return 'Vault exceeds the 1 MiB maximum size.';
+    case SyncErrorReason.fileFailed:
+      return "Couldn't read or write that file. Nothing was changed.";
   }
 }
 
@@ -945,6 +950,9 @@ class SyncController extends ChangeNotifier {
     } on VaultException catch (ve) {
       _setError(_mapVaultError(ve.code));
       return false;
+    } on FileSystemException {
+      _setError(SyncErrorReason.fileFailed);
+      return false;
     }
   }
 
@@ -963,6 +971,9 @@ class SyncController extends ChangeNotifier {
       return payload;
     } on VaultException catch (ve) {
       _setError(_mapVaultError(ve.code));
+      return null;
+    } on FileSystemException {
+      _setError(SyncErrorReason.fileFailed);
       return null;
     }
   }

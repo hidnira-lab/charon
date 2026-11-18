@@ -107,6 +107,7 @@ SyncNote _errorNote(AppLocalizations l10n, SyncController sync) {
     SyncErrorReason.rateLimited => warn(l10n.syncTagFailed, l10n.syncTextRateLimited),
     SyncErrorReason.unauthorized => warn(l10n.syncTagFailed, l10n.syncTextUnauthorized),
     SyncErrorReason.vaultTooLarge => warn(l10n.syncTagFailed, l10n.syncTextTooLarge),
+    SyncErrorReason.fileFailed => warn(l10n.syncTagFailed, l10n.syncTextFileFailed),
     null => warn(l10n.syncTagFailed, sync.errorMessage ?? ''),
   };
 }

@@ -18,6 +18,12 @@ enum ToastKind {
 
   /// "Unpaired · the server copy stays".
   unpaired,
+
+  /// "Backup saved · keep your passphrase safe".
+  vaultBackedUp,
+
+  /// "Restored from file".
+  vaultRestored,
 }
 
 /// The one toast at the bottom of the window (Dialogs board). A new one replaces

@@ -32,6 +32,7 @@ Charon is licensed under the GNU General Public License v3.0 (`LICENSE`). It shi
 * **`cryptography` (2.9.0)**: Apache License 2.0 (compatible with GPL 3.0)
 * **`dart_ipc` (2.0.2)**: MIT License
 * **`ffi` (2.2.0)**: BSD 3-Clause License
+* **`file_selector` (1.1.0)**: BSD 3-Clause License (Copyright 2013 The Flutter Authors). Opens the system save and open dialogs for the vault file backup. Its platform packages `file_selector_windows` (0.9.3+6) and `file_selector_platform_interface` (2.7.0) have the same licence.
 * **`fixnum` (1.1.1)**: BSD 3-Clause License
 * **`intl` (0.20.2)**: BSD 3-Clause License
 * **`path` (1.9.1)**: BSD 3-Clause License

@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 
+import '../../../core/vault_file_picker.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../state/home_controller.dart';
 import '../../../state/toast.dart';
@@ -24,11 +25,15 @@ const int _tabSettings = 4;
 /// Right column Sync card of the ServersDesktop board (320 px). What it says in
 /// each state comes from [syncNote] and [syncPairLine]. Push, Pull, Resolve and
 /// Unpair call the controller, and Pair this device and Show pairing code open
-/// their dialogs. The file picker for backups is not built yet.
+/// their dialogs. File backup asks for the passphrase and then for the place to
+/// save. File restore asks for the file first, then for the passphrase.
 class SyncCard extends StatefulWidget {
-  const SyncCard({super.key, required this.controller});
+  const SyncCard({super.key, required this.controller, this.picker = const VaultFilePicker()});
 
   final HomeController controller;
+
+  /// The system file dialogs. A test passes a fake.
+  final VaultFilePicker picker;
 
   @override
   State<SyncCard> createState() => _SyncCardState();
@@ -61,6 +66,42 @@ class _SyncCardState extends State<SyncCard> {
   }
 
   Future<void> _showCode() => PairingCodeDialog.show(context, _c);
+
+  // The key derivation takes a moment and these runs do not move the sync state
+  // to busy, so a second tap while one is running is ignored.
+  bool _fileBusy = false;
+
+  Future<void> _backupToFile() async {
+    if (_fileBusy) return;
+    _fileBusy = true;
+    try {
+      final pass = await VaultPassphraseDialog.show(context, mode: VaultDialogMode.backup);
+      if (pass == null || !mounted) return;
+      final target = await widget.picker.chooseBackupTarget(DateTime.now());
+      if (target == null) return;
+      if (await _c.backupVaultToFile(target, pass)) {
+        _c.showToast(const ToastMessage(ToastKind.vaultBackedUp));
+      }
+    } finally {
+      _fileBusy = false;
+    }
+  }
+
+  Future<void> _restoreFromFile() async {
+    if (_fileBusy) return;
+    _fileBusy = true;
+    try {
+      final source = await widget.picker.chooseRestoreSource();
+      if (source == null || !mounted) return;
+      final pass = await VaultPassphraseDialog.show(context, mode: VaultDialogMode.restore);
+      if (pass == null) return;
+      if (await _c.restoreVaultFromFile(source, pass)) {
+        _c.showToast(const ToastMessage(ToastKind.vaultRestored));
+      }
+    } finally {
+      _fileBusy = false;
+    }
+  }
 
   Future<void> _resolve() async {
     final choice = await SyncConflictDialog.show(context);
@@ -273,7 +314,7 @@ class _SyncCardState extends State<SyncCard> {
                         Expanded(
                           child: pill(
                             l10n.syncActionBackupFile,
-                            () => VaultPassphraseDialog.show(context, mode: VaultDialogMode.backup),
+                            _backupToFile,
                             height: 36,
                             style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: colors.text),
                           ),
@@ -282,7 +323,7 @@ class _SyncCardState extends State<SyncCard> {
                         Expanded(
                           child: pill(
                             l10n.syncActionRestoreFile,
-                            () => VaultPassphraseDialog.show(context, mode: VaultDialogMode.restore),
+                            _restoreFromFile,
                             height: 36,
                             style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: colors.text),
                           ),

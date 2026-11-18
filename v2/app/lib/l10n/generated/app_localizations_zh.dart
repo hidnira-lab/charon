@@ -3130,6 +3130,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get syncTextTooLarge => '保险库超过了 1 MiB 的上限。';
 
   @override
+  String get syncTextFileFailed => '无法读取或写入该文件。没有任何改动。';
+
+  @override
   String get dlgAddKicker => '服务器 · 添加';
 
   @override
@@ -4829,6 +4832,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get toastUnpaired => '已解除配对 · 服务器副本保留';
+
+  @override
+  String get toastVaultBackedUp => '备份已保存 · 请妥善保管密码短语';
+
+  @override
+  String get toastVaultRestored => '已从文件恢复';
 
   @override
   String get toastUndo => '撤销';
@@ -7998,6 +8007,9 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get syncTextTooLarge => '保险库超过了 1 MiB 的上限。';
 
   @override
+  String get syncTextFileFailed => '无法读取或写入该文件。没有任何改动。';
+
+  @override
   String get dlgAddKicker => '服务器 · 添加';
 
   @override
@@ -9697,6 +9709,12 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get toastUnpaired => '已解除配对 · 服务器副本保留';
+
+  @override
+  String get toastVaultBackedUp => '备份已保存 · 请妥善保管密码短语';
+
+  @override
+  String get toastVaultRestored => '已从文件恢复';
 
   @override
   String get toastUndo => '撤销';

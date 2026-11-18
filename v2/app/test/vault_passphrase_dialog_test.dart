@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:charon/core/vault_file_picker.dart';
 import 'package:charon/sync/sync_client.dart';
 
 import 'support/fake_sync.dart';
@@ -9,6 +12,16 @@ import 'package:charon/l10n/generated/app_localizations.dart';
 import 'package:charon/theme/theme.dart';
 import 'package:charon/ui/dialogs/vault_passphrase_dialog.dart';
 import 'package:charon/ui/servers/widgets/sync_card.dart';
+
+/// A file dialog that always picks the same file, so no real window opens.
+class _PickedFile extends VaultFilePicker {
+  _PickedFile(this.file);
+
+  final File file;
+
+  @override
+  Future<File?> chooseRestoreSource() async => file;
+}
 
 Widget _buildTestApp({required Widget child}) {
   return MaterialApp(
@@ -108,17 +121,20 @@ void main() {
     });
 
     testWidgets('SyncCard opens VaultPassphraseDialog for backup and restore', (tester) async {
-      await tester.pumpWidget(_buildTestApp(child: SyncCard(controller: controllerWithSync(FakeSync(SyncState.paired)))));
+      final picker = _PickedFile(File('picked.charonvault'));
+      await tester.pumpWidget(_buildTestApp(
+        child: SyncCard(controller: controllerWithSync(FakeSync(SyncState.paired)), picker: picker),
+      ));
       await tester.pump();
 
-      // Tap Back up to file
+      // Tap Back up to file: the passphrase comes first.
       await tester.tap(find.text('Back up to file'));
       await tester.pumpAndSettle();
       expect(find.text('Back up to .charonvault'), findsOneWidget);
       await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
 
-      // Tap Restore from file
+      // Tap Restore from file: the file comes first, then the passphrase.
       await tester.tap(find.text('Restore from file'));
       await tester.pumpAndSettle();
       expect(find.text('Restore from .charonvault'), findsOneWidget);

@@ -5782,6 +5782,12 @@ abstract class AppLocalizations {
   /// **'Vault exceeds the 1 MiB maximum size.'**
   String get syncTextTooLarge;
 
+  /// Sync note text when the backup file cannot be written or read.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t read or write that file. Nothing was changed.'**
+  String get syncTextFileFailed;
+
   /// Dialog text.
   ///
   /// In en, this message translates to:
@@ -8841,6 +8847,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unpaired · the server copy stays'**
   String get toastUnpaired;
+
+  /// Toast after a .charonvault backup file was written.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup saved · keep your passphrase safe'**
+  String get toastVaultBackedUp;
+
+  /// Toast after a .charonvault file was restored.
+  ///
+  /// In en, this message translates to:
+  /// **'Restored from file'**
+  String get toastVaultRestored;
 
   /// Toast button that puts a deleted server back.
   ///

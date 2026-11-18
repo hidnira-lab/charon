@@ -3309,6 +3309,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get syncTextTooLarge => 'Vault melebihi ukuran maksimum 1 MiB.';
 
   @override
+  String get syncTextFileFailed =>
+      'Tidak bisa membaca atau menulis file itu. Tidak ada yang berubah.';
+
+  @override
   String get dlgAddKicker => 'SERVER · TAMBAH';
 
   @override
@@ -5073,6 +5077,13 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get toastUnpaired => 'Pasangan dilepas · salinan server tetap ada';
+
+  @override
+  String get toastVaultBackedUp =>
+      'Cadangan disimpan · jaga passphrase-mu baik-baik';
+
+  @override
+  String get toastVaultRestored => 'Dipulihkan dari file';
 
   @override
   String get toastUndo => 'Urungkan';

@@ -3329,6 +3329,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get syncTextTooLarge => 'Vault exceeds the 1 MiB maximum size.';
 
   @override
+  String get syncTextFileFailed =>
+      'Couldn\'t read or write that file. Nothing was changed.';
+
+  @override
   String get dlgAddKicker => 'SERVERS · ADD';
 
   @override
@@ -5105,6 +5109,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get toastUnpaired => 'Unpaired · the server copy stays';
+
+  @override
+  String get toastVaultBackedUp => 'Backup saved · keep your passphrase safe';
+
+  @override
+  String get toastVaultRestored => 'Restored from file';
 
   @override
   String get toastUndo => 'Undo';

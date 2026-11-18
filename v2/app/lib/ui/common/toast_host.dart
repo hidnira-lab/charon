@@ -97,6 +97,8 @@ class _BarState extends State<_Bar> {
         ToastKind.serverDeleted => l10n.toastServerDeleted(toast.label),
         ToastKind.erased => l10n.toastErased,
         ToastKind.unpaired => l10n.toastUnpaired,
+        ToastKind.vaultBackedUp => l10n.toastVaultBackedUp,
+        ToastKind.vaultRestored => l10n.toastVaultRestored,
       };
 
   @override
