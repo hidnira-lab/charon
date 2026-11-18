@@ -19,7 +19,7 @@ enum StepMark { done, act, fail, pend }
 
 /// What a button does. [UpdateButton.enabled] is false for the ones that have
 /// no command or no package behind them yet (a download, links to a release
-/// page, the file picker), so they are drawn but cannot be pressed.
+/// page), so they are drawn but cannot be pressed.
 enum UpdateAction {
   applyNow,
   applyWhenDisconnected,
@@ -45,8 +45,7 @@ class UpdateButton {
   bool get enabled => switch (action) {
         UpdateAction.download ||
         UpdateAction.releaseNotes ||
-        UpdateAction.cancel ||
-        UpdateAction.chooseFile =>
+        UpdateAction.cancel =>
           false,
         _ => true,
       };

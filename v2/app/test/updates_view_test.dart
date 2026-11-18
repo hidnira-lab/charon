@@ -189,12 +189,12 @@ void main() {
   });
 
   group('the file card', () {
-    test('idle: the board sentence and a Choose file button that is not pressable yet', () {
+    test('idle: the board sentence and a Choose file button you can press', () {
       final f = UpdatesView(AppLocalizationsEn(), ctl()).file;
       expect(f.text, startsWith('For when GitHub is blocked and the tunnel is down.'));
       expect(f.chip, isNull);
       expect(f.button!.label, 'Choose file');
-      expect(f.button!.enabled, isFalse);
+      expect(f.button!.enabled, isTrue);
     });
   });
 

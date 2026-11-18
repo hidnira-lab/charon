@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import '../../core/external_link.dart';
+import '../../core/update_file_picker.dart';
 import 'package:flutter/services.dart';
 
 import '../../gen/charon/v1/charon.pb.dart';
@@ -22,9 +23,13 @@ class UpdatesScreen extends StatefulWidget {
   const UpdatesScreen({
     super.key,
     required this.controller,
+    this.picker = const UpdateFilePicker(),
   });
 
   final HomeController controller;
+
+  /// The system open dialog. A test passes a fake.
+  final UpdateFilePicker picker;
 
   @override
   State<UpdatesScreen> createState() => _UpdatesScreenState();
@@ -83,12 +88,22 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
         c.applyAppUpdate();
       case UpdateAction.allReleases:
         ExternalLinks.open(ExternalLinks.releasesPage);
-      case UpdateAction.download ||
-            UpdateAction.releaseNotes ||
-            UpdateAction.cancel ||
-            UpdateAction.chooseFile:
+      case UpdateAction.chooseFile:
+        _chooseFile();
+      case UpdateAction.download || UpdateAction.releaseNotes || UpdateAction.cancel:
         break;
     }
+  }
+
+  /// Open dialog, then the controller sends the file to the service. A cancelled
+  /// dialog changes nothing on the card. Pressing it again while a file is on its
+  /// way does nothing.
+  Future<void> _chooseFile() async {
+    final c = widget.controller;
+    if (c.isFileUploading) return;
+    final file = await widget.picker.chooseBundle();
+    if (file == null || !mounted) return;
+    await c.updateFromFile(file);
   }
 
   @override

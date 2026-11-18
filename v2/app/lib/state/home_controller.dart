@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import '../core/core_client.dart';
 import '../core/device_location.dart';
 import '../core/elevated.dart';
 import '../core/transport.dart';
+import '../core/update_bundle.dart';
 import '../gen/charon/v1/charon.pb.dart';
 import '../sync/sync_client.dart';
 import 'app_info.dart';
@@ -343,6 +345,27 @@ class HomeController extends ChangeNotifier {
     _fileUploadProgress = 0;
     _fileVerificationResult = null;
     notifyListeners();
+  }
+
+  /// Sends a `.charonup` file the user chose to the service, which checks the
+  /// signature and everything else. A file that is too big, cannot be read or is
+  /// not a bundle never leaves the window: the card says it is not valid.
+  Future<bool> updateFromFile(File file) async {
+    UpdateKind? kind;
+    Uint8List? bytes;
+    try {
+      if (await file.length() <= maxUpdateFileBytes) {
+        bytes = await file.readAsBytes();
+        kind = updateKindOfBundle(bytes);
+      }
+    } on FileSystemException {
+      // Falls through to the same answer: nothing was installed.
+    }
+    if (kind != null && bytes != null) return uploadUpdateFileBytes(kind, bytes);
+    _isFileUploading = false;
+    _fileVerificationResult = 'failed';
+    notifyListeners();
+    return false;
   }
 
   /// Streams a manual update bundle or binary ([bytes]) to the service in

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/fonts.dart';
 
 import 'package:charon/core/external_link.dart';
+import 'package:charon/core/update_file_picker.dart';
 import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/l10n/generated/app_localizations.dart';
 import 'package:charon/main.dart';
@@ -16,13 +19,18 @@ import 'package:charon/ui/updates/widgets/file_update_card.dart';
 import 'package:charon/ui/updates/widgets/offline_banner.dart';
 import 'package:charon/ui/updates/widgets/update_card.dart';
 
-Widget _buildTestUpdatesApp({required HomeController controller, Locale? locale, ThemeData? theme}) {
+Widget _buildTestUpdatesApp({
+  required HomeController controller,
+  Locale? locale,
+  ThemeData? theme,
+  UpdateFilePicker picker = const UpdateFilePicker(),
+}) {
   return MaterialApp(
     theme: theme,
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
     locale: locale,
-    home: UpdatesScreen(controller: controller),
+    home: UpdatesScreen(controller: controller, picker: picker),
   );
 }
 
@@ -42,6 +50,19 @@ void _withPendingUpdates(HomeController c) {
     newVersion: '0.2.0',
     sizeBytes: Int64(29826048),
   ));
+}
+
+/// Stands in for the open dialog: hands back [file], or null for a cancel.
+class _FakePicker extends UpdateFilePicker {
+  _FakePicker(this.file);
+  final File? file;
+  int opened = 0;
+
+  @override
+  Future<File?> chooseBundle() async {
+    opened++;
+    return file;
+  }
 }
 
 void main() {
@@ -144,20 +165,50 @@ void main() {
       expect(find.text("WHAT'S NEW"), findsNothing);
     });
 
-    testWidgets('buttons that have no command behind them do nothing', (tester) async {
+    testWidgets('Choose file opens the dialog, and a cancel changes nothing', (tester) async {
       tester.view.physicalSize = const Size(1024, 768);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() => tester.view.resetPhysicalSize());
 
+      final picker = _FakePicker(null);
       final controller = HomeController(initialStatus: Status(phase: Phase.PHASE_UP));
       _withPendingUpdates(controller);
-      await tester.pumpWidget(_buildTestUpdatesApp(controller: controller));
+      await tester.pumpWidget(_buildTestUpdatesApp(controller: controller, picker: picker));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Choose file'), warnIfMissed: false);
+      await tester.tap(find.text('Choose file'));
       await tester.pumpAndSettle();
+      expect(picker.opened, 1);
       expect(controller.fileVerificationResult, isNull);
       expect(find.text('VERIFIED'), findsNothing);
+    });
+
+    testWidgets('a file that is not a bundle is not sent and the card says it failed', (tester) async {
+      tester.view.physicalSize = const Size(1024, 768);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() => tester.view.resetPhysicalSize());
+
+      final dir = Directory.systemTemp.createTempSync('charon_pick');
+      addTearDown(() => dir.deleteSync(recursive: true));
+      final junk = File('${dir.path}/not_a_bundle.charonup')..writeAsStringSync('hello');
+
+      final controller = HomeController(initialStatus: Status(phase: Phase.PHASE_UP));
+      await tester.pumpWidget(_buildTestUpdatesApp(controller: controller, picker: _FakePicker(junk)));
+      await tester.pumpAndSettle();
+
+      await tester.runAsync(() async {
+        await controller.updateFromFile(junk);
+      });
+      await tester.pumpAndSettle();
+      expect(controller.isFileUploading, isFalse);
+      expect(controller.fileVerificationResult, 'failed');
+    });
+
+    testWidgets('a file that cannot be read is answered the same way', (tester) async {
+      final controller = HomeController(initialStatus: Status(phase: Phase.PHASE_UP));
+      final ok = await tester.runAsync(() => controller.updateFromFile(File('does/not/exist.charonup')));
+      expect(ok, isFalse);
+      expect(controller.fileVerificationResult, 'failed');
     });
 
     testWidgets('All releases opens the page of the releases', (tester) async {
