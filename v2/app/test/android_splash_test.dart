@@ -195,6 +195,58 @@ void main() {
     });
   });
 
+  group('Always on VPN card status', () {
+    Future<void> show(WidgetTester tester, {bool alwaysOn = false, bool lockdown = false}) async {
+      await tester.pumpWidget(
+        _buildTestApp(child: AndroidAlwaysOnVpnCard(alwaysOn: alwaysOn, lockdown: lockdown)),
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+
+    testWidgets('not set', (tester) async {
+      await show(tester);
+      expect(find.text('Android setting · Charon cannot switch it on for you'), findsOneWidget);
+    });
+
+    testWidgets('on, lockdown off', (tester) async {
+      await show(tester, alwaysOn: true);
+      expect(find.text('On · traffic goes direct if Charon stops'), findsOneWidget);
+      expect(find.textContaining('turn on Always on VPN and Block connections without VPN'), findsOneWidget);
+    });
+
+    testWidgets('on with lockdown', (tester) async {
+      await show(tester, alwaysOn: true, lockdown: true);
+      expect(find.text('On with lockdown · internet is blocked if Charon stops'), findsOneWidget);
+      expect(find.text('Android keeps Charon on and blocks the internet whenever Charon is not connected.'),
+          findsOneWidget);
+    });
+  });
+
+  test('vpnLockdown reads the two system switches and refreshes the controller', () async {
+    final binding = TestWidgetsFlutterBinding.ensureInitialized();
+    const methodChannel = MethodChannel('app.charon/core_lockdown_test');
+    var lockdown = false;
+    binding.defaultBinaryMessenger.setMockMethodCallHandler(methodChannel, (call) async {
+      expect(call.method, 'vpnLockdown');
+      return {'alwaysOn': true, 'lockdown': lockdown};
+    });
+    addTearDown(() => binding.defaultBinaryMessenger.setMockMethodCallHandler(methodChannel, null));
+
+    final transport = PlatformChannelTransport(
+      methodChannel: methodChannel,
+      eventChannel: const EventChannel('app.charon/core_events_lockdown_test'),
+    );
+    addTearDown(transport.close);
+    expect(await transport.vpnLockdown(), (alwaysOn: true, lockdown: false));
+
+    final controller = HomeController(platformTransport: transport);
+    await controller.refreshSystemLockdown();
+    expect((controller.systemAlwaysOn, controller.systemLockdown), (true, false));
+    lockdown = true;
+    await controller.refreshSystemLockdown();
+    expect(controller.systemLockdown, isTrue);
+  });
+
   group('PlatformChannelTransport & Android Session Anomalies (M4)', () {
     test('PlatformChannelTransport round-trips framed envelopes and events', () async {
       final binding = TestWidgetsFlutterBinding.ensureInitialized();

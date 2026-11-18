@@ -18,7 +18,7 @@ import 'ui_state.dart';
 
 /// One of the four readout cards.
 class Readout {
-  const Readout(this.label, this.value, this.note, {this.unit = '', this.dim = false, this.spark});
+  const Readout(this.label, this.value, this.note, {this.unit = '', this.dim = false, this.warn = false, this.spark});
 
   final String label;
   final String value;
@@ -27,6 +27,10 @@ class Readout {
 
   /// True for words such as "off" and "wait", drawn in the quiet ink.
   final bool dim;
+
+  /// True for "blocked" while Android lockdown holds all internet, drawn in the
+  /// amber ink of the board.
+  final bool warn;
 
   /// Which series the little line beside the number draws (DOWN or UP) while
   /// the tunnel is up, null for the cards that have none.
@@ -296,10 +300,14 @@ class HomeView {
         ];
       case UiState.disconnected:
       case UiState.disconnecting:
+        // Android lockdown: nothing goes direct, Android blocks all internet.
+        Readout blocked(String label) =>
+            Readout(label, l10n.homeValueBlocked, l10n.homeNoteUntilCharonConnects, warn: true);
+        final lock = _ui == UiState.disconnected && controller.systemLockdown;
         return [
           off(latLabel, l10n.homeNoteNoTunnel),
-          off(downLabel, l10n.homeNoteNoTunnel),
-          off(upLabel, l10n.homeNoteNoTunnel),
+          lock ? blocked(downLabel) : off(downLabel, l10n.homeNoteNoTunnel),
+          lock ? blocked(upLabel) : off(upLabel, l10n.homeNoteNoTunnel),
           off(sesLabel, l10n.homeNoteLastSessionNotStored),
         ];
     }
@@ -539,7 +547,7 @@ class HomeView {
       return BannerSpec(
         tone: BannerTone.warn,
         tag: l10n.androidVpnPermissionTitle.toUpperCase(),
-        text: l10n.androidVpnRevokedNotice,
+        text: controller.systemLockdown ? l10n.androidVpnRevokedLockdownNotice : l10n.androidVpnRevokedNotice,
         actions: [BannerAction(BannerActionKind.allowVpnAgain, l10n.androidActionAllowAgain, primary: true)],
       );
     }
@@ -547,7 +555,7 @@ class HomeView {
       return BannerSpec(
         tone: BannerTone.warn,
         tag: l10n.androidAnotherVpnTitle.toUpperCase(),
-        text: l10n.androidAnotherVpnNotice,
+        text: controller.systemLockdown ? l10n.androidAnotherVpnLockdownNotice : l10n.androidAnotherVpnNotice,
         actions: [BannerAction(BannerActionKind.connect, l10n.actionConnect, primary: true)],
       );
     }
@@ -555,7 +563,7 @@ class HomeView {
       return BannerSpec(
         tone: BannerTone.warn,
         tag: l10n.androidAlwaysOnVpnTitle.toUpperCase(),
-        text: l10n.androidStoppedNotice,
+        text: controller.systemLockdown ? l10n.androidStoppedLockdownNotice : l10n.androidStoppedNotice,
         actions: [
           BannerAction(BannerActionKind.connect, l10n.actionConnect, primary: true),
           BannerAction(BannerActionKind.openVpnSettings, l10n.androidOpenVpnSettings),

@@ -298,4 +298,67 @@ void main() {
       expect(HomeView(l10n, c, localeTag: 'zh').quotaView().note, contains('12 月 1 日'));
     });
   });
+
+  // Android Always-on VPN with "Block connections without VPN": nothing goes
+  // direct, Android blocks all internet until Charon connects (HomeMobile board,
+  // prop `lockdown`).
+  group('Android lockdown', () {
+    HomeController idle({bool lockdown = false}) {
+      final c = HomeController(
+        initialStatus: Status(phase: Phase.PHASE_IDLE, activeServerId: 'SRV-01'),
+        initialConfig: servers(),
+      );
+      c.setSystemLockdown(alwaysOn: lockdown, lockdown: lockdown);
+      return c;
+    }
+
+    test('off: disconnected readouts keep "no tunnel"', () {
+      final r = HomeView(l10n, idle(), localeTag: 'en').readouts();
+      expect(row(r[1]), ['DOWN', 'off', '', 'no tunnel']);
+      expect(r[1].warn, isFalse);
+    });
+
+    test('on: DOWN and UP say blocked, LATENCY and SESSION stay as they were', () {
+      final r = HomeView(l10n, idle(lockdown: true), localeTag: 'en').readouts();
+      expect(row(r[0]), ['LATENCY', 'off', '', 'no tunnel']);
+      expect(row(r[1]), ['DOWN', 'blocked', '', 'until Charon connects']);
+      expect(row(r[2]), ['UP', 'blocked', '', 'until Charon connects']);
+      expect(r[1].warn, isTrue);
+      expect(r[3].note, 'last session not stored');
+    });
+
+    test('lockdown changes nothing while connected', () {
+      final c = HomeController(
+        initialStatus: Status(phase: Phase.PHASE_UP, activeServerId: 'SRV-01'),
+        initialConfig: servers(),
+      )..setSystemLockdown(alwaysOn: true, lockdown: true);
+      expect(HomeView(l10n, c, localeTag: 'en').readouts()[1].value, '—');
+    });
+
+    test('the Android banners say internet is blocked, not direct', () {
+      String text(HomeController c) => HomeView(l10n, c, localeTag: 'en').banner()!.text;
+
+      expect(text(idle(lockdown: true)..setHasVpnPermission(false)),
+          "Android removed Charon's VPN permission. Internet is blocked until you allow it again.");
+      expect(text(idle()..setHasVpnPermission(false)),
+          "Android removed Charon's VPN permission. Traffic is going direct.");
+
+      expect(text(idle(lockdown: true)..setAnotherVpnTookOver(true)),
+          'Another VPN took over. Internet is blocked until Charon is back.');
+      expect(text(idle()..setAnotherVpnTookOver(true)), 'Another VPN took over. Traffic is going direct.');
+
+      expect(text(idle(lockdown: true)..setStoppedByAndroid(true)),
+          'Android stopped Charon. Internet is blocked until Charon connects.');
+      expect(text(idle()..setStoppedByAndroid(true)),
+          'Android stopped Charon. Traffic may have gone direct meanwhile.');
+    });
+
+    test('the hero line is translated', () async {
+      final id = await AppLocalizations.delegate.load(const Locale('id'));
+      final zh = await AppLocalizations.delegate.load(const Locale('zh'));
+      expect(l10n.stateDisconnectedLockdownLine2, 'internet is blocked until Charon connects');
+      expect(id.stateDisconnectedLockdownLine2, 'internet diblokir sampai Charon terhubung');
+      expect(zh.stateDisconnectedLockdownLine2, 'Charon 连接前，网络会一直被拦截');
+    });
+  });
 }

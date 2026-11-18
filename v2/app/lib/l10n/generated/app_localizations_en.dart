@@ -2568,6 +2568,44 @@ class AppLocalizationsEn extends AppLocalizations {
       'If Android stops Charon, traffic can go direct. For full protection turn on Always on VPN and Block connections without VPN in Android settings.';
 
   @override
+  String get stateDisconnectedLockdownLine2 =>
+      'internet is blocked until Charon connects';
+
+  @override
+  String get homeValueBlocked => 'blocked';
+
+  @override
+  String get homeNoteUntilCharonConnects => 'until Charon connects';
+
+  @override
+  String get androidVpnRevokedLockdownNotice =>
+      'Android removed Charon\'s VPN permission. Internet is blocked until you allow it again.';
+
+  @override
+  String get androidAnotherVpnLockdownNotice =>
+      'Another VPN took over. Internet is blocked until Charon is back.';
+
+  @override
+  String get androidStoppedLockdownNotice =>
+      'Android stopped Charon. Internet is blocked until Charon connects.';
+
+  @override
+  String get androidAlwaysOnLockdownDesc =>
+      'Android keeps Charon on and blocks the internet whenever Charon is not connected.';
+
+  @override
+  String get androidAlwaysOnLineNotSet =>
+      'Android setting · Charon cannot switch it on for you';
+
+  @override
+  String get androidAlwaysOnLineOn =>
+      'On · traffic goes direct if Charon stops';
+
+  @override
+  String get androidAlwaysOnLineLockdown =>
+      'On with lockdown · internet is blocked if Charon stops';
+
+  @override
   String get androidOpenVpnSettings => 'Open VPN settings';
 
   @override

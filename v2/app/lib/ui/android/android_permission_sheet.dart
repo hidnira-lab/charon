@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../state/ui_state.dart';
 import '../../../theme/colors.dart';
 import '../../../theme/tokens.dart';
+import '../../../theme/typography.dart';
+import '../common/state_tone.dart';
 
 enum AndroidPermissionKind {
   vpn,
@@ -244,9 +247,16 @@ class AndroidAlwaysOnVpnCard extends StatelessWidget {
   const AndroidAlwaysOnVpnCard({
     super.key,
     this.onOpenSettings,
+    this.alwaysOn = false,
+    this.lockdown = false,
   });
 
   final VoidCallback? onOpenSettings;
+
+  /// What Android says about Charon: Always-on VPN, and "Block connections
+  /// without VPN" on top of it.
+  final bool alwaysOn;
+  final bool lockdown;
 
   @override
   Widget build(BuildContext context) {
@@ -275,7 +285,7 @@ class AndroidAlwaysOnVpnCard extends StatelessWidget {
               Icon(
                 Icons.security_rounded,
                 size: 18,
-                color: colors.accentText,
+                color: lockdown ? colors.accentText : colors.tone(StateTone.transition).$1,
               ),
               const SizedBox(width: 8),
               Text(
@@ -291,11 +301,24 @@ class AndroidAlwaysOnVpnCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            l10n.androidAlwaysOnVpnDesc,
+            lockdown ? l10n.androidAlwaysOnLockdownDesc : l10n.androidAlwaysOnVpnDesc,
             style: TextStyle(
               fontFamily: CharonTokens.fontBody,
               fontSize: 12,
               height: 1.45,
+              color: textMuted,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            lockdown
+                ? l10n.androidAlwaysOnLineLockdown
+                : alwaysOn
+                    ? l10n.androidAlwaysOnLineOn
+                    : l10n.androidAlwaysOnLineNotSet,
+            style: TextStyle(
+              fontFamily: CharonFontFamilies.spaceMono,
+              fontSize: 11,
               color: textMuted,
             ),
           ),

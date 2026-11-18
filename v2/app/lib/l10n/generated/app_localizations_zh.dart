@@ -2398,6 +2398,40 @@ class AppLocalizationsZh extends AppLocalizations {
       '如果 Android 停止了 Charon，流量可能会直连。要获得完整保护，请在 Android 设置中开启“始终开启的 VPN”和“屏蔽未使用 VPN 的连接”。';
 
   @override
+  String get stateDisconnectedLockdownLine2 => 'Charon 连接前，网络会一直被拦截';
+
+  @override
+  String get homeValueBlocked => '已拦截';
+
+  @override
+  String get homeNoteUntilCharonConnects => '直到 Charon 连接';
+
+  @override
+  String get androidVpnRevokedLockdownNotice =>
+      'Android 移除了 Charon 的 VPN 权限。在你重新允许之前，网络会一直被拦截。';
+
+  @override
+  String get androidAnotherVpnLockdownNotice =>
+      '另一个 VPN 已接管。在 Charon 恢复之前，网络会一直被拦截。';
+
+  @override
+  String get androidStoppedLockdownNotice =>
+      'Android 停止了 Charon。在 Charon 连接之前，网络会一直被拦截。';
+
+  @override
+  String get androidAlwaysOnLockdownDesc =>
+      'Android 会让 Charon 保持开启，并在 Charon 未连接时拦截所有网络。';
+
+  @override
+  String get androidAlwaysOnLineNotSet => 'Android 设置 · Charon 无法替你开启';
+
+  @override
+  String get androidAlwaysOnLineOn => '已开启 · Charon 停止时流量会直连';
+
+  @override
+  String get androidAlwaysOnLineLockdown => '已开启并锁定 · Charon 停止时网络会被拦截';
+
+  @override
   String get androidOpenVpnSettings => '打开 VPN 设置';
 
   @override
@@ -7273,6 +7307,40 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   @override
   String get androidAlwaysOnVpnDesc =>
       '如果 Android 停止了 Charon，流量可能会直连。要获得完整保护，请在 Android 设置中开启“始终开启的 VPN”和“屏蔽未使用 VPN 的连接”。';
+
+  @override
+  String get stateDisconnectedLockdownLine2 => 'Charon 连接前，网络会一直被拦截';
+
+  @override
+  String get homeValueBlocked => '已拦截';
+
+  @override
+  String get homeNoteUntilCharonConnects => '直到 Charon 连接';
+
+  @override
+  String get androidVpnRevokedLockdownNotice =>
+      'Android 移除了 Charon 的 VPN 权限。在你重新允许之前，网络会一直被拦截。';
+
+  @override
+  String get androidAnotherVpnLockdownNotice =>
+      '另一个 VPN 已接管。在 Charon 恢复之前，网络会一直被拦截。';
+
+  @override
+  String get androidStoppedLockdownNotice =>
+      'Android 停止了 Charon。在 Charon 连接之前，网络会一直被拦截。';
+
+  @override
+  String get androidAlwaysOnLockdownDesc =>
+      'Android 会让 Charon 保持开启，并在 Charon 未连接时拦截所有网络。';
+
+  @override
+  String get androidAlwaysOnLineNotSet => 'Android 设置 · Charon 无法替你开启';
+
+  @override
+  String get androidAlwaysOnLineOn => '已开启 · Charon 停止时流量会直连';
+
+  @override
+  String get androidAlwaysOnLineLockdown => '已开启并锁定 · Charon 停止时网络会被拦截';
 
   @override
   String get androidOpenVpnSettings => '打开 VPN 设置';

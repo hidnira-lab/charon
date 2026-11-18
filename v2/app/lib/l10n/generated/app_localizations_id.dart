@@ -2545,6 +2545,44 @@ class AppLocalizationsId extends AppLocalizations {
       'Kalau Android menghentikan Charon, trafik bisa lewat langsung. Untuk perlindungan penuh, nyalakan VPN selalu aktif dan Blokir koneksi tanpa VPN di pengaturan Android.';
 
   @override
+  String get stateDisconnectedLockdownLine2 =>
+      'internet diblokir sampai Charon terhubung';
+
+  @override
+  String get homeValueBlocked => 'diblokir';
+
+  @override
+  String get homeNoteUntilCharonConnects => 'sampai Charon terhubung';
+
+  @override
+  String get androidVpnRevokedLockdownNotice =>
+      'Android mencabut izin VPN Charon. Internet diblokir sampai kamu mengizinkannya lagi.';
+
+  @override
+  String get androidAnotherVpnLockdownNotice =>
+      'VPN lain mengambil alih. Internet diblokir sampai Charon kembali.';
+
+  @override
+  String get androidStoppedLockdownNotice =>
+      'Android menghentikan Charon. Internet diblokir sampai Charon terhubung.';
+
+  @override
+  String get androidAlwaysOnLockdownDesc =>
+      'Android menjaga Charon tetap nyala dan memblokir internet setiap kali Charon tidak terhubung.';
+
+  @override
+  String get androidAlwaysOnLineNotSet =>
+      'pengaturan Android · Charon tidak bisa menyalakannya untukmu';
+
+  @override
+  String get androidAlwaysOnLineOn =>
+      'Nyala · trafik lewat langsung kalau Charon berhenti';
+
+  @override
+  String get androidAlwaysOnLineLockdown =>
+      'Nyala dengan lockdown · internet diblokir kalau Charon berhenti';
+
+  @override
   String get androidOpenVpnSettings => 'Buka pengaturan VPN';
 
   @override

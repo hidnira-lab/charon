@@ -4541,6 +4541,66 @@ abstract class AppLocalizations {
   /// **'If Android stops Charon, traffic can go direct. For full protection turn on Always on VPN and Block connections without VPN in Android settings.'**
   String get androidAlwaysOnVpnDesc;
 
+  /// Subtitle when disconnected and Android lockdown is on.
+  ///
+  /// In en, this message translates to:
+  /// **'internet is blocked until Charon connects'**
+  String get stateDisconnectedLockdownLine2;
+
+  /// Readout value when Android lockdown blocks all internet.
+  ///
+  /// In en, this message translates to:
+  /// **'blocked'**
+  String get homeValueBlocked;
+
+  /// Throughput note while Android lockdown blocks all internet.
+  ///
+  /// In en, this message translates to:
+  /// **'until Charon connects'**
+  String get homeNoteUntilCharonConnects;
+
+  /// Amber notice when VPN permission is revoked and Android lockdown is on.
+  ///
+  /// In en, this message translates to:
+  /// **'Android removed Charon\'s VPN permission. Internet is blocked until you allow it again.'**
+  String get androidVpnRevokedLockdownNotice;
+
+  /// Amber notice when another VPN takes over and Android lockdown is on.
+  ///
+  /// In en, this message translates to:
+  /// **'Another VPN took over. Internet is blocked until Charon is back.'**
+  String get androidAnotherVpnLockdownNotice;
+
+  /// Amber notice when Android stopped Charon and Android lockdown is on.
+  ///
+  /// In en, this message translates to:
+  /// **'Android stopped Charon. Internet is blocked until Charon connects.'**
+  String get androidStoppedLockdownNotice;
+
+  /// Always on VPN card text when lockdown is on.
+  ///
+  /// In en, this message translates to:
+  /// **'Android keeps Charon on and blocks the internet whenever Charon is not connected.'**
+  String get androidAlwaysOnLockdownDesc;
+
+  /// Status line of the Always on VPN card when it is not set.
+  ///
+  /// In en, this message translates to:
+  /// **'Android setting · Charon cannot switch it on for you'**
+  String get androidAlwaysOnLineNotSet;
+
+  /// Status line of the Always on VPN card when it is on but lockdown is off.
+  ///
+  /// In en, this message translates to:
+  /// **'On · traffic goes direct if Charon stops'**
+  String get androidAlwaysOnLineOn;
+
+  /// Status line of the Always on VPN card when lockdown is on.
+  ///
+  /// In en, this message translates to:
+  /// **'On with lockdown · internet is blocked if Charon stops'**
+  String get androidAlwaysOnLineLockdown;
+
   /// Button to open Android VPN system settings.
   ///
   /// In en, this message translates to:

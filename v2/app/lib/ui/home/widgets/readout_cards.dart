@@ -9,6 +9,7 @@ import 'sparkline.dart';
 import '../../../state/ui_state.dart';
 import '../../common/glass_card.dart';
 import '../../common/motion.dart';
+import '../../common/state_tone.dart';
 
 /// The 4 readout cards row matching HomeDesktop board (height 84 px).
 /// What each card says in each state comes from [HomeView.readouts].
@@ -124,7 +125,11 @@ class _ReadoutCard extends StatelessWidget {
                       readout.value,
                       style: CharonTypography.dataXL.copyWith(
                         fontSize: 22.0,
-                        color: readout.dim ? colors.text3 : colors.text,
+                        color: readout.warn
+                            ? colors.tone(StateTone.transition).$1
+                            : readout.dim
+                                ? colors.text3
+                                : colors.text,
                       ),
                     ),
                     if (readout.unit.isNotEmpty) ...[

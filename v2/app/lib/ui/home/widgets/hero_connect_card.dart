@@ -61,6 +61,9 @@ class HeroConnectCard extends StatelessWidget {
       }
     }
 
+    // Android lockdown: nothing goes direct, so the line must not say it does.
+    final lockdown = uiState == UiState.disconnected && controller.systemLockdown;
+
     final (String title, String badge, String line2, String cta, bool isPrimary, VoidCallback? onCta) =
         switch (uiState) {
       UiState.connected => (
@@ -82,7 +85,7 @@ class HeroConnectCard extends StatelessWidget {
       UiState.disconnected => (
           l10n.stateDisconnectedTitle,
           l10n.stateDisconnectedBadge,
-          l10n.stateDisconnectedLine2,
+          lockdown ? l10n.stateDisconnectedLockdownLine2 : l10n.stateDisconnectedLine2,
           l10n.actionConnect,
           true,
           controller.connect,
@@ -289,10 +292,10 @@ class HeroConnectCard extends StatelessWidget {
                     '> $line2',
                     style: CharonTypography.caption.copyWith(
                       fontFamily: CharonFontFamilies.spaceMono,
-                      color: toneFg,
+                      color: lockdown ? colors.tone(StateTone.transition).$1 : toneFg,
                       fontSize: 11.0,
                     ),
-                    maxLines: 1,
+                    maxLines: lockdown ? 2 : 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const Spacer(),
