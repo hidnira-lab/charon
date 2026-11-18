@@ -303,6 +303,90 @@ func TestVerifier_WaitsForXrayToListen(t *testing.T) {
 	}
 }
 
+// Check 1 reaches the server through DialServer, so a platform can keep that socket out of
+// the tunnel (Android). A refused dial there is the reason of check 1.
+func TestVerifier_UsesDialServerForCheck1(t *testing.T) {
+	var dialed []string
+	v := New(Options{
+		SocksAddr: "127.0.0.1:1",
+		LookupHost: func(context.Context, string) ([]netip.Addr, error) {
+			return []netip.Addr{netip.MustParseAddr("192.0.2.10")}, nil
+		},
+		DialServer: func(_ context.Context, network, addr string) (net.Conn, error) {
+			dialed = append(dialed, network+" "+addr)
+			return nil, io.ErrClosedPipe
+		},
+	})
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	_, _, reason := v.Verify(ctx, &charonv1.Server{Id: "SRV-01", Address: "192.0.2.10", Port: 443}, nil)
+	if reason != charonv1.FailureReason_FAILURE_TCP_TIMEOUT {
+		t.Fatalf("want FAILURE_TCP_TIMEOUT, got %v", reason)
+	}
+	if len(dialed) != 1 || dialed[0] != "tcp 192.0.2.10:443" {
+		t.Fatalf("check 1 should dial the server once through DialServer: %v", dialed)
+	}
+}
+
+// A network where the server cannot be reached: Xray is up and its SOCKS port answers, but it
+// cannot open a connection to anything, so no round trip is possible. That must fail, not pass.
+func TestVerifier_FailsWhenTheTunnelCarriesNothing(t *testing.T) {
+	srvLn, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer srvLn.Close()
+	go func() {
+		for {
+			c, err := srvLn.Accept()
+			if err != nil {
+				return
+			}
+			_ = c.Close()
+		}
+	}()
+	_, portStr, _ := net.SplitHostPort(srvLn.Addr().String())
+	srvPort, _ := strconv.Atoi(portStr)
+
+	socksLn, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer socksLn.Close()
+	go func() {
+		for {
+			c, err := socksLn.Accept()
+			if err != nil {
+				return
+			}
+			go func(c net.Conn) {
+				defer c.Close()
+				var greet [3]byte
+				if _, err := io.ReadFull(c, greet[:]); err != nil {
+					return
+				}
+				_, _ = c.Write([]byte{0x05, 0x00})
+				var req [10]byte
+				_, _ = io.ReadAtLeast(c, req[:], 4)
+				// 0x04: host unreachable.
+				_, _ = c.Write([]byte{0x05, 0x04, 0x00, 0x01, 0, 0, 0, 0, 0, 0})
+			}(c)
+		}
+	}()
+
+	v := New(Options{
+		SocksAddr:  socksLn.Addr().String(),
+		EgressURL:  "https://192.0.2.1/cdn-cgi/trace",
+		LookupHost: func(context.Context, string) ([]netip.Addr, error) { return []netip.Addr{netip.MustParseAddr("192.0.2.10")}, nil },
+	})
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	_, _, reason := v.Verify(ctx, &charonv1.Server{Id: "SRV-01", Address: "127.0.0.1", Port: uint32(srvPort)}, nil)
+	if reason != charonv1.FailureReason_FAILURE_REALITY_HANDSHAKE {
+		t.Fatalf("a tunnel that carries nothing must fail with FAILURE_REALITY_HANDSHAKE, got %v", reason)
+	}
+}
+
 // If Xray never listens, the verification fails with the reason of check 2, once the wait is over,
 // and the log says which check and why, with no address in it.
 func TestVerifier_GivesUpWhenXrayNeverListens(t *testing.T) {

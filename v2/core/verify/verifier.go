@@ -30,6 +30,13 @@ type Options struct {
 	QueryHost  string // domain queried in check 4, defaults to "example.com"
 	LookupHost func(ctx context.Context, host string) ([]netip.Addr, error)
 
+	// DialServer opens the plain TCP connection of check 1 to the server itself.
+	// It must reach the server by the network underneath the tunnel. Nil is a
+	// normal dial, which is right on Windows. On Android a normal dial would
+	// enter the tunnel, so the platform passes a dialer whose sockets are
+	// protected from it.
+	DialServer func(ctx context.Context, network, addr string) (net.Conn, error)
+
 	// SocksReadyWait is how long check 2 waits for the SOCKS inbound of Xray to
 	// accept connections. Xray is "started" 150 ms after it is launched, but it
 	// makes the adapter and the routes before it listens, which takes longer, so
@@ -99,8 +106,11 @@ func (v *Verifier) Verify(ctx context.Context, server *charonv1.Server, cfg *cha
 
 	// Step 1: TCP reachability to the server's address:port.
 	serverEndpoint := net.JoinHostPort(strings.TrimSpace(server.GetAddress()), fmt.Sprintf("%d", server.GetPort()))
-	var d net.Dialer
-	tcpConn, err := d.DialContext(ctx, "tcp", serverEndpoint)
+	dial := v.opts.DialServer
+	if dial == nil {
+		dial = (&net.Dialer{}).DialContext
+	}
+	tcpConn, err := dial(ctx, "tcp", serverEndpoint)
 	if err != nil {
 		v.failed("1 (the server does not accept a connection)", err)
 		return "", 0, charonv1.FailureReason_FAILURE_TCP_TIMEOUT
