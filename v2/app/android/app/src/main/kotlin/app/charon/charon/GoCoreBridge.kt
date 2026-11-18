@@ -45,7 +45,7 @@ class GoCoreBridge(
     private val dataDir: String,
     private val host: NativeHostCallbacks,
     private val serviceVersion: String = "0.1.0",
-    private val xrayVersion: String = "25.10.15",
+    private val xrayVersion: String = "26.10.31",
 ) {
     private val mainHandler = Handler(Looper.getMainLooper())
     private var nativeBridge: Any? = null
