@@ -23,9 +23,8 @@ const (
 )
 
 type Config struct {
-	Store  *store.Store
-	Now    func() time.Time
-	LogIPs bool
+	Store *store.Store
+	Now   func() time.Time
 }
 
 type Server struct {

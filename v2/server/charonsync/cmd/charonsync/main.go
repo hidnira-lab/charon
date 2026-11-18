@@ -97,7 +97,6 @@ func runServe(args []string) {
 	keyFile := fs.String("key", "", "TLS private key PEM file")
 	behindProxy := fs.Bool("behind-tls-proxy", false, "allow plain HTTP on loopback behind a reverse proxy that terminates TLS")
 	allow443 := fs.Bool("allow-port-443", false, "override the port 443 safety check when Reality is on another host")
-	logIPs := fs.Bool("log-ips", false, "log client IP addresses")
 	_ = fs.Parse(args)
 
 	_, portStr, err := net.SplitHostPort(*listenAddr)
@@ -125,9 +124,8 @@ func runServe(args []string) {
 	}
 
 	srv := server.New(server.Config{
-		Store:  st,
-		Now:    time.Now,
-		LogIPs: *logIPs,
+		Store: st,
+		Now:   time.Now,
 	})
 
 	ln, err := net.Listen("tcp", *listenAddr)
