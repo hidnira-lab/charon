@@ -33,7 +33,7 @@ interface NativeHostCallbacks {
 }
 
 /**
- * GoCoreBridge wraps the gomobile-generated `app.charon.bridge.CoreBridge`
+ * GoCoreBridge wraps the gomobile-generated `app.charon.bridge.bridge.CoreBridge`
  * from `charoncore.aar` (built by `v2/platform/android/build-aar.ps1`).
  *
  * Per docs/charon_ipc_contract.md section 3 ("Android"):
@@ -59,9 +59,11 @@ class GoCoreBridge(
 
     private fun initNativeBridge() {
         try {
-            val bridgeFactoryCls = Class.forName("app.charon.bridge.Bridge")
-            val nativeHostIface = Class.forName("app.charon.bridge.NativeHost")
-            val eventSinkIface = Class.forName("app.charon.bridge.EventSink")
+            // gomobile puts the classes at <-javapkg>.<Go package name>, so the
+            // second "bridge" is the Go package (build-aar.ps1 passes -javapkg=app.charon.bridge).
+            val bridgeFactoryCls = Class.forName("app.charon.bridge.bridge.Bridge")
+            val nativeHostIface = Class.forName("app.charon.bridge.bridge.NativeHost")
+            val eventSinkIface = Class.forName("app.charon.bridge.bridge.EventSink")
 
             val hostProxy = Proxy.newProxyInstance(
                 nativeHostIface.classLoader,
@@ -143,8 +145,9 @@ class GoCoreBridge(
             val setSinkMethod = inst.javaClass.getMethod("setEventSink", eventSinkIface)
             setSinkMethod.invoke(inst, sinkProxy)
             nativeBridge = inst
-        } catch (_: ClassNotFoundException) {
+        } catch (e: ClassNotFoundException) {
             // charoncore.aar is built by v2/platform/android/build-aar.ps1 and not committed to git.
+            android.util.Log.e("CharonCore", "Go bridge class missing", e)
             nativeBridge = null
         } catch (t: Throwable) {
             host.reportFatalError("BRIDGE_INIT_FAILED", t.message ?: "unknown")
