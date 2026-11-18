@@ -13,3 +13,7 @@ Zero-knowledge encrypted vault sync server for Charon (`charonsync`).
 ```powershell
 go test -race ./...
 ```
+
+## Licence
+
+GPL 3.0, the same as the rest of Charon. See `../../LICENSE`.
