@@ -24,6 +24,7 @@ Charon is licensed under the GNU General Public License v3.0 (`LICENSE`). It shi
 * **`google.golang.org/protobuf` (v1.36.11)**: BSD 3-Clause License
 * **`golang.org/x/crypto` (v0.45.0)**: BSD 3-Clause License
 * **`golang.org/x/sys` (v0.38.0)**: BSD 3-Clause License
+* **`golang.org/x/mobile` (bind runtime, in the Android AAR)**: BSD 3-Clause License (Copyright 2009 The Go Authors)
 * **`github.com/microsoft/go-winio` (v0.6.2)**: MIT License (Copyright (c) Microsoft Corporation)
 
 ## 4. Flutter SDK and Dart Packages (`app`)
