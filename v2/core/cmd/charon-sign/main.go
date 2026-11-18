@@ -37,6 +37,8 @@ func main() {
 		runSign(args)
 	case "verify":
 		runVerify(args)
+	case "bundle":
+		runBundle(args)
 	default:
 		usage()
 		os.Exit(2)
@@ -50,7 +52,9 @@ Commands:
   keygen    Generate an offline Ed25519 keypair for release manifest signing
   manifest  Build manifest.json from release artifact files
   sign      Create a detached Ed25519 signature (manifest.json.sig)
-  verify    Verify a manifest.json and its detached signature`)
+  verify    Verify a manifest.json and its detached signature
+  bundle    Pack manifest, signature and one artifact into a .charonup file for
+            "Update from a file" (run it after signing)`)
 }
 
 func runKeygen(args []string) {
@@ -223,6 +227,69 @@ func runVerify(args []string) {
 		fatalf("verify failed: %v", err)
 	}
 	fmt.Printf("verified version=%s sequence=%d artifacts=%d\n", m.Version, m.Sequence, len(m.Artifacts))
+}
+
+func runBundle(args []string) {
+	fs := flag.NewFlagSet("bundle", flag.ExitOnError)
+	manifestPath := fs.String("manifest", "manifest.json", "path to the signed manifest.json")
+	sigPath := fs.String("sig", "", "path to detached signature (defaults to <manifest>.sig)")
+	artifactPath := fs.String("artifact", "", "path to the release file to pack (installer or core)")
+	outPath := fs.String("out", "", "output path (defaults to <artifact>.charonup)")
+	_ = fs.Parse(args)
+
+	if *artifactPath == "" {
+		fatalf("bundle requires -artifact")
+	}
+	if *sigPath == "" {
+		*sigPath = *manifestPath + ".sig"
+	}
+	if *outPath == "" {
+		*outPath = *artifactPath + ".charonup"
+	}
+
+	bundle, err := buildBundle(*manifestPath, *sigPath, *artifactPath)
+	if err != nil {
+		fatalf("bundle: %v", err)
+	}
+	if err := os.WriteFile(*outPath, bundle, 0o644); err != nil {
+		fatalf("write %s: %v", *outPath, err)
+	}
+	fmt.Printf("bundle=%s bytes=%d\n", *outPath, len(bundle))
+}
+
+// buildBundle packs the three files after checking that the artifact is one the
+// manifest names, with the exact size and sha256. The service checks the
+// signature on the user's machine, so this only guards against packing the wrong
+// file at release time.
+func buildBundle(manifestPath, sigPath, artifactPath string) ([]byte, error) {
+	manifestBytes, err := os.ReadFile(manifestPath)
+	if err != nil {
+		return nil, fmt.Errorf("read manifest: %w", err)
+	}
+	sigBytes, err := os.ReadFile(sigPath)
+	if err != nil {
+		return nil, fmt.Errorf("read signature: %w", err)
+	}
+	artifactBytes, err := os.ReadFile(artifactPath)
+	if err != nil {
+		return nil, fmt.Errorf("read artifact: %w", err)
+	}
+
+	var m update.Manifest
+	if err := json.Unmarshal(manifestBytes, &m); err != nil {
+		return nil, fmt.Errorf("parse manifest: %w", err)
+	}
+	name := filepath.Base(artifactPath)
+	for _, a := range m.Artifacts {
+		if a.Name != name {
+			continue
+		}
+		if err := update.VerifyArtifactBytes(artifactBytes, a); err != nil {
+			return nil, fmt.Errorf("%s does not match the manifest: %w", name, err)
+		}
+		return update.PackBundle(manifestBytes, sigBytes, artifactBytes), nil
+	}
+	return nil, fmt.Errorf("%s is not listed in the manifest", name)
 }
 
 func hashFile(path string) (string, int64, error) {
