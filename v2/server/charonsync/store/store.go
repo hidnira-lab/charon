@@ -96,6 +96,15 @@ func Open(dataDir string, now func() time.Time) (*Store, error) {
 		dataDir: dataDir,
 		now:     now,
 	}
+	// A process killed in the middle of writeFileAtomic leaves its temporary file
+	// behind. The real file is untouched (the rename never happened), so these are
+	// only litter.
+	for _, dir := range []string{dataDir, filepath.Join(dataDir, "blobs")} {
+		stray, _ := filepath.Glob(filepath.Join(dir, "*.tmp.*"))
+		for _, f := range stray {
+			_ = os.Remove(f)
+		}
+	}
 	dbPath := filepath.Join(dataDir, "state.db")
 	raw, err := os.ReadFile(dbPath)
 	if err != nil {

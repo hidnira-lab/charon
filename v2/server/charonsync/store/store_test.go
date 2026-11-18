@@ -358,6 +358,39 @@ func TestStateSurvivesReopen(t *testing.T) {
 	}
 }
 
+// A kill between the temporary write and the rename leaves a half written file
+// next to the good one. The good state must open as it was, and the litter goes.
+func TestHalfWrittenFilesFromAKilledProcessAreIgnored(t *testing.T) {
+	s, clk, dir, _, tok := claimed(t)
+	s.PutVault(0, []byte("vault"), "PC")
+
+	litter := []string{
+		filepath.Join(dir, "state.db.tmp.123"),
+		filepath.Join(dir, "blobs", "rev-2.charonvault.tmp.456"),
+	}
+	for _, f := range litter {
+		if err := os.WriteFile(f, []byte("{half"), 0o600); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	again, err := Open(dir, clk.Now)
+	if err != nil {
+		t.Fatalf("reopen with half written files: %v", err)
+	}
+	if _, err := again.Authenticate(tok); err != nil {
+		t.Errorf("token after reopen: %v", err)
+	}
+	if blob, meta, err := again.GetLatestVault(); err != nil || string(blob) != "vault" || meta.Revision != 1 {
+		t.Errorf("vault after reopen: %q %+v %v", blob, meta, err)
+	}
+	for _, f := range litter {
+		if _, err := os.Stat(f); !os.IsNotExist(err) {
+			t.Errorf("%s should have been removed (%v)", f, err)
+		}
+	}
+}
+
 func TestCorruptStateIsRefused(t *testing.T) {
 	dir := t.TempDir()
 	if err := os.WriteFile(filepath.Join(dir, "state.db"), []byte("{not json"), 0o600); err != nil {
