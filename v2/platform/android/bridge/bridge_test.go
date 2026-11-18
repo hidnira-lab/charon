@@ -420,7 +420,7 @@ func TestAndroidBootRuleAndPanicRecovery(t *testing.T) {
 	if err != nil {
 		t.Fatalf("NewCoreBridge 2: %v", err)
 	}
-	cb2.SetVerifier(defaultAndroidVerifier{})
+	cb2.SetVerifier(acceptAllVerifier{})
 	if err := cb2.Start(true); err != nil {
 		t.Fatalf("Start(true): %v", err)
 	}

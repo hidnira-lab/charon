@@ -3,8 +3,11 @@ package bridge
 import (
 	"context"
 	"encoding/binary"
+	"errors"
 	"fmt"
+	"net"
 	"sync"
+	"syscall"
 	"time"
 
 	"github.com/hidnira-lab/charon/core/diag"
@@ -14,6 +17,7 @@ import (
 	"github.com/hidnira-lab/charon/core/logbuf"
 	"github.com/hidnira-lab/charon/core/machine"
 	"github.com/hidnira-lab/charon/core/quota"
+	"github.com/hidnira-lab/charon/core/verify"
 	"github.com/hidnira-lab/charon/core/xrayconfig"
 	"google.golang.org/protobuf/proto"
 )
@@ -119,9 +123,9 @@ func NewCoreBridgeWithBackend(dataDir string, host NativeHost, backend TunnelBac
 		accessLogs:     accessLogs,
 		serviceVersion: serviceVersion,
 		xrayVersion:    xrayVersion,
-		verifier:       defaultAndroidVerifier{},
 		stopCh:         make(chan struct{}),
 	}
+	b.verifier = verifierFor(b)
 
 	b.drv = driver.New(cfg, saved, driver.Deps{
 		Gate:          gate,
@@ -818,18 +822,58 @@ func (p *androidVerifierProxy) Verify(ctx context.Context, server *charonv1.Serv
 	v := p.bridge.verifier
 	p.bridge.mu.Unlock()
 	if v == nil {
-		return server.GetAddress(), 25, charonv1.FailureReason_FAILURE_UNSPECIFIED
+		// No verifier means nothing was checked, which is a failure and never a pass.
+		return "", 0, charonv1.FailureReason_FAILURE_TCP_TIMEOUT
 	}
 	return v.Verify(ctx, server, cfg)
 }
 
-type defaultAndroidVerifier struct{}
+// acceptAllVerifier passes whenever the server has an address and never touches the
+// network. It is for host tests only: the Android build replaces verifierFor in init
+// (xray_runner_android.go), so a tunnel that is dead can never be shown as verified.
+type acceptAllVerifier struct{}
 
-func (defaultAndroidVerifier) Verify(_ context.Context, server *charonv1.Server, _ *charonv1.Config) (string, uint32, charonv1.FailureReason) {
+func (acceptAllVerifier) Verify(_ context.Context, server *charonv1.Server, _ *charonv1.Config) (string, uint32, charonv1.FailureReason) {
 	if server == nil || server.GetAddress() == "" {
 		return "", 0, charonv1.FailureReason_FAILURE_TCP_TIMEOUT
 	}
 	return server.GetAddress(), 38, charonv1.FailureReason_FAILURE_UNSPECIFIED
+}
+
+// verifierFor picks the verifier of a new bridge. See acceptAllVerifier.
+var verifierFor = func(*CoreBridge) driver.Verifier { return acceptAllVerifier{} }
+
+// egressURL answers with the address the caller is seen from, as on Windows.
+const egressURL = "https://1.1.1.1/cdn-cgi/trace"
+
+// newTunnelVerifier is the same four step check as Windows. Checks 2 to 4 go through
+// the local SOCKS inbound of Xray, so they only pass when the tunnel really carries
+// traffic. Check 1 reaches the server itself, so its socket is protected from the TUN.
+func newTunnelVerifier(b *CoreBridge) driver.Verifier {
+	return verify.New(verify.Options{
+		SocksAddr:  fmt.Sprintf("127.0.0.1:%d", defaultSocksPort),
+		EgressURL:  egressURL,
+		DialServer: b.protectedDial,
+		Log: func(msg string) {
+			b.coreLogs.Append(charonv1.LogLevel_LOG_LEVEL_WARN, msg, time.Now().UnixMilli())
+		},
+	})
+}
+
+// protectedDial dials with VpnService.protect() applied before connect, so the socket
+// leaves by the network underneath the tunnel instead of entering it.
+func (b *CoreBridge) protectedDial(ctx context.Context, network, addr string) (net.Conn, error) {
+	d := net.Dialer{Control: func(_, _ string, c syscall.RawConn) error {
+		var ok bool
+		if err := c.Control(func(fd uintptr) { ok = b.host.ProtectSocket(int(fd)) }); err != nil {
+			return err
+		}
+		if !ok {
+			return errors.New("VpnService.protect refused the socket")
+		}
+		return nil
+	}}
+	return d.DialContext(ctx, network, addr)
 }
 
 type androidStatsReader struct {

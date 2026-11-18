@@ -34,7 +34,10 @@ import (
 	_ "github.com/xtls/xray-core/transport/internet/udp"
 )
 
-func init() { defaultRunner = runXray }
+func init() {
+	defaultRunner = runXray
+	verifierFor = newTunnelVerifier
+}
 
 // currentProtector is what the dialer controller calls. Xray keeps controllers in a
 // global list that never shrinks, so one controller is registered for the life of the
