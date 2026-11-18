@@ -195,6 +195,15 @@ class PlatformChannelTransport implements CoreTransport {
     return granted ?? false;
   }
 
+  /// Whether Always-on VPN and "Block connections without VPN" are on for
+  /// Charon. With lockdown on, Android blocks all internet while Charon is not
+  /// connected, so nothing goes direct.
+  Future<({bool alwaysOn, bool lockdown})> vpnLockdown() async {
+    if (_closed) return (alwaysOn: false, lockdown: false);
+    final m = await _methodChannel.invokeMapMethod<String, bool>('vpnLockdown');
+    return (alwaysOn: m?['alwaysOn'] ?? false, lockdown: m?['lockdown'] ?? false);
+  }
+
   /// Opens the Android system VPN settings screen (Always-on VPN / Block
   /// connections without VPN).
   Future<bool> openVpnSettings() async {

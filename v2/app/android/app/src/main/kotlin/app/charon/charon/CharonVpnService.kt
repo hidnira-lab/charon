@@ -50,6 +50,23 @@ class CharonVpnService : VpnService(), NativeHostCallbacks {
         var tileSubtitle: String = "Off"
             private set
 
+        private const val PREFS = "charon_android"
+        private const val KEY_ALWAYS_ON = "system_always_on"
+        private const val KEY_LOCKDOWN = "system_lockdown"
+
+        /**
+         * Whether Android's Always-on VPN and "Block connections without VPN" are
+         * on for Charon. Only a running VpnService can ask the system (API 29), so
+         * when none runs the answer is the last one it saw. The system rebinds the
+         * service whenever the user changes these switches, so that value stays
+         * close to the truth.
+         */
+        fun systemFlags(context: Context): Pair<Boolean, Boolean> {
+            activeInstance?.recordSystemFlags()
+            val p = context.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            return Pair(p.getBoolean(KEY_ALWAYS_ON, false), p.getBoolean(KEY_LOCKDOWN, false))
+        }
+
         @Synchronized
         fun ensureBridge(context: Context): GoCoreBridge {
             var b = sharedBridge
@@ -71,11 +88,21 @@ class CharonVpnService : VpnService(), NativeHostCallbacks {
     override fun onCreate() {
         super.onCreate()
         activeInstance = this
+        recordSystemFlags()
         CharonNotificationHelper.ensureChannels(this)
         registerNetworkCallback()
     }
 
+    private fun recordSystemFlags() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return
+        getSharedPreferences(PREFS, MODE_PRIVATE).edit()
+            .putBoolean(KEY_ALWAYS_ON, isAlwaysOn)
+            .putBoolean(KEY_LOCKDOWN, isLockdownEnabled)
+            .apply()
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        recordSystemFlags()
         val bridge = ensureBridge(this)
         val action = intent?.action
 

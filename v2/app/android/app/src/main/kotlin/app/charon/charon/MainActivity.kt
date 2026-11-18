@@ -88,6 +88,11 @@ class MainActivity : FlutterActivity() {
                     }
                 }
 
+                "vpnLockdown" -> {
+                    val (alwaysOn, lockdown) = CharonVpnService.systemFlags(this)
+                    result.success(mapOf("alwaysOn" to alwaysOn, "lockdown" to lockdown))
+                }
+
                 "openVpnSettings" -> {
                     val intent = Intent(Settings.ACTION_VPN_SETTINGS).apply {
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK

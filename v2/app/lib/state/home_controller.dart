@@ -60,6 +60,7 @@ class HomeController extends ChangeNotifier {
         service = serviceSupervisor ?? ServiceSupervisor(),
         _uiStore = uiPrefs {
     _platformTransport = platformTransport;
+    unawaited(refreshSystemLockdown());
     _dnsFromConfig();
     _lastPhase = _status.phase;
     _syncAndroidAnomaly(_status);
@@ -444,6 +445,34 @@ class HomeController extends ChangeNotifier {
   bool get anotherVpnTookOver => _anotherVpnTookOver;
   bool get stoppedByAndroid => _stoppedByAndroid;
 
+  /// Android's Always-on VPN and "Block connections without VPN" for Charon.
+  /// With lockdown on, Android blocks all internet while Charon is not
+  /// connected, so Home must not say traffic goes direct.
+  bool get systemAlwaysOn => _systemAlwaysOn;
+  bool get systemLockdown => _systemLockdown;
+  bool _systemAlwaysOn = false;
+  bool _systemLockdown = false;
+
+  void setSystemLockdown({required bool alwaysOn, required bool lockdown}) {
+    if (_systemAlwaysOn == alwaysOn && _systemLockdown == lockdown) return;
+    _systemAlwaysOn = alwaysOn;
+    _systemLockdown = lockdown;
+    notifyListeners();
+  }
+
+  /// Asks Android again. Runs at start and on every phase change, which is when
+  /// the system has just rebound the service after the user changed a switch.
+  Future<void> refreshSystemLockdown() async {
+    final t = _platformTransport;
+    if (t == null) return;
+    try {
+      final f = await t.vpnLockdown();
+      if (!_isDisposed) setSystemLockdown(alwaysOn: f.alwaysOn, lockdown: f.lockdown);
+    } catch (_) {
+      // Keep the last known answer.
+    }
+  }
+
   void setQuota(Quota quota) {
     _quota = quota;
     notifyListeners();
@@ -467,6 +496,7 @@ class HomeController extends ChangeNotifier {
     if (status.phase == Phase.PHASE_IDLE) throughputHistory.clear();
     final from = _lastPhase;
     if (from != null && from != status.phase) {
+      unawaited(refreshSystemLockdown());
       _stateChanges.add((atMs: serviceNowMs, from: from, to: status.phase));
       if (_stateChanges.length > maxStateChanges) _stateChanges.removeAt(0);
     }
@@ -1026,6 +1056,7 @@ class HomeController extends ChangeNotifier {
     if (serviceVersion != null) _serviceVersion = serviceVersion;
     if (platformTransport != null) {
       _platformTransport = platformTransport;
+      unawaited(refreshSystemLockdown());
     }
     service.setStatus(ServiceStatus.running);
     if (initialStatus != null) {
