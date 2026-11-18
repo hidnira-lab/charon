@@ -604,7 +604,7 @@ class SyncController extends ChangeNotifier {
   String? _errorMessage;
   SyncConflictInfo? _conflictInfo;
   SyncPairingTicket? _activePairingTicket;
-  String _deviceName = 'Windows Desktop';
+  String _deviceName = Platform.isAndroid ? 'Android Phone' : 'Windows Desktop';
   String _serverUrl = '';
   int _lastSeenRevision = 0;
 
