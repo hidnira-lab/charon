@@ -4,6 +4,7 @@ import '../../l10n/generated/app_localizations.dart';
 import '../../state/home_controller.dart';
 import '../../theme/theme.dart';
 import '../common/glass_card.dart';
+import '../common/phone_layout.dart';
 import 'guide_links.dart';
 import 'widgets/trust_page.dart';
 import '../common/pixel_icon.dart';
@@ -94,13 +95,17 @@ class PrivacyScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          GridView.count(
-            crossAxisCount: 2,
+          GridView(
+            // On a phone the words wrap, as on the TrustMobile board, so each cell is taller.
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              childAspectRatio: 7,
+              mainAxisExtent: isPhoneLayout(context) ? 72 : null,
+            ),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 8,
-            crossAxisSpacing: 8,
-            childAspectRatio: 7,
             children: [
               for (final f in facts)
                 Container(
@@ -118,6 +123,7 @@ class PrivacyScreen extends StatelessWidget {
                       Expanded(
                         child: Text(
                           f,
+                          maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: colors.text),
                         ),
