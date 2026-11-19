@@ -4914,6 +4914,72 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsConnModeProxySoon => '系统代理，将在 v1.1 提供';
+
+  @override
+  String get mobileMenuOpen => '打开菜单';
+
+  @override
+  String get mobileMenuClose => '关闭菜单';
+
+  @override
+  String get mobileNavHomeSub => '连接、场景、今日';
+
+  @override
+  String get mobileNavNoServerYet => '尚无服务器';
+
+  @override
+  String get mobileNavServersSubEmpty => '在这里添加第一个';
+
+  @override
+  String mobileNavSplitSubAllExcept(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 条规则',
+      zero: '暂无规则',
+    );
+    return '$_temp0 · 除列表外全部';
+  }
+
+  @override
+  String mobileNavSplitSubOnlyListed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 条规则',
+      zero: '暂无规则',
+    );
+    return '$_temp0 · 仅列表';
+  }
+
+  @override
+  String mobileNavTelemetryLive(String speed) {
+    return '实时 · 下行 $speed Mbps';
+  }
+
+  @override
+  String get mobileNavTelemetryIdle => '当前没有会话';
+
+  @override
+  String mobileNavSettingsSub(int armed) {
+    return '故障保护已启用 $armed/2 · 关于';
+  }
+
+  @override
+  String get mobileDrawerAddServer => '添加服务器后开始';
+
+  @override
+  String mobileDrawerReady(String code) {
+    return '就绪 · $code';
+  }
+
+  @override
+  String mobileDrawerVersion(String version) {
+    return 'Charon v$version';
+  }
+
+  @override
+  String get mobileFailsafeReconnect => '重新连接';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -9825,4 +9891,70 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get settingsConnModeProxySoon => '系统代理，将在 v1.1 提供';
+
+  @override
+  String get mobileMenuOpen => '打开菜单';
+
+  @override
+  String get mobileMenuClose => '关闭菜单';
+
+  @override
+  String get mobileNavHomeSub => '连接、场景、今日';
+
+  @override
+  String get mobileNavNoServerYet => '尚无服务器';
+
+  @override
+  String get mobileNavServersSubEmpty => '在这里添加第一个';
+
+  @override
+  String mobileNavSplitSubAllExcept(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 条规则',
+      zero: '暂无规则',
+    );
+    return '$_temp0 · 除列表外全部';
+  }
+
+  @override
+  String mobileNavSplitSubOnlyListed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 条规则',
+      zero: '暂无规则',
+    );
+    return '$_temp0 · 仅列表';
+  }
+
+  @override
+  String mobileNavTelemetryLive(String speed) {
+    return '实时 · 下行 $speed Mbps';
+  }
+
+  @override
+  String get mobileNavTelemetryIdle => '当前没有会话';
+
+  @override
+  String mobileNavSettingsSub(int armed) {
+    return '故障保护已启用 $armed/2 · 关于';
+  }
+
+  @override
+  String get mobileDrawerAddServer => '添加服务器后开始';
+
+  @override
+  String mobileDrawerReady(String code) {
+    return '就绪 · $code';
+  }
+
+  @override
+  String mobileDrawerVersion(String version) {
+    return 'Charon v$version';
+  }
+
+  @override
+  String get mobileFailsafeReconnect => '重新连接';
 }

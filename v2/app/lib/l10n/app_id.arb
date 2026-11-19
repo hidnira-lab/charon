@@ -1505,5 +1505,19 @@
   "settingsCountryLabel": "Negara, {name}",
   "settingsGreetingPreviewIn": "· di {city}",
   "trustLicSubCities": "data kota untuk sapaan · bekerja offline",
-  "settingsConnModeProxySoon": "System proxy, hadir di v1.1"
+  "settingsConnModeProxySoon": "System proxy, hadir di v1.1",
+  "mobileMenuOpen": "Buka menu",
+  "mobileMenuClose": "Tutup menu",
+  "mobileNavHomeSub": "koneksi, suasana, hari ini",
+  "mobileNavNoServerYet": "belum ada server",
+  "mobileNavServersSubEmpty": "tambah yang pertama di sini",
+  "mobileNavSplitSubAllExcept": "{count, plural, =0{belum ada aturan} other{{count} aturan}} · semua kecuali daftar",
+  "mobileNavSplitSubOnlyListed": "{count, plural, =0{belum ada aturan} other{{count} aturan}} · hanya daftar",
+  "mobileNavTelemetryLive": "langsung · {speed} Mbps unduh",
+  "mobileNavTelemetryIdle": "tidak ada sesi sekarang",
+  "mobileNavSettingsSub": "pengaman {armed} dari 2 aktif · tentang",
+  "mobileDrawerAddServer": "Tambah server untuk mulai",
+  "mobileDrawerReady": "Siap · {code}",
+  "mobileDrawerVersion": "Charon v{version}",
+  "mobileFailsafeReconnect": "Sambungkan lagi"
 }

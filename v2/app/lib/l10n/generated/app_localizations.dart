@@ -8991,6 +8991,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'System proxy, coming in v1.1'**
   String get settingsConnModeProxySoon;
+
+  /// Phone Home: label of the menu button (HomeMobile board).
+  ///
+  /// In en, this message translates to:
+  /// **'Open menu'**
+  String get mobileMenuOpen;
+
+  /// Phone Home: label of the button that closes the menu.
+  ///
+  /// In en, this message translates to:
+  /// **'Close menu'**
+  String get mobileMenuClose;
+
+  /// Phone menu: second line under Home.
+  ///
+  /// In en, this message translates to:
+  /// **'connect, scene, today'**
+  String get mobileNavHomeSub;
+
+  /// Phone menu: second line under Home with no server.
+  ///
+  /// In en, this message translates to:
+  /// **'no server yet'**
+  String get mobileNavNoServerYet;
+
+  /// Phone menu: second line under Servers with no server. Not on the board in ID and ZH.
+  ///
+  /// In en, this message translates to:
+  /// **'add your first one here'**
+  String get mobileNavServersSubEmpty;
+
+  /// Phone menu: second line under Split tunnel in the all except listed mode.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{no rules} =1{1 rule} other{{count} rules}} · all except listed'**
+  String mobileNavSplitSubAllExcept(int count);
+
+  /// Phone menu: second line under Split tunnel in the only listed mode. Not on the board.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{no rules} =1{1 rule} other{{count} rules}} · only listed'**
+  String mobileNavSplitSubOnlyListed(int count);
+
+  /// Phone menu: second line under Telemetry while connected.
+  ///
+  /// In en, this message translates to:
+  /// **'live · {speed} Mbps down'**
+  String mobileNavTelemetryLive(String speed);
+
+  /// Phone menu: second line under Telemetry with no session.
+  ///
+  /// In en, this message translates to:
+  /// **'no session right now'**
+  String get mobileNavTelemetryIdle;
+
+  /// Phone menu: second line under Settings.
+  ///
+  /// In en, this message translates to:
+  /// **'failsafe {armed} of 2 armed · about'**
+  String mobileNavSettingsSub(int armed);
+
+  /// Phone menu: status card with no server.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a server to start'**
+  String get mobileDrawerAddServer;
+
+  /// Phone menu: status card while disconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready · {code}'**
+  String mobileDrawerReady(String code);
+
+  /// Phone menu: footer line.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon v{version}'**
+  String mobileDrawerVersion(String version);
+
+  /// Phone Home: short name of auto reconnect on the Failsafe row (HomeMobile board).
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnect'**
+  String get mobileFailsafeReconnect;
 }
 
 class _AppLocalizationsDelegate

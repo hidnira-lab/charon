@@ -5167,4 +5167,70 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get settingsConnModeProxySoon => 'System proxy, hadir di v1.1';
+
+  @override
+  String get mobileMenuOpen => 'Buka menu';
+
+  @override
+  String get mobileMenuClose => 'Tutup menu';
+
+  @override
+  String get mobileNavHomeSub => 'koneksi, suasana, hari ini';
+
+  @override
+  String get mobileNavNoServerYet => 'belum ada server';
+
+  @override
+  String get mobileNavServersSubEmpty => 'tambah yang pertama di sini';
+
+  @override
+  String mobileNavSplitSubAllExcept(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count aturan',
+      zero: 'belum ada aturan',
+    );
+    return '$_temp0 · semua kecuali daftar';
+  }
+
+  @override
+  String mobileNavSplitSubOnlyListed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count aturan',
+      zero: 'belum ada aturan',
+    );
+    return '$_temp0 · hanya daftar';
+  }
+
+  @override
+  String mobileNavTelemetryLive(String speed) {
+    return 'langsung · $speed Mbps unduh';
+  }
+
+  @override
+  String get mobileNavTelemetryIdle => 'tidak ada sesi sekarang';
+
+  @override
+  String mobileNavSettingsSub(int armed) {
+    return 'pengaman $armed dari 2 aktif · tentang';
+  }
+
+  @override
+  String get mobileDrawerAddServer => 'Tambah server untuk mulai';
+
+  @override
+  String mobileDrawerReady(String code) {
+    return 'Siap · $code';
+  }
+
+  @override
+  String mobileDrawerVersion(String version) {
+    return 'Charon v$version';
+  }
+
+  @override
+  String get mobileFailsafeReconnect => 'Sambungkan lagi';
 }

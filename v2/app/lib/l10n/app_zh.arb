@@ -1506,5 +1506,19 @@
   "settingsCountryLabel": "国家，{name}",
   "settingsGreetingPreviewIn": "· 在{city}",
   "trustLicSubCities": "问候语的城市数据 · 离线可用",
-  "settingsConnModeProxySoon": "系统代理，将在 v1.1 提供"
+  "settingsConnModeProxySoon": "系统代理，将在 v1.1 提供",
+  "mobileMenuOpen": "打开菜单",
+  "mobileMenuClose": "关闭菜单",
+  "mobileNavHomeSub": "连接、场景、今日",
+  "mobileNavNoServerYet": "尚无服务器",
+  "mobileNavServersSubEmpty": "在这里添加第一个",
+  "mobileNavSplitSubAllExcept": "{count, plural, =0{暂无规则} other{{count} 条规则}} · 除列表外全部",
+  "mobileNavSplitSubOnlyListed": "{count, plural, =0{暂无规则} other{{count} 条规则}} · 仅列表",
+  "mobileNavTelemetryLive": "实时 · 下行 {speed} Mbps",
+  "mobileNavTelemetryIdle": "当前没有会话",
+  "mobileNavSettingsSub": "故障保护已启用 {armed}/2 · 关于",
+  "mobileDrawerAddServer": "添加服务器后开始",
+  "mobileDrawerReady": "就绪 · {code}",
+  "mobileDrawerVersion": "Charon v{version}",
+  "mobileFailsafeReconnect": "重新连接"
 }

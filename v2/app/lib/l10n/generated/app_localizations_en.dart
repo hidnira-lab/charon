@@ -5198,4 +5198,72 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsConnModeProxySoon => 'System proxy, coming in v1.1';
+
+  @override
+  String get mobileMenuOpen => 'Open menu';
+
+  @override
+  String get mobileMenuClose => 'Close menu';
+
+  @override
+  String get mobileNavHomeSub => 'connect, scene, today';
+
+  @override
+  String get mobileNavNoServerYet => 'no server yet';
+
+  @override
+  String get mobileNavServersSubEmpty => 'add your first one here';
+
+  @override
+  String mobileNavSplitSubAllExcept(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count rules',
+      one: '1 rule',
+      zero: 'no rules',
+    );
+    return '$_temp0 · all except listed';
+  }
+
+  @override
+  String mobileNavSplitSubOnlyListed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count rules',
+      one: '1 rule',
+      zero: 'no rules',
+    );
+    return '$_temp0 · only listed';
+  }
+
+  @override
+  String mobileNavTelemetryLive(String speed) {
+    return 'live · $speed Mbps down';
+  }
+
+  @override
+  String get mobileNavTelemetryIdle => 'no session right now';
+
+  @override
+  String mobileNavSettingsSub(int armed) {
+    return 'failsafe $armed of 2 armed · about';
+  }
+
+  @override
+  String get mobileDrawerAddServer => 'Add a server to start';
+
+  @override
+  String mobileDrawerReady(String code) {
+    return 'Ready · $code';
+  }
+
+  @override
+  String mobileDrawerVersion(String version) {
+    return 'Charon v$version';
+  }
+
+  @override
+  String get mobileFailsafeReconnect => 'Reconnect';
 }
