@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+
+import '../common/phone_layout.dart';
 import 'package:flutter/services.dart';
 
 import '../../core/external_link.dart';
@@ -292,6 +294,28 @@ class _SetupScreenState extends State<SetupScreen> {
     // Setup has its own window light, by day from 6 to 18 or by night, and its glass
     // edges follow it.
     final day = hour >= 6 && hour < 18;
+
+    // A phone gets the single column of the SetupMobile board: the progress on top, then the step.
+    if (isPhoneLayout(context)) {
+      return Scaffold(
+        backgroundColor: colors.bg,
+        body: Ambient(
+          time: day ? SceneTime.day : SceneTime.night,
+          child: AmbientLayer(
+            lights: AmbientPainter.setup(day, colors),
+            origin: const Offset(0.20, 0.25),
+            child: SafeArea(
+              child: Column(
+                children: [
+                  _PhoneHeader(step: _step, phase: _phase, stop: stop),
+                  Expanded(child: _Main(state: this, palette: palette, phone: true)),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       backgroundColor: colors.bg,
@@ -645,13 +669,82 @@ class _StepperRow extends StatelessWidget {
 }
 
 // ---------------------------------------------------------------------------------
+// The top of the phone page: the name, the step, and how far along it is.
+
+class _PhoneHeader extends StatelessWidget {
+  const _PhoneHeader({required this.step, required this.phase, required this.stop});
+
+  final SetupStep step;
+  final ConnectPhase phase;
+  final int stop;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final progress = setupProgress(step, phase);
+    final text = switch (stop) {
+      0 => l10n.stpProgressStart,
+      5 => l10n.stpProgressDone,
+      _ => l10n.stpProgressStep(stop.clamp(1, 4)),
+    };
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 14, 20, 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              const LogoMark(),
+              const SizedBox(width: 8),
+              Text('Charon', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: colors.text)),
+              const SizedBox(width: 6),
+              Text(l10n.stpTitleTag, style: monoStyle(colors.text3, 10, bold: true, em: 0.08)),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  text,
+                  textAlign: TextAlign.end,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: monoStyle(colors.text2, 10, bold: true, em: 0.06),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Semantics(
+            label: text,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(2),
+              child: SizedBox(
+                height: 4,
+                child: Stack(
+                  children: [
+                    Positioned.fill(child: ColoredBox(color: colors.surface2)),
+                    FractionallySizedBox(widthFactor: progress.clamp(0.0, 1.0), child: ColoredBox(color: colors.accent)),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------------
 // The main column: header, the step, the footer.
 
 class _Main extends StatelessWidget {
-  const _Main({required this.state, required this.palette});
+  const _Main({required this.state, required this.palette, this.phone = false});
 
   final _SetupScreenState state;
   final SplashPalette palette;
+
+  /// The single column of a phone: less room around, a smaller title.
+  final bool phone;
 
   @override
   Widget build(BuildContext context) {
@@ -694,7 +787,7 @@ class _Main extends StatelessWidget {
           );
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(36, 30, 36, 22),
+      padding: phone ? const EdgeInsets.fromLTRB(20, 8, 20, 16) : const EdgeInsets.fromLTRB(36, 30, 36, 22),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -709,7 +802,13 @@ class _Main extends StatelessWidget {
                   header: true,
                   child: Text(
                     title,
-                    style: TextStyle(fontSize: 28, height: 34 / 28, fontWeight: FontWeight.w600, letterSpacing: -0.56, color: colors.text),
+                    style: TextStyle(
+                      fontSize: phone ? 24 : 28,
+                      height: phone ? 30 / 24 : 34 / 28,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: phone ? -0.48 : -0.56,
+                      color: colors.text,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -735,12 +834,32 @@ class _Footer extends StatelessWidget {
   final List<Widget> children;
 
   @override
-  Widget build(BuildContext context) => Row(children: [
-        for (final (i, c) in children.indexed) ...[
-          if (i > 0) const SizedBox(width: 14),
-          c,
+  Widget build(BuildContext context) {
+    if (isPhoneLayout(context)) {
+      // The way on first, where the thumb is, then the way back, then a plain link.
+      final ons = [for (final c in children) if (c is _Big && c.primary) c];
+      final others = [for (final c in children) if (c is _Big && !c.primary) c];
+      final rest = [for (final c in children) if (c is! _Big && c is! Spacer) c];
+      final ordered = [...ons, ...others];
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final (i, c) in ordered.indexed) ...[
+            if (i > 0) const SizedBox(height: 10),
+            c,
+          ],
+          for (final c in rest) ...[const SizedBox(height: 12), Center(child: c)],
         ],
-      ]);
+      );
+    }
+    return Row(children: [
+      for (final (i, c) in children.indexed) ...[
+        if (i > 0) const SizedBox(width: 14),
+        c,
+      ],
+    ]);
+  }
 }
 
 class _Big extends StatelessWidget {
@@ -772,9 +891,12 @@ class _Big extends StatelessWidget {
               borderRadius: BorderRadius.circular(999),
             ),
             child: Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: isPhoneLayout(context) ? MainAxisSize.max : MainAxisSize.min,
+              mainAxisAlignment: isPhoneLayout(context)
+                  ? (primary && icon != null ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center)
+                  : MainAxisAlignment.start,
               children: [
-                Text(label, style: monoStyle(primary ? colors.bg : colors.text, 13, bold: true)),
+                Flexible(child: Text(label, style: monoStyle(primary ? colors.bg : colors.text, 13, bold: true), maxLines: 1, overflow: TextOverflow.ellipsis)),
                 if (primary && icon != null) ...[
                   const SizedBox(width: 14),
                   Container(
@@ -812,6 +934,20 @@ class _Link extends StatelessWidget {
 // ---------------------------------------------------------------------------------
 // 0. Welcome
 
+/// The two cards of the welcome step: side by side at the height of the taller on a PC,
+/// one under the other on a phone.
+class _Duo extends StatelessWidget {
+  const _Duo({required this.phone, required this.children});
+
+  final bool phone;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) => phone
+      ? Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: children)
+      : IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: children));
+}
+
 class _Welcome extends StatelessWidget {
   const _Welcome({required this.state, required this.palette});
 
@@ -829,17 +965,18 @@ class _Welcome extends StatelessWidget {
       (l10n.stpNeed3, l10n.stpNeed3d, true),
       (l10n.stpNeed4, l10n.stpNeed4d, false),
     ];
+    final phone = isPhoneLayout(context);
+    // Side by side on a PC, one under the other on a phone, where the cards do not stretch.
+    Widget cell(int flex, Widget child) => phone ? child : Expanded(flex: flex, child: child);
+    Widget spacer() => phone ? const SizedBox(height: 12) : const Spacer();
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+    final top = <Widget>[
+        _Duo(
+          phone: phone,
             children: [
-              Expanded(
-                flex: 115,
-                child: InkWell(
+              cell(
+                115,
+                InkWell(
                   onTap: () => ExternalLinks.open(CharonGuideLinks.urlFor(CharonGuideId.hub, locale: Localizations.localeOf(context))),
                   borderRadius: BorderRadius.circular(16),
                   child: Glass(
@@ -884,7 +1021,7 @@ class _Welcome extends StatelessWidget {
                               ],
                             ),
                           ),
-                        const Spacer(),
+                        spacer(),
                         Container(
                           height: 40,
                           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -905,10 +1042,10 @@ class _Welcome extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                flex: 100,
-                child: GlassCard(
+              phone ? const SizedBox(height: 12) : const SizedBox(width: 12),
+              cell(
+                100,
+                GlassCard(
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -940,7 +1077,7 @@ class _Welcome extends StatelessWidget {
                             ],
                           ),
                         ),
-                      const Spacer(),
+                      spacer(),
                       Container(
                         padding: const EdgeInsets.only(top: 8),
                         decoration: BoxDecoration(border: Border(top: BorderSide(color: colors.divider))),
@@ -951,8 +1088,9 @@ class _Welcome extends StatelessWidget {
                 ),
               ),
             ],
-          ),
         ),
+        // The service is a Windows thing, the phone board does not have this note.
+        if (!phone) ...[
         const SizedBox(height: 12),
         Glass(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -974,12 +1112,25 @@ class _Welcome extends StatelessWidget {
             ],
           ),
         ),
-        const Spacer(),
-        _Footer(children: [
-          _Big(l10n.stpGetStarted, () => state._go(SetupStep.server), icon: PixelIcons.arrow, primary: true),
-          _Big(l10n.stpAlreadyUse, () => state._go(SetupStep.restore)),
-        ]),
-      ],
+        ],
+    ];
+    final footer = _Footer(children: [
+      _Big(l10n.stpGetStarted, () => state._go(SetupStep.server), icon: PixelIcons.arrow, primary: true),
+      _Big(l10n.stpAlreadyUse, () => state._go(SetupStep.restore)),
+    ]);
+    if (phone) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(child: SingleChildScrollView(child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: top))),
+          const SizedBox(height: 12),
+          footer,
+        ],
+      );
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [...top, const Spacer(), footer],
     );
   }
 }
@@ -1620,11 +1771,13 @@ class _ConnectStep extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Row(
+                _DialRow(
+                  phone: isPhoneLayout(context),
                   children: [
-                    _Dial(phase: phase),
-                    const SizedBox(width: 28),
-                    Expanded(
+                    Center(child: _Dial(phase: phase)),
+                    isPhoneLayout(context) ? const SizedBox(height: 12) : const SizedBox(width: 28),
+                    _PhoneCell(
+                      phone: isPhoneLayout(context),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -1669,13 +1822,17 @@ class _ConnectStep extends StatelessWidget {
                 Semantics(
                   label: l10n.stpChecksLabel,
                   container: true,
-                  child: GridView.count(
-                    crossAxisCount: 2,
+                  child: GridView(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: isPhoneLayout(context) ? 1 : 2,
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 8,
+                      childAspectRatio: 4.2,
+                      // On a phone each check is one row of a fixed height, whatever the width.
+                      mainAxisExtent: isPhoneLayout(context) ? 66 : null,
+                    ),
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    mainAxisSpacing: 8,
-                    crossAxisSpacing: 8,
-                    childAspectRatio: 4.2,
                     children: [
                       for (var i = 0; i < 4; i++)
                         Builder(builder: (_) {
@@ -1747,6 +1904,28 @@ class _ConnectStep extends StatelessWidget {
 
 /// The ring of 28 squares around the ghost: grey while ready, amber chasing
 /// while verifying, blue when connected, half lit amber when not reachable.
+/// The dial and the words next to it on a PC, the words under the dial on a phone.
+class _DialRow extends StatelessWidget {
+  const _DialRow({required this.phone, required this.children});
+
+  final bool phone;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) =>
+      phone ? Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: children) : Row(children: children);
+}
+
+class _PhoneCell extends StatelessWidget {
+  const _PhoneCell({required this.phone, required this.child});
+
+  final bool phone;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => phone ? child : Expanded(child: child);
+}
+
 class _Dial extends StatelessWidget {
   const _Dial({required this.phase});
 
