@@ -49,10 +49,11 @@ func (s *FileStore) LoadConfig() (*charonv1.Config, error) {
 	return cfg, nil
 }
 
-// defaultSettings is what a new install starts with: auto reconnect and local network on, as
-// on Windows and on the SetupMobile board. The kill switch starts off on that board.
+// defaultSettings is what a new install starts with: the kill switch, auto reconnect and local
+// network all on, as on Windows. The SetupMobile board draws the kill switch off, but the owner
+// decided that it starts on.
 func defaultSettings() *charonv1.Settings {
-	return &charonv1.Settings{AutoReconnect: true, AllowLocalNetwork: true}
+	return &charonv1.Settings{KillSwitch: true, AutoReconnect: true, AllowLocalNetwork: true}
 }
 
 func (s *FileStore) SaveConfig(cfg *charonv1.Config) error {
