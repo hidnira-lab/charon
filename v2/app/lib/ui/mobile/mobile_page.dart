@@ -78,10 +78,17 @@ class _MobileMenuHostState extends State<MobileMenuHost>
   @override
   Widget build(BuildContext context) {
     final top = MediaQuery.paddingOf(context).top;
+    // Back closes the menu first, then goes from any other place to Home, and only Home leaves the app.
+    final onHome = widget.controller.activeTabIndex == 0;
     return PopScope(
-      canPop: !_shown,
+      canPop: !_shown && onHome,
       onPopInvokedWithResult: (didPop, _) {
-        if (!didPop) _close();
+        if (didPop) return;
+        if (_shown) {
+          _close();
+        } else {
+          widget.controller.setTab(0);
+        }
       },
       child: Scaffold(
         body: Stack(
