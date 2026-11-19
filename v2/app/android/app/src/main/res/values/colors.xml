@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The page colour of Charon, behind the first frame (Tokens board). -->
+    <color name="charon_bg">#F5F5F5</color>
+</resources>
