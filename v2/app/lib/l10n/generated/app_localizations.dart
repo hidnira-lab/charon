@@ -9075,6 +9075,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reconnect'**
   String get mobileFailsafeReconnect;
+
+  /// Phone Servers: action sheet of a profile (DialogsMobile board).
+  ///
+  /// In en, this message translates to:
+  /// **'Use this server'**
+  String get mobileSrvActUse;
+
+  /// Phone Servers: action sheet, edit the profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get mobileSrvActEdit;
+
+  /// Phone Servers: action sheet, delete the profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get mobileSrvActDelete;
+
+  /// Phone Servers: note under Use this server when it is the active one.
+  ///
+  /// In en, this message translates to:
+  /// **'in use now'**
+  String get mobileSrvActInUse;
+
+  /// Phone Servers: note under an action that needs the tunnel off.
+  ///
+  /// In en, this message translates to:
+  /// **'disconnect first'**
+  String get mobileSrvActDisconnectFirst;
+
+  /// Phone Servers: screen reader label of the three dot button of a profile.
+  ///
+  /// In en, this message translates to:
+  /// **'More about {name}'**
+  String mobileSrvMoreLabel(String name);
 }
 
 class _AppLocalizationsDelegate

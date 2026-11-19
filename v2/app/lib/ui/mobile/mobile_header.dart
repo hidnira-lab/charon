@@ -8,6 +8,7 @@ import '../../state/ui_state.dart';
 import '../../theme/theme.dart';
 import '../common/living_logo.dart';
 import '../home/widgets/rail_nav.dart' show RailStatusChip;
+import 'mobile_page.dart' show HamburgerPainter;
 
 /// The top bar of the phone pages (HomeMobile board): the menu button, the logo
 /// and the name, and the state chip. 56 px, frosted over the window light.
@@ -52,7 +53,7 @@ class MobileHeader extends StatelessWidget {
                       child: SizedBox(
                         width: 48,
                         height: 48,
-                        child: Center(child: CustomPaint(size: const Size(22, 22), painter: _Hamburger(colors.text))),
+                        child: Center(child: CustomPaint(size: const Size(22, 22), painter: HamburgerPainter(colors.text))),
                       ),
                     ),
                   ),
@@ -85,26 +86,4 @@ class MobileHeader extends StatelessWidget {
       ),
     );
   }
-}
-
-/// Three lines, 2 px, round caps, in a 24 unit box scaled to 22 (the board's svg).
-class _Hamburger extends CustomPainter {
-  const _Hamburger(this.color);
-
-  final Color color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final k = size.width / 24;
-    final p = Paint()
-      ..color = color
-      ..strokeWidth = 2 * k
-      ..strokeCap = StrokeCap.round;
-    for (final y in const [6.0, 12.0, 18.0]) {
-      canvas.drawLine(Offset(4 * k, y * k), Offset(20 * k, y * k), p);
-    }
-  }
-
-  @override
-  bool shouldRepaint(_Hamburger old) => old.color != color;
 }

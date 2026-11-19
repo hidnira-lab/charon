@@ -3706,5 +3706,17 @@
   "mobileDrawerVersion": "Charon v{version}",
   "@mobileDrawerVersion": {"description": "Phone menu: footer line.", "placeholders": {"version": {"type": "String"}}},
   "mobileFailsafeReconnect": "Reconnect",
-  "@mobileFailsafeReconnect": {"description": "Phone Home: short name of auto reconnect on the Failsafe row (HomeMobile board)."}
+  "@mobileFailsafeReconnect": {"description": "Phone Home: short name of auto reconnect on the Failsafe row (HomeMobile board)."},
+  "mobileSrvActUse": "Use this server",
+  "@mobileSrvActUse": {"description": "Phone Servers: action sheet of a profile (DialogsMobile board)."},
+  "mobileSrvActEdit": "Edit",
+  "@mobileSrvActEdit": {"description": "Phone Servers: action sheet, edit the profile."},
+  "mobileSrvActDelete": "Delete",
+  "@mobileSrvActDelete": {"description": "Phone Servers: action sheet, delete the profile."},
+  "mobileSrvActInUse": "in use now",
+  "@mobileSrvActInUse": {"description": "Phone Servers: note under Use this server when it is the active one."},
+  "mobileSrvActDisconnectFirst": "disconnect first",
+  "@mobileSrvActDisconnectFirst": {"description": "Phone Servers: note under an action that needs the tunnel off."},
+  "mobileSrvMoreLabel": "More about {name}",
+  "@mobileSrvMoreLabel": {"description": "Phone Servers: screen reader label of the three dot button of a profile.", "placeholders": {"name": {"type": "String"}}}
 }

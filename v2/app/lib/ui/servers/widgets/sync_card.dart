@@ -28,9 +28,12 @@ const int _tabSettings = 4;
 /// their dialogs. File backup asks for the passphrase and then for the place to
 /// save. File restore asks for the file first, then for the passphrase.
 class SyncCard extends StatefulWidget {
-  const SyncCard({super.key, required this.controller, this.picker = const VaultFilePicker()});
+  const SyncCard({super.key, required this.controller, this.picker = const VaultFilePicker(), this.width = 320});
 
   final HomeController controller;
+
+  /// The desktop column is 320 px. On a phone the card fills the page, so null.
+  final double? width;
 
   /// The system file dialogs. A test passes a fake.
   final VaultFilePicker picker;
@@ -177,7 +180,7 @@ class _SyncCardState extends State<SyncCard> {
     }
 
     return Glass(
-      width: 320,
+      width: widget.width,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       child: SingleChildScrollView(
         child: Column(

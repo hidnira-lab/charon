@@ -270,22 +270,24 @@ class _RailNavState extends State<RailNav> with SingleTickerProviderStateMixin {
     );
   }
 
-  /// The short note after the server code on the unit card (the board's sideMeta).
-  String _meta(AppLocalizations l10n, HomeController? c, UiState ui) {
-    String clock() => formatClock(c?.phaseElapsed ?? Duration.zero);
-    final max = (c?.status.maxAttempts ?? 0) > 0 ? c!.status.maxAttempts : 5;
-    return switch (ui) {
-      UiState.connected || UiState.checkingNetwork || UiState.onBackup || UiState.verifying => clock(),
-      UiState.disconnected || UiState.disconnecting => l10n.railMetaReady,
-      UiState.blocked => l10n.railMetaHeld,
-      UiState.noServer => l10n.railMetaNone,
-      UiState.reconnecting || UiState.reconnectingHeld => l10n.railMetaTry(c?.status.attempt ?? 0, max),
-      UiState.switching => l10n.railMetaVerifying,
-      UiState.tunnelLost => l10n.railMetaLost,
-      UiState.couldNotReach => l10n.railMetaFailed,
-      UiState.wakingUp => l10n.railMetaWaking,
-    };
-  }
+  String _meta(AppLocalizations l10n, HomeController? c, UiState ui) => railMetaText(l10n, c, ui);
+}
+
+/// The short note after the server code on the unit card and the phone dock (the board's sideMeta).
+String railMetaText(AppLocalizations l10n, HomeController? c, UiState ui) {
+  String clock() => formatClock(c?.phaseElapsed ?? Duration.zero);
+  final max = (c?.status.maxAttempts ?? 0) > 0 ? c!.status.maxAttempts : 5;
+  return switch (ui) {
+    UiState.connected || UiState.checkingNetwork || UiState.onBackup || UiState.verifying => clock(),
+    UiState.disconnected || UiState.disconnecting => l10n.railMetaReady,
+    UiState.blocked => l10n.railMetaHeld,
+    UiState.noServer => l10n.railMetaNone,
+    UiState.reconnecting || UiState.reconnectingHeld => l10n.railMetaTry(c?.status.attempt ?? 0, max),
+    UiState.switching => l10n.railMetaVerifying,
+    UiState.tunnelLost => l10n.railMetaLost,
+    UiState.couldNotReach => l10n.railMetaFailed,
+    UiState.wakingUp => l10n.railMetaWaking,
+  };
 }
 
 /// A place of the rail: a 44 px tile, the active one a lit pill.

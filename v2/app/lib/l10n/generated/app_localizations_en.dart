@@ -5266,4 +5266,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mobileFailsafeReconnect => 'Reconnect';
+
+  @override
+  String get mobileSrvActUse => 'Use this server';
+
+  @override
+  String get mobileSrvActEdit => 'Edit';
+
+  @override
+  String get mobileSrvActDelete => 'Delete';
+
+  @override
+  String get mobileSrvActInUse => 'in use now';
+
+  @override
+  String get mobileSrvActDisconnectFirst => 'disconnect first';
+
+  @override
+  String mobileSrvMoreLabel(String name) {
+    return 'More about $name';
+  }
 }

@@ -24,8 +24,8 @@ import '../home/widgets/home_scene.dart';
 import '../home/widgets/home_state_banner.dart';
 import '../home/widgets/live_values.dart';
 import '../home/widgets/rail_nav.dart' show railShortLabel;
-import 'mobile_drawer.dart';
 import 'mobile_header.dart';
+import 'mobile_page.dart' show MobileMenuHost;
 
 // Places the menu and the cards open (the rail's order).
 const int _tabTelemetry = 3;
@@ -35,92 +35,26 @@ const int _tabSettings = 4;
 /// the scene with the greeting, the connect card, four readouts, the failsafe row and
 /// the month. It scrolls when the phone is shorter than the board. The menu slides in
 /// over it.
-class HomeMobileScreen extends StatefulWidget {
+class HomeMobileScreen extends StatelessWidget {
   const HomeMobileScreen({super.key, required this.controller});
 
   final HomeController controller;
 
   @override
-  State<HomeMobileScreen> createState() => _HomeMobileScreenState();
-}
-
-class _HomeMobileScreenState extends State<HomeMobileScreen> with SingleTickerProviderStateMixin {
-  // The menu slides in 300 ms and back in 200 ms (mDrawer).
-  late final AnimationController _menu = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 300),
-    reverseDuration: CharonDurations.sheetExit,
-  );
-  var _menuShown = false;
-
-  HomeController get controller => widget.controller;
-
-  @override
-  void dispose() {
-    _menu.dispose();
-    super.dispose();
-  }
-
-  bool get _reduceMotion => MediaQuery.maybeDisableAnimationsOf(context) ?? false;
-
-  void _openMenu() {
-    setState(() => _menuShown = true);
-    if (_reduceMotion) {
-      _menu.value = 1;
-    } else {
-      _menu.forward();
-    }
-  }
-
-  Future<void> _closeMenu() async {
-    if (!_menuShown) return;
-    if (_reduceMotion) {
-      _menu.value = 0;
-    } else {
-      await _menu.reverse();
-    }
-    if (mounted) setState(() => _menuShown = false);
-  }
-
-  void _go(int tab) {
-    controller.setTab(tab);
-    _closeMenu();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final top = MediaQuery.paddingOf(context).top;
-    return PopScope(
-      canPop: !_menuShown,
-      onPopInvokedWithResult: (didPop, _) {
-        if (!didPop) _closeMenu();
-      },
-      child: Scaffold(
-        body: Stack(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(top: top),
-              child: ListenableBuilder(
-                listenable: controller,
-                // Elapsed times and countdowns are computed from the Status on every build,
-                // so one rebuild a second keeps them current.
-                builder: (context, _) => EverySecond(
-                  builder: (context) => Column(
-                    children: [
-                      MobileHeader(controller: controller, onMenu: _openMenu),
-                      Expanded(child: _Body(controller: controller)),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            if (_menuShown)
-              ListenableBuilder(
-                listenable: controller,
-                builder: (context, _) =>
-                    MobileDrawer(controller: controller, animation: _menu, onClose: _closeMenu, onGo: _go),
-              ),
-          ],
+    return MobileMenuHost(
+      controller: controller,
+      builder: (context, openMenu) => ListenableBuilder(
+        listenable: controller,
+        // Elapsed times and countdowns are computed from the Status on every build,
+        // so one rebuild a second keeps them current.
+        builder: (context, _) => EverySecond(
+          builder: (context) => Column(
+            children: [
+              MobileHeader(controller: controller, onMenu: openMenu),
+              Expanded(child: _Body(controller: controller)),
+            ],
+          ),
         ),
       ),
     );

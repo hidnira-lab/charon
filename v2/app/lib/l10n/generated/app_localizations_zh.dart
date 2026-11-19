@@ -4980,6 +4980,26 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobileFailsafeReconnect => '重新连接';
+
+  @override
+  String get mobileSrvActUse => '使用这台服务器';
+
+  @override
+  String get mobileSrvActEdit => '编辑';
+
+  @override
+  String get mobileSrvActDelete => '删除';
+
+  @override
+  String get mobileSrvActInUse => '正在使用';
+
+  @override
+  String get mobileSrvActDisconnectFirst => '请先断开';
+
+  @override
+  String mobileSrvMoreLabel(String name) {
+    return '$name 的更多操作';
+  }
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -9957,4 +9977,24 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get mobileFailsafeReconnect => '重新连接';
+
+  @override
+  String get mobileSrvActUse => '使用这台服务器';
+
+  @override
+  String get mobileSrvActEdit => '编辑';
+
+  @override
+  String get mobileSrvActDelete => '删除';
+
+  @override
+  String get mobileSrvActInUse => '正在使用';
+
+  @override
+  String get mobileSrvActDisconnectFirst => '请先断开';
+
+  @override
+  String mobileSrvMoreLabel(String name) {
+    return '$name 的更多操作';
+  }
 }

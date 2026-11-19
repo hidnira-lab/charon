@@ -5233,4 +5233,24 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get mobileFailsafeReconnect => 'Sambungkan lagi';
+
+  @override
+  String get mobileSrvActUse => 'Pakai server ini';
+
+  @override
+  String get mobileSrvActEdit => 'Edit';
+
+  @override
+  String get mobileSrvActDelete => 'Hapus';
+
+  @override
+  String get mobileSrvActInUse => 'sedang dipakai';
+
+  @override
+  String get mobileSrvActDisconnectFirst => 'putuskan dulu';
+
+  @override
+  String mobileSrvMoreLabel(String name) {
+    return 'Selengkapnya tentang $name';
+  }
 }

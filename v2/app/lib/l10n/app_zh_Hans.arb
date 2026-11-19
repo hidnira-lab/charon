@@ -1520,5 +1520,11 @@
   "mobileDrawerAddServer": "添加服务器后开始",
   "mobileDrawerReady": "就绪 · {code}",
   "mobileDrawerVersion": "Charon v{version}",
-  "mobileFailsafeReconnect": "重新连接"
+  "mobileFailsafeReconnect": "重新连接",
+  "mobileSrvActUse": "使用这台服务器",
+  "mobileSrvActEdit": "编辑",
+  "mobileSrvActDelete": "删除",
+  "mobileSrvActInUse": "正在使用",
+  "mobileSrvActDisconnectFirst": "请先断开",
+  "mobileSrvMoreLabel": "{name} 的更多操作"
 }

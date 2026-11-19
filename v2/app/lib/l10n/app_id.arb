@@ -1519,5 +1519,11 @@
   "mobileDrawerAddServer": "Tambah server untuk mulai",
   "mobileDrawerReady": "Siap · {code}",
   "mobileDrawerVersion": "Charon v{version}",
-  "mobileFailsafeReconnect": "Sambungkan lagi"
+  "mobileFailsafeReconnect": "Sambungkan lagi",
+  "mobileSrvActUse": "Pakai server ini",
+  "mobileSrvActEdit": "Edit",
+  "mobileSrvActDelete": "Hapus",
+  "mobileSrvActInUse": "sedang dipakai",
+  "mobileSrvActDisconnectFirst": "putuskan dulu",
+  "mobileSrvMoreLabel": "Selengkapnya tentang {name}"
 }

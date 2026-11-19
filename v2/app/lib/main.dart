@@ -23,6 +23,7 @@ import 'ui/shell/window_shell.dart';
 import 'ui/common/phone_layout.dart';
 import 'ui/home/home_screen.dart';
 import 'ui/mobile/home_mobile_screen.dart';
+import 'ui/mobile/servers_mobile_screen.dart';
 import 'ui/servers/servers_screen.dart';
 import 'ui/service/service_screen.dart';
 import 'ui/splash/splash_screen.dart';
@@ -137,7 +138,11 @@ class _CharonAppState extends State<CharonApp> {
         } else if (controller.service.view != null) {
           screen = ServiceScreen(controller: controller);
         } else if (activeTab == 1) {
-          screen = ServersScreen(controller: controller);
+          screen = Builder(
+            builder: (context) => isPhoneLayout(context)
+                ? ServersMobileScreen(controller: controller)
+                : ServersScreen(controller: controller),
+          );
         } else if (activeTab == 2) {
           screen = SplitScreen(controller: controller);
         } else if (activeTab == 3) {
