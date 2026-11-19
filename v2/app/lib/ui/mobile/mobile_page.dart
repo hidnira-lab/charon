@@ -8,6 +8,7 @@ import '../../theme/theme.dart';
 import '../common/glass_card.dart' show monoStyle;
 import '../common/living_logo.dart';
 import '../common/motion.dart';
+import '../common/pixel_icon.dart';
 import '../common/state_tone.dart';
 import '../home/widgets/hero_spec.dart';
 import '../home/widgets/live_values.dart';
@@ -187,12 +188,16 @@ class MobileTitleBar extends StatelessWidget {
   const MobileTitleBar({
     super.key,
     required this.title,
-    required this.onMenu,
+    this.onMenu,
+    this.onBack,
     this.trailing,
-  });
+  }) : assert(onMenu != null || onBack != null);
 
   final String title;
-  final VoidCallback onMenu;
+
+  /// The menu button on the left. A page that opens over another has [onBack] instead.
+  final VoidCallback? onMenu;
+  final VoidCallback? onBack;
   final Widget? trailing;
 
   @override
@@ -225,19 +230,24 @@ class MobileTitleBar extends StatelessWidget {
             children: [
               Semantics(
                 button: true,
-                label: l10n.mobileMenuOpen,
+                label: onBack != null ? l10n.mobileBack : l10n.mobileMenuOpen,
                 excludeSemantics: true,
                 child: InkResponse(
-                  onTap: onMenu,
+                  onTap: onBack ?? onMenu,
                   radius: 24,
                   child: SizedBox(
                     width: 48,
                     height: 48,
                     child: Center(
-                      child: CustomPaint(
-                        size: const Size(22, 22),
-                        painter: HamburgerPainter(colors.text),
-                      ),
+                      child: onBack != null
+                          ? Transform.rotate(
+                              angle: 3.14159265,
+                              child: PixelIcon(PixelIcons.arrow, size: 20, color: colors.text),
+                            )
+                          : CustomPaint(
+                              size: const Size(22, 22),
+                              painter: HamburgerPainter(colors.text),
+                            ),
                     ),
                   ),
                 ),

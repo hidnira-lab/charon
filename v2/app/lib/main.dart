@@ -23,6 +23,7 @@ import 'ui/shell/window_shell.dart';
 import 'ui/common/phone_layout.dart';
 import 'ui/home/home_screen.dart';
 import 'ui/mobile/home_mobile_screen.dart';
+import 'ui/mobile/telemetry_mobile_screen.dart';
 import 'ui/mobile/settings_mobile_screen.dart';
 import 'ui/mobile/servers_mobile_screen.dart';
 import 'ui/servers/servers_screen.dart';
@@ -147,7 +148,10 @@ class _CharonAppState extends State<CharonApp> {
         } else if (activeTab == 2) {
           screen = SplitScreen(controller: controller);
         } else if (activeTab == 3) {
-          screen = TelemetryScreen(controller: controller);
+          screen = Builder(
+            builder: (context) =>
+                isPhoneLayout(context) ? TelemetryMobileScreen(controller: controller) : TelemetryScreen(controller: controller),
+          );
         } else if (activeTab == 4) {
           screen = Builder(
             builder: (context) =>

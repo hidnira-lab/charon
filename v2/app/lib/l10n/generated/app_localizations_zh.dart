@@ -5055,6 +5055,24 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsAlwaysOnBtn => '打开 VPN 设置';
+
+  @override
+  String get mobileTelLogTitle => '日志';
+
+  @override
+  String get mobileTelViewAll => '查看全部';
+
+  @override
+  String get mobileTelHistoryLabel => '在线时长 · 会话';
+
+  @override
+  String get mobileTelNotTracked => '暂未记录';
+
+  @override
+  String get mobileTelLogEmpty => '暂无日志行';
+
+  @override
+  String get mobileBack => '返回';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -10107,4 +10125,22 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get settingsAlwaysOnBtn => '打开 VPN 设置';
+
+  @override
+  String get mobileTelLogTitle => '日志';
+
+  @override
+  String get mobileTelViewAll => '查看全部';
+
+  @override
+  String get mobileTelHistoryLabel => '在线时长 · 会话';
+
+  @override
+  String get mobileTelNotTracked => '暂未记录';
+
+  @override
+  String get mobileTelLogEmpty => '暂无日志行';
+
+  @override
+  String get mobileBack => '返回';
 }

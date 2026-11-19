@@ -9213,6 +9213,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open VPN settings'**
   String get settingsAlwaysOnBtn;
+
+  /// Phone Telemetry: title of the log tail card (TelemetryMobile board).
+  ///
+  /// In en, this message translates to:
+  /// **'LOG'**
+  String get mobileTelLogTitle;
+
+  /// Phone Telemetry: opens the whole log.
+  ///
+  /// In en, this message translates to:
+  /// **'View all'**
+  String get mobileTelViewAll;
+
+  /// Phone Telemetry: dashed row that stands for the history that is not kept.
+  ///
+  /// In en, this message translates to:
+  /// **'UPTIME · SESSIONS'**
+  String get mobileTelHistoryLabel;
+
+  /// Phone Telemetry: right side of the history row.
+  ///
+  /// In en, this message translates to:
+  /// **'Not tracked yet'**
+  String get mobileTelNotTracked;
+
+  /// Phone Telemetry: log tail with nothing in it.
+  ///
+  /// In en, this message translates to:
+  /// **'no lines yet'**
+  String get mobileTelLogEmpty;
+
+  /// Phone: label of the back button of a page that opens over another.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get mobileBack;
 }
 
 class _AppLocalizationsDelegate

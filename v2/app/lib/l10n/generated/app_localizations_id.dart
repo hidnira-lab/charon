@@ -5315,4 +5315,22 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get settingsAlwaysOnBtn => 'Buka pengaturan VPN';
+
+  @override
+  String get mobileTelLogTitle => 'LOG';
+
+  @override
+  String get mobileTelViewAll => 'Lihat semua';
+
+  @override
+  String get mobileTelHistoryLabel => 'UPTIME · SESI';
+
+  @override
+  String get mobileTelNotTracked => 'Belum dilacak';
+
+  @override
+  String get mobileTelLogEmpty => 'belum ada baris';
+
+  @override
+  String get mobileBack => 'Kembali';
 }

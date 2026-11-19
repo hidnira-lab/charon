@@ -5348,4 +5348,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsAlwaysOnBtn => 'Open VPN settings';
+
+  @override
+  String get mobileTelLogTitle => 'LOG';
+
+  @override
+  String get mobileTelViewAll => 'View all';
+
+  @override
+  String get mobileTelHistoryLabel => 'UPTIME · SESSIONS';
+
+  @override
+  String get mobileTelNotTracked => 'Not tracked yet';
+
+  @override
+  String get mobileTelLogEmpty => 'no lines yet';
+
+  @override
+  String get mobileBack => 'Back';
 }

@@ -141,10 +141,14 @@ class _LogTerminalCardState extends State<LogTerminalCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // A Wrap, so on a narrow phone the buttons drop under the source switch.
+            Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              runSpacing: 8,
               children: [
                 Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text('> ${l10n.telemetryLogHead}', style: monoStyle(colors.text2, 10, bold: true, em: 0.08)),
                     const SizedBox(width: 10),
@@ -175,6 +179,7 @@ class _LogTerminalCardState extends State<LogTerminalCard> {
                   ],
                 ),
                 Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     _PillButton(
                       label: l10n.telemetryRawMode,

@@ -11,9 +11,12 @@ import '../../common/sliding_pills.dart';
 /// Throughput card of the Telemetry board: live pill, Chart/Table tabs, the
 /// three readouts, the chart or the last 60 samples, and the legend.
 class ThroughputCard extends StatefulWidget {
-  const ThroughputCard({super.key, required this.view});
+  const ThroughputCard({super.key, required this.view, this.compact = false});
 
   final TelemetryView view;
+
+  /// The phone form (TelemetryMobile board): no Chart and Table switch, a shorter chart and smaller numbers.
+  final bool compact;
 
   @override
   State<ThroughputCard> createState() => _ThroughputCardState();
@@ -60,7 +63,7 @@ class _ThroughputCardState extends State<ThroughputCard> {
                           Blink(on: live, child: Container(width: 6, height: 6, color: live ? colors.connectedFill : colors.idleFill)),
                           const SizedBox(width: 6),
                           Text(
-                            view.liveChip,
+                            widget.compact ? (live ? l10n.telemetryTagLive : l10n.telemetryChipOff) : view.liveChip,
                             style: monoStyle(live ? colors.connectedText : colors.idleText, 10, bold: true, em: 0.08),
                           ),
                         ],
@@ -68,6 +71,7 @@ class _ThroughputCardState extends State<ThroughputCard> {
                     ),
                   ],
                 ),
+                if (!widget.compact)
                 Semantics(
                   label: l10n.telemetryViewLabel,
                   // Chart and Table: the dark pill slides across (tsA) and the words tween (tcA).
@@ -96,7 +100,7 @@ class _ThroughputCardState extends State<ThroughputCard> {
               children: [
                 for (final (i, r) in view.reads.indexed) ...[
                   if (i > 0) const SizedBox(width: 12),
-                  Expanded(child: _read(colors, i, r)),
+                  Expanded(child: _read(colors, i, r, widget.compact)),
                 ],
               ],
             ),
@@ -131,23 +135,28 @@ class _ThroughputCardState extends State<ThroughputCard> {
                       Text(l10n.telemetryLegendUp, style: TextStyle(fontSize: 12, color: colors.text2)),
                     ],
                   ),
-                  Flexible(
-                    child: Text(
-                      l10n.telemetryAxisNote,
-                      overflow: TextOverflow.ellipsis,
-                      style: monoStyle(colors.text3, 10),
+                  if (!widget.compact)
+                    Flexible(
+                      child: Text(
+                        l10n.telemetryAxisNote,
+                        overflow: TextOverflow.ellipsis,
+                        style: monoStyle(colors.text3, 10),
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
+            if (widget.compact) ...[
+              const SizedBox(height: 6),
+              Text(l10n.telemetryAxisNote, style: monoStyle(colors.text3, 9), maxLines: 2, overflow: TextOverflow.ellipsis),
+            ],
           ],
         ),
       ),
     );
   }
 
-  Widget _read(CharonColors colors, int i, TelemetryRead r) {
+  Widget _read(CharonColors colors, int i, TelemetryRead r, bool compact) {
     final key = [colors.accentText, colors.text, Colors.transparent][i];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,8 +178,8 @@ class _ThroughputCardState extends State<ThroughputCard> {
         Text.rich(
           TextSpan(
             text: r.value,
-            style: monoStyle(r.dim ? colors.text2 : colors.text, 24, bold: true, em: -0.02),
-            children: [TextSpan(text: r.unit, style: monoStyle(colors.text3, 12))],
+            style: monoStyle(r.dim ? colors.text2 : colors.text, compact ? 20 : 24, bold: true, em: -0.02),
+            children: [TextSpan(text: r.unit, style: monoStyle(colors.text3, compact ? 10 : 12))],
           ),
         ),
       ],

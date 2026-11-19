@@ -1543,5 +1543,11 @@
   "settingsAlwaysOnLineLock": "已开启并锁定 · Charon 停止时网络会被拦截",
   "settingsAlwaysOnLineOn": "已开启 · Charon 停止时流量会直连",
   "settingsAlwaysOnLineOff": "Android 设置 · Charon 无法替你开启",
-  "settingsAlwaysOnBtn": "打开 VPN 设置"
+  "settingsAlwaysOnBtn": "打开 VPN 设置",
+  "mobileTelLogTitle": "日志",
+  "mobileTelViewAll": "查看全部",
+  "mobileTelHistoryLabel": "在线时长 · 会话",
+  "mobileTelNotTracked": "暂未记录",
+  "mobileTelLogEmpty": "暂无日志行",
+  "mobileBack": "返回"
 }

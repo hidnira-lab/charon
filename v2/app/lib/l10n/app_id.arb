@@ -1542,5 +1542,11 @@
   "settingsAlwaysOnLineLock": "Nyala dengan lockdown · internet diblokir kalau Charon berhenti",
   "settingsAlwaysOnLineOn": "Nyala · trafik lewat langsung kalau Charon berhenti",
   "settingsAlwaysOnLineOff": "pengaturan Android · Charon tidak bisa menyalakannya untukmu",
-  "settingsAlwaysOnBtn": "Buka pengaturan VPN"
+  "settingsAlwaysOnBtn": "Buka pengaturan VPN",
+  "mobileTelLogTitle": "LOG",
+  "mobileTelViewAll": "Lihat semua",
+  "mobileTelHistoryLabel": "UPTIME · SESI",
+  "mobileTelNotTracked": "Belum dilacak",
+  "mobileTelLogEmpty": "belum ada baris",
+  "mobileBack": "Kembali"
 }

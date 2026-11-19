@@ -3752,5 +3752,17 @@
   "settingsAlwaysOnLineOff": "Android setting · Charon cannot switch it on for you",
   "@settingsAlwaysOnLineOff": {"description": "Always on VPN status line."},
   "settingsAlwaysOnBtn": "Open VPN settings",
-  "@settingsAlwaysOnBtn": {"description": "Always on VPN button."}
+  "@settingsAlwaysOnBtn": {"description": "Always on VPN button."},
+  "mobileTelLogTitle": "LOG",
+  "@mobileTelLogTitle": {"description": "Phone Telemetry: title of the log tail card (TelemetryMobile board)."},
+  "mobileTelViewAll": "View all",
+  "@mobileTelViewAll": {"description": "Phone Telemetry: opens the whole log."},
+  "mobileTelHistoryLabel": "UPTIME · SESSIONS",
+  "@mobileTelHistoryLabel": {"description": "Phone Telemetry: dashed row that stands for the history that is not kept."},
+  "mobileTelNotTracked": "Not tracked yet",
+  "@mobileTelNotTracked": {"description": "Phone Telemetry: right side of the history row."},
+  "mobileTelLogEmpty": "no lines yet",
+  "@mobileTelLogEmpty": {"description": "Phone Telemetry: log tail with nothing in it."},
+  "mobileBack": "Back",
+  "@mobileBack": {"description": "Phone: label of the back button of a page that opens over another."}
 }
