@@ -5073,6 +5073,36 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobileBack => '返回';
+
+  @override
+  String get mobileSplitModeAll => '除列表外全部';
+
+  @override
+  String get mobileSplitModeOnly => '仅列表';
+
+  @override
+  String get mobileSplitThisPhone => '本机';
+
+  @override
+  String get mobileSplitTabAll => '全部';
+
+  @override
+  String get mobileSplitTabDomain => '域名';
+
+  @override
+  String get mobileSplitTabIp => 'IP';
+
+  @override
+  String get mobileSplitTabApp => '应用';
+
+  @override
+  String get mobileSplitNoteTap => '点按规则即可删除';
+
+  @override
+  String get mobileSplitRemoveBtn => '删除规则';
+
+  @override
+  String get mobileSplitAddLabel => '添加规则';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -10143,4 +10173,34 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get mobileBack => '返回';
+
+  @override
+  String get mobileSplitModeAll => '除列表外全部';
+
+  @override
+  String get mobileSplitModeOnly => '仅列表';
+
+  @override
+  String get mobileSplitThisPhone => '本机';
+
+  @override
+  String get mobileSplitTabAll => '全部';
+
+  @override
+  String get mobileSplitTabDomain => '域名';
+
+  @override
+  String get mobileSplitTabIp => 'IP';
+
+  @override
+  String get mobileSplitTabApp => '应用';
+
+  @override
+  String get mobileSplitNoteTap => '点按规则即可删除';
+
+  @override
+  String get mobileSplitRemoveBtn => '删除规则';
+
+  @override
+  String get mobileSplitAddLabel => '添加规则';
 }

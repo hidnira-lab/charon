@@ -1549,5 +1549,15 @@
   "mobileTelHistoryLabel": "在线时长 · 会话",
   "mobileTelNotTracked": "暂未记录",
   "mobileTelLogEmpty": "暂无日志行",
-  "mobileBack": "返回"
+  "mobileBack": "返回",
+  "mobileSplitModeAll": "除列表外全部",
+  "mobileSplitModeOnly": "仅列表",
+  "mobileSplitThisPhone": "本机",
+  "mobileSplitTabAll": "全部",
+  "mobileSplitTabDomain": "域名",
+  "mobileSplitTabIp": "IP",
+  "mobileSplitTabApp": "应用",
+  "mobileSplitNoteTap": "点按规则即可删除",
+  "mobileSplitRemoveBtn": "删除规则",
+  "mobileSplitAddLabel": "添加规则"
 }

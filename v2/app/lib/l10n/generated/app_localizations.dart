@@ -9249,6 +9249,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back'**
   String get mobileBack;
+
+  /// Phone Split: short name of the first tunnel mode (SplitMobile board).
+  ///
+  /// In en, this message translates to:
+  /// **'All except listed'**
+  String get mobileSplitModeAll;
+
+  /// Phone Split: short name of the second tunnel mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Only listed'**
+  String get mobileSplitModeOnly;
+
+  /// Phone Split: chip on the tunnel mode card.
+  ///
+  /// In en, this message translates to:
+  /// **'THIS PHONE'**
+  String get mobileSplitThisPhone;
+
+  /// Phone Split: rule filter, every rule.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get mobileSplitTabAll;
+
+  /// Phone Split: rule filter, domain rules.
+  ///
+  /// In en, this message translates to:
+  /// **'Domain'**
+  String get mobileSplitTabDomain;
+
+  /// Phone Split: rule filter, IP and CIDR rules.
+  ///
+  /// In en, this message translates to:
+  /// **'IP'**
+  String get mobileSplitTabIp;
+
+  /// Phone Split: rule filter, app rules.
+  ///
+  /// In en, this message translates to:
+  /// **'App'**
+  String get mobileSplitTabApp;
+
+  /// Phone Split: first note at the foot of the page.
+  ///
+  /// In en, this message translates to:
+  /// **'tap a rule to remove it'**
+  String get mobileSplitNoteTap;
+
+  /// Phone Split: button of the sheet that opens on a rule.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove rule'**
+  String get mobileSplitRemoveBtn;
+
+  /// Phone Split: label of the plus button of the title bar.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a rule'**
+  String get mobileSplitAddLabel;
 }
 
 class _AppLocalizationsDelegate

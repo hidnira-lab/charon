@@ -5333,4 +5333,34 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get mobileBack => 'Kembali';
+
+  @override
+  String get mobileSplitModeAll => 'Semua kecuali yang terdaftar';
+
+  @override
+  String get mobileSplitModeOnly => 'Hanya yang terdaftar';
+
+  @override
+  String get mobileSplitThisPhone => 'PONSEL INI';
+
+  @override
+  String get mobileSplitTabAll => 'Semua';
+
+  @override
+  String get mobileSplitTabDomain => 'Domain';
+
+  @override
+  String get mobileSplitTabIp => 'IP';
+
+  @override
+  String get mobileSplitTabApp => 'Aplikasi';
+
+  @override
+  String get mobileSplitNoteTap => 'ketuk aturan untuk menghapusnya';
+
+  @override
+  String get mobileSplitRemoveBtn => 'Hapus aturan';
+
+  @override
+  String get mobileSplitAddLabel => 'Tambah aturan';
 }

@@ -1548,5 +1548,15 @@
   "mobileTelHistoryLabel": "UPTIME · SESI",
   "mobileTelNotTracked": "Belum dilacak",
   "mobileTelLogEmpty": "belum ada baris",
-  "mobileBack": "Kembali"
+  "mobileBack": "Kembali",
+  "mobileSplitModeAll": "Semua kecuali yang terdaftar",
+  "mobileSplitModeOnly": "Hanya yang terdaftar",
+  "mobileSplitThisPhone": "PONSEL INI",
+  "mobileSplitTabAll": "Semua",
+  "mobileSplitTabDomain": "Domain",
+  "mobileSplitTabIp": "IP",
+  "mobileSplitTabApp": "Aplikasi",
+  "mobileSplitNoteTap": "ketuk aturan untuk menghapusnya",
+  "mobileSplitRemoveBtn": "Hapus aturan",
+  "mobileSplitAddLabel": "Tambah aturan"
 }

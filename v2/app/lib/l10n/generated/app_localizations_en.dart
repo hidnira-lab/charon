@@ -5366,4 +5366,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mobileBack => 'Back';
+
+  @override
+  String get mobileSplitModeAll => 'All except listed';
+
+  @override
+  String get mobileSplitModeOnly => 'Only listed';
+
+  @override
+  String get mobileSplitThisPhone => 'THIS PHONE';
+
+  @override
+  String get mobileSplitTabAll => 'All';
+
+  @override
+  String get mobileSplitTabDomain => 'Domain';
+
+  @override
+  String get mobileSplitTabIp => 'IP';
+
+  @override
+  String get mobileSplitTabApp => 'App';
+
+  @override
+  String get mobileSplitNoteTap => 'tap a rule to remove it';
+
+  @override
+  String get mobileSplitRemoveBtn => 'Remove rule';
+
+  @override
+  String get mobileSplitAddLabel => 'Add a rule';
 }
