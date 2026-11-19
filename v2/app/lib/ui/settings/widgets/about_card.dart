@@ -22,9 +22,13 @@ class AboutCard extends StatelessWidget {
   const AboutCard({
     super.key,
     this.controller,
+    this.width = 300,
   });
 
   final HomeController? controller;
+
+  /// The desktop column is 300 px. On a phone the card fills the page, so null.
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +85,7 @@ class AboutCard extends StatelessWidget {
       container: true,
       label: l10n.settingsAboutTitle,
       child: Container(
-      width: 300,
+      width: width,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(color: ground, borderRadius: BorderRadius.circular(16)),
       child: CustomPaint(

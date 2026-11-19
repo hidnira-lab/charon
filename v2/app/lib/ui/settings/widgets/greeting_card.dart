@@ -15,9 +15,13 @@ class GreetingCard extends StatefulWidget {
   const GreetingCard({
     super.key,
     required this.controller,
+    this.width = 300,
   });
 
   final HomeController controller;
+
+  /// The desktop column is 300 px. On a phone the card fills the page, so null.
+  final double? width;
 
   @override
   State<GreetingCard> createState() => _GreetingCardState();
@@ -62,7 +66,7 @@ class _GreetingCardState extends State<GreetingCard> {
     };
 
     return Glass(
-      width: 300,
+      width: widget.width,
             padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

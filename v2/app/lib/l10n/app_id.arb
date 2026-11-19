@@ -1525,5 +1525,22 @@
   "mobileSrvActDelete": "Hapus",
   "mobileSrvActInUse": "sedang dipakai",
   "mobileSrvActDisconnectFirst": "putuskan dulu",
-  "mobileSrvMoreLabel": "Selengkapnya tentang {name}"
+  "mobileSrvMoreLabel": "Selengkapnya tentang {name}",
+  "blockedBannerBodyPhone": "Charon tidak bisa menjangkau satu pun servermu. Tidak ada yang keluar dari ponsel ini sampai kamu mencoba lagi, memilih server, atau melepas.",
+  "settingsAllowLocalDescPhone": "Ponselmu tetap bisa menjangkau printer, NAS, dan perangkat lain di jaringan rumah saat trafik ditahan atau lewat tunnel.",
+  "settingsAppMetaPhone": "ANDROID",
+  "settingsThemeLineSystemPhone": "mengikuti Android · sedang gelap",
+  "settingsThemeLineDarkPhone": "selalu gelap, apa pun tema Android",
+  "settingsThemeLineLightPhone": "selalu terang, apa pun tema Android",
+  "settingsLanguageLineSystemPhone": "mengikuti Android · sedang English",
+  "settingsEraseDescPhone": "Menghapus server, aturan, pengaturan, dan penghitung dari ponsel ini. Salinan sync tetap ada.",
+  "dlgEraseHeadingPhone": "Hapus semua data di ponsel ini?",
+  "dlgEraseIntroPhone": "Charon memutus koneksi, mematikan kill switch, lalu menghapus semua yang disimpannya di ponsel ini.",
+  "settingsAlwaysOnTitle": "VPN selalu aktif",
+  "settingsAlwaysOnDescLock": "Android menjaga Charon tetap nyala dan memblokir internet setiap kali Charon tidak terhubung.",
+  "settingsAlwaysOnDescOpen": "Kalau Android menghentikan Charon, trafik bisa lewat langsung. Untuk perlindungan penuh, nyalakan VPN selalu aktif dan Blokir koneksi tanpa VPN di pengaturan Android.",
+  "settingsAlwaysOnLineLock": "Nyala dengan lockdown · internet diblokir kalau Charon berhenti",
+  "settingsAlwaysOnLineOn": "Nyala · trafik lewat langsung kalau Charon berhenti",
+  "settingsAlwaysOnLineOff": "pengaturan Android · Charon tidak bisa menyalakannya untukmu",
+  "settingsAlwaysOnBtn": "Buka pengaturan VPN"
 }

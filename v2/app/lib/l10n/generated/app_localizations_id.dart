@@ -5253,4 +5253,66 @@ class AppLocalizationsId extends AppLocalizations {
   String mobileSrvMoreLabel(String name) {
     return 'Selengkapnya tentang $name';
   }
+
+  @override
+  String get blockedBannerBodyPhone =>
+      'Charon tidak bisa menjangkau satu pun servermu. Tidak ada yang keluar dari ponsel ini sampai kamu mencoba lagi, memilih server, atau melepas.';
+
+  @override
+  String get settingsAllowLocalDescPhone =>
+      'Ponselmu tetap bisa menjangkau printer, NAS, dan perangkat lain di jaringan rumah saat trafik ditahan atau lewat tunnel.';
+
+  @override
+  String get settingsAppMetaPhone => 'ANDROID';
+
+  @override
+  String get settingsThemeLineSystemPhone => 'mengikuti Android · sedang gelap';
+
+  @override
+  String get settingsThemeLineDarkPhone => 'selalu gelap, apa pun tema Android';
+
+  @override
+  String get settingsThemeLineLightPhone =>
+      'selalu terang, apa pun tema Android';
+
+  @override
+  String get settingsLanguageLineSystemPhone =>
+      'mengikuti Android · sedang English';
+
+  @override
+  String get settingsEraseDescPhone =>
+      'Menghapus server, aturan, pengaturan, dan penghitung dari ponsel ini. Salinan sync tetap ada.';
+
+  @override
+  String get dlgEraseHeadingPhone => 'Hapus semua data di ponsel ini?';
+
+  @override
+  String get dlgEraseIntroPhone =>
+      'Charon memutus koneksi, mematikan kill switch, lalu menghapus semua yang disimpannya di ponsel ini.';
+
+  @override
+  String get settingsAlwaysOnTitle => 'VPN selalu aktif';
+
+  @override
+  String get settingsAlwaysOnDescLock =>
+      'Android menjaga Charon tetap nyala dan memblokir internet setiap kali Charon tidak terhubung.';
+
+  @override
+  String get settingsAlwaysOnDescOpen =>
+      'Kalau Android menghentikan Charon, trafik bisa lewat langsung. Untuk perlindungan penuh, nyalakan VPN selalu aktif dan Blokir koneksi tanpa VPN di pengaturan Android.';
+
+  @override
+  String get settingsAlwaysOnLineLock =>
+      'Nyala dengan lockdown · internet diblokir kalau Charon berhenti';
+
+  @override
+  String get settingsAlwaysOnLineOn =>
+      'Nyala · trafik lewat langsung kalau Charon berhenti';
+
+  @override
+  String get settingsAlwaysOnLineOff =>
+      'pengaturan Android · Charon tidak bisa menyalakannya untukmu';
+
+  @override
+  String get settingsAlwaysOnBtn => 'Buka pengaturan VPN';
 }

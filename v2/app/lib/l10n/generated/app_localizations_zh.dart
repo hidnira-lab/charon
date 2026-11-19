@@ -5000,6 +5000,61 @@ class AppLocalizationsZh extends AppLocalizations {
   String mobileSrvMoreLabel(String name) {
     return '$name 的更多操作';
   }
+
+  @override
+  String get blockedBannerBodyPhone =>
+      'Charon 连不上你的任何一台服务器。在你重试、选择服务器或放行之前，没有流量会离开这部手机。';
+
+  @override
+  String get settingsAllowLocalDescPhone =>
+      '在流量被拦截或走隧道时，手机仍能访问家里网络中的打印机、NAS 等设备。';
+
+  @override
+  String get settingsAppMetaPhone => 'ANDROID';
+
+  @override
+  String get settingsThemeLineSystemPhone => '跟随 Android · 当前为深色';
+
+  @override
+  String get settingsThemeLineDarkPhone => '始终深色，不随 Android 变化';
+
+  @override
+  String get settingsThemeLineLightPhone => '始终浅色，不随 Android 变化';
+
+  @override
+  String get settingsLanguageLineSystemPhone => '跟随 Android · 当前为 English';
+
+  @override
+  String get settingsEraseDescPhone => '从这部手机删除服务器、规则、设置和计数。同步副本会保留。';
+
+  @override
+  String get dlgEraseHeadingPhone => '清除这部手机上的所有数据？';
+
+  @override
+  String get dlgEraseIntroPhone => 'Charon 会先断开连接、关闭断网保护，然后删除它在这部手机上保存的所有内容。';
+
+  @override
+  String get settingsAlwaysOnTitle => '始终开启的 VPN';
+
+  @override
+  String get settingsAlwaysOnDescLock =>
+      'Android 会让 Charon 保持开启，并在 Charon 未连接时拦截所有网络。';
+
+  @override
+  String get settingsAlwaysOnDescOpen =>
+      '如果 Android 停止了 Charon，流量可能会直连。要获得完整保护，请在 Android 设置中开启“始终开启的 VPN”和“屏蔽未使用 VPN 的连接”。';
+
+  @override
+  String get settingsAlwaysOnLineLock => '已开启并锁定 · Charon 停止时网络会被拦截';
+
+  @override
+  String get settingsAlwaysOnLineOn => '已开启 · Charon 停止时流量会直连';
+
+  @override
+  String get settingsAlwaysOnLineOff => 'Android 设置 · Charon 无法替你开启';
+
+  @override
+  String get settingsAlwaysOnBtn => '打开 VPN 设置';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -9997,4 +10052,59 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String mobileSrvMoreLabel(String name) {
     return '$name 的更多操作';
   }
+
+  @override
+  String get blockedBannerBodyPhone =>
+      'Charon 连不上你的任何一台服务器。在你重试、选择服务器或放行之前，没有流量会离开这部手机。';
+
+  @override
+  String get settingsAllowLocalDescPhone =>
+      '在流量被拦截或走隧道时，手机仍能访问家里网络中的打印机、NAS 等设备。';
+
+  @override
+  String get settingsAppMetaPhone => 'ANDROID';
+
+  @override
+  String get settingsThemeLineSystemPhone => '跟随 Android · 当前为深色';
+
+  @override
+  String get settingsThemeLineDarkPhone => '始终深色，不随 Android 变化';
+
+  @override
+  String get settingsThemeLineLightPhone => '始终浅色，不随 Android 变化';
+
+  @override
+  String get settingsLanguageLineSystemPhone => '跟随 Android · 当前为 English';
+
+  @override
+  String get settingsEraseDescPhone => '从这部手机删除服务器、规则、设置和计数。同步副本会保留。';
+
+  @override
+  String get dlgEraseHeadingPhone => '清除这部手机上的所有数据？';
+
+  @override
+  String get dlgEraseIntroPhone => 'Charon 会先断开连接、关闭断网保护，然后删除它在这部手机上保存的所有内容。';
+
+  @override
+  String get settingsAlwaysOnTitle => '始终开启的 VPN';
+
+  @override
+  String get settingsAlwaysOnDescLock =>
+      'Android 会让 Charon 保持开启，并在 Charon 未连接时拦截所有网络。';
+
+  @override
+  String get settingsAlwaysOnDescOpen =>
+      '如果 Android 停止了 Charon，流量可能会直连。要获得完整保护，请在 Android 设置中开启“始终开启的 VPN”和“屏蔽未使用 VPN 的连接”。';
+
+  @override
+  String get settingsAlwaysOnLineLock => '已开启并锁定 · Charon 停止时网络会被拦截';
+
+  @override
+  String get settingsAlwaysOnLineOn => '已开启 · Charon 停止时流量会直连';
+
+  @override
+  String get settingsAlwaysOnLineOff => 'Android 设置 · Charon 无法替你开启';
+
+  @override
+  String get settingsAlwaysOnBtn => '打开 VPN 设置';
 }

@@ -468,7 +468,7 @@ class HomeView {
       return BannerSpec(
         tone: BannerTone.crit,
         tag: l10n.homeBannerBlockedTag,
-        text: l10n.blockedBannerBody,
+        text: controller.phoneLayout ? l10n.blockedBannerBodyPhone : l10n.blockedBannerBody,
         actions: [
           BannerAction(BannerActionKind.retryNow, l10n.actionRetryNow, primary: true),
           BannerAction(BannerActionKind.chooseServer, l10n.blockedActionChooseServer),

@@ -12,10 +12,7 @@ import '../../common/sliding_pills.dart';
 import 'language_picker.dart';
 
 class AppCard extends StatelessWidget {
-  const AppCard({
-    super.key,
-    required this.controller,
-  });
+  const AppCard({super.key, required this.controller});
 
   final HomeController controller;
 
@@ -23,6 +20,7 @@ class AppCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
+    final phone = controller.phoneLayout;
     final boot = controller.launchAtStartup;
     final ks = controller.killSwitch;
     final svcRestart = controller.isServiceRestarting;
@@ -49,7 +47,7 @@ class AppCard extends StatelessWidget {
                 ),
               ),
               Text(
-                l10n.settingsAppMeta,
+                phone ? l10n.settingsAppMetaPhone : l10n.settingsAppMeta,
                 style: TextStyle(
                   fontFamily: CharonTokens.fontMono,
                   fontSize: 10,
@@ -62,182 +60,196 @@ class AppCard extends StatelessWidget {
           ),
           const SizedBox(height: 10),
 
-          // Row 1: Launch at startup
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: colors.surface2,
-                  borderRadius: BorderRadius.circular(9),
-                ),
-                child: PixelIcon(
-                  PixelIcons.power,
-                  size: 18,
-                  color: boot ? colors.accentText : colors.text2,
-                ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.settingsStartupTitle,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: colors.text,
-                      ),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      l10n.settingsStartupDesc,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: colors.text2,
-                        height: 1.3,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    Row(
-                      children: [
-                        Container(
-                          width: 6,
-                          height: 6,
-                          color: boot
-                              ? colors.accentText
-                              : (ks ? colors.transitionText : colors.text3),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            boot
-                                ? '> ${l10n.settingsStartupLineOn}'
-                                : (ks
-                                    ? '> ${l10n.settingsStartupLineKs}'
-                                    : '> ${l10n.settingsStartupLineOff}'),
-                            style: TextStyle(
-                              fontFamily: CharonTokens.fontMono,
-                              fontSize: 11,
-                              color: boot
-                                  ? colors.accentText
-                                  : (ks ? colors.transitionText : colors.text3),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 12),
-              CharonSwitch(
-                value: boot,
-                onChanged: (v) => controller.setLaunchAtStartup(v),
-                semanticLabel: l10n.settingsStartupTitle,
-              ),
-            ],
-          ),
-          Divider(color: colors.divider, height: 20),
-
-          // Row 2: Charon service
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: colors.surface2,
-                  borderRadius: BorderRadius.circular(9),
-                ),
-                child: PixelIcon(
-                  PixelIcons.service,
-                  size: 18,
-                  color: svcRestart ? colors.transitionText : colors.accentText,
-                ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.settingsServiceTitle,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: colors.text,
-                      ),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      l10n.settingsServiceDesc,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: colors.text2,
-                        height: 1.3,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    Row(
-                      children: [
-                        Container(
-                          width: 6,
-                          height: 6,
-                          color: svcRestart ? colors.transitionText : colors.text3,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            svcRestart
-                                ? '> ${l10n.settingsServiceLineRestarting}'
-                                : '> ${l10n.settingsServiceLineRunning(controller.serviceVersion)}',
-                            style: TextStyle(
-                              fontFamily: CharonTokens.fontMono,
-                              fontSize: 11,
-                              color: svcRestart ? colors.transitionText : colors.text3,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 12),
-              OutlinedButton(
-                onPressed: svcRestart ? null : controller.restartService,
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: colors.text,
-                  side: BorderSide(color: colors.controlBorder),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(999),
+          // Rows 1 and 2 are Windows only: launch at startup and the Charon service.
+          if (!phone) ...[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: colors.surface2,
+                    borderRadius: BorderRadius.circular(9),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-                child: Text(
-                  l10n.settingsServiceRestartBtn,
-                  style: const TextStyle(
-                    fontFamily: CharonTokens.fontMono,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
+                  child: PixelIcon(
+                    PixelIcons.power,
+                    size: 18,
+                    color: boot ? colors.accentText : colors.text2,
                   ),
                 ),
-              ),
-            ],
-          ),
-          Divider(color: colors.divider, height: 20),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.settingsStartupTitle,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: colors.text,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        l10n.settingsStartupDesc,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: colors.text2,
+                          height: 1.3,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Row(
+                        children: [
+                          Container(
+                            width: 6,
+                            height: 6,
+                            color: boot
+                                ? colors.accentText
+                                : (ks ? colors.transitionText : colors.text3),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              boot
+                                  ? '> ${l10n.settingsStartupLineOn}'
+                                  : (ks
+                                        ? '> ${l10n.settingsStartupLineKs}'
+                                        : '> ${l10n.settingsStartupLineOff}'),
+                              style: TextStyle(
+                                fontFamily: CharonTokens.fontMono,
+                                fontSize: 11,
+                                color: boot
+                                    ? colors.accentText
+                                    : (ks
+                                          ? colors.transitionText
+                                          : colors.text3),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                CharonSwitch(
+                  value: boot,
+                  onChanged: (v) => controller.setLaunchAtStartup(v),
+                  semanticLabel: l10n.settingsStartupTitle,
+                ),
+              ],
+            ),
+            Divider(color: colors.divider, height: 20),
 
-          // Row 3: Pair Row (THEME & LANGUAGE)
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            // Row 2: Charon service
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: colors.surface2,
+                    borderRadius: BorderRadius.circular(9),
+                  ),
+                  child: PixelIcon(
+                    PixelIcons.service,
+                    size: 18,
+                    color: svcRestart
+                        ? colors.transitionText
+                        : colors.accentText,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.settingsServiceTitle,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: colors.text,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        l10n.settingsServiceDesc,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: colors.text2,
+                          height: 1.3,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Row(
+                        children: [
+                          Container(
+                            width: 6,
+                            height: 6,
+                            color: svcRestart
+                                ? colors.transitionText
+                                : colors.text3,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              svcRestart
+                                  ? '> ${l10n.settingsServiceLineRestarting}'
+                                  : '> ${l10n.settingsServiceLineRunning(controller.serviceVersion)}',
+                              style: TextStyle(
+                                fontFamily: CharonTokens.fontMono,
+                                fontSize: 11,
+                                color: svcRestart
+                                    ? colors.transitionText
+                                    : colors.text3,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                OutlinedButton(
+                  onPressed: svcRestart ? null : controller.restartService,
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: colors.text,
+                    side: BorderSide(color: colors.controlBorder),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 8,
+                    ),
+                  ),
+                  child: Text(
+                    l10n.settingsServiceRestartBtn,
+                    style: const TextStyle(
+                      fontFamily: CharonTokens.fontMono,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Divider(color: colors.divider, height: 20),
+          ],
+
+          // Row 3: Pair Row (THEME & LANGUAGE). On a phone the two sit one under the other.
+          _Pair(
+            phone: phone,
             children: [
               // Left: Theme
-              Expanded(
+              _Cell(
+                phone: phone,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -252,50 +264,64 @@ class AppCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Builder(builder: (context) {
-                      const modes = [ThemeMode.system, ThemeMode.dark, ThemeMode.light];
-                      final labels = [l10n.settingsThemeSystem, l10n.settingsThemeDark, l10n.settingsThemeLight];
-                      const icons = [PixelIcons.monitor, PixelIcons.moon, PixelIcons.sun];
-                      // The pill slides to the picked theme (segA) while the colours tween.
-                      return SlidingPills(
-                        count: 3,
-                        selected: modes.indexOf(thm),
-                        stretch: true,
-                        semanticLabels: labels,
-                        onSelect: (i) => controller.setThemeMode(modes[i]),
-                        itemBuilder: (context, i, on, ink) => SizedBox(
-                          height: 30,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              PixelIcon(icons[i], size: 14, color: ink),
-                              const SizedBox(width: 6),
-                              Flexible(
-                                child: Text(
-                                  labels[i],
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontFamily: CharonTokens.fontMono,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w700,
-                                    letterSpacing: 0.6,
-                                    color: ink,
+                    Builder(
+                      builder: (context) {
+                        const modes = [
+                          ThemeMode.system,
+                          ThemeMode.dark,
+                          ThemeMode.light,
+                        ];
+                        final labels = [
+                          l10n.settingsThemeSystem,
+                          l10n.settingsThemeDark,
+                          l10n.settingsThemeLight,
+                        ];
+                        const icons = [
+                          PixelIcons.monitor,
+                          PixelIcons.moon,
+                          PixelIcons.sun,
+                        ];
+                        // The pill slides to the picked theme (segA) while the colours tween.
+                        return SlidingPills(
+                          count: 3,
+                          selected: modes.indexOf(thm),
+                          stretch: true,
+                          semanticLabels: labels,
+                          onSelect: (i) => controller.setThemeMode(modes[i]),
+                          itemBuilder: (context, i, on, ink) => SizedBox(
+                            height: 30,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                PixelIcon(icons[i], size: 14, color: ink),
+                                const SizedBox(width: 6),
+                                Flexible(
+                                  child: Text(
+                                    labels[i],
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontFamily: CharonTokens.fontMono,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing: 0.6,
+                                      color: ink,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    }),
+                        );
+                      },
+                    ),
                     const SizedBox(height: 6),
                     Text(
                       thm == ThemeMode.system
-                          ? '> ${l10n.settingsThemeLineSystem}'
+                          ? '> ${phone ? l10n.settingsThemeLineSystemPhone : l10n.settingsThemeLineSystem}'
                           : (thm == ThemeMode.dark
-                              ? '> ${l10n.settingsThemeLineDark}'
-                              : '> ${l10n.settingsThemeLineLight}'),
+                                ? '> ${phone ? l10n.settingsThemeLineDarkPhone : l10n.settingsThemeLineDark}'
+                                : '> ${phone ? l10n.settingsThemeLineLightPhone : l10n.settingsThemeLineLight}'),
                       style: TextStyle(
                         fontFamily: CharonTokens.fontMono,
                         fontSize: 11,
@@ -306,10 +332,11 @@ class AppCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 16),
+              phone ? const SizedBox(height: 14) : const SizedBox(width: 16),
 
               // Right: Language
-              Expanded(
+              _Cell(
+                phone: phone,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -329,7 +356,7 @@ class AppCard extends StatelessWidget {
                     const SizedBox(height: 6),
                     Text(
                       loc == null
-                          ? '> ${l10n.settingsLanguageLineSystem}'
+                          ? '> ${phone ? l10n.settingsLanguageLineSystemPhone : l10n.settingsLanguageLineSystem}'
                           : '> ${l10n.settingsLanguageLineManual}',
                       style: TextStyle(
                         fontFamily: CharonTokens.fontMono,
@@ -356,7 +383,11 @@ class AppCard extends StatelessWidget {
                   color: colors.surface2,
                   borderRadius: BorderRadius.circular(9),
                 ),
-                child: PixelIcon(PixelIcons.trash, size: 18, color: colors.text2),
+                child: PixelIcon(
+                  PixelIcons.trash,
+                  size: 18,
+                  color: colors.text2,
+                ),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -373,7 +404,9 @@ class AppCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 3),
                     Text(
-                      l10n.settingsEraseDesc,
+                      phone
+                          ? l10n.settingsEraseDescPhone
+                          : l10n.settingsEraseDesc,
                       style: TextStyle(
                         fontSize: 12,
                         color: colors.text2,
@@ -383,11 +416,7 @@ class AppCard extends StatelessWidget {
                     const SizedBox(height: 5),
                     Row(
                       children: [
-                        Container(
-                          width: 6,
-                          height: 6,
-                          color: colors.text3,
-                        ),
+                        Container(width: 6, height: 6, color: colors.text3),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -416,11 +445,16 @@ class AppCard extends StatelessWidget {
                 },
                 style: OutlinedButton.styleFrom(
                   foregroundColor: colors.criticalText,
-                  side: BorderSide(color: colors.criticalFill.withValues(alpha: 0.4)),
+                  side: BorderSide(
+                    color: colors.criticalFill.withValues(alpha: 0.4),
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(999),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 8,
+                  ),
                 ),
                 child: Text(
                   l10n.settingsEraseBtn,
@@ -437,4 +471,27 @@ class AppCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Theme and Language side by side on a PC, one under the other on a phone.
+class _Pair extends StatelessWidget {
+  const _Pair({required this.phone, required this.children});
+
+  final bool phone;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) => phone
+      ? Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: children)
+      : Row(crossAxisAlignment: CrossAxisAlignment.start, children: children);
+}
+
+class _Cell extends StatelessWidget {
+  const _Cell({required this.phone, required this.child});
+
+  final bool phone;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => phone ? child : Expanded(child: child);
 }

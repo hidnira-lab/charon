@@ -5286,4 +5286,66 @@ class AppLocalizationsEn extends AppLocalizations {
   String mobileSrvMoreLabel(String name) {
     return 'More about $name';
   }
+
+  @override
+  String get blockedBannerBodyPhone =>
+      'Charon could not reach any of your servers. Nothing leaves this phone until you retry, pick a server, or release.';
+
+  @override
+  String get settingsAllowLocalDescPhone =>
+      'Lets your phone reach printers, NAS and other devices on your home network while traffic is held or tunnelled.';
+
+  @override
+  String get settingsAppMetaPhone => 'ANDROID';
+
+  @override
+  String get settingsThemeLineSystemPhone => 'follows Android · dark right now';
+
+  @override
+  String get settingsThemeLineDarkPhone => 'always dark, whatever Android uses';
+
+  @override
+  String get settingsThemeLineLightPhone =>
+      'always light, whatever Android uses';
+
+  @override
+  String get settingsLanguageLineSystemPhone =>
+      'follows Android · English right now';
+
+  @override
+  String get settingsEraseDescPhone =>
+      'Removes servers, rules, settings and counters from this phone. The sync copy stays.';
+
+  @override
+  String get dlgEraseHeadingPhone => 'Erase all data on this phone?';
+
+  @override
+  String get dlgEraseIntroPhone =>
+      'Charon disconnects, turns off the kill switch, then removes everything it keeps on this phone.';
+
+  @override
+  String get settingsAlwaysOnTitle => 'Always on VPN';
+
+  @override
+  String get settingsAlwaysOnDescLock =>
+      'Android keeps Charon on and blocks the internet whenever Charon is not connected.';
+
+  @override
+  String get settingsAlwaysOnDescOpen =>
+      'If Android stops Charon, traffic can go direct. For full protection turn on Always on VPN and Block connections without VPN in Android settings.';
+
+  @override
+  String get settingsAlwaysOnLineLock =>
+      'On with lockdown · internet is blocked if Charon stops';
+
+  @override
+  String get settingsAlwaysOnLineOn =>
+      'On · traffic goes direct if Charon stops';
+
+  @override
+  String get settingsAlwaysOnLineOff =>
+      'Android setting · Charon cannot switch it on for you';
+
+  @override
+  String get settingsAlwaysOnBtn => 'Open VPN settings';
 }

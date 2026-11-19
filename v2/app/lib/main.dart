@@ -23,6 +23,7 @@ import 'ui/shell/window_shell.dart';
 import 'ui/common/phone_layout.dart';
 import 'ui/home/home_screen.dart';
 import 'ui/mobile/home_mobile_screen.dart';
+import 'ui/mobile/settings_mobile_screen.dart';
 import 'ui/mobile/servers_mobile_screen.dart';
 import 'ui/servers/servers_screen.dart';
 import 'ui/service/service_screen.dart';
@@ -148,7 +149,10 @@ class _CharonAppState extends State<CharonApp> {
         } else if (activeTab == 3) {
           screen = TelemetryScreen(controller: controller);
         } else if (activeTab == 4) {
-          screen = SettingsScreen(controller: controller);
+          screen = Builder(
+            builder: (context) =>
+                isPhoneLayout(context) ? SettingsMobileScreen(controller: controller) : SettingsScreen(controller: controller),
+          );
         } else {
           // A phone gets the phone Home (HomeMobile board). The other places still have only
           // their desktop layout, until their phone boards are built.
@@ -179,17 +183,21 @@ class _CharonAppState extends State<CharonApp> {
           supportedLocales: AppLocalizations.supportedLocales,
           // The window light behind every page, under the glass of the cards.
           navigatorKey: _navigatorKey,
-          builder: (context, child) => WindowShell(
-            host: widget.windowHost ?? const NoWindowHost(),
-            controller: controller,
-            navigatorKey: _navigatorKey,
-            toasts: widget.osToasts,
-            child: PageBackdrop(
-              home: !controller.isFirstRun && controller.service.view == null && activeTab == 0,
-              // The toast sits above every screen and dialog, in the one window.
-              child: Stack(children: [child!, ToastHost(controller: controller)]),
-            ),
-          ),
+          builder: (context, child) {
+            // Words that differ between a PC and a phone follow the layout.
+            controller.phoneLayout = isPhoneLayout(context);
+            return WindowShell(
+              host: widget.windowHost ?? const NoWindowHost(),
+              controller: controller,
+              navigatorKey: _navigatorKey,
+              toasts: widget.osToasts,
+              child: PageBackdrop(
+                home: !controller.isFirstRun && controller.service.view == null && activeTab == 0,
+                // The toast sits above every screen and dialog, in the one window.
+                child: Stack(children: [child!, ToastHost(controller: controller)]),
+              ),
+            );
+          },
           // The splash goes inside the home, not around the app: it needs the Overlay of the
           // Navigator (the window buttons have tooltips). Keyed, so it keeps its clock when the
           // screen under it changes.

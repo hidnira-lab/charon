@@ -449,6 +449,10 @@ class HomeController extends ChangeNotifier {
   /// With lockdown on, Android blocks all internet while Charon is not
   /// connected, so Home must not say traffic goes direct.
   bool get systemAlwaysOn => _systemAlwaysOn;
+
+  /// The app is laid out for a phone (the `*Mobile` boards). Set by the app on every build,
+  /// so words that differ between a PC and a phone ("this PC", "this phone") can follow it.
+  bool phoneLayout = false;
   bool get systemLockdown => _systemLockdown;
   bool _systemAlwaysOn = false;
   bool _systemLockdown = false;

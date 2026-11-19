@@ -9111,6 +9111,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'More about {name}'**
   String mobileSrvMoreLabel(String name);
+
+  /// Held banner on a phone (HomeMobile board).
+  ///
+  /// In en, this message translates to:
+  /// **'Charon could not reach any of your servers. Nothing leaves this phone until you retry, pick a server, or release.'**
+  String get blockedBannerBodyPhone;
+
+  /// Allow local network on a phone (SettingsMobile board).
+  ///
+  /// In en, this message translates to:
+  /// **'Lets your phone reach printers, NAS and other devices on your home network while traffic is held or tunnelled.'**
+  String get settingsAllowLocalDescPhone;
+
+  /// App card header meta on a phone.
+  ///
+  /// In en, this message translates to:
+  /// **'ANDROID'**
+  String get settingsAppMetaPhone;
+
+  /// Theme line on a phone.
+  ///
+  /// In en, this message translates to:
+  /// **'follows Android · dark right now'**
+  String get settingsThemeLineSystemPhone;
+
+  /// Theme line on a phone.
+  ///
+  /// In en, this message translates to:
+  /// **'always dark, whatever Android uses'**
+  String get settingsThemeLineDarkPhone;
+
+  /// Theme line on a phone.
+  ///
+  /// In en, this message translates to:
+  /// **'always light, whatever Android uses'**
+  String get settingsThemeLineLightPhone;
+
+  /// Language line on a phone.
+  ///
+  /// In en, this message translates to:
+  /// **'follows Android · English right now'**
+  String get settingsLanguageLineSystemPhone;
+
+  /// Erase row on a phone.
+  ///
+  /// In en, this message translates to:
+  /// **'Removes servers, rules, settings and counters from this phone. The sync copy stays.'**
+  String get settingsEraseDescPhone;
+
+  /// Erase confirm title on a phone.
+  ///
+  /// In en, this message translates to:
+  /// **'Erase all data on this phone?'**
+  String get dlgEraseHeadingPhone;
+
+  /// Erase confirm text on a phone.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon disconnects, turns off the kill switch, then removes everything it keeps on this phone.'**
+  String get dlgEraseIntroPhone;
+
+  /// Android only row of Failsafe.
+  ///
+  /// In en, this message translates to:
+  /// **'Always on VPN'**
+  String get settingsAlwaysOnTitle;
+
+  /// Always on VPN row with lockdown on.
+  ///
+  /// In en, this message translates to:
+  /// **'Android keeps Charon on and blocks the internet whenever Charon is not connected.'**
+  String get settingsAlwaysOnDescLock;
+
+  /// Always on VPN row without lockdown.
+  ///
+  /// In en, this message translates to:
+  /// **'If Android stops Charon, traffic can go direct. For full protection turn on Always on VPN and Block connections without VPN in Android settings.'**
+  String get settingsAlwaysOnDescOpen;
+
+  /// Always on VPN status line.
+  ///
+  /// In en, this message translates to:
+  /// **'On with lockdown · internet is blocked if Charon stops'**
+  String get settingsAlwaysOnLineLock;
+
+  /// Always on VPN status line.
+  ///
+  /// In en, this message translates to:
+  /// **'On · traffic goes direct if Charon stops'**
+  String get settingsAlwaysOnLineOn;
+
+  /// Always on VPN status line.
+  ///
+  /// In en, this message translates to:
+  /// **'Android setting · Charon cannot switch it on for you'**
+  String get settingsAlwaysOnLineOff;
+
+  /// Always on VPN button.
+  ///
+  /// In en, this message translates to:
+  /// **'Open VPN settings'**
+  String get settingsAlwaysOnBtn;
 }
 
 class _AppLocalizationsDelegate

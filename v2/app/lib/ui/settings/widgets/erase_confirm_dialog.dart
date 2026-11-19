@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../common/phone_layout.dart';
+
 import '../../../l10n/generated/app_localizations.dart';
 import '../../dialogs/dialog_shell.dart';
 import '../../common/pixel_icon.dart';
@@ -15,9 +17,10 @@ class EraseConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final phone = isPhoneLayout(context);
     return CharonDialog(
       kicker: l10n.dlgEraseKicker,
-      title: l10n.dlgEraseHeading,
+      title: phone ? l10n.dlgEraseHeadingPhone : l10n.dlgEraseHeading,
       tile: PixelIcons.trash,
       hint: l10n.dialogEscFoot,
       onClose: () => Navigator.of(context).pop(false),
@@ -26,7 +29,7 @@ class EraseConfirmDialog extends StatelessWidget {
         DialogAction(l10n.dlgEraseBtn, () => Navigator.of(context).pop(true), primary: true),
       ],
       children: [
-        DialogText(l10n.dlgEraseIntro),
+        DialogText(phone ? l10n.dlgEraseIntroPhone : l10n.dlgEraseIntro),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

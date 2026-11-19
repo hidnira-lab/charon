@@ -97,11 +97,16 @@ class FailsafeCard extends StatelessWidget {
           _SwitchRow(
             icon: PixelIcons.house,
             title: l10n.settingsAllowLocalTitle,
-            desc: l10n.settingsAllowLocalDesc,
+            desc: controller.phoneLayout ? l10n.settingsAllowLocalDescPhone : l10n.settingsAllowLocalDesc,
             line: lan ? l10n.settingsAllowLocalArmed : l10n.settingsAllowLocalDisarmed,
             isOn: lan,
             onChanged: (v) => controller.setAllowLocalNetwork(v),
           ),
+          // Row 4, Android only: Android's own Always on VPN and Block connections without VPN.
+          if (controller.phoneLayout) ...[
+            Divider(color: colors.divider, height: 20),
+            _AlwaysOnRow(controller: controller),
+          ],
           const SizedBox(height: 12),
 
           // Footer link
@@ -147,6 +152,79 @@ class FailsafeCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Whether Android keeps Charon on, and whether it blocks the internet without it. Charon cannot
+/// switch this on for you, so the button opens the VPN settings of Android.
+class _AlwaysOnRow extends StatelessWidget {
+  const _AlwaysOnRow({required this.controller});
+
+  final HomeController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final lock = controller.systemLockdown;
+    final on = controller.systemAlwaysOn;
+    final ink = lock ? colors.accentText : colors.transitionText;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(color: colors.surface2, borderRadius: BorderRadius.circular(9)),
+          child: PixelIcon(PixelIcons.phone, size: 18, color: ink),
+        ),
+        const SizedBox(width: 14),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(l10n.settingsAlwaysOnTitle, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: colors.text)),
+              const SizedBox(height: 4),
+              Text(
+                lock ? l10n.settingsAlwaysOnDescLock : l10n.settingsAlwaysOnDescOpen,
+                style: TextStyle(fontSize: 12, height: 16 / 12, color: colors.text2),
+              ),
+              const SizedBox(height: 6),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: SizedBox(width: 6, height: 6, child: ColoredBox(color: ink)),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      '> ${lock ? l10n.settingsAlwaysOnLineLock : on ? l10n.settingsAlwaysOnLineOn : l10n.settingsAlwaysOnLineOff}',
+                      style: TextStyle(fontFamily: CharonTokens.fontMono, fontSize: 11, height: 16 / 11, color: lock ? colors.accentText : colors.text2),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                height: 36,
+                child: OutlinedButton(
+                  onPressed: controller.openVpnSettings,
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: colors.text,
+                    side: BorderSide(color: colors.controlBorder),
+                    shape: const StadiumBorder(),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                  ),
+                  child: Text(l10n.settingsAlwaysOnBtn, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
