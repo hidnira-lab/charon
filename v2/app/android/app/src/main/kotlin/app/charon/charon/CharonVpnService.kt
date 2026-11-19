@@ -234,12 +234,28 @@ class CharonVpnService : VpnService(), NativeHostCallbacks {
         showRelease: Boolean,
         showRetry: Boolean,
     ) {
+        // The core says "going direct" when the VPN is gone. With Android's "Block connections
+        // without VPN" on, that is false: nothing goes direct, the internet is blocked.
+        var sub = subtitle
+        var short = collapsed
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && isLockdownEnabled) {
+            when (state) {
+                "vpn revoked" -> {
+                    sub = "Android removed Charon's VPN permission. Internet is blocked until you allow it again."
+                    short = "Internet is blocked · allow the VPN again"
+                }
+                "another vpn" -> {
+                    sub = "Another VPN took over. Internet is blocked until Charon is back."
+                    short = "Another VPN took over · internet is blocked"
+                }
+            }
+        }
         val notif = CharonNotificationHelper.buildForegroundNotification(
             this,
             state,
             title,
-            subtitle,
-            collapsed,
+            sub,
+            short,
             publicLine,
             level,
             showRelease,
