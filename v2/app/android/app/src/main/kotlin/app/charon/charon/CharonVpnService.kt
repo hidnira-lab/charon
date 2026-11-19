@@ -82,6 +82,10 @@ class CharonVpnService : VpnService(), NativeHostCallbacks {
     }
 
     private var tunPfd: ParcelFileDescriptor? = null
+
+    /** True between startForeground and stopForeground, so onStartCommand never overwrites a real notification. */
+    @Volatile
+    private var isForeground = false
     private var connectivityManager: ConnectivityManager? = null
     private var networkCallback: ConnectivityManager.NetworkCallback? = null
 
@@ -103,6 +107,17 @@ class CharonVpnService : VpnService(), NativeHostCallbacks {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         recordSystemFlags()
+        // startForegroundService() obliges us to call startForeground() within seconds, also
+        // while the core is idle and no notification should stay. Enter and leave at once.
+        if (!isForeground) {
+            enterForeground(
+                CharonNotificationHelper.buildForegroundNotification(
+                    this, "idle", "Charon", "", "", "Charon", "idle", false, false,
+                )
+            )
+            stopForeground(STOP_FOREGROUND_REMOVE)
+            isForeground = false
+        }
         val bridge = ensureBridge(this)
         val action = intent?.action
 
@@ -233,20 +248,27 @@ class CharonVpnService : VpnService(), NativeHostCallbacks {
         val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (state == "idle") {
             stopForeground(STOP_FOREGROUND_REMOVE)
+            isForeground = false
         } else if (state == "vpn revoked" || state == "another vpn") {
             stopForeground(STOP_FOREGROUND_DETACH)
+            isForeground = false
             nm.notify(CharonNotificationHelper.NOTIFICATION_ID_FOREGROUND, notif)
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                startForeground(
-                    CharonNotificationHelper.NOTIFICATION_ID_FOREGROUND,
-                    notif,
-                    ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
-                )
-            } else {
-                startForeground(CharonNotificationHelper.NOTIFICATION_ID_FOREGROUND, notif)
-            }
+            enterForeground(notif)
         }
+    }
+
+    private fun enterForeground(notif: android.app.Notification) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            startForeground(
+                CharonNotificationHelper.NOTIFICATION_ID_FOREGROUND,
+                notif,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
+            )
+        } else {
+            startForeground(CharonNotificationHelper.NOTIFICATION_ID_FOREGROUND, notif)
+        }
+        isForeground = true
     }
 
     override fun updateTile(active: Boolean, subtitle: String) {
