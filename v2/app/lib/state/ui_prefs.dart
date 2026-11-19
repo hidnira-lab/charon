@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/services.dart' show MethodChannel;
+
 /// What the window remembers between launches: choices of looks and the two
 /// things typed for the Home greeting. UI only data, it never crosses the IPC
 /// contract (`charon_ipc_contract.md`) and only theme and language sync.
@@ -15,7 +17,12 @@ class UiPrefs {
     this.detectCity = true,
     this.city = '',
     this.countryCode = '',
+    this.setupDone = false,
   });
+
+  /// True once the first run setup was finished or skipped, or a server was found without it.
+  /// Without this the setup would come back whenever the last server is deleted.
+  final bool setupDone;
 
   /// `system`, `light` or `dark`.
   final String theme;
@@ -38,6 +45,7 @@ class UiPrefs {
         'detectCity': detectCity,
         'city': city,
         'countryCode': countryCode,
+        'setupDone': setupDone,
       };
 
   /// Reads what [toJson] wrote. A field that is missing or of the wrong kind
@@ -55,7 +63,9 @@ class UiPrefs {
     final theme = s('theme', 'system');
     final language = s('language', 'system');
     final d = json['detectCity'];
+    final done = json['setupDone'];
     return UiPrefs(
+      setupDone: done is bool ? done : false,
       theme: themes.contains(theme) ? theme : 'system',
       language: languages.contains(language) ? language : 'system',
       greetingName: s('greetingName', ''),
@@ -73,10 +83,11 @@ class UiPrefs {
       other.greetingName == greetingName &&
       other.detectCity == detectCity &&
       other.city == city &&
-      other.countryCode == countryCode;
+      other.countryCode == countryCode &&
+      other.setupDone == setupDone;
 
   @override
-  int get hashCode => Object.hash(theme, language, greetingName, detectCity, city, countryCode);
+  int get hashCode => Object.hash(theme, language, greetingName, detectCity, city, countryCode, setupDone);
 }
 
 /// Where [UiPrefs] live. An interface, like the Store of the core, so Android
@@ -101,6 +112,18 @@ class FileUiPrefsStore implements UiPrefsStore {
     final root = Platform.isWindows ? Platform.environment['APPDATA'] : null;
     if (root == null || root.isEmpty) return null;
     return FileUiPrefsStore('$root${Platform.pathSeparator}Charon${Platform.pathSeparator}ui.json');
+  }
+
+  /// `ui/ui.json` in the files folder of the app, which only this app can read. The folder
+  /// comes from `MainActivity`, since Dart has no way to ask for it. Null if it cannot say.
+  static Future<FileUiPrefsStore?> androidDefault() async {
+    try {
+      final dir = await const MethodChannel('app.charon/core').invokeMethod<String>('filesDir');
+      if (dir == null || dir.isEmpty) return null;
+      return FileUiPrefsStore('$dir${Platform.pathSeparator}ui${Platform.pathSeparator}ui.json');
+    } catch (_) {
+      return null;
+    }
   }
 
   final String path;

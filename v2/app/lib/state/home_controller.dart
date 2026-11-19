@@ -180,6 +180,7 @@ class HomeController extends ChangeNotifier {
 
   void setIsFirstRun(bool value) {
     _isFirstRun = value;
+    if (!value) _setupEnded();
     notifyListeners();
   }
 
@@ -211,6 +212,7 @@ class HomeController extends ChangeNotifier {
       return;
     }
     _isFirstRun = false;
+    _setupEnded();
     _activeTabIndex = 0;
     notifyListeners();
   }
@@ -715,12 +717,41 @@ class HomeController extends ChangeNotifier {
   String _typedCity = '';
   String _typedCountry = '';
 
+  /// The first run setup was finished or skipped, or a server showed up without it. Only
+  /// meaningful once [_prefsLoaded]: without a store (tests) the setup never starts by itself.
+  bool _setupDone = false;
+  bool _prefsLoaded = false;
+
+  /// The first run starts by itself when nothing says it was done and the service has answered
+  /// with no server. It stays on until the setup ends, even though the first server it adds
+  /// would end the "no server" on its own. A server found without a setup (an older install)
+  /// counts as done, so deleting the last one later does not bring the setup back.
+  @override
+  void notifyListeners() {
+    if (_prefsLoaded && !_setupDone && _config != null && !_isDisposed) {
+      if (!_hasServers) {
+        _isFirstRun = true;
+      } else if (!_isFirstRun) {
+        _setupDone = true;
+        _persistUi();
+      }
+    }
+    super.notifyListeners();
+  }
+
+  void _setupEnded() {
+    _setupDone = true;
+    _persistUi();
+  }
+
   /// Reads the saved looks and greeting before the first screen is drawn. A
   /// missing or unreadable file leaves the defaults.
   Future<void> loadUiPrefs() async {
     final store = _uiStore;
     if (store == null) return;
     final p = await store.load();
+    _setupDone = p.setupDone;
+    _prefsLoaded = true;
     _themeMode = ThemeMode.values.firstWhere((m) => m.name == p.theme, orElse: () => ThemeMode.system);
     _locale = syncLanguageToLocale(p.language);
     _greetingName = p.greetingName;
@@ -739,6 +770,7 @@ class HomeController extends ChangeNotifier {
         detectCity: _detectCity,
         city: _typedCity,
         countryCode: _typedCountry,
+        setupDone: _setupDone,
       );
 
   /// Saves the prefs. Typing waits a moment ([soon]) so a name is written once,
@@ -1009,6 +1041,8 @@ class HomeController extends ChangeNotifier {
     _detectCity = true;
     _city = _countryCode = _typedCity = _typedCountry = '';
     _locationRun++;
+    // Fresh means the setup is due again.
+    _setupDone = false;
     await _uiStore?.erase();
     if (_client != null) {
       try {

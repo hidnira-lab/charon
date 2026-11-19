@@ -38,7 +38,8 @@ import 'ui/telemetry/telemetry_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   unawaited(GeoIp.load()); // only needed once the user adds a server
-  final controller = HomeController(uiPrefs: FileUiPrefsStore.windowsDefault());
+  final prefs = Platform.isAndroid ? await FileUiPrefsStore.androidDefault() : FileUiPrefsStore.windowsDefault();
+  final controller = HomeController(uiPrefs: prefs);
   // The saved theme and language are in place before the first frame.
   await controller.loadUiPrefs();
   if (Platform.isWindows) {

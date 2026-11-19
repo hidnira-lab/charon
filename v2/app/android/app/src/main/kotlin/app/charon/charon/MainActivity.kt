@@ -92,6 +92,9 @@ class MainActivity : FlutterActivity() {
                     }
                 }
 
+                // Where the window keeps its own small files (ui_prefs.dart).
+                "filesDir" -> result.success(filesDir.absolutePath)
+
                 // Android 13 and newer ask at runtime. Older versions have no such prompt.
                 "requestNotifications" -> {
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||

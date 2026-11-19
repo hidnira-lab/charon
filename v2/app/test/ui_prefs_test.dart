@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:charon/core/cities.dart';
 import 'package:charon/core/device_location.dart';
+import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/state/home_controller.dart';
 import 'package:charon/state/location_status.dart';
 import 'package:charon/state/ui_prefs.dart';
@@ -207,6 +208,73 @@ void main() {
         ..setThemeMode(ThemeMode.dark)
         ..setGreetingName('Day');
       expect(c.themeMode, ThemeMode.dark);
+    });
+  });
+
+  group('the first run starts by itself', () {
+    final oneServer = Config(servers: [Server(id: 'SRV-01', address: '203.0.113.7')]);
+
+    test('setupDone is saved, and an older file without it reads as not done', () {
+      const p = UiPrefs(setupDone: true);
+      expect(UiPrefs.fromJson(p.toJson()), p);
+      expect(UiPrefs.fromJson({'format': 1, 'theme': 'dark'}).setupDone, isFalse);
+      expect(UiPrefs.fromJson({'setupDone': 'yes'}).setupDone, isFalse);
+    });
+
+    test('no server, setup not done and the service has answered: the setup comes', () async {
+      final c = HomeController(uiPrefs: MemStore(), initialConfig: Config());
+      expect(c.isFirstRun, isFalse, reason: 'the prefs are not read yet');
+      await c.loadUiPrefs();
+      expect(c.isFirstRun, isTrue);
+    });
+
+    test('it waits for the service: no config yet, no setup', () async {
+      final c = HomeController(uiPrefs: MemStore());
+      await c.loadUiPrefs();
+      expect(c.isFirstRun, isFalse);
+    });
+
+    test('a server found without a setup counts as done, and is remembered', () async {
+      final store = MemStore();
+      final c = HomeController(uiPrefs: store, initialConfig: oneServer);
+      await c.loadUiPrefs();
+      expect(c.isFirstRun, isFalse);
+      await pumpEventQueue();
+      expect(store.saved.setupDone, isTrue);
+    });
+
+    test('a finished setup does not come back, and ending it is remembered', () async {
+      final store = MemStore();
+      final c = HomeController(uiPrefs: store, initialConfig: Config());
+      await c.loadUiPrefs();
+      expect(c.isFirstRun, isTrue);
+      c.setIsFirstRun(false);
+      await pumpEventQueue();
+      expect(c.isFirstRun, isFalse);
+      expect(store.saved.setupDone, isTrue);
+      c.setThemeMode(ThemeMode.dark); // any later change must not bring it back
+      expect(c.isFirstRun, isFalse);
+    });
+
+    test('a setup that was done earlier stays done with no server', () async {
+      final c = HomeController(uiPrefs: MemStore(const UiPrefs(setupDone: true)), initialConfig: Config());
+      await c.loadUiPrefs();
+      expect(c.isFirstRun, isFalse);
+    });
+
+    test('Erase all data makes the setup due again', () async {
+      final store = MemStore(const UiPrefs(setupDone: true));
+      final c = HomeController(uiPrefs: store, initialConfig: oneServer);
+      await c.loadUiPrefs();
+      expect(c.isFirstRun, isFalse);
+      await c.eraseAllData();
+      expect(c.isFirstRun, isTrue);
+    });
+
+    test('without a store the setup never starts by itself', () async {
+      final c = HomeController(initialConfig: Config());
+      await c.loadUiPrefs();
+      expect(c.isFirstRun, isFalse);
     });
   });
 }
