@@ -150,7 +150,7 @@ class _RailNavState extends State<RailNav> with SingleTickerProviderStateMixin {
                 const Spacer(),
                 place(4),
                 const SizedBox(height: 10),
-                _StatusChip(uiState: ui),
+                RailStatusChip(uiState: ui),
               ],
             ),
           ),
@@ -482,6 +482,17 @@ class _SidebarRowState extends State<_SidebarRow> {
 
 /// The device card at the foot of the open sidebar: the ghost on its tile with
 /// the state bar, the state word, the server and its note, and this unit.
+/// The one word for the state on the device card and the phone menu (the board's `short`).
+String railShortLabel(AppLocalizations l10n, UiState state) => switch (state) {
+      UiState.connected || UiState.onBackup || UiState.checkingNetwork => l10n.railShortConnected,
+      UiState.verifying || UiState.wakingUp => l10n.railShortVerifying,
+      UiState.blocked => l10n.railShortBlocked,
+      UiState.noServer => l10n.railShortNoServer,
+      UiState.reconnecting || UiState.reconnectingHeld => l10n.railShortReconnecting,
+      UiState.switching => l10n.railShortSwitching,
+      UiState.disconnected || UiState.disconnecting || UiState.tunnelLost || UiState.couldNotReach => l10n.railShortDisconnected,
+    };
+
 class _UnitCard extends StatelessWidget {
   const _UnitCard({required this.state, required this.code, required this.meta});
 
@@ -494,15 +505,7 @@ class _UnitCard extends StatelessWidget {
     final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     final (fg, _, dot) = colors.tone(state.tone);
-    final short = switch (state) {
-      UiState.connected || UiState.onBackup || UiState.checkingNetwork => l10n.railShortConnected,
-      UiState.verifying || UiState.wakingUp => l10n.railShortVerifying,
-      UiState.blocked => l10n.railShortBlocked,
-      UiState.noServer => l10n.railShortNoServer,
-      UiState.reconnecting || UiState.reconnectingHeld => l10n.railShortReconnecting,
-      UiState.switching => l10n.railShortSwitching,
-      UiState.disconnected || UiState.disconnecting || UiState.tunnelLost || UiState.couldNotReach => l10n.railShortDisconnected,
-    };
+    final short = railShortLabel(l10n, state);
     return ClipPath(
       clipper: NotchClipper(12),
       child: Container(
@@ -548,20 +551,20 @@ class _UnitCard extends StatelessWidget {
   }
 }
 
-/// The status chip at the foot of the rail. When the state changes it plays
+/// The status chip at the foot of the rail, and in the header of the phone Home. When the state changes it plays
 /// the board's sc motion: the word rises out and the dot shrinks (140 ms), then
 /// the colors tween from the old tone (320 ms), the new word rises in from
 /// below with a little blur (240 ms after 40) and the dot pops (300 ms).
-class _StatusChip extends StatefulWidget {
-  const _StatusChip({required this.uiState});
+class RailStatusChip extends StatefulWidget {
+  const RailStatusChip({super.key, required this.uiState});
 
   final UiState uiState;
 
   @override
-  State<_StatusChip> createState() => _StatusChipState();
+  State<RailStatusChip> createState() => _RailStatusChipState();
 }
 
-class _StatusChipState extends State<_StatusChip> with TickerProviderStateMixin {
+class _RailStatusChipState extends State<RailStatusChip> with TickerProviderStateMixin {
   static const _inTotal = Duration(milliseconds: 320);
   late final AnimationController _out = AnimationController(vsync: this, duration: SwapFade.out);
   late final AnimationController _in = AnimationController(vsync: this, duration: _inTotal, value: 1);
@@ -569,7 +572,7 @@ class _StatusChipState extends State<_StatusChip> with TickerProviderStateMixin 
   late UiState _from = widget.uiState;
 
   @override
-  void didUpdateWidget(_StatusChip old) {
+  void didUpdateWidget(RailStatusChip old) {
     super.didUpdateWidget(old);
     if (widget.uiState == old.uiState || _out.isAnimating) return;
     if (MediaQuery.maybeDisableAnimationsOf(context) ?? false) {

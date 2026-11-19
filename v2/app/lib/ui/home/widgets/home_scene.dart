@@ -83,6 +83,28 @@ const sceneHeight = 61;
 const sceneCell = 6.0;
 const _horizon = 40;
 
+/// How big the scene is, in cells of 6 pixels. The desktop card is 93 x 61. The
+/// phone card (HomeMobile board) is 33 cells tall and as wide as the phone has room
+/// for, 60 on the board's 390 pixel frame, with its own sun, clouds and ripples.
+class SceneLayout {
+  const SceneLayout._(this.cols, this.rows, this.horizon, this.phone);
+
+  static const desktop = SceneLayout._(sceneWidth, sceneHeight, _horizon, false);
+
+  factory SceneLayout.phone(int cols) => SceneLayout._(cols, 33, 22, true);
+
+  final int cols, rows, horizon;
+  final bool phone;
+
+  Size get size => Size(cols * sceneCell, rows * sceneCell);
+
+  @override
+  bool operator ==(Object other) => other is SceneLayout && other.cols == cols && other.phone == phone;
+
+  @override
+  int get hashCode => Object.hash(cols, phone);
+}
+
 Color _c(String hex) => Color(0xFF000000 | int.parse(hex.substring(1), radix: 16));
 
 class _Cfg {
@@ -111,11 +133,39 @@ class _Cfg {
   final ({double f, int y, int r, String c, String h})? sun;
   final ({double f, int y, int r, String c, String sh})? moon;
   final List<(int, int, int)> stars; // x, y, twinkle clock (0 for none)
+
+  /// This sky with the sun, moon, clouds and stars the phone card has.
+  _Cfg phoned({
+    ({double f, int y, int r, String c, String h})? sun,
+    ({double f, int y, int r, String c, String sh})? moon,
+    required List<(String, double, int)> clouds,
+    List<(int, int, int)>? stars,
+  }) =>
+      _Cfg(
+        seed: seed,
+        sky: sky,
+        cloud: cloud,
+        far: far,
+        near: near,
+        water: water,
+        ripple: ripple,
+        refl: refl,
+        clouds: clouds,
+        sun: sun,
+        moon: moon,
+        stars: stars ?? const [],
+      );
 }
 
 const _stars = [
   (4, 3, 1), (11, 9, 2), (19, 2, 0), (25, 7, 3), (32, 3, 0), (38, 11, 1), (55, 3, 2), //
   (60, 10, 0), (7, 14, 3), (22, 13, 0), (53, 15, 1), (30, 16, 2), (41, 2, 0), (15, 6, 0),
+];
+
+// The 14 stars of the phone card (HomeMobile board).
+const _phoneStars = [
+  (4, 3, 1), (11, 9, 2), (19, 2, 0), (25, 7, 3), (32, 3, 0), (38, 11, 1), (55, 3, 2), //
+  (50, 10, 0), (7, 14, 3), (22, 13, 0), (53, 15, 1), (30, 16, 2), (41, 2, 0), (15, 6, 0),
 ];
 
 final _nightStars = [
@@ -176,6 +226,19 @@ final _configs = <SceneTime, _Cfg>{
   ),
 };
 
+// The same skies on the phone card: the sun and the moon sit lower in the sky, one cloud,
+// and the night keeps the first 14 stars.
+final _phoneConfigs = <SceneTime, _Cfg>{
+  SceneTime.morning: _configs[SceneTime.morning]!.phoned(
+      sun: (f: 0.84, y: 18, r: 4, c: '#FFF1DA', h: '#F8E2CC'), clouds: const [('B', 0.74, 3)]),
+  SceneTime.day: _configs[SceneTime.day]!.phoned(
+      sun: (f: 0.84, y: 6, r: 4, c: '#FFF8E8', h: '#A3CBEC'), clouds: const [('B', 0.7, 13)]),
+  SceneTime.dusk: _configs[SceneTime.dusk]!.phoned(
+      sun: (f: 0.84, y: 17, r: 4, c: '#FBE0B4', h: '#F4C49C'), clouds: const [('B', 0.72, 4)]),
+  SceneTime.night: _configs[SceneTime.night]!.phoned(
+      moon: (f: 0.84, y: 7, r: 4, c: '#E1E1E1', sh: '#B8B8B8'), stars: _phoneStars, clouds: const []),
+};
+
 const _cloudShapes = {
   'A': ['....XXX.....', '..XXXXXXX...', '.XXXXXXXXXX.', 'SSSSSSSSSSSS'],
   'B': ['..XXX...', '.XXXXXX.', 'SSSSSSSS'],
@@ -185,8 +248,9 @@ const _cloudShapes = {
 /// board's generator ported as it is: the sky in bands that dither where two
 /// colours meet, the sun or the moon, clouds, two ridges, the water with the
 /// reflection and the ripples. Each rect carries the loop it moves with.
-List<SceneRect> sceneRects(SceneTime time) {
-  final cfg = _configs[time]!;
+List<SceneRect> sceneRects(SceneTime time, [SceneLayout layout = SceneLayout.desktop]) {
+  final cfg = (layout.phone ? _phoneConfigs : _configs)[time]!;
+  final cols = layout.cols, rows = layout.rows, horizon = layout.horizon;
   final out = <SceneRect>[];
   void px(num x, num y, num w, num h, String c, [SceneAnim anim = SceneAnim.none]) {
     if (w > 0 && h > 0) out.add(SceneRect(x.toDouble(), y.toDouble(), w.toDouble(), h.toDouble(), _c(c), anim));
@@ -195,7 +259,7 @@ List<SceneRect> sceneRects(SceneTime time) {
   // A row where two colours alternate every cell: the dither between two bands.
   void checker(int y, String a, String b) {
     final first = y.isOdd ? a : b, second = y.isOdd ? b : a;
-    for (var x = 0; x < sceneWidth; x++) {
+    for (var x = 0; x < cols; x++) {
       px(x, y, 1, 1, x.isEven ? first : second);
     }
   }
@@ -225,37 +289,37 @@ List<SceneRect> sceneRects(SceneTime time) {
   }
 
   // Sky.
-  for (var y = 0; y < _horizon; y++) {
-    final p = y / (_horizon - 1) * 2;
+  for (var y = 0; y < horizon; y++) {
+    final p = y / (horizon - 1) * 2;
     final i = math.min(1, p.floor());
     final f = p - i;
     if (f < 0.34) {
-      px(0, y, sceneWidth, 1, cfg.sky[i]);
+      px(0, y, cols, 1, cfg.sky[i]);
     } else if (f > 0.66) {
-      px(0, y, sceneWidth, 1, cfg.sky[i + 1]);
+      px(0, y, cols, 1, cfg.sky[i + 1]);
     } else {
       checker(y, cfg.sky[i], cfg.sky[i + 1]);
     }
   }
   for (final s in cfg.stars) {
-    if (s.$2 < _horizon - 6) px(s.$1, s.$2, 1, 1, s.$3 > 0 ? '#EDEDED' : '#8A8A8A', const [SceneAnim.none, SceneAnim.tw1, SceneAnim.tw2, SceneAnim.tw3][s.$3]);
+    if (s.$1 < cols && s.$2 < horizon - (layout.phone ? 5 : 6)) px(s.$1, s.$2, 1, 1, s.$3 > 0 ? '#EDEDED' : '#8A8A8A', const [SceneAnim.none, SceneAnim.tw1, SceneAnim.tw2, SceneAnim.tw3][s.$3]);
   }
   final sun = cfg.sun;
   if (sun != null) {
-    final cx = (sun.f * sceneWidth).round();
+    final cx = (sun.f * cols).round();
     disc(cx, sun.y, sun.r + 2, sun.h);
     disc(cx, sun.y, sun.r, sun.c);
   }
   final moon = cfg.moon;
   if (moon != null) {
-    final cx = (moon.f * sceneWidth).round();
+    final cx = (moon.f * cols).round();
     disc(cx, moon.y, moon.r, moon.c, cut: (2, -1));
     px(cx - 2, moon.y + 1, 1, 1, moon.sh);
     px(cx - 3, moon.y - 1, 1, 1, moon.sh);
     px(cx - 1, moon.y + 3, 1, 1, moon.sh);
   }
   for (final (model, f, y) in cfg.clouds) {
-    final ox = (f * sceneWidth).round();
+    final ox = (f * cols).round();
     for (final (yy, row) in _cloudShapes[model]!.indexed) {
       final body = <int>[], shade = <int>[];
       for (var xx = 0; xx < row.length; xx++) {
@@ -271,32 +335,33 @@ List<SceneRect> sceneRects(SceneTime time) {
   void ridge(int base, double a1, double f1, double p1, double a2, double f2, double p2, String c) {
     int top(int x) => (base + a1 * math.sin(x * f1 + p1) + a2 * math.sin(x * f2 + p2)).round();
     var x = 0;
-    while (x < sceneWidth) {
+    while (x < cols) {
       final t = top(x);
       var x2 = x;
-      while (x2 < sceneWidth && top(x2) == t) {
+      while (x2 < cols && top(x2) == t) {
         x2++;
       }
-      px(x, t, x2 - x, _horizon - t, c);
+      px(x, t, x2 - x, horizon - t, c);
       x = x2;
     }
   }
 
-  ridge(_horizon - 5, 1.6, 0.19, cfg.seed, 1.4, 0.07, 1.3, cfg.far);
-  ridge(_horizon - 2, 0.9, 0.23, cfg.seed + 2, 0.7, 0.41, 0.5, cfg.near);
+  ridge(horizon - 5, 1.6, 0.19, cfg.seed, 1.4, 0.07, 1.3, cfg.far);
+  ridge(horizon - 2, 0.9, 0.23, cfg.seed + 2, 0.7, 0.41, 0.5, cfg.near);
 
   // Water, the reflection of the sun or the moon, and the ripples.
-  px(0, _horizon, sceneWidth, 3, cfg.water[0]);
-  checker(_horizon + 3, cfg.water[0], cfg.water[1]);
-  checker(_horizon + 4, cfg.water[0], cfg.water[1]);
-  px(0, _horizon + 5, sceneWidth, sceneHeight - _horizon - 5, cfg.water[1]);
-  final rx = ((sun?.f ?? moon!.f) * sceneWidth).round();
+  px(0, horizon, cols, 3, cfg.water[0]);
+  checker(horizon + 3, cfg.water[0], cfg.water[1]);
+  checker(horizon + 4, cfg.water[0], cfg.water[1]);
+  px(0, horizon + 5, cols, rows - horizon - 5, cfg.water[1]);
+  final rx = ((sun?.f ?? moon!.f) * cols).round();
   const widths = [6, 4, 5, 3, 4, 2, 3, 1];
-  for (final (k, w) in widths.indexed) {
-    px(rx - (w / 2).floor(), _horizon + 1 + k * 2, w, 1, cfg.refl, SceneAnim.shim);
+  for (final (k, w) in widths.take(layout.phone ? 5 : 8).indexed) {
+    px(rx - (w / 2).floor(), horizon + 1 + k * 2, w, 1, cfg.refl, SceneAnim.shim);
   }
-  for (var k = 0; k < 16; k++) {
-    px((k * 23 + (cfg.seed * 7).round()) % (sceneWidth - 8) + 2, _horizon + 2 + (k * 7) % 18, 2 + k % 3, 1, cfg.ripple,
+  for (var k = 0; k < (layout.phone ? 10 : 16); k++) {
+    px((k * 23 + (cfg.seed * 7).round()) % (cols - 8) + 2, horizon + 2 + (layout.phone ? (k * 5) % 9 : (k * 7) % 18), 2 + k % 3, 1,
+        cfg.ripple,
         k.isOdd ? SceneAnim.rip : SceneAnim.rip2);
   }
   return out;
@@ -308,15 +373,15 @@ List<SceneRect> sceneRects(SceneTime time) {
 /// each run of rects that stand still, in the order the scene draws them, is one
 /// layer the engine keeps as a texture, and a step draws only the moving rects.
 class HomeScene extends StatelessWidget {
-  const HomeScene({super.key, required this.time});
+  const HomeScene({super.key, required this.time, this.layout = SceneLayout.desktop});
 
   final SceneTime time;
-
-  static const _size = Size(sceneWidth * sceneCell, sceneHeight * sceneCell);
+  final SceneLayout layout;
 
   @override
   Widget build(BuildContext context) {
-    final parts = _sceneParts(time);
+    final size = layout.size;
+    final parts = _sceneParts(time, layout);
     return ExcludeSemantics(
       child: StepLoop(
         tracks: sceneTracks,
@@ -324,9 +389,9 @@ class HomeScene extends StatelessWidget {
           children: [
             for (final part in parts)
               if (part is ui.Picture)
-                RepaintBoundary(child: CustomPaint(size: _size, isComplex: true, painter: _StillPainter(part)))
+                RepaintBoundary(child: CustomPaint(size: size, isComplex: true, painter: _StillPainter(part)))
               else
-                CustomPaint(size: _size, painter: _MovingPainter(part as List<SceneRect>, ms)),
+                CustomPaint(size: size, painter: _MovingPainter(part as List<SceneRect>, ms)),
           ],
         ),
       ),
@@ -336,17 +401,19 @@ class HomeScene extends StatelessWidget {
 
 /// The painter of one frame of the scene [ms] into its loops, for tests.
 @visibleForTesting
-CustomPainter sceneFramePainter(SceneTime time, int ms) => _FramePainter(_sceneParts(time), ms);
+CustomPainter sceneFramePainter(SceneTime time, int ms, [SceneLayout layout = SceneLayout.desktop]) =>
+    _FramePainter(_sceneParts(time, layout), ms);
 
 Rect _box(SceneRect r, double dx) =>
     Rect.fromLTWH(r.x * sceneCell + dx, r.y * sceneCell, r.w * sceneCell, r.h * sceneCell + (r.w >= 6 ? 1 : 0));
 
-final _partsCache = <SceneTime, List<Object>>{};
+final _partsCache = <(SceneTime, SceneLayout), List<Object>>{};
 
 /// The scene in drawing order: a run of rects that never move is one recorded
 /// [ui.Picture], a run of moving rects is a list. Runs keep the order of the rects,
 /// so what is drawn over what does not change.
-List<Object> _sceneParts(SceneTime time) => _partsCache[time] ??= _split(sceneRects(time));
+List<Object> _sceneParts(SceneTime time, SceneLayout layout) =>
+    _partsCache[(time, layout)] ??= _split(sceneRects(time, layout));
 
 List<Object> _split(List<SceneRect> rects) {
   final parts = <Object>[];

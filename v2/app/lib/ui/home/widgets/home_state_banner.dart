@@ -21,9 +21,14 @@ class HomeStateBanner extends StatelessWidget {
   const HomeStateBanner({
     super.key,
     required this.controller,
+    this.mobile = false,
   });
 
   final HomeController controller;
+
+  /// The phone layout (HomeMobile board): the buttons wrap under the text, 36 px high,
+  /// and the gap below belongs to the page.
+  final bool mobile;
 
   @override
   Widget build(BuildContext context) {
@@ -77,8 +82,68 @@ class HomeStateBanner extends StatelessWidget {
       }
     }
 
+    final texts = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          spec.tag,
+          style: CharonTypography.label.copyWith(color: tag, fontSize: 10.0),
+        ),
+        const SizedBox(height: 2.0),
+        Text(
+          spec.text,
+          style: CharonTypography.body.copyWith(
+            fontSize: 12.0,
+            height: 16 / 12,
+            color: colors.text,
+          ),
+        ),
+        if (spec.todo != null)
+          Text(
+            spec.todo!,
+            style: CharonTypography.body.copyWith(
+              fontSize: 12.0,
+              height: 16 / 12,
+              color: colors.text2,
+            ),
+          ),
+      ],
+    );
+    final Widget content = mobile
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              texts,
+              if (spec.actions.isNotEmpty || spec.help != null) ...[
+                const SizedBox(height: 8.0),
+                Wrap(
+                  spacing: 8.0,
+                  runSpacing: 8.0,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    for (final a in spec.actions) _ActionPill(action: a, onPressed: () => run(a.kind), height: 36.0),
+                    if (spec.help != null) _HelpLink(help: spec.help!, color: tag),
+                  ],
+                ),
+              ],
+            ],
+          )
+        : Row(
+            children: [
+              Expanded(child: texts),
+              const SizedBox(width: 14.0),
+              if (spec.help != null) _HelpLink(help: spec.help!, color: tag),
+              for (final a in spec.actions) ...[
+                const SizedBox(width: 8.0),
+                _ActionPill(action: a, onPressed: () => run(a.kind)),
+              ],
+            ],
+          );
+
     return Padding(
-      padding: const EdgeInsets.only(bottom: CharonSpacing.s3),
+      padding: EdgeInsets.only(bottom: mobile ? 0 : CharonSpacing.s3),
       child: Semantics(
         liveRegion: true,
         container: true,
@@ -94,46 +159,7 @@ class HomeStateBanner extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  spec.tag,
-                                  style: CharonTypography.label.copyWith(color: tag, fontSize: 10.0),
-                                ),
-                                const SizedBox(height: 2.0),
-                                Text(
-                                  spec.text,
-                                  style: CharonTypography.body.copyWith(
-                                    fontSize: 12.0,
-                                    height: 16 / 12,
-                                    color: colors.text,
-                                  ),
-                                ),
-                                if (spec.todo != null)
-                                  Text(
-                                    spec.todo!,
-                                    style: CharonTypography.body.copyWith(
-                                      fontSize: 12.0,
-                                      height: 16 / 12,
-                                      color: colors.text2,
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 14.0),
-                          if (spec.help != null) _HelpLink(help: spec.help!, color: tag),
-                          for (final a in spec.actions) ...[
-                            const SizedBox(width: 8.0),
-                            _ActionPill(action: a, onPressed: () => run(a.kind)),
-                          ],
-                        ],
-                      ),
+                      child: content,
                     ),
                   ),
                 ],
@@ -219,10 +245,11 @@ class _HelpLink extends StatelessWidget {
 }
 
 class _ActionPill extends StatelessWidget {
-  const _ActionPill({required this.action, required this.onPressed});
+  const _ActionPill({required this.action, required this.onPressed, this.height = 34.0});
 
   final BannerAction action;
   final VoidCallback onPressed;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -236,21 +263,24 @@ class _ActionPill extends StatelessWidget {
         onTap: onPressed,
         borderRadius: BorderRadius.circular(999.0),
         child: Container(
-          height: 34.0,
+          height: height,
           padding: const EdgeInsets.symmetric(horizontal: 14.0),
           decoration: BoxDecoration(
             color: action.primary ? colors.text : Colors.transparent,
             borderRadius: BorderRadius.circular(999.0),
             border: Border.all(color: action.primary ? colors.text : colors.controlBorder),
           ),
-          alignment: Alignment.center,
-          child: Text(
-            action.label,
-            style: CharonTypography.button.copyWith(
-              color: action.primary ? colors.bg : colors.text,
-              fontSize: 12.0,
+          // A width factor, so a pill is as wide as its label also inside a Wrap.
+          child: Center(
+            widthFactor: 1.0,
+            child: Text(
+              action.label,
+              style: CharonTypography.button.copyWith(
+                color: action.primary ? colors.bg : colors.text,
+                fontSize: 12.0,
+              ),
+              maxLines: 1,
             ),
-            maxLines: 1,
           ),
         ),
       ),

@@ -269,7 +269,7 @@ class _FailsafeBody extends StatelessWidget {
                 color: colors.text,
               ),
             ),
-            _MiniChip(chip: chip),
+            MiniChip(chip: chip),
           ],
         );
 
@@ -512,8 +512,8 @@ class _BottomCard extends StatelessWidget {
   }
 }
 
-class _MiniChip extends StatelessWidget {
-  const _MiniChip({required this.chip});
+class MiniChip extends StatelessWidget {
+  const MiniChip({super.key, required this.chip});
 
   final StatusChip chip;
 
