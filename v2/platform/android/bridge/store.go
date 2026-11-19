@@ -35,9 +35,7 @@ func (s *FileStore) LoadConfig() (*charonv1.Config, error) {
 	raw, err := os.ReadFile(filepath.Join(s.dir, "config.pb"))
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			return &charonv1.Config{
-				Settings: &charonv1.Settings{AllowLocalNetwork: true},
-			}, nil
+			return &charonv1.Config{Settings: defaultSettings()}, nil
 		}
 		return nil, err
 	}
@@ -46,9 +44,15 @@ func (s *FileStore) LoadConfig() (*charonv1.Config, error) {
 		return nil, err
 	}
 	if cfg.Settings == nil {
-		cfg.Settings = &charonv1.Settings{AllowLocalNetwork: true}
+		cfg.Settings = defaultSettings()
 	}
 	return cfg, nil
+}
+
+// defaultSettings is what a new install starts with: auto reconnect and local network on, as
+// on Windows and on the SetupMobile board. The kill switch starts off on that board.
+func defaultSettings() *charonv1.Settings {
+	return &charonv1.Settings{AutoReconnect: true, AllowLocalNetwork: true}
 }
 
 func (s *FileStore) SaveConfig(cfg *charonv1.Config) error {
