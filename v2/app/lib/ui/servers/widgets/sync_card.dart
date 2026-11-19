@@ -209,7 +209,7 @@ class _SyncCardState extends State<SyncCard> {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(color: colors.surface2, borderRadius: BorderRadius.circular(10)),
-                    child: PixelIcon(PixelIcons.laptop, size: 22, color: colors.text),
+                    child: PixelIcon(Platform.isAndroid ? PixelIcons.phone : PixelIcons.laptop, size: 22, color: colors.text),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
