@@ -1253,7 +1253,8 @@ class _ServerStep extends StatelessWidget {
                     controller: state._link,
                     mono: true,
                     height: 44,
-                    autofocus: true,
+                    // On a phone the keyboard would cover the three ways to add a server.
+                    autofocus: !isPhoneLayout(context),
                     warn: read.hasError,
                     onChanged: (_) => state._recompute(),
                   )
@@ -1355,7 +1356,7 @@ class _RestoreStep extends StatelessWidget {
                           label: l10n.stpRestoreCode,
                           controller: state._code,
                           height: 58,
-                          autofocus: true,
+                          autofocus: !isPhoneLayout(context),
                           style: monoStyle(colors.text, 18, bold: true).copyWith(letterSpacing: 18 * 0.16),
                         ),
                         l10n.stpRestoreCodeHelp,
@@ -1442,7 +1443,9 @@ class _SafetyStep extends StatelessWidget {
     final rows = [
       (PixelIcons.shield, l10n.stpKillSwitch, l10n.stpKillDesc, state._kill, l10n.stpKillOn, l10n.stpKillOff, (bool v) => state._set(() => state._kill = v)),
       (PixelIcons.reload, l10n.stpAutoReconnect, l10n.stpAutoDesc, state._auto, l10n.stpAutoOn, l10n.stpAutoOff, (bool v) => state._set(() => state._auto = v)),
-      (PixelIcons.power, l10n.stpLaunch, l10n.stpLaunchDesc, state._boot, l10n.stpLaunchOn, l10n.stpLaunchOff, (bool v) => state._set(() => state._boot = v)),
+      // The SetupMobile board has only the two safety switches: a phone has no window to open at sign in.
+      if (!isPhoneLayout(context))
+        (PixelIcons.power, l10n.stpLaunch, l10n.stpLaunchDesc, state._boot, l10n.stpLaunchOn, l10n.stpLaunchOff, (bool v) => state._set(() => state._boot = v)),
     ];
     final chips = [
       (l10n.stpDrop, l10n.stpDropLost, colors.surface2, colors.text2, 1.0, true),

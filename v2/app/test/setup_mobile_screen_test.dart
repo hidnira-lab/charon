@@ -50,6 +50,19 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
+  testWidgets('the safety step has the two switches of the board, not launch at startup', (t) async {
+    await show(t, SetupStep.safety, const Size(390, 844));
+    expect(find.text('Kill switch'), findsOneWidget);
+    expect(find.text('Auto reconnect'), findsOneWidget);
+    expect(find.text('Launch at startup'), findsNothing);
+  });
+
+  testWidgets('the server step does not raise the keyboard over the three ways to add one', (t) async {
+    await show(t, SetupStep.server, const Size(390, 844));
+    expect(find.byType(EditableText), findsOneWidget);
+    expect(t.widget<EditableText>(find.byType(EditableText)).autofocus, isFalse);
+  });
+
   testWidgets('Continue after Make it yours explains the two Android prompts first', (t) async {
     await show(t, SetupStep.yours, const Size(390, 844));
     await t.tap(find.text('Continue'));
