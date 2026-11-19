@@ -2,6 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../common/phone_layout.dart';
+
 import '../../core/core_client.dart' show maxProtocolVersion;
 import '../../core/external_link.dart';
 import '../../l10n/generated/app_localizations.dart';
@@ -35,6 +37,30 @@ class ServiceScreen extends StatelessWidget {
       listenable: controller,
       builder: (context, _) {
         final view = controller.service.view;
+        // A phone has no title bar and no fixed window: the state fills the screen and scrolls.
+        if (isPhoneLayout(context)) {
+          return Scaffold(
+            backgroundColor: colors.bg,
+            body: Stack(
+              children: [
+                const Positioned.fill(child: _Ambient()),
+                SafeArea(
+                  child: view == null
+                      ? const SizedBox.shrink()
+                      : LayoutBuilder(
+                          builder: (context, c) => SingleChildScrollView(
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(minHeight: c.maxHeight - 32),
+                              child: _Content(key: ValueKey('${view.kind}${view.install}'), view: view, controller: controller),
+                            ),
+                          ),
+                        ),
+                ),
+              ],
+            ),
+          );
+        }
         return Scaffold(
           backgroundColor: colors.bg,
           body: Center(
@@ -215,8 +241,9 @@ class _Content extends StatelessWidget {
             child: RiseOnChange(
               value: v.kind,
               duration: const Duration(milliseconds: 240),
-              child: SizedBox(
-              width: 600,
+              // 600 wide on a PC, as wide as the phone has room for on a phone.
+              child: ConstrainedBox(
+              constraints: BoxConstraints(minWidth: isPhoneLayout(context) ? 0 : 600, maxWidth: 600),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
