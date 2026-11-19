@@ -5103,6 +5103,53 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobileSplitAddLabel => '添加规则';
+
+  @override
+  String get stpTitlePermissions => '在 Android 询问之前';
+
+  @override
+  String get stpLeadPermissions => '接下来会有两个系统提示。';
+
+  @override
+  String get stpBubPermissions => '接下来 Android 会弹出两个问题，下面是它们的意思。';
+
+  @override
+  String get stpPermVpnTitle => 'VPN 连接请求';
+
+  @override
+  String get stpPermVpnWhen => '只在首次连接时询问一次';
+
+  @override
+  String get stpPermRequired => '必需';
+
+  @override
+  String get stpPermVpnSys => 'Charon 想要设置 VPN 连接，以便监控网络流量。';
+
+  @override
+  String get stpPermVpnWhy => '隧道就是这样工作的。所有 VPN 应用都会出现同样的警告，你的流量会去往你自己的服务器。';
+
+  @override
+  String get stpPermNotifTitle => '通知';
+
+  @override
+  String get stpPermNotifWhen => 'Android 13 及以上';
+
+  @override
+  String get stpPermDenied => '已拒绝';
+
+  @override
+  String get stpPermNotifSys => '允许 Charon 向你发送通知吗？';
+
+  @override
+  String get stpPermNotifWhy =>
+      '这样 Charon 才能在流量被拦截时通知你。拒绝的话 Charon 仍能工作，但可能无法显示“流量已拦截”提示。';
+
+  @override
+  String get stpPermSays => 'Android 会提示：';
+
+  @override
+  String get stpPermDeniedNote =>
+      '你选择了拒绝，所以可能无法显示“流量已拦截”提示。随时可以在 Android 设置中允许。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -10203,4 +10250,51 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get mobileSplitAddLabel => '添加规则';
+
+  @override
+  String get stpTitlePermissions => '在 Android 询问之前';
+
+  @override
+  String get stpLeadPermissions => '接下来会有两个系统提示。';
+
+  @override
+  String get stpBubPermissions => '接下来 Android 会弹出两个问题，下面是它们的意思。';
+
+  @override
+  String get stpPermVpnTitle => 'VPN 连接请求';
+
+  @override
+  String get stpPermVpnWhen => '只在首次连接时询问一次';
+
+  @override
+  String get stpPermRequired => '必需';
+
+  @override
+  String get stpPermVpnSys => 'Charon 想要设置 VPN 连接，以便监控网络流量。';
+
+  @override
+  String get stpPermVpnWhy => '隧道就是这样工作的。所有 VPN 应用都会出现同样的警告，你的流量会去往你自己的服务器。';
+
+  @override
+  String get stpPermNotifTitle => '通知';
+
+  @override
+  String get stpPermNotifWhen => 'Android 13 及以上';
+
+  @override
+  String get stpPermDenied => '已拒绝';
+
+  @override
+  String get stpPermNotifSys => '允许 Charon 向你发送通知吗？';
+
+  @override
+  String get stpPermNotifWhy =>
+      '这样 Charon 才能在流量被拦截时通知你。拒绝的话 Charon 仍能工作，但可能无法显示“流量已拦截”提示。';
+
+  @override
+  String get stpPermSays => 'Android 会提示：';
+
+  @override
+  String get stpPermDeniedNote =>
+      '你选择了拒绝，所以可能无法显示“流量已拦截”提示。随时可以在 Android 设置中允许。';
 }

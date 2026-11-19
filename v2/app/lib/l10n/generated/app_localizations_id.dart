@@ -5363,4 +5363,54 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get mobileSplitAddLabel => 'Tambah aturan';
+
+  @override
+  String get stpTitlePermissions => 'Sebelum Android bertanya';
+
+  @override
+  String get stpLeadPermissions => 'Dua prompt sistem akan muncul.';
+
+  @override
+  String get stpBubPermissions =>
+      'Android akan memunculkan dua pertanyaan. Ini artinya.';
+
+  @override
+  String get stpPermVpnTitle => 'Permintaan koneksi VPN';
+
+  @override
+  String get stpPermVpnWhen => 'ditanya sekali, saat koneksi pertama';
+
+  @override
+  String get stpPermRequired => 'WAJIB';
+
+  @override
+  String get stpPermVpnSys =>
+      'Charon ingin menyiapkan koneksi VPN yang memungkinkannya memantau trafik jaringan.';
+
+  @override
+  String get stpPermVpnWhy =>
+      'Begitulah cara tunnel bekerja. Semua aplikasi VPN mendapat peringatan yang sama, dan trafikmu menuju servermu sendiri.';
+
+  @override
+  String get stpPermNotifTitle => 'Notifikasi';
+
+  @override
+  String get stpPermNotifWhen => 'Android 13 dan yang lebih baru';
+
+  @override
+  String get stpPermDenied => 'DITOLAK';
+
+  @override
+  String get stpPermNotifSys => 'Izinkan Charon mengirim notifikasi?';
+
+  @override
+  String get stpPermNotifWhy =>
+      'Supaya Charon bisa memberi tahu saat trafik ditahan. Kalau ditolak, Charon tetap jalan, tapi pemberitahuan Trafik ditahan mungkin tidak muncul.';
+
+  @override
+  String get stpPermSays => 'Android akan bilang:';
+
+  @override
+  String get stpPermDeniedNote =>
+      'Kamu menolak, jadi pemberitahuan Trafik ditahan mungkin tidak muncul. Izinkan kapan saja di pengaturan Android.';
 }

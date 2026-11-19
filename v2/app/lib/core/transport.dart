@@ -195,6 +195,14 @@ class PlatformChannelTransport implements CoreTransport {
     return granted ?? false;
   }
 
+  /// Asks Android 13 and newer for the notification permission. True when it is
+  /// granted, or when the Android version has no such prompt.
+  Future<bool> requestNotifications() async {
+    if (_closed) return false;
+    final granted = await _methodChannel.invokeMethod<bool>('requestNotifications');
+    return granted ?? false;
+  }
+
   /// Whether Always-on VPN and "Block connections without VPN" are on for
   /// Charon. With lockdown on, Android blocks all internet while Charon is not
   /// connected, so nothing goes direct.

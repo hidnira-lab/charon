@@ -50,6 +50,38 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
+  testWidgets('Continue after Make it yours explains the two Android prompts first', (t) async {
+    await show(t, SetupStep.yours, const Size(390, 844));
+    await t.tap(find.text('Continue'));
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 600));
+    expect(find.text('Before Android asks'), findsOneWidget);
+    expect(find.text('VPN connection request'), findsOneWidget);
+    expect(find.text('REQUIRED'), findsOneWidget);
+    expect(find.text('Notifications'), findsOneWidget);
+    expect(find.text('OPTIONAL'), findsOneWidget);
+    expect(find.text('DENIED'), findsNothing);
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets('Connect and verify asks, then goes on to the first connect', (t) async {
+    await show(t, SetupStep.permissions, const Size(390, 844));
+    await t.tap(find.text('Connect & verify'));
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 600));
+    expect(find.text('Before Android asks'), findsNothing);
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets('Back from the first connect returns to the prompts', (t) async {
+    await show(t, SetupStep.connect, const Size(390, 844));
+    await t.tap(find.text('Back'));
+    await t.pump();
+    await t.pump(const Duration(milliseconds: 600));
+    expect(find.text('Before Android asks'), findsOneWidget);
+    expect(t.takeException(), isNull);
+  });
+
   testWidgets('Get started goes on to the server step', (t) async {
     await show(t, SetupStep.welcome, const Size(390, 844));
     await t.tap(find.text('Get started'));

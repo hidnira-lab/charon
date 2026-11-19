@@ -92,6 +92,9 @@ class _SetupScreenState extends State<SetupScreen> {
   final _city = TextEditingController();
   late bool _dark = widget.controller.themeMode != ThemeMode.light;
 
+  // The Android prompts of a phone, answered on the way to the first connect.
+  var _notifDenied = false;
+
   // First connect.
   Timer? _clock;
   var _verifyStarted = DateTime.now();
@@ -179,6 +182,20 @@ class _SetupScreenState extends State<SetupScreen> {
         _step = step;
         if (step != SetupStep.connect) _phase = ConnectPhase.ready;
       });
+
+  /// Where "Continue" after "Make it yours" goes: a phone explains the two Android prompts first.
+  SetupStep _beforeConnect(BuildContext context) =>
+      isPhoneLayout(context) ? SetupStep.permissions : SetupStep.connect;
+
+  /// The notification prompt comes first. The VPN prompt is Android's own, raised by the connect.
+  /// Saying no to the notifications never stops the setup.
+  Future<void> _askAndConnect() async {
+    final granted = await _c.requestNotifications();
+    if (!mounted) return;
+    setState(() => _notifDenied = !granted);
+    _go(SetupStep.connect);
+    await _connectAndVerify();
+  }
 
   Future<void> _connectAndVerify() async {
     final server = _server ?? _finalServer();
@@ -390,6 +407,7 @@ class _Aside extends StatelessWidget {
       SetupStep.restore => (stepTag(1), l10n.stpBubRestore),
       SetupStep.safety => (stepTag(2), l10n.stpBubSafety),
       SetupStep.yours => (stepTag(3), l10n.stpBubYours),
+      SetupStep.permissions => (stepTag(4), l10n.stpBubPermissions),
       SetupStep.connect => switch (phase) {
           ConnectPhase.ready => (stepTag(4), l10n.stpBubReady),
           ConnectPhase.verifying => (stepTag(4), l10n.stpBubVerifying),
@@ -409,6 +427,7 @@ class _Aside extends StatelessWidget {
         SetupStep.restore => (l10n.stpHelpRestore, CharonGuideId.hub),
         SetupStep.safety => (l10n.stpHelpSafety, CharonGuideId.a7KillSwitchAndBoot),
         SetupStep.yours => (l10n.stpHelpYours, CharonGuideId.hub),
+        SetupStep.permissions => (l10n.stpHelpConnect, CharonGuideId.b10Troubleshooting),
         SetupStep.connect => switch (phase) {
             ConnectPhase.connected => (l10n.stpHelpConnected, CharonGuideId.a1GettingStarted),
             ConnectPhase.unreachable => (l10n.stpHelpUnreachable, CharonGuideId.a5CouldNotReach),
@@ -760,6 +779,7 @@ class _Main extends StatelessWidget {
       SetupStep.restore => (kicker(1, l10n.stpKickRestore), l10n.stpTitleRestore, l10n.stpLeadRestore),
       SetupStep.safety => (kicker(2, l10n.stpKickSafety), l10n.stpTitleSafety, l10n.stpLeadSafety),
       SetupStep.yours => (kicker(3, l10n.stpOptional), l10n.stpStep3, l10n.stpLeadYours),
+      SetupStep.permissions => (kicker(4, l10n.stpKickConnect), l10n.stpTitlePermissions, l10n.stpLeadPermissions),
       SetupStep.connect => phase == ConnectPhase.connected
           ? (l10n.stpKickerDone, l10n.stpTitleReady, l10n.stpLeadReady)
           : (kicker(4, l10n.stpKickConnect), l10n.stpTitleConnect, l10n.stpLeadConnect),
@@ -771,6 +791,7 @@ class _Main extends StatelessWidget {
       SetupStep.restore => _RestoreStep(state: state),
       SetupStep.safety => _SafetyStep(state: state),
       SetupStep.yours => _YoursStep(state: state),
+      SetupStep.permissions => _PermissionsStep(state: state),
       SetupStep.connect => _ConnectStep(state: state, palette: palette),
     };
 
@@ -1683,9 +1704,132 @@ class _YoursStep extends StatelessWidget {
         const SizedBox(height: 12),
         _Footer(children: [
           _Big(l10n.stpBack, () => state._go(SetupStep.safety)),
-          _Big(l10n.stpContinue, () => state._go(SetupStep.connect), icon: PixelIcons.arrow, primary: true),
+          _Big(l10n.stpContinue, () => state._go(state._beforeConnect(context)), icon: PixelIcons.arrow, primary: true),
           const Spacer(),
-          _Link(l10n.stpSkipStep, () => state._go(SetupStep.connect)),
+          _Link(l10n.stpSkipStep, () => state._go(state._beforeConnect(context))),
+        ]),
+      ],
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------------
+// 3b. The two Android prompts (a phone only, the "permissions" step of the SetupMobile board)
+
+class _PermissionsStep extends StatelessWidget {
+  const _PermissionsStep({required this.state});
+
+  final _SetupScreenState state;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final denied = state._notifDenied;
+
+    // icon, title, when it is asked, tag, tag ink, what Android says, why, denied
+    final cards = [
+      (PixelIcons.lock, l10n.stpPermVpnTitle, l10n.stpPermVpnWhen, l10n.stpPermRequired, colors.text, l10n.stpPermVpnSys, l10n.stpPermVpnWhy, false),
+      (
+        PixelIcons.phone,
+        l10n.stpPermNotifTitle,
+        l10n.stpPermNotifWhen,
+        denied ? l10n.stpPermDenied : l10n.stpOptional,
+        denied ? colors.transitionText : colors.text3,
+        l10n.stpPermNotifSys,
+        denied ? '' : l10n.stpPermNotifWhy,
+        denied,
+      ),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                for (final (icon, title, ask, tag, tagInk, sys, why, isDenied) in cards) ...[
+                  Glass(
+                    padding: const EdgeInsets.all(12),
+                    radius: 16,
+                    edge: colors.surface2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              width: 32,
+                              height: 32,
+                              decoration: BoxDecoration(color: colors.surface2, borderRadius: BorderRadius.circular(9)),
+                              child: Center(child: PixelIcon(icon, size: 20, color: colors.text)),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(title, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: colors.text)),
+                                  Text(ask, style: monoStyle(colors.text3, 10)),
+                                ],
+                              ),
+                            ),
+                            Text(tag, style: monoStyle(tagInk, 10, bold: true, em: 0.08)),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                          decoration: BoxDecoration(color: colors.bg, borderRadius: BorderRadius.circular(10)),
+                          child: Text.rich(
+                            TextSpan(children: [
+                              TextSpan(text: '> ${l10n.stpPermSays} ', style: monoStyle(colors.text3, 10)),
+                              TextSpan(text: sys, style: monoStyle(colors.text2, 10)),
+                            ]),
+                            style: const TextStyle(height: 15 / 10),
+                          ),
+                        ),
+                        if (why.isNotEmpty) ...[
+                          const SizedBox(height: 8),
+                          Text(why, style: TextStyle(fontSize: 12, height: 17 / 12, color: colors.text2)),
+                        ],
+                        if (isDenied) ...[
+                          const SizedBox(height: 8),
+                          Semantics(
+                            liveRegion: true,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 5),
+                                  child: Container(width: 6, height: 6, color: colors.transitionText),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    l10n.stpPermDeniedNote,
+                                    style: TextStyle(fontSize: 12, height: 16 / 12, color: colors.transitionText),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        _Footer(children: [
+          _Big(l10n.stpBack, () => state._go(SetupStep.yours)),
+          _Big(l10n.stpConnectVerify, state._askAndConnect, icon: PixelIcons.arrow, primary: true),
         ]),
       ],
     );
@@ -1889,7 +2033,8 @@ class _ConnectStep extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         _Footer(children: [
-          if (phase == ConnectPhase.ready) _Big(l10n.stpBack, () => state._go(SetupStep.yours)),
+          if (phase == ConnectPhase.ready)
+            _Big(l10n.stpBack, () => state._go(isPhoneLayout(context) ? SetupStep.permissions : SetupStep.yours)),
           if (phase == ConnectPhase.unreachable) _Big(l10n.stpEditServer, () => state._go(SetupStep.server)),
           _Big(cta, ctaTap, icon: ctaIcon, primary: true),
           if (phase == ConnectPhase.ready || phase == ConnectPhase.unreachable) ...[

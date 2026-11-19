@@ -1,7 +1,9 @@
 package app.charon.charon
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.VpnService
 import android.os.Build
 import android.os.Handler
@@ -30,9 +32,11 @@ class MainActivity : FlutterActivity() {
         private const val CHANNEL_CORE_EVENTS = "app.charon/core_events"
         private const val CHANNEL_SECURE_STORAGE = "app.charon/secure_storage"
         private const val REQUEST_VPN_PERMISSION = 4001
+        private const val REQUEST_NOTIFICATIONS = 4002
     }
 
     private var pendingVpnResult: MethodChannel.Result? = null
+    private var pendingNotificationsResult: MethodChannel.Result? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -88,6 +92,19 @@ class MainActivity : FlutterActivity() {
                     }
                 }
 
+                // Android 13 and newer ask at runtime. Older versions have no such prompt.
+                "requestNotifications" -> {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+                        checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        result.success(true)
+                    } else {
+                        pendingNotificationsResult?.success(false)
+                        pendingNotificationsResult = result
+                        requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_NOTIFICATIONS)
+                    }
+                }
+
                 "vpnLockdown" -> {
                     val (alwaysOn, lockdown) = CharonVpnService.systemFlags(this)
                     result.success(mapOf("alwaysOn" to alwaysOn, "lockdown" to lockdown))
@@ -112,6 +129,16 @@ class MainActivity : FlutterActivity() {
                 else -> result.notImplemented()
             }
         }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == REQUEST_NOTIFICATIONS) {
+            val res = pendingNotificationsResult
+            pendingNotificationsResult = null
+            res?.success(grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED)
+            return
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     @Deprecated("Deprecated in Java")

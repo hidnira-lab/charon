@@ -9309,6 +9309,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add a rule'**
   String get mobileSplitAddLabel;
+
+  /// Setup screen text, phone only.
+  ///
+  /// In en, this message translates to:
+  /// **'Before Android asks'**
+  String get stpTitlePermissions;
+
+  /// Setup screen text, phone only.
+  ///
+  /// In en, this message translates to:
+  /// **'Two system prompts come next.'**
+  String get stpLeadPermissions;
+
+  /// Setup screen text, phone only.
+  ///
+  /// In en, this message translates to:
+  /// **'Android will pop up two questions next. Here is what they mean.'**
+  String get stpBubPermissions;
+
+  /// Setup screen text, phone only.
+  ///
+  /// In en, this message translates to:
+  /// **'VPN connection request'**
+  String get stpPermVpnTitle;
+
+  /// Setup screen text, phone only.
+  ///
+  /// In en, this message translates to:
+  /// **'asked once, on the first connect'**
+  String get stpPermVpnWhen;
+
+  /// Setup screen text, phone only.
+  ///
+  /// In en, this message translates to:
+  /// **'REQUIRED'**
+  String get stpPermRequired;
+
+  /// Setup screen text, phone only.
+  ///
+  /// In en, this message translates to:
+  /// **'Charon wants to set up a VPN connection that allows it to monitor network traffic.'**
+  String get stpPermVpnSys;
+
+  /// Setup screen text, phone only.
+  ///
+  /// In en, this message translates to:
+  /// **'This is how the tunnel works. Every VPN app gets the same warning, and your traffic goes to your own server.'**
+  String get stpPermVpnWhy;
+
+  /// Setup screen text, phone only.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get stpPermNotifTitle;
+
+  /// Setup screen text, phone only.
+  ///
+  /// In en, this message translates to:
+  /// **'Android 13 and newer'**
+  String get stpPermNotifWhen;
+
+  /// Setup screen text, phone only.
+  ///
+  /// In en, this message translates to:
+  /// **'DENIED'**
+  String get stpPermDenied;
+
+  /// Setup screen text, phone only.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Charon to send you notifications?'**
+  String get stpPermNotifSys;
+
+  /// Setup screen text, phone only.
+  ///
+  /// In en, this message translates to:
+  /// **'So Charon can tell you when traffic is held. Say no and Charon still works, but the Traffic held notice may not show.'**
+  String get stpPermNotifWhy;
+
+  /// Setup screen text, phone only.
+  ///
+  /// In en, this message translates to:
+  /// **'Android will say:'**
+  String get stpPermSays;
+
+  /// Setup screen text, phone only.
+  ///
+  /// In en, this message translates to:
+  /// **'You said no, so the Traffic held notice may not show. Allow it any time in Android settings.'**
+  String get stpPermDeniedNote;
 }
 
 class _AppLocalizationsDelegate

@@ -1558,5 +1558,20 @@
   "mobileSplitTabApp": "Aplikasi",
   "mobileSplitNoteTap": "ketuk aturan untuk menghapusnya",
   "mobileSplitRemoveBtn": "Hapus aturan",
-  "mobileSplitAddLabel": "Tambah aturan"
+  "mobileSplitAddLabel": "Tambah aturan",
+  "stpTitlePermissions": "Sebelum Android bertanya",
+  "stpLeadPermissions": "Dua prompt sistem akan muncul.",
+  "stpBubPermissions": "Android akan memunculkan dua pertanyaan. Ini artinya.",
+  "stpPermVpnTitle": "Permintaan koneksi VPN",
+  "stpPermVpnWhen": "ditanya sekali, saat koneksi pertama",
+  "stpPermRequired": "WAJIB",
+  "stpPermVpnSys": "Charon ingin menyiapkan koneksi VPN yang memungkinkannya memantau trafik jaringan.",
+  "stpPermVpnWhy": "Begitulah cara tunnel bekerja. Semua aplikasi VPN mendapat peringatan yang sama, dan trafikmu menuju servermu sendiri.",
+  "stpPermNotifTitle": "Notifikasi",
+  "stpPermNotifWhen": "Android 13 dan yang lebih baru",
+  "stpPermDenied": "DITOLAK",
+  "stpPermNotifSys": "Izinkan Charon mengirim notifikasi?",
+  "stpPermNotifWhy": "Supaya Charon bisa memberi tahu saat trafik ditahan. Kalau ditolak, Charon tetap jalan, tapi pemberitahuan Trafik ditahan mungkin tidak muncul.",
+  "stpPermSays": "Android akan bilang:",
+  "stpPermDeniedNote": "Kamu menolak, jadi pemberitahuan Trafik ditahan mungkin tidak muncul. Izinkan kapan saja di pengaturan Android."
 }

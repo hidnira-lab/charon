@@ -1559,5 +1559,20 @@
   "mobileSplitTabApp": "应用",
   "mobileSplitNoteTap": "点按规则即可删除",
   "mobileSplitRemoveBtn": "删除规则",
-  "mobileSplitAddLabel": "添加规则"
+  "mobileSplitAddLabel": "添加规则",
+  "stpTitlePermissions": "在 Android 询问之前",
+  "stpLeadPermissions": "接下来会有两个系统提示。",
+  "stpBubPermissions": "接下来 Android 会弹出两个问题，下面是它们的意思。",
+  "stpPermVpnTitle": "VPN 连接请求",
+  "stpPermVpnWhen": "只在首次连接时询问一次",
+  "stpPermRequired": "必需",
+  "stpPermVpnSys": "Charon 想要设置 VPN 连接，以便监控网络流量。",
+  "stpPermVpnWhy": "隧道就是这样工作的。所有 VPN 应用都会出现同样的警告，你的流量会去往你自己的服务器。",
+  "stpPermNotifTitle": "通知",
+  "stpPermNotifWhen": "Android 13 及以上",
+  "stpPermDenied": "已拒绝",
+  "stpPermNotifSys": "允许 Charon 向你发送通知吗？",
+  "stpPermNotifWhy": "这样 Charon 才能在流量被拦截时通知你。拒绝的话 Charon 仍能工作，但可能无法显示“流量已拦截”提示。",
+  "stpPermSays": "Android 会提示：",
+  "stpPermDeniedNote": "你选择了拒绝，所以可能无法显示“流量已拦截”提示。随时可以在 Android 设置中允许。"
 }

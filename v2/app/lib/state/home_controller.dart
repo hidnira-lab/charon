@@ -1252,6 +1252,12 @@ class HomeController extends ChangeNotifier {
     return granted;
   }
 
+  /// The notification prompt of Android 13 and newer. Off Android there is nothing to ask.
+  Future<bool> requestNotifications() async {
+    final t = _platformTransport;
+    return t == null ? true : t.requestNotifications();
+  }
+
   Future<bool> allowVpnAgain() async {
     final granted = await prepareVpn();
     if (granted) {

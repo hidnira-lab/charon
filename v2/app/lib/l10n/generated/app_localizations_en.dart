@@ -5396,4 +5396,54 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mobileSplitAddLabel => 'Add a rule';
+
+  @override
+  String get stpTitlePermissions => 'Before Android asks';
+
+  @override
+  String get stpLeadPermissions => 'Two system prompts come next.';
+
+  @override
+  String get stpBubPermissions =>
+      'Android will pop up two questions next. Here is what they mean.';
+
+  @override
+  String get stpPermVpnTitle => 'VPN connection request';
+
+  @override
+  String get stpPermVpnWhen => 'asked once, on the first connect';
+
+  @override
+  String get stpPermRequired => 'REQUIRED';
+
+  @override
+  String get stpPermVpnSys =>
+      'Charon wants to set up a VPN connection that allows it to monitor network traffic.';
+
+  @override
+  String get stpPermVpnWhy =>
+      'This is how the tunnel works. Every VPN app gets the same warning, and your traffic goes to your own server.';
+
+  @override
+  String get stpPermNotifTitle => 'Notifications';
+
+  @override
+  String get stpPermNotifWhen => 'Android 13 and newer';
+
+  @override
+  String get stpPermDenied => 'DENIED';
+
+  @override
+  String get stpPermNotifSys => 'Allow Charon to send you notifications?';
+
+  @override
+  String get stpPermNotifWhy =>
+      'So Charon can tell you when traffic is held. Say no and Charon still works, but the Traffic held notice may not show.';
+
+  @override
+  String get stpPermSays => 'Android will say:';
+
+  @override
+  String get stpPermDeniedNote =>
+      'You said no, so the Traffic held notice may not show. Allow it any time in Android settings.';
 }

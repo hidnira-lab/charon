@@ -1,8 +1,9 @@
 import '../gen/charon/v1/charon.pb.dart';
 
 /// The screens of the first run setup, from the Setup board. "First connect"
-/// has four moments of its own, see [ConnectPhase].
-enum SetupStep { welcome, server, restore, safety, yours, connect }
+/// has four moments of its own, see [ConnectPhase]. [permissions] is only on a phone: it
+/// explains the two Android prompts before the first connect.
+enum SetupStep { welcome, server, restore, safety, yours, permissions, connect }
 
 /// What the first connect screen is doing.
 enum ConnectPhase { ready, verifying, connected, unreachable }
@@ -15,6 +16,7 @@ int setupStop(SetupStep step, ConnectPhase phase) => switch (step) {
       SetupStep.server || SetupStep.restore => 1,
       SetupStep.safety => 2,
       SetupStep.yours => 3,
+      SetupStep.permissions => 4,
       SetupStep.connect => phase == ConnectPhase.connected ? 5 : 4,
     };
 
@@ -48,6 +50,7 @@ SetupMood setupMood(SetupStep step, ConnectPhase phase, {bool serverError = fals
       SetupStep.welcome || SetupStep.restore || SetupStep.yours => SetupMood.happy,
       SetupStep.server => serverError ? SetupMood.worried : SetupMood.focused,
       SetupStep.safety => SetupMood.focused,
+      SetupStep.permissions => SetupMood.neutral,
       SetupStep.connect => switch (phase) {
           ConnectPhase.ready => SetupMood.neutral,
           ConnectPhase.verifying => SetupMood.focused,
