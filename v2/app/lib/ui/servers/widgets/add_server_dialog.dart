@@ -270,7 +270,7 @@ class _Tabs extends StatelessWidget {
             children: [
               PixelIcon(icons[i], size: 18, color: ink),
               const SizedBox(width: 8),
-              Text(labels[i], style: monoStyle(ink, 12, bold: true)),
+              Flexible(child: Text(labels[i], style: monoStyle(ink, 12, bold: true), maxLines: 1, overflow: TextOverflow.ellipsis)),
             ],
           ),
         ),

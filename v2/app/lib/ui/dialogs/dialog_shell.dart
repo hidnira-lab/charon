@@ -7,10 +7,15 @@ import '../common/motion.dart';
 import '../common/pixel_flag.dart';
 import '../common/pixel_field.dart';
 import '../common/pixel_icon.dart';
+import '../common/phone_layout.dart';
+import '../mobile/mobile_sheet.dart';
 
 /// Opens a dialog with the scrim and the motion of the Dialogs board: in
 /// 260 ms, out 160 ms (see [charonDialogTransition]).
 Future<T?> showCharonDialog<T>(BuildContext context, WidgetBuilder builder) {
+  // A phone gets the sheet of the DialogsMobile board: it rises from the bottom, 340 ms in
+  // and 200 ms out.
+  if (isPhoneLayout(context)) return showMobileSheet<T>(context, builder);
   return Navigator.of(context).push(_CharonDialogRoute<T>(
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
     barrierColor: CharonColors.of(context).scrim,
@@ -78,6 +83,7 @@ class CharonDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
+    if (isPhoneLayout(context)) return _sheet(context, colors, l10n);
     return Center(
       child: Material(
         color: Colors.transparent,
@@ -194,15 +200,130 @@ class CharonDialog extends StatelessWidget {
       ),
     );
   }
+
+  /// The phone form of the dialog (DialogsMobile board): a sheet with a grip, the kicker, the
+  /// title and the close button, the body, and the buttons across the foot.
+  Widget _sheet(BuildContext context, CharonColors colors, AppLocalizations l10n) {
+    final inset = MediaQuery.viewInsetsOf(context).bottom;
+    final bottom = MediaQuery.paddingOf(context).bottom;
+    return AnimatedPadding(
+      duration: const Duration(milliseconds: 120),
+      padding: EdgeInsets.only(bottom: inset),
+      child: Material(
+        color: Colors.transparent,
+        child: Semantics(
+          label: title,
+          scopesRoute: true,
+          explicitChildNodes: true,
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: colors.raised,
+              border: Border.all(color: colors.divider),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+              boxShadow: [BoxShadow(color: colors.overlayShadow, blurRadius: 60, offset: const Offset(0, 24))],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
+                  child: Container(
+                    width: 36,
+                    height: 4,
+                    margin: const EdgeInsets.only(top: 12),
+                    decoration: BoxDecoration(color: colors.controlBorder.withValues(alpha: 0.6), borderRadius: BorderRadius.circular(2)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 10, 0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('> $kicker', style: monoStyle(colors.text3, 10, bold: true, em: 0.08).copyWith(height: 14 / 10)),
+                              const SizedBox(height: 4),
+                              Text(
+                                title,
+                                style: TextStyle(fontSize: 20, height: 26 / 20, fontWeight: FontWeight.w600, letterSpacing: -0.2, color: colors.text),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Semantics(
+                        button: true,
+                        label: l10n.dlgClose,
+                        excludeSemantics: true,
+                        child: InkWell(
+                          onTap: onClose ?? () => Navigator.of(context).pop(),
+                          borderRadius: BorderRadius.circular(12),
+                          child: SizedBox(width: 44, height: 44, child: Center(child: PixelIcon(PixelIcons.close, size: 20, color: colors.text2))),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Flexible(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        for (final (i, c) in children.indexed) ...[
+                          if (i > 0) const SizedBox(height: 14),
+                          c,
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(20, 12, 20, 20 + bottom * 0.5),
+                  decoration: BoxDecoration(border: Border(top: BorderSide(color: colors.surface2))),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (hint != null) ...[
+                        Text('> $hint', style: monoStyle(colors.text3, 10)),
+                        const SizedBox(height: 10),
+                      ],
+                      Row(
+                        children: [
+                          for (final (i, a) in actions.indexed) ...[
+                            if (i > 0) const SizedBox(width: 10),
+                            Expanded(child: PillButton(a, height: 44, expand: true)),
+                          ],
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 /// The round buttons of the boards: a filled primary, an outlined secondary.
 /// [external] adds the small arrow of a link that leaves the app.
 class PillButton extends StatelessWidget {
-  const PillButton(this.a, {super.key, this.external = false});
+  const PillButton(this.a, {super.key, this.external = false, this.height = 40, this.expand = false});
 
   final DialogAction a;
   final bool external;
+
+  /// 44 on a phone, where the buttons also fill the foot of the sheet.
+  final double height;
+  final bool expand;
 
   @override
   Widget build(BuildContext context) {
@@ -217,7 +338,7 @@ class PillButton extends StatelessWidget {
         onTap: a.onTap,
         borderRadius: BorderRadius.circular(999),
         child: Container(
-          height: 40,
+          height: height,
           padding: EdgeInsets.only(left: 18, right: a.icon != null ? 5 : 18),
           decoration: BoxDecoration(
             color: a.primary ? (off ? colors.surface2 : colors.text) : Colors.transparent,
@@ -225,9 +346,11 @@ class PillButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(999),
           ),
           child: Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
+            mainAxisAlignment: expand && a.icon == null ? MainAxisAlignment.center : MainAxisAlignment.start,
             children: [
               Text(a.label, style: monoStyle(ink, 12, bold: true)),
+              if (expand && a.icon != null) const Spacer(),
               if (external) ...[
                 const SizedBox(width: 8),
                 Text('↗', style: monoStyle(colors.text3, 12)),
