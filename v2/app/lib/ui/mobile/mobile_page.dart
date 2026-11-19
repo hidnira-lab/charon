@@ -443,3 +443,67 @@ class _DockButton extends StatelessWidget {
     );
   }
 }
+
+/// A phone page that opens over another one (Licences, Privacy, Export diagnostics, Updates):
+/// the back button and the title on top, [body] scrolling, and the dock at the bottom. It has
+/// no menu, Back goes to where it came from.
+class MobileSubPage extends StatelessWidget {
+  const MobileSubPage({
+    super.key,
+    required this.controller,
+    required this.title,
+    required this.body,
+    required this.onBack,
+    this.trailing,
+    this.dock = true,
+    this.scrollController,
+  });
+
+  final HomeController controller;
+  final String title;
+  final Widget body;
+  final VoidCallback onBack;
+  final Widget? trailing;
+  final bool dock;
+  final ScrollController? scrollController;
+
+  @override
+  Widget build(BuildContext context) {
+    final top = MediaQuery.paddingOf(context).top;
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) onBack();
+      },
+      child: Scaffold(
+        body: Padding(
+          padding: EdgeInsets.only(top: top),
+          child: ListenableBuilder(
+            listenable: controller,
+            builder: (context, _) => EverySecond(
+              builder: (context) => Column(
+                children: [
+                  MobileTitleBar(title: title, onBack: onBack, trailing: trailing),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 480),
+                        child: SingleChildScrollView(
+                          controller: scrollController,
+                          padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+                          child: body,
+                        ),
+                      ),
+                    ),
+                  ),
+                  if (dock) MobileDock(controller: controller),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

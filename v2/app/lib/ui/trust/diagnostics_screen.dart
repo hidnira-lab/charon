@@ -1,6 +1,8 @@
 import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
+
+import '../common/phone_layout.dart';
 import 'package:flutter/services.dart';
 
 import '../../l10n/generated/app_localizations.dart';
@@ -94,6 +96,7 @@ class _DiagnosticsScreenState extends State<DiagnosticsScreen> {
           (l10n.trustDiagItemAccess, l10n.trustDiagDescAccess, _o.access, (b) => _o.copyWith(access: b)),
         ];
 
+        final phone = isPhoneLayout(context);
         return TrustPage(
           controller: widget.controller,
           crumb: l10n.trustDiagCrumb,
@@ -105,11 +108,13 @@ class _DiagnosticsScreenState extends State<DiagnosticsScreen> {
             children: [
               Text(l10n.trustDiagIntro, style: TextStyle(fontSize: 13, height: 1.45, color: colors.text2)),
               const SizedBox(height: 12),
-              Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+              _Fill(
+                phone: phone,
+                child: _TwoUp(
+                  phone: phone,
                   children: [
-                    Expanded(
+                    _Part(
+                      phone: phone,
                       flex: 5,
                       child: Semantics(
                         label: l10n.trustDiagWhatGoesIn,
@@ -166,9 +171,11 @@ class _DiagnosticsScreenState extends State<DiagnosticsScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 14),
-                    Expanded(
+                    phone ? const SizedBox(height: 12) : const SizedBox(width: 14),
+                    _Part(
+                      phone: phone,
                       flex: 4,
+                      phoneHeight: 280,
                       child: Semantics(
                         label: l10n.trustDiagPreviewLabel,
                         container: true,
@@ -314,4 +321,42 @@ class _Pill extends StatelessWidget {
       ),
     );
   }
+}
+
+/// The two panels of the page side by side on a PC, one under the other on a phone.
+class _Fill extends StatelessWidget {
+  const _Fill({required this.phone, required this.child});
+
+  final bool phone;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => phone ? child : Expanded(child: child);
+}
+
+class _TwoUp extends StatelessWidget {
+  const _TwoUp({required this.phone, required this.children});
+
+  final bool phone;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) => phone
+      ? Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: children)
+      : Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: children);
+}
+
+class _Part extends StatelessWidget {
+  const _Part({required this.phone, required this.flex, required this.child, this.phoneHeight});
+
+  final bool phone;
+  final int flex;
+  final Widget child;
+
+  /// The height a panel needs on a phone, where the page scrolls and nothing fills the rest.
+  final double? phoneHeight;
+
+  @override
+  Widget build(BuildContext context) =>
+      phone ? (phoneHeight == null ? child : SizedBox(height: phoneHeight, child: child)) : Expanded(flex: flex, child: child);
 }

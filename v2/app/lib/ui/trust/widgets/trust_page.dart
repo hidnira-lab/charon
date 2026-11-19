@@ -8,6 +8,8 @@ import '../../common/glass_card.dart';
 import '../../home/widgets/rail_nav.dart';
 import '../../home/widgets/title_bar.dart';
 import '../../common/motion.dart';
+import '../../common/phone_layout.dart';
+import '../../mobile/mobile_page.dart';
 
 /// The frame of the three Trust pages (Licences, Privacy and network, Export
 /// diagnostics): the rail, the breadcrumb that goes back to Settings, the
@@ -44,6 +46,22 @@ class TrustPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
+    // A phone gets the page of the TrustMobile board: Back and the title on top, the page
+    // scrolling, the dock at the foot.
+    if (isPhoneLayout(context)) {
+      return MobileSubPage(
+        controller: controller,
+        title: title,
+        onBack: () => _back(context),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(padding: const EdgeInsets.only(bottom: 10), child: Text(meta, style: monoStyle(colors.text3, 11))),
+            child,
+          ],
+        ),
+      );
+    }
     return Scaffold(
       body: TitleBarPage(child: Row(
         children: [

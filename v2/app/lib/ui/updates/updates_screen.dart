@@ -18,6 +18,8 @@ import 'widgets/offline_banner.dart';
 import 'widgets/update_card.dart';
 import 'widgets/update_rules_card.dart';
 import '../common/motion.dart';
+import '../common/phone_layout.dart';
+import '../mobile/mobile_page.dart';
 
 class UpdatesScreen extends StatefulWidget {
   const UpdatesScreen({
@@ -121,6 +123,52 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
         final l10n = AppLocalizations.of(context)!;
         final view = UpdatesView(l10n, widget.controller, isWindows: Platform.isWindows);
         final checkedLine = view.checkedLine;
+
+        // A phone gets the page of the UpdatesMobile board: the cards one under the other.
+        if (isPhoneLayout(context)) {
+          return MobileSubPage(
+            controller: widget.controller,
+            title: l10n.updatesTitle,
+            onBack: _handleBack,
+            scrollController: _scrollController,
+            body: MobileColumn(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if (checkedLine != null)
+                      Flexible(child: Throb(child: Text(checkedLine, style: monoStyle(colors.text3, 11), maxLines: 1, overflow: TextOverflow.ellipsis)))
+                    else
+                      const SizedBox.shrink(),
+                    const SizedBox(width: 12),
+                    Opacity(
+                      opacity: widget.controller.isCheckingUpdates ? 0.4 : 1,
+                      child: InkWell(
+                        onTap: widget.controller.isCheckingUpdates ? null : () => _act(UpdateAction.check),
+                        borderRadius: BorderRadius.circular(999),
+                        child: Container(
+                          height: 36,
+                          padding: const EdgeInsets.symmetric(horizontal: 14),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: colors.controlBorder),
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                          child: Text(l10n.updCheckNow, style: monoStyle(colors.text, 12, bold: true)),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                if (!view.online) OfflineBanner(onScrollToFileUpdate: _scrollToFileCard),
+                IntrinsicHeight(child: UpdateCard(view: view.core, onAction: _act)),
+                IntrinsicHeight(child: UpdateCard(view: view.app, onAction: _act)),
+                KeyedSubtree(key: _fileCardKey, child: FileUpdateCard(view: view.file, onAction: _act)),
+                UpdateRulesCard(controller: widget.controller),
+              ],
+            ),
+          );
+        }
 
         return Scaffold(
           body: TitleBarPage(child: Row(

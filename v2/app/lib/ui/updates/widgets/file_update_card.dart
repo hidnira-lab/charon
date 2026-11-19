@@ -28,10 +28,9 @@ class FileUpdateCard extends StatelessWidget {
         value: (v.chip, v.text),
         child: GlassCard(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Row(
-          children: [
-            Expanded(
-              child: Row(
+        child: _InfoAndButton(
+          button: v.button == null ? null : UpdatePillButton(button: v.button!, onTap: () => onAction(v.button!.action)),
+          info: Row(
                 children: [
                   Container(
                     width: 36,
@@ -77,14 +76,32 @@ class FileUpdateCard extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-            if (v.button != null) ...[
-              const SizedBox(width: 16),
-              UpdatePillButton(button: v.button!, onTap: () => onAction(v.button!.action)),
-            ],
-          ],
         ),
       )),
+    );
+  }
+}
+
+/// The text and the button side by side, or on a narrow phone the button under the text.
+class _InfoAndButton extends StatelessWidget {
+  const _InfoAndButton({required this.info, required this.button});
+
+  final Widget info;
+  final Widget? button;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, c) {
+        if (button == null) return info;
+        if (c.maxWidth < 420) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [info, const SizedBox(height: 12), Align(alignment: Alignment.centerLeft, child: button)],
+          );
+        }
+        return Row(children: [Expanded(child: info), const SizedBox(width: 16), button!]);
+      },
     );
   }
 }
