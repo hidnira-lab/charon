@@ -20,7 +20,9 @@ import 'theme/theme.dart';
 import 'ui/common/ambient.dart';
 import 'ui/common/toast_host.dart';
 import 'ui/shell/window_shell.dart';
+import 'ui/common/phone_layout.dart';
 import 'ui/home/home_screen.dart';
+import 'ui/mobile/home_mobile_screen.dart';
 import 'ui/servers/servers_screen.dart';
 import 'ui/service/service_screen.dart';
 import 'ui/splash/splash_screen.dart';
@@ -143,7 +145,12 @@ class _CharonAppState extends State<CharonApp> {
         } else if (activeTab == 4) {
           screen = SettingsScreen(controller: controller);
         } else {
-          screen = HomeScreen(controller: controller);
+          // A phone gets the phone Home (HomeMobile board). The other places still have only
+          // their desktop layout, until their phone boards are built.
+          screen = Builder(
+            builder: (context) =>
+                isPhoneLayout(context) ? HomeMobileScreen(controller: controller) : HomeScreen(controller: controller),
+          );
         }
 
         ThemeData activeTheme = widget.themeData ?? CharonTheme.dark;
