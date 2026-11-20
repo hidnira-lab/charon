@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../gen/charon/v1/charon.pb.dart';
 import '../../l10n/generated/app_localizations.dart';
+import '../../state/domain_rule.dart';
 import '../../state/home_controller.dart';
 import '../../state/installed_apps.dart';
 import '../../state/split_view.dart';
@@ -111,7 +112,7 @@ class _SplitMobileScreenState extends State<SplitMobileScreen> {
           Navigator.of(sheet).pop();
           // The list of the mode in use, by place: that is how the controller takes a rule out.
           final index = c.activeSplitRules.indexWhere(
-            (r) => r.value == rule.value && r.kind == rule.kind,
+            (r) => r.value == rule.value && r.kind == rule.kind && r.includeSubdomains == rule.includeSubdomains,
           );
           if (index >= 0) c.removeSplitRule(index);
         },
@@ -152,7 +153,7 @@ class _SplitMobileScreenState extends State<SplitMobileScreen> {
             l10n,
             connected: connected,
             onlyListed: only,
-            rules: [for (final r in rules) r.value],
+            rules: [for (final r in rules) ruleShown(r)],
           );
           final shown = [
             for (final r in rules)
@@ -564,7 +565,7 @@ class _RuleRow extends StatelessWidget {
     final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     final isApp = rule.kind == RuleKind.RULE_APP;
-    final title = isApp ? _appTitle(rule) : rule.value;
+    final title = isApp ? _appTitle(rule) : ruleShown(rule);
     final helper = isApp ? l10n.splitHelperApp(rule.value) : RuleValidator.describeRule(rule, l10n);
     return Semantics(
       button: true,
@@ -647,7 +648,7 @@ class _RuleSheet extends StatelessWidget {
     final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     final isApp = rule.kind == RuleKind.RULE_APP;
-    final title = isApp ? _appTitle(rule) : rule.value;
+    final title = isApp ? _appTitle(rule) : ruleShown(rule);
     return MobileSheetFrame(
       semanticLabel: title,
       header: Row(

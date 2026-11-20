@@ -8,6 +8,7 @@ import 'dart:async';
 import 'package:fixnum/fixnum.dart';
 
 import '../gen/charon/v1/charon.pb.dart';
+import '../state/domain_rule.dart';
 import 'frame.dart';
 import 'transport.dart';
 
@@ -152,7 +153,7 @@ extension CoreCommands on CoreClient {
   Future<Response> release() => send(Command(release: Empty()));
   Future<Response> retryNow() => send(Command(retryNow: Empty()));
   Future<Response> getConfig() => send(Command(getConfig: Empty()));
-  Future<Response> setConfig(Config config) => send(Command(setConfig: config));
+  Future<Response> setConfig(Config config) => send(Command(setConfig: withCanonicalRules(config)));
   Future<Response> subscribe(Subscription sub) => send(Command(subscribe: sub));
   Future<Response> unsubscribe(Subscription sub) => send(Command(unsubscribe: sub));
   Future<Response> exportDiagnostics() =>

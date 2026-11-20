@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../gen/charon/v1/charon.pb.dart';
 import '../../l10n/generated/app_localizations.dart';
+import '../../state/domain_rule.dart';
 import '../../state/home_controller.dart';
 import '../../state/split_view.dart';
 import '../../theme/theme.dart';
@@ -59,7 +60,7 @@ class _SplitScreenState extends State<SplitScreen> {
           l10n,
           connected: isConnected,
           onlyListed: isOnlyListed,
-          rules: [for (final r in rules) r.value],
+          rules: [for (final r in rules) ruleShown(r)],
         );
         final subtitle =
             isOnlyListed ? l10n.splitSubtitleOnlyListed : l10n.splitSubtitleAllExcept;

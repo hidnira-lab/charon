@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../theme/theme.dart';
+import '../../../state/domain_rule.dart';
 import '../rule_validator.dart';
 import '../../common/glass_card.dart';
 import '../../common/dashed_box.dart';
@@ -48,7 +49,7 @@ class RulesListCard extends StatelessWidget {
     Widget row(int index) {
       final rule = rules[index];
       final pending = isRulePending(rule.value);
-      final marked = pending || conflictWith == rule.value;
+      final marked = pending || conflictWith == ruleShown(rule);
       return Container(
         decoration: BoxDecoration(
           color: colors.bg,
@@ -80,7 +81,7 @@ class RulesListCard extends StatelessWidget {
                     children: [
                       Flexible(
                         child: Text(
-                          rule.value,
+                          ruleShown(rule),
                           style: monoStyle(colors.text, 13, bold: true),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -121,7 +122,7 @@ class RulesListCard extends StatelessWidget {
               icon: PixelIcon(PixelIcons.trash, size: 18, color: colors.text2),
               color: colors.text2,
               onPressed: () => onRemoveRule(index),
-              tooltip: l10n.splitRemoveRule(rule.value),
+              tooltip: l10n.splitRemoveRule(ruleShown(rule)),
             ),
           ],
         ),

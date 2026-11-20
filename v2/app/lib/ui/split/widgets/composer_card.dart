@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../state/domain_rule.dart';
 import '../../../theme/theme.dart';
 import '../rule_validator.dart';
 import '../../common/glass_card.dart';
@@ -76,12 +77,7 @@ class _ComposerCardState extends State<ComposerCard> {
     if (_conflictCoverer != null) return;
     if (widget.existingRules.length >= 1000) return;
 
-    final rule = Rule(
-      kind: _selectedKind,
-      value: value,
-      includeSubdomains: _selectedKind == RuleKind.RULE_DOMAIN &&
-          (value.startsWith('*.') || !value.startsWith('*')),
-    );
+    final rule = _selectedKind == RuleKind.RULE_DOMAIN ? domainRule(value) : Rule(kind: _selectedKind, value: value);
 
     final success = await widget.onAddRule(rule);
     if (success && mounted) {

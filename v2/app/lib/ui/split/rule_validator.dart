@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import '../../gen/charon/v1/charon.pb.dart';
 import '../../l10n/generated/app_localizations.dart';
+import '../../state/domain_rule.dart';
 
 /// Helper to validate, detect conflicts, and format descriptions for split tunnel rules.
 class RuleValidator {
@@ -40,17 +41,17 @@ class RuleValidator {
         final existingIsWildcard = existingVal.startsWith('*.') || rule.includeSubdomains;
         final existingBase = existingVal.startsWith('*.') ? existingVal.substring(2) : existingVal;
 
-        if (existingVal == trimmed) return rule.value;
+        if (existingVal == trimmed) return ruleShown(rule);
 
         if (existingIsWildcard) {
           if (inputBase == existingBase || inputBase.endsWith('.$existingBase')) {
-            return rule.value;
+            return ruleShown(rule);
           }
         }
 
         if (inputIsWildcard) {
           if (existingBase == inputBase || existingBase.endsWith('.$inputBase')) {
-            return rule.value;
+            return ruleShown(rule);
           }
         }
       }
