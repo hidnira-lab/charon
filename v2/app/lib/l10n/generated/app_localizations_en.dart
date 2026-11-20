@@ -5299,6 +5299,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsAppMetaPhone => 'ANDROID';
 
   @override
+  String get settingsQuotaCountedPhone =>
+      'counted on this phone, even when Charon is closed';
+
+  @override
   String get settingsThemeLineSystemPhone => 'follows Android · dark right now';
 
   @override

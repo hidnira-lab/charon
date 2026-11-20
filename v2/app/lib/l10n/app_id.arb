@@ -1529,6 +1529,7 @@
   "blockedBannerBodyPhone": "Charon tidak bisa menjangkau satu pun servermu. Tidak ada yang keluar dari ponsel ini sampai kamu mencoba lagi, memilih server, atau melepas.",
   "settingsAllowLocalDescPhone": "Ponselmu tetap bisa menjangkau printer, NAS, dan perangkat lain di jaringan rumah saat trafik ditahan atau lewat tunnel.",
   "settingsAppMetaPhone": "ANDROID",
+  "settingsQuotaCountedPhone": "dihitung di ponsel ini, walau Charon ditutup",
   "settingsThemeLineSystemPhone": "mengikuti Android · sedang gelap",
   "settingsThemeLineDarkPhone": "selalu gelap, apa pun tema Android",
   "settingsThemeLineLightPhone": "selalu terang, apa pun tema Android",

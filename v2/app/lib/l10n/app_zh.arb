@@ -1530,6 +1530,7 @@
   "blockedBannerBodyPhone": "Charon 连不上你的任何一台服务器。在你重试、选择服务器或放行之前，没有流量会离开这部手机。",
   "settingsAllowLocalDescPhone": "在流量被拦截或走隧道时，手机仍能访问家里网络中的打印机、NAS 等设备。",
   "settingsAppMetaPhone": "ANDROID",
+  "settingsQuotaCountedPhone": "在本机计数，即使关闭 Charon",
   "settingsThemeLineSystemPhone": "跟随 Android · 当前为深色",
   "settingsThemeLineDarkPhone": "始终深色，不随 Android 变化",
   "settingsThemeLineLightPhone": "始终浅色，不随 Android 变化",

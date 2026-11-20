@@ -3725,6 +3725,8 @@
   "@settingsAllowLocalDescPhone": {"description": "Allow local network on a phone (SettingsMobile board)."},
   "settingsAppMetaPhone": "ANDROID",
   "@settingsAppMetaPhone": {"description": "App card header meta on a phone."},
+  "settingsQuotaCountedPhone": "counted on this phone, even when Charon is closed",
+  "@settingsQuotaCountedPhone": {"description": "Quota persistence note on a phone (SettingsMobile board)."},
   "settingsThemeLineSystemPhone": "follows Android · dark right now",
   "@settingsThemeLineSystemPhone": {"description": "Theme line on a phone."},
   "settingsThemeLineDarkPhone": "always dark, whatever Android uses",

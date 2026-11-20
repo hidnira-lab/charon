@@ -5013,6 +5013,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsAppMetaPhone => 'ANDROID';
 
   @override
+  String get settingsQuotaCountedPhone => '在本机计数，即使关闭 Charon';
+
+  @override
   String get settingsThemeLineSystemPhone => '跟随 Android · 当前为深色';
 
   @override
@@ -10367,6 +10370,9 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get settingsAppMetaPhone => 'ANDROID';
+
+  @override
+  String get settingsQuotaCountedPhone => '在本机计数，即使关闭 Charon';
 
   @override
   String get settingsThemeLineSystemPhone => '跟随 Android · 当前为深色';

@@ -239,7 +239,7 @@ class _QuotaCardState extends State<QuotaCard> {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  '> ${l10n.settingsQuotaCountedDevice}',
+                  '> ${widget.controller.phoneLayout ? l10n.settingsQuotaCountedPhone : l10n.settingsQuotaCountedDevice}',
                   style: TextStyle(
                     fontFamily: CharonTokens.fontMono,
                     fontSize: 11,

@@ -9130,6 +9130,12 @@ abstract class AppLocalizations {
   /// **'ANDROID'**
   String get settingsAppMetaPhone;
 
+  /// Quota persistence note on a phone (SettingsMobile board).
+  ///
+  /// In en, this message translates to:
+  /// **'counted on this phone, even when Charon is closed'**
+  String get settingsQuotaCountedPhone;
+
   /// Theme line on a phone.
   ///
   /// In en, this message translates to:

@@ -5266,6 +5266,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get settingsAppMetaPhone => 'ANDROID';
 
   @override
+  String get settingsQuotaCountedPhone =>
+      'dihitung di ponsel ini, walau Charon ditutup';
+
+  @override
   String get settingsThemeLineSystemPhone => 'mengikuti Android · sedang gelap';
 
   @override

@@ -30,6 +30,14 @@ void main() {
     await saveShot(tester, find.byKey(const Key('shot')), 'mobile_settings_light');
   });
 
+  testWidgets('the quota note says phone, not window', (tester) async {
+    await pumpPhone(tester, tab: 4, status: idleStatus());
+    await tester.drag(find.byType(SingleChildScrollView).first, const Offset(0, -1200));
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(find.text('> counted on this phone, even when Charon is closed'), findsOneWidget);
+    expect(find.textContaining('this window'), findsNothing);
+  });
+
   testWidgets('the kill switch toggles from the page', (tester) async {
     final controller = await pumpPhone(tester, tab: 4, status: idleStatus());
     final before = controller.killSwitch;
