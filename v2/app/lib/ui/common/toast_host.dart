@@ -27,10 +27,12 @@ class ToastHost extends StatelessWidget {
       builder: (context, _) {
         final toast = controller.toast;
         if (toast == null) return const SizedBox.shrink();
+        // On a phone the bar keeps 16 px from the sides and sits above the connect dock (Dialogs board).
+        final phone = controller.phoneLayout;
         return Positioned(
-          left: 0,
-          right: 0,
-          bottom: 18,
+          left: phone ? 16 : 0,
+          right: phone ? 16 : 0,
+          bottom: phone ? 104 : 18,
           child: Center(
             // A new toast is a new widget, so it rises again.
             child: _Rise(key: ObjectKey(toast), child: _Bar(toast: toast, controller: controller)),
@@ -99,6 +101,9 @@ class _BarState extends State<_Bar> {
         ToastKind.unpaired => l10n.toastUnpaired,
         ToastKind.vaultBackedUp => l10n.toastVaultBackedUp,
         ToastKind.vaultRestored => l10n.toastVaultRestored,
+        ToastKind.appsAdded => toast.nextConnect
+            ? '${l10n.appPickerAdded(toast.count)} · ${l10n.splitNextConnectNote}'
+            : l10n.appPickerAdded(toast.count),
       };
 
   @override
@@ -118,8 +123,9 @@ class _BarState extends State<_Bar> {
       liveRegion: true,
       container: true,
       child: Container(
-        height: 44,
-        padding: const EdgeInsets.only(left: 16, right: 8),
+        // One line is 44 px tall. A long text (two sentences on a phone) wraps and the bar grows.
+        constraints: const BoxConstraints(minHeight: 44),
+        padding: const EdgeInsets.only(left: 16, right: 8, top: 6, bottom: 6),
         decoration: BoxDecoration(
           color: bar,
           borderRadius: BorderRadius.circular(12),
@@ -136,13 +142,17 @@ class _BarState extends State<_Bar> {
           children: [
             Container(width: 8, height: 8, color: square),
             const SizedBox(width: 14),
-            Text(
-              _text(l10n),
-              style: CharonTypography.body.copyWith(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                color: ink,
-                decoration: TextDecoration.none,
+            Flexible(
+              child: Text(
+                _text(l10n),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: CharonTypography.body.copyWith(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: ink,
+                  decoration: TextDecoration.none,
+                ),
               ),
             ),
             if (toast.undo != null) ...[

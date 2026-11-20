@@ -24,14 +24,23 @@ enum ToastKind {
 
   /// "Restored from file".
   vaultRestored,
+
+  /// "3 apps added", with "rule changes apply on the next connect" while connected.
+  appsAdded,
 }
 
 /// The one toast at the bottom of the window (Dialogs board). A new one replaces
 /// the one that is showing.
 class ToastMessage {
-  const ToastMessage(this.kind, {this.code = '', this.label = '', this.order = 0, this.undo});
+  const ToastMessage(this.kind, {this.code = '', this.label = '', this.order = 0, this.count = 0, this.nextConnect = false, this.undo});
 
   final ToastKind kind;
+
+  /// How many things the toast is about (apps added).
+  final int count;
+
+  /// Adds "rule changes apply on the next connect": the tunnel is up, so the change waits.
+  final bool nextConnect;
 
   /// The SRV code of the server the toast is about.
   final String code;

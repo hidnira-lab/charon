@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:charon/core/core_client.dart';
+import 'package:charon/core/frame.dart';
 import 'package:charon/core/transport.dart';
 import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/main.dart';
 import 'package:charon/state/home_controller.dart';
+import 'package:charon/state/installed_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -33,6 +35,7 @@ Future<HomeController> pumpPhone(
   int tab = 0,
   ThemeData? theme,
   void Function(Uint8List)? onSend,
+  InstalledApps? installedApps,
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1.0;
@@ -41,6 +44,7 @@ Future<HomeController> pumpPhone(
     client: CoreClient(_FakeTransport(onSend: onSend)),
     initialStatus: status ?? connectedStatus(),
     initialConfig: config ?? twoServers(),
+    installedApps: installedApps,
   );
   if (tab != 0) controller.setTab(tab);
   await tester.pumpWidget(RepaintBoundary(key: const Key('shot'), child: CharonApp(controller: controller, themeData: theme)));
@@ -64,8 +68,20 @@ class _FakeTransport implements CoreTransport {
   @override
   Stream<Uint8List> get incoming => _controller.stream;
 
+  // The decoder keeps what a frame left over, so one decoder serves the whole connection.
+  final FrameDecoder _decoder = FrameDecoder();
+
   @override
-  void send(Uint8List bytes) => onSend?.call(bytes);
+  void send(Uint8List bytes) {
+    onSend?.call(bytes);
+    // A saved Config waits for the core's answer, so the page that saved it can go on.
+    for (final env in _decoder.add(bytes)) {
+      if (env.hasCommand() && env.command.hasSetConfig()) {
+        final reply = Envelope(protocolVersion: env.protocolVersion, requestId: env.requestId, response: Response());
+        scheduleMicrotask(() => _controller.add(encodeFrame(reply)));
+      }
+    }
+  }
 
   @override
   Future<void> close() async {

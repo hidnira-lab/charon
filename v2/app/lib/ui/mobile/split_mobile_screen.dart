@@ -3,14 +3,18 @@ import 'package:flutter/material.dart';
 import '../../gen/charon/v1/charon.pb.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../state/home_controller.dart';
+import '../../state/installed_apps.dart';
 import '../../state/split_view.dart';
+import '../../state/toast.dart';
 import '../../theme/theme.dart';
+import '../common/dashed_box.dart';
 import '../common/glass_card.dart';
 import '../common/pixel_flag.dart';
 import '../common/pixel_icon.dart';
 import '../split/rule_validator.dart';
 import '../split/widgets/composer_card.dart';
 import '../split/widgets/pending_banner.dart';
+import 'app_picker_sheet.dart';
 import 'mobile_page.dart';
 import 'mobile_sheet.dart';
 
@@ -30,6 +34,7 @@ enum _Tab { all, domain, ip, app }
 
 class _SplitMobileScreenState extends State<SplitMobileScreen> {
   var _tab = _Tab.all;
+  InstalledApps get _apps => c.installedApps;
 
   HomeController get c => widget.controller;
 
@@ -61,6 +66,12 @@ class _SplitMobileScreenState extends State<SplitMobileScreen> {
                 if (ok && sheet.mounted) Navigator.of(sheet).pop();
                 return ok;
               },
+              onChooseApps: c.phoneLayout
+                  ? () {
+                      Navigator.of(sheet).pop();
+                      _openAppPicker();
+                    }
+                  : null,
             ),
           ],
         ),
@@ -68,10 +79,33 @@ class _SplitMobileScreenState extends State<SplitMobileScreen> {
     );
   }
 
+  /// The picker adds one rule per app, then the page shows the App tab.
+  Future<void> _openAppPicker() async {
+    final chosen = await showAppPicker(
+      context,
+      source: _apps,
+      onlyListed: c.splitMode == SplitMode.SPLIT_ONLY_LISTED,
+      inList: {
+        for (final r in c.activeSplitRules)
+          if (r.kind == RuleKind.RULE_APP) r.value,
+      },
+      usedRules: c.activeSplitRules.length,
+    );
+    if (chosen == null || chosen.isEmpty || !mounted) return;
+    final added = await c.addSplitRules([
+      for (final a in chosen) Rule(kind: RuleKind.RULE_APP, value: a.package, label: a.name),
+    ]);
+    if (added == 0 || !mounted) return;
+    setState(() => _tab = _Tab.app);
+    final connected = c.status.phase == Phase.PHASE_UP || c.status.phase == Phase.PHASE_VERIFYING;
+    c.showToast(ToastMessage(ToastKind.appsAdded, count: added, nextConnect: connected));
+  }
+
   void _openRule(Rule rule) {
     showMobileSheet<void>(
       context,
       (sheet) => _RuleSheet(
+        apps: _apps,
         rule: rule,
         onRemove: () {
           Navigator.of(sheet).pop();
@@ -192,7 +226,9 @@ class _SplitMobileScreenState extends State<SplitMobileScreen> {
                   ],
                 ],
               ),
-              if (shown.isEmpty)
+              if (shown.isEmpty && _tab == _Tab.app)
+                _AppEmpty(only: only, onChoose: _openAppPicker)
+              else if (shown.isEmpty)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   child: Text(
@@ -214,6 +250,7 @@ class _SplitMobileScreenState extends State<SplitMobileScreen> {
                     for (final (i, r) in shown.indexed) ...[
                       if (i > 0) const SizedBox(height: 6),
                       _RuleRow(
+                        apps: _apps,
                         rule: r,
                         pending: c.isRulePending(r.value),
                         onTap: () => _openRule(r),
@@ -511,11 +548,13 @@ class _TabChip extends StatelessWidget {
 
 class _RuleRow extends StatelessWidget {
   const _RuleRow({
+    required this.apps,
     required this.rule,
     required this.pending,
     required this.onTap,
   });
 
+  final InstalledApps apps;
   final Rule rule;
   final bool pending;
   final VoidCallback onTap;
@@ -524,10 +563,12 @@ class _RuleRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final helper = RuleValidator.describeRule(rule, l10n);
+    final isApp = rule.kind == RuleKind.RULE_APP;
+    final title = isApp ? _appTitle(rule) : rule.value;
+    final helper = isApp ? l10n.splitHelperApp(rule.value) : RuleValidator.describeRule(rule, l10n);
     return Semantics(
       button: true,
-      label: l10n.splitRemoveRule(rule.value),
+      label: l10n.splitRemoveRule(title),
       excludeSemantics: true,
       child: InkWell(
         onTap: onTap,
@@ -543,31 +584,36 @@ class _RuleRow extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: colors.surface2,
-                  borderRadius: BorderRadius.circular(9),
-                ),
-                child: Center(
-                  child: PixelIcon(
-                    rule.kind == RuleKind.RULE_DOMAIN
-                        ? PixelIcons.globe
-                        : PixelIcons.hash,
-                    size: 16,
-                    color: colors.text,
+              if (isApp)
+                AppIconTile(source: apps, package: rule.value, name: title, size: 32)
+              else
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: colors.surface2,
+                    borderRadius: BorderRadius.circular(9),
+                  ),
+                  child: Center(
+                    child: PixelIcon(
+                      rule.kind == RuleKind.RULE_DOMAIN
+                          ? PixelIcons.globe
+                          : PixelIcons.hash,
+                      size: 16,
+                      color: colors.text,
+                    ),
                   ),
                 ),
-              ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      rule.value,
-                      style: monoStyle(colors.text, 13, bold: true),
+                      title,
+                      style: isApp
+                          ? TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: colors.text)
+                          : monoStyle(colors.text, 13, bold: true),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -590,8 +636,9 @@ class _RuleRow extends StatelessWidget {
 
 /// What a tap on a rule offers: take it out of the list.
 class _RuleSheet extends StatelessWidget {
-  const _RuleSheet({required this.rule, required this.onRemove});
+  const _RuleSheet({required this.apps, required this.rule, required this.onRemove});
 
+  final InstalledApps apps;
   final Rule rule;
   final VoidCallback onRemove;
 
@@ -599,40 +646,47 @@ class _RuleSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
+    final isApp = rule.kind == RuleKind.RULE_APP;
+    final title = isApp ? _appTitle(rule) : rule.value;
     return MobileSheetFrame(
-      semanticLabel: rule.value,
+      semanticLabel: title,
       header: Row(
         children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              color: colors.surface2,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Center(
-              child: PixelIcon(
-                rule.kind == RuleKind.RULE_DOMAIN
-                    ? PixelIcons.globe
-                    : PixelIcons.hash,
-                size: 18,
-                color: colors.text,
+          if (isApp)
+            AppIconTile(source: apps, package: rule.value, name: title, size: 36)
+          else
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: colors.surface2,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Center(
+                child: PixelIcon(
+                  rule.kind == RuleKind.RULE_DOMAIN
+                      ? PixelIcons.globe
+                      : PixelIcons.hash,
+                  size: 18,
+                  color: colors.text,
+                ),
               ),
             ),
-          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  rule.value,
-                  style: monoStyle(colors.text, 14, bold: true),
+                  title,
+                  style: isApp
+                      ? TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: colors.text)
+                      : monoStyle(colors.text, 14, bold: true),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  RuleValidator.describeRule(rule, l10n),
+                  isApp ? l10n.splitHelperApp(rule.value) : RuleValidator.describeRule(rule, l10n),
                   style: monoStyle(colors.text3, 11),
                 ),
               ],
@@ -682,6 +736,74 @@ class _RuleSheet extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// What an app rule is called: the name the user saw when choosing it, or the package.
+String _appTitle(Rule rule) => rule.label.isNotEmpty ? rule.label : rule.value;
+
+/// The App tab with no rules: a dashed card that opens the picker.
+class _AppEmpty extends StatelessWidget {
+  const _AppEmpty({required this.only, required this.onChoose});
+
+  final bool only;
+  final VoidCallback onChoose;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = CharonColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    return DashedBox(
+      color: DashedBox.slot(colors).line,
+      radius: 16,
+      padding: const EdgeInsets.fromLTRB(18, 22, 18, 18),
+      child: Column(
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(color: colors.surface, borderRadius: BorderRadius.circular(12)),
+            child: Center(child: PixelIcon(PixelIcons.blocks, size: 24, color: colors.text2)),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            l10n.splitAppEmptyTitle,
+            style: TextStyle(fontSize: 16, height: 22 / 16, fontWeight: FontWeight.w600, color: colors.text),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            only ? l10n.splitAppEmptyOnly : l10n.splitAppEmptyExcept,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 13, height: 19 / 13, color: colors.text2),
+          ),
+          const SizedBox(height: 14),
+          InkWell(
+            onTap: onChoose,
+            borderRadius: BorderRadius.circular(999),
+            child: Container(
+              height: 48,
+              padding: const EdgeInsets.only(left: 18, right: 6),
+              decoration: BoxDecoration(color: colors.text, borderRadius: BorderRadius.circular(999)),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(l10n.appPickerTitle, style: monoStyle(colors.bg, 14, bold: true)),
+                  const SizedBox(width: 12),
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(color: colors.accent, shape: BoxShape.circle),
+                    child: Center(child: PixelIcon(PixelIcons.plus, size: 18, color: colors.onAccent)),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text('> ${l10n.splitNextConnectNote}', style: monoStyle(colors.text3, 10).copyWith(height: 14 / 10)),
+        ],
+      ),
     );
   }
 }

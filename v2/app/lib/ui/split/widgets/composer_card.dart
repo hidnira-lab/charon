@@ -16,12 +16,17 @@ class ComposerCard extends StatefulWidget {
     required this.existingRules,
     required this.onAddRule,
     this.onConflict,
+    this.onChooseApps,
   });
 
   final bool isOnlyListed;
   final String activeServerName;
   final List<Rule> existingRules;
   final Future<bool> Function(Rule rule) onAddRule;
+
+  /// Opens the app picker. Only the phone gives it: without it the APP segment is locked
+  /// with "Android only", as on the desktop boards.
+  final VoidCallback? onChooseApps;
 
   /// Tells the rules list which rule covers what is typed, so it can mark it.
   final ValueChanged<String?>? onConflict;
@@ -52,11 +57,13 @@ class _ComposerCardState extends State<ComposerCard> {
     }
   }
 
-  String? _findConflict() => RuleValidator.findConflict(
-        _textController.text,
-        _selectedKind,
-        widget.existingRules,
-      );
+  String? _findConflict() => _selectedKind == RuleKind.RULE_APP
+      ? null
+      : RuleValidator.findConflict(
+          _textController.text,
+          _selectedKind,
+          widget.existingRules,
+        );
 
   void _recheck() {
     setState(() => _conflictCoverer = _findConflict());
@@ -93,6 +100,7 @@ class _ComposerCardState extends State<ComposerCard> {
     final l10n = AppLocalizations.of(context)!;
     final colors = CharonColors.of(context);
     final isAtLimit = widget.existingRules.length >= 1000;
+    final isApp = _selectedKind == RuleKind.RULE_APP;
     final hasConflict = _conflictCoverer != null;
     final isValid = RuleValidator.isValidInput(_textController.text, _selectedKind);
     final canAdd = isValid && !hasConflict && !isAtLimit;
@@ -137,6 +145,15 @@ class _ComposerCardState extends State<ComposerCard> {
                         onTap: () => _pickKind(RuleKind.RULE_CIDR),
                       ),
                       const SizedBox(width: 2),
+                      if (widget.onChooseApps != null)
+                        _segment(
+                          colors,
+                          label: l10n.splitTypeApp,
+                          icon: PixelIcons.blocks,
+                          isSelected: isApp,
+                          onTap: () => _pickKind(RuleKind.RULE_APP),
+                        )
+                      else
                       Tooltip(
                         message: l10n.splitAppAndroidOnly,
                         child: Container(
@@ -181,6 +198,9 @@ class _ComposerCardState extends State<ComposerCard> {
             ],
           ),
           const SizedBox(height: 10),
+          if (isApp)
+            ..._appPanel(colors, l10n)
+          else ...[
           Row(
             children: [
               Expanded(
@@ -294,9 +314,69 @@ class _ComposerCardState extends State<ComposerCard> {
               style: monoStyle(colors.text3, 11),
               overflow: TextOverflow.ellipsis,
             ),
+          ],
         ],
       ),
     );
+  }
+
+  /// What the APP segment shows instead of a text field: the picker opens from here.
+  List<Widget> _appPanel(CharonColors colors, AppLocalizations l10n) {
+    final note = widget.isOnlyListed ? l10n.splitAppNoteOnly(widget.activeServerName) : l10n.splitAppNoteExcept;
+    return [
+      Semantics(
+        button: true,
+        label: l10n.splitAppComposerTitle,
+        excludeSemantics: true,
+        child: InkWell(
+          onTap: widget.onChooseApps,
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 52),
+            padding: const EdgeInsets.only(left: 12, right: 10),
+            decoration: BoxDecoration(
+              color: colors.bg,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: colors.controlBorder),
+            ),
+            child: Row(
+              children: [
+                Text('>', style: monoStyle(colors.accentText, 14, bold: true)),
+                const SizedBox(width: 10),
+                Expanded(child: Text(l10n.splitAppComposerTitle, style: monoStyle(colors.text3, 13))),
+                PixelIcon(PixelIcons.chevRight, size: 20, color: colors.text2),
+              ],
+            ),
+          ),
+        ),
+      ),
+      const SizedBox(height: 8),
+      Text('> $note', style: monoStyle(colors.text3, 10).copyWith(height: 15 / 10)),
+      const SizedBox(height: 2),
+      Text('> ${l10n.splitAppComposerHint}', style: monoStyle(colors.text3, 10).copyWith(height: 15 / 10)),
+      const SizedBox(height: 10),
+      InkWell(
+        onTap: widget.onChooseApps,
+        borderRadius: BorderRadius.circular(999),
+        child: Container(
+          height: 52,
+          padding: const EdgeInsets.only(left: 20, right: 6),
+          decoration: BoxDecoration(color: colors.text, borderRadius: BorderRadius.circular(999)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(l10n.appPickerTitle, style: monoStyle(colors.bg, 14, bold: true)),
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(color: colors.accent, shape: BoxShape.circle),
+                child: Center(child: PixelIcon(PixelIcons.chevRight, size: 20, color: colors.onAccent)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ];
   }
 
   Widget _segment(

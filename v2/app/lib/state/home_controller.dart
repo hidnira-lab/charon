@@ -15,6 +15,7 @@ import '../gen/charon/v1/charon.pb.dart';
 import '../sync/sync_client.dart';
 import 'app_info.dart';
 import 'dns_input.dart';
+import 'installed_apps.dart';
 import 'location_status.dart';
 import 'service_supervisor.dart';
 import 'staged_installer.dart';
@@ -49,7 +50,9 @@ class HomeController extends ChangeNotifier {
     ProcessRunner? runAdmin,
     String? stagingDir,
     String? serviceVersion,
-  })  : _runAdmin = runAdmin ?? runElevated,
+    InstalledApps? installedApps,
+  })  : installedApps = installedApps ?? ChannelInstalledApps(),
+        _runAdmin = runAdmin ?? runElevated,
         _stagingDir = stagingDir ?? defaultStagingDir,
         _serviceVersion = serviceVersion ?? '',
         _clock = clock ?? (() => DateTime.now().millisecondsSinceEpoch),
@@ -74,6 +77,9 @@ class HomeController extends ChangeNotifier {
 
   CoreClient? _client;
   PlatformChannelTransport? _platformTransport;
+
+  /// The apps of the phone, for the split tunnel picker (Android only, never asked on a PC).
+  final InstalledApps installedApps;
 
   // Time. Every time shown on screen is derived from the core's Status
   // (phase_since_ms, next_try_at_ms), which uses the service clock. The offset
@@ -617,19 +623,24 @@ class HomeController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> addSplitRule(Rule rule) async {
+  Future<bool> addSplitRule(Rule rule) async => await addSplitRules([rule]) == 1;
+
+  /// Adds the rules that fit under the limit of 1000 in one save. Returns how many were added.
+  Future<int> addSplitRules(List<Rule> rules) async {
     _config ??= Config();
     final split = _config!.ensureSplit();
     final list = splitMode == SplitMode.SPLIT_ONLY_LISTED
         ? split.onlyListed
         : split.allExceptListed;
-    if (list.length >= 1000) return false;
+    final room = 1000 - list.length;
+    if (room <= 0 || rules.isEmpty) return 0;
 
-    list.add(rule);
+    final added = rules.take(room).toList();
+    list.addAll(added);
     _bumpConfigVersion();
     if (_status.phase == Phase.PHASE_UP || _status.phase == Phase.PHASE_VERIFYING) {
       _hasPendingSplitChanges = true;
-      _pendingSplitRules.add(rule.value);
+      _pendingSplitRules.addAll([for (final r in added) r.value]);
     }
     if (_client != null) {
       try {
@@ -639,7 +650,7 @@ class HomeController extends ChangeNotifier {
       }
     }
     notifyListeners();
-    return true;
+    return added.length;
   }
 
   Future<void> removeSplitRule(int index) async {

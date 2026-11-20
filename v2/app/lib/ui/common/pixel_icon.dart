@@ -8,6 +8,14 @@ abstract final class PixelIcons {
   static const close =
       'M7 19H5V17H7V19ZM19 19H17V17H19V19ZM9 15V17H7V15H9ZM17 17H15V15H17V17ZM11 15H9V13H11V15ZM15 15H13V13H15V15ZM13 13H11V11H13V13ZM11 11H9V9H11V11ZM15 11H13V9H15V11ZM9 9H7V7H9V9ZM17 9H15V7H17V9ZM7 7H5V5H7V7ZM19 7H17V5H19V7Z';
   static const plus = 'M11 4h2v16h-2zM4 11h16v2H4z';
+
+  /// A magnifier (search fields).
+  static const search =
+      'M7 3h6v2H7zM5 5h2v2H5zm8 0h2v2h-2zM3 7h2v6H3zm12 0h2v6h-2zM5 13h2v2H5zm8 0h2v2h-2zm-6 2h6v2H7zm8 0h2v2h-2zm2 2h2v2h-2zm2 2h2v2h-2z';
+
+  /// Stacked blocks, the app rule (SplitMobile board).
+  static const blocks =
+      'M15 1h6v2h-6zm-2 2h2v6h-2zm2 6h6v2h-6zm6-6h2v6h-2zM3 5h6v2H3zM1 7h2v14H1zm2 14h14v2H3zm14-6h2v6h-2zM3 13h14v2H3zM9 7h2v14H9z';
   static const server = 'M6 7h4v2H6zm0 8h4v2H6zM2 5h2v14H2zm18 0h2v14h-2zM4 19h16v2H4zM4 3h16v2H4zm0 8h16v2H4z';
   static const window = 'M4 2h16v2H4zm0 6h16v2H4zm0 12h16v2H4zM2 4h2v16H2zm18 0h2v16h-2zM5 5h2v2H5zm3 0h2v2H8z';
   static const copy = 'M8 6h12v2H8zM4 2h12v2H4zm2 6h2v12H6zM2 4h2v12H2zm6 16h12v2H8zM20 8h2v12h-2zm-4-4h2v2h-2zM4 16h2v2H4z';

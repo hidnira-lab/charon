@@ -5,10 +5,11 @@ import '../common/glass_card.dart' show monoStyle;
 
 /// Opens a bottom sheet with the scrim and the motion of the Dialogs board for phones:
 /// up in 340 ms, down in 200 ms (mSheet).
-Future<T?> showMobileSheet<T>(BuildContext context, WidgetBuilder builder) {
+Future<T?> showMobileSheet<T>(BuildContext context, WidgetBuilder builder, {bool enableDrag = true}) {
   return showModalBottomSheet<T>(
     context: context,
     isScrollControlled: true,
+    enableDrag: enableDrag,
     useSafeArea: true,
     backgroundColor: Colors.transparent,
     elevation: 0,
