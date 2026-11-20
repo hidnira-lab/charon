@@ -8,6 +8,8 @@ import '../../state/domain_rule.dart';
 class RuleValidator {
   RuleValidator._();
 
+  static final _hostChars = RegExp(r'^[a-zA-Z0-9.-]+$');
+
   /// Validates format of rule input for given [kind].
   static bool isValidInput(String input, RuleKind kind) {
     final trimmed = input.trim();
@@ -15,10 +17,11 @@ class RuleValidator {
 
     if (kind == RuleKind.RULE_DOMAIN) {
       final domain = trimmed.startsWith('*.') ? trimmed.substring(2) : trimmed;
-      if (domain.isEmpty || domain.contains(' ') || domain.startsWith('.') || domain.endsWith('.')) {
+      // The same test as the core (validDomain): a core that refuses a rule drops it silently.
+      if (domain.isEmpty || domain.startsWith('.') || domain.endsWith('.') || domain.contains('..')) {
         return false;
       }
-      return domain.contains('.');
+      return _hostChars.hasMatch(domain) && domain.contains('.');
     } else if (kind == RuleKind.RULE_CIDR) {
       return _parseCidrRange(trimmed) != null;
     }

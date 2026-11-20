@@ -40,6 +40,20 @@ void main() {
     expect(RuleValidator.findConflict('a.example.com', RuleKind.RULE_DOMAIN, [domainRule('example.com')]), isNull);
   });
 
+  test('the app accepts a domain only when the core would (letters, digits, dots, hyphens)', () {
+    bool ok(String s) => RuleValidator.isValidInput(s, RuleKind.RULE_DOMAIN);
+    expect(ok('media.example.org'), isTrue);
+    expect(ok('*.example.com'), isTrue);
+    expect(ok('a-b.example.com'), isTrue);
+    expect(ok('media..example.org'), isFalse);
+    expect(ok('bücher.example'), isFalse);
+    expect(ok('exa mple.com'), isFalse);
+    expect(ok('https://example.com'), isFalse);
+    expect(ok('example'), isFalse);
+    expect(ok('.example.com'), isFalse);
+    expect(ok('example.com.'), isFalse);
+  });
+
   test('a Config that is already right is not copied', () {
     final c = Config(split: SplitTunnel(allExceptListed: [domainRule('*.example.com')]));
     expect(identical(withCanonicalRules(c), c), isTrue);
