@@ -5150,6 +5150,215 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get stpPermDeniedNote =>
       '你选择了拒绝，所以可能无法显示“流量已拦截”提示。随时可以在 Android 设置中允许。';
+
+  @override
+  String get appPickerKicker => '选择应用';
+
+  @override
+  String get appPickerTitle => '选择应用';
+
+  @override
+  String get appPickerSearchHint => '按名称或包名搜索';
+
+  @override
+  String get appPickerSearchLabel => '搜索应用';
+
+  @override
+  String get appPickerClearSearch => '清除搜索';
+
+  @override
+  String get appPickerSystemChip => '系统应用';
+
+  @override
+  String get appPickerShowSystem => '显示系统应用';
+
+  @override
+  String get appPickerSystemTag => '系统应用';
+
+  @override
+  String get appPickerInListTag => '已在列表';
+
+  @override
+  String get appPickerLoading => '正在读取已安装的应用…';
+
+  @override
+  String get appPickerErrorTitle => '无法读取你的应用';
+
+  @override
+  String get appPickerErrorBody => 'Android 没有向 Charon 提供已安装应用的列表。没有任何改动。';
+
+  @override
+  String get appPickerErrorNote => '你的规则保持不变';
+
+  @override
+  String get appPickerTryAgain => '重试';
+
+  @override
+  String get appPickerNoMatchHint => '试试名称的一部分，或包名';
+
+  @override
+  String get appPickerYourChoice => '你的选择';
+
+  @override
+  String get appPickerClear => '清除';
+
+  @override
+  String get appPickerClearLabel => '清除所选';
+
+  @override
+  String get appPickerDiscardBody => '还没有添加任何内容。关闭会丢弃你的选择。';
+
+  @override
+  String get appPickerKeep => '继续选择';
+
+  @override
+  String get appPickerDiscard => '放弃';
+
+  @override
+  String get appPickerStateChosen => '已选择';
+
+  @override
+  String get appPickerStateNotChosen => '未选择';
+
+  @override
+  String get appPickerStateInList => '已在此列表中';
+
+  @override
+  String get appPickerModeLineExcept => '你选择的应用使用普通连接，其余流量都走隧道。';
+
+  @override
+  String get appPickerModeLineOnly => '只有你选择的应用走隧道，其余流量使用普通连接。';
+
+  @override
+  String appPickerChosen(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '已选 $count 个',
+      zero: '未选择',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerAdd(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '添加 $count 个应用',
+      zero: '添加应用',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerInstalled(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 个已安装应用',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerSystemShown(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '显示 $count 个系统应用',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerResults(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 个结果',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerHidden(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '有 $count 个已选应用被搜索隐藏',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerNoMatch(String query) {
+    return '没有与“$query”匹配的应用';
+  }
+
+  @override
+  String appPickerLimit(int fit) {
+    String _temp0 = intl.Intl.pluralLogic(
+      fit,
+      locale: localeName,
+      other: '最多 1000 条规则，还能再加 $fit 条。请少选几个应用。',
+      zero: '最多 1000 条规则。删除一条才能再添加。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerDiscardTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '放弃已选的 $count 个应用？',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerAdded(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '已添加 $count 个应用',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerRowLabel(String name, String pkg, String state) {
+    return '$name，$pkg，$state';
+  }
+
+  @override
+  String get splitAppEmptyTitle => '还没有应用';
+
+  @override
+  String get splitAppEmptyExcept => '在这里添加的应用使用普通连接，即使 Charon 已连接。';
+
+  @override
+  String get splitAppEmptyOnly => '只有在这里添加的应用会走隧道。';
+
+  @override
+  String get splitAppComposerTitle => '选择已安装的应用';
+
+  @override
+  String get splitAppComposerHint => '可选一个或多个，每个应用各成一条规则';
+
+  @override
+  String get splitAppNoteExcept => '即使 Charon 已连接，该应用的流量也会绕过隧道，从你自己的网络出去';
+
+  @override
+  String splitAppNoteOnly(String server) {
+    return '该应用的流量经由 $server，手机上的其他流量保持直连';
+  }
+
+  @override
+  String splitHelperApp(String pkg) {
+    return '应用 · $pkg';
+  }
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -10297,4 +10506,213 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   @override
   String get stpPermDeniedNote =>
       '你选择了拒绝，所以可能无法显示“流量已拦截”提示。随时可以在 Android 设置中允许。';
+
+  @override
+  String get appPickerKicker => '选择应用';
+
+  @override
+  String get appPickerTitle => '选择应用';
+
+  @override
+  String get appPickerSearchHint => '按名称或包名搜索';
+
+  @override
+  String get appPickerSearchLabel => '搜索应用';
+
+  @override
+  String get appPickerClearSearch => '清除搜索';
+
+  @override
+  String get appPickerSystemChip => '系统应用';
+
+  @override
+  String get appPickerShowSystem => '显示系统应用';
+
+  @override
+  String get appPickerSystemTag => '系统应用';
+
+  @override
+  String get appPickerInListTag => '已在列表';
+
+  @override
+  String get appPickerLoading => '正在读取已安装的应用…';
+
+  @override
+  String get appPickerErrorTitle => '无法读取你的应用';
+
+  @override
+  String get appPickerErrorBody => 'Android 没有向 Charon 提供已安装应用的列表。没有任何改动。';
+
+  @override
+  String get appPickerErrorNote => '你的规则保持不变';
+
+  @override
+  String get appPickerTryAgain => '重试';
+
+  @override
+  String get appPickerNoMatchHint => '试试名称的一部分，或包名';
+
+  @override
+  String get appPickerYourChoice => '你的选择';
+
+  @override
+  String get appPickerClear => '清除';
+
+  @override
+  String get appPickerClearLabel => '清除所选';
+
+  @override
+  String get appPickerDiscardBody => '还没有添加任何内容。关闭会丢弃你的选择。';
+
+  @override
+  String get appPickerKeep => '继续选择';
+
+  @override
+  String get appPickerDiscard => '放弃';
+
+  @override
+  String get appPickerStateChosen => '已选择';
+
+  @override
+  String get appPickerStateNotChosen => '未选择';
+
+  @override
+  String get appPickerStateInList => '已在此列表中';
+
+  @override
+  String get appPickerModeLineExcept => '你选择的应用使用普通连接，其余流量都走隧道。';
+
+  @override
+  String get appPickerModeLineOnly => '只有你选择的应用走隧道，其余流量使用普通连接。';
+
+  @override
+  String appPickerChosen(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '已选 $count 个',
+      zero: '未选择',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerAdd(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '添加 $count 个应用',
+      zero: '添加应用',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerInstalled(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 个已安装应用',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerSystemShown(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '显示 $count 个系统应用',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerResults(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 个结果',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerHidden(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '有 $count 个已选应用被搜索隐藏',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerNoMatch(String query) {
+    return '没有与“$query”匹配的应用';
+  }
+
+  @override
+  String appPickerLimit(int fit) {
+    String _temp0 = intl.Intl.pluralLogic(
+      fit,
+      locale: localeName,
+      other: '最多 1000 条规则，还能再加 $fit 条。请少选几个应用。',
+      zero: '最多 1000 条规则。删除一条才能再添加。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerDiscardTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '放弃已选的 $count 个应用？',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerAdded(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '已添加 $count 个应用',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerRowLabel(String name, String pkg, String state) {
+    return '$name，$pkg，$state';
+  }
+
+  @override
+  String get splitAppEmptyTitle => '还没有应用';
+
+  @override
+  String get splitAppEmptyExcept => '在这里添加的应用使用普通连接，即使 Charon 已连接。';
+
+  @override
+  String get splitAppEmptyOnly => '只有在这里添加的应用会走隧道。';
+
+  @override
+  String get splitAppComposerTitle => '选择已安装的应用';
+
+  @override
+  String get splitAppComposerHint => '可选一个或多个，每个应用各成一条规则';
+
+  @override
+  String get splitAppNoteExcept => '即使 Charon 已连接，该应用的流量也会绕过隧道，从你自己的网络出去';
+
+  @override
+  String splitAppNoteOnly(String server) {
+    return '该应用的流量经由 $server，手机上的其他流量保持直连';
+  }
+
+  @override
+  String splitHelperApp(String pkg) {
+    return '应用 · $pkg';
+  }
 }

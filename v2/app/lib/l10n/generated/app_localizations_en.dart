@@ -5446,4 +5446,230 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get stpPermDeniedNote =>
       'You said no, so the Traffic held notice may not show. Allow it any time in Android settings.';
+
+  @override
+  String get appPickerKicker => 'CHOOSE APPS';
+
+  @override
+  String get appPickerTitle => 'Choose apps';
+
+  @override
+  String get appPickerSearchHint => 'Search by name or package';
+
+  @override
+  String get appPickerSearchLabel => 'Search apps';
+
+  @override
+  String get appPickerClearSearch => 'Clear search';
+
+  @override
+  String get appPickerSystemChip => 'System apps';
+
+  @override
+  String get appPickerShowSystem => 'Show system apps';
+
+  @override
+  String get appPickerSystemTag => 'SYSTEM APP';
+
+  @override
+  String get appPickerInListTag => 'IN LIST';
+
+  @override
+  String get appPickerLoading => 'reading installed apps…';
+
+  @override
+  String get appPickerErrorTitle => 'Couldn\'t read your apps';
+
+  @override
+  String get appPickerErrorBody =>
+      'Android did not give Charon the list of installed apps. Nothing was changed.';
+
+  @override
+  String get appPickerErrorNote => 'your rules stay as they are';
+
+  @override
+  String get appPickerTryAgain => 'Try again';
+
+  @override
+  String get appPickerNoMatchHint =>
+      'try part of the name, or the package name';
+
+  @override
+  String get appPickerYourChoice => 'Your choice';
+
+  @override
+  String get appPickerClear => 'Clear';
+
+  @override
+  String get appPickerClearLabel => 'Clear the choice';
+
+  @override
+  String get appPickerDiscardBody =>
+      'Nothing has been added yet. Closing drops your choice.';
+
+  @override
+  String get appPickerKeep => 'Keep choosing';
+
+  @override
+  String get appPickerDiscard => 'Discard';
+
+  @override
+  String get appPickerStateChosen => 'chosen';
+
+  @override
+  String get appPickerStateNotChosen => 'not chosen';
+
+  @override
+  String get appPickerStateInList => 'already in this list';
+
+  @override
+  String get appPickerModeLineExcept =>
+      'The apps you choose use the normal connection. Everything else goes through the tunnel.';
+
+  @override
+  String get appPickerModeLineOnly =>
+      'Only the apps you choose go through the tunnel. Everything else uses the normal connection.';
+
+  @override
+  String appPickerChosen(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count chosen',
+      zero: 'none chosen',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerAdd(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Add $count apps',
+      one: 'Add 1 app',
+      zero: 'Add apps',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerInstalled(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count installed apps',
+      one: '1 installed app',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerSystemShown(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count system apps shown',
+      one: '1 system app shown',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerResults(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count results',
+      one: '1 result',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerHidden(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count chosen apps are hidden by the search',
+      one: '1 chosen app is hidden by the search',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerNoMatch(String query) {
+    return 'No apps match “$query”';
+  }
+
+  @override
+  String appPickerLimit(int fit) {
+    String _temp0 = intl.Intl.pluralLogic(
+      fit,
+      locale: localeName,
+      other: '1000 rules is the limit, $fit more fit. Choose fewer apps.',
+      one: '1000 rules is the limit, 1 more fits. Choose fewer apps.',
+      zero: '1000 rules is the limit. Delete one to add another.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerDiscardTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Discard $count chosen apps?',
+      one: 'Discard 1 chosen app?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerAdded(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count apps added',
+      one: '1 app added',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerRowLabel(String name, String pkg, String state) {
+    return '$name, $pkg, $state';
+  }
+
+  @override
+  String get splitAppEmptyTitle => 'No apps yet';
+
+  @override
+  String get splitAppEmptyExcept =>
+      'Apps you add here use the normal connection, even while Charon is connected.';
+
+  @override
+  String get splitAppEmptyOnly =>
+      'Apps you add here are the only ones that go through the tunnel.';
+
+  @override
+  String get splitAppComposerTitle => 'Choose installed apps';
+
+  @override
+  String get splitAppComposerHint =>
+      'pick one or more, each app becomes its own rule';
+
+  @override
+  String get splitAppNoteExcept =>
+      'the app\'s traffic skips the tunnel and leaves through your own network, even while Charon is connected';
+
+  @override
+  String splitAppNoteOnly(String server) {
+    return 'the app\'s traffic goes through $server, the rest of the phone stays direct';
+  }
+
+  @override
+  String splitHelperApp(String pkg) {
+    return 'app · $pkg';
+  }
 }

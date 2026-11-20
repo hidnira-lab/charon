@@ -3814,5 +3814,198 @@
   "stpPermSays": "Android will say:",
   "@stpPermSays": { "description": "Setup screen text, phone only." },
   "stpPermDeniedNote": "You said no, so the Traffic held notice may not show. Allow it any time in Android settings.",
-  "@stpPermDeniedNote": { "description": "Setup screen text, phone only." }
+  "@stpPermDeniedNote": { "description": "Setup screen text, phone only." },
+  "appPickerKicker": "CHOOSE APPS",
+  "@appPickerKicker": {
+    "description": "App picker sheet: kicker."
+  },
+  "appPickerTitle": "Choose apps",
+  "@appPickerTitle": {
+    "description": "App picker sheet title, also the button that opens it."
+  },
+  "appPickerSearchHint": "Search by name or package",
+  "@appPickerSearchHint": {
+    "description": "App picker: search field hint."
+  },
+  "appPickerSearchLabel": "Search apps",
+  "@appPickerSearchLabel": {
+    "description": "App picker: search field accessibility label."
+  },
+  "appPickerClearSearch": "Clear search",
+  "@appPickerClearSearch": {
+    "description": "App picker: clear button of the search field."
+  },
+  "appPickerSystemChip": "System apps",
+  "@appPickerSystemChip": {
+    "description": "App picker: chip that shows system apps."
+  },
+  "appPickerShowSystem": "Show system apps",
+  "@appPickerShowSystem": {
+    "description": "App picker: button of the no results state."
+  },
+  "appPickerSystemTag": "SYSTEM APP",
+  "@appPickerSystemTag": {
+    "description": "App picker: tag on a system app row."
+  },
+  "appPickerInListTag": "IN LIST",
+  "@appPickerInListTag": {
+    "description": "App picker: tag on an app that is already a rule."
+  },
+  "appPickerLoading": "reading installed apps…",
+  "@appPickerLoading": {
+    "description": "App picker: loading line."
+  },
+  "appPickerErrorTitle": "Couldn't read your apps",
+  "@appPickerErrorTitle": {
+    "description": "App picker: error title."
+  },
+  "appPickerErrorBody": "Android did not give Charon the list of installed apps. Nothing was changed.",
+  "@appPickerErrorBody": {
+    "description": "App picker: error text."
+  },
+  "appPickerErrorNote": "your rules stay as they are",
+  "@appPickerErrorNote": {
+    "description": "App picker: error note."
+  },
+  "appPickerTryAgain": "Try again",
+  "@appPickerTryAgain": {
+    "description": "App picker: retry button."
+  },
+  "appPickerNoMatchHint": "try part of the name, or the package name",
+  "@appPickerNoMatchHint": {
+    "description": "App picker: hint under the no results line."
+  },
+  "appPickerYourChoice": "Your choice",
+  "@appPickerYourChoice": {
+    "description": "App picker: label of the choice bar."
+  },
+  "appPickerClear": "Clear",
+  "@appPickerClear": {
+    "description": "App picker: clears the choice."
+  },
+  "appPickerClearLabel": "Clear the choice",
+  "@appPickerClearLabel": {
+    "description": "App picker: accessibility label of Clear."
+  },
+  "appPickerDiscardBody": "Nothing has been added yet. Closing drops your choice.",
+  "@appPickerDiscardBody": {
+    "description": "App picker: close confirm text."
+  },
+  "appPickerKeep": "Keep choosing",
+  "@appPickerKeep": {
+    "description": "App picker: close confirm, stay."
+  },
+  "appPickerDiscard": "Discard",
+  "@appPickerDiscard": {
+    "description": "App picker: close confirm, leave."
+  },
+  "appPickerStateChosen": "chosen",
+  "@appPickerStateChosen": {
+    "description": "App picker: row state for screen readers."
+  },
+  "appPickerStateNotChosen": "not chosen",
+  "@appPickerStateNotChosen": {
+    "description": "App picker: row state for screen readers."
+  },
+  "appPickerStateInList": "already in this list",
+  "@appPickerStateInList": {
+    "description": "App picker: row state for screen readers."
+  },
+  "appPickerModeLineExcept": "The apps you choose use the normal connection. Everything else goes through the tunnel.",
+  "@appPickerModeLineExcept": {
+    "description": "App picker: line under the title, mode All except listed."
+  },
+  "appPickerModeLineOnly": "Only the apps you choose go through the tunnel. Everything else uses the normal connection.",
+  "@appPickerModeLineOnly": {
+    "description": "App picker: line under the title, mode Only listed."
+  },
+  "appPickerChosen": "{count, plural, =0{none chosen} other{{count} chosen}}",
+  "@appPickerChosen": {
+    "description": "App picker: how many apps are chosen.",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "appPickerAdd": "{count, plural, =0{Add apps} =1{Add 1 app} other{Add {count} apps}}",
+  "@appPickerAdd": {
+    "description": "App picker: label of the Add button.",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "appPickerInstalled": "{count, plural, =1{1 installed app} other{{count} installed apps}}",
+  "@appPickerInstalled": {
+    "description": "App picker: count line.",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "appPickerSystemShown": "{count, plural, =1{1 system app shown} other{{count} system apps shown}}",
+  "@appPickerSystemShown": {
+    "description": "App picker: line next to the System apps chip.",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "appPickerResults": "{count, plural, =1{1 result} other{{count} results}}",
+  "@appPickerResults": {
+    "description": "App picker: count line while searching.",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "appPickerHidden": "{count, plural, =1{1 chosen app is hidden by the search} other{{count} chosen apps are hidden by the search}}",
+  "@appPickerHidden": {
+    "description": "App picker: line above the list when the search hides chosen apps.",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "appPickerNoMatch": "No apps match “{query}”",
+  "@appPickerNoMatch": {
+    "description": "App picker: no results line.",
+    "placeholders": { "query": { "type": "String" } }
+  },
+  "appPickerLimit": "{fit, plural, =0{1000 rules is the limit. Delete one to add another.} =1{1000 rules is the limit, 1 more fits. Choose fewer apps.} other{1000 rules is the limit, {fit} more fit. Choose fewer apps.}}",
+  "@appPickerLimit": {
+    "description": "App picker: amber line when the choice does not fit under the limit.",
+    "placeholders": { "fit": { "type": "int" } }
+  },
+  "appPickerDiscardTitle": "{count, plural, =1{Discard 1 chosen app?} other{Discard {count} chosen apps?}}",
+  "@appPickerDiscardTitle": {
+    "description": "App picker: close confirm title.",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "appPickerAdded": "{count, plural, =1{1 app added} other{{count} apps added}}",
+  "@appPickerAdded": {
+    "description": "Toast after the picker added apps.",
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "appPickerRowLabel": "{name}, {pkg}, {state}",
+  "@appPickerRowLabel": {
+    "description": "App picker: screen reader label of a row.",
+    "placeholders": { "name": { "type": "String" }, "pkg": { "type": "String" }, "state": { "type": "String" } }
+  },
+  "splitAppEmptyTitle": "No apps yet",
+  "@splitAppEmptyTitle": {
+    "description": "Phone Split: empty App tab title."
+  },
+  "splitAppEmptyExcept": "Apps you add here use the normal connection, even while Charon is connected.",
+  "@splitAppEmptyExcept": {
+    "description": "Phone Split: empty App tab text, mode All except listed."
+  },
+  "splitAppEmptyOnly": "Apps you add here are the only ones that go through the tunnel.",
+  "@splitAppEmptyOnly": {
+    "description": "Phone Split: empty App tab text, mode Only listed."
+  },
+  "splitAppComposerTitle": "Choose installed apps",
+  "@splitAppComposerTitle": {
+    "description": "Phone Split composer: text of the APP segment."
+  },
+  "splitAppComposerHint": "pick one or more, each app becomes its own rule",
+  "@splitAppComposerHint": {
+    "description": "Phone Split composer: hint of the APP segment."
+  },
+  "splitAppNoteExcept": "the app's traffic skips the tunnel and leaves through your own network, even while Charon is connected",
+  "@splitAppNoteExcept": {
+    "description": "Phone Split: note of an app rule, mode All except listed."
+  },
+  "splitAppNoteOnly": "the app's traffic goes through {server}, the rest of the phone stays direct",
+  "@splitAppNoteOnly": {
+    "description": "Phone Split: note of an app rule, mode Only listed.",
+    "placeholders": { "server": { "type": "String" } }
+  },
+  "splitHelperApp": "app · {pkg}",
+  "@splitHelperApp": {
+    "description": "Helper line of an app rule: the package name.",
+    "placeholders": { "pkg": { "type": "String" } }
+  }
 }

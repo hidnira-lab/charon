@@ -5413,4 +5413,222 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get stpPermDeniedNote =>
       'Kamu menolak, jadi pemberitahuan Trafik ditahan mungkin tidak muncul. Izinkan kapan saja di pengaturan Android.';
+
+  @override
+  String get appPickerKicker => 'PILIH APLIKASI';
+
+  @override
+  String get appPickerTitle => 'Pilih aplikasi';
+
+  @override
+  String get appPickerSearchHint => 'Cari nama atau package';
+
+  @override
+  String get appPickerSearchLabel => 'Cari aplikasi';
+
+  @override
+  String get appPickerClearSearch => 'Hapus pencarian';
+
+  @override
+  String get appPickerSystemChip => 'Aplikasi sistem';
+
+  @override
+  String get appPickerShowSystem => 'Tampilkan aplikasi sistem';
+
+  @override
+  String get appPickerSystemTag => 'APLIKASI SISTEM';
+
+  @override
+  String get appPickerInListTag => 'DI DAFTAR';
+
+  @override
+  String get appPickerLoading => 'membaca aplikasi terpasang…';
+
+  @override
+  String get appPickerErrorTitle => 'Tidak bisa membaca aplikasimu';
+
+  @override
+  String get appPickerErrorBody =>
+      'Android tidak memberi Charon daftar aplikasi terpasang. Tidak ada yang berubah.';
+
+  @override
+  String get appPickerErrorNote => 'aturanmu tetap seperti semula';
+
+  @override
+  String get appPickerTryAgain => 'Coba lagi';
+
+  @override
+  String get appPickerNoMatchHint => 'coba sebagian nama, atau nama package';
+
+  @override
+  String get appPickerYourChoice => 'Pilihanmu';
+
+  @override
+  String get appPickerClear => 'Bersihkan';
+
+  @override
+  String get appPickerClearLabel => 'Bersihkan pilihan';
+
+  @override
+  String get appPickerDiscardBody =>
+      'Belum ada yang ditambahkan. Kalau ditutup, pilihanmu hilang.';
+
+  @override
+  String get appPickerKeep => 'Lanjut memilih';
+
+  @override
+  String get appPickerDiscard => 'Buang';
+
+  @override
+  String get appPickerStateChosen => 'dipilih';
+
+  @override
+  String get appPickerStateNotChosen => 'tidak dipilih';
+
+  @override
+  String get appPickerStateInList => 'sudah ada di daftar ini';
+
+  @override
+  String get appPickerModeLineExcept =>
+      'Aplikasi yang kamu pilih memakai koneksi biasa. Selebihnya lewat tunnel.';
+
+  @override
+  String get appPickerModeLineOnly =>
+      'Hanya aplikasi yang kamu pilih yang lewat tunnel. Selebihnya memakai koneksi biasa.';
+
+  @override
+  String appPickerChosen(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count dipilih',
+      zero: 'belum dipilih',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerAdd(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Tambah $count aplikasi',
+      zero: 'Tambah aplikasi',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerInstalled(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count aplikasi terpasang',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerSystemShown(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count aplikasi sistem ditampilkan',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerResults(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hasil',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerHidden(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count aplikasi terpilih tersembunyi oleh pencarian',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerNoMatch(String query) {
+    return 'Tidak ada aplikasi yang cocok dengan “$query”';
+  }
+
+  @override
+  String appPickerLimit(int fit) {
+    String _temp0 = intl.Intl.pluralLogic(
+      fit,
+      locale: localeName,
+      other:
+          'Batasnya 1000 aturan, masih muat $fit. Pilih lebih sedikit aplikasi.',
+      zero: 'Batasnya 1000 aturan. Hapus satu untuk menambah yang lain.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerDiscardTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Buang $count aplikasi yang dipilih?',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerAdded(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count aplikasi ditambahkan',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String appPickerRowLabel(String name, String pkg, String state) {
+    return '$name, $pkg, $state';
+  }
+
+  @override
+  String get splitAppEmptyTitle => 'Belum ada aplikasi';
+
+  @override
+  String get splitAppEmptyExcept =>
+      'Aplikasi yang kamu tambahkan di sini memakai koneksi biasa, walau Charon sedang terhubung.';
+
+  @override
+  String get splitAppEmptyOnly =>
+      'Hanya aplikasi yang kamu tambahkan di sini yang lewat tunnel.';
+
+  @override
+  String get splitAppComposerTitle => 'Pilih aplikasi terpasang';
+
+  @override
+  String get splitAppComposerHint =>
+      'pilih satu atau lebih, tiap aplikasi jadi aturannya sendiri';
+
+  @override
+  String get splitAppNoteExcept =>
+      'trafik aplikasi melewati tunnel dan keluar lewat jaringanmu sendiri, bahkan saat Charon terhubung';
+
+  @override
+  String splitAppNoteOnly(String server) {
+    return 'trafik aplikasi lewat $server, sisa ponsel tetap langsung';
+  }
+
+  @override
+  String splitHelperApp(String pkg) {
+    return 'aplikasi · $pkg';
+  }
 }

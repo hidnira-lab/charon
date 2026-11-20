@@ -9399,6 +9399,276 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You said no, so the Traffic held notice may not show. Allow it any time in Android settings.'**
   String get stpPermDeniedNote;
+
+  /// App picker sheet: kicker.
+  ///
+  /// In en, this message translates to:
+  /// **'CHOOSE APPS'**
+  String get appPickerKicker;
+
+  /// App picker sheet title, also the button that opens it.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose apps'**
+  String get appPickerTitle;
+
+  /// App picker: search field hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by name or package'**
+  String get appPickerSearchHint;
+
+  /// App picker: search field accessibility label.
+  ///
+  /// In en, this message translates to:
+  /// **'Search apps'**
+  String get appPickerSearchLabel;
+
+  /// App picker: clear button of the search field.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get appPickerClearSearch;
+
+  /// App picker: chip that shows system apps.
+  ///
+  /// In en, this message translates to:
+  /// **'System apps'**
+  String get appPickerSystemChip;
+
+  /// App picker: button of the no results state.
+  ///
+  /// In en, this message translates to:
+  /// **'Show system apps'**
+  String get appPickerShowSystem;
+
+  /// App picker: tag on a system app row.
+  ///
+  /// In en, this message translates to:
+  /// **'SYSTEM APP'**
+  String get appPickerSystemTag;
+
+  /// App picker: tag on an app that is already a rule.
+  ///
+  /// In en, this message translates to:
+  /// **'IN LIST'**
+  String get appPickerInListTag;
+
+  /// App picker: loading line.
+  ///
+  /// In en, this message translates to:
+  /// **'reading installed apps…'**
+  String get appPickerLoading;
+
+  /// App picker: error title.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t read your apps'**
+  String get appPickerErrorTitle;
+
+  /// App picker: error text.
+  ///
+  /// In en, this message translates to:
+  /// **'Android did not give Charon the list of installed apps. Nothing was changed.'**
+  String get appPickerErrorBody;
+
+  /// App picker: error note.
+  ///
+  /// In en, this message translates to:
+  /// **'your rules stay as they are'**
+  String get appPickerErrorNote;
+
+  /// App picker: retry button.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get appPickerTryAgain;
+
+  /// App picker: hint under the no results line.
+  ///
+  /// In en, this message translates to:
+  /// **'try part of the name, or the package name'**
+  String get appPickerNoMatchHint;
+
+  /// App picker: label of the choice bar.
+  ///
+  /// In en, this message translates to:
+  /// **'Your choice'**
+  String get appPickerYourChoice;
+
+  /// App picker: clears the choice.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get appPickerClear;
+
+  /// App picker: accessibility label of Clear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear the choice'**
+  String get appPickerClearLabel;
+
+  /// App picker: close confirm text.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing has been added yet. Closing drops your choice.'**
+  String get appPickerDiscardBody;
+
+  /// App picker: close confirm, stay.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep choosing'**
+  String get appPickerKeep;
+
+  /// App picker: close confirm, leave.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get appPickerDiscard;
+
+  /// App picker: row state for screen readers.
+  ///
+  /// In en, this message translates to:
+  /// **'chosen'**
+  String get appPickerStateChosen;
+
+  /// App picker: row state for screen readers.
+  ///
+  /// In en, this message translates to:
+  /// **'not chosen'**
+  String get appPickerStateNotChosen;
+
+  /// App picker: row state for screen readers.
+  ///
+  /// In en, this message translates to:
+  /// **'already in this list'**
+  String get appPickerStateInList;
+
+  /// App picker: line under the title, mode All except listed.
+  ///
+  /// In en, this message translates to:
+  /// **'The apps you choose use the normal connection. Everything else goes through the tunnel.'**
+  String get appPickerModeLineExcept;
+
+  /// App picker: line under the title, mode Only listed.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the apps you choose go through the tunnel. Everything else uses the normal connection.'**
+  String get appPickerModeLineOnly;
+
+  /// App picker: how many apps are chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{none chosen} other{{count} chosen}}'**
+  String appPickerChosen(int count);
+
+  /// App picker: label of the Add button.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Add apps} =1{Add 1 app} other{Add {count} apps}}'**
+  String appPickerAdd(int count);
+
+  /// App picker: count line.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 installed app} other{{count} installed apps}}'**
+  String appPickerInstalled(int count);
+
+  /// App picker: line next to the System apps chip.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 system app shown} other{{count} system apps shown}}'**
+  String appPickerSystemShown(int count);
+
+  /// App picker: count line while searching.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 result} other{{count} results}}'**
+  String appPickerResults(int count);
+
+  /// App picker: line above the list when the search hides chosen apps.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 chosen app is hidden by the search} other{{count} chosen apps are hidden by the search}}'**
+  String appPickerHidden(int count);
+
+  /// App picker: no results line.
+  ///
+  /// In en, this message translates to:
+  /// **'No apps match “{query}”'**
+  String appPickerNoMatch(String query);
+
+  /// App picker: amber line when the choice does not fit under the limit.
+  ///
+  /// In en, this message translates to:
+  /// **'{fit, plural, =0{1000 rules is the limit. Delete one to add another.} =1{1000 rules is the limit, 1 more fits. Choose fewer apps.} other{1000 rules is the limit, {fit} more fit. Choose fewer apps.}}'**
+  String appPickerLimit(int fit);
+
+  /// App picker: close confirm title.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Discard 1 chosen app?} other{Discard {count} chosen apps?}}'**
+  String appPickerDiscardTitle(int count);
+
+  /// Toast after the picker added apps.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 app added} other{{count} apps added}}'**
+  String appPickerAdded(int count);
+
+  /// App picker: screen reader label of a row.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}, {pkg}, {state}'**
+  String appPickerRowLabel(String name, String pkg, String state);
+
+  /// Phone Split: empty App tab title.
+  ///
+  /// In en, this message translates to:
+  /// **'No apps yet'**
+  String get splitAppEmptyTitle;
+
+  /// Phone Split: empty App tab text, mode All except listed.
+  ///
+  /// In en, this message translates to:
+  /// **'Apps you add here use the normal connection, even while Charon is connected.'**
+  String get splitAppEmptyExcept;
+
+  /// Phone Split: empty App tab text, mode Only listed.
+  ///
+  /// In en, this message translates to:
+  /// **'Apps you add here are the only ones that go through the tunnel.'**
+  String get splitAppEmptyOnly;
+
+  /// Phone Split composer: text of the APP segment.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose installed apps'**
+  String get splitAppComposerTitle;
+
+  /// Phone Split composer: hint of the APP segment.
+  ///
+  /// In en, this message translates to:
+  /// **'pick one or more, each app becomes its own rule'**
+  String get splitAppComposerHint;
+
+  /// Phone Split: note of an app rule, mode All except listed.
+  ///
+  /// In en, this message translates to:
+  /// **'the app\'s traffic skips the tunnel and leaves through your own network, even while Charon is connected'**
+  String get splitAppNoteExcept;
+
+  /// Phone Split: note of an app rule, mode Only listed.
+  ///
+  /// In en, this message translates to:
+  /// **'the app\'s traffic goes through {server}, the rest of the phone stays direct'**
+  String splitAppNoteOnly(String server);
+
+  /// Helper line of an app rule: the package name.
+  ///
+  /// In en, this message translates to:
+  /// **'app · {pkg}'**
+  String splitHelperApp(String pkg);
 }
 
 class _AppLocalizationsDelegate
