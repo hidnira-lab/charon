@@ -9301,7 +9301,7 @@ abstract class AppLocalizations {
   /// Phone Split: first note at the foot of the page.
   ///
   /// In en, this message translates to:
-  /// **'tap a rule to remove it'**
+  /// **'long press a rule to edit or remove it'**
   String get mobileSplitNoteTap;
 
   /// Phone Split: button of the sheet that opens on a rule.
@@ -9675,6 +9675,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'app · {pkg}'**
   String splitHelperApp(String pkg);
+
+  /// Edit rule sheet: kicker before the list name.
+  ///
+  /// In en, this message translates to:
+  /// **'EDIT RULE ·'**
+  String get splitEditKicker;
+
+  /// Edit rule sheet: accessible name.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit rule'**
+  String get splitEditTitle;
+
+  /// Accessible name of a rule row on the phone.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit rule {value}'**
+  String splitEditRuleAria(String value);
+
+  /// Edit rule sheet: label of the Exact name or subdomains choice.
+  ///
+  /// In en, this message translates to:
+  /// **'Match'**
+  String get splitScopeLabel;
+
+  /// Edit rule sheet: match the exact name only.
+  ///
+  /// In en, this message translates to:
+  /// **'Exact name'**
+  String get splitScopeExact;
+
+  /// Edit rule sheet: match the name and every subdomain.
+  ///
+  /// In en, this message translates to:
+  /// **'+ subdomains'**
+  String get splitScopeSub;
+
+  /// Edit rule sheet: label of the IP field.
+  ///
+  /// In en, this message translates to:
+  /// **'IP OR CIDR'**
+  String get splitFieldIp;
+
+  /// Edit rule sheet: what a subdomain domain rule matches.
+  ///
+  /// In en, this message translates to:
+  /// **'matches {base} and every subdomain · turned into IPs once, on connect'**
+  String splitOkDomainSub(String base);
+
+  /// Edit rule sheet: what an exact domain rule matches.
+  ///
+  /// In en, this message translates to:
+  /// **'matches this exact name only · turned into IPs once, on connect'**
+  String get splitOkDomainExact;
+
+  /// Edit rule sheet: how an app rule matches.
+  ///
+  /// In en, this message translates to:
+  /// **'matched by package name, keeps working after app updates'**
+  String get splitOkApp;
+
+  /// Edit rule sheet: invalid domain.
+  ///
+  /// In en, this message translates to:
+  /// **'Not a valid domain.'**
+  String get splitErrDomain;
+
+  /// Edit rule sheet: domain with two dots in a row.
+  ///
+  /// In en, this message translates to:
+  /// **'Not a valid domain, there are two dots in a row.'**
+  String get splitErrDomainDots;
+
+  /// Edit rule sheet: how a domain is written.
+  ///
+  /// In en, this message translates to:
+  /// **'just the name, no https://, no path · like media.example.org'**
+  String get splitErrDomainHelp;
+
+  /// Edit rule sheet: invalid IP or CIDR.
+  ///
+  /// In en, this message translates to:
+  /// **'Not a valid IP address or CIDR range.'**
+  String get splitErrIp;
+
+  /// Edit rule sheet: how an IP or CIDR is written.
+  ///
+  /// In en, this message translates to:
+  /// **'like 198.51.100.7 or 198.51.100.0/24'**
+  String get splitErrIpHelp;
+
+  /// Edit rule sheet: jumps to the rule that already covers the typed one.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit {coverer} instead →'**
+  String splitEditInstead(String coverer);
+
+  /// Edit rule sheet: note while the tunnel is up.
+  ///
+  /// In en, this message translates to:
+  /// **'Applies on the next connect. The tunnel running now keeps the old list.'**
+  String get splitEditNextConnect;
+
+  /// Edit rule sheet: remove the rule.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get splitEditRemove;
+
+  /// Edit rule sheet: change the app of an app rule.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get splitEditChange;
+
+  /// Toast after saving a rule.
+  ///
+  /// In en, this message translates to:
+  /// **'Rule saved'**
+  String get toastRuleSaved;
+
+  /// Toast after saving a rule while the tunnel is up.
+  ///
+  /// In en, this message translates to:
+  /// **'Rule saved · applies on the next connect'**
+  String get toastRuleSavedNext;
+
+  /// Toast after removing a rule, with Undo.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed {value}'**
+  String toastRuleRemoved(String value);
 }
 
 class _AppLocalizationsDelegate

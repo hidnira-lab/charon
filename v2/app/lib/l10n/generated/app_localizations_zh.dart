@@ -5099,7 +5099,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSplitTabApp => '应用';
 
   @override
-  String get mobileSplitNoteTap => '点按规则即可删除';
+  String get mobileSplitNoteTap => '长按规则即可编辑或删除';
 
   @override
   String get mobileSplitRemoveBtn => '删除规则';
@@ -5361,6 +5361,81 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String splitHelperApp(String pkg) {
     return '应用 · $pkg';
+  }
+
+  @override
+  String get splitEditKicker => '编辑规则 ·';
+
+  @override
+  String get splitEditTitle => '编辑规则';
+
+  @override
+  String splitEditRuleAria(String value) {
+    return '编辑规则 $value';
+  }
+
+  @override
+  String get splitScopeLabel => '匹配';
+
+  @override
+  String get splitScopeExact => '精确名称';
+
+  @override
+  String get splitScopeSub => '+ 子域名';
+
+  @override
+  String get splitFieldIp => 'IP 或 CIDR';
+
+  @override
+  String splitOkDomainSub(String base) {
+    return '匹配 $base 及所有子域名 · 连接时解析一次 IP';
+  }
+
+  @override
+  String get splitOkDomainExact => '仅匹配这个精确名称 · 连接时解析一次 IP';
+
+  @override
+  String get splitOkApp => '按包名匹配，应用更新后依然有效';
+
+  @override
+  String get splitErrDomain => '不是有效的域名。';
+
+  @override
+  String get splitErrDomainDots => '不是有效的域名，有两个连续的点。';
+
+  @override
+  String get splitErrDomainHelp =>
+      '只写名称，不要 https://，不要路径 · 例如 media.example.org';
+
+  @override
+  String get splitErrIp => '不是有效的 IP 地址或 CIDR 范围。';
+
+  @override
+  String get splitErrIpHelp => '例如 198.51.100.7 或 198.51.100.0/24';
+
+  @override
+  String splitEditInstead(String coverer) {
+    return '改为编辑 $coverer →';
+  }
+
+  @override
+  String get splitEditNextConnect => '下次连接时生效，当前隧道继续使用旧列表。';
+
+  @override
+  String get splitEditRemove => '删除';
+
+  @override
+  String get splitEditChange => '更换';
+
+  @override
+  String get toastRuleSaved => '规则已保存';
+
+  @override
+  String get toastRuleSavedNext => '规则已保存 · 下次连接时生效';
+
+  @override
+  String toastRuleRemoved(String value) {
+    return '已删除 $value';
   }
 }
 
@@ -10458,7 +10533,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get mobileSplitTabApp => '应用';
 
   @override
-  String get mobileSplitNoteTap => '点按规则即可删除';
+  String get mobileSplitNoteTap => '长按规则即可编辑或删除';
 
   @override
   String get mobileSplitRemoveBtn => '删除规则';
@@ -10720,5 +10795,80 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   @override
   String splitHelperApp(String pkg) {
     return '应用 · $pkg';
+  }
+
+  @override
+  String get splitEditKicker => '编辑规则 ·';
+
+  @override
+  String get splitEditTitle => '编辑规则';
+
+  @override
+  String splitEditRuleAria(String value) {
+    return '编辑规则 $value';
+  }
+
+  @override
+  String get splitScopeLabel => '匹配';
+
+  @override
+  String get splitScopeExact => '精确名称';
+
+  @override
+  String get splitScopeSub => '+ 子域名';
+
+  @override
+  String get splitFieldIp => 'IP 或 CIDR';
+
+  @override
+  String splitOkDomainSub(String base) {
+    return '匹配 $base 及所有子域名 · 连接时解析一次 IP';
+  }
+
+  @override
+  String get splitOkDomainExact => '仅匹配这个精确名称 · 连接时解析一次 IP';
+
+  @override
+  String get splitOkApp => '按包名匹配，应用更新后依然有效';
+
+  @override
+  String get splitErrDomain => '不是有效的域名。';
+
+  @override
+  String get splitErrDomainDots => '不是有效的域名，有两个连续的点。';
+
+  @override
+  String get splitErrDomainHelp =>
+      '只写名称，不要 https://，不要路径 · 例如 media.example.org';
+
+  @override
+  String get splitErrIp => '不是有效的 IP 地址或 CIDR 范围。';
+
+  @override
+  String get splitErrIpHelp => '例如 198.51.100.7 或 198.51.100.0/24';
+
+  @override
+  String splitEditInstead(String coverer) {
+    return '改为编辑 $coverer →';
+  }
+
+  @override
+  String get splitEditNextConnect => '下次连接时生效，当前隧道继续使用旧列表。';
+
+  @override
+  String get splitEditRemove => '删除';
+
+  @override
+  String get splitEditChange => '更换';
+
+  @override
+  String get toastRuleSaved => '规则已保存';
+
+  @override
+  String get toastRuleSavedNext => '规则已保存 · 下次连接时生效';
+
+  @override
+  String toastRuleRemoved(String value) {
+    return '已删除 $value';
   }
 }

@@ -5360,7 +5360,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileSplitTabApp => 'Aplikasi';
 
   @override
-  String get mobileSplitNoteTap => 'ketuk aturan untuk menghapusnya';
+  String get mobileSplitNoteTap => 'tekan lama aturan untuk edit atau hapus';
 
   @override
   String get mobileSplitRemoveBtn => 'Hapus aturan';
@@ -5634,5 +5634,85 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String splitHelperApp(String pkg) {
     return 'aplikasi · $pkg';
+  }
+
+  @override
+  String get splitEditKicker => 'EDIT ATURAN ·';
+
+  @override
+  String get splitEditTitle => 'Edit aturan';
+
+  @override
+  String splitEditRuleAria(String value) {
+    return 'Edit aturan $value';
+  }
+
+  @override
+  String get splitScopeLabel => 'Cocokkan';
+
+  @override
+  String get splitScopeExact => 'Nama persis';
+
+  @override
+  String get splitScopeSub => '+ subdomain';
+
+  @override
+  String get splitFieldIp => 'IP ATAU CIDR';
+
+  @override
+  String splitOkDomainSub(String base) {
+    return 'cocok dengan $base dan semua subdomain · diubah ke IP sekali, saat terhubung';
+  }
+
+  @override
+  String get splitOkDomainExact =>
+      'hanya cocok dengan nama persis ini · diubah ke IP sekali, saat terhubung';
+
+  @override
+  String get splitOkApp =>
+      'dicocokkan lewat nama package, tetap jalan setelah aplikasi diperbarui';
+
+  @override
+  String get splitErrDomain => 'Domain tidak valid.';
+
+  @override
+  String get splitErrDomainDots =>
+      'Domain tidak valid, ada dua titik berturut-turut.';
+
+  @override
+  String get splitErrDomainHelp =>
+      'cukup namanya, tanpa https://, tanpa path · seperti media.example.org';
+
+  @override
+  String get splitErrIp => 'Bukan alamat IP atau rentang CIDR yang valid.';
+
+  @override
+  String get splitErrIpHelp => 'seperti 198.51.100.7 atau 198.51.100.0/24';
+
+  @override
+  String splitEditInstead(String coverer) {
+    return 'Edit $coverer saja →';
+  }
+
+  @override
+  String get splitEditNextConnect =>
+      'Berlaku di koneksi berikutnya. Tunnel yang berjalan tetap memakai daftar lama.';
+
+  @override
+  String get splitEditRemove => 'Hapus';
+
+  @override
+  String get splitEditChange => 'Ubah';
+
+  @override
+  String get toastRuleSaved => 'Aturan disimpan';
+
+  @override
+  String get toastRuleSavedNext =>
+      'Aturan disimpan · berlaku di koneksi berikutnya';
+
+  @override
+  String toastRuleRemoved(String value) {
+    return '$value dihapus';
   }
 }

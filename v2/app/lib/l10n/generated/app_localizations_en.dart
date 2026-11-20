@@ -5393,7 +5393,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mobileSplitTabApp => 'App';
 
   @override
-  String get mobileSplitNoteTap => 'tap a rule to remove it';
+  String get mobileSplitNoteTap => 'long press a rule to edit or remove it';
 
   @override
   String get mobileSplitRemoveBtn => 'Remove rule';
@@ -5675,5 +5675,84 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String splitHelperApp(String pkg) {
     return 'app · $pkg';
+  }
+
+  @override
+  String get splitEditKicker => 'EDIT RULE ·';
+
+  @override
+  String get splitEditTitle => 'Edit rule';
+
+  @override
+  String splitEditRuleAria(String value) {
+    return 'Edit rule $value';
+  }
+
+  @override
+  String get splitScopeLabel => 'Match';
+
+  @override
+  String get splitScopeExact => 'Exact name';
+
+  @override
+  String get splitScopeSub => '+ subdomains';
+
+  @override
+  String get splitFieldIp => 'IP OR CIDR';
+
+  @override
+  String splitOkDomainSub(String base) {
+    return 'matches $base and every subdomain · turned into IPs once, on connect';
+  }
+
+  @override
+  String get splitOkDomainExact =>
+      'matches this exact name only · turned into IPs once, on connect';
+
+  @override
+  String get splitOkApp =>
+      'matched by package name, keeps working after app updates';
+
+  @override
+  String get splitErrDomain => 'Not a valid domain.';
+
+  @override
+  String get splitErrDomainDots =>
+      'Not a valid domain, there are two dots in a row.';
+
+  @override
+  String get splitErrDomainHelp =>
+      'just the name, no https://, no path · like media.example.org';
+
+  @override
+  String get splitErrIp => 'Not a valid IP address or CIDR range.';
+
+  @override
+  String get splitErrIpHelp => 'like 198.51.100.7 or 198.51.100.0/24';
+
+  @override
+  String splitEditInstead(String coverer) {
+    return 'Edit $coverer instead →';
+  }
+
+  @override
+  String get splitEditNextConnect =>
+      'Applies on the next connect. The tunnel running now keeps the old list.';
+
+  @override
+  String get splitEditRemove => 'Remove';
+
+  @override
+  String get splitEditChange => 'Change';
+
+  @override
+  String get toastRuleSaved => 'Rule saved';
+
+  @override
+  String get toastRuleSavedNext => 'Rule saved · applies on the next connect';
+
+  @override
+  String toastRuleRemoved(String value) {
+    return 'Removed $value';
   }
 }

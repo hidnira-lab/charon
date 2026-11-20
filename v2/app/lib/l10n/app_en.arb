@@ -3781,7 +3781,7 @@
   "@mobileSplitTabIp": {"description": "Phone Split: rule filter, IP and CIDR rules."},
   "mobileSplitTabApp": "App",
   "@mobileSplitTabApp": {"description": "Phone Split: rule filter, app rules."},
-  "mobileSplitNoteTap": "tap a rule to remove it",
+  "mobileSplitNoteTap": "long press a rule to edit or remove it",
   "@mobileSplitNoteTap": {"description": "Phone Split: first note at the foot of the page."},
   "mobileSplitRemoveBtn": "Remove rule",
   "@mobileSplitRemoveBtn": {"description": "Phone Split: button of the sheet that opens on a rule."},
@@ -4009,5 +4009,61 @@
   "@splitHelperApp": {
     "description": "Helper line of an app rule: the package name.",
     "placeholders": { "pkg": { "type": "String" } }
+  },
+  "splitEditKicker": "EDIT RULE ·",
+  "@splitEditKicker": { "description": "Edit rule sheet: kicker before the list name." },
+  "splitEditTitle": "Edit rule",
+  "@splitEditTitle": { "description": "Edit rule sheet: accessible name." },
+  "splitEditRuleAria": "Edit rule {value}",
+  "@splitEditRuleAria": {
+    "description": "Accessible name of a rule row on the phone.",
+    "placeholders": { "value": { "type": "String" } }
+  },
+  "splitScopeLabel": "Match",
+  "@splitScopeLabel": { "description": "Edit rule sheet: label of the Exact name or subdomains choice." },
+  "splitScopeExact": "Exact name",
+  "@splitScopeExact": { "description": "Edit rule sheet: match the exact name only." },
+  "splitScopeSub": "+ subdomains",
+  "@splitScopeSub": { "description": "Edit rule sheet: match the name and every subdomain." },
+  "splitFieldIp": "IP OR CIDR",
+  "@splitFieldIp": { "description": "Edit rule sheet: label of the IP field." },
+  "splitOkDomainSub": "matches {base} and every subdomain · turned into IPs once, on connect",
+  "@splitOkDomainSub": {
+    "description": "Edit rule sheet: what a subdomain domain rule matches.",
+    "placeholders": { "base": { "type": "String" } }
+  },
+  "splitOkDomainExact": "matches this exact name only · turned into IPs once, on connect",
+  "@splitOkDomainExact": { "description": "Edit rule sheet: what an exact domain rule matches." },
+  "splitOkApp": "matched by package name, keeps working after app updates",
+  "@splitOkApp": { "description": "Edit rule sheet: how an app rule matches." },
+  "splitErrDomain": "Not a valid domain.",
+  "@splitErrDomain": { "description": "Edit rule sheet: invalid domain." },
+  "splitErrDomainDots": "Not a valid domain, there are two dots in a row.",
+  "@splitErrDomainDots": { "description": "Edit rule sheet: domain with two dots in a row." },
+  "splitErrDomainHelp": "just the name, no https://, no path · like media.example.org",
+  "@splitErrDomainHelp": { "description": "Edit rule sheet: how a domain is written." },
+  "splitErrIp": "Not a valid IP address or CIDR range.",
+  "@splitErrIp": { "description": "Edit rule sheet: invalid IP or CIDR." },
+  "splitErrIpHelp": "like 198.51.100.7 or 198.51.100.0/24",
+  "@splitErrIpHelp": { "description": "Edit rule sheet: how an IP or CIDR is written." },
+  "splitEditInstead": "Edit {coverer} instead →",
+  "@splitEditInstead": {
+    "description": "Edit rule sheet: jumps to the rule that already covers the typed one.",
+    "placeholders": { "coverer": { "type": "String" } }
+  },
+  "splitEditNextConnect": "Applies on the next connect. The tunnel running now keeps the old list.",
+  "@splitEditNextConnect": { "description": "Edit rule sheet: note while the tunnel is up." },
+  "splitEditRemove": "Remove",
+  "@splitEditRemove": { "description": "Edit rule sheet: remove the rule." },
+  "splitEditChange": "Change",
+  "@splitEditChange": { "description": "Edit rule sheet: change the app of an app rule." },
+  "toastRuleSaved": "Rule saved",
+  "@toastRuleSaved": { "description": "Toast after saving a rule." },
+  "toastRuleSavedNext": "Rule saved · applies on the next connect",
+  "@toastRuleSavedNext": { "description": "Toast after saving a rule while the tunnel is up." },
+  "toastRuleRemoved": "Removed {value}",
+  "@toastRuleRemoved": {
+    "description": "Toast after removing a rule, with Undo.",
+    "placeholders": { "value": { "type": "String" } }
   }
 }
