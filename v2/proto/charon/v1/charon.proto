@@ -266,6 +266,9 @@ message Rule {
   RuleKind kind = 1;
   string value = 2;
   bool include_subdomains = 3;
+  // The name the user saw when choosing an app rule (value is the package name).
+  // Display only, never used for matching. Empty for domain and CIDR rules.
+  string label = 4;
 }
 
 enum Phase {

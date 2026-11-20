@@ -3627,8 +3627,11 @@ type Rule struct {
 	Kind              RuleKind               `protobuf:"varint,1,opt,name=kind,proto3,enum=charon.v1.RuleKind" json:"kind,omitempty"`
 	Value             string                 `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
 	IncludeSubdomains bool                   `protobuf:"varint,3,opt,name=include_subdomains,json=includeSubdomains,proto3" json:"include_subdomains,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// The name the user saw when choosing an app rule (value is the package name).
+	// Display only, never used for matching. Empty for domain and CIDR rules.
+	Label         string `protobuf:"bytes,4,opt,name=label,proto3" json:"label,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Rule) Reset() {
@@ -3680,6 +3683,13 @@ func (x *Rule) GetIncludeSubdomains() bool {
 		return x.IncludeSubdomains
 	}
 	return false
+}
+
+func (x *Rule) GetLabel() string {
+	if x != nil {
+		return x.Label
+	}
+	return ""
 }
 
 // Encrypted sync vault plaintext payload (docs/charon_sync_design.md section 3).
@@ -4035,11 +4045,12 @@ const file_charon_v1_charon_proto_rawDesc = "" +
 	"\x04mode\x18\x01 \x01(\x0e2\x14.charon.v1.SplitModeR\x04mode\x12;\n" +
 	"\x11all_except_listed\x18\x02 \x03(\v2\x0f.charon.v1.RuleR\x0fallExceptListed\x120\n" +
 	"\vonly_listed\x18\x03 \x03(\v2\x0f.charon.v1.RuleR\n" +
-	"onlyListed\"t\n" +
+	"onlyListed\"\x8a\x01\n" +
 	"\x04Rule\x12'\n" +
 	"\x04kind\x18\x01 \x01(\x0e2\x13.charon.v1.RuleKindR\x04kind\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value\x12-\n" +
-	"\x12include_subdomains\x18\x03 \x01(\bR\x11includeSubdomains\"\xf0\x01\n" +
+	"\x12include_subdomains\x18\x03 \x01(\bR\x11includeSubdomains\x12\x14\n" +
+	"\x05label\x18\x04 \x01(\tR\x05label\"\xf0\x01\n" +
 	"\vSyncPayload\x12%\n" +
 	"\x0eschema_version\x18\x01 \x01(\rR\rschemaVersion\x12\x1a\n" +
 	"\brevision\x18\x02 \x01(\x04R\brevision\x12\"\n" +

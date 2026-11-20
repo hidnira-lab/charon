@@ -1482,6 +1482,7 @@ const Rule$json = {
       '5': 8,
       '10': 'includeSubdomains'
     },
+    {'1': 'label', '3': 4, '4': 1, '5': 9, '10': 'label'},
   ],
 };
 
@@ -1489,7 +1490,7 @@ const Rule$json = {
 final $typed_data.Uint8List ruleDescriptor = $convert.base64Decode(
     'CgRSdWxlEicKBGtpbmQYASABKA4yEy5jaGFyb24udjEuUnVsZUtpbmRSBGtpbmQSFAoFdmFsdW'
     'UYAiABKAlSBXZhbHVlEi0KEmluY2x1ZGVfc3ViZG9tYWlucxgDIAEoCFIRaW5jbHVkZVN1YmRv'
-    'bWFpbnM=');
+    'bWFpbnMSFAoFbGFiZWwYBCABKAlSBWxhYmVs');
 
 @$core.Deprecated('Use syncPayloadDescriptor instead')
 const SyncPayload$json = {

@@ -3315,11 +3315,13 @@ class Rule extends $pb.GeneratedMessage {
     RuleKind? kind,
     $core.String? value,
     $core.bool? includeSubdomains,
+    $core.String? label,
   }) {
     final result = Rule._();
     if (kind != null) result.kind = kind;
     if (value != null) result.value = value;
     if (includeSubdomains != null) result.includeSubdomains = includeSubdomains;
+    if (label != null) result.label = label;
     return result;
   }
 
@@ -3340,6 +3342,7 @@ class Rule extends $pb.GeneratedMessage {
         enumValues: RuleKind.values)
     ..aOS(2, _omitFieldNames ? '' : 'value')
     ..aOB(3, _omitFieldNames ? '' : 'includeSubdomains')
+    ..aOS(4, _omitFieldNames ? '' : 'label')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -3388,6 +3391,17 @@ class Rule extends $pb.GeneratedMessage {
   $core.bool hasIncludeSubdomains() => $_has(2);
   @$pb.TagNumber(3)
   void clearIncludeSubdomains() => $_clearField(3);
+
+  /// The name the user saw when choosing an app rule (value is the package name).
+  /// Display only, never used for matching. Empty for domain and CIDR rules.
+  @$pb.TagNumber(4)
+  $core.String get label => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set label($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasLabel() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearLabel() => $_clearField(4);
 }
 
 /// Encrypted sync vault plaintext payload (docs/charon_sync_design.md section 3).

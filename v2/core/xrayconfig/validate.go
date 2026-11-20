@@ -196,7 +196,7 @@ func validateRules(pathPrefix string, rules []*charonv1.Rule, allowAppRules bool
 	for i, r := range rules {
 		rPath := fmt.Sprintf("%s[%d]", pathPrefix, i)
 		val := strings.TrimSpace(r.GetValue())
-		if val == "" || len(val) > MaxStringLen {
+		if val == "" || len(val) > MaxStringLen || len(r.GetLabel()) > MaxStringLen {
 			errs = append(errs, &charonv1.FieldError{
 				Path:       rPath + ".value",
 				MessageKey: "error.rule.value_invalid",
