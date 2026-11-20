@@ -4065,5 +4065,13 @@
   "@toastRuleRemoved": {
     "description": "Toast after removing a rule, with Undo.",
     "placeholders": { "value": { "type": "String" } }
-  }
+  },
+  "splitNewRuleKicker": "NEW RULE",
+  "@splitNewRuleKicker": { "description": "Add rule sheet: kicker before the mode tag." },
+  "splitNoteIpField": "one address, or a CIDR range",
+  "@splitNoteIpField": { "description": "Add rule sheet: note under the IP field." },
+  "toastRuleAdded": "Rule added",
+  "@toastRuleAdded": { "description": "Toast after adding a rule." },
+  "toastRuleAddedNext": "Rule added · applies on the next connect",
+  "@toastRuleAddedNext": { "description": "Toast after adding a rule while the tunnel is up." }
 }

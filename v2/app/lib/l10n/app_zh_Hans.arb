@@ -1642,5 +1642,9 @@
   "splitEditChange": "更换",
   "toastRuleSaved": "规则已保存",
   "toastRuleSavedNext": "规则已保存 · 下次连接时生效",
-  "toastRuleRemoved": "已删除 {value}"
+  "toastRuleRemoved": "已删除 {value}",
+  "splitNewRuleKicker": "新规则",
+  "splitNoteIpField": "一个地址，或一个 CIDR 范围",
+  "toastRuleAdded": "规则已添加",
+  "toastRuleAddedNext": "规则已添加 · 下次连接时生效"
 }

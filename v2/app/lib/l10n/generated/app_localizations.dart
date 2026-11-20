@@ -9807,6 +9807,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Removed {value}'**
   String toastRuleRemoved(String value);
+
+  /// Add rule sheet: kicker before the mode tag.
+  ///
+  /// In en, this message translates to:
+  /// **'NEW RULE'**
+  String get splitNewRuleKicker;
+
+  /// Add rule sheet: note under the IP field.
+  ///
+  /// In en, this message translates to:
+  /// **'one address, or a CIDR range'**
+  String get splitNoteIpField;
+
+  /// Toast after adding a rule.
+  ///
+  /// In en, this message translates to:
+  /// **'Rule added'**
+  String get toastRuleAdded;
+
+  /// Toast after adding a rule while the tunnel is up.
+  ///
+  /// In en, this message translates to:
+  /// **'Rule added · applies on the next connect'**
+  String get toastRuleAddedNext;
 }
 
 class _AppLocalizationsDelegate

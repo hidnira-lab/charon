@@ -5715,4 +5715,17 @@ class AppLocalizationsId extends AppLocalizations {
   String toastRuleRemoved(String value) {
     return '$value dihapus';
   }
+
+  @override
+  String get splitNewRuleKicker => 'ATURAN BARU';
+
+  @override
+  String get splitNoteIpField => 'satu alamat, atau rentang CIDR';
+
+  @override
+  String get toastRuleAdded => 'Aturan ditambahkan';
+
+  @override
+  String get toastRuleAddedNext =>
+      'Aturan ditambahkan · berlaku di koneksi berikutnya';
 }

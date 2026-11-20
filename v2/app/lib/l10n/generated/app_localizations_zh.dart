@@ -5437,6 +5437,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String toastRuleRemoved(String value) {
     return '已删除 $value';
   }
+
+  @override
+  String get splitNewRuleKicker => '新规则';
+
+  @override
+  String get splitNoteIpField => '一个地址，或一个 CIDR 范围';
+
+  @override
+  String get toastRuleAdded => '规则已添加';
+
+  @override
+  String get toastRuleAddedNext => '规则已添加 · 下次连接时生效';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -10871,4 +10883,16 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String toastRuleRemoved(String value) {
     return '已删除 $value';
   }
+
+  @override
+  String get splitNewRuleKicker => '新规则';
+
+  @override
+  String get splitNoteIpField => '一个地址，或一个 CIDR 范围';
+
+  @override
+  String get toastRuleAdded => '规则已添加';
+
+  @override
+  String get toastRuleAddedNext => '规则已添加 · 下次连接时生效';
 }

@@ -1641,5 +1641,9 @@
   "splitEditChange": "Ubah",
   "toastRuleSaved": "Aturan disimpan",
   "toastRuleSavedNext": "Aturan disimpan · berlaku di koneksi berikutnya",
-  "toastRuleRemoved": "{value} dihapus"
+  "toastRuleRemoved": "{value} dihapus",
+  "splitNewRuleKicker": "ATURAN BARU",
+  "splitNoteIpField": "satu alamat, atau rentang CIDR",
+  "toastRuleAdded": "Aturan ditambahkan",
+  "toastRuleAddedNext": "Aturan ditambahkan · berlaku di koneksi berikutnya"
 }

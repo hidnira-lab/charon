@@ -5755,4 +5755,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String toastRuleRemoved(String value) {
     return 'Removed $value';
   }
+
+  @override
+  String get splitNewRuleKicker => 'NEW RULE';
+
+  @override
+  String get splitNoteIpField => 'one address, or a CIDR range';
+
+  @override
+  String get toastRuleAdded => 'Rule added';
+
+  @override
+  String get toastRuleAddedNext => 'Rule added · applies on the next connect';
 }
