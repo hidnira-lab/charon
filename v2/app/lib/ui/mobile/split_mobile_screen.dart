@@ -18,10 +18,11 @@ import '../split/widgets/pending_banner.dart';
 import 'app_picker_sheet.dart';
 import 'mobile_page.dart';
 import 'mobile_sheet.dart';
+import 'rule_edit_sheet.dart';
 
 /// The phone Split tunnel page (SplitMobile board): the tunnel mode and where traffic goes, the
 /// rules in tabs by type, and the notes. The plus of the title bar opens the composer in a
-/// sheet, and a rule opens a sheet to remove it.
+/// sheet, and a long press on a rule opens the Edit rule sheet.
 class SplitMobileScreen extends StatefulWidget {
   const SplitMobileScreen({super.key, required this.controller});
 
@@ -102,19 +103,62 @@ class _SplitMobileScreenState extends State<SplitMobileScreen> {
     c.showToast(ToastMessage(ToastKind.appsAdded, count: added, nextConnect: connected));
   }
 
+  /// The Edit rule sheet. A rule is told apart by its place in the list of the mode in use: that
+  /// is how the controller replaces or removes it.
   void _openRule(Rule rule) {
+    final rules = c.activeSplitRules;
+    final index = rules.indexWhere(
+      (r) => r.value == rule.value && r.kind == rule.kind && r.includeSubdomains == rule.includeSubdomains,
+    );
+    if (index < 0) return;
+    final l10n = AppLocalizations.of(context)!;
+    final only = c.splitMode == SplitMode.SPLIT_ONLY_LISTED;
+    bool connected() => c.status.phase == Phase.PHASE_UP || c.status.phase == Phase.PHASE_VERIFYING;
     showMobileSheet<void>(
       context,
-      (sheet) => _RuleSheet(
+      (sheet) => RuleEditSheet(
         apps: _apps,
         rule: rule,
+        others: [
+          for (final (i, r) in rules.indexed)
+            if (i != index) r,
+        ],
+        listName: (only ? l10n.mobileSplitModeOnly : l10n.mobileSplitModeAll).toUpperCase(),
+        connected: connected(),
+        onSave: (next) {
+          Navigator.of(sheet).pop();
+          c.replaceSplitRule(index, next);
+          c.showToast(ToastMessage(ToastKind.ruleSaved, nextConnect: connected()));
+        },
         onRemove: () {
           Navigator.of(sheet).pop();
-          // The list of the mode in use, by place: that is how the controller takes a rule out.
-          final index = c.activeSplitRules.indexWhere(
-            (r) => r.value == rule.value && r.kind == rule.kind && r.includeSubdomains == rule.includeSubdomains,
+          c.removeSplitRule(index);
+          c.showToast(
+            ToastMessage(
+              ToastKind.ruleRemoved,
+              label: rule.kind == RuleKind.RULE_APP ? _appTitle(rule) : ruleShown(rule),
+              undo: () => c.restoreSplitRule(index, rule),
+            ),
           );
-          if (index >= 0) c.removeSplitRule(index);
+        },
+        // One app takes the place of this rule; if more are ticked, the first one does.
+        onChooseApp: () async {
+          final chosen = await showAppPicker(
+            sheet,
+            source: _apps,
+            onlyListed: only,
+            inList: {
+              for (final (i, r) in rules.indexed)
+                if (i != index && r.kind == RuleKind.RULE_APP) r.value,
+            },
+            usedRules: rules.length,
+          );
+          return chosen == null || chosen.isEmpty ? null : chosen.first;
+        },
+        onEditOther: (coverer) {
+          Navigator.of(sheet).pop();
+          final other = c.activeSplitRules.where((r) => ruleShown(r) == coverer).firstOrNull;
+          if (other != null) _openRule(other);
         },
       ),
     );
@@ -254,7 +298,7 @@ class _SplitMobileScreenState extends State<SplitMobileScreen> {
                         apps: _apps,
                         rule: r,
                         pending: c.isRulePending(r.value),
-                        onTap: () => _openRule(r),
+                        onLongPress: () => _openRule(r),
                       ),
                     ],
                   ],
@@ -552,13 +596,13 @@ class _RuleRow extends StatelessWidget {
     required this.apps,
     required this.rule,
     required this.pending,
-    required this.onTap,
+    required this.onLongPress,
   });
 
   final InstalledApps apps;
   final Rule rule;
   final bool pending;
-  final VoidCallback onTap;
+  final VoidCallback onLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -569,10 +613,11 @@ class _RuleRow extends StatelessWidget {
     final helper = isApp ? l10n.splitHelperApp(rule.value) : RuleValidator.describeRule(rule, l10n);
     return Semantics(
       button: true,
-      label: l10n.splitRemoveRule(title),
+      label: l10n.splitEditRuleAria(title),
+      onLongPress: onLongPress,
       excludeSemantics: true,
       child: InkWell(
-        onTap: onTap,
+        onLongPress: onLongPress,
         borderRadius: BorderRadius.circular(12),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -631,112 +676,6 @@ class _RuleRow extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-/// What a tap on a rule offers: take it out of the list.
-class _RuleSheet extends StatelessWidget {
-  const _RuleSheet({required this.apps, required this.rule, required this.onRemove});
-
-  final InstalledApps apps;
-  final Rule rule;
-  final VoidCallback onRemove;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = CharonColors.of(context);
-    final l10n = AppLocalizations.of(context)!;
-    final isApp = rule.kind == RuleKind.RULE_APP;
-    final title = isApp ? _appTitle(rule) : ruleShown(rule);
-    return MobileSheetFrame(
-      semanticLabel: title,
-      header: Row(
-        children: [
-          if (isApp)
-            AppIconTile(source: apps, package: rule.value, name: title, size: 36)
-          else
-            Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                color: colors.surface2,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: PixelIcon(
-                  rule.kind == RuleKind.RULE_DOMAIN
-                      ? PixelIcons.globe
-                      : PixelIcons.hash,
-                  size: 18,
-                  color: colors.text,
-                ),
-              ),
-            ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: isApp
-                      ? TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: colors.text)
-                      : monoStyle(colors.text, 14, bold: true),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  isApp ? l10n.splitHelperApp(rule.value) : RuleValidator.describeRule(rule, l10n),
-                  style: monoStyle(colors.text3, 11),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-      children: [
-        Semantics(
-          button: true,
-          label: l10n.mobileSplitRemoveBtn,
-          excludeSemantics: true,
-          child: InkWell(
-            onTap: onRemove,
-            borderRadius: BorderRadius.circular(12),
-            child: SizedBox(
-              height: 52,
-              child: Row(
-                children: [
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: colors.surface2,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: PixelIcon(
-                        PixelIcons.trash,
-                        size: 18,
-                        color: colors.text,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  Text(
-                    l10n.mobileSplitRemoveBtn,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: colors.text,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

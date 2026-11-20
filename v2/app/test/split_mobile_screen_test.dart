@@ -57,19 +57,6 @@ void main() {
     expect(find.text('media.example.org'), findsNothing);
   });
 
-  testWidgets('a tap on a rule offers to remove it', (tester) async {
-    final controller = await pumpPhone(tester, tab: 2, config: withRules());
-    expect(controller.activeSplitRules.length, 4);
-    await tester.tap(find.text('192.0.2.0/24'));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 500));
-    await saveShot(tester, find.byKey(const Key('shot')), 'mobile_split_rule_sheet');
-    await tester.tap(find.text('Remove rule'));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 500));
-    expect(controller.activeSplitRules.length, 3);
-  });
-
   testWidgets('the plus opens the composer in a sheet', (tester) async {
     await pumpPhone(tester, tab: 2, status: idleStatus());
     await tester.tap(find.bySemanticsLabel('Add a rule'));
