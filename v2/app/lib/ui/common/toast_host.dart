@@ -104,6 +104,7 @@ class _BarState extends State<_Bar> {
         ToastKind.appsAdded => toast.nextConnect
             ? '${l10n.appPickerAdded(toast.count)} · ${l10n.splitNextConnectNote}'
             : l10n.appPickerAdded(toast.count),
+        ToastKind.ruleAdded => toast.nextConnect ? l10n.toastRuleAddedNext : l10n.toastRuleAdded,
         ToastKind.ruleSaved => toast.nextConnect ? l10n.toastRuleSavedNext : l10n.toastRuleSaved,
         ToastKind.ruleRemoved => l10n.toastRuleRemoved(toast.label),
       };

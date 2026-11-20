@@ -13,11 +13,11 @@ import '../common/glass_card.dart';
 import '../common/pixel_flag.dart';
 import '../common/pixel_icon.dart';
 import '../split/rule_validator.dart';
-import '../split/widgets/composer_card.dart';
 import '../split/widgets/pending_banner.dart';
 import 'app_picker_sheet.dart';
 import 'mobile_page.dart';
 import 'mobile_sheet.dart';
+import 'rule_add_sheet.dart';
 import 'rule_edit_sheet.dart';
 
 /// The phone Split tunnel page (SplitMobile board): the tunnel mode and where traffic goes, the
@@ -54,32 +54,28 @@ class _SplitMobileScreenState extends State<SplitMobileScreen> {
       context,
       (sheet) => ListenableBuilder(
         listenable: c,
-        builder: (context, _) => MobileSheetFrame(
-          semanticLabel: AppLocalizations.of(context)!.splitAddRuleTitle,
-          children: [
-            ComposerCard(
-              isOnlyListed: only,
-              activeServerName: server?.id.isNotEmpty == true
-                  ? server!.id
-                  : 'SRV-01',
-              existingRules: c.activeSplitRules,
-              onAddRule: (rule) async {
-                final ok = await c.addSplitRule(rule);
-                if (ok && sheet.mounted) Navigator.of(sheet).pop();
-                return ok;
-              },
-              onChooseApps: c.phoneLayout
-                  ? () {
-                      Navigator.of(sheet).pop();
-                      _openAppPicker();
-                    }
-                  : null,
-            ),
-          ],
+        builder: (context, _) => RuleAddSheet(
+          onlyListed: only,
+          serverName: server?.id.isNotEmpty == true ? server!.id : 'SRV-01',
+          existingRules: c.activeSplitRules,
+          onAdd: (rule) async {
+            final ok = await c.addSplitRule(rule);
+            if (ok && sheet.mounted) {
+              Navigator.of(sheet).pop();
+              c.showToast(ToastMessage(ToastKind.ruleAdded, nextConnect: _connected));
+            }
+            return ok;
+          },
+          onChooseApps: () {
+            Navigator.of(sheet).pop();
+            _openAppPicker();
+          },
         ),
       ),
     );
   }
+
+  bool get _connected => c.status.phase == Phase.PHASE_UP || c.status.phase == Phase.PHASE_VERIFYING;
 
   /// The picker adds one rule per app, then the page shows the App tab.
   Future<void> _openAppPicker() async {

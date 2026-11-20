@@ -28,6 +28,9 @@ enum ToastKind {
   /// "3 apps added", with "rule changes apply on the next connect" while connected.
   appsAdded,
 
+  /// "Rule added", with "applies on the next connect" while connected.
+  ruleAdded,
+
   /// "Rule saved", with "applies on the next connect" while connected.
   ruleSaved,
 
