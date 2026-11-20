@@ -13,6 +13,7 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodChannel
+import java.util.concurrent.Executors
 
 /**
  * MainActivity relays raw protobuf Envelope byte arrays between Flutter and
@@ -37,6 +38,20 @@ class MainActivity : FlutterActivity() {
 
     private var pendingVpnResult: MethodChannel.Result? = null
     private var pendingNotificationsResult: MethodChannel.Result? = null
+
+    private val catalog by lazy { AppCatalog(this) }
+    private val appWork = Executors.newSingleThreadExecutor()
+
+    private fun <T> inBackground(result: MethodChannel.Result, work: AppCatalog.() -> T) {
+        appWork.execute {
+            try {
+                val value = catalog.work()
+                runOnUiThread { result.success(value) }
+            } catch (t: Throwable) {
+                runOnUiThread { result.error("APPS_FAILED", t.message ?: "apps failed", null) }
+            }
+        }
+    }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -106,6 +121,14 @@ class MainActivity : FlutterActivity() {
                         pendingNotificationsResult = result
                         requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_NOTIFICATIONS)
                     }
+                }
+
+                // The split tunnel app picker. Off the main thread: hundreds of labels and icons.
+                "listApps" -> inBackground(result) { list() }
+                "appIcon" -> {
+                    val pkg = call.arguments as? String
+                    if (pkg == null) result.error("INVALID_ARGUMENT", "Missing package name", null)
+                    else inBackground(result) { icon(pkg) }
                 }
 
                 "vpnLockdown" -> {
