@@ -677,6 +677,43 @@ class HomeController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Puts [rule] in the place of the one at [index] of the list in use. False when that place is
+  /// gone. The pending mark moves to the new rule while the tunnel is up.
+  Future<bool> replaceSplitRule(int index, Rule rule) async {
+    final list = activeSplitRules;
+    if (index < 0 || index >= list.length) return false;
+    _pendingSplitRules.remove(list[index].value);
+    list[index] = rule;
+    await _splitListChanged(pending: [rule.value]);
+    return true;
+  }
+
+  /// Puts a removed rule back at its place, for Undo.
+  Future<void> restoreSplitRule(int index, Rule rule) async {
+    if (_config == null || !_config!.hasSplit()) return;
+    final list = activeSplitRules;
+    list.insert(index.clamp(0, list.length), rule);
+    await _splitListChanged(pending: [rule.value]);
+  }
+
+  /// What every change to a rule list ends with: a new Config version, the pending mark while
+  /// the tunnel is up (rules apply on the next connect), the save, and the redraw.
+  Future<void> _splitListChanged({Iterable<String> pending = const []}) async {
+    _bumpConfigVersion();
+    if (_status.phase == Phase.PHASE_UP || _status.phase == Phase.PHASE_VERIFYING) {
+      _hasPendingSplitChanges = true;
+      _pendingSplitRules.addAll(pending);
+    }
+    if (_client != null) {
+      try {
+        await _client!.setConfig(_config!);
+      } catch (e) {
+        _logError(e);
+      }
+    }
+    notifyListeners();
+  }
+
   Future<void> reconnectForPendingSplit() async {
     _hasPendingSplitChanges = false;
     _pendingSplitRules.clear();

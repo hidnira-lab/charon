@@ -27,6 +27,12 @@ enum ToastKind {
 
   /// "3 apps added", with "rule changes apply on the next connect" while connected.
   appsAdded,
+
+  /// "Rule saved", with "applies on the next connect" while connected.
+  ruleSaved,
+
+  /// "Removed 192.0.2.0/24" (the value is in `label`), with Undo.
+  ruleRemoved,
 }
 
 /// The one toast at the bottom of the window (Dialogs board). A new one replaces
