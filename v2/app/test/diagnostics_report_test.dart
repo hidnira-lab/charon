@@ -1,8 +1,24 @@
+import 'dart:typed_data';
+
+import 'package:charon/core/core_client.dart';
+import 'package:charon/core/transport.dart';
 import 'package:charon/gen/charon/v1/charon.pb.dart';
 import 'package:charon/state/diagnostics_report.dart';
 import 'package:charon/state/home_controller.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+/// A core that never answers: enough to attach a client.
+class _QuietTransport implements CoreTransport {
+  @override
+  Stream<Uint8List> get incoming => const Stream.empty();
+
+  @override
+  void send(Uint8List bytes) {}
+
+  @override
+  Future<void> close() async {}
+}
 
 HomeController ctl() {
   var now = DateTime(2026, 11, 3, 13, 20, 4).millisecondsSinceEpoch;
@@ -59,6 +75,23 @@ void main() {
     expect(text, contains('SRV-01 vless reality sni=example.com pbk=****'));
     expect(text, contains('killswitch=on autoreconnect=on lan=off dns=default split=all-except-listed rules=1'));
     expect(text, isNot(contains('visited.example.com')));
+  });
+
+  test('Hello gives the Xray version where there is no update state (Android)', () {
+    final c = HomeController(initialStatus: Status(phase: Phase.PHASE_IDLE));
+    String report() =>
+        DiagnosticsReport.text(DiagnosticsReport.build(c, const DiagnosticsOptions(), osName: 'android 16'));
+    expect(report(), contains('xray —'));
+    c.attachClient(CoreClient(_QuietTransport()), xrayVersion: '26.10.31');
+    expect(c.xrayVersion, '26.10.31');
+    expect(report(), contains('xray 26.10.31'));
+  });
+
+  test('the first status after nothing is said is not a state change', () {
+    final c = HomeController(initialStatus: Status());
+    c.updateStatus(Status(phase: Phase.PHASE_IDLE));
+    c.updateStatus(Status(phase: Phase.PHASE_UP));
+    expect(c.stateChanges.map((e) => (e.from, e.to)), [(Phase.PHASE_IDLE, Phase.PHASE_UP)]);
   });
 
   test('secrets never go in: no uuid, key, short id, address or rule name', () {

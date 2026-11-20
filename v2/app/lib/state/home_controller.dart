@@ -507,7 +507,8 @@ class HomeController extends ChangeNotifier {
   void _onStatus(Status status) {
     if (status.phase == Phase.PHASE_IDLE) throughputHistory.clear();
     final from = _lastPhase;
-    if (from != null && from != status.phase) {
+    // PHASE_UNSPECIFIED is "nothing said yet", not a state the tunnel was in.
+    if (from != null && from != Phase.PHASE_UNSPECIFIED && from != status.phase) {
       unawaited(refreshSystemLockdown());
       _stateChanges.add((atMs: serviceNowMs, from: from, to: status.phase));
       if (_stateChanges.length > maxStateChanges) _stateChanges.removeAt(0);
@@ -1093,16 +1094,27 @@ class HomeController extends ChangeNotifier {
   String get serviceVersion => _serviceVersion.isEmpty ? appVersion : _serviceVersion;
   String _serviceVersion;
 
+  /// The Xray version: the update state knows it on Windows, Hello says it on both platforms
+  /// (Android has no update state, so Hello is the only source there).
+  String get xrayVersion {
+    final updated = coreUpdateState.currentVersion;
+    return updated.isNotEmpty ? updated : _xrayVersion;
+  }
+
+  String _xrayVersion = '';
+
   void attachClient(
     CoreClient newClient, {
     Status? initialStatus,
     String? serviceVersion,
+    String? xrayVersion,
     PlatformChannelTransport? platformTransport,
   }) {
     if (_isDisposed) return;
     _eventSub?.cancel();
     _client = newClient;
     if (serviceVersion != null) _serviceVersion = serviceVersion;
+    if (xrayVersion != null) _xrayVersion = xrayVersion;
     if (platformTransport != null) {
       _platformTransport = platformTransport;
       unawaited(refreshSystemLockdown());

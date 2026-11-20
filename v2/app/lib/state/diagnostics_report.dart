@@ -62,7 +62,7 @@ class DiagnosticsReport {
   }) {
     final out = <DiagnosticsLine>[];
     if (o.versions) {
-      final xray = c.coreUpdateState.currentVersion;
+      final xray = c.xrayVersion;
       out.add(DiagnosticsLine('charon $appVersion · xray ${xray.isEmpty ? '—' : xray.replaceFirst('v', '')}'));
     }
     if (o.os) out.add(DiagnosticsLine(osName));

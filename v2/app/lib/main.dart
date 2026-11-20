@@ -75,7 +75,8 @@ Future<void> _connectWindows(HomeController controller) async {
   final client = CoreClient(transport);
   try {
     final ack = await client.hello(appVersion: appVersion);
-    controller.attachClient(client, initialStatus: ack.status, serviceVersion: ack.serviceVersion);
+    controller.attachClient(client,
+        initialStatus: ack.status, serviceVersion: ack.serviceVersion, xrayVersion: ack.xrayVersion);
   } catch (_) {
     unawaited(transport.close());
     rethrow;
@@ -90,6 +91,7 @@ Future<void> _connectAndroid(HomeController controller) async {
     client,
     initialStatus: ack.status,
     serviceVersion: ack.serviceVersion,
+    xrayVersion: ack.xrayVersion,
     platformTransport: transport,
   );
 }

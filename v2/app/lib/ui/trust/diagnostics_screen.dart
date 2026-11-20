@@ -72,7 +72,7 @@ class _DiagnosticsScreenState extends State<DiagnosticsScreen> {
     return ListenableBuilder(
       listenable: widget.controller,
       builder: (context, _) {
-        final xray = widget.controller.coreUpdateState.currentVersion;
+        final xray = widget.controller.xrayVersion;
         final lines = DiagnosticsReport.build(widget.controller, _o, osName: _osName);
 
         // title, description, value, setter
