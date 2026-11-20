@@ -6,11 +6,11 @@ import '../../state/domain_rule.dart';
 import '../../state/installed_apps.dart';
 import '../../theme/theme.dart';
 import '../common/glass_card.dart' show monoStyle;
-import '../common/pixel_field.dart';
 import '../common/pixel_icon.dart';
 import '../split/rule_validator.dart';
 import 'app_picker_sheet.dart' show AppIconTile;
 import 'mobile_sheet.dart';
+import 'rule_sheet_parts.dart';
 
 /// The Edit rule sheet of the phone Split page (SplitMobile board): the type, the value, how a
 /// domain matches, what the rule will do, and Remove or Save. It never changes the list itself,
@@ -76,13 +76,7 @@ class _RuleEditSheetState extends State<RuleEditSheet> {
   bool get _isApp => _kind == RuleKind.RULE_APP;
   String get _typed => _text.text.trim();
   String get _base => _typed.startsWith('*.') ? _typed.substring(2) : _typed;
-
   bool get _valid => _isApp ? _app != null : RuleValidator.isValidInput(_typed, _kind);
-  String? get _coverer =>
-      _isApp || !_valid ? null : RuleValidator.findConflict(_typed, _kind, widget.others);
-
-  /// A value was typed and it does not read as this kind of rule.
-  bool get _invalid => !_isApp && _base.isNotEmpty && !_valid;
 
   void _pickKind(RuleKind kind) {
     if (kind == _kind) return;
@@ -115,180 +109,41 @@ class _RuleEditSheetState extends State<RuleEditSheet> {
   Widget build(BuildContext context) {
     final colors = CharonColors.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final coverer = _coverer;
-    final canSave = _valid && coverer == null;
+    final problem = ruleProblem(l10n, _kind, _typed, widget.others);
+    final canSave = _valid && problem == null;
     final isDomain = _kind == RuleKind.RULE_DOMAIN;
-    final err = _invalid || coverer != null;
 
     return MobileSheetFrame(
       semanticLabel: l10n.splitEditTitle,
-      header: Padding(
-        padding: const EdgeInsets.only(bottom: 4),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '> ${l10n.splitEditKicker} ${widget.listName}',
-                    style: monoStyle(colors.text3, 10, bold: true, em: 0.08).copyWith(height: 14 / 10),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    l10n.splitEditTitle,
-                    style: TextStyle(
-                      fontSize: 20,
-                      height: 26 / 20,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: -0.2,
-                      color: colors.text,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Semantics(
-              button: true,
-              label: l10n.dlgClose,
-              excludeSemantics: true,
-              child: InkResponse(
-                onTap: () => Navigator.of(context).pop(),
-                radius: 22,
-                child: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: Center(child: PixelIcon(PixelIcons.close, size: 20, color: colors.text2)),
-                ),
-              ),
-            ),
-          ],
+      header: RuleSheetHeader(
+        kicker: Text(
+          '> ${l10n.splitEditKicker} ${widget.listName}',
+          style: monoStyle(colors.text3, 10, bold: true, em: 0.08).copyWith(height: 14 / 10),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
+        title: l10n.splitEditTitle,
       ),
       children: [
-        _types(colors, l10n),
-        if (_isApp) _appTile(colors, l10n) else _field(colors, l10n, err: err),
-        if (isDomain) _scope(colors, l10n),
-        if (coverer != null)
-          _error(colors, l10n.splitConflictTitle(coverer), l10n.splitConflictHint(coverer), coverer: coverer, l10n: l10n)
-        else if (_invalid)
-          _error(
-            colors,
-            isDomain
-                ? (_typed.contains('..') ? l10n.splitErrDomainDots : l10n.splitErrDomain)
-                : l10n.splitErrIp,
-            isDomain ? l10n.splitErrDomainHelp : l10n.splitErrIpHelp,
-            l10n: l10n,
-          )
+        RuleTypeSegments(kind: _kind, onPick: _pickKind),
+        if (_isApp)
+          _appTile(colors, l10n)
         else
-          _okLine(colors, l10n),
+          RuleValueField(
+            label: isDomain ? l10n.splitTypeDomain : l10n.splitFieldIp,
+            controller: _text,
+            hint: isDomain ? l10n.splitDomainPlaceholder : l10n.splitCidrPlaceholder,
+            err: problem != null,
+            onChanged: (_) => setState(() {}),
+            onSubmitted: (_) => canSave ? widget.onSave(_built()) : null,
+          ),
+        if (isDomain) _scope(colors, l10n),
+        if (problem != null)
+          RuleProblemBlock(problem: problem, onEditOther: widget.onEditOther)
+        else
+          _okLine(l10n),
         if (widget.connected) _note(colors, l10n),
         _buttons(colors, l10n, canSave),
-      ],
-    );
-  }
-
-  Widget _types(CharonColors colors, AppLocalizations l10n) {
-    Widget seg(RuleKind kind, String label, String icon) {
-      final on = _kind == kind;
-      final ink = on ? colors.bg : colors.text2;
-      return Expanded(
-        child: Semantics(
-          inMutuallyExclusiveGroup: true,
-          checked: on,
-          label: label,
-          excludeSemantics: true,
-          child: InkWell(
-            onTap: () => _pickKind(kind),
-            borderRadius: BorderRadius.circular(9),
-            child: Container(
-              height: 34,
-              decoration: BoxDecoration(
-                color: on ? colors.text : Colors.transparent,
-                borderRadius: BorderRadius.circular(9),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  PixelIcon(icon, size: 14, color: ink),
-                  const SizedBox(width: 6),
-                  Flexible(
-                    child: Text(
-                      label,
-                      style: monoStyle(ink, 11, bold: true, em: 0.06),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-
-    return Semantics(
-      label: l10n.splitRuleType,
-      container: true,
-      child: Container(
-        padding: const EdgeInsets.all(3),
-        decoration: BoxDecoration(color: colors.surface2, borderRadius: BorderRadius.circular(12)),
-        child: Row(
-          children: [
-            seg(RuleKind.RULE_DOMAIN, l10n.splitTypeDomain, PixelIcons.globe),
-            const SizedBox(width: 2),
-            seg(RuleKind.RULE_CIDR, l10n.splitTypeIpCidr, PixelIcons.hash),
-            const SizedBox(width: 2),
-            seg(RuleKind.RULE_APP, l10n.splitTypeApp, PixelIcons.blocks),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _field(CharonColors colors, AppLocalizations l10n, {required bool err}) {
-    final label = _kind == RuleKind.RULE_DOMAIN ? l10n.splitTypeDomain : l10n.splitFieldIp;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: monoStyle(colors.text3, 10, bold: true, em: 0.08)),
-        const SizedBox(height: 6),
-        PixelField(
-          height: 48,
-          fill: colors.bg,
-          frame: err ? colors.transitionFill : colors.controlBorder,
-          child: Row(
-            children: [
-              Text('>', style: monoStyle(colors.accentText, 14, bold: true)),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Semantics(
-                  label: label,
-                  textField: true,
-                  child: TextField(
-                    controller: _text,
-                    onChanged: (_) => setState(() {}),
-                    onSubmitted: (_) => _valid && _coverer == null ? widget.onSave(_built()) : null,
-                    autocorrect: false,
-                    enableSuggestions: false,
-                    keyboardType: TextInputType.url,
-                    style: monoStyle(colors.text, 14, bold: true),
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      isDense: true,
-                      contentPadding: EdgeInsets.zero,
-                      hintText: _kind == RuleKind.RULE_DOMAIN ? l10n.splitDomainPlaceholder : l10n.splitCidrPlaceholder,
-                      hintStyle: monoStyle(colors.text3, 14),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
       ],
     );
   }
@@ -418,7 +273,7 @@ class _RuleEditSheetState extends State<RuleEditSheet> {
     );
   }
 
-  Widget _okLine(CharonColors colors, AppLocalizations l10n) {
+  Widget _okLine(AppLocalizations l10n) {
     final String? line;
     if (_isApp) {
       line = l10n.splitOkApp;
@@ -429,58 +284,7 @@ class _RuleEditSheetState extends State<RuleEditSheet> {
     } else {
       line = _valid ? RuleValidator.describeRule(Rule(kind: _kind, value: _typed), l10n) : null;
     }
-    if (line == null) return const SizedBox.shrink();
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 3),
-          child: Container(width: 6, height: 6, color: colors.accent),
-        ),
-        const SizedBox(width: 8),
-        Expanded(child: Text(line, style: monoStyle(colors.text3, 11).copyWith(height: 16 / 11))),
-      ],
-    );
-  }
-
-  Widget _error(CharonColors colors, String title, String help, {String? coverer, required AppLocalizations l10n}) {
-    return Semantics(
-      liveRegion: true,
-      container: true,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Container(width: 8, height: 8, color: colors.transitionFill),
-              ),
-              const SizedBox(width: 8),
-              Expanded(child: Text(title, style: TextStyle(fontSize: 13, height: 18 / 13, color: colors.text))),
-            ],
-          ),
-          const SizedBox(height: 3),
-          Text('> $help', style: monoStyle(colors.text3, 11).copyWith(height: 16 / 11)),
-          if (coverer != null) ...[
-            const SizedBox(height: 6),
-            Semantics(
-              button: true,
-              excludeSemantics: true,
-              label: l10n.splitEditInstead(coverer),
-              child: InkWell(
-                onTap: () => widget.onEditOther(coverer),
-                child: Text(
-                  l10n.splitEditInstead(coverer),
-                  style: monoStyle(colors.accentText, 12, bold: true),
-                ),
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
+    return line == null ? const SizedBox.shrink() : RuleInfoLine(line);
   }
 
   Widget _note(CharonColors colors, AppLocalizations l10n) {
@@ -536,40 +340,11 @@ class _RuleEditSheetState extends State<RuleEditSheet> {
         const SizedBox(width: 12),
         Expanded(
           flex: 13,
-          child: Semantics(
-            button: true,
-            enabled: canSave,
+          child: RulePillButton(
             label: l10n.dialogSave,
-            excludeSemantics: true,
-            child: InkWell(
-              onTap: canSave ? () => widget.onSave(_built()) : null,
-              borderRadius: BorderRadius.circular(999),
-              child: Container(
-                height: 52,
-                padding: const EdgeInsets.only(left: 20, right: 6),
-                decoration: BoxDecoration(
-                  color: canSave ? colors.text : colors.surface2,
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(l10n.dialogSave, style: monoStyle(canSave ? colors.bg : colors.text3, 14, bold: true)),
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: canSave ? colors.accent : colors.surface,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: PixelIcon(PixelIcons.check, size: 20, color: canSave ? colors.onAccent : colors.text3),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            icon: PixelIcons.check,
+            enabled: canSave,
+            onTap: () => widget.onSave(_built()),
           ),
         ),
       ],
