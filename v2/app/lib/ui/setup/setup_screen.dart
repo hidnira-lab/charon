@@ -1519,6 +1519,9 @@ class _SafetyStep extends StatelessWidget {
                     ),
                   ),
                 ),
+                // The strip and its footnote are on the desktop board only (SetupMobile has
+                // neither), and four chips do not fit a phone width in every language.
+                if (!isPhoneLayout(context)) ...[
                 const SizedBox(height: 12),
                 Glass(
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -1561,6 +1564,7 @@ class _SafetyStep extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Text('> ${l10n.stpSafetyFoot}', style: monoStyle(colors.text3, 11)),
+                ],
               ],
             ),
           ),

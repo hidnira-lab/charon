@@ -55,6 +55,9 @@ void main() {
     expect(find.text('Kill switch'), findsOneWidget);
     expect(find.text('Auto reconnect'), findsOneWidget);
     expect(find.text('Launch at startup'), findsNothing);
+    // The "if the tunnel drops" strip and its footnote are on the desktop board only.
+    expect(find.text('> IF THE TUNNEL DROPS, WITH THESE SETTINGS'), findsNothing);
+    expect(find.textContaining('nothing here is permanent'), findsNothing);
   });
 
   testWidgets('the server step does not raise the keyboard over the three ways to add one', (t) async {
