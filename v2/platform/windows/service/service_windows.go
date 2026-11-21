@@ -17,6 +17,7 @@ import (
 	"github.com/hidnira-lab/charon/core/machine"
 	"github.com/hidnira-lab/charon/core/quota"
 	"github.com/hidnira-lab/charon/core/xrayconfig"
+	"github.com/hidnira-lab/charon/platform/windows/icmp"
 	"github.com/hidnira-lab/charon/platform/windows/pipe"
 	"github.com/hidnira-lab/charon/platform/windows/stats"
 	"github.com/hidnira-lab/charon/platform/windows/store"
@@ -147,6 +148,9 @@ func NewRuntime(opts Options) (*Runtime, error) {
 	ver := verify.New(verify.Options{
 		SocksAddr: fmt.Sprintf("127.0.0.1:%d", opts.SocksPort),
 		EgressURL: opts.EgressURL,
+		// After check 1 fails: does the server answer ping? The gate's permit for the
+		// server address covers ICMP too, so this also works while it is Armed.
+		Ping: icmp.Answers,
 		Log: func(msg string) {
 			coreLogs.Append(charonv1.LogLevel_LOG_LEVEL_WARN, msg, clock.NowMs())
 		},

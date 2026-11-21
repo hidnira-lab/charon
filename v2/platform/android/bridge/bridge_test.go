@@ -26,6 +26,7 @@ type fakeNativeHost struct {
 	protectedFDs      []int
 	notifState        string
 	notifTitle        string
+	notifSubtitle     string
 	notifPublic       string
 	notifLevel        string
 	notifShowRelease  bool
@@ -66,7 +67,7 @@ func (h *fakeNativeHost) ProtectSocket(fd int) bool {
 	return true
 }
 
-func (h *fakeNativeHost) UpdateNotification(state, title, _, _, publicLine, level string, showRelease, _ bool) {
+func (h *fakeNativeHost) UpdateNotification(state, title, subtitle, _, publicLine, level string, showRelease, _ bool) {
 	if h.panicOnNotif {
 		panic("simulated host panic")
 	}
@@ -74,6 +75,7 @@ func (h *fakeNativeHost) UpdateNotification(state, title, _, _, publicLine, leve
 	defer h.mu.Unlock()
 	h.notifState = state
 	h.notifTitle = title
+	h.notifSubtitle = subtitle
 	h.notifPublic = publicLine
 	h.notifLevel = level
 	h.notifShowRelease = showRelease
@@ -471,5 +473,49 @@ func TestVerifierFailureOnFirstConnect(t *testing.T) {
 	st := sink.latestStatus()
 	if st == nil || st.GetLastEnd() != charonv1.SessionEnd_SESSION_END_COULD_NOT_REACH || st.GetLastFailure() != charonv1.FailureReason_FAILURE_DNS_NOT_TUNNELLED {
 		t.Fatalf("expected COULD_NOT_REACH + FAILURE_DNS_NOT_TUNNELLED, got %v", st)
+	}
+}
+
+// When the last automatic try found the server answering ping but no TCP, the ongoing
+// notification says it may be blocked on this network; the lock screen line stays plain.
+func TestNotificationSaysServerMayBeBlocked(t *testing.T) {
+	host := newFakeNativeHost()
+	cb, err := NewCoreBridge(t.TempDir(), host, "0.1.0", "25.10.15")
+	if err != nil {
+		t.Fatalf("NewCoreBridge: %v", err)
+	}
+	defer cb.Stop()
+
+	for _, tc := range []struct {
+		name    string
+		status  *charonv1.Status
+		wantSub string
+		public  string
+	}{
+		{"blocked, likely blocked",
+			&charonv1.Status{Phase: charonv1.Phase_PHASE_BLOCKED, Gate: charonv1.Gate_GATE_HELD, ActiveServerId: "SRV-01",
+				LastFailure: charonv1.FailureReason_FAILURE_LIKELY_BLOCKED},
+			"SRV-01 may be blocked on this network. Nothing leaves this phone.", "Traffic held"},
+		{"blocked, no answer",
+			&charonv1.Status{Phase: charonv1.Phase_PHASE_BLOCKED, Gate: charonv1.Gate_GATE_HELD, ActiveServerId: "SRV-01",
+				LastFailure: charonv1.FailureReason_FAILURE_TCP_TIMEOUT},
+			"No server answered. Nothing leaves this phone.", "Traffic held"},
+		{"retrying held, likely blocked",
+			&charonv1.Status{Phase: charonv1.Phase_PHASE_RETRYING, Gate: charonv1.Gate_GATE_HELD, ActiveServerId: "SRV-01",
+				Attempt: 2, MaxAttempts: 5, LastFailure: charonv1.FailureReason_FAILURE_LIKELY_BLOCKED},
+			"Retry 2 of 5 · SRV-01 may be blocked on this network", "Traffic held"},
+		{"retrying, likely blocked",
+			&charonv1.Status{Phase: charonv1.Phase_PHASE_RETRYING, Gate: charonv1.Gate_GATE_DISARMED, ActiveServerId: "SRV-01",
+				Attempt: 2, MaxAttempts: 5, LastFailure: charonv1.FailureReason_FAILURE_LIKELY_BLOCKED},
+			"Retry 2 of 5 · SRV-01 may be blocked on this network", "Reconnecting"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			cb.syncHostUI(tc.status)
+			host.mu.Lock()
+			defer host.mu.Unlock()
+			if host.notifSubtitle != tc.wantSub || host.notifPublic != tc.public {
+				t.Fatalf("got (%q, public %q), want (%q, public %q)", host.notifSubtitle, host.notifPublic, tc.wantSub, tc.public)
+			}
+		})
 	}
 }

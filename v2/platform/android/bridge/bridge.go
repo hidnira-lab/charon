@@ -692,9 +692,15 @@ func (b *CoreBridge) syncHostUI(st *charonv1.Status) {
 		retryStr := fmt.Sprintf("Retry %d of %d", st.GetAttempt(), st.GetMaxAttempts())
 		if st.GetGate() == charonv1.Gate_GATE_HELD {
 			sub := retryStr + " · nothing leaves this phone"
+			if hint := blockedHint(st, activeID); hint != "" {
+				sub = retryStr + " · " + hint
+			}
 			b.host.UpdateNotification("reconnecting held", "Reconnecting · traffic held", sub, sub, "Traffic held", "crit", true, false)
 			b.host.UpdateTile(true, "Traffic held")
 		} else {
+			if hint := blockedHint(st, activeID); hint != "" {
+				retryStr += " · " + hint
+			}
 			b.host.UpdateNotification("reconnecting", "Reconnecting · "+activeID, retryStr, retryStr, "Reconnecting", "warn", false, false)
 			b.host.UpdateTile(true, retryStr)
 		}
@@ -703,6 +709,9 @@ func (b *CoreBridge) syncHostUI(st *charonv1.Status) {
 		// CORE5: while held without the UI, foreground notification is red
 		// ("crit"), says "Traffic held", and exposes a Release action.
 		sub := "No server answered. Nothing leaves this phone."
+		if hint := blockedHint(st, activeID); hint != "" {
+			sub = hint + ". Nothing leaves this phone."
+		}
 		b.host.UpdateNotification("blocked", "Traffic held · all servers failed", sub, sub, "Traffic held", "crit", true, true)
 		b.host.UpdateTile(true, "Traffic held")
 
@@ -854,6 +863,7 @@ func newTunnelVerifier(b *CoreBridge) driver.Verifier {
 		SocksAddr:  fmt.Sprintf("127.0.0.1:%d", defaultSocksPort),
 		EgressURL:  egressURL,
 		DialServer: b.protectedDial,
+		Ping:       b.protectedPing,
 		Log: func(msg string) {
 			b.coreLogs.Append(charonv1.LogLevel_LOG_LEVEL_WARN, msg, time.Now().UnixMilli())
 		},
@@ -894,6 +904,16 @@ func (s *androidStatsReader) ReadServerBytes(serverID string) (uint64, uint64, e
 		uOut = uint64(outB)
 	}
 	return uIn, uOut, nil
+}
+
+// blockedHint is what the notification adds when the last automatic try found the
+// server answering ping but no TCP connection: it may be blocked on this network. The
+// lock screen keeps its plain public line.
+func blockedHint(st *charonv1.Status, activeID string) string {
+	if st.GetLastFailure() != charonv1.FailureReason_FAILURE_LIKELY_BLOCKED {
+		return ""
+	}
+	return activeID + " may be blocked on this network"
 }
 
 type androidNotifier struct {
