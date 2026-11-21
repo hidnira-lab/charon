@@ -315,6 +315,9 @@ class _HeroCard extends StatelessWidget {
                     Text(
                       '> ${spec.line2}',
                       style: monoStyle(spec.lockdown ? colors.tone(StateTone.transition).$1 : fg, 10).copyWith(height: 14 / 10),
+                      // A line that mixes Space Mono with a Han fallback font takes the tallest
+                      // ascent and descent of both and grew 1 px past the card in Chinese.
+                      strutStyle: const StrutStyle(fontSize: 10, height: 14 / 10, forceStrutHeight: true),
                       maxLines: spec.lockdown ? 2 : 1,
                       overflow: TextOverflow.ellipsis,
                     ),
