@@ -222,6 +222,21 @@ void main() {
             await _shot(t, '$prefix-setup-unreachable');
           });
 
+          testWidgets('setup likely blocked', (t) async {
+            final c = await toConnect(t);
+            await tapBig(t, l.stpConnectVerify);
+            c.setStatus(
+              Status(
+                phase: Phase.PHASE_IDLE,
+                activeServerId: 'SRV-01',
+                lastEnd: SessionEnd.SESSION_END_COULD_NOT_REACH,
+                lastFailure: FailureReason.FAILURE_LIKELY_BLOCKED,
+              ),
+            );
+            await _frames(t);
+            await _shot(t, '$prefix-setup-likely-blocked');
+          });
+
           testWidgets('home connected', (t) async {
             await pumpPhone(
               t,
