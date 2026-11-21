@@ -34,6 +34,7 @@ Future<HomeController> pumpPhone(
   Config? config,
   int tab = 0,
   ThemeData? theme,
+  Locale? locale,
   void Function(Uint8List)? onSend,
   InstalledApps? installedApps,
 }) async {
@@ -47,7 +48,7 @@ Future<HomeController> pumpPhone(
     installedApps: installedApps,
   );
   if (tab != 0) controller.setTab(tab);
-  await tester.pumpWidget(RepaintBoundary(key: const Key('shot'), child: CharonApp(controller: controller, themeData: theme)));
+  await tester.pumpWidget(RepaintBoundary(key: const Key('shot'), child: CharonApp(controller: controller, themeData: theme, locale: locale)));
   await tester.pump(const Duration(milliseconds: 600));
   return controller;
 }
