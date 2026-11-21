@@ -99,4 +99,5 @@ jobs:
             v2/dist/xray-windows-amd64.exe
             v2/dist/charonsync-windows-amd64.exe
             v2/dist/charonsync-linux-amd64
+            v2/dist/charon-server-install.sh
             v2/dist/manifest.json

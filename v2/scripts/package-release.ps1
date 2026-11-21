@@ -97,6 +97,9 @@ try {
     Pop-Location
 }
 
+# The server installer ships as a release asset, so what people read is what they run.
+Copy-Item (Join-Path $v2Root "server\install.sh") (Join-Path $distDir "charon-server-install.sh")
+
 Write-Host "==> Fetching pinned Xray $XrayVersion and wintun $WintunVersion..."
 $dl = Join-Path $distDir "download"
 New-Item -ItemType Directory -Force -Path $dl | Out-Null
