@@ -90,6 +90,18 @@ void main() {
     expect(find.text('*.example.com'), findsOneWidget, reason: 'the list shows it with the star');
   });
 
+  testWidgets('with the keyboard up the sheet rides above it, so the field and Add rule stay visible', (tester) async {
+    await open(tester);
+    final dpr = tester.view.devicePixelRatio;
+    final screenBottom = tester.view.physicalSize.height / dpr;
+    tester.view.viewInsets = FakeViewPadding(bottom: 300 * dpr);
+    addTearDown(tester.view.resetViewInsets);
+    await settle(tester);
+    expect(tester.takeException(), isNull);
+    expect(tester.getBottomLeft(find.byType(TextField)).dy, lessThanOrEqualTo(screenBottom - 300));
+    expect(tester.getBottomLeft(find.bySemanticsLabel('Add rule')).dy, lessThanOrEqualTo(screenBottom - 300));
+  });
+
   testWidgets('while connected the toast says the rule waits for the next connect', (tester) async {
     await open(tester, connected: true);
     await tester.enterText(find.byType(TextField), 'example.net');

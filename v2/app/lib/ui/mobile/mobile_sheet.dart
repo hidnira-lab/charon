@@ -20,7 +20,12 @@ Future<T?> showMobileSheet<T>(BuildContext context, WidgetBuilder builder, {bool
       curve: CharonCurves.entry,
       reverseCurve: CharonCurves.exit,
     ),
-    builder: builder,
+    // A sheet route has no Scaffold, so nothing lifts it over the keyboard: pad it by hand
+    // and let the frame's scroll view absorb the shorter room.
+    builder: (context) => Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+      child: builder(context),
+    ),
   );
 }
 
