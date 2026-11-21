@@ -1,6 +1,7 @@
 import '../gen/charon/v1/charon.pb.dart';
 import '../l10n/generated/app_localizations.dart';
 import '../ui/common/ghost.dart';
+import '../ui/home/widgets/failure_copy.dart' show failurePort;
 import 'home_controller.dart';
 import 'home_view.dart';
 import 'ui_state.dart';
@@ -9,7 +10,7 @@ import 'ui_state.dart';
 /// are only for things that happen without the user: pressing Connect or
 /// Disconnect never makes one. Each kind replaces its own toast in place ([tag]).
 
-enum ToastKind { reconnecting, reconnected, movedToBackup, trafficHeld, tunnelLost, quotaAmber, quotaCap }
+enum ToastKind { reconnecting, reconnected, movedToBackup, trafficHeld, tunnelLost, likelyBlocked, quotaAmber, quotaCap }
 
 /// The colour of the toast: its bar and its primary button.
 enum ToastTone { ok, warn, crit }
@@ -170,6 +171,22 @@ class TrayToasts {
           publicText: l10n.toastPublicLost,
           stays: true,
           buttons: [ToastButton(ToastAction.connect, l10n.actionConnect, primary: true), open],
+        );
+      case NoticeKind.NOTICE_LIKELY_BLOCKED:
+        // An automatic retry found the server answering ping but no TCP: say what that
+        // usually means and how to check it. The lock screen gets no server name.
+        return ToastSpec(
+          kind: ToastKind.likelyBlocked,
+          tone: ToastTone.warn,
+          mood: GhostEyes.worried,
+          title: l10n.stpFailTitleBlocked(_code),
+          body: l10n.toastBlockedBody(_code, failurePort(_home.active)),
+          publicText: l10n.toastPublicBlocked,
+          stays: true,
+          buttons: [
+            if (next != null) ToastButton(ToastAction.moveToNext, l10n.toastMoveTo(next.id), primary: true, serverId: next.id),
+            open,
+          ],
         );
       case NoticeKind.NOTICE_QUOTA_AMBER:
       case NoticeKind.NOTICE_QUOTA_CAP:

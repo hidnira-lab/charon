@@ -4261,7 +4261,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stpIntroNote =>
-      'opens Charon\'s page on @hidnira\'s site in your browser';
+      'opens Charon\'s page on hidnira-lab\'s site in your browser';
 
   @override
   String get stpNeedsTitle => 'BEFORE YOU START';
@@ -4629,7 +4629,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stpFailBody =>
-      'TCP connect and ping both failed. This looks like a network or server problem, not a block. Check that the server is running, then retry.';
+      'Neither TCP nor ping got an answer. The server may be off, or its address may be blocked on this network. Check that the server is running, then retry.';
 
   @override
   String get trayChipWait => 'WAIT';
@@ -5767,4 +5767,86 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get toastRuleAddedNext => 'Rule added · applies on the next connect';
+
+  @override
+  String stpFailTitleBlocked(String server) {
+    return '$server may be blocked on this network';
+  }
+
+  @override
+  String stpFailBodyBlocked(int port) {
+    return 'It answers ping, but not on port $port. That often means its address is blocked here. Try another network (for example mobile data): if it works there, it is a block, not your server.';
+  }
+
+  @override
+  String stpFailTitleRefused(String server) {
+    return '$server refused the connection';
+  }
+
+  @override
+  String stpFailBodyRefused(int port) {
+    return 'The server is up, but nothing accepted the connection on port $port. Xray may not be running, or a firewall rejects it. Check the server, then retry.';
+  }
+
+  @override
+  String stpFailTitleUnresolved(String server) {
+    return 'The address of $server was not found';
+  }
+
+  @override
+  String get stpFailBodyUnresolved =>
+      'Its name did not turn into an address. Check the address with Edit server, or check your network, then retry.';
+
+  @override
+  String get stpCheck1Blocked => 'answers ping, not tcp';
+
+  @override
+  String get stpCheck1Refused => 'tcp connect refused';
+
+  @override
+  String get stpCheck1Unresolved => 'name not found';
+
+  @override
+  String get reasonLikelyBlocked => 'may be blocked here';
+
+  @override
+  String get reasonPortRefused => 'tcp connect refused';
+
+  @override
+  String get reasonNameUnresolved => 'name not found';
+
+  @override
+  String homeCauseBlocked(String server, int port) {
+    return '$server answers ping, but not on port $port.';
+  }
+
+  @override
+  String get homeTodoBlocked =>
+      'It may be blocked on this network. Try another network (for example mobile data): if it works there, it is a block, not your server.';
+
+  @override
+  String homeCauseRefused(String server, int port) {
+    return '$server refused the connection on port $port.';
+  }
+
+  @override
+  String get homeTodoRefused =>
+      'Xray may not be running, or a firewall rejects it. Check the server, then retry.';
+
+  @override
+  String homeCauseUnresolved(String server) {
+    return 'The address of $server was not found.';
+  }
+
+  @override
+  String get homeTodoUnresolved =>
+      'Check the address, or your network, then retry.';
+
+  @override
+  String toastBlockedBody(String server, int port) {
+    return '$server answers ping but not on port $port. Try another network to check: if it works there, it is a block.';
+  }
+
+  @override
+  String get toastPublicBlocked => 'Server may be blocked';
 }

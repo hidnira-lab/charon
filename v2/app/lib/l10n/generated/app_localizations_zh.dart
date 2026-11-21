@@ -4000,7 +4000,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get stpIntroButton => '阅读介绍';
 
   @override
-  String get stpIntroNote => '在浏览器中打开 @hidnira 网站上的 Charon 页面';
+  String get stpIntroNote => '在浏览器中打开 hidnira-lab 网站上的 Charon 页面';
 
   @override
   String get stpNeedsTitle => '开始之前';
@@ -4355,7 +4355,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get stpFailBody =>
-      'TCP 连接和 ping 都失败了。这像是网络或服务器问题，而不是被屏蔽。请确认服务器在运行，然后重试。';
+      'TCP 和 ping 都没有得到响应。服务器可能已关闭，或者它的地址可能在这个网络上被屏蔽。请确认服务器在运行，然后重试。';
 
   @override
   String get trayChipWait => '等待';
@@ -5449,6 +5449,86 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get toastRuleAddedNext => '规则已添加 · 下次连接时生效';
+
+  @override
+  String stpFailTitleBlocked(String server) {
+    return '$server 可能在这个网络上被屏蔽';
+  }
+
+  @override
+  String stpFailBodyBlocked(int port) {
+    return '它能响应 ping，但端口 $port 没有响应。这通常意味着它的地址在这里被屏蔽了。换一个网络试试（例如移动数据）：如果在那里能连上，就是被屏蔽，而不是你的服务器有问题。';
+  }
+
+  @override
+  String stpFailTitleRefused(String server) {
+    return '$server 拒绝了连接';
+  }
+
+  @override
+  String stpFailBodyRefused(int port) {
+    return '服务器在线，但端口 $port 上没有程序接受连接。可能是 Xray 没有运行，或者防火墙拒绝了连接。请检查服务器，然后重试。';
+  }
+
+  @override
+  String stpFailTitleUnresolved(String server) {
+    return '找不到 $server 的地址';
+  }
+
+  @override
+  String get stpFailBodyUnresolved =>
+      '它的名称无法解析为地址。请通过“编辑服务器”检查地址，或检查你的网络，然后重试。';
+
+  @override
+  String get stpCheck1Blocked => '响应 ping，但 TCP 不通';
+
+  @override
+  String get stpCheck1Refused => 'TCP 连接被拒绝';
+
+  @override
+  String get stpCheck1Unresolved => '找不到名称';
+
+  @override
+  String get reasonLikelyBlocked => '可能在此被屏蔽';
+
+  @override
+  String get reasonPortRefused => 'TCP 连接被拒绝';
+
+  @override
+  String get reasonNameUnresolved => '找不到名称';
+
+  @override
+  String homeCauseBlocked(String server, int port) {
+    return '$server 能响应 ping，但端口 $port 没有响应。';
+  }
+
+  @override
+  String get homeTodoBlocked =>
+      '它可能在这个网络上被屏蔽。换一个网络试试（例如移动数据）：如果在那里能连上，就是被屏蔽，而不是你的服务器有问题。';
+
+  @override
+  String homeCauseRefused(String server, int port) {
+    return '$server 拒绝了端口 $port 上的连接。';
+  }
+
+  @override
+  String get homeTodoRefused => '可能是 Xray 没有运行，或者防火墙拒绝了连接。请检查服务器，然后重试。';
+
+  @override
+  String homeCauseUnresolved(String server) {
+    return '找不到 $server 的地址。';
+  }
+
+  @override
+  String get homeTodoUnresolved => '请检查地址或你的网络，然后重试。';
+
+  @override
+  String toastBlockedBody(String server, int port) {
+    return '$server 能响应 ping，但端口 $port 没有响应。换一个网络确认一下：如果在那里能连上，就是被屏蔽。';
+  }
+
+  @override
+  String get toastPublicBlocked => '服务器可能被屏蔽';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hans`).
@@ -9446,7 +9526,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
   String get stpIntroButton => '阅读介绍';
 
   @override
-  String get stpIntroNote => '在浏览器中打开 @hidnira 网站上的 Charon 页面';
+  String get stpIntroNote => '在浏览器中打开 hidnira-lab 网站上的 Charon 页面';
 
   @override
   String get stpNeedsTitle => '开始之前';
@@ -9801,7 +9881,7 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get stpFailBody =>
-      'TCP 连接和 ping 都失败了。这像是网络或服务器问题，而不是被屏蔽。请确认服务器在运行，然后重试。';
+      'TCP 和 ping 都没有得到响应。服务器可能已关闭，或者它的地址可能在这个网络上被屏蔽。请确认服务器在运行，然后重试。';
 
   @override
   String get trayChipWait => '等待';
@@ -10895,4 +10975,84 @@ class AppLocalizationsZhHans extends AppLocalizationsZh {
 
   @override
   String get toastRuleAddedNext => '规则已添加 · 下次连接时生效';
+
+  @override
+  String stpFailTitleBlocked(String server) {
+    return '$server 可能在这个网络上被屏蔽';
+  }
+
+  @override
+  String stpFailBodyBlocked(int port) {
+    return '它能响应 ping，但端口 $port 没有响应。这通常意味着它的地址在这里被屏蔽了。换一个网络试试（例如移动数据）：如果在那里能连上，就是被屏蔽，而不是你的服务器有问题。';
+  }
+
+  @override
+  String stpFailTitleRefused(String server) {
+    return '$server 拒绝了连接';
+  }
+
+  @override
+  String stpFailBodyRefused(int port) {
+    return '服务器在线，但端口 $port 上没有程序接受连接。可能是 Xray 没有运行，或者防火墙拒绝了连接。请检查服务器，然后重试。';
+  }
+
+  @override
+  String stpFailTitleUnresolved(String server) {
+    return '找不到 $server 的地址';
+  }
+
+  @override
+  String get stpFailBodyUnresolved =>
+      '它的名称无法解析为地址。请通过“编辑服务器”检查地址，或检查你的网络，然后重试。';
+
+  @override
+  String get stpCheck1Blocked => '响应 ping，但 TCP 不通';
+
+  @override
+  String get stpCheck1Refused => 'TCP 连接被拒绝';
+
+  @override
+  String get stpCheck1Unresolved => '找不到名称';
+
+  @override
+  String get reasonLikelyBlocked => '可能在此被屏蔽';
+
+  @override
+  String get reasonPortRefused => 'TCP 连接被拒绝';
+
+  @override
+  String get reasonNameUnresolved => '找不到名称';
+
+  @override
+  String homeCauseBlocked(String server, int port) {
+    return '$server 能响应 ping，但端口 $port 没有响应。';
+  }
+
+  @override
+  String get homeTodoBlocked =>
+      '它可能在这个网络上被屏蔽。换一个网络试试（例如移动数据）：如果在那里能连上，就是被屏蔽，而不是你的服务器有问题。';
+
+  @override
+  String homeCauseRefused(String server, int port) {
+    return '$server 拒绝了端口 $port 上的连接。';
+  }
+
+  @override
+  String get homeTodoRefused => '可能是 Xray 没有运行，或者防火墙拒绝了连接。请检查服务器，然后重试。';
+
+  @override
+  String homeCauseUnresolved(String server) {
+    return '找不到 $server 的地址。';
+  }
+
+  @override
+  String get homeTodoUnresolved => '请检查地址或你的网络，然后重试。';
+
+  @override
+  String toastBlockedBody(String server, int port) {
+    return '$server 能响应 ping，但端口 $port 没有响应。换一个网络确认一下：如果在那里能连上，就是被屏蔽。';
+  }
+
+  @override
+  String get toastPublicBlocked => '服务器可能被屏蔽';
 }

@@ -1,6 +1,9 @@
 import '../../../gen/charon/v1/charon.pb.dart';
 import '../../../l10n/generated/app_localizations.dart';
 
+/// The port a failure message names: the server's, or 443 when none is saved (0).
+int failurePort(Server? server) => (server?.port ?? 0) == 0 ? 443 : server!.port;
+
 /// The short line for a failure the core reported, as on the Home board
 /// (`REASON[...].short`). A failed check always has a reason. Anything the
 /// boards do not name falls back to "no answer", the board default.
@@ -14,6 +17,9 @@ String failureShort(AppLocalizations l10n, FailureReason reason) {
     FailureReason.FAILURE_CONFIG_REJECTED => l10n.reasonConfigRejected,
     FailureReason.FAILURE_XRAY_EXITED => l10n.reasonXrayExited,
     FailureReason.FAILURE_GATE_FAILED => l10n.reasonGateFailed,
+    FailureReason.FAILURE_LIKELY_BLOCKED => l10n.reasonLikelyBlocked,
+    FailureReason.FAILURE_PORT_REFUSED => l10n.reasonPortRefused,
+    FailureReason.FAILURE_NAME_UNRESOLVED => l10n.reasonNameUnresolved,
     _ => l10n.reasonNoAnswer,
   };
 }

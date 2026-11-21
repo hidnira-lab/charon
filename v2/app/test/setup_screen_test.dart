@@ -284,7 +284,9 @@ void main() {
       expect(find.text('03 · SKIPPED'), findsOneWidget);
       expect(find.text('04 · SKIPPED'), findsOneWidget);
       expect(find.text('SRV-01 is not reachable'), findsOneWidget);
-      expect(find.textContaining('This looks like a network or server problem'), findsOneWidget);
+      // No claim it cannot back up: v2 never rules a block out without asking the server.
+      expect(find.textContaining('Neither TCP nor ping got an answer.'), findsOneWidget);
+      expect(find.textContaining('not a block'), findsNothing);
       expect(find.text("I can't reach SRV-01. Not your fault, probably."), findsOneWidget);
       expect(find.text('STUCK MIDWAY'), findsOneWidget);
       expect(find.text('Retry'), findsOneWidget);
@@ -295,6 +297,41 @@ void main() {
       await t.pump();
       expect(find.text('Add your first server'), findsOneWidget);
     });
+
+    testWidgets('likely blocked: the card says so, how to check it, and check 1 says ping answers', (t) async {
+      final c = await withServer(t);
+      await t.tap(big('Connect & verify'));
+      await t.pump();
+      await t.pump();
+      c.setStatus(Status(
+        phase: Phase.PHASE_IDLE,
+        lastEnd: SessionEnd.SESSION_END_COULD_NOT_REACH,
+        lastFailure: FailureReason.FAILURE_LIKELY_BLOCKED,
+      ));
+      await t.pump();
+
+      expect(find.text('01 · FAILED'), findsOneWidget);
+      expect(find.text('answers ping, not tcp'), findsOneWidget);
+      expect(find.text('SRV-01 may be blocked on this network'), findsOneWidget);
+      expect(find.textContaining('It answers ping, but not on port 443.'), findsOneWidget);
+      expect(find.textContaining('Try another network (for example mobile data)'), findsOneWidget);
+    });
+
+    for (final (reason, title, line) in [
+      (FailureReason.FAILURE_PORT_REFUSED, 'SRV-01 refused the connection', 'tcp connect refused'),
+      (FailureReason.FAILURE_NAME_UNRESOLVED, 'The address of SRV-01 was not found', 'name not found'),
+    ]) {
+      testWidgets('${reason.name}: its own card and check 1 line', (t) async {
+        final c = await withServer(t);
+        await t.tap(big('Connect & verify'));
+        await t.pump();
+        await t.pump();
+        c.setStatus(Status(phase: Phase.PHASE_IDLE, lastEnd: SessionEnd.SESSION_END_COULD_NOT_REACH, lastFailure: reason));
+        await t.pump();
+        expect(find.text(title), findsOneWidget);
+        expect(find.text(line), findsOneWidget);
+      });
+    }
 
     testWidgets('Finish without connecting saves the server and the choices and finishes', (t) async {
       var done = 0;

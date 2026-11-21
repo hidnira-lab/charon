@@ -48,8 +48,8 @@ void main() {
   });
 
   test('the Setup intro note says whose site it opens, as the board does', () {
-    expect(AppLocalizationsEn().stpIntroNote, "opens Charon's page on @hidnira's site in your browser");
-    expect(AppLocalizationsId().stpIntroNote, 'membuka halaman Charon di situs @hidnira lewat browser');
-    expect(AppLocalizationsZh().stpIntroNote, '在浏览器中打开 @hidnira 网站上的 Charon 页面');
+    expect(AppLocalizationsEn().stpIntroNote, "opens Charon's page on hidnira-lab's site in your browser");
+    expect(AppLocalizationsId().stpIntroNote, 'membuka halaman Charon di situs hidnira-lab lewat browser');
+    expect(AppLocalizationsZh().stpIntroNote, '在浏览器中打开 hidnira-lab 网站上的 Charon 页面');
   });
 }

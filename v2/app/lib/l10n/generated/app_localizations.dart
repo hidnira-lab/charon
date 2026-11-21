@@ -7387,7 +7387,7 @@ abstract class AppLocalizations {
   /// Setup screen text.
   ///
   /// In en, this message translates to:
-  /// **'opens Charon\'s page on @hidnira\'s site in your browser'**
+  /// **'opens Charon\'s page on hidnira-lab\'s site in your browser'**
   String get stpIntroNote;
 
   /// Setup screen text.
@@ -8053,7 +8053,7 @@ abstract class AppLocalizations {
   /// Setup screen text.
   ///
   /// In en, this message translates to:
-  /// **'TCP connect and ping both failed. This looks like a network or server problem, not a block. Check that the server is running, then retry.'**
+  /// **'Neither TCP nor ping got an answer. The server may be off, or its address may be blocked on this network. Check that the server is running, then retry.'**
   String get stpFailBody;
 
   /// Tray flyout chip while the tunnel is being checked or retried.
@@ -9831,6 +9831,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Rule added · applies on the next connect'**
   String get toastRuleAddedNext;
+
+  /// Setup failure card title when the server answers ping but no TCP (also the toast title).
+  ///
+  /// In en, this message translates to:
+  /// **'{server} may be blocked on this network'**
+  String stpFailTitleBlocked(String server);
+
+  /// Setup failure card body when the server answers ping but no TCP.
+  ///
+  /// In en, this message translates to:
+  /// **'It answers ping, but not on port {port}. That often means its address is blocked here. Try another network (for example mobile data): if it works there, it is a block, not your server.'**
+  String stpFailBodyBlocked(int port);
+
+  /// Setup failure card title when the server refused the TCP connection.
+  ///
+  /// In en, this message translates to:
+  /// **'{server} refused the connection'**
+  String stpFailTitleRefused(String server);
+
+  /// Setup failure card body when the server refused the TCP connection.
+  ///
+  /// In en, this message translates to:
+  /// **'The server is up, but nothing accepted the connection on port {port}. Xray may not be running, or a firewall rejects it. Check the server, then retry.'**
+  String stpFailBodyRefused(int port);
+
+  /// Setup failure card title when the server name did not resolve.
+  ///
+  /// In en, this message translates to:
+  /// **'The address of {server} was not found'**
+  String stpFailTitleUnresolved(String server);
+
+  /// Setup failure card body when the server name did not resolve.
+  ///
+  /// In en, this message translates to:
+  /// **'Its name did not turn into an address. Check the address with Edit server, or check your network, then retry.'**
+  String get stpFailBodyUnresolved;
+
+  /// Check 1 line when the server answers ping but no TCP.
+  ///
+  /// In en, this message translates to:
+  /// **'answers ping, not tcp'**
+  String get stpCheck1Blocked;
+
+  /// Check 1 line when the TCP connection was refused.
+  ///
+  /// In en, this message translates to:
+  /// **'tcp connect refused'**
+  String get stpCheck1Refused;
+
+  /// Check 1 line when the server name did not resolve.
+  ///
+  /// In en, this message translates to:
+  /// **'name not found'**
+  String get stpCheck1Unresolved;
+
+  /// Short failure reason: answers ping but no TCP.
+  ///
+  /// In en, this message translates to:
+  /// **'may be blocked here'**
+  String get reasonLikelyBlocked;
+
+  /// Short failure reason: the TCP connection was refused.
+  ///
+  /// In en, this message translates to:
+  /// **'tcp connect refused'**
+  String get reasonPortRefused;
+
+  /// Short failure reason: the server name did not resolve.
+  ///
+  /// In en, this message translates to:
+  /// **'name not found'**
+  String get reasonNameUnresolved;
+
+  /// Failure cause: answers ping but no TCP.
+  ///
+  /// In en, this message translates to:
+  /// **'{server} answers ping, but not on port {port}.'**
+  String homeCauseBlocked(String server, int port);
+
+  /// What to do when the server answers ping but no TCP.
+  ///
+  /// In en, this message translates to:
+  /// **'It may be blocked on this network. Try another network (for example mobile data): if it works there, it is a block, not your server.'**
+  String get homeTodoBlocked;
+
+  /// Failure cause: the TCP connection was refused.
+  ///
+  /// In en, this message translates to:
+  /// **'{server} refused the connection on port {port}.'**
+  String homeCauseRefused(String server, int port);
+
+  /// What to do when the TCP connection was refused.
+  ///
+  /// In en, this message translates to:
+  /// **'Xray may not be running, or a firewall rejects it. Check the server, then retry.'**
+  String get homeTodoRefused;
+
+  /// Failure cause: the server name did not resolve.
+  ///
+  /// In en, this message translates to:
+  /// **'The address of {server} was not found.'**
+  String homeCauseUnresolved(String server);
+
+  /// What to do when the server name did not resolve.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the address, or your network, then retry.'**
+  String get homeTodoUnresolved;
+
+  /// Toast body when an automatic retry finds the server answering ping but no TCP.
+  ///
+  /// In en, this message translates to:
+  /// **'{server} answers ping but not on port {port}. Try another network to check: if it works there, it is a block.'**
+  String toastBlockedBody(String server, int port);
+
+  /// Lock screen version of the likely blocked toast (no server name).
+  ///
+  /// In en, this message translates to:
+  /// **'Server may be blocked'**
+  String get toastPublicBlocked;
 }
 
 class _AppLocalizationsDelegate

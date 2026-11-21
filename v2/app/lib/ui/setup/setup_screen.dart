@@ -33,6 +33,7 @@ import '../common/dashed_box.dart';
 import '../common/ambient.dart';
 import '../common/motion.dart';
 import '../home/widgets/home_scene.dart' show SceneTime;
+import '../home/widgets/failure_copy.dart' show failurePort;
 
 /// The first run setup of the Setup board: a welcome, the first server (a link,
 /// a pasted config or a restore from another device), the safety switches, a few
@@ -1884,6 +1885,15 @@ class _ConnectStep extends StatelessWidget {
     };
     final lineInk = phase == ConnectPhase.connected ? colors.accentText : colors.text3;
 
+    // Check 1 says why the server was not reached; the card names it in plain words.
+    final port = failurePort(server);
+    final (failTitle, failBody) = switch (st.lastFailure) {
+      FailureReason.FAILURE_LIKELY_BLOCKED => (l10n.stpFailTitleBlocked(code), l10n.stpFailBodyBlocked(port)),
+      FailureReason.FAILURE_PORT_REFUSED => (l10n.stpFailTitleRefused(code), l10n.stpFailBodyRefused(port)),
+      FailureReason.FAILURE_NAME_UNRESOLVED => (l10n.stpFailTitleUnresolved(code), l10n.stpFailBodyUnresolved),
+      _ => (l10n.stpFailTitle(code), l10n.stpFailBody),
+    };
+
     final names = [l10n.stpCheck1, l10n.stpCheck2, l10n.stpCheck3, l10n.stpCheck4];
     String detail(int i) {
       final ok = checks[i] == CheckState.ok;
@@ -1891,7 +1901,12 @@ class _ConnectStep extends StatelessWidget {
         0 => ok && st.latencyMs > 0
             ? l10n.stpCheck1Ok(st.latencyMs)
             : checks[i] == CheckState.failed
-                ? l10n.stpCheck1Fail
+                ? switch (st.lastFailure) {
+                    FailureReason.FAILURE_LIKELY_BLOCKED => l10n.stpCheck1Blocked,
+                    FailureReason.FAILURE_PORT_REFUSED => l10n.stpCheck1Refused,
+                    FailureReason.FAILURE_NAME_UNRESOLVED => l10n.stpCheck1Unresolved,
+                    _ => l10n.stpCheck1Fail,
+                  }
                 : l10n.stpCheck1Wait,
         1 => ok ? l10n.stpCheck2Ok : l10n.stpCheck2Wait,
         2 => ok ? l10n.stpCheck3Ok(st.egressAddress.isEmpty ? '–' : st.egressAddress, code) : l10n.stpCheck3Wait,
@@ -2027,9 +2042,9 @@ class _ConnectStep extends StatelessWidget {
                       children: [
                         Text(l10n.stpFailTag, style: monoStyle(colors.transitionText, 10, bold: true, em: 0.08)),
                         const SizedBox(height: 4),
-                        Text(l10n.stpFailTitle(code), style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: colors.text)),
+                        Text(failTitle, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: colors.text)),
                         const SizedBox(height: 4),
-                        Text(l10n.stpFailBody, style: TextStyle(fontSize: 12, height: 16 / 12, color: colors.text)),
+                        Text(failBody, style: TextStyle(fontSize: 12, height: 16 / 12, color: colors.text)),
                       ],
                     ),
                   ),

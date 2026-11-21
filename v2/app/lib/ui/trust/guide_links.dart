@@ -70,7 +70,11 @@ class CharonGuideLinks {
   /// `charon_uiux_additions.md` section 6).
   static CharonGuideId guideForFailureReason(FailureReason reason) {
     return switch (reason) {
-      FailureReason.FAILURE_TCP_TIMEOUT => CharonGuideId.a5CouldNotReach,
+      FailureReason.FAILURE_TCP_TIMEOUT ||
+      FailureReason.FAILURE_LIKELY_BLOCKED ||
+      FailureReason.FAILURE_PORT_REFUSED ||
+      FailureReason.FAILURE_NAME_UNRESOLVED =>
+        CharonGuideId.a5CouldNotReach,
       FailureReason.FAILURE_REALITY_HANDSHAKE =>
         CharonGuideId.a4RealityKeysAndSni,
       FailureReason.FAILURE_CONFIG_REJECTED => CharonGuideId.a3ServerSetup,

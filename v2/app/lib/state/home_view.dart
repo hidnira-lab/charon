@@ -633,6 +633,24 @@ class HomeView {
         return (cause: l10n.reasonXrayExited, todo: '', alt: null, guide: 'B10');
       case FailureReason.FAILURE_GATE_FAILED:
         return (cause: l10n.reasonGateFailed, todo: '', alt: null, guide: 'A7');
+      // Check 1 says why: the server answers ping but no TCP (likely blocked here), it
+      // refused the port, or its name did not resolve.
+      case FailureReason.FAILURE_LIKELY_BLOCKED:
+        return (
+          cause: l10n.homeCauseBlocked(code, failurePort(active)),
+          todo: l10n.homeTodoBlocked,
+          alt: (BannerActionKind.chooseServer, l10n.blockedActionChooseServer),
+          guide: 'A5',
+        );
+      case FailureReason.FAILURE_PORT_REFUSED:
+        return (cause: l10n.homeCauseRefused(code, failurePort(active)), todo: l10n.homeTodoRefused, alt: null, guide: 'A5');
+      case FailureReason.FAILURE_NAME_UNRESOLVED:
+        return (
+          cause: l10n.homeCauseUnresolved(code),
+          todo: l10n.homeTodoUnresolved,
+          alt: (BannerActionKind.editServer, l10n.homeActionEditServer),
+          guide: 'A5',
+        );
       default:
         return (
           cause: l10n.homeCauseNoAnswer(code),

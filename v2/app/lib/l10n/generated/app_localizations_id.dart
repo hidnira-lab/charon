@@ -4228,7 +4228,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get stpIntroNote =>
-      'membuka halaman Charon di situs @hidnira lewat browser';
+      'membuka halaman Charon di situs hidnira-lab lewat browser';
 
   @override
   String get stpNeedsTitle => 'SEBELUM MULAI';
@@ -4596,7 +4596,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get stpFailBody =>
-      'Koneksi TCP dan ping sama-sama gagal. Ini terlihat seperti masalah jaringan atau server, bukan blokir. Cek apakah server berjalan, lalu coba lagi.';
+      'TCP maupun ping tidak mendapat jawaban. Servernya mungkin mati, atau alamatnya mungkin diblokir di jaringan ini. Cek apakah server berjalan, lalu coba lagi.';
 
   @override
   String get trayChipWait => 'CEK';
@@ -5728,4 +5728,86 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get toastRuleAddedNext =>
       'Aturan ditambahkan · berlaku di koneksi berikutnya';
+
+  @override
+  String stpFailTitleBlocked(String server) {
+    return '$server mungkin diblokir di jaringan ini';
+  }
+
+  @override
+  String stpFailBodyBlocked(int port) {
+    return 'Server membalas ping, tapi tidak di port $port. Biasanya itu berarti alamatnya diblokir di sini. Coba jaringan lain (misalnya data seluler): kalau di sana jalan, ini blokir, bukan masalah servermu.';
+  }
+
+  @override
+  String stpFailTitleRefused(String server) {
+    return '$server menolak koneksi';
+  }
+
+  @override
+  String stpFailBodyRefused(int port) {
+    return 'Servernya hidup, tapi tidak ada yang menerima koneksi di port $port. Xray mungkin tidak berjalan, atau firewall menolaknya. Cek servernya, lalu coba lagi.';
+  }
+
+  @override
+  String stpFailTitleUnresolved(String server) {
+    return 'Alamat $server tidak ditemukan';
+  }
+
+  @override
+  String get stpFailBodyUnresolved =>
+      'Namanya tidak bisa diubah menjadi alamat. Cek alamatnya lewat Edit server, atau cek jaringanmu, lalu coba lagi.';
+
+  @override
+  String get stpCheck1Blocked => 'membalas ping, bukan tcp';
+
+  @override
+  String get stpCheck1Refused => 'koneksi tcp ditolak';
+
+  @override
+  String get stpCheck1Unresolved => 'nama tidak ditemukan';
+
+  @override
+  String get reasonLikelyBlocked => 'mungkin diblokir di sini';
+
+  @override
+  String get reasonPortRefused => 'koneksi tcp ditolak';
+
+  @override
+  String get reasonNameUnresolved => 'nama tidak ditemukan';
+
+  @override
+  String homeCauseBlocked(String server, int port) {
+    return '$server membalas ping, tapi tidak di port $port.';
+  }
+
+  @override
+  String get homeTodoBlocked =>
+      'Mungkin diblokir di jaringan ini. Coba jaringan lain (misalnya data seluler): kalau di sana jalan, ini blokir, bukan masalah servermu.';
+
+  @override
+  String homeCauseRefused(String server, int port) {
+    return '$server menolak koneksi di port $port.';
+  }
+
+  @override
+  String get homeTodoRefused =>
+      'Xray mungkin tidak berjalan, atau firewall menolaknya. Cek servernya, lalu coba lagi.';
+
+  @override
+  String homeCauseUnresolved(String server) {
+    return 'Alamat $server tidak ditemukan.';
+  }
+
+  @override
+  String get homeTodoUnresolved =>
+      'Cek alamatnya atau jaringanmu, lalu coba lagi.';
+
+  @override
+  String toastBlockedBody(String server, int port) {
+    return '$server membalas ping tapi tidak di port $port. Coba jaringan lain untuk memastikan: kalau di sana jalan, ini blokir.';
+  }
+
+  @override
+  String get toastPublicBlocked => 'Server mungkin diblokir';
 }

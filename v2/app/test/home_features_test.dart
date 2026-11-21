@@ -201,6 +201,31 @@ void main() {
       expect(find.text('WEBSITE ↗'), findsOneWidget);
     });
 
+    testWidgets('could not reach says why: likely blocked, refused port, unknown name', (tester) async {
+      for (final (reason, cause, todo, alt) in [
+        (FailureReason.FAILURE_LIKELY_BLOCKED, 'SRV-01 answers ping, but not on port 443.', 'It may be blocked on this network.', 'Choose another server'),
+        (FailureReason.FAILURE_PORT_REFUSED, 'SRV-01 refused the connection on port 443.', 'Xray may not be running', null),
+        (FailureReason.FAILURE_NAME_UNRESOLVED, 'The address of SRV-01 was not found.', 'Check the address, or your network', 'Edit server'),
+      ]) {
+        final controller = HomeController(
+          initialStatus: Status(
+            phase: Phase.PHASE_IDLE,
+            gate: Gate.GATE_DISARMED,
+            activeServerId: 'SRV-01',
+            lastEnd: SessionEnd.SESSION_END_COULD_NOT_REACH,
+            lastFailure: reason,
+          ),
+          initialConfig: twoServers(),
+        );
+        await pumpBanner(tester, controller);
+        expect(find.text('COULD NOT REACH · SRV-01'), findsOneWidget, reason: '$reason');
+        expect(find.text(cause), findsOneWidget, reason: '$reason');
+        expect(find.textContaining(todo), findsOneWidget, reason: '$reason');
+        if (alt != null) expect(find.text(alt), findsOneWidget, reason: '$reason');
+        expect(find.text('Retry'), findsOneWidget, reason: '$reason');
+      }
+    });
+
     testWidgets('failover in progress names the server that failed and the one being checked', (tester) async {
       final controller = HomeController(
         initialStatus: Status(

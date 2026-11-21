@@ -91,6 +91,16 @@ void main() {
       expect(s.publicText, 'Traffic held');
     });
 
+    test('likely blocked: says so and how to check, stays, amber, no server on the lock screen', () {
+      final s = toasts(controller(held)).forNotice(notice(NoticeKind.NOTICE_LIKELY_BLOCKED))!;
+      expect(s.title, 'SRV-01 may be blocked on this network');
+      expect(s.body, startsWith('SRV-01 answers ping but not on port 443. Try another network to check'));
+      expect(labels(s).last, 'Open Charon');
+      expect((s.stays, s.sound, s.tone), (true, false, ToastTone.warn));
+      expect(s.publicText, 'Server may be blocked');
+      expect(s.tag, 'likelyBlocked');
+    });
+
     test('tunnel lost: stays but never red and never a sound', () {
       final s = toasts(controller(Status(phase: Phase.PHASE_IDLE, activeServerId: 'SRV-01'))).forNotice(notice(NoticeKind.NOTICE_TUNNEL_LOST))!;
       expect(s.title, 'Tunnel lost');
