@@ -373,6 +373,9 @@ enum NoticeKind {
   NOTICE_QUOTA_AMBER = 4;
   NOTICE_QUOTA_CAP = 5;
   NOTICE_TUNNEL_LOST = 6;
+  // An automatic retry found the server answering ping but no TCP: it may be
+  // blocked on this network. Sent once, when the reason first turns up.
+  NOTICE_LIKELY_BLOCKED = 7;
 }
 
 enum FailureReason {
@@ -390,6 +393,16 @@ enum FailureReason {
   // The traffic gate (the WFP filters on Windows) could not be installed or
   // changed, so the session was ended instead of claiming protection.
   FAILURE_GATE_FAILED = 11;
+  // Check 1 failed and the server was then asked why (added after
+  // FAILURE_TCP_TIMEOUT, which now means: neither TCP nor ping answered).
+  // LIKELY_BLOCKED: the server answers ping but no TCP connection gets through,
+  // the usual sign of an address blocked on this network. A hint, not a proof.
+  FAILURE_LIKELY_BLOCKED = 12;
+  // PORT_REFUSED: the server refused the TCP connection, so it is up but nothing
+  // accepts the port (Xray stopped, or a firewall rejects it).
+  FAILURE_PORT_REFUSED = 13;
+  // NAME_UNRESOLVED: the server address is a name that did not resolve.
+  FAILURE_NAME_UNRESOLVED = 14;
 }
 
 enum Probe {

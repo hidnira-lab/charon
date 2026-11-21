@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/netip"
 	"strings"
+	"syscall"
 	"time"
 
 	charonv1 "github.com/hidnira-lab/charon/core/gen/charonv1"
@@ -36,6 +37,13 @@ type Options struct {
 	// enter the tunnel, so the platform passes a dialer whose sockets are
 	// protected from it.
 	DialServer func(ctx context.Context, network, addr string) (net.Conn, error)
+
+	// Ping sends ICMP echoes to the server address, underneath the tunnel like
+	// DialServer, and reports whether one came back before ctx ends. It runs only
+	// after every try of check 1 timed out: a server that answers ping but no TCP
+	// connection is the usual sign of an address blocked on this network. It talks
+	// to the user's own server and nothing else. Nil skips it.
+	Ping func(ctx context.Context, ip netip.Addr) bool
 
 	// SocksReadyWait is how long check 2 waits for the SOCKS inbound of Xray to
 	// accept connections. Xray is "started" 150 ms after it is launched, but it
@@ -101,21 +109,17 @@ func (v *Verifier) Verify(ctx context.Context, server *charonv1.Server, cfg *cha
 	expectedIPs, err := v.opts.LookupHost(ctx, strings.TrimSpace(server.GetAddress()))
 	if err != nil || len(expectedIPs) == 0 {
 		v.failed("1 (the server address did not resolve)", err)
-		return "", 0, charonv1.FailureReason_FAILURE_TCP_TIMEOUT
+		return "", 0, charonv1.FailureReason_FAILURE_NAME_UNRESOLVED
 	}
 
-	// Step 1: TCP reachability to the server's address:port.
+	// Step 1: TCP reachability to the server's address:port. When it fails, ask the
+	// server why, so the screens can tell a refused port, a likely block and silence apart.
 	serverEndpoint := net.JoinHostPort(strings.TrimSpace(server.GetAddress()), fmt.Sprintf("%d", server.GetPort()))
-	dial := v.opts.DialServer
-	if dial == nil {
-		dial = (&net.Dialer{}).DialContext
+	if err := v.reach(ctx, serverEndpoint); err != nil {
+		reason := v.whyUnreachable(ctx, err, expectedIPs[0])
+		v.failed("1 ("+unreachableText[reason]+")", err)
+		return "", 0, reason
 	}
-	tcpConn, err := dial(ctx, "tcp", serverEndpoint)
-	if err != nil {
-		v.failed("1 (the server does not accept a connection)", err)
-		return "", 0, charonv1.FailureReason_FAILURE_TCP_TIMEOUT
-	}
-	_ = tcpConn.Close()
 
 	// Xray needs a moment after it started before it listens: wait for it, so a
 	// healthy start is not taken for a failed one.
@@ -161,6 +165,96 @@ func (v *Verifier) Verify(ctx context.Context, server *charonv1.Server, cfg *cha
 	}
 
 	return observedIP.String(), latencyMs, charonv1.FailureReason_FAILURE_UNSPECIFIED
+}
+
+const (
+	// Check 1 dials this many times at once: one SYN lost on a flaky mobile link is
+	// not a dead server.
+	reachTries = 3
+	// How long one try of check 1, and the ping after it, may take.
+	reachTimeout  = 5 * time.Second
+	pingTimeout   = 3 * time.Second
+	canaryTimeout = 1500 * time.Millisecond
+	// WSAECONNREFUSED: Windows reports a refused connection with this code, which
+	// is not the value of syscall.ECONNREFUSED there.
+	wsaeConnRefused = 10061
+)
+
+// What each reason of check 1 means, for the log line (no address in it).
+var unreachableText = map[charonv1.FailureReason]string{
+	charonv1.FailureReason_FAILURE_PORT_REFUSED:   "the server refused the connection",
+	charonv1.FailureReason_FAILURE_LIKELY_BLOCKED: "the server answers ping but not TCP, likely blocked on this network",
+	charonv1.FailureReason_FAILURE_TCP_TIMEOUT:    "the server answered neither TCP nor ping",
+}
+
+// reach dials the server reachTries times at once and returns nil as soon as one
+// try connects. Otherwise it returns a refusal if any try was refused (the most
+// telling answer), or the first error.
+func (v *Verifier) reach(ctx context.Context, endpoint string) error {
+	dial := v.opts.DialServer
+	if dial == nil {
+		dial = (&net.Dialer{}).DialContext
+	}
+	ctx, cancel := context.WithTimeout(ctx, reachTimeout)
+	defer cancel()
+	errs := make(chan error, reachTries)
+	for range reachTries {
+		go func() {
+			conn, err := dial(ctx, "tcp", endpoint)
+			if err == nil {
+				_ = conn.Close()
+			}
+			errs <- err
+		}()
+	}
+	var first error
+	for range reachTries {
+		err := <-errs
+		if err == nil {
+			return nil
+		}
+		if first == nil || (refused(err) && !refused(first)) {
+			first = err
+		}
+	}
+	return first
+}
+
+// whyUnreachable names the failure of check 1. A refusal means the server is up but
+// nothing takes the port. Silence on TCP with an answer to ping is the usual sign of a
+// blocked address; with no answer at all, Charon cannot tell a dead server from a block.
+func (v *Verifier) whyUnreachable(ctx context.Context, err error, ip netip.Addr) charonv1.FailureReason {
+	if refused(err) {
+		return charonv1.FailureReason_FAILURE_PORT_REFUSED
+	}
+	if v.opts.Ping != nil && v.answers(ctx, ip, pingTimeout) {
+		// Another VPN's TUN can answer ping for every address itself. An address that is
+		// never routed (a documentation one) answering too means the reply is not the
+		// server's, so it proves nothing. No real host is asked.
+		canary := netip.MustParseAddr("192.0.2.1")
+		if ip.Is6() {
+			canary = netip.MustParseAddr("2001:db8::1")
+		}
+		if !v.answers(ctx, canary, canaryTimeout) {
+			return charonv1.FailureReason_FAILURE_LIKELY_BLOCKED
+		}
+	}
+	return charonv1.FailureReason_FAILURE_TCP_TIMEOUT
+}
+
+func (v *Verifier) answers(ctx context.Context, ip netip.Addr, wait time.Duration) bool {
+	ctx, cancel := context.WithTimeout(ctx, wait)
+	defer cancel()
+	return v.opts.Ping(ctx, ip)
+}
+
+// refused reports whether err is a refused TCP connection, on any platform.
+func refused(err error) bool {
+	if errors.Is(err, syscall.ECONNREFUSED) {
+		return true
+	}
+	var errno syscall.Errno
+	return errors.As(err, &errno) && uintptr(errno) == wsaeConnRefused
 }
 
 // waitForSocks waits until the SOCKS inbound of Xray accepts a connection, for

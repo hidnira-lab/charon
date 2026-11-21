@@ -361,6 +361,11 @@ class NoticeKind extends $pb.ProtobufEnum {
   static const NoticeKind NOTICE_TUNNEL_LOST =
       NoticeKind._(6, _omitEnumNames ? '' : 'NOTICE_TUNNEL_LOST');
 
+  /// An automatic retry found the server answering ping but no TCP: it may be
+  /// blocked on this network. Sent once, when the reason first turns up.
+  static const NoticeKind NOTICE_LIKELY_BLOCKED =
+      NoticeKind._(7, _omitEnumNames ? '' : 'NOTICE_LIKELY_BLOCKED');
+
   static const $core.List<NoticeKind> values = <NoticeKind>[
     NOTICE_UNSPECIFIED,
     NOTICE_RECONNECTED,
@@ -369,10 +374,11 @@ class NoticeKind extends $pb.ProtobufEnum {
     NOTICE_QUOTA_AMBER,
     NOTICE_QUOTA_CAP,
     NOTICE_TUNNEL_LOST,
+    NOTICE_LIKELY_BLOCKED,
   ];
 
   static final $core.List<NoticeKind?> _byValue =
-      $pb.ProtobufEnum.$_initByValueList(values, 6);
+      $pb.ProtobufEnum.$_initByValueList(values, 7);
   static NoticeKind? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
@@ -408,6 +414,22 @@ class FailureReason extends $pb.ProtobufEnum {
   static const FailureReason FAILURE_GATE_FAILED =
       FailureReason._(11, _omitEnumNames ? '' : 'FAILURE_GATE_FAILED');
 
+  /// Check 1 failed and the server was then asked why (added after
+  /// FAILURE_TCP_TIMEOUT, which now means: neither TCP nor ping answered).
+  /// LIKELY_BLOCKED: the server answers ping but no TCP connection gets through,
+  /// the usual sign of an address blocked on this network. A hint, not a proof.
+  static const FailureReason FAILURE_LIKELY_BLOCKED =
+      FailureReason._(12, _omitEnumNames ? '' : 'FAILURE_LIKELY_BLOCKED');
+
+  /// PORT_REFUSED: the server refused the TCP connection, so it is up but nothing
+  /// accepts the port (Xray stopped, or a firewall rejects it).
+  static const FailureReason FAILURE_PORT_REFUSED =
+      FailureReason._(13, _omitEnumNames ? '' : 'FAILURE_PORT_REFUSED');
+
+  /// NAME_UNRESOLVED: the server address is a name that did not resolve.
+  static const FailureReason FAILURE_NAME_UNRESOLVED =
+      FailureReason._(14, _omitEnumNames ? '' : 'FAILURE_NAME_UNRESOLVED');
+
   static const $core.List<FailureReason> values = <FailureReason>[
     FAILURE_UNSPECIFIED,
     FAILURE_TCP_TIMEOUT,
@@ -421,10 +443,13 @@ class FailureReason extends $pb.ProtobufEnum {
     FAILURE_NETWORK_CHANGED,
     FAILURE_DNS_NOT_TUNNELLED,
     FAILURE_GATE_FAILED,
+    FAILURE_LIKELY_BLOCKED,
+    FAILURE_PORT_REFUSED,
+    FAILURE_NAME_UNRESOLVED,
   ];
 
   static final $core.List<FailureReason?> _byValue =
-      $pb.ProtobufEnum.$_initByValueList(values, 11);
+      $pb.ProtobufEnum.$_initByValueList(values, 14);
   static FailureReason? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 

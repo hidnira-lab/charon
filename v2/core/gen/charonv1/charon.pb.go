@@ -725,6 +725,9 @@ const (
 	NoticeKind_NOTICE_QUOTA_AMBER     NoticeKind = 4
 	NoticeKind_NOTICE_QUOTA_CAP       NoticeKind = 5
 	NoticeKind_NOTICE_TUNNEL_LOST     NoticeKind = 6
+	// An automatic retry found the server answering ping but no TCP: it may be
+	// blocked on this network. Sent once, when the reason first turns up.
+	NoticeKind_NOTICE_LIKELY_BLOCKED NoticeKind = 7
 )
 
 // Enum value maps for NoticeKind.
@@ -737,6 +740,7 @@ var (
 		4: "NOTICE_QUOTA_AMBER",
 		5: "NOTICE_QUOTA_CAP",
 		6: "NOTICE_TUNNEL_LOST",
+		7: "NOTICE_LIKELY_BLOCKED",
 	}
 	NoticeKind_value = map[string]int32{
 		"NOTICE_UNSPECIFIED":     0,
@@ -746,6 +750,7 @@ var (
 		"NOTICE_QUOTA_AMBER":     4,
 		"NOTICE_QUOTA_CAP":       5,
 		"NOTICE_TUNNEL_LOST":     6,
+		"NOTICE_LIKELY_BLOCKED":  7,
 	}
 )
 
@@ -793,6 +798,16 @@ const (
 	// The traffic gate (the WFP filters on Windows) could not be installed or
 	// changed, so the session was ended instead of claiming protection.
 	FailureReason_FAILURE_GATE_FAILED FailureReason = 11
+	// Check 1 failed and the server was then asked why (added after
+	// FAILURE_TCP_TIMEOUT, which now means: neither TCP nor ping answered).
+	// LIKELY_BLOCKED: the server answers ping but no TCP connection gets through,
+	// the usual sign of an address blocked on this network. A hint, not a proof.
+	FailureReason_FAILURE_LIKELY_BLOCKED FailureReason = 12
+	// PORT_REFUSED: the server refused the TCP connection, so it is up but nothing
+	// accepts the port (Xray stopped, or a firewall rejects it).
+	FailureReason_FAILURE_PORT_REFUSED FailureReason = 13
+	// NAME_UNRESOLVED: the server address is a name that did not resolve.
+	FailureReason_FAILURE_NAME_UNRESOLVED FailureReason = 14
 )
 
 // Enum value maps for FailureReason.
@@ -810,6 +825,9 @@ var (
 		9:  "FAILURE_NETWORK_CHANGED",
 		10: "FAILURE_DNS_NOT_TUNNELLED",
 		11: "FAILURE_GATE_FAILED",
+		12: "FAILURE_LIKELY_BLOCKED",
+		13: "FAILURE_PORT_REFUSED",
+		14: "FAILURE_NAME_UNRESOLVED",
 	}
 	FailureReason_value = map[string]int32{
 		"FAILURE_UNSPECIFIED":       0,
@@ -824,6 +842,9 @@ var (
 		"FAILURE_NETWORK_CHANGED":   9,
 		"FAILURE_DNS_NOT_TUNNELLED": 10,
 		"FAILURE_GATE_FAILED":       11,
+		"FAILURE_LIKELY_BLOCKED":    12,
+		"FAILURE_PORT_REFUSED":      13,
+		"FAILURE_NAME_UNRESOLVED":   14,
 	}
 )
 
@@ -4134,7 +4155,7 @@ const file_charon_v1_charon_proto_rawDesc = "" +
 	"\x0fUPDATE_APPLYING\x10\x06\x12\x12\n" +
 	"\x0eUPDATE_UPDATED\x10\a\x12\x16\n" +
 	"\x12UPDATE_ROLLED_BACK\x10\b\x12\x17\n" +
-	"\x13UPDATE_CANNOT_CHECK\x10\t*\xb7\x01\n" +
+	"\x13UPDATE_CANNOT_CHECK\x10\t*\xd2\x01\n" +
 	"\n" +
 	"NoticeKind\x12\x16\n" +
 	"\x12NOTICE_UNSPECIFIED\x10\x00\x12\x16\n" +
@@ -4143,7 +4164,8 @@ const file_charon_v1_charon_proto_rawDesc = "" +
 	"\x13NOTICE_TRAFFIC_HELD\x10\x03\x12\x16\n" +
 	"\x12NOTICE_QUOTA_AMBER\x10\x04\x12\x14\n" +
 	"\x10NOTICE_QUOTA_CAP\x10\x05\x12\x16\n" +
-	"\x12NOTICE_TUNNEL_LOST\x10\x06*\xd7\x02\n" +
+	"\x12NOTICE_TUNNEL_LOST\x10\x06\x12\x19\n" +
+	"\x15NOTICE_LIKELY_BLOCKED\x10\a*\xaa\x03\n" +
 	"\rFailureReason\x12\x17\n" +
 	"\x13FAILURE_UNSPECIFIED\x10\x00\x12\x17\n" +
 	"\x13FAILURE_TCP_TIMEOUT\x10\x01\x12\x1d\n" +
@@ -4157,7 +4179,10 @@ const file_charon_v1_charon_proto_rawDesc = "" +
 	"\x17FAILURE_NETWORK_CHANGED\x10\t\x12\x1d\n" +
 	"\x19FAILURE_DNS_NOT_TUNNELLED\x10\n" +
 	"\x12\x17\n" +
-	"\x13FAILURE_GATE_FAILED\x10\v*H\n" +
+	"\x13FAILURE_GATE_FAILED\x10\v\x12\x1a\n" +
+	"\x16FAILURE_LIKELY_BLOCKED\x10\f\x12\x18\n" +
+	"\x14FAILURE_PORT_REFUSED\x10\r\x12\x1b\n" +
+	"\x17FAILURE_NAME_UNRESOLVED\x10\x0e*H\n" +
 	"\x05Probe\x12\x15\n" +
 	"\x11PROBE_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14PROBE_NETWORK_CHANGE\x10\x01\x12\x0e\n" +

@@ -441,11 +441,13 @@ func (r *run) failedCheck(e Event) {
 			reason = charonv1.FailureReason_FAILURE_ADAPTER_LOST
 		}
 	}
+	newlyBlocked := reason == charonv1.FailureReason_FAILURE_LIKELY_BLOCKED && s.LastFailure != reason
 	s.LastFailure = reason
 	switch s.Phase {
 	case phStarting:
 		s.Ending = charonv1.SessionEnd_SESSION_END_COULD_NOT_REACH
 		r.beginStop(e) // first connect, never Up: stop, no retry loop (S4)
+		return
 	case phVerifying:
 		if !s.EverUp {
 			s.Ending = charonv1.SessionEnd_SESSION_END_COULD_NOT_REACH
@@ -457,6 +459,11 @@ func (r *run) failedCheck(e Event) {
 		r.toRetrying(2, true) // the first check on a switch target is attempt 1
 	case phRetrying:
 		r.retryFailed()
+	}
+	// The session was Up, so this try ran on its own: say once that the server may be
+	// blocked here. A first connect shows it on the screen the user is looking at.
+	if newlyBlocked {
+		r.notify(charonv1.NoticeKind_NOTICE_LIKELY_BLOCKED)
 	}
 }
 

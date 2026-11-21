@@ -8,9 +8,12 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/netip"
+	"os"
+	"slices"
 	"strconv"
 	"strings"
 	"sync"
+	"syscall"
 	"testing"
 	"time"
 
@@ -202,10 +205,113 @@ func TestVerifier_AllFourChecks(t *testing.T) {
 		t.Fatalf("expected FAILURE_REALITY_HANDSHAKE, got %v", r)
 	}
 
-	// 5. Check 1 fails (TCP timeout / connection refused to server).
+	// 5. Check 1 fails: nothing listens on port 1, so the real stack refuses it.
 	deadSrv := &charonv1.Server{Id: "SRV-01", Address: "127.0.0.1", Port: 1}
-	if _, _, r := v.Verify(ctx, deadSrv, nil); r != charonv1.FailureReason_FAILURE_TCP_TIMEOUT {
-		t.Fatalf("expected FAILURE_TCP_TIMEOUT, got %v", r)
+	if _, _, r := v.Verify(ctx, deadSrv, nil); r != charonv1.FailureReason_FAILURE_PORT_REFUSED {
+		t.Fatalf("expected FAILURE_PORT_REFUSED, got %v", r)
+	}
+}
+
+// Check 1 names why the server could not be reached: a name that did not resolve, a
+// refused port, an address that answers ping but no TCP (likely blocked), or silence.
+// A ping answered by every address (another VPN's TUN) proves nothing.
+func TestVerifier_Check1SaysWhy(t *testing.T) {
+	refusedErr := &net.OpError{Op: "dial", Net: "tcp", Err: os.NewSyscallError("connect", syscall.ECONNREFUSED)}
+	winRefused := &net.OpError{Op: "dial", Net: "tcp", Err: os.NewSyscallError("connectex", syscall.Errno(10061))}
+	timeout := context.DeadlineExceeded
+	server := netip.MustParseAddr("192.0.2.10")
+	canary := netip.MustParseAddr("192.0.2.1")
+	found := func(context.Context, string) ([]netip.Addr, error) { return []netip.Addr{server}, nil }
+	notFound := func(context.Context, string) ([]netip.Addr, error) {
+		return nil, &net.DNSError{Err: "no such host", IsNotFound: true}
+	}
+	silent := []error{timeout, timeout, timeout}
+
+	for _, tc := range []struct {
+		name      string
+		lookup    func(context.Context, string) ([]netip.Addr, error)
+		dialErr   []error      // one per try, in any order
+		answering []netip.Addr // addresses that answer ping; nil: no Ping function
+		want      charonv1.FailureReason
+		pinged    []netip.Addr // in order
+	}{
+		{name: "name did not resolve", lookup: notFound, want: charonv1.FailureReason_FAILURE_NAME_UNRESOLVED},
+		{name: "refused", lookup: found, dialErr: []error{refusedErr, refusedErr, refusedErr}, answering: []netip.Addr{server},
+			want: charonv1.FailureReason_FAILURE_PORT_REFUSED},
+		{name: "refused on Windows (WSAECONNREFUSED)", lookup: found, dialErr: []error{winRefused, winRefused, winRefused},
+			want: charonv1.FailureReason_FAILURE_PORT_REFUSED},
+		{name: "one refusal among timeouts", lookup: found, dialErr: []error{timeout, refusedErr, timeout}, answering: []netip.Addr{server},
+			want: charonv1.FailureReason_FAILURE_PORT_REFUSED},
+		{name: "silent on TCP, answers ping", lookup: found, dialErr: silent, answering: []netip.Addr{server},
+			want: charonv1.FailureReason_FAILURE_LIKELY_BLOCKED, pinged: []netip.Addr{server, canary}},
+		{name: "every address answers ping (another VPN's TUN)", lookup: found, dialErr: silent, answering: []netip.Addr{server, canary},
+			want: charonv1.FailureReason_FAILURE_TCP_TIMEOUT, pinged: []netip.Addr{server, canary}},
+		{name: "silent on TCP and ping", lookup: found, dialErr: silent, answering: []netip.Addr{},
+			want: charonv1.FailureReason_FAILURE_TCP_TIMEOUT, pinged: []netip.Addr{server}},
+		{name: "silent on TCP, no ping on this platform", lookup: found, dialErr: silent,
+			want: charonv1.FailureReason_FAILURE_TCP_TIMEOUT},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			var mu sync.Mutex
+			tries := 0
+			var pinged []netip.Addr
+			opts := Options{
+				SocksAddr:  "127.0.0.1:1",
+				LookupHost: tc.lookup,
+				DialServer: func(context.Context, string, string) (net.Conn, error) {
+					mu.Lock()
+					defer mu.Unlock()
+					err := tc.dialErr[tries]
+					tries++
+					return nil, err
+				},
+			}
+			if tc.answering != nil {
+				opts.Ping = func(_ context.Context, got netip.Addr) bool {
+					pinged = append(pinged, got)
+					return slices.Contains(tc.answering, got)
+				}
+			}
+			_, _, reason := New(opts).Verify(context.Background(), &charonv1.Server{Id: "SRV-01", Address: "192.0.2.10", Port: 443}, nil)
+			if reason != tc.want {
+				t.Fatalf("want %v, got %v", tc.want, reason)
+			}
+			if len(tc.dialErr) > 0 && tries != 3 {
+				t.Fatalf("check 1 should try 3 times, tried %d", tries)
+			}
+			if !slices.Equal(pinged, tc.pinged) {
+				t.Fatalf("pinged %v, want %v", pinged, tc.pinged)
+			}
+		})
+	}
+}
+
+// One try out of three that connects is enough: a lost SYN on a flaky link is not a
+// dead server, so check 1 passes and the next check runs.
+func TestVerifier_OneOfThreeTriesIsEnough(t *testing.T) {
+	var mu sync.Mutex
+	tries := 0
+	v := New(Options{
+		SocksAddr:      "127.0.0.1:1",
+		SocksReadyWait: 100 * time.Millisecond,
+		LookupHost: func(context.Context, string) ([]netip.Addr, error) {
+			return []netip.Addr{netip.MustParseAddr("192.0.2.10")}, nil
+		},
+		DialServer: func(context.Context, string, string) (net.Conn, error) {
+			mu.Lock()
+			defer mu.Unlock()
+			tries++
+			if tries == 2 {
+				c, _ := net.Pipe()
+				return c, nil
+			}
+			return nil, context.DeadlineExceeded
+		},
+		Ping: func(context.Context, netip.Addr) bool { t.Fatal("ping must not run when check 1 passed"); return false },
+	})
+	_, _, reason := v.Verify(context.Background(), &charonv1.Server{Id: "SRV-01", Address: "192.0.2.10", Port: 443}, nil)
+	if reason != charonv1.FailureReason_FAILURE_REALITY_HANDSHAKE {
+		t.Fatalf("check 1 should pass and check 2 fail on the missing SOCKS port, got %v", reason)
 	}
 }
 
@@ -306,6 +412,7 @@ func TestVerifier_WaitsForXrayToListen(t *testing.T) {
 // Check 1 reaches the server through DialServer, so a platform can keep that socket out of
 // the tunnel (Android). A refused dial there is the reason of check 1.
 func TestVerifier_UsesDialServerForCheck1(t *testing.T) {
+	var mu sync.Mutex
 	var dialed []string
 	v := New(Options{
 		SocksAddr: "127.0.0.1:1",
@@ -313,6 +420,8 @@ func TestVerifier_UsesDialServerForCheck1(t *testing.T) {
 			return []netip.Addr{netip.MustParseAddr("192.0.2.10")}, nil
 		},
 		DialServer: func(_ context.Context, network, addr string) (net.Conn, error) {
+			mu.Lock()
+			defer mu.Unlock()
 			dialed = append(dialed, network+" "+addr)
 			return nil, io.ErrClosedPipe
 		},
@@ -323,8 +432,8 @@ func TestVerifier_UsesDialServerForCheck1(t *testing.T) {
 	if reason != charonv1.FailureReason_FAILURE_TCP_TIMEOUT {
 		t.Fatalf("want FAILURE_TCP_TIMEOUT, got %v", reason)
 	}
-	if len(dialed) != 1 || dialed[0] != "tcp 192.0.2.10:443" {
-		t.Fatalf("check 1 should dial the server once through DialServer: %v", dialed)
+	if len(dialed) != 3 || dialed[0] != "tcp 192.0.2.10:443" || dialed[1] != dialed[0] || dialed[2] != dialed[0] {
+		t.Fatalf("check 1 should dial the server three times through DialServer: %v", dialed)
 	}
 }
 
@@ -375,9 +484,11 @@ func TestVerifier_FailsWhenTheTunnelCarriesNothing(t *testing.T) {
 	}()
 
 	v := New(Options{
-		SocksAddr:  socksLn.Addr().String(),
-		EgressURL:  "https://192.0.2.1/cdn-cgi/trace",
-		LookupHost: func(context.Context, string) ([]netip.Addr, error) { return []netip.Addr{netip.MustParseAddr("192.0.2.10")}, nil },
+		SocksAddr: socksLn.Addr().String(),
+		EgressURL: "https://192.0.2.1/cdn-cgi/trace",
+		LookupHost: func(context.Context, string) ([]netip.Addr, error) {
+			return []netip.Addr{netip.MustParseAddr("192.0.2.10")}, nil
+		},
 	})
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
